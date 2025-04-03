@@ -50,7 +50,7 @@ jobs:
           SENTRY_URL: https://toska.cs.helsinki.fi/
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
           SENTRY_ORG: toska
-          SENTRY_PROJECT: apparaatti
+          SENTRY_PROJECT: apparaatti-client
         with:
           environment: production
           set_commits: 'skip'
