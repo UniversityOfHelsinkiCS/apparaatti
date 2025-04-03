@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-20-minimal
+FROM docker.io/node:23-alpine
 
 ENV TZ="Europe/Helsinki"
 
