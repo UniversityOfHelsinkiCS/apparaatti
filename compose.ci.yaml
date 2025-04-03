@@ -1,6 +1,6 @@
 services:
   app:
-    image: quay.io/toska/gptwrapper:ci
+    image: quay.io/toska/apparaatti:ci
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - PORT=3000
@@ -10,7 +10,7 @@ services:
       - PUBLIC_URL=http://localhost:8000
     ports:
       - 8000:3000
-    container_name: gptwrapper
+    container_name: apparaatti
 
   db:
     image: docker.io/postgres:15.8-alpine
@@ -21,11 +21,11 @@ services:
       - 5432:5432
     volumes:
       - pg_data:/data
-    container_name: gptwrapper_db
+    container_name: apparaatti_db
 
   redis:
     image: redis:7-alpine
-    container_name: gptwrapper_redis
+    container_name: apparaatti_redis
 
 volumes:
   pg_data:
