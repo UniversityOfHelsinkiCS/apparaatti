@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "docker compose up",
-    "prod": "NODE_ENV=production node --no-warnings --experimental-strip-types src/server/index.ts",
+    "prod": "NODE_ENV=production node --no-warnings src/server/index.ts",
     "dev": "NODE_ENV=development concurrently \"nodemon --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
     "tsc": "tsc",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
