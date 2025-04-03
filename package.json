@@ -1,0 +1,34 @@
+{
+  "name": "apparaatti",
+  "version": "0.0.1",
+  "description": "Platform for recmmending the correct courses based on user feedback",
+  "type": "module",
+  "scripts": {
+    "start": "docker compose up",
+    "prod": "NODE_ENV=production node --no-warnings --experimental-strip-types src/server/index.ts",
+    "dev": "NODE_ENV=development concurrently \"nodemon --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
+    "tsc": "tsc",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write '*.{ts,json,css,md}'",
+    "build": "vite build",
+    "prepare": "husky install"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": true
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "e2e"
+    ],
+    "watch": [
+      "src"
+    ],
+    "ext": "*.js,*.ts,*.json"
+  }
+}
