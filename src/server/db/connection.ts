@@ -6,6 +6,10 @@ import { DATABASE_URL } from '../util/config.ts'
 
 const DB_CONNECTION_RETRY_LIMIT = 10
 
+if(DATABASE_URL === ''){
+  console.log("database url not set!")
+}
+
 export const sequelize = new Sequelize(DATABASE_URL, { logging: false })
 
 const umzug = new Umzug({
