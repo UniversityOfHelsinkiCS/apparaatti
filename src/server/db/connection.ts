@@ -20,9 +20,7 @@ export type Migration = typeof umzug._types.migration
 const runMigrations = async () => {
   const migrations = await umzug.up()
 
-  logger.info('Migrations up to date', {
-    migrations,
-  })
+  logger.info('Migrations up to date')
 }
 
 const testConnection = async () => {
@@ -38,6 +36,8 @@ export const connectToDatabase = async (attempt = 0): Promise<void | null> => {
     await testConnection()
     console.log("connected to db")
   } catch (err: any) {
+    console.log("ran into an error")
+    console.log(err)
     if (attempt === DB_CONNECTION_RETRY_LIMIT) {
       logger.error(`Connection to database failed after ${attempt} attempts`, {
         error: err.stack,
