@@ -38,7 +38,13 @@
   },
   "dependencies": {
     "express": "^5.1.0",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "sequelize": "^6.37.7",
+    "umzug": "^3.8.2",
+    "winston": "^3.17.0",
+    "winston-gelf-transporter": "^1.0.2"
   }
 }

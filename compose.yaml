@@ -24,7 +24,7 @@ services:
     volumes:
       - pg_data:/data
     container_name: apparaatti_db
-
+  
   redis:
     image: redis:7-alpine
     container_name: apparaatti_redis

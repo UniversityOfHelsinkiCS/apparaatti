@@ -1,6 +1,8 @@
 import path from 'path'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { connectToDatabase } from './db/connection.ts'
+
 
 import express from 'express'
 
@@ -25,5 +27,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(process.env.PORT, async () => {
-   console.log(`Server running on port ${process.env.PORT}`)
+  await connectToDatabase()
+  console.log(`Server running on port ${process.env.PORT}`)
 })
