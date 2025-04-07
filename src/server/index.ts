@@ -18,7 +18,6 @@ if (process.env.NODE_ENV === "production") {
     dirname(fileURLToPath(import.meta.url)),
     '../../dist'
   )
-
   const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
   app.use(express.static(DIST_PATH))
   app.get('/*mint', (_, res) => res.sendFile(INDEX_PATH))
