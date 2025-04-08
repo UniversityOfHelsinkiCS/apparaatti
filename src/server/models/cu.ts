@@ -1,5 +1,5 @@
 import { Model, DataTypes, CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../db/connection';
+import { sequelize } from '../db/connection.ts';
 import { LocalizedString } from '../../common/types.ts';
 
 class Cu extends Model<
