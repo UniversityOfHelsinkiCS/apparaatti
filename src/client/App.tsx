@@ -17,9 +17,7 @@ function App() {
 
   return (
     <>
-     
       <MultiChoiceForm form={form}/>
-   
     </>
   )
 }
