@@ -3,9 +3,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import MultiChoiceForm from './components/MultiChoiceForm.tsx';
+import { useQuery } from '@tanstack/react-query';
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+ 
 
   async function callHome(){
     const req = await fetch('/api')
@@ -15,13 +19,27 @@ function App() {
   }
 
 
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['form'],
+    queryFn: () => {
+      return fetch('/api/form1')
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+          return data
+        })
+    },
+  })
+
   useEffect(() => {
     callHome()
   }, [])
 
   return (
     <>
+     
       <MultiChoiceForm />
+   
     </>
   )
 }
