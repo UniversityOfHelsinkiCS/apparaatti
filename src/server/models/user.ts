@@ -1,4 +1,5 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
 import { sequelize } from '../db/connection.ts';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
@@ -35,6 +36,7 @@ User.init(
   {
     sequelize,
     tableName: 'users',
+    underscored: true,
     timestamps: true,
   }
 );
