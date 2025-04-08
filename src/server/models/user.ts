@@ -1,5 +1,5 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
-import { sequelize } from '../db/connection'; // Adjust the path to your database configuration
+import { sequelize } from '../db/connection.ts';
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string;

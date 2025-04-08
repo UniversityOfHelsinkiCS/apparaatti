@@ -1,5 +1,5 @@
 import { Model, DataTypes, CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../db/connection';
+import { sequelize } from '../db/connection.ts';
 
 class CurCu extends Model<
   InferAttributes<CurCu>,
