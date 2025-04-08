@@ -10,11 +10,16 @@ const FormQuestion = ({question, selectedOption, handleOptionChange}: {question:
       {question.question.fi}
     </Typography>
       <RadioGroup value={selectedOption} onChange={handleOptionChange}>
-        <FormControlLabel value="1" control={<Radio />} label="heikko" />
-        <FormControlLabel value="2" control={<Radio />} label="kohtalainen" />
-        <FormControlLabel value="3" control={<Radio />} label="hyväksyttävä" />
-        <FormControlLabel value="4" control={<Radio />} label="hyvä" />
-        <FormControlLabel value="5" control={<Radio />} label="erinomainen" />
+        {
+          question.options.map((option) => (
+            <FormControlLabel
+              key={option.id}
+              value={option.id}
+              control={<Radio />}
+              label={option.name.fi}
+            />
+          ))
+        }
       </RadioGroup>
   </>
   );
