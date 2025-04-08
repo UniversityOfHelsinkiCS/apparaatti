@@ -1,12 +1,13 @@
 import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import React from 'react';
+import { Form, Question } from '../../common/types.tsx';
 
 
-const Question = ({selectedOption, handleOptionChange}: {selectedOption: string | null, handleOptionChange: (e: any) => void}) => {
+const FormQuestion = ({question, selectedOption, handleOptionChange}: {question: Question, selectedOption: string | null, handleOptionChange: (e: any) => void}) => {
   return (
     <>
       <Typography variant="h5" component="h1" gutterBottom>
-      Koen ruotsin kielentaitoni vahvaksi
+      {question.question.fi}
     </Typography>
       <RadioGroup value={selectedOption} onChange={handleOptionChange}>
         <FormControlLabel value="1" control={<Radio />} label="heikko" />
@@ -20,4 +21,4 @@ const Question = ({selectedOption, handleOptionChange}: {selectedOption: string 
 }
 
 
-export default Question;
+export default FormQuestion;

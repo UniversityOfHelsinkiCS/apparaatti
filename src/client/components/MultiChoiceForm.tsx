@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import Question from './Question.tsx';
+import FormQuestion from './FormQuestion.tsx';
 import { Form } from '../../common/types.ts';
 
 
@@ -40,7 +40,8 @@ const MultiChoiceForm = ({form}: {form: Form}) => {
         {
           form != undefined ?
           form.questions.map((q) => {
-            return( <Question selectedOption={selectedOption} handleOptionChange={handleOptionChange}/>)
+            console.log(q)
+            return( <FormQuestion key={q.id} question={q} selectedOption={selectedOption} handleOptionChange={handleOptionChange}/>)
           })
           :
           <></>

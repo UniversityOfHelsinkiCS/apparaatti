@@ -36,6 +36,10 @@ function App() {
     callHome()
   }, [])
 
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
      
