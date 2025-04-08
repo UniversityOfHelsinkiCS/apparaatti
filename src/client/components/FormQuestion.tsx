@@ -1,9 +1,15 @@
 import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Question } from '../../common/types.tsx';
 
 
-const FormQuestion = ({question, selectedOption, handleOptionChange}: {question: Question, selectedOption: string | null, handleOptionChange: (e: any) => void}) => {
+const FormQuestion = ({question}: {question: Question}) => {
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
   return (
     <>
       <Typography variant="h5" component="h1" gutterBottom>

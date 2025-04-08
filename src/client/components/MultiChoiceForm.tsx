@@ -6,18 +6,10 @@ import { Form } from '../../common/types.ts';
 
 const MultiChoiceForm = ({form}: {form: Form}) => {
   console.log(form)
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
-  };
+  
 
   const handleSubmit = () => {
-    if (selectedOption) {
-      alert(`You selected: ${selectedOption}`);
-    } else {
-      alert('Please select an option.');
-    }
+    
   };
 
   return (
@@ -42,7 +34,7 @@ const MultiChoiceForm = ({form}: {form: Form}) => {
           form != undefined ?
           form.questions.map((q) => {
             console.log(q)
-            return( <FormQuestion key={q.id} question={q} selectedOption={selectedOption} handleOptionChange={handleOptionChange}/>)
+            return( <FormQuestion key={q.id} question={q}/>)
           })
           :
           <></>
