@@ -20,14 +20,14 @@ function App() {
   }
 
 
-  const { form, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['form'],
     queryFn: () => {
       return fetch('/api/form/1')
         .then((res) => res.json())
         .then((data) => {
           console.log(data)
-          return data as Form
+          return data
         })
     },
   })
@@ -43,7 +43,7 @@ function App() {
   return (
     <>
      
-      <MultiChoiceForm form={form}/>
+      <MultiChoiceForm form={data}/>
    
     </>
   )

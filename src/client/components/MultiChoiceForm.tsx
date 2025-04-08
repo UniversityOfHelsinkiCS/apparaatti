@@ -5,6 +5,7 @@ import { Form } from '../../common/types.ts';
 
 
 const MultiChoiceForm = ({form}: {form: Form}) => {
+  console.log(form)
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
