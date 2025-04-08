@@ -1,50 +1,43 @@
-import React, { useState } from 'react';
-import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Button, FormControl } from '@mui/material';
 import FormQuestion from './FormQuestion.tsx';
 import { Form } from '../../common/types.ts';
 
 
-const MultiChoiceForm = ({form}: {form: Form}) => {
-  console.log(form)
-  
-
-  const handleSubmit = () => {
-    
+const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: FormData) => Promise<void>}) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
+    ev.preventDefault();
+    const formData = new FormData(ev.currentTarget);
+    await onSubmit(formData);
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 2,
-        gap: 2,
-        maxWidth: 400,
-        margin: '0 auto',
-        border: '1px solid #ccc',
-        borderRadius: 2,
-        boxShadow: 2,
-      }}
-    >
-     
-      <FormControl component="fieldset">
-        {
-          form != undefined ?
-          form.questions.map((q) => {
-            console.log(q)
-            return( <FormQuestion key={q.id} question={q}/>)
-          })
-          :
-          <></>
-        }
-         
-      </FormControl>
-      <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </Box>
+    <form onSubmit={handleSubmit}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 2,
+          gap: 2,
+          maxWidth: 400,
+          margin: '0 auto',
+          border: '1px solid #ccc',
+          borderRadius: 2,
+          boxShadow: 2,
+        }}
+      >
+        <FormControl component="fieldset">
+          {form.questions.map((q) => 
+            <FormQuestion key={q.id} question={q}/>
+          )}
+        </FormControl>
+        <Button variant="contained" color="primary" type="submit">
+          Submit
+        </Button>
+      </Box>
+    </form>
   );
 };
 

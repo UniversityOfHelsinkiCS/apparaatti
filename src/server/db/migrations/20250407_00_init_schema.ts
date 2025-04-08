@@ -51,7 +51,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
   })
   //course unit realisations
-  queryInterface.createTable('curs', {
+  await queryInterface.createTable('curs', {
     id: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -79,7 +79,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
   })
   //course units
-  queryInterface.createTable('cus', {
+  await queryInterface.createTable('cus', {
     id: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -107,7 +107,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
   })
   //best practise: lausutaan kurkku
-  queryInterface.createTable('cur_cu', {
+  await queryInterface.createTable('cur_cu', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -132,7 +132,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
   })
   
-  queryInterface.createTable('answers', {
+  await queryInterface.createTable('answers', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -146,6 +146,10 @@ export const up: Migration = async ({ context: queryInterface }) => {
     form_id: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    user_id: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
