@@ -114,10 +114,6 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       primaryKey: true,
     },
-    name: {
-      type: JSONB,
-      allowNull: false
-    },
     cur_id: {
       type: DataTypes.STRING,
       allowNull: false
