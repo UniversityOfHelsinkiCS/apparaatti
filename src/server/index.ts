@@ -2,13 +2,13 @@ import path from 'path'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectToDatabase } from './db/connection.ts'
-
-
 import express from 'express'
+import router from './routes/router.ts'
 
 const app = express()
 
-app.use('/api/ping', (req, res, next) => {res.send("pong")})
+app.use('/api', router)
+app.use('/api/ping', (_req, res) => { res.send("pong") })
 app.use('/api', (_, res) => {
   res.sendStatus(404)
 })

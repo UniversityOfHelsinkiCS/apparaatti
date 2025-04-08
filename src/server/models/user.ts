@@ -1,22 +1,12 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { sequelize } from '../db/connection'; // Adjust the path to your database configuration
 
-interface UserAttributes {
-  id: string;
-  username: string;
-  language?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, 'language'> {}
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string;
   declare username: string;
-  declare language?: string;
-  declare createdAt: Date;
-  declare updatedAt: Date;
+  declare language?: CreationOptional<string>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 User.init(
