@@ -22,7 +22,7 @@ function App() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['form'],
     queryFn: () => {
-      return fetch('/api/form1')
+      return fetch('/api/form/1')
         .then((res) => res.json())
         .then((data) => {
           console.log(data)
