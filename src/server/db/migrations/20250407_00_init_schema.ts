@@ -109,7 +109,8 @@ export const up: Migration = async ({ context: queryInterface }) => {
   //best practise: lausutaan kurkku
   queryInterface.createTable('cur_cu', {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
@@ -138,6 +139,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
   queryInterface.createTable('answers', {
     id: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
@@ -158,10 +160,6 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   })
-
-  
-
-
 }
 
 export const down: Migration = ({ context: queryInterface }) =>
