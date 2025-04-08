@@ -1,6 +1,8 @@
-import Cur from "../models/cur"
-import Enrolment from "../models/enrolment"
-import User from "../models/user"
+import Cu from "../models/cu.ts"
+import Cur from "../models/cur.ts"
+import CurCu from "../models/curCu.ts"
+import Enrolment from "../models/enrolment.ts"
+import User from "../models/user.ts"
 
 export const seed = async () => {
   await Enrolment.destroy({
@@ -9,13 +11,21 @@ export const seed = async () => {
   await User.destroy({
     where: {},
   })
+  await CurCu.destroy({
+    where: {},
+  })
   await Cur.destroy({
+    where: {},
+  })
+  await Cu.destroy({
     where: {},
   })
 
   await seedUsers()
   await seedCurs()
+  await seedCus()
   await seedEnrolments()
+  await seedCurCus()
 
   console.log('Seeding completed')
 }
@@ -40,9 +50,9 @@ const seedCurs = async () => {
     {
       id: '1',
       name: { 
-        fi: 'E-urheilun perusteet', 
-        en: 'Introduction to E-sports',
-        sv: 'E-sportens grunder'
+        fi: 'E-urheilun perusteet - Luento-opetus', 
+        en: 'Introduction to E-sports - Lectures',
+        sv: 'E-sportens grunder - Föreläsningar'
       },
       startDate: new Date('2025-01-01'),
       endDate: new Date('2025-06-01'),
@@ -50,9 +60,9 @@ const seedCurs = async () => {
     {
       id: '2',
       name: { 
-        fi: 'E-urheilun syventävät opinnot', 
-        en: 'Advanced E-sports Studies',
-        sv: 'Avancerade studier i e-sport'
+        fi: 'E-urheilun syventävät opinnot - Luento-opetus', 
+        en: 'Advanced E-sports Studies - Lectures',
+        sv: 'Avancerade studier i e-sport - Föreläsningar'
       },
       startDate: new Date('2025-01-01'),
       endDate: new Date('2025-06-01'),
@@ -74,5 +84,43 @@ const seedEnrolments = async () => {
       userId: '2',
       courseRealisationId: '2',
     }
+  ])
+}
+
+const seedCus = async () => {
+  await Cu.bulkCreate([
+    {
+      id: '1',
+      name: {
+        fi: 'E-urheilun perusteet',
+        en: 'Introduction to E-sports',
+        sv: 'E-sportens grunder'
+      },
+      groupId: '1',
+      courseCode: 'E-URHEILU-101',
+    },
+    {
+      id: '2',
+      name: {
+        fi: 'E-urheilun syventävät opinnot',
+        en: 'Advanced E-sports Studies',
+        sv: 'Avancerade studier i e-sport'
+      },
+      groupId: '2',
+      courseCode: 'E-URHEILU-102',
+    },
+  ])  
+}
+
+const seedCurCus = async () => {
+  await CurCu.bulkCreate([
+    {
+      curId: '1',
+      cuId: '1',
+    },
+    {
+      curId: '1',
+      cuId: '2',
+    },
   ])
 }

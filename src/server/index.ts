@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { connectToDatabase } from './db/connection.ts'
 import express from 'express'
 import router from './routes/router.ts'
+import { seed } from './test/seed.ts'
 
 const app = express()
 
@@ -25,5 +26,6 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
+  await seed()
   console.log(`Server running on port ${process.env.PORT}`)
 })
