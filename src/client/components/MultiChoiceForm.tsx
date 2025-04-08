@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import Question from './Question.tsx';
+import { Form } from '../../common/types.ts';
 
 
-const MultiChoiceForm = () => {
+const MultiChoiceForm = ({form}: {form: Form}) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +37,15 @@ const MultiChoiceForm = () => {
     >
      
       <FormControl component="fieldset">
-          <Question selectedOption={selectedOption} handleOptionChange={handleOptionChange}/>
+        {
+          form != undefined ?
+          form.questions.map((q) => {
+            return( <Question selectedOption={selectedOption} handleOptionChange={handleOptionChange}/>)
+          })
+          :
+          <></>
+        }
+         
       </FormControl>
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         Submit

@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import MultiChoiceForm from './components/MultiChoiceForm.tsx';
 import { useQuery } from '@tanstack/react-query';
+import { Form } from '../common/types.ts';
 
 
 
@@ -19,14 +20,14 @@ function App() {
   }
 
 
-  const { data, isLoading, error } = useQuery({
+  const { form, isLoading, error } = useQuery({
     queryKey: ['form'],
     queryFn: () => {
       return fetch('/api/form/1')
         .then((res) => res.json())
         .then((data) => {
           console.log(data)
-          return data
+          return data as Form
         })
     },
   })
@@ -38,7 +39,7 @@ function App() {
   return (
     <>
      
-      <MultiChoiceForm />
+      <MultiChoiceForm form={form}/>
    
     </>
   )
