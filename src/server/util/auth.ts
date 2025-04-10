@@ -25,6 +25,7 @@ async function setupAuth(){
     console.log('OpenID Connect profile:', profile);
     return cb(null, profile);
   }));
+  console.log("OIDC setup done");
   
 }
 
