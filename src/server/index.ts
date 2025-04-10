@@ -5,7 +5,6 @@ import { connectToDatabase } from './db/connection.ts'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
-import SQLiteStore from 'connect-sqlite3'
 
 import router from './routes/router.ts'
 
