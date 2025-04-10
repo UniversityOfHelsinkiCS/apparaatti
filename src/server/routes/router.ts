@@ -33,4 +33,20 @@ router.post('/form/1/answer', async (req, res) => {
   res.json(answer);
 })
 
+
+
+router.get('/login', (req, res) => {
+  console.log('Login received:', req.params);
+
+  res.json({"answer": "redirecting to new dimensions"});
+})
+
+
+router.get('/login/callback', (req, res) => {
+  console.log('Login callback received:', req.params);
+
+  res.json({"answer": "got it"});
+})
+
+
 export default router;
