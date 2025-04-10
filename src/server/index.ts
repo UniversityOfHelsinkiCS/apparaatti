@@ -3,12 +3,27 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { connectToDatabase } from './db/connection.ts'
 import express from 'express'
+import session from 'express-session'
+import passport from 'passport'
+import SQLiteStore from 'connect-sqlite3'
+
 import router from './routes/router.ts'
+
 import { seed } from './test/seed.ts'
 import setupAuth from './util/auth.ts'
+import { SESSION_SECRET } from './util/config.ts'
 
 
 const app = express()
+
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' }) //this causes issues with multiple pods...
+}));
+app.use(passport.authenticate('session'));
+
 
 app.use('/api', router)
 app.use('/api/ping', (_req, res) => { res.send("pong") })

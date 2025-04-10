@@ -25,6 +25,19 @@ async function setupAuth(){
     console.log('OpenID Connect profile:', profile);
     return cb(null, profile);
   }));
+
+  passport.serializeUser(function(user, cb) {
+    process.nextTick(function() {
+      cb(null, { id: user.id, name: user.name});
+    });
+  });
+  
+  passport.deserializeUser(function(user, cb) {
+    process.nextTick(function() {
+      return cb(null, user);
+    });
+  });
+
   console.log("OIDC setup done");
   
 }
