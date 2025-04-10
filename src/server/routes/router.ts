@@ -3,6 +3,7 @@ import { FORM } from '../data/form.ts';
 import { AnswerSchema } from '../../common/validators.ts';
 import Answer from '../models/answer.ts';
 import User from '../models/user.ts';
+import passport from 'passport';
 
 const router = express.Router();
 
@@ -35,10 +36,21 @@ router.post('/form/1/answer', async (req, res) => {
 
 
 
-router.get('/login', (req, res) => {
-  console.log('Login received:', req.params);
+router.get('/login', passport.authenticate('openidconnect'))
 
-  res.json({"answer": "redirecting to new dimensions"});
+router.get('/login/callback', passport.authenticate('openidconnect', { 
+  failureRedirect: '/login/failure',
+  successRedirect: '/login/success'
+}))
+
+router.get('/login/success', (req, res) => {
+
+  res.json({"answer": "got it"});
+})
+
+router.get('/login/failure', (req, res) => {
+  
+  res.json({"answer": "login failed"});
 })
 
 
