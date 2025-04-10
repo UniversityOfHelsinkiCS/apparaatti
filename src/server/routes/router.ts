@@ -36,10 +36,10 @@ router.post('/form/1/answer', async (req, res) => {
 
 
 
-router.get('/login', passport.authenticate('session'))
+router.get('/login', passport.authenticate('openidconnect'))
 
 router.get('/login/callback', 
-  passport.authenticate('session', { 
+  passport.authenticate('openidconnect', { 
     failureRedirect: '/login/failure',
     successRedirect: '/login/success'
   })
@@ -50,15 +50,13 @@ router.get('/login/callback',
 
 router.get('/login/success', (req, res) => {
 
-  res.json({"answer": "got it"});
+  res.json({"answer": "login success"});
 })
 
 router.get('/login/failure', (req, res) => {
   
   res.json({"answer": "login failed"});
 })
-
-
 
 
 export default router;
