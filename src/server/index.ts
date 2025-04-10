@@ -11,17 +11,15 @@ import router from './routes/router.ts'
 
 import { seed } from './test/seed.ts'
 import setupAuth from './util/auth.ts'
-import { SESSION_SECRET } from './util/config.ts'
+import { REDIS_URL, SESSION_SECRET } from './util/config.ts'
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 
 
 const redisClient = createClient({ 
-  host: 'localhost',
-  port: 6379,
-  legacyMode: true 
+  url: REDIS_URL,
 });
-redisClient.connect().catch(console.error);
+redisClient.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
 
 
 const app = express()
