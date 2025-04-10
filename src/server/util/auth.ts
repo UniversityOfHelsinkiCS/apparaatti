@@ -27,12 +27,14 @@ async function setupAuth(){
   }));
 
   passport.serializeUser(function(user, cb) {
+    console.log("serializing user", user);
     process.nextTick(function() {
       cb(null, { id: user.id, name: user.name});
     });
   });
   
   passport.deserializeUser(function(user, cb) {
+    console.log("deserializing user", user);
     process.nextTick(function() {
       return cb(null, user);
     });
