@@ -38,14 +38,12 @@ router.post('/form/1/answer', async (req, res) => {
 
 router.get('/login', passport.authenticate('openidconnect'))
 
-router.get('/login/callback', (req, res) => {
-  console.log('Login callback received:', req.params);
- 
+router.get('/login/callback', 
   passport.authenticate('openidconnect', { 
     failureRedirect: '/login/failure',
     successRedirect: '/login/success'
   })
-})
+)
   
   
  
@@ -61,11 +59,6 @@ router.get('/login/failure', (req, res) => {
 })
 
 
-router.get('/login/callback', (req, res) => {
-  console.log('Login callback received:', req.params);
-
-  res.json({"answer": "got it"});
-})
 
 
 export default router;
