@@ -12,6 +12,16 @@ import router from './routes/router.ts'
 import { seed } from './test/seed.ts'
 import setupAuth from './util/auth.ts'
 import { SESSION_SECRET } from './util/config.ts'
+import {createClient} from 'redis'
+import {RedisStore} from 'connect-redis'
+
+
+const redisClient = createClient({ 
+  host: 'localhost',
+  port: 6379,
+  legacyMode: true 
+});
+redisClient.connect().catch(console.error);
 
 
 const app = express()
@@ -20,7 +30,7 @@ app.use(session({
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' }) //this causes issues with multiple pods...
+  store: new RedisStore({client: redisClient}),
 }));
 app.use(passport.authenticate('session'));
 
