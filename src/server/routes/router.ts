@@ -36,7 +36,7 @@ router.post('/form/1/answer', async (req, res) => {
 
 
 
-router.get('/login', passport.authenticate('session'))
+router.get('/login', passport.authenticate('openidconnect'))
 
 router.get('/login/callback', 
   passport.authenticate('session', { 
