@@ -29,7 +29,7 @@ app.use(session({
   saveUninitialized: false,
   store: new RedisStore({client: redisClient}),
 }));
-app.use(passport.authenticate('session'));
+app.use(passport.session());
 
 
 app.use('/api', router)
