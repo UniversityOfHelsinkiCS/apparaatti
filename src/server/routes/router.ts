@@ -41,7 +41,10 @@ router.get('/login', passport.authenticate('openidconnect'))
 router.get('/login/callback', (req, res) => {
   console.log('Login callback received:', req.params);
   console.log(req)
-  return res.json({"answer": "got the code"});
+  return passport.authenticate('openidconnect', { 
+    failureRedirect: '/login/failure',
+    successRedirect: '/login/success'
+  })
 })
   
   
