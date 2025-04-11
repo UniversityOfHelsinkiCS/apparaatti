@@ -21,36 +21,7 @@ const redisClient = createClient({
 redisClient.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
 
 
-
-passport.use(new OpenIDConnectStrategy({
-  issuer: OIDC_ISSUER,
-  authorizationURL: OIDC_AUTHORIZATION_URL,
-  tokenURL: OIDC_TOKEN_URL,
-  userInfoURL: OIDC_USERINFO_URL,
-  clientID: OIDC_CLIENT_ID,
-  clientSecret: OIDC_CLIENT_SECRET,
-  callbackURL: OIDC_REDIRECT_URI,
-}, function verify(issuer, profile, cb) {
-  console.log('OpenID Connect profile:', profile);
-  return cb(null, profile);
-}));
-
-passport.serializeUser(function(user, cb) {
-  console.log("serializing user", user);
-  process.nextTick(function() {
-    cb(null, user);
-  });
-});
-
-passport.deserializeUser(function(user, cb) {
-  console.log("deserializing user", user);
-  process.nextTick(function() {
-    return cb(null, user);
-  });
-});
-
 const app = express()
-
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -61,7 +32,6 @@ app.use(session({
 
 
 
-app.use(passport.authenticate('session'));
 
 
 app.use('/api', router)

@@ -37,29 +37,5 @@ router.post('/form/1/answer', async (req, res) => {
 
 
 
-router.get('/login', passport.authenticate('openidconnect'))
-router.get('/login/callback', 
-  passport.authenticate('openidconnect', { 
-    failureRedirect: '/login/failure',
-    failureFlash: true,
-    failureMessage: true
-  }), (req, res) => {
-    res.redirect('/');
-  }
-)
-  
-  
- 
-
-router.get('/login/success', (req, res) => {
-
-  res.json({"answer": "login success"});
-})
-
-router.get('/login/failure', (req, res) => {
-  
-  res.json({"answer": "login failed"});
-})
-
 
 export default router;
