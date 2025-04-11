@@ -2,7 +2,7 @@ import { Issuer, Strategy, TokenSet, UnknownObject, UserinfoResponse } from 'ope
 import passport from 'passport'
 
 import { inDevelopment, inE2E } from '../../config'
-import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config'
+import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
 import { UserParams } from '../../shared/types'
 import { OpenIDAttributes } from '../types'
 import { parseShibDateOfBirth } from '../middleware/authentication'
