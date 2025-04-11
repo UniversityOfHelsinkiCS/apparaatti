@@ -82,6 +82,6 @@ if (process.env.NODE_ENV === "production") {
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   await seed()
-  await setupAuthentication()
+ 
   console.log(`Server running on port ${process.env.PORT}`)
 })
