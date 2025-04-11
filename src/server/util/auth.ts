@@ -12,7 +12,7 @@ async function setupAuth(){
 
   }
 
-  passport.use(new OpenIDConnectStrategy({
+  passport.use(new OAuth2Strategy({
     issuer: OIDC_ISSUER,
     authorizationURL: OIDC_AUTHORIZATION_URL,
     tokenURL: OIDC_TOKEN_URL,
