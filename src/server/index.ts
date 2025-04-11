@@ -13,7 +13,6 @@ import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TO
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import OpenIDConnectStrategy from 'passport-openidconnect';
-import { Strategy } from 'openid-client/passport'
 
 
 const redisClient = createClient({ 
@@ -31,7 +30,7 @@ passport.use(new OpenIDConnectStrategy({
   clientID: OIDC_CLIENT_ID,
   clientSecret: OIDC_CLIENT_SECRET,
   callbackURL: OIDC_REDIRECT_URI,
-}, function verify(accessToken, refreshToken, profile, cb) {
+}, function verify(issuer, profile, cb) {
   console.log('OpenID Connect profile:', profile);
   return cb(null, profile);
 }));
@@ -39,7 +38,7 @@ passport.use(new OpenIDConnectStrategy({
 passport.serializeUser(function(user, cb) {
   console.log("serializing user", user);
   process.nextTick(function() {
-    cb(null, { id: user.id, name: user.name});
+    cb(null, user);
   });
 });
 
@@ -62,7 +61,7 @@ app.use(session({
 
 
 
-app.use(passport.session());
+app.use(passport.authenticate('session'));
 
 
 app.use('/api', router)
