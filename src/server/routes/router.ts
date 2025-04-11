@@ -37,14 +37,12 @@ router.post('/form/1/answer', async (req, res) => {
 
 
 
-router.get('/login', passport.authenticate('oidc'))
+router.get('/login', passport.authenticate('openidconnect'))
 router.get('/login/callback', 
-  passport.authenticate('oidc', { 
+  passport.authenticate('openidconnect', { 
     failureRedirect: '/login/failure',
-    successRedirect: '/login/success'
-    
   }), (req, res) => {
-    res.json({"answer": "got callback"});
+    res.redirect('/');
   }
 )
   
