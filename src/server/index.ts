@@ -13,8 +13,11 @@ import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TO
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import OpenIDConnectStrategy from 'passport-openidconnect';
+<<<<<<< HEAD
 import { set } from 'zod'
 import setupAuthentication from './util/oidc.ts'
+=======
+>>>>>>> 3f6f9ea (change app.use)
 
 
 const redisClient = createClient({ 
@@ -23,6 +26,37 @@ const redisClient = createClient({
 redisClient.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
 
 
+<<<<<<< HEAD
+=======
+
+passport.use(new OpenIDConnectStrategy({
+  issuer: OIDC_ISSUER,
+  authorizationURL: OIDC_AUTHORIZATION_URL,
+  tokenURL: OIDC_TOKEN_URL,
+  userInfoURL: OIDC_USERINFO_URL,
+  clientID: OIDC_CLIENT_ID,
+  clientSecret: OIDC_CLIENT_SECRET,
+  callbackURL: OIDC_REDIRECT_URI,
+}, function verify(issuer, profile, cb) {
+  console.log('OpenID Connect profile:', profile);
+  return cb(null, profile);
+}));
+
+passport.serializeUser(function(user, cb) {
+  console.log("serializing user", user);
+  process.nextTick(function() {
+    cb(null, user);
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  console.log("deserializing user", user);
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
+>>>>>>> 3f6f9ea (change app.use)
 const app = express()
 app.use(session({
   secret: SESSION_SECRET,
@@ -34,6 +68,10 @@ app.use(session({
 
 
 
+<<<<<<< HEAD
+=======
+app.use(passport.authenticate('session'));
+>>>>>>> 3f6f9ea (change app.use)
 
 
 app.use('/api', router)
