@@ -30,6 +30,7 @@ passport.use(new OpenIDConnectStrategy({
   clientID: OIDC_CLIENT_ID,
   clientSecret: OIDC_CLIENT_SECRET,
   callbackURL: OIDC_REDIRECT_URI,
+  scope: 'openid profile email',
 }, function verify(issuer, profile, cb) {
   console.log('OpenID Connect profile:', profile);
   return cb(null, profile);

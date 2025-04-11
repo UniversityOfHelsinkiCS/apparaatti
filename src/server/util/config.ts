@@ -5,21 +5,13 @@ export const inProduction = process.env.IN_PRODUCTION || ''
 
 export const SESSION_SECRET = process.env.SESSION_SECRET || '1234'
 
-export const OIDC_ISSUER = inProduction
-  ? 'https://login.helsinki.fi'
-  : 'https://login-test.it.helsinki.fi'
+export const OIDC_ISSUER = 'https://login-test.it.helsinki.fi'
 
-export const OIDC_AUTHORIZATION_URL = inProduction
-  ? 'https://login.helsinki.fi/idp/profile/oidc/authorize'
-  : 'https://login-test.it.helsinki.fi/idp/profile/oidc/authorize'
+export const OIDC_AUTHORIZATION_URL ='https://login-test.it.helsinki.fi/idp/profile/oidc/authorize'
 
-export const OIDC_TOKEN_URL = inProduction
-  ? 'https://login.helsinki.fi/idp/profile/oidc/token'
-  : 'https://login-test.it.helsinki.fi/idp/profile/oidc/token'
+export const OIDC_TOKEN_URL = 'https://login-test.it.helsinki.fi/idp/profile/oidc/token'
 
-export const OIDC_USERINFO_URL = inProduction
-  ? 'https://login.helsinki.fi/idp/profile/oidc/userinfo'
-  : 'https://login-test.it.helsinki.fi/idp/profile/oidc/userinfo'
+export const OIDC_USERINFO_URL = 'https://login-test.it.helsinki.fi/idp/profile/oidc/userinfo'
 
 
 
