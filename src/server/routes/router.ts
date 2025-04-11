@@ -36,6 +36,10 @@ router.post('/form/1/answer', async (req, res) => {
 })
 
 
-
+router.get('/login', passport.authenticate('openidconnect'))
+router.get('/login/callback', passport.authenticate('openidconnect', { failureRedirect: '/' }), (req, res) => {
+  // Successful authentication, redirect home.
+  res.redirect('/');
+});
 
 export default router;

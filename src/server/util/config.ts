@@ -6,8 +6,8 @@ export const inProduction = process.env.IN_PRODUCTION || ''
 export const SESSION_SECRET = process.env.SESSION_SECRET || '1234'
 
 export const OIDC_ISSUER = inProduction
-  ? 'https://login.helsinki.fi/.well-known/openid-configuration'
-  : 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'
+  ? 'https://login.helsinki.fi'
+  : 'https://login-test.it.helsinki.fi'
 
 export const OIDC_AUTHORIZATION_URL = inProduction
   ? 'https://login.helsinki.fi/idp/profile/oidc/authorize'
