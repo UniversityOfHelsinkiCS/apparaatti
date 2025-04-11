@@ -41,6 +41,8 @@ router.get('/login', passport.authenticate('openidconnect'))
 router.get('/login/callback', 
   passport.authenticate('openidconnect', { 
     failureRedirect: '/login/failure',
+    failureFlash: true,
+    failureMessage: true
   }), (req, res) => {
     res.redirect('/');
   }
