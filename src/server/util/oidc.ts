@@ -58,8 +58,8 @@ const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidCli
   const { uid: username, hyPersonSisuId: id, given_name: firstName, family_name: lastName, schacDateOfBirth, email, hyGroupCn: iamGroups } = userinfo as unknown as OpenIDAttributes
 
   const user: User = {
-    id: id,
-    username: username,
+    id: userinfo.sub as string,
+    username: "username",
     language: 'fi',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -83,9 +83,9 @@ const setupAuthentication = async () => {
     return done(null, { id, username })
   })
 
-  passport.deserializeUser(async ({ id, birthDate, iamGroups }: { id: string; birthDate: string; iamGroups: string[] }, done) => {
-    console.log('Deserializing user:', id, birthDate, iamGroups)
-    const user = await User.findByPk(id)
+  passport.deserializeUser(async ({ sub, birthDate, iamGroups }: { sub: string; birthDate: string; iamGroups: string[] }, done) => {
+    console.log('Deserializing user:', sub, birthDate, iamGroups)
+    const user = await User.findByPk(sub)
 
     if (!user) return done(new Error('User not found'))
 
