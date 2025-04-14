@@ -38,15 +38,14 @@ router.post('/form/1/answer', async (req, res) => {
 router.get('/login', passport.authenticate('oidc'))
 
 router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), async (req, res) => {
-  const username = req.user.username
-  res.redirect('/success?username=' + username)
+  res.redirect('/api/login/success')
 })
 
 
 router.get('/success',passport.authenticate('oidc', { failureRedirect: '/fail' }), async (req, res) => {
   res.json({
     message: 'Login successful',
-    request: req,
+    user: req.user,
   });
 })
 
