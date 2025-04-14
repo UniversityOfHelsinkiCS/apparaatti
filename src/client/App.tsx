@@ -55,10 +55,11 @@ function App() {
   return (
     <>
     {
-      user && user.message !== 'User logged in' ? (
-        <a href="/api/login">Login</a>
-      ) : (
+      user?.username ? (
         <h1>Welcome {user.username}</h1>
+       
+      ) : (
+        <a href="/api/login">Login</a>
       )
     }
       
