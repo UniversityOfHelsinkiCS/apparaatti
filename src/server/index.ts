@@ -13,7 +13,6 @@ import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TO
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import OpenIDConnectStrategy from 'passport-openidconnect';
-import setupAuthentication from './util/oidc.ts'
 
 
 const redisClient = createClient({ 
@@ -85,6 +84,6 @@ if (process.env.NODE_ENV === "production") {
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   await seed()
-  await setupAuthentication()
+ 
   console.log(`Server running on port ${process.env.PORT}`)
 })
