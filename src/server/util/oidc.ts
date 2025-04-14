@@ -1,6 +1,6 @@
 import * as openidClient from 'openid-client'
 import passport from 'passport'
-import OpenIDConnectStrategy from 'passport-openidconnect'
+
 
 import User from '../models/user.ts'
 import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, OIDC_AUTHORIZATION_URL, OIDC_TOKEN_URL, OIDC_USERINFO_URL } from './config.ts'
@@ -91,29 +91,8 @@ const setupAuthentication = async () => {
     return done(null, obj)
   })
 
-  passport.use('oidc', new OpenIDConnectStrategy(
-    {
-      issuer: OIDC_ISSUER,
-      authorizationURL: OIDC_AUTHORIZATION_URL,
-      tokenURL: OIDC_TOKEN_URL,
-      userInfoURL: OIDC_USERINFO_URL,
-      clientID: OIDC_CLIENT_ID,
-      clientSecret: OIDC_CLIENT_SECRET,
-      callbackURL: OIDC_REDIRECT_URI,
-      responseType: 'token',
-      responseMode: 'query',
-      scope: 'profile email',
-    }, 
-    (issuer, profile, done) => {
-      console.log('OIDC strategy called')
-      console.log('Issuer:', issuer)
-      console.log('Profile:', profile)
-
-      
-      done(null, profile)
-    }
-  )
-  )
+  
+  passport.use('oidc', new openidClient.Strategy({ client, params }, verifyLogin))
 }
 
 export default setupAuthentication
