@@ -39,7 +39,7 @@ const getClient = async () => {
     client_id: OIDC_CLIENT_ID,
     client_secret: OIDC_CLIENT_SECRET,
     redirect_uris: [OIDC_REDIRECT_URI],
-    response_types: ['code'],
+    response_types: ['token'],
   })
 
   return client
