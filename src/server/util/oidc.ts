@@ -81,7 +81,7 @@ const setupAuthentication = async () => {
     return done(null, { ...user.dataValues, birthDate, iamGroups })
   })
 
-  passport.use('oidc', new Strategy({ client, params }, verifyLogin))
+  passport.use('oidc', new openidClient.Strategy({ client, params }, verifyLogin))
 }
 
 export default setupAuthentication
