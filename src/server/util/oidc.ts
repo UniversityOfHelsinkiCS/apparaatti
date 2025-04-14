@@ -60,20 +60,18 @@ const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (er
   console.log('User info:', userinfo)
   console.log('Token set:', _tokenSet)
  
-  const userData = userinfo as OpenIDAttributes
-  console.log(userData)
-
+  
   const user: User = {
     id: userinfo.sub as string,
-    username: "username",
+    username: userinfo.uid as string,
     language: 'fi',
     createdAt: new Date(),
     updatedAt: new Date(),
   } as User
 
- // const [_, created] = await User.upsert({
- //   ...user,
- // })
+  const [_, created] = await User.upsert({
+    ...user,
+  })
 
   done(null, { ...user, newUser: user })
 }
