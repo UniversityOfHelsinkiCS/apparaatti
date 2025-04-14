@@ -12,44 +12,13 @@ import { seed } from './test/seed.ts'
 import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './util/config.ts'
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
-import OpenIDConnectStrategy from 'passport-openidconnect';
+import setupAuthentication from './util/oidc.ts'
 
 
 const redisClient = createClient({ 
   url: REDIS_URL,
 });
 redisClient.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
-
-
-
-passport.use(new OpenIDConnectStrategy({
-  issuer: OIDC_ISSUER,
-  authorizationURL: OIDC_AUTHORIZATION_URL,
-  tokenURL: OIDC_TOKEN_URL,
-  userInfoURL: OIDC_USERINFO_URL,
-  clientID: OIDC_CLIENT_ID,
-  clientSecret: OIDC_CLIENT_SECRET,
-  callbackURL: OIDC_REDIRECT_URI,
-  scope: 'openid',
-  tokenEndpointAuthMethod: 'client_secret_basic',
-}, function verify(issuer, profile, cb) {
-  console.log('OpenID Connect profile:', profile);
-  return cb(null, profile);
-}));
-
-passport.serializeUser(function(user, cb) {
-  console.log("serializing user", user);
-  process.nextTick(function() {
-    cb(null, user);
-  });
-});
-
-passport.deserializeUser(function(user, cb) {
-  console.log("deserializing user", user);
-  process.nextTick(function() {
-    return cb(null, user);
-  });
-});
 
 const app = express()
 app.use(session({
@@ -58,8 +27,6 @@ app.use(session({
   saveUninitialized: false,
   store: new RedisStore({client: redisClient}),
 }));
-
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -84,6 +51,7 @@ if (process.env.NODE_ENV === "production") {
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   await seed()
+  await setupAuthentication()
  
   console.log(`Server running on port ${process.env.PORT}`)
 })

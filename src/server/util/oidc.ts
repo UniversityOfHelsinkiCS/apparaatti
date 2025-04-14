@@ -1,12 +1,20 @@
-import { Issuer, Strategy, TokenSet, UnknownObject, UserinfoResponse } from 'openid-client'
+import * as openidClient from 'openid-client'
 import passport from 'passport'
 
-import { inDevelopment, inE2E } from '../../config'
+import User from '../models/user.ts'
 import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
-import { UserParams } from '../../shared/types'
-import { OpenIDAttributes } from '../types'
-import { parseShibDateOfBirth } from '../middleware/authentication'
-import { User } from '../db/models'
+
+
+type OpenIDAttributes = {
+  uid: string
+  hyPersonSisuId: string
+  given_name: string
+  family_name: string
+  schacDateOfBirth: string
+  email: string
+  hyGroupCn: string[]
+}
+
 
 const params = {
   claims: {
@@ -25,7 +33,7 @@ const params = {
 }
 
 const getClient = async () => {
-  const issuer = await Issuer.discover(OIDC_ISSUER)
+  const issuer = await openidClient.Issuer.discover(OIDC_ISSUER)
 
   const client = new issuer.Client({
     client_id: OIDC_CLIENT_ID,
@@ -37,17 +45,16 @@ const getClient = async () => {
   return client
 }
 
-const verifyLogin = async (_tokenSet: TokenSet, userinfo: UserinfoResponse<UnknownObject, UnknownObject>, done: (err: any, user?: unknown) => void) => {
+const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, done: (err: any, user?: unknown) => void) => {
   const { uid: username, hyPersonSisuId: id, given_name: firstName, family_name: lastName, schacDateOfBirth, email, hyGroupCn: iamGroups } = userinfo as unknown as OpenIDAttributes
 
-  const user: UserParams = {
-    id: id || username,
-    firstName,
-    lastName,
-    birthDate: parseShibDateOfBirth(schacDateOfBirth),
-    email,
-    iamGroups,
-  }
+  const user: User = {
+    id: id,
+    username: username,
+    language: 'fi',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  } as User
 
   const [_, created] = await User.upsert({
     ...user,
@@ -57,14 +64,13 @@ const verifyLogin = async (_tokenSet: TokenSet, userinfo: UserinfoResponse<Unkno
 }
 
 const setupAuthentication = async () => {
-  if (inDevelopment || inE2E) return
-
+ 
   const client = await getClient()
 
   passport.serializeUser((user, done) => {
-    const { id, iamGroups, birthDate, newUser } = user as UserParams
+    const { id, username } = user as User
 
-    return done(null, { id, iamGroups, birthDate, newUser })
+    return done(null, { id, username })
   })
 
   passport.deserializeUser(async ({ id, birthDate, iamGroups }: { id: string; birthDate: string; iamGroups: string[] }, done) => {

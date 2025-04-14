@@ -35,11 +35,11 @@ router.post('/form/1/answer', async (req, res) => {
   res.json(answer);
 })
 
+router.get('/login', passport.authenticate('oidc'))
 
-router.get('/login', passport.authenticate('openidconnect'))
-router.get('/login/callback', passport.authenticate('openidconnect', { failureRedirect: '/', failureMessage: true }), (req, res) => {
-  // Successful authentication, redirect home.
-  res.redirect('/');
-});
+router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), (_, res) => {
+  res.redirect(`${PUBLIC_URL}/private`)
+})
+
 
 export default router;
