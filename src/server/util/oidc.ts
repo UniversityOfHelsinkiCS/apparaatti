@@ -101,9 +101,7 @@ const setupAuthentication = async () => {
       clientSecret: OIDC_CLIENT_SECRET,
       callbackURL: OIDC_REDIRECT_URI,
       responseTypes: ['code'],
-      scope: 'openid profile email',
-      
-
+      scope: 'profile email',
     }, 
     (issuer, profile, done) => {
       console.log('OIDC strategy called')
