@@ -48,4 +48,12 @@ router.get('/success',passport.authenticate('oidc', { failureRedirect: '/fail' }
     request: req,
   });
 })
+
+router.get('/fail', async (_req, res) => {
+  res.json({
+    message: 'Login failed',
+  });
+})
+
+
 export default router;
