@@ -84,13 +84,13 @@ const setupAuthentication = async () => {
     return done(null, { id, username })
   })
 
-  passport.deserializeUser(async ({ sub, birthDate, iamGroups }: { sub: string; birthDate: string; iamGroups: string[] }, done) => {
-    console.log('Deserializing user:', sub, birthDate, iamGroups)
-    const user = await User.findByPk(sub)
+  passport.deserializeUser(async (user, done) => {
+    console.log('Deserializing user:', user)
+    const user = await User.findByPk(user.id)
 
-    if (!user) return done(new Error('User not found'))
+    
 
-    return done(null, { ...user.dataValues, birthDate, iamGroups })
+    return done(null, user)
   })
 
   passport.use('oidc', new openidClient.Strategy({ client, params }, verifyLogin))
