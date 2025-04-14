@@ -101,6 +101,7 @@ const setupAuthentication = async () => {
       clientSecret: OIDC_CLIENT_SECRET,
       callbackURL: OIDC_REDIRECT_URI,
       responseTypes: ['token', 'code'],
+      responseMode: 'query',
       scope: 'profile email',
     }, 
     (issuer, profile, done) => {
