@@ -87,6 +87,7 @@ const setupAuthentication = async () => {
   })
 
   passport.deserializeUser((obj, done) => {
+    console.log('Deserializing user:', obj)
     return done(null, obj)
   })
 
