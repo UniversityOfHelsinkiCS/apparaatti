@@ -53,8 +53,11 @@ const getClient = async () => {
   return client
 }
 
-const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, done: (err: any, user?: unknown) => void) => {
+const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, profile, accessToken, refreshToken, done: (err: any, user?: unknown) => void) => {
   console.log('User info:', userinfo)
+  console.log('Profile:', profile)
+  console.log('Access token:', accessToken)
+  console.log('Refresh token:', refreshToken)
  
   const { uid: username, hyPersonSisuId: id, given_name: firstName, family_name: lastName, schacDateOfBirth, email, hyGroupCn: iamGroups } = userinfo as unknown as OpenIDAttributes
 
