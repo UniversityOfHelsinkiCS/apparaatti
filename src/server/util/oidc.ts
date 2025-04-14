@@ -21,8 +21,15 @@ const params = {
     id_token: {
       uid: { essential: true },
       hyPersonSisuId: { essential: true },
+      given_name: { essential: true },
+      family_name: { essential: true },
+      schacDateOfBirth: { essential: true },
+      email: { essential: true },
+      hyGroupCn: { essential: true },
     },
     userinfo: {
+      uid: { essential: true },
+      hyPersonSisuId: { essential: true },
       given_name: { essential: true },
       family_name: { essential: true },
       schacDateOfBirth: { essential: true },
@@ -39,7 +46,7 @@ const getClient = async () => {
     client_id: OIDC_CLIENT_ID,
     client_secret: OIDC_CLIENT_SECRET,
     redirect_uris: [OIDC_REDIRECT_URI],
-    response_types: ['token'],
+    response_types: ['code'],
   })
 
   return client
