@@ -49,6 +49,7 @@ router.get('/user', async (req, res) => {
   }
 
   res.json({
+    message: "User logged in",
     user: req.user,
   });
 })

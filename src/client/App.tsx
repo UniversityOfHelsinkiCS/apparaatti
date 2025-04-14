@@ -12,6 +12,14 @@ function App() {
     },
   })
 
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await fetch('/api/user')
+      return res.json()
+    },
+  })
+
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
 
@@ -46,6 +54,14 @@ function App() {
 
   return (
     <>
+    {
+      user && user.message !== 'User logged in' ? (
+        <a href="/api/login">Login</a>
+      ) : (
+        <h1>Welcome {user.username}</h1>
+      )
+    }
+      
       <MultiChoiceForm form={form} onSubmit={handleSubmit}/>
     </>
   )
