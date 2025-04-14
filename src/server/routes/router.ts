@@ -48,10 +48,7 @@ router.get('/user', async (req, res) => {
     return
   }
 
-  res.json({
-    message: "User logged in",
-    user: req.user,
-  });
+  res.json(req.user);
 })
 
 router.get('/fail', async (_req, res) => {
