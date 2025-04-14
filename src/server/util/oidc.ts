@@ -47,7 +47,6 @@ const getClient = async () => {
 
 const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, done: (err: any, user?: unknown) => void) => {
   console.log('User info:', userinfo)
-  
  
   const { uid: username, hyPersonSisuId: id, given_name: firstName, family_name: lastName, schacDateOfBirth, email, hyGroupCn: iamGroups } = userinfo as unknown as OpenIDAttributes
 
@@ -59,11 +58,11 @@ const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidCli
     updatedAt: new Date(),
   } as User
 
-  const [_, created] = await User.upsert({
-    ...user,
-  })
+ // const [_, created] = await User.upsert({
+ //   ...user,
+ // })
 
-  done(null, { ...user, newUser: created })
+  done(null, { ...user, newUser: user })
 }
 
 const setupAuthentication = async () => {
@@ -71,12 +70,14 @@ const setupAuthentication = async () => {
   const client = await getClient()
 
   passport.serializeUser((user, done) => {
+    console.log('Serializing user:', user)
     const { id, username } = user as User
 
     return done(null, { id, username })
   })
 
   passport.deserializeUser(async ({ id, birthDate, iamGroups }: { id: string; birthDate: string; iamGroups: string[] }, done) => {
+    console.log('Deserializing user:', id, birthDate, iamGroups)
     const user = await User.findByPk(id)
 
     if (!user) return done(new Error('User not found'))
