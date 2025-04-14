@@ -1,5 +1,6 @@
 import * as openidClient from 'openid-client'
 import passport from 'passport'
+import OpenIDConnectStrategy from 'passport-openidconnect'
 
 import User from '../models/user.ts'
 import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
@@ -49,15 +50,14 @@ const getClient = async () => {
     redirect_uris: [OIDC_REDIRECT_URI],
     response_types: ['code'],
   })
-
+  console.log('Issuer:', issuer)
+  console.log('Client:', client)
   return client
 }
 
-const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, profile, accessToken, refreshToken, done: (err: any, user?: unknown) => void) => {
+const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo: openidClient.UserinfoResponse<openidClient.UnknownObject, openidClient.UnknownObject>, done: (err: any, user?: unknown) => void) => {
   console.log('User info:', userinfo)
-  console.log('Profile:', profile)
-  console.log('Access token:', accessToken)
-  console.log('Refresh token:', refreshToken)
+ 
  
   const { uid: username, hyPersonSisuId: id, given_name: firstName, family_name: lastName, schacDateOfBirth, email, hyGroupCn: iamGroups } = userinfo as unknown as OpenIDAttributes
 
@@ -82,21 +82,26 @@ const setupAuthentication = async () => {
 
   passport.serializeUser((user, done) => {
     console.log('Serializing user:', user)
-    const { id, username } = user as User
-
-    return done(null, { id, username })
-  })
-
-  passport.deserializeUser(async (user, done) => {
-    console.log('Deserializing user:', user)
-    const user = await User.findByPk(user.id)
-
-    
-
+  
     return done(null, user)
   })
 
-  passport.use('oidc', new openidClient.Strategy({ client, params }, verifyLogin))
+  passport.deserializeUser((obj, done) => {
+    return done(null, obj)
+  })
+
+  passport.use('oidc', new OpenIDConnectStrategy(
+    { client, params }, 
+    (issuer, profile, done) => {
+      console.log('OIDC strategy called')
+      console.log('Issuer:', issuer)
+      console.log('Profile:', profile)
+
+      
+      done(null, profile)
+    }
+  )
+  )
 }
 
 export default setupAuthentication
