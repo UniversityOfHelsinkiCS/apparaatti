@@ -4,6 +4,7 @@ import OpenIDConnectStrategy from 'passport-openidconnect'
 
 import User from '../models/user.ts'
 import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, OIDC_AUTHORIZATION_URL, OIDC_TOKEN_URL, OIDC_USERINFO_URL } from './config.ts'
+import { response } from 'express'
 
 
 type OpenIDAttributes = {
@@ -98,7 +99,11 @@ const setupAuthentication = async () => {
       userInfoURL: OIDC_USERINFO_URL,
       clientID: OIDC_CLIENT_ID,
       clientSecret: OIDC_CLIENT_SECRET,
-      callbackURL: OIDC_REDIRECT_URI
+      callbackURL: OIDC_REDIRECT_URI,
+      responseTypes: ['code'],
+      scope: 'openid profile email',
+      
+
     }, 
     (issuer, profile, done) => {
       console.log('OIDC strategy called')
