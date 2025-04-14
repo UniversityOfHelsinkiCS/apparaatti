@@ -5,7 +5,7 @@ export const inProduction = process.env.IN_PRODUCTION || ''
 
 export const SESSION_SECRET = process.env.SESSION_SECRET || '1234'
 
-export const OIDC_ISSUER = 'https://login-test.it.helsinki.fi'
+export const OIDC_ISSUER = 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'
 
 export const OIDC_AUTHORIZATION_URL ='https://login-test.it.helsinki.fi/idp/profile/oidc/authorize'
 
