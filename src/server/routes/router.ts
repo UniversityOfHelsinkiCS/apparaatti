@@ -45,7 +45,7 @@ router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '
 })
 
 
-router.get('/user',passport.authenticate('oidc', { failureRedirect: '/fail' }), async (req, res) => {
+router.get('/user',passport.authenticate('oidc', { failureRedirect: '/fail' , failureMessage: true}), async (req, res) => {
   res.json({
     user: req.user,
   });
