@@ -47,7 +47,6 @@ router.get('/user', async (req, res) => {
     res.status(401).json({ message: 'Unauthorized' });
     return
   }
-
   res.json(req.user);
 })
 
@@ -56,6 +55,24 @@ router.get('/fail', async (_req, res) => {
     message: 'Login failed',
   });
 })
+
+
+router.get('/logout', async (req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return
+  }
+
+  req.logout((err) => {
+    if (err) return next(err)
+    res.redirect('/')  
+  })
+
+  res.redirect('/');
+
+  
+})
+
 
 
 export default router;
