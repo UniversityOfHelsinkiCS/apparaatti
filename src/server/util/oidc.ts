@@ -17,6 +17,7 @@ type OpenIDAttributes = {
 
 
 const params = {
+  scope: 'openid profile email',
   claims: {
     id_token: {
       uid: { essential: true },

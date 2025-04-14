@@ -37,7 +37,7 @@ router.post('/form/1/answer', async (req, res) => {
 
 router.get('/login', passport.authenticate('oidc'))
 
-router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), (_, res) => {
+router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), (req, res) => {
   res.redirect('/api/ping')
 })
 
