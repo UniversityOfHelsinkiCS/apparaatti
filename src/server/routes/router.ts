@@ -38,10 +38,7 @@ router.post('/form/1/answer', async (req, res) => {
 router.get('/login', passport.authenticate('oidc'))
 
 router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), async (req, res) => {
-  res.json({
-    message: 'Login successful',
-    user: req.user,
-  });
+  res.redirect('/');
 })
 
 
