@@ -82,7 +82,7 @@ const setupAuthentication = async () => {
 
   passport.serializeUser((user, done) => {
     console.log('Serializing user:', user)
-  
+    
     return done(null, user)
   })
 

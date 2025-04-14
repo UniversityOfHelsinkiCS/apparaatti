@@ -38,8 +38,14 @@ router.post('/form/1/answer', async (req, res) => {
 router.get('/login', passport.authenticate('oidc'))
 
 router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), (req, res) => {
-  res.redirect('/api/ping')
+  res.redirect('/success')
 })
 
 
+router.get('/success',passport.authenticate('oidc'), (req, res) => {
+  res.json({
+    message: 'Login successful',
+    request: req,
+  });
+})
 export default router;
