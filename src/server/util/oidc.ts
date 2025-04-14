@@ -51,16 +51,12 @@ const getClient = async () => {
     redirect_uris: [OIDC_REDIRECT_URI],
     response_types: ['code'],
   })
-  console.log('Issuer:', issuer)
-  console.log('Client:', client)
+ 
   return client
 }
 
 const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (err: any, user?: unknown) => void) => {
-  console.log('User info:', userinfo)
-  console.log('Token set:', _tokenSet)
- 
-  
+
   const user: User = {
     id: userinfo.sub as string,
     username: userinfo.uid as string,
@@ -81,13 +77,10 @@ const setupAuthentication = async () => {
   const client = await getClient()
 
   passport.serializeUser((user, done) => {
-    console.log('Serializing user:', user)
-    
     return done(null, user)
   })
 
   passport.deserializeUser((obj, done) => {
-    console.log('Deserializing user:', obj)
     return done(null, obj)
   })
 

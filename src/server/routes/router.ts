@@ -17,7 +17,7 @@ router.get('/form/1', (_req, res) => {
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body);
 
-  console.log('Answer received:', answerData);
+  
 
   const user = await User.findByPk("1");
 
