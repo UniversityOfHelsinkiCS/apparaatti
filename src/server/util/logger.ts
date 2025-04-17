@@ -50,7 +50,7 @@ if (!inProduction) {
       protocol: 'udp',
       hostName: os.hostname(),
       additional: {
-        app: 'gptwrapper',
+        app: 'apparaatti',
         environment: 'production',
       },
     })
