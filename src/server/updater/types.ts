@@ -1,3 +1,4 @@
+//this file might be useful to move to the common/types in order to share with the client
 import { Request } from 'express'
 import OpenAI from 'openai'
 import { ChatRequestMessage, GetChatCompletionsOptions } from '@azure/openai'
