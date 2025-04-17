@@ -30,3 +30,4 @@ export const REDIS_PASSWORD = process.env.REDIS_PASSWORD || ''
 //used by updater
 export const IMPORTER_URL = process.env.IMPORTER_URL || 'missing url' 
 export const API_TOKEN = process.env.API_TOKEN || 'dontuse1234'
+export const UPDATER_CRON_ENABLED = process.env.UPDATER_CRON_ENABLED || false
