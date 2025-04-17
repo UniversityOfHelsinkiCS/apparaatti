@@ -1,9 +1,9 @@
 import Redis from 'ioredis'
 
-import { REDIS_URL } from './config.ts'
+import { REDIS_HOST } from './config.ts'
 
 export const redis = new Redis({
-  host: REDIS_URL,
+  host: REDIS_HOST,
   port: 6379,
 })
 
