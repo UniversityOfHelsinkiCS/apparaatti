@@ -9,7 +9,7 @@ import passport from 'passport'
 import router from './routes/router.ts'
 
 import { seed } from './test/seed.ts'
-import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './util/config.ts'
+import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, UPDATER_CRON_ENABLED } from './util/config.ts'
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
@@ -49,7 +49,8 @@ if (process.env.NODE_ENV === "production") {
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   await seed()
-  await setupAuthentication()
- 
+  if (OIDC_CLIENT_ID){
+    await setupAuthentication()
+  }
   console.log(`Server running on port ${process.env.PORT}`)
 })
