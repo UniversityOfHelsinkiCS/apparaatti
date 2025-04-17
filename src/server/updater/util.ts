@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 
-import { redis } from '../util/redis'
-import logger from '../util/logger'
+import { redis } from '../util/redis.ts'
+import logger from '../util/logger.ts'
 import { PartialRecord } from '../types'
 
 const logError = (message: string, error: Error) => {

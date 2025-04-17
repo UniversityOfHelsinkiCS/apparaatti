@@ -13,19 +13,17 @@ import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TO
 import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
+import { redis } from './util/redis.ts'
 
 
-const redisClient = createClient({ 
-  url: REDIS_URL,
-});
-redisClient.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
+redis.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
 
 const app = express()
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  store: new RedisStore({client: redisClient}),
+  store: new RedisStore({client: redis}),
 }));
 
 app.use(passport.initialize());
