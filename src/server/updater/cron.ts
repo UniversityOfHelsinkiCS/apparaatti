@@ -1,6 +1,6 @@
 import cron from 'node-cron'
 
-import { UPDATER_CRON_ENABLED, inProduction } from '../util/config'
+import { UPDATER_CRON_ENABLED, inProduction } from '../util/config.ts'
 import { run } from './index.ts'
 
 
