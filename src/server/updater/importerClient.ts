@@ -26,8 +26,8 @@ export const fetchData = async <T = unknown>(
   validator: (data: T) => boolean = defaultValidator
 ): Promise<T> => {
   console.log("fetching data from importer", IMPORTER_URL)
-  
-  const { data } = await importerClient.get(`apparaatti/${url}`, {
+
+  const { data } = await importerClient.get(`/apparaatti/${url}`, {
     params,
   })
 
