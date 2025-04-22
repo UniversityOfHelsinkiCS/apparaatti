@@ -1,13 +1,13 @@
 
 
 import { redis } from '../util/redis.ts'
-import logger from '../util/logger.ts'
+
 import { PartialRecord } from './types.ts'
 
 const logError = (message: string, error: Error) => {
-  logger.error(`${message} ${error.name}, ${error.message}`)
+  console.log(message)
+  console.log(error)
 
-  Sentry.captureException(error)
 }
 
 type AllowedBulkCreateOptionField =
@@ -41,7 +41,6 @@ export const safeBulkCreate = async ({
       `[UPDATER] ${entityName}.bulkCreate failed, reason: `,
       bulkCreateError
     )
-    logger.info(`[UPDATER] Creating ${entityName}s one by one`)
     for (const entity of entities) {
       try {
         const res = await fallbackCreate(entity, fallbackCreateOptions)
