@@ -1,6 +1,6 @@
 import { redis } from '../util/redis.ts'
 
-import { PartialRecord } from './types.ts'
+import type { PartialRecord } from './types.ts'
 
 const logError = (message: string, error: Error) => {
   console.log(message)
