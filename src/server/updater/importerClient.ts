@@ -25,7 +25,7 @@ export const fetchData = async <T = unknown>(
   params: Record<string, any> = {},
   validator: (data: T) => boolean = defaultValidator
 ): Promise<T> => {
-  const { data } = await importerClient.get(`curre/${url}`, {
+  const { data } = await importerClient.get(`apparaatti/${url}`, {
     params,
   })
 

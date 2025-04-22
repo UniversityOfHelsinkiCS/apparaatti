@@ -1,6 +1,6 @@
 
 export const DATABASE_URL = process.env.DATABASE_URL || ''
-export const inProduction = process.env.IN_PRODUCTION || ''
+export const inProduction = process.env.IN_PRODUCTION || false
 
 
 export const SESSION_SECRET = process.env.SESSION_SECRET || '1234'
@@ -29,6 +29,21 @@ export const REDIS_PASSWORD = process.env.REDIS_PASSWORD || ''
 
 
 //used by updater
-export const IMPORTER_URL = process.env.IMPORTER_URL || 'missing url' 
 export const API_TOKEN = process.env.API_TOKEN || 'dontuse1234'
 export const UPDATER_CRON_ENABLED = process.env.UPDATER_CRON_ENABLED || false
+
+
+export const JAMI_URL =
+  inProduction
+    ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami/'
+    : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/jami'
+
+export const PATE_URL =
+  inProduction
+    ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate/'
+    : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/pate/'
+
+export const IMPORTER_URL =
+  inProduction
+    ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/importer'
+    : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer'
