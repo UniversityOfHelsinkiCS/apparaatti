@@ -47,6 +47,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "ioredis": "^5.6.1",
+    "node-cron": "^3.0.3",
     "openid-client": "^5.4.3",
     "passport": "^0.6.0",
     "passport-oauth": "^1.0.0",
