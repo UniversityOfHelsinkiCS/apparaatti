@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { mangleData } from './mangleData'
+import { mangleData } from './mangleData.ts'
 
 
 interface SisuEnrolment {
