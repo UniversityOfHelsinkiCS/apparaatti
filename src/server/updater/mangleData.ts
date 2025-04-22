@@ -54,7 +54,7 @@ export const mangleData = async <T = object>(
    * This way Importer, which is comparatively slower, will be constantly working on one request.
    */
 
-  
+  for (let tries = 0; tries < 3; tries++) {
     try {
       try {
         currentData = await nextData
@@ -71,7 +71,8 @@ export const mangleData = async <T = object>(
 
       nextData = fetchData<T[]>(url, { limit, offset, since })
 
-     
+      if (!currentData) continue // first iteration
+
       const processingStart = Date.now()
 
       try {
@@ -102,7 +103,7 @@ export const mangleData = async <T = object>(
         logError('Unknown updaterloop error:', e)
       }
     }
-  
+  }
 
   const duration = Date.now() - start
   logger.info(
