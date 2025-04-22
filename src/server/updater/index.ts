@@ -1,5 +1,4 @@
-import * as Sentry from '@sentry/node'
-import logger from '../util/logger'
+
 import { fetchCoursesAndResponsibilities } from './courses'
 import { fetchEnrolments } from './enrolments'
 import { fetchUsers } from './users'
@@ -12,16 +11,16 @@ const runUpdater = async () => {
 }
 
 export const run = async () => {
-  logger.info('[UPDATER] Running updater')
-
+  console.log("running updater")
   try {
     await clearOffsets()
     await runUpdater()
   } catch (error) {
-    Sentry.captureException(error)
-    Sentry.captureMessage('Updater run failed!')
-    return logger.error('[UPDATER] finished with error', error)
+    
+    console.log(error)
+    return
   }
 
-  return logger.info('[UPDATER] Finished updating')
+  console.log("updater finished")
+  return
 }
