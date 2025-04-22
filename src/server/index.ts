@@ -14,6 +14,7 @@ import {createClient} from 'redis'
 import {RedisStore} from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
+import setupCron from './updater/cron.ts'
 
 
 redis.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
@@ -53,5 +54,11 @@ app.listen(process.env.PORT, async () => {
   if (UPDATER_CRON_ENABLED === false){
     await setupAuthentication()
   }
+
+  if(UPDATER_CRON_ENABLED){
+   await setupCron()
+   console.log("Cron jobs started")
+  }
+
   console.log(`Server running on port ${process.env.PORT}`)
 })
