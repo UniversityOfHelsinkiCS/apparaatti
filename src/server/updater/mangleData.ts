@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/node'
 
-import logger from '../util/logger'
-import { fetchData } from './importerClient'
-import * as redis from '../util/redis'
+
+import logger from '../util/logger.ts'
+import { fetchData } from './importerClient.ts'
+import * as redis from '../util/redis.ts'
 
 const logError = (message: string, error: Error) => {
   logger.error(`[UPDATER] ${message} ${error.name}, ${error.message}`)
-  Sentry.captureException(error)
+  
 }
 
 /**

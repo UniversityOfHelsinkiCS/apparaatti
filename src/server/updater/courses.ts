@@ -5,7 +5,7 @@ import {
   SisuCourseWithRealization,
 } from './types.ts'
 import { mangleData } from './mangleData.ts'
-import { upsertResponsibilities } from './responsibilities.ts'
+
 import { safeBulkCreate } from './util.ts'
 
 // Find the newest course unit that has started before the course realisation
@@ -67,7 +67,7 @@ const coursesHandler = async (
   )
 
  
-  await upsertResponsibilities(filteredCourseRealizations)
+  
 }
 
 // default 1000, set to 10 for example when debugging
