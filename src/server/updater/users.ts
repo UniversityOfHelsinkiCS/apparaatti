@@ -1,4 +1,4 @@
-import { User } from '../db/user.ts'
+import  User  from '../db/models/user.ts'
 import { mangleData } from './mangleData.ts'
 import { safeBulkCreate } from './util.ts'
 
