@@ -1,6 +1,6 @@
 import { User } from '../db/user.ts'
-import { mangleData } from './mangleData'
-import { safeBulkCreate } from './util'
+import { mangleData } from './mangleData.ts'
+import { safeBulkCreate } from './util.ts'
 
 const parsePreferredLanguageUrnToLanguage = (urn: string) => {
   const fallBackLanguage = 'en'
