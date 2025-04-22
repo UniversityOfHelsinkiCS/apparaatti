@@ -71,8 +71,7 @@ export const mangleData = async <T = object>(
 
       nextData = fetchData<T[]>(url, { limit, offset, since })
 
-      if (!currentData) continue // first iteration
-
+     
       const processingStart = Date.now()
 
       try {
