@@ -3,7 +3,7 @@ import {
   ActivityPeriod,
   SisuCourseUnit,
   SisuCourseWithRealization,
-} from '../types.ts'
+} from './types.ts'
 import { mangleData } from './mangleData.ts'
 import { upsertResponsibilities } from './responsibilities.ts'
 import { safeBulkCreate } from './util.ts'
