@@ -1,39 +1,12 @@
-import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-  DataTypes,
-} from 'sequelize'
-
-import { sequelize } from '../connection'
-
+import { DataTypes, Model } from 'sequelize';
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { sequelize } from '../connection.ts';
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  declare id: string
-
-  declare username: string
-
-  declare language: CreationOptional<string>
-
-  declare isAdmin: boolean
-
-  declare isPowerUser: boolean
-
-  declare iamGroups: string[]
-
-  declare usage: number
-
-  declare totalUsage: bigint
-
-  declare activeCourseIds: CreationOptional<string[]>
-
-  declare lastName: string
-
-  declare firstNames: string
-
-  declare studentNumber: string
-
-  declare primaryEmail: string
+  declare id: string;
+  declare username: string;
+  declare language?: CreationOptional<string>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 User.init(
@@ -50,56 +23,21 @@ User.init(
     language: {
       type: DataTypes.STRING,
     },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    isPowerUser: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    iamGroups: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: [],
-    },
-    usage: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    totalUsage: {
-      type: DataTypes.BIGINT,
-      defaultValue: 0,
-    },
-    activeCourseIds: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    createdAt: {
+      type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: [],
     },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
-    firstNames: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
-    studentNumber: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
-    primaryEmail: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   },
   {
-    underscored: true,
     sequelize,
+    tableName: 'users',
+    underscored: true,
+    timestamps: true,
   }
-)
+);
 
-export default User
+export default User;

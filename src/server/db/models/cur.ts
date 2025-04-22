@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../db/connection.ts';
-import type { LocalizedString } from '../../common/types.ts';
+import { sequelize } from '../connection.ts';
+import type { LocalizedString } from '../../../common/types.ts';
 
 class Cur extends Model<
   InferAttributes<Cur>,

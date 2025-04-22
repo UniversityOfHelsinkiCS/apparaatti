@@ -1,51 +1,50 @@
-import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-  DataTypes,
-} from 'sequelize'
-
-import { sequelize } from '../connection'
+import { Model, DataTypes } from 'sequelize';
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
+import { sequelize } from '../connection.ts';
 
 class Enrolment extends Model<
-  InferAttributes<Enrolment>,
-  InferCreationAttributes<Enrolment>
+    InferAttributes<Enrolment>,
+    InferCreationAttributes<Enrolment>
 > {
-  declare id: CreationOptional<string>
-
-  declare userId: string
-
-  declare chatInstanceId: string
+    declare id: CreationOptional<number>;
+    declare userId: string;
+    declare courseRealisationId: string;
+    declare createdAt: CreationOptional<Date>;
+    declare updatedAt: CreationOptional<Date>;
 }
 
 Enrolment.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
+      autoIncrement: true,
     },
     userId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    chatInstanceId: {
+    courseRealisationId: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
   {
-    underscored: true,
     sequelize,
-    indexes: [
-      {
-        unique: true,
-        fields: ['user_id', 'chat_instance_id'],
-      },
-    ],
+    modelName: 'Enrolment',
+    tableName: 'enrolments',
+    underscored: true, // Ensures database columns use snake_case
+    timestamps: true, // Automatically manages createdAt and updatedAt
   }
-)
+);
 
-export default Enrolment
+export default Enrolment;

@@ -42,6 +42,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.0.1",
     "@tanstack/react-query": "^5.72.0",
+    "axios": "^1.8.4",
     "bindings": "^1.5.0",
     "connect-redis": "^8.0.2",
     "express": "^5.1.0",

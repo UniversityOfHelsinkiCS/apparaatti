@@ -1,5 +1,3 @@
-
-
 import { redis } from '../util/redis.ts'
 
 import { PartialRecord } from './types.ts'

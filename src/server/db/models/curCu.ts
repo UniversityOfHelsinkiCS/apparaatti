@@ -1,38 +1,33 @@
 import { Model, DataTypes } from 'sequelize';
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../db/connection.ts';
-import type { LocalizedString } from '../../common/types.ts';
+import { sequelize } from '../connection.ts';
 
-class Cu extends Model<
-  InferAttributes<Cu>,
-  InferCreationAttributes<Cu>
+class CurCu extends Model<
+  InferAttributes<CurCu>,
+  InferCreationAttributes<CurCu>
 > {
-  declare id: string;
-  declare name: LocalizedString;
-  declare courseCode: string;
-  declare groupId: string;
+  declare id: CreationOptional<number>;
+  declare cuId: string;
+  declare curId: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-Cu.init(
+CurCu.init(
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
     },
-    name: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-    },
-    courseCode: {
+    cuId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    groupId: {
+    curId: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -45,11 +40,11 @@ Cu.init(
   },
   {
     sequelize,
-    modelName: 'Cu',
-    tableName: 'cus',
-    underscored: true,
-    timestamps: true,
+    modelName: 'CurCu',
+    tableName: 'cur_cu',
+    underscored: true, // Ensures database columns use snake_case
+    timestamps: true, // Automatically manages createdAt and updatedAt
   }
 );
 
-export default Cu;
+export default CurCu;

@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../db/connection.ts';
+import { sequelize } from '../connection.ts';
 
 class Answer extends Model<
     InferAttributes<Answer>,

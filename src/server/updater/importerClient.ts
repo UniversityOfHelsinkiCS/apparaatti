@@ -3,7 +3,7 @@ import { Agent as HttpAgent } from 'http'
 import { Agent as HttpsAgent } from 'https'
 
 import { IMPORTER_URL, API_TOKEN } from '../util/config.ts'
-import logger from '../util/logger'
+import logger from '../util/logger.ts'
 
 const importerClient = axios.create({
   baseURL: IMPORTER_URL,

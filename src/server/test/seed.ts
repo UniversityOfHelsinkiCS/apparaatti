@@ -1,8 +1,8 @@
-import Cu from "../models/cu.ts"
-import Cur from "../models/cur.ts"
-import CurCu from "../models/curCu.ts"
-import Enrolment from "../models/enrolment.ts"
-import User from "../models/user.ts"
+import Cu from "../db/models/cu.ts"
+import Cur from "../db/models/cur.ts"
+import CurCu from "../db/models/curCu.ts"
+import Enrolment from "../db/models/enrolment.ts"
+import User from "../db/models/user.ts"
 
 export const seed = async () => {
   await Enrolment.destroy({

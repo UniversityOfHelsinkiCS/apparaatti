@@ -1,8 +1,8 @@
 import express from 'express';
 import { FORM } from '../data/form.ts';
 import { AnswerSchema } from '../../common/validators.ts';
-import Answer from '../models/answer.ts';
-import User from '../models/user.ts';
+import Answer from '../db/models/answer.ts';
+import User from '../db/models/user.ts';
 import passport from 'passport';
 
 

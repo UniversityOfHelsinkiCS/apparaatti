@@ -2,7 +2,7 @@ import * as openidClient from 'openid-client'
 import passport from 'passport'
 
 
-import User from '../models/user.ts'
+import User from '../db/models/user.ts'
 import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, OIDC_AUTHORIZATION_URL, OIDC_TOKEN_URL, OIDC_USERINFO_URL } from './config.ts'
 import { response } from 'express'
 
