@@ -1,12 +1,12 @@
-import { ChatInstance } from '../db/models'
+
 import {
   ActivityPeriod,
   SisuCourseUnit,
   SisuCourseWithRealization,
-} from '../types'
-import { mangleData } from './mangleData'
-import { upsertResponsibilities } from './responsibilities'
-import { safeBulkCreate } from './util'
+} from '../types.ts'
+import { mangleData } from './mangleData.ts'
+import { upsertResponsibilities } from './responsibilities.ts'
+import { safeBulkCreate } from './util.ts'
 
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
@@ -54,45 +54,7 @@ const courseUnitsOf = ({ courseUnits }: any) => {
   }, [])
 }
 
-const createChatInstance = async (
-  courseRealisations: SisuCourseWithRealization[]
-) => {
-  const chatInstances = courseRealisations.map((course) => {
-    const courseUnit = getCourseUnit(course.courseUnits, course.activityPeriod)
 
-    return {
-      name: {
-        fi: courseUnit.name.fi,
-        en: courseUnit.name.en || courseUnit.name.fi,
-        sv: courseUnit.name.sv || courseUnit.name.fi,
-      },
-      courseId: course.id,
-      activityPeriod: course.activityPeriod,
-      courseActivityPeriod: course.activityPeriod,
-      courseUnitRealisationTypeUrn: course.courseUnitRealisationTypeUrn,
-      courseUnits: courseUnitsOf(course),
-    }
-  })
-
-  await safeBulkCreate({
-    entityName: 'ChatInstance',
-    entities: chatInstances,
-    bulkCreate: async (e, opts) => ChatInstance.bulkCreate(e, opts),
-    fallbackCreate: async (e, opts) => ChatInstance.upsert(e, opts),
-    bulkCreateOptions: {
-      updateOnDuplicate: [
-        'name',
-        'courseUnitRealisationTypeUrn',
-        'courseUnits',
-        'courseActivityPeriod',
-      ],
-      conflictAttributes: ['courseId'],
-    },
-    fallbackCreateOptions: {
-      fields: ['courseId'],
-    },
-  })
-}
 
 const coursesHandler = async (
   courseRealizations: SisuCourseWithRealization[]
@@ -104,7 +66,7 @@ const coursesHandler = async (
       course.flowState !== 'ARCHIVED'
   )
 
-  await createChatInstance(filteredCourseRealizations)
+ 
   await upsertResponsibilities(filteredCourseRealizations)
 }
 
