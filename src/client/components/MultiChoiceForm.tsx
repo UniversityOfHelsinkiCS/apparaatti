@@ -33,7 +33,18 @@ const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: F
             <FormQuestion key={q.id} question={q}/>
           )}
         </FormControl>
-        <Button variant="contained" color="primary" type="submit">
+        <Button
+          variant="outlined"
+          type="submit"
+          sx={{
+            borderColor: '#90caf9',
+            color: 'black',
+            '&:hover': {
+              backgroundColor: '#2196f3',
+              color: 'white',
+            },
+          }}
+        >
           Submit
         </Button>
       </Box>
