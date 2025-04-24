@@ -14,6 +14,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
       type: JSONB,
       allowNull: false,
     },
+    //might not want to tie a form spesifically to a single course realisation, 
     course_realisation_id: {
       type: DataTypes.STRING,
       allowNull: false,
