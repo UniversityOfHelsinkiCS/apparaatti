@@ -7,6 +7,7 @@ import { useState } from 'react';
 import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx';
 
 function App() {
+  const [courseRecommendations, setCourseRecommendations] = useState([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 
   const { data: form, isLoading } = useQuery<Form>({
@@ -36,6 +37,8 @@ function App() {
           'Content-Type': 'application/json',
         },
       })
+      const recommendations = await res.json()
+      setCourseRecommendations(recommendations);
 
       if (!res.ok) {
         throw new Error('Network response was not ok')
@@ -79,7 +82,7 @@ function App() {
       <Box sx={{ padding: 2 }}>
         <MultiChoiceForm form={form} onSubmit={handleSubmit} />
       </Box>
-      {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)} />}
+      {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}
     </>
   )
 }

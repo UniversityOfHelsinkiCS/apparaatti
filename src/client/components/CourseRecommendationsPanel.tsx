@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import type { CourseRecommendation as CourseRecommendationType } from '../../common/types';
+import CourseRecommendation from './CourseRecommendation';
 
-const CourseRecommendationsPanel = ({ onClose }: { onClose: () => void }) => {
+const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRecommendationType[] }) => {
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = () => {
@@ -77,6 +79,12 @@ const CourseRecommendationsPanel = ({ onClose }: { onClose: () => void }) => {
       <Typography variant="h6" sx={{ marginTop: 4, marginBottom: 2 }}>
         Suositellut kurssit
       </Typography>
+      <Box>
+          {recommendations.map((course) => (
+            <CourseRecommendation key={course.id} course={course} />
+          ))}
+
+      </Box>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
         TODO: kussit
       </Typography>

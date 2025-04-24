@@ -4,6 +4,7 @@ import { AnswerSchema } from '../../common/validators.ts';
 import Answer from '../db/models/answer.ts';
 import User from '../db/models/user.ts';
 import passport from 'passport';
+import type { CourseRecommendation } from '../../common/types.ts';
 
 
 const router = express.Router();
@@ -32,7 +33,35 @@ router.post('/form/1/answer', async (req, res) => {
     formId: 1,
   });
 
-  res.json(answer);
+  // do the recommendation calculation
+  const recommendations: CourseRecommendation[] = [
+    {
+      id: '1',
+      name: 'Course 1',
+      description: 'Description 1',
+      courseCode: 'CS101',
+      credits: 5,
+      url: 'https://example.com/course1',
+    },
+    {
+      id: '2',
+      name: 'Course 2',
+      description: 'Description 2',
+      courseCode: 'CS102',
+      credits: 5,
+      url: 'https://example.com/course2',
+    },
+    {
+      id: '3',
+      name: 'Course 3',
+      description: 'Description 3',
+      courseCode: 'CS103',
+      credits: 5,
+      url: 'https://example.com/course3',
+    }
+  ]
+
+  res.json(recommendations);
 })
 
 router.get('/login', passport.authenticate('oidc'))

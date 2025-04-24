@@ -20,3 +20,13 @@ export type Form = {
   id: string;
   questions: Question[];
 }
+
+
+export type CourseRecommendation = {
+  id: string;
+  name: string;
+  description: string;
+  courseCode: string;
+  credits: number;
+  url: string;
+}
