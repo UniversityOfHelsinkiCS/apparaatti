@@ -30,6 +30,7 @@ export const fetchData = async <T = unknown>(
   const { data } = await axios.get(`https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer/apparaatti/updater/persons`, {
     params: {...params, token: API_TOKEN },
   })
+  console.log("data", data)
 
   if (data.waitAndRetry) {
     // importer is working to prepare data. Wait a bit and try again
