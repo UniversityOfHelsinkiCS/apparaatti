@@ -71,7 +71,12 @@ function App() {
             Apparaatti
           </Typography>
           {user?.username ? (
+            <>
             <Button color="inherit">Welcome, {user.username}</Button>
+            <Button color="inherit" href="/api/logout">
+              Logout
+            </Button>
+            </>
           ) : (
             <Button color="inherit" href="/api/login">
               Login

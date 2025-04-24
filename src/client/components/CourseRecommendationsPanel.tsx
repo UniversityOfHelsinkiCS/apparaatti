@@ -80,7 +80,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
       </Button>
       <Stack >
         <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6 }}>
-          Kurssi Ehdotukset
+          Ehdotetut kurssit:
         </Typography>
       {recommendations.map((course) => (
         <CourseRecommendation key={course.id} course={course} />
