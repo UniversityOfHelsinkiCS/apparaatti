@@ -16,7 +16,7 @@ export const OIDC_USERINFO_URL = 'https://login-test.it.helsinki.fi/idp/profile/
 
 
 
-export const OIDC_CLIENT_ID = process.env.OIDC_CLIENT_ID || ''
+export const OIDC_CLIENT_ID = process.env.OIDC_CLIENT_ID || '1234'
 
 export const OIDC_CLIENT_SECRET = process.env.OIDC_CLIENT_SECRET || ''
 

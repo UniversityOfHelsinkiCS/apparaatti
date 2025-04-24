@@ -1,7 +1,8 @@
-import MultiChoiceForm from './components/MultiChoiceForm.tsx';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { Form } from '../common/types.ts';
-import { AnswerSchema } from '../common/validators.ts';
+import MultiChoiceForm from './components/MultiChoiceForm.tsx'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Form } from '../common/types.ts'
+import { AnswerSchema } from '../common/validators.ts'
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
 
 function App() {
   const { data: form, isLoading } = useQuery<Form>({
@@ -22,7 +23,6 @@ function App() {
 
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-
       const answerData = AnswerSchema.parse(Object.fromEntries(formData))
 
       const res = await fetch('/api/form/1/answer', {
@@ -40,11 +40,10 @@ function App() {
   })
 
   const handleSubmit = async (formData: FormData) => {
-
     submitAnswerMutation.mutateAsync(formData, {
       onSuccess: () => {
         console.log('Form submitted successfully')
-      }
+      },
     })
   }
 
@@ -54,16 +53,27 @@ function App() {
 
   return (
     <>
-    {
-      user?.username ? (
-        <h1>Welcome {user.username}</h1>
-       
-      ) : (
-        <a href="/api/login">Login</a>
-      )
-    }
-      
-      <MultiChoiceForm form={form} onSubmit={handleSubmit}/>
+      <AppBar position="static" sx={{ 
+        backgroundColor: 'white', 
+        color: 'black', 
+        boxShadow: 'none', 
+        borderBottom: '1px solid #e0e0e0' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Apparaatti
+          </Typography>
+          {user?.username ? (
+            <Button color="inherit">Welcome, {user.username}</Button>
+          ) : (
+            <Button color="inherit" href="/api/login">
+              Login
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
+      <Box sx={{ padding: 2 }}>
+        <MultiChoiceForm form={form} onSubmit={handleSubmit} />
+      </Box>
     </>
   )
 }
