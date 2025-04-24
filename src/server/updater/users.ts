@@ -62,5 +62,5 @@ const usersHandler = async (users: SisuUser[]) => {
 }
 
 export const fetchUsers = async () => {
-  await mangleData('persons', 10_000, usersHandler, new Date('2025-01-01'))
+  await mangleData('persons', 10_000, usersHandler)
 }

@@ -27,9 +27,7 @@ export const fetchData = async <T = unknown>(
 ): Promise<T> => {
   console.log("fetching data from importer", IMPORTER_URL)
   console.log(params)
-  const { data } = await axios.get(`https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer/apparaatti/updater/persons`, {
-    params: {...params, token: API_TOKEN },
-  })
+  const { data } = await importerClient.get(`apparaatti/${url}`, { params })
   console.log("data", data)
 
   if (data.waitAndRetry) {
