@@ -6,7 +6,12 @@ const FormQuestion = ({ question }: { question: Question }) => {
     <Box sx={{
       paddingTop: 4,
     }}>
-      <Typography variant="h5" component="h1" gutterBottom>
+      <Typography 
+        variant="h5" 
+        component="h1" 
+        gutterBottom 
+        sx={{ fontSize: '2rem' }}
+      >
         {question.question.fi}
       </Typography>
       <RadioGroup name={question.id}>
