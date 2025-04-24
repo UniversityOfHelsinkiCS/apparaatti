@@ -10,11 +10,17 @@ const logError = (message: string, error: Error) => {
 }
 
 /**
- * If a single update category takes over tow hours, something is probably wrong
- * Stop Updater from running indefinitely, crashing Norppa and messing up logs
+ * If a single update category takes over two hours, something is probably wrong
+ * Stop Updater from running indefinitely
  */
 const checkTimeout = (start: number) => {
   if (Date.now() - start > 7_200_000)
+    throw new Error('Updater time limit exceeded!')
+  return true
+}
+
+const checkTimeoutSmall = (start: number) => {
+  if (Date.now() - start > 1_000)
     throw new Error('Updater time limit exceeded!')
   return true
 }
@@ -54,7 +60,7 @@ export const mangleData = async <T = object>(
    * This way Importer, which is comparatively slower, will be constantly working on one request.
    */
 
-  while (checkTimeout(start)) {
+  while (checkTimeoutSmall(start)) {
     try {
       try {
         currentData = await nextData
