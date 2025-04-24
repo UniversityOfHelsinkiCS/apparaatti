@@ -29,6 +29,9 @@ export const fetchData = async <T = unknown>(
   console.log(params)
   const { data } = await axios.get(`https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer/apparaatti/persons`, {
     params: {...params, token: API_TOKEN },
+    headers:{
+      'Authorization': 'Bearer ' + API_TOKEN,
+    }
   })
 
   if (data.waitAndRetry) {
