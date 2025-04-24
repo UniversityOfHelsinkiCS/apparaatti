@@ -8,7 +8,7 @@ import logger from '../util/logger.ts'
 const importerClient = axios.create({
   baseURL: IMPORTER_URL,
   params: {
-    token: API_TOKEN,
+    token: "API_TOKEN",
   },
   // see this issue: https://github.com/axios/axios/issues/5929#issue-1918808460
   // see related issue: https://github.com/node-fetch/node-fetch/issues/1735
