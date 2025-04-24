@@ -3,6 +3,7 @@ import Cur from "../db/models/cur.ts"
 import CurCu from "../db/models/curCu.ts"
 import Enrolment from "../db/models/enrolment.ts"
 import User from "../db/models/user.ts"
+import Form from "../db/models/form.ts"
 
 export const seed = async () => {
   await Enrolment.destroy({
@@ -20,12 +21,16 @@ export const seed = async () => {
   await Cu.destroy({
     where: {},
   })
+  await Form.destroy({
+    where: {},
+  })
 
   await seedUsers()
   await seedCurs()
   await seedCus()
   await seedEnrolments()
   await seedCurCus()
+  await seedForms()
 
   console.log('Seeding completed')
 }
@@ -123,4 +128,47 @@ const seedCurCus = async () => {
       cuId: '2',
     },
   ])
+}
+
+const seedForms = async () => {
+  await seedForm()
+}
+
+const seedForm = async () => {
+  await Form.create({
+    id: "1",
+    name: "Kyselylomake",
+    courseRealisationId: "1",
+    active: true,
+    questions: [
+      {
+        id: "1",
+        question: {
+          fi: "Mikä on minttu?",
+          sv: "Vad är mint?",
+          en: "What is mint?",
+        },
+        type: "select",
+        options: [
+          { id: "1", name: { fi: "Kasvi", sv: "Växt", en: "Plant" } },
+          { id: "2", name: { fi: "Juoma", sv: "Dryck", en: "Drink" } },
+          { id: "3", name: { fi: "Maku", sv: "Smak", en: "Flavor" } },
+        ],
+      },
+      {
+        id: "2",
+        question: {
+          fi: "Mikä on lempivärisi?",
+          sv: "Vad är din favoritfärg?",
+          en: "What is your favorite color?",
+        },
+        type: "select",
+        options: [
+          { id: "1", name: { fi: "Punainen", sv: "Röd", en: "Red" } },
+          { id: "2", name: { fi: "Sininen", sv: "Blå", en: "Blue" } },
+          { id: "3", name: { fi: "Vihreä", sv: "Grön", en: "Green" } },
+        ],
+      },
+    ],
+  })
 }
