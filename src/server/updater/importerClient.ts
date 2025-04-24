@@ -26,7 +26,7 @@ export const fetchData = async <T = unknown>(
   validator: (data: T) => boolean = defaultValidator
 ): Promise<T> => {
   console.log("fetching data from importer", IMPORTER_URL)
-
+  console.log(params)
   const { data } = await axios.get(`https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer/apparaatti/persons`, {
     params: {...params, token: API_TOKEN },
   })
