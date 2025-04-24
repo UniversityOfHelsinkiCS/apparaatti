@@ -3,8 +3,12 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form } from '../common/types.ts'
 import { AnswerSchema } from '../common/validators.ts'
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
+import { useState } from 'react';
+import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx';
 
 function App() {
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+
   const { data: form, isLoading } = useQuery<Form>({
     queryKey: ['form'],
     queryFn: async () => {
@@ -42,9 +46,10 @@ function App() {
   const handleSubmit = async (formData: FormData) => {
     submitAnswerMutation.mutateAsync(formData, {
       onSuccess: () => {
-        console.log('Form submitted successfully')
+        console.log('Form submitted successfully');
       },
     })
+    setIsSidePanelOpen(true);
   }
 
   if (isLoading || !form) {
@@ -74,6 +79,7 @@ function App() {
       <Box sx={{ padding: 2 }}>
         <MultiChoiceForm form={form} onSubmit={handleSubmit} />
       </Box>
+      {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)} />}
     </>
   )
 }
