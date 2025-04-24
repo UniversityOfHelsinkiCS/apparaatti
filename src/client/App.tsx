@@ -61,7 +61,7 @@ function App() {
 
   return (
     <>
-      <AppBar position="static" sx={{ 
+      <AppBar position="fixed" sx={{ 
         backgroundColor: 'white', 
         color: 'black', 
         boxShadow: 'none', 
@@ -79,11 +79,14 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <Box sx={{ padding: 2 }}>
+      <Box sx={{
+        paddingTop: 10,
+         }}>  
         <MultiChoiceForm form={form} onSubmit={handleSubmit} />
+      
       </Box>
       {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}
-    </>
+      </>
   )
 }
 

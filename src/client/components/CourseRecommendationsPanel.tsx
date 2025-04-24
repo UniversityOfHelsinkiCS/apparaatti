@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types';
 import CourseRecommendation from './CourseRecommendation';
 
@@ -25,6 +25,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         height: '100%',
         backgroundColor: '#f5f5f5',
         boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',
+        marginTop: 8,
         padding: 2,
         display: 'flex',
         flexDirection: 'column',
@@ -59,6 +60,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
           minWidth: '24px',
           height: '24px',
           padding: 0,
+          margin: 1,
           fontSize: '1rem',
           lineHeight: 1,
           color: 'black',
@@ -76,18 +78,16 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
       >
         X
       </Button>
-      <Typography variant="h6" sx={{ marginTop: 4, marginBottom: 2 }}>
-        Suositellut kurssit
-      </Typography>
-      <Box>
-          {recommendations.map((course) => (
-            <CourseRecommendation key={course.id} course={course} />
-          ))}
-
-      </Box>
-      <Typography variant="body1" sx={{ marginBottom: 2 }}>
-        TODO: kussit
-      </Typography>
+      <Stack >
+        <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6 }}>
+          Course Recommendations
+        </Typography>
+      {recommendations.map((course) => (
+        <CourseRecommendation key={course.id} course={course} />
+      ))}
+      </Stack>
+  
+      
     </Box>
   );
 };

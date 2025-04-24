@@ -20,12 +20,9 @@ const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: F
           alignItems: 'center',
           justifyContent: 'center',
           padding: 2,
-          gap: 2,
-          maxWidth: 400,
+          gap: 0,
+          maxWidth: 1000,
           margin: '0 auto',
-          border: '1px solid #ccc',
-          borderRadius: 2,
-          boxShadow: 2,
         }}
       >
         <FormControl component="fieldset">
@@ -43,6 +40,7 @@ const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: F
               backgroundColor: '#2196f3',
               color: 'white',
             },
+            marginTop: 4,
           }}
         >
           Submit

@@ -6,13 +6,10 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
   if (!course) return null;
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, margin: 2 }}>
+    <Paper elevation={2} sx={{ padding: 2, margin: 1 }}>
       <Box>
         <Typography variant="h5" component="h2" gutterBottom>
           {course.name}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          {course.description}
         </Typography>
         <Typography variant="body2" color="textSecondary">
          {course.courseCode}

@@ -1,9 +1,11 @@
-import { FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 import { Question } from '../../common/types.tsx';
 
 const FormQuestion = ({ question }: { question: Question }) => {
   return (
-    <>
+    <Box sx={{
+      paddingTop: 4,
+    }}>
       <Typography variant="h5" component="h1" gutterBottom>
         {question.question.fi}
       </Typography>
@@ -31,7 +33,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
           />
         ))}
       </RadioGroup>
-    </>
+    </Box>
   );
 }
 
