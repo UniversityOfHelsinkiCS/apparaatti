@@ -29,4 +29,9 @@ export type CourseRecommendation = {
   courseCode: string;
   credits: number;
   url: string;
+  courseRecommendationCoordinates: {
+    fear: number;
+    teachingMethod: number;
+    experience: number;
+  }
 }
