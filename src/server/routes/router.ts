@@ -112,6 +112,19 @@ function getRecommendations(userCoordinates){
         teachingMethod: 0,
         experience: 1.0,
       }
+    },
+    {
+      id: '4',
+      name: 'Course 4',
+      description: 'Description 4',
+      courseCode: 'CS103',
+      credits: 5,
+      url: 'https://example.com/course3',
+      courseRecommendationCoordinates: {
+        fear: 0.0,
+        teachingMethod: 0.0,
+        experience: 0.0,
+      }
     }
   ]
 
