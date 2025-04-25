@@ -5,20 +5,22 @@ import Answer from '../db/models/answer.ts';
 import User from '../db/models/user.ts';
 import passport from 'passport';
 import type { CourseRecommendation } from '../../common/types.ts';
+import Form from '../db/models/form.ts';
 
 
 const router = express.Router();
 
 router.use(express.json());
 
-router.get('/form/1', (_req, res) => {
-  res.json(FORM);
+router.get('/form/1', async (_req, res) => {
+  const form = await Form.findByPk(1);
+
+  res.json(form);
 });
 
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body);
 
-  
 
   const user = await User.findByPk("1");
 

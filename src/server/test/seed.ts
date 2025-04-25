@@ -144,31 +144,45 @@ const seedForm = async () => {
       {
         id: "1",
         question: {
-          fi: "Mikä on minttu?",
-          sv: "Vad är mint?",
-          en: "What is mint?",
+          fi: "Kuinka paljon jännität?",
+          sv: "Hur mycket oroar du dig?",
+          en: "How much do you worry?",
         },
         type: "select",
         options: [
-          { id: "1", name: { fi: "Kasvi", sv: "Växt", en: "Plant" } },
-          { id: "2", name: { fi: "Juoma", sv: "Dryck", en: "Drink" } },
-          { id: "3", name: { fi: "Maku", sv: "Smak", en: "Flavor" } },
+          { id: "1", name: { fi: "En ollenkaan", sv: "", en: "" } },
+          { id: "2", name: { fi: "Jonkin verran", sv: "", en: "" } },
+          { id: "3", name: { fi: "Paljon", sv: "", en: "" } },
         ],
       },
       {
         id: "2",
         question: {
-          fi: "Mikä on lempivärisi?",
+          fi: "Mikä on suosimasi opetuksen muoto?",
           sv: "Vad är din favoritfärg?",
           en: "What is your favorite color?",
         },
         type: "select",
         options: [
-          { id: "1", name: { fi: "Punainen", sv: "Röd", en: "Red" } },
-          { id: "2", name: { fi: "Sininen", sv: "Blå", en: "Blue" } },
-          { id: "3", name: { fi: "Vihreä", sv: "Grön", en: "Green" } },
+          { id: "1", name: { fi: "Täysin etäopetus", sv: "", en: "" } },
+          { id: "2", name: { fi: "Puolet etänä puolet läsnä", sv: "", en: "" } },
+          { id: "3", name: { fi: "Vain lähiopetus", sv: "", en: "" } },
         ],
       },
+      {
+        id: "3",
+        question: {
+          fi: "Kuinka paljon kokemusta sinulla on?",
+          sv: "",
+          en: "",
+        },
+        type: "select",
+        options: [
+          { id: "1", name: { fi: "Ei ollenkaan", sv: "", en: "" } },
+          { id: "2", name: { fi: "Perusteet", sv: "", en: "" } },
+          { id: "3", name: { fi: "Edistynyt", sv: "", en: "" } },
+        ],
+      }
     ],
   })
 }
