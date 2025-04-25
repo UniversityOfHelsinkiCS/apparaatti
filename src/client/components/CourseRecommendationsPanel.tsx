@@ -79,12 +79,14 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         X
       </Button>
       <Stack >
-        <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6 }}>
+        <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6}}>
           Ehdotetut kurssit:
         </Typography>
+      <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 1, paddingRight: 1, paddingTop: 2, paddingBottom: 10 }}>
       {recommendations.map((course) => (
         <CourseRecommendation key={course.id} course={course} />
       ))}
+      </Stack>
       </Stack>
   
       

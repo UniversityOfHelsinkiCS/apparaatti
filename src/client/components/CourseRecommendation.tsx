@@ -17,6 +17,9 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
         <Typography variant="body2" color="textSecondary">
          opintopisteet: {course.credits}
         </Typography>
+        <p>
+          Jännitys: {course.courseRecommendationCoordinates.fear}, Opetusmuoto: {course.courseRecommendationCoordinates.teachingMethod}, Kokemus: {course.courseRecommendationCoordinates.experience}
+        </p>
       </Box>
     </Paper>
   );

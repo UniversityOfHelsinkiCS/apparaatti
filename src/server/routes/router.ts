@@ -125,12 +125,25 @@ function getRecommendations(userCoordinates){
         teachingMethod: 0.0,
         experience: 0.0,
       }
+    },
+    {
+      id: '5',
+      name: 'Course 5',
+      description: 'Description 5',
+      courseCode: 'CS103',
+      credits: 5,
+      url: 'https://example.com/course3',
+      courseRecommendationCoordinates: {
+        fear: 1.0,
+        teachingMethod: 1.0,
+        experience: 1.0,
+      }
     }
   ]
 
   const distances = calculateUserDistances(userCoordinates, availableCourses);
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance);
-  const recommendations = sortedCourses.slice(0, 1).map(course => ({
+  const recommendations = sortedCourses.slice(0, 3).map(course => ({
     id: course.id,
     name: course.name,
     description: course.description,
