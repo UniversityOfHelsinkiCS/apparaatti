@@ -168,7 +168,7 @@ router.post('/form/1/answer', async (req, res) => {
     return
   }
 
-  //await saveAnswer(answerData, user)
+  await saveAnswer(answerData, user)
 
   const userCoordinates = calculateUserCoordinates(answerData);
   const recommendations = getRecommendations(userCoordinates);
