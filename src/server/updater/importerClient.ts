@@ -25,10 +25,7 @@ export const fetchData = async <T = unknown>(
   params: Record<string, any> = {},
   validator: (data: T) => boolean = defaultValidator
 ): Promise<T> => {
-  console.log("fetching data from importer", IMPORTER_URL)
-  console.log(params)
   const { data } = await importerClient.get(`apparaatti/${url}`, { params })
-  console.log("data", data)
 
   if (data.waitAndRetry) {
     // importer is working to prepare data. Wait a bit and try again
