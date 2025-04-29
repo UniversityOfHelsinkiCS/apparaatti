@@ -1,13 +1,10 @@
 import express from 'express'
-import { FORM } from '../data/form.ts'
 import { AnswerSchema } from '../../common/validators.ts'
 import Answer from '../db/models/answer.ts'
 import User from '../db/models/user.ts'
 import passport from 'passport'
-import type { CourseRecommendation } from '../../common/types.ts'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
-
 
 const router = express.Router()
 
@@ -43,7 +40,7 @@ router.post('/form/1/answer', async (req, res) => {
   }
 
   await saveAnswer(answerData, user)
-  const recommendations = recommendCourses(answerData)
+  const recommendations = await recommendCourses(answerData)
   res.json(recommendations)
 })
 

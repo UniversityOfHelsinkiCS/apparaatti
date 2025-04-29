@@ -38,6 +38,7 @@ function App() {
         },
       })
       const recommendations = await res.json()
+      console.log(recommendations)
       setCourseRecommendations(recommendations)
 
       if (!res.ok) {

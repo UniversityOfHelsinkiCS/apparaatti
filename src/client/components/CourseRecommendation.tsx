@@ -1,5 +1,4 @@
-import React from 'react'
-import { CourseRecommendation as CourseRecommendationType } from '/common/types'
+import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import { Box, Paper, Typography } from '@mui/material'
 
 const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) => {
@@ -18,7 +17,7 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
          opintopisteet: {course.credits}
         </Typography>
         <p>
-          Jännitys: {course.courseRecommendationCoordinates.fear}, Opetusmuoto: {course.courseRecommendationCoordinates.teachingMethod}, Kokemus: {course.courseRecommendationCoordinates.experience}
+          Jännitys: {course.fear}, Opetusmuoto: {course.teachingMethod}, Kokemus: {course.experience}
         </p>
       </Box>
     </Paper>

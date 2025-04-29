@@ -21,6 +21,13 @@ export type Form = {
   questions: Question[];
 }
 
+export const DIMENSIONS = [
+  'fear',
+  'teachingMethod',
+  'experience',
+] as const
+
+export type Dimension = typeof DIMENSIONS[number]
 
 export type CourseRecommendation = {
   id: string;
@@ -29,9 +36,4 @@ export type CourseRecommendation = {
   courseCode: string;
   credits: number;
   url: string;
-  courseRecommendationCoordinates: {
-    fear: number;
-    teachingMethod: number;
-    experience: number;
-  }
-}
+} & Record<Dimension, number>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import CourseRecommendation from './CourseRecommendation'
