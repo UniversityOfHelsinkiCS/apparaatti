@@ -47,4 +47,4 @@ Form.init(
     underscored: true,
   }
 )
-export default Form;
+export default Form

@@ -10,14 +10,14 @@ import router from './routes/router.ts'
 
 import { seed } from './test/seed.ts'
 import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, UPDATER_CRON_ENABLED } from './util/config.ts'
-import {createClient} from 'redis'
-import {RedisStore} from 'connect-redis'
+import { createClient } from 'redis'
+import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
 
 
-redis.on('ready', () => {console.log("connected to redis")}).connect().catch(console.error);
+redis.on('ready', () => {console.log('connected to redis')}).connect().catch(console.error)
 
 const app = express()
 app.use(session({
@@ -25,19 +25,19 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new RedisStore({client: redis}),
-}));
+}))
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 app.use('/api', router)
-app.use('/api/ping', (_req, res) => { res.send("pong") })
+app.use('/api/ping', (_req, res) => { res.send('pong') })
 app.use('/api', (_, res) => {
   res.sendStatus(404)
 })
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   const DIST_PATH = path.resolve(
     dirname(fileURLToPath(import.meta.url)),
     '../../dist'
@@ -56,8 +56,8 @@ app.listen(process.env.PORT, async () => {
   }
 
   if(UPDATER_CRON_ENABLED){
-   await setupCron()
-   console.log("Cron jobs started")
+    await setupCron()
+    console.log('Cron jobs started')
   }
 
   console.log(`Server running on port ${process.env.PORT}`)

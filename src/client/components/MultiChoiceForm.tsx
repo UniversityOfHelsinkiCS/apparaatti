@@ -1,15 +1,15 @@
-import React from 'react';
-import { Box, Button, FormControl } from '@mui/material';
-import FormQuestion from './FormQuestion.tsx';
-import { Form } from '../../common/types.ts';
+import React from 'react'
+import { Box, Button, FormControl } from '@mui/material'
+import FormQuestion from './FormQuestion.tsx'
+import { Form } from '../../common/types.ts'
 
 
 const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: FormData) => Promise<void>}) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
-    ev.preventDefault();
-    const formData = new FormData(ev.currentTarget);
-    await onSubmit(formData);
-  };
+    ev.preventDefault()
+    const formData = new FormData(ev.currentTarget)
+    await onSubmit(formData)
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -47,7 +47,7 @@ const MultiChoiceForm = ({ form, onSubmit }: {form: Form, onSubmit: (formData: F
         </Button>
       </Box>
     </form>
-  );
-};
+  )
+}
 
-export default MultiChoiceForm;
+export default MultiChoiceForm

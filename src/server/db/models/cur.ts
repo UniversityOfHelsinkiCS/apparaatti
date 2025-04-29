@@ -1,18 +1,18 @@
-import { Model, DataTypes } from 'sequelize';
-import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../connection.ts';
-import type { LocalizedString } from '../../../common/types.ts';
+import { Model, DataTypes } from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { sequelize } from '../connection.ts'
+import type { LocalizedString } from '../../../common/types.ts'
 
 class Cur extends Model<
   InferAttributes<Cur>,
   InferCreationAttributes<Cur>
 > {
-  declare id: string;
-  declare name: LocalizedString;
-  declare startDate: Date;
-  declare endDate: Date;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare id: string
+  declare name: LocalizedString
+  declare startDate: Date
+  declare endDate: Date
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 }
 
 Cur.init(
@@ -50,6 +50,6 @@ Cur.init(
     underscored: true, // Ensures database columns use snake_case
     timestamps: true, // Automatically manages createdAt and updatedAt
   }
-);
+)
 
-export default Cur;
+export default Cur

@@ -1,5 +1,5 @@
 //this file might be useful to move to the common/types in order to share with the client
-import express from 'express';
+import express from 'express'
 
 export type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>;
 

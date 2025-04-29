@@ -3,12 +3,12 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Form } from '../common/types.ts'
 import { AnswerSchema } from '../common/validators.ts'
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
-import { useState } from 'react';
-import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx';
+import { useState } from 'react'
+import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx'
 
 function App() {
-  const [courseRecommendations, setCourseRecommendations] = useState([]);
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [courseRecommendations, setCourseRecommendations] = useState([])
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
 
   const { data: form, isLoading } = useQuery<Form>({
     queryKey: ['form'],
@@ -38,7 +38,7 @@ function App() {
         },
       })
       const recommendations = await res.json()
-      setCourseRecommendations(recommendations);
+      setCourseRecommendations(recommendations)
 
       if (!res.ok) {
         throw new Error('Network response was not ok')
@@ -49,10 +49,10 @@ function App() {
   const handleSubmit = async (formData: FormData) => {
     submitAnswerMutation.mutateAsync(formData, {
       onSuccess: () => {
-        console.log('Form submitted successfully');
+        console.log('Form submitted successfully')
       },
     })
-    setIsSidePanelOpen(true);
+    setIsSidePanelOpen(true)
   }
 
   if (isLoading || !form) {
@@ -72,10 +72,10 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-            <Button color="inherit">Welcome, {user.username}</Button>
-            <Button color="inherit" href="/api/logout">
+              <Button color="inherit">Welcome, {user.username}</Button>
+              <Button color="inherit" href="/api/logout">
               Logout
-            </Button>
+              </Button>
             </>
           ) : (
             <Button color="inherit" href="/api/login">
@@ -86,12 +86,12 @@ function App() {
       </AppBar>
       <Box sx={{
         paddingTop: 10,
-         }}>  
+      }}>  
         <MultiChoiceForm form={form} onSubmit={handleSubmit} />
       
       </Box>
       {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}
-      </>
+    </>
   )
 }
 

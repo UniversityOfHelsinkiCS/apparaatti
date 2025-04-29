@@ -5,7 +5,7 @@ import { run } from './index.ts'
 
 
 const setupCron = async () => {
-  console.log("starting cron jobs")
+  console.log('starting cron jobs')
  
   if (!inProduction) {
     await run()

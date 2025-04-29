@@ -1,9 +1,9 @@
-import React from 'react';
-import { CourseRecommendation as CourseRecommendationType } from '/common/types';
-import { Box, Paper, Typography } from '@mui/material';
+import React from 'react'
+import { CourseRecommendation as CourseRecommendationType } from '/common/types'
+import { Box, Paper, Typography } from '@mui/material'
 
 const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) => {
-  if (!course) return null;
+  if (!course) return null
 
   return (
     <Paper elevation={2} sx={{ padding: 2, margin: 1 }}>
@@ -12,7 +12,7 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
           {course.name}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-         {course.courseCode}
+          {course.courseCode}
         </Typography>
         <Typography variant="body2" color="textSecondary">
          opintopisteet: {course.credits}
@@ -22,7 +22,7 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
         </p>
       </Box>
     </Paper>
-  );
-};
+  )
+}
 
-export default CourseRecommendation;
+export default CourseRecommendation

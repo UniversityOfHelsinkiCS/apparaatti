@@ -1,17 +1,17 @@
-import { Model, DataTypes } from 'sequelize';
-import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../connection.ts';
+import { Model, DataTypes } from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { sequelize } from '../connection.ts'
 
 class Answer extends Model<
     InferAttributes<Answer>,
     InferCreationAttributes<Answer>
 > {
-  declare id: CreationOptional<number>;
-  declare userId: string;
-  declare formId: number;
-  declare answer: Record<string, unknown>;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare id: CreationOptional<number>
+  declare userId: string
+  declare formId: number
+  declare answer: Record<string, unknown>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 }
 
 Answer.init(
@@ -50,6 +50,6 @@ Answer.init(
     underscored: true, // Ensures database columns use snake_case
     timestamps: true, // Automatically manages createdAt and updatedAt
   }
-);
+)
 
-export default Answer;
+export default Answer

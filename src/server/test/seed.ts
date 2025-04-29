@@ -1,9 +1,9 @@
-import Cu from "../db/models/cu.ts"
-import Cur from "../db/models/cur.ts"
-import CurCu from "../db/models/curCu.ts"
-import Enrolment from "../db/models/enrolment.ts"
-import User from "../db/models/user.ts"
-import Form from "../db/models/form.ts"
+import Cu from '../db/models/cu.ts'
+import Cur from '../db/models/cur.ts'
+import CurCu from '../db/models/curCu.ts'
+import Enrolment from '../db/models/enrolment.ts'
+import User from '../db/models/user.ts'
+import Form from '../db/models/form.ts'
 
 export const seed = async () => {
   await Enrolment.destroy({
@@ -136,51 +136,51 @@ const seedForms = async () => {
 
 const seedForm = async () => {
   await Form.create({
-    id: "1",
-    name: "Kyselylomake",
-    courseRealisationId: "1",
+    id: '1',
+    name: 'Kyselylomake',
+    courseRealisationId: '1',
     active: true,
     questions: [
       {
-        id: "1",
+        id: '1',
         question: {
-          fi: "Kuinka paljon jännität?",
-          sv: "Hur mycket oroar du dig?",
-          en: "How much do you worry?",
+          fi: 'Kuinka paljon jännität?',
+          sv: 'Hur mycket oroar du dig?',
+          en: 'How much do you worry?',
         },
-        type: "select",
+        type: 'select',
         options: [
-          { id: "1", name: { fi: "En ollenkaan", sv: "", en: "" } },
-          { id: "2", name: { fi: "Jonkin verran", sv: "", en: "" } },
-          { id: "3", name: { fi: "Paljon", sv: "", en: "" } },
+          { id: '1', name: { fi: 'En ollenkaan', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Jonkin verran', sv: '', en: '' } },
+          { id: '3', name: { fi: 'Paljon', sv: '', en: '' } },
         ],
       },
       {
-        id: "2",
+        id: '2',
         question: {
-          fi: "Mikä on suosimasi opetuksen muoto?",
-          sv: "Vad är din favoritfärg?",
-          en: "What is your favorite color?",
+          fi: 'Mikä on suosimasi opetuksen muoto?',
+          sv: 'Vad är din favoritfärg?',
+          en: 'What is your favorite color?',
         },
-        type: "select",
+        type: 'select',
         options: [
-          { id: "1", name: { fi: "Täysin etäopetus", sv: "", en: "" } },
-          { id: "2", name: { fi: "Puolet etänä puolet läsnä", sv: "", en: "" } },
-          { id: "3", name: { fi: "Vain lähiopetus", sv: "", en: "" } },
+          { id: '1', name: { fi: 'Täysin etäopetus', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Puolet etänä puolet läsnä', sv: '', en: '' } },
+          { id: '3', name: { fi: 'Vain lähiopetus', sv: '', en: '' } },
         ],
       },
       {
-        id: "3",
+        id: '3',
         question: {
-          fi: "Kuinka paljon kokemusta sinulla on?",
-          sv: "",
-          en: "",
+          fi: 'Kuinka paljon kokemusta sinulla on?',
+          sv: '',
+          en: '',
         },
-        type: "select",
+        type: 'select',
         options: [
-          { id: "1", name: { fi: "Ei ollenkaan", sv: "", en: "" } },
-          { id: "2", name: { fi: "Perusteet", sv: "", en: "" } },
-          { id: "3", name: { fi: "Edistynyt", sv: "", en: "" } },
+          { id: '1', name: { fi: 'Ei ollenkaan', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Perusteet', sv: '', en: '' } },
+          { id: '3', name: { fi: 'Edistynyt', sv: '', en: '' } },
         ],
       }
     ],

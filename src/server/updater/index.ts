@@ -11,7 +11,7 @@ const runUpdater = async () => {
 }
 
 export const run = async () => {
-  console.log("running updater")
+  console.log('running updater')
   try {
     await clearOffsets()
     await runUpdater()
@@ -21,6 +21,6 @@ export const run = async () => {
     return
   }
 
-  console.log("updater finished")
+  console.log('updater finished')
   return
 }

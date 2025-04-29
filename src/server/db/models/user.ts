@@ -1,12 +1,12 @@
-import { DataTypes, Model } from 'sequelize';
-import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../connection.ts';
+import { DataTypes, Model } from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { sequelize } from '../connection.ts'
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  declare id: string;
-  declare username: string;
-  declare language?: CreationOptional<string>;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare id: string
+  declare username: string
+  declare language?: CreationOptional<string>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 }
 
 User.init(
@@ -38,6 +38,6 @@ User.init(
     underscored: true,
     timestamps: true,
   }
-);
+)
 
-export default User;
+export default User

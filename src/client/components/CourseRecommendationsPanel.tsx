@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import type { CourseRecommendation as CourseRecommendationType } from '../../common/types';
-import CourseRecommendation from './CourseRecommendation';
+import React, { useState, useEffect } from 'react'
+import { Box, Button, Stack, Typography } from '@mui/material'
+import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import CourseRecommendation from './CourseRecommendation'
 
 const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRecommendationType[] }) => {
-  const [isClosing, setIsClosing] = useState(false);
+  const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(onClose, 300); // Match the animation duration
-  };
+    setIsClosing(true)
+    setTimeout(onClose, 300) // Match the animation duration
+  }
 
   useEffect(() => {
-    setIsClosing(false); // Reset closing state when the component is mounted
-  }, []);
+    setIsClosing(false) // Reset closing state when the component is mounted
+  }, [])
 
   return (
     <Box
@@ -82,16 +82,16 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6}}>
           Ehdotetut kurssit:
         </Typography>
-      <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 1, paddingRight: 1, paddingTop: 2, paddingBottom: 10 }}>
-      {recommendations.map((course) => (
-        <CourseRecommendation key={course.id} course={course} />
-      ))}
-      </Stack>
+        <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 1, paddingRight: 1, paddingTop: 2, paddingBottom: 10 }}>
+          {recommendations.map((course) => (
+            <CourseRecommendation key={course.id} course={course} />
+          ))}
+        </Stack>
       </Stack>
   
       
     </Box>
-  );
-};
+  )
+}
 
-export default CourseRecommendationsPanel;
+export default CourseRecommendationsPanel

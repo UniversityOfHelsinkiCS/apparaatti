@@ -1,5 +1,5 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
-import { Question } from '../../common/types.tsx';
+import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
+import { Question } from '../../common/types.tsx'
 
 const FormQuestion = ({ question }: { question: Question }) => {
   return (
@@ -39,7 +39,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
         ))}
       </RadioGroup>
     </Box>
-  );
+  )
 }
 
-export default FormQuestion;
+export default FormQuestion

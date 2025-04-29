@@ -93,7 +93,7 @@ export const mangleData = async <T = object>(
       const processingTime = (Date.now() - processingStart).toFixed(0)
       const totalTime = (Date.now() - loopStart).toFixed(0)
       loopStart = Date.now()
-      logger.debug(`[UPDATERLOOP]`, {
+      logger.debug('[UPDATERLOOP]', {
         url,
         offset,
         items: currentData.length,

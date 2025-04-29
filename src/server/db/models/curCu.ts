@@ -1,16 +1,16 @@
-import { Model, DataTypes } from 'sequelize';
-import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize';
-import { sequelize } from '../connection.ts';
+import { Model, DataTypes } from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { sequelize } from '../connection.ts'
 
 class CurCu extends Model<
   InferAttributes<CurCu>,
   InferCreationAttributes<CurCu>
 > {
-  declare id: CreationOptional<number>;
-  declare cuId: string;
-  declare curId: string;
-  declare createdAt: CreationOptional<Date>;
-  declare updatedAt: CreationOptional<Date>;
+  declare id: CreationOptional<number>
+  declare cuId: string
+  declare curId: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 }
 
 CurCu.init(
@@ -45,6 +45,6 @@ CurCu.init(
     underscored: true, // Ensures database columns use snake_case
     timestamps: true, // Automatically manages createdAt and updatedAt
   }
-);
+)
 
-export default CurCu;
+export default CurCu
