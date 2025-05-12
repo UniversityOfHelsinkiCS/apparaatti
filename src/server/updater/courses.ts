@@ -65,6 +65,9 @@ const coursesHandler = async (
       course.flowState !== 'CANCELLED' &&
       course.flowState !== 'ARCHIVED'
   )
+  console.log("coursesHandler got courses: ")
+  console.log(filteredCourseRealizations)
+
 
  
   
