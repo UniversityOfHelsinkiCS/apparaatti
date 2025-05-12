@@ -114,19 +114,27 @@ router.get('/cur/analyze', async (req, res) => {
   }  
 
   const curs = await Cur.findAll({})
-  const wordCounts: Record<string, number> = {};
+  const wordCounts: Record<string, string[]> = {};
   curs.forEach((cur) => {
     const names = [cur.name?.fi, cur.name?.en, cur.name?.sv].filter(Boolean);
     names.forEach((name) => {
       const words = name.split(/\s+/); 
       words.forEach((word) => {
         const normalizedWord = word.toLowerCase();
-        wordCounts[normalizedWord] = (wordCounts[normalizedWord] || 0) + 1;
+        if (normalizedWord in wordCounts){
+          wordCounts[normalizedWord].push(cur.id);
+        }
+        else{
+          wordCounts[normalizedWord] = [cur.id];
+        }
+       
       });
     });
   });
-  const sortedWordCounts = Object.entries(wordCounts).sort((a, b) => b[1] - a[1]);
-  res.json(sortedWordCounts)
+  // sortedWordCounts = Object.entries(wordCounts).sort((a, b) => b[1] - a[1]);
+  //const wordsWithTentti = sortedWordCounts.filter(([word]) => word.includes('tentti'));
+  
+  res.json(wordCounts)
 })
 
 export default router
