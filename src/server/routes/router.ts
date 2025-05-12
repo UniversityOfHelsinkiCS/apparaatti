@@ -111,9 +111,21 @@ router.get('/cur/analyze', async (req, res) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
     return
-  }  
+  }
+  const { name } = req.query 
 
-  const curs = await Cur.findAll({})
+  const nameQuery = name
+    ? { 
+        [Op.or]: [
+          { 'name.fi': { [Op.like]: `%${name}%` } },
+          { 'name.en': { [Op.like]: `%${name}%` } },
+          { 'name.sv': { [Op.like]: `%${name}%` } },
+        ],
+     }
+    : {}
+
+
+  const curs = await Cur.findAll({where: nameQuery})
   const wordCounts: Record<string, string[]> = {};
   curs.forEach((cur) => {
     const names = [cur.name?.fi, cur.name?.en, cur.name?.sv].filter(Boolean);
