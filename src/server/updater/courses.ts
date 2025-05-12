@@ -8,7 +8,7 @@ import { mangleData } from './mangleData.ts'
 
 import { safeBulkCreate } from './util.ts'
 import Cur from '../db/models/cur.ts'
-import { CourseRealization } from '../../common/types.ts'
+import type { CourseRealization } from '../../common/types.ts'
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
   courseUnits: SisuCourseUnit[],
