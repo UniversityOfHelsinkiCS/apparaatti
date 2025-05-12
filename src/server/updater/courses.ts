@@ -73,6 +73,7 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
 
   try{
     Cur.bulkCreate(curs, {ignoreDuplicates: true})
+    console.log('Curs created successfully')
   }
   catch (error) {
     console.error('Error creating curs:', error)
@@ -88,8 +89,7 @@ const coursesHandler = async (
       course.flowState !== 'CANCELLED' &&
       course.flowState !== 'ARCHIVED'
   )
-  console.log("coursesHandler got courses: ")
-  console.log(filteredCourseRealizations)  
+
 
   await createCursFromUpdater(filteredCourseRealizations)
   

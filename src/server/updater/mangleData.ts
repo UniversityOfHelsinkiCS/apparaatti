@@ -82,9 +82,6 @@ export const mangleData = async <T = object>(
       const processingStart = Date.now()
 
       try {
-        console.log('saving as:')
-        console.log(offsetKey)
-        console.log(offset)
         await handler(currentData)
         await redis.set(offsetKey, offset)
       } catch (e: any) {
