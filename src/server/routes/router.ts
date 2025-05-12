@@ -125,8 +125,8 @@ router.get('/cur/analyze', async (req, res) => {
       });
     });
   });
-
-  res.json(wordCounts)
+  const sortedWordCounts = Object.entries(wordCounts).sort((a, b) => b[1] - a[1]);
+  res.json(sortedWordCounts)
 })
 
 export default router
