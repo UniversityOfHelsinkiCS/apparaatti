@@ -6,7 +6,7 @@ import passport from 'passport'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
 import Cur from '../db/models/cur.ts'
-import { Op } from 'sequelize'
+import { json, Op } from 'sequelize'
 
 const router = express.Router()
 
@@ -107,5 +107,26 @@ router.get('/cur', async (req, res) => {
 })
 
 
+router.get('/cur/analyze', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }  
+
+  const curs = await Cur.findAll()
+  const wordCounts: Record<string, number> = {};
+  curs.forEach((cur) => {
+    const names = [cur.name?.fi, cur.name?.en, cur.name?.sv].filter(Boolean);
+    names.forEach((name) => {
+      const words = name.split(/\s+/); 
+      words.forEach((word) => {
+        const normalizedWord = word.toLowerCase();
+        wordCounts[normalizedWord] = (wordCounts[normalizedWord] || 0) + 1;
+      });
+    });
+  });
+
+  res.json(wordCounts)
+})
 
 export default router
