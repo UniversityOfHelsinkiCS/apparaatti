@@ -71,8 +71,12 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
   console.log('curs to be created:')
   console.log(curs)
 
-  Cur.bulkCreate(curs)
-
+  try{
+    Cur.bulkCreate(curs, {ignoreDuplicates: true})
+  }
+  catch (error) {
+    console.error('Error creating curs:', error)
+  }
 }
 
 const coursesHandler = async (
