@@ -60,7 +60,7 @@ export const mangleData = async <T = object>(
    * This way Importer, which is comparatively slower, will be constantly working on one request.
    */
 
-  while (checkTimeoutSmall(start)) {
+  while (checkTimeout(start)) {
     try {
       try {
         currentData = await nextData

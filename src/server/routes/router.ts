@@ -83,5 +83,13 @@ router.get('/logout', async (req, res, next) => {
 })
 
 
+router.get('/courses', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }  
+})
+
+
 
 export default router
