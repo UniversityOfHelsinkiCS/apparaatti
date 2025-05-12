@@ -113,7 +113,7 @@ router.get('/cur/analyze', async (req, res) => {
     return
   }  
 
-  const curs = await Cur.findAll()
+  const curs = await Cur.findAll({})
   const wordCounts: Record<string, number> = {};
   curs.forEach((cur) => {
     const names = [cur.name?.fi, cur.name?.en, cur.name?.sv].filter(Boolean);
