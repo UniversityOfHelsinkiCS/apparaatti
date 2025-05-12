@@ -6,6 +6,7 @@ import passport from 'passport'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
 import Cur from '../db/models/cur.ts'
+import { Op } from 'sequelize'
 
 const router = express.Router()
 
@@ -89,8 +90,13 @@ router.get('/cur', async (req, res) => {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }  
+  const { name } = req.query 
 
-  const curs = await Cur.findAll({})
+  const nameQuery = name
+    ? { name: { [Op.like]: `%${name}%` } }
+    : {}
+
+  const curs = await Cur.findAll({where: nameQuery})
   res.json(curs)
 })
 
