@@ -7,7 +7,8 @@ import type {
 import { mangleData } from './mangleData.ts'
 
 import { safeBulkCreate } from './util.ts'
-
+import Cur from '../db/models/cur.ts'
+import { CourseRealization } from '../../common/types.ts'
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
   courseUnits: SisuCourseUnit[],
@@ -54,7 +55,25 @@ const courseUnitsOf = ({ courseUnits }: any) => {
   }, [])
 }
 
+const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
+  const curs: CourseRealization[] = realisations.map((realisation) => {
+    const { id, name, activityPeriod } = realisation
+    const startDate = new Date(activityPeriod.startDate)
+    const endDate = new Date(activityPeriod.endDate)
+    return {
+      id,
+      name,
+      startDate,
+      endDate,
+    }
+  })
 
+  console.log('curs to be created:')
+  console.log(curs)
+
+  Cur.bulkCreate(curs)
+
+}
 
 const coursesHandler = async (
   courseRealizations: SisuCourseWithRealization[]
@@ -66,11 +85,13 @@ const coursesHandler = async (
       course.flowState !== 'ARCHIVED'
   )
   console.log("coursesHandler got courses: ")
-  console.log(filteredCourseRealizations)
+  console.log(filteredCourseRealizations)  
 
-
- 
+  await createCursFromUpdater(filteredCourseRealizations)
   
+
+
+
 }
 
 // default 1000, set to 10 for example when debugging

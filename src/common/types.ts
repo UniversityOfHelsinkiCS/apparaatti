@@ -37,3 +37,11 @@ export type CourseRecommendation = {
   credits: number;
   url: string;
 } & Record<Dimension, number>
+
+
+export type CourseRealization = {
+  id: string;
+  name: LocalizedString;
+  startDate: Date;
+  endDate: Date;
+}
