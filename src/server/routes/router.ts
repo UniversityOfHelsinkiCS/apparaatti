@@ -93,7 +93,13 @@ router.get('/cur', async (req, res) => {
   const { name } = req.query 
 
   const nameQuery = name
-    ? { name: { [Op.like]: `%${name}%` } }
+    ? { 
+        [Op.or]: [
+          { 'name.fi': { [Op.like]: `%${name}%` } },
+          { 'name.en': { [Op.like]: `%${name}%` } },
+          { 'name.sv': { [Op.like]: `%${name}%` } },
+        ],
+     }
     : {}
 
   const curs = await Cur.findAll({where: nameQuery})
