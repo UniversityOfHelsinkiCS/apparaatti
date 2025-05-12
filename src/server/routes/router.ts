@@ -5,6 +5,7 @@ import User from '../db/models/user.ts'
 import passport from 'passport'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
+import Cur from '../db/models/cur.ts'
 
 const router = express.Router()
 
@@ -83,11 +84,14 @@ router.get('/logout', async (req, res, next) => {
 })
 
 
-router.get('/courses', async (req, res) => {
+router.get('/cur', async (req, res) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }  
+
+  const curs = await Cur.findAll({})
+  res.json(curs)
 })
 
 
