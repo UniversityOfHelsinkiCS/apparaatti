@@ -134,10 +134,10 @@ router.get('/cur/analyze', async (req, res) => {
       words.forEach((word) => {
         const normalizedWord = word.toLowerCase();
         if (normalizedWord in wordCounts){
-          wordCounts[normalizedWord].push(cur.id);
+          wordCounts[normalizedWord].push(cur.name.fi as string);
         }
         else{
-          wordCounts[normalizedWord] = [cur.id];
+          wordCounts[normalizedWord] = [cur.name.fi as string];
         }
        
       });
@@ -148,5 +148,40 @@ router.get('/cur/analyze', async (req, res) => {
   
   res.json(wordCounts)
 })
+
+/**
+ * Notes.
+ * tentit:
+ * rästitentti
+ * kirjatentti
+ * examinarium-tentti
+ * salitentti
+ * kotitentti
+ * 
+ * muita kivoja sanoja:
+ * essee
+ * moodle
+ * 
+ * 
+ * itsenäinen
+ * työharjoittelu
+ * 
+ * johdantokurssi
+ * 
+ * etäopetus
+ * 
+ * valmistuvat
+ * intensiivijakso
+ * 
+ * 
+ * suullinen
+ * kirjallinen
+ * 
+ * historia
+ * 
+ * projekti/projektiopinnot
+ * 
+ * seminaari
+ */
 
 export default router
