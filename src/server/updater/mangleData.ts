@@ -3,6 +3,7 @@
 import logger from '../util/logger.ts'
 import { fetchData } from './importerClient.ts'
 import * as redis from '../util/redis.ts'
+import { IMPORTER_URL } from '../util/config.ts'
 
 const logError = (message: string, error: Error) => {
   logger.error(`[UPDATER] ${message} ${error.name}, ${error.message}`)
@@ -40,6 +41,7 @@ export const mangleData = async <T = object>(
   handler: (data: T[]) => Promise<void>,
   since: Date = null
 ) => {
+  console.log('Updater started with base url of ', IMPORTER_URL)
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const offsetKey = `${url}-offset`
   const start = Date.now()
