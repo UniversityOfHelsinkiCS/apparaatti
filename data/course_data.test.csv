@@ -1,6 +1,6 @@
 id,name,description,courseCode,credits,url,fear,teachingMethod,experience
-1,AY: Toisen kotimaisen kielen kirjallinen taito, ruotsi (CEFR B1) (hum.),Description 1,CS101,5,https://example.com/course1,0.5,0.5,0.5
-2,Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), intensiivijakso, r11, Monimuoto-opetus,Description 2,CS102,5,https://example.com/course2,1.0,1.0,0
-3,AY: Toisen kotimaisen kielen kirjallinen taito, ruotsi (CEFR B1) (oik.), Svalm,Description 3,CS103,5,https://example.com/course3,0.0,0,1.0
-4,Suomen ja lähialueiden historia, itsenäinen työskentely (ruotsiksi),Description 4,CS103,5,https://example.com/course3,0.0,0.0,0.0
-5,Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), intensiivijakso, r17, kaikki opintosuunnat, valmistuvat ja muut opiskelijat, Distance teaching,Description 5,CS103,5,https://example.com/course3,1.0,1.0,1.0
+1,"AY: Toisen kotimaisen kielen kirjallinen taito, ruotsi (CEFR B1) (hum.)",Description 1,CS101,5,https://example.com/course1,0.5,0.5,0.5
+2,"Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1)", intensiivijakso, r11, Monimuoto-opetus,Description 2,CS102,5,https://example.com/course2,1.0,1.0,0
+3,"AY: Toisen kotimaisen kielen kirjallinen taito, ruotsi (CEFR B1) (oik.), Svalm",Description 3,CS103,5,https://example.com/course3,0.0,0,1.0
+4,"Suomen ja lähialueiden historia, itsenäinen työskentely (ruotsiksi)",Description 4,CS103,5,https://example.com/course3,0.0,0.0,0.0
+5,"Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), intensiivijakso, r17, kaikki opintosuunnat, valmistuvat ja muut opiskelijat, Distance teaching",Description 5,CS103,5,https://example.com/course3,1.0,1.0,1.0
