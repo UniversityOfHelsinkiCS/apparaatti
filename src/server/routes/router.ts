@@ -143,45 +143,9 @@ router.get('/cur/analyze', async (req, res) => {
       });
     });
   });
-  // sortedWordCounts = Object.entries(wordCounts).sort((a, b) => b[1] - a[1]);
-  //const wordsWithTentti = sortedWordCounts.filter(([word]) => word.includes('tentti'));
+ 
   
   res.json(wordCounts)
 })
-
-/**
- * Notes.
- * tentit:
- * rästitentti
- * kirjatentti
- * examinarium-tentti
- * salitentti
- * kotitentti
- * 
- * muita kivoja sanoja:
- * essee
- * moodle
- * 
- * 
- * itsenäinen
- * työharjoittelu
- * 
- * johdantokurssi
- * 
- * etäopetus
- * 
- * valmistuvat
- * intensiivijakso
- * 
- * 
- * suullinen
- * kirjallinen
- * 
- * historia
- * 
- * projekti/projektiopinnot
- * 
- * seminaari
- */
 
 export default router

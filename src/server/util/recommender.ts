@@ -24,13 +24,11 @@ function convertAnswerValueToFloat(answerValue: any) {
 }
 
 function calculateUserCoordinates(answerData: any) {
-  console.log('Calculating user coordinates based on answer data:', answerData)
   const userCoordinates = {
     fear: convertAnswerValueToFloat(answerData['1']),
     teachingMethod: convertAnswerValueToFloat(answerData['2']),
     experience: convertAnswerValueToFloat(answerData['3']),
   }
-  console.log('User coordinates:', userCoordinates)
   return userCoordinates
 }
 
@@ -58,8 +56,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: CourseRe
 
 async function getRecommendations(userCoordinates: any) {
   const courseData = await readCsvData() as CourseRecommendation[]
-  console.log('Course data:', courseData)
-
+ 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
