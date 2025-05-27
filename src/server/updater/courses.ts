@@ -84,7 +84,7 @@ const coursesHandler = async (
 ) => {
  // console.log(courseRealizations)
  courseRealizations.forEach((course) => {
-  console.log(course.id, course.name)
+  console.log(course)
   console.log(course.assesmentItemIds)
   console.log("-----")
 }) 
