@@ -14,6 +14,7 @@ function App() {
     queryKey: ['form'],
     queryFn: async () => {
       const res = await fetch('/api/form/1')
+      console.log('Form data fetched:', res.json())
       return res.json()
     },
   })

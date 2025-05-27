@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseRealization, CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import CourseRecommendation from './CourseRecommendation'
 
-const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRecommendationType[] }) => {
+const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRealization[] }) => {
   const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
