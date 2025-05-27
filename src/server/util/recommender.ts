@@ -90,6 +90,7 @@ async function getRecommendations(userCoordinates: any) {
   })
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
+  console.log('Wanted course realization IDs:', wantedIds)
   const courseRealizationsWithCourseUnit = await Cur.findAll({
     where: {
       id: wantedIds,
