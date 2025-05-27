@@ -36,12 +36,16 @@ function calculateUserCoordinates(answerData: any) {
 }
 
 //returns a list of [{course, distance}] 
-function calculateUserDistances(userCoordinates: any, availableCourses: CourseRecommendation[]) {
+function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   const dimensions = Object.keys(userCoordinates)
 
   const distances = availableCourses.map(course => {
-    // Take the keys from course that are in the user coordinates
-    const courseCoordinates = _.pick(course, dimensions) as Record<keyof typeof dimensions, number>
+    // using random values for now...
+    const courseCoordinates = {
+      'fear': Math.random(),
+      'teachingMethod': Math.random(), 
+      'experience': Math.random(), 
+    }
   
     const sum = dimensions.reduce((acc, key) => {
       const userValue = userCoordinates[key]
@@ -101,7 +105,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
 
 
 async function getRecommendations(userCoordinates: any) {
-  const courseData = await readCsvData() as CourseRecommendation[]
+  
   
   type courseCode = {
     code: string;
@@ -110,8 +114,8 @@ async function getRecommendations(userCoordinates: any) {
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
   console.log('Course codes:', courseCodes)
 
-  const wantedRealizations = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
-  console.log('Wanted course realizations:', wantedRealizations)
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
+  console.log('Wanted course realizations:', courseData)
 
 
   const distances = calculateUserDistances(userCoordinates, courseData)
