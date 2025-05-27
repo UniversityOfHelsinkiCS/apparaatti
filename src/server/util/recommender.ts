@@ -2,6 +2,7 @@
 
 import type { CourseRecommendation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
+import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 
@@ -78,6 +79,26 @@ async function getRecommendations(userCoordinates: any) {
       console.log(`Course code ${code} not found in course data`)
     }
   })
+
+  //probably should be a join, but ill roll with this one
+  const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
+  const courseRealizationIdsWithCourseUnit = CurCu.findAll({
+    where: {
+      cuId: courseUnitIds,
+    }
+  })
+
+  const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
+  const courseRealizationsWithCourseUnit = Cur.findAll({
+    where: {
+      id: wantedIds,
+    },
+  })
+  console.log('Found course realizations with course unit:', courseRealizationsWithCourseUnit.length)
+  const courseRealizations = courseRealizationsWithCourseUnit.map((realization) => {
+    console.log('Realization:', realization.name)
+  })
+
 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
