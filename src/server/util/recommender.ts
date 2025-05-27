@@ -93,6 +93,36 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   return courseRealizationsWithCourseUnit
 }
 
+async function codesForCur(curId: string) {
+  const curCuRelations = await CurCu.findAll({
+    where: {
+      curId: curId,
+    },
+  })
+
+  const cuIds = curCuRelations.map(relation => relation.cuId)
+  const courseUnits = await Cu.findAll({
+    where: {
+      id: cuIds,
+    },
+  })
+
+  return courseUnits.map(courseUnit => courseUnit.courseCode)
+
+}
+
+
+async function addCourseCodesToRecommendations(courses) {
+  const recommendations: CourseRecommendation[] = courses.map(async (recommendation) => {
+    const codes = await codesForCur(recommendation.course.id)
+    return {
+      course: recommendation.course,
+      distance: recommendation.distance,
+      courseCodes: codes //the codes could be saved in the previus steps?
+    }
+  })
+  return recommendations
+}
 
 async function getRecommendations(userCoordinates: any) {
   
@@ -108,8 +138,9 @@ async function getRecommendations(userCoordinates: any) {
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
-  
-  return recommendations
+  const recommendationsWithCodes  = await addCourseCodesToRecommendations(recommendations)
+
+  return recommendationsWithCodes
 }
 
 export default recommendCourses

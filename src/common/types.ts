@@ -34,6 +34,7 @@ export type Dimension = typeof DIMENSIONS[number]
 export type CourseRecommendation = {
   course: CourseRealization,
   distance: number,
+  courseCodes: number[]
 } & Record<Dimension, number>
 
 
