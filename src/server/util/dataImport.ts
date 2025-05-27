@@ -40,7 +40,7 @@ export function readCodeData(): Promise<object[]> {
       header: true,
       skipEmptyLines: true,
       complete: (results: any) => {
-        cachedData = results.data
+        cachedCodeData = results.data
         resolve(results.data)
       },
       error: (error: any) => reject(error),
