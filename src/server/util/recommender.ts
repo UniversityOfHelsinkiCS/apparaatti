@@ -83,11 +83,14 @@ async function getRecommendations(userCoordinates: any) {
 
   //probably should be a join, but ill roll with this one
   const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
+  console.log('Course unit IDs:', courseUnitIds)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
     }
   })
+  console.log('Found course realizations with course unit:', courseRealizationIdsWithCourseUnit.length)
+  console.log('Course realization IDs with course unit:', courseRealizationIdsWithCourseUnit)
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
   console.log('Wanted course realization IDs:', wantedIds)
