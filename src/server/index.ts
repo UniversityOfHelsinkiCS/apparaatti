@@ -56,7 +56,7 @@ app.listen(process.env.PORT, async () => {
   }
 
   if(UPDATER_CRON_ENABLED){
-  //  await setupCron()
+    await setupCron()
     console.log('Cron jobs started')
   }
 
