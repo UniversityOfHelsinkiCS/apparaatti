@@ -162,6 +162,10 @@ const coursesHandler = async (
       course.flowState !== 'ARCHIVED'
   )
 
+  console.log(`Found ${filteredCourseRealizations.length} valid course realizations`)
+  console.log(courseRealizations)
+  console.log(courseRealizations[0].courseUnits)
+
 
   await createCursFromUpdater(filteredCourseRealizations)
   await createCusFromUpdater(filteredCourseRealizations)
