@@ -108,52 +108,6 @@ router.get('/cur', async (req, res) => {
   res.json(curs)
 })
 
-
-
-
-
-
-router.get('/cur/analyze', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-  const { name } = req.query 
-
-  const nameQuery = name
-    ? { 
-        [Op.or]: [
-          { 'name.fi': { [Op.like]: `%${name}%` } },
-          { 'name.en': { [Op.like]: `%${name}%` } },
-          { 'name.sv': { [Op.like]: `%${name}%` } },
-        ],
-     }
-    : {}
-
-
-  const curs = await Cur.findAll({where: nameQuery})
-  const wordCounts: Record<string, string[]> = {};
-  curs.forEach((cur) => {
-    const names = [cur.name?.fi, cur.name?.en, cur.name?.sv].filter(Boolean);
-    names.forEach((name) => {
-      const words = name.split(/\s+/); 
-      words.forEach((word) => {
-        const normalizedWord = word.toLowerCase();
-        if (normalizedWord in wordCounts){
-          wordCounts[normalizedWord].push(cur.name.fi as string);
-        }
-        else{
-          wordCounts[normalizedWord] = [cur.name.fi as string];
-        }
-       
-      });
-    });
-  });
- 
-  
-  res.json(wordCounts)
-})
-
 router.get('/cu', async (req, res) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
@@ -181,18 +135,6 @@ router.get('/cu', async (req, res) => {
       ...nameQuery,
       ...codeQuery,
     }
-  const cus = await Cu.findAll({ where: whereQuery })
-  res.json(cus)
-})
-
-
-router.get('/cu/recommended', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-  
-
   const cus = await Cu.findAll({ where: whereQuery })
   res.json(cus)
 })
