@@ -159,7 +159,7 @@ router.get('/cu', async (req, res) => {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
-  const { name } = req.query
+  const { name, code } = req.query
 
   const nameQuery = name
     ? {
@@ -171,7 +171,17 @@ router.get('/cu', async (req, res) => {
       }
     : {}
 
-  const cus = await Cu.findAll({ where: nameQuery })
+    const codeQuery = code
+    ? {
+        code: { [Op.like]: `%${code}%` },
+      }
+    : {}
+
+    const whereQuery = {
+      ...nameQuery,
+      ...codeQuery,
+    }
+  const cus = await Cu.findAll({ where: whereQuery })
   res.json(cus)
 })
 
