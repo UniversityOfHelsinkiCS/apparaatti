@@ -63,8 +63,8 @@ async function getRecommendations(userCoordinates: any) {
   }
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  
   console.log('Course codes:', courseCodes)
+
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
       courseCode: courseCodeStrings,
@@ -72,6 +72,12 @@ async function getRecommendations(userCoordinates: any) {
   })
   console.log('Found course units with codes:', courseUnitsWithCodes.length)
   console.log(courseUnitsWithCodes)
+
+  courseCodeStrings.map((code) => {
+    if (!courseUnitsWithCodes.some(course => course.courseCode === code)) {
+      console.log(`Course code ${code} not found in course data`)
+    }
+  })
 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
