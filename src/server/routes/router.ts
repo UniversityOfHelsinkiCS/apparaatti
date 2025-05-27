@@ -173,7 +173,7 @@ router.get('/cu', async (req, res) => {
 
     const codeQuery = code
     ? {
-        code: { [Op.like]: `%${code}%` },
+        courseCode: { [Op.like]: `%${code}%` },
       }
     : {}
 
