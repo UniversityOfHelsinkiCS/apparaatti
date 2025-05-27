@@ -57,16 +57,8 @@ function calculateUserDistances(userCoordinates: any, availableCourses: CourseRe
   return distances
 }
 
-async function getRecommendations(userCoordinates: any) {
-  const courseData = await readCsvData() as CourseRecommendation[]
-  
-  type courseCode = {
-    code: string;
-  }
-  const courseCodes = await readCodeData() as courseCode[]
-  const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  console.log('Course codes:', courseCodes)
 
+async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
       courseCode: courseCodeStrings,
@@ -103,6 +95,23 @@ async function getRecommendations(userCoordinates: any) {
   const courseRealizations = courseRealizationsWithCourseUnit.map((realization) => {
     console.log('Realization:', realization.name)
   })
+
+  return courseRealizationsWithCourseUnit
+}
+
+
+async function getRecommendations(userCoordinates: any) {
+  const courseData = await readCsvData() as CourseRecommendation[]
+  
+  type courseCode = {
+    code: string;
+  }
+  const courseCodes = await readCodeData() as courseCode[]
+  const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
+  console.log('Course codes:', courseCodes)
+
+  const wantedRealizations = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
+  console.log('Wanted course realizations:', wantedRealizations)
 
 
   const distances = calculateUserDistances(userCoordinates, courseData)
