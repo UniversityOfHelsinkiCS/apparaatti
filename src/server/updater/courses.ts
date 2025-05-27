@@ -10,7 +10,6 @@ import { safeBulkCreate } from './util.ts'
 import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
-import { create } from 'lodash'
 import CurCu from '../db/models/curCu.ts'
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
