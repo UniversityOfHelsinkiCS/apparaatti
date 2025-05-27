@@ -8,7 +8,10 @@ import { mangleData } from './mangleData.ts'
 
 import { safeBulkCreate } from './util.ts'
 import Cur from '../db/models/cur.ts'
-import type { CourseRealization } from '../../common/types.ts'
+import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
+import Cu from '../db/models/cu.ts'
+import { create } from 'lodash'
+import CurCu from '../db/models/curCu.ts'
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
   courseUnits: SisuCourseUnit[],
@@ -79,6 +82,70 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
   }
 }
 
+const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
+  const cus = realisations.map((realisation) => {
+    const { id, name, courseUnits, activityPeriod } = realisation
+    const courseUnit = getCourseUnit(courseUnits, activityPeriod)
+
+    return {
+      id,
+      name,
+      courseCode: courseUnit.code,
+      groupId: courseUnit.organisations[0]?.id ?? null,
+    }
+  })
+
+  try{
+    Cu.bulkCreate(cus, {ignoreDuplicates: true})
+    console.log('Cus created successfully')
+  }
+  catch (error) {
+    console.error('Error creating cus:', error)
+  }
+
+
+
+}
+
+
+const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
+  const CourseUnitIdsOfRealization = realisations.map((realisation) => {
+    const { id, courseUnits } = realisation
+    const courseUnitIds = realisation.courseUnits.map((unit) => unit.id)
+
+    return({
+      curId: id,
+      cuIds: courseUnitIds,
+    })
+
+
+  })
+  
+  let curCuRelations: CurCuRelation[] = []
+  CourseUnitIdsOfRealization.forEach((relation) => {
+    const { curId, cuIds } = relation
+    cuIds.forEach((cuId) => {
+      curCuRelations.push({
+        cuId,
+        curId,
+      })
+    })
+  })
+
+  try{
+    CurCu.bulkCreate(curCuRelations, {ignoreDuplicates: true})
+    console.log('kurkut created successfully')
+  }
+  catch (error) {
+    console.error('Error creating kurkkuja:', error)
+  }
+  
+}
+
+
+
+
+
 const coursesHandler = async (
   courseRealizations: any[]
 ) => {
@@ -98,8 +165,8 @@ const coursesHandler = async (
 
 
   await createCursFromUpdater(filteredCourseRealizations)
-  
-
+  await createCusFromUpdater(filteredCourseRealizations)
+  await createCurCusFromUpdater(filteredCourseRealizations)
 
 
 }

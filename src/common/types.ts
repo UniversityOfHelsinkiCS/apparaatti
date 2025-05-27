@@ -45,3 +45,9 @@ export type CourseRealization = {
   startDate: Date;
   endDate: Date;
 }
+
+
+export type CurCuRelation = {
+  cuId: string;
+  curId: string;
+}

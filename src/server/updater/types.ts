@@ -75,6 +75,7 @@ export interface OrganisationData {
 
 export interface SisuCourseUnit {
   id: string;
+  code: string;
   name: Locales;
   validityPeriod: ActivityPeriod;
 }
