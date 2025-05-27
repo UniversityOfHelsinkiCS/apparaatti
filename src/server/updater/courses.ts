@@ -82,6 +82,7 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
 const coursesHandler = async (
   courseRealizations: SisuCourseWithRealization[]
 ) => {
+  console.log(courseRealizations)
   const filteredCourseRealizations = courseRealizations.filter(
     (course) =>
       course.courseUnits.length &&
