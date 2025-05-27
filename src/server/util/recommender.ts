@@ -113,7 +113,7 @@ async function codesForCur(curId: string) {
 
 
 async function addCourseCodesToRecommendations(courses) {
-  const recommendations: CourseRecommendation[] = courses.map(async (recommendation) => {
+  const recommendationsAsync: CourseRecommendation[] = courses.map(async (recommendation) => {
     const codes = await codesForCur(recommendation.course.id)
     return {
       course: recommendation.course,
@@ -121,6 +121,8 @@ async function addCourseCodesToRecommendations(courses) {
       courseCodes: codes //the codes could be saved in the previus steps?
     }
   })
+  const recommendations = await Promise.all(recommendationsAsync)
+  
   return recommendations
 }
 
