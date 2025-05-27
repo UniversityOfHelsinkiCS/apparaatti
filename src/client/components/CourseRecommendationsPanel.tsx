@@ -84,7 +84,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         </Typography>
         <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 1, paddingRight: 1, paddingTop: 2, paddingBottom: 10 }}>
           {recommendations.map((course) => (
-            <CourseRecommendation key={course.id} course={course} />
+            <CourseRecommendation key={course.course.id} course={course} />
           ))}
         </Stack>
       </Stack>

@@ -68,8 +68,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       courseCode: courseCodeStrings,
     },
   })
-  console.log('Found course units with codes:', courseUnitsWithCodes.length)
-  console.log(courseUnitsWithCodes)
 
   courseCodeStrings.map((code) => {
     if (!courseUnitsWithCodes.some(course => course.courseCode === code)) {
@@ -85,19 +83,13 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       cuId: courseUnitIds,
     }
   })
-  console.log('Found course realizations with course unit:', courseRealizationIdsWithCourseUnit.length)
-  console.log('Course realization IDs with course unit:', courseRealizationIdsWithCourseUnit)
-
+  
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
   console.log('Wanted course realization IDs:', wantedIds)
   const courseRealizationsWithCourseUnit = await Cur.findAll({
     where: {
       id: wantedIds,
     },
-  })
-  console.log('Found course realizations with course unit:', courseRealizationsWithCourseUnit.length)
-  const courseRealizations = courseRealizationsWithCourseUnit.map((realization) => {
-    console.log('Realization:', realization.name)
   })
 
   return courseRealizationsWithCourseUnit
@@ -112,11 +104,8 @@ async function getRecommendations(userCoordinates: any) {
   }
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  console.log('Course codes:', courseCodes)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
-  console.log('Wanted course realizations:', courseData)
-
 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)

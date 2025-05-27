@@ -10,12 +10,6 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
         <Typography variant="h5" component="h2" gutterBottom>
           {course.course.name.fi}
         </Typography>
-        <Typography variant="body2" color="textSecondary">
-         
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-       
-        </Typography>
        </Box>
     </Paper>
   )
