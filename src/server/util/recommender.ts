@@ -2,6 +2,7 @@
 
 import type { CourseRecommendation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
+import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
@@ -82,14 +83,14 @@ async function getRecommendations(userCoordinates: any) {
 
   //probably should be a join, but ill roll with this one
   const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
-  const courseRealizationIdsWithCourseUnit = CurCu.findAll({
+  const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
     }
   })
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
-  const courseRealizationsWithCourseUnit = Cur.findAll({
+  const courseRealizationsWithCourseUnit = await Cur.findAll({
     where: {
       id: wantedIds,
     },
