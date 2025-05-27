@@ -77,7 +77,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
 
   //probably should be a join, but ill roll with this one
   const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
-  console.log('Course unit IDs:', courseUnitIds)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
@@ -85,7 +84,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   })
   
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
-  console.log('Wanted course realization IDs:', wantedIds)
   const courseRealizationsWithCourseUnit = await Cur.findAll({
     where: {
       id: wantedIds,
@@ -110,7 +108,7 @@ async function getRecommendations(userCoordinates: any) {
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
-  console.log('Recommendations:', recommendations)
+  
   return recommendations
 }
 
