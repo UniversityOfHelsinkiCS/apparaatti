@@ -1,5 +1,5 @@
 import type { CourseRealization, CourseRecommendation as CourseRecommendationType } from '../../common/types'
-import { Box, Paper, Typography } from '@mui/material'
+import { Box, Button, Paper, Typography } from '@mui/material'
 
 const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) => {
   if (!course) return null
@@ -11,9 +11,19 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
         <Typography variant="h5" component="h2" gutterBottom>
           {course.course.name.fi}
         </Typography>
-        <Typography variant="body1" gutterBottom>
-          <a href={courseUrl}>visit</a>
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          {course.courseCodes.map(code => code.toString()).join(', ')}
         </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          href={courseUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ marginTop: 1 }}
+        >
+          näytä
+        </Button>
        </Box>
     </Paper>
   )
