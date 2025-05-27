@@ -1,7 +1,8 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
 import type { CourseRecommendation } from '../../common/types.ts'
-import { readCsvData } from './dataImport.ts'
+import Cu from '../db/models/cu.ts'
+import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 
 function recommendCourses(answerData: any) {
@@ -56,7 +57,22 @@ function calculateUserDistances(userCoordinates: any, availableCourses: CourseRe
 
 async function getRecommendations(userCoordinates: any) {
   const courseData = await readCsvData() as CourseRecommendation[]
- 
+  
+  type courseCode = {
+    code: string;
+  }
+  const courseCodes = await readCodeData() as courseCode[]
+  const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
+  
+  console.log('Course codes:', courseCodes)
+  const courseUnitsWithCodes = await Cu.findAll({
+    where: {
+      courseCode: courseCodeStrings,
+    },
+  })
+  console.log('Found course units with codes:', courseUnitsWithCodes.length)
+  console.log(courseUnitsWithCodes)
+
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)

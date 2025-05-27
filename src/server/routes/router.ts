@@ -186,6 +186,22 @@ router.get('/cu', async (req, res) => {
 })
 
 
+router.get('/cu/recommended', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+  
+
+  const cus = await Cu.findAll({ where: whereQuery })
+  res.json(cus)
+})
+
+
+
+
+
+
 
 router.get('/curcu', async (req, res) => {
   if (!req.user) {
