@@ -49,14 +49,14 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
-  //await seed()
+  await seed()
 
   if (UPDATER_CRON_ENABLED === false){
     await setupAuthentication()
   }
 
   if(UPDATER_CRON_ENABLED){
-   // await setupCron()
+    await setupCron()
     console.log('Cron jobs started')
   }
 
