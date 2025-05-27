@@ -7,6 +7,8 @@ import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
 import Cur from '../db/models/cur.ts'
 import { json, Op } from 'sequelize'
+import Cu from '../db/models/cu.ts'
+import CurCu from '../db/models/curCu.ts'
 
 const router = express.Router()
 
@@ -107,6 +109,10 @@ router.get('/cur', async (req, res) => {
 })
 
 
+
+
+
+
 router.get('/cur/analyze', async (req, res) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
@@ -147,5 +153,39 @@ router.get('/cur/analyze', async (req, res) => {
   
   res.json(wordCounts)
 })
+
+router.get('/cu', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+  const { name } = req.query
+
+  const nameQuery = name
+    ? {
+        [Op.or]: [
+          { 'name.fi': { [Op.like]: `%${name}%` } },
+          { 'name.en': { [Op.like]: `%${name}%` } },
+          { 'name.sv': { [Op.like]: `%${name}%` } },
+        ],
+      }
+    : {}
+
+  const cus = await Cu.findAll({ where: nameQuery })
+  res.json(cus)
+})
+
+
+
+router.get('/curcu', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+
+  const curcus = await CurCu.findAll()
+  res.json(curcus)
+})
+
 
 export default router
