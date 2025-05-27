@@ -87,8 +87,8 @@ const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) =
     const courseUnit = getCourseUnit(courseUnits, activityPeriod)
 
     return {
-      id,
-      name,
+      id: courseUnit.id,
+      name: courseUnit.name,
       courseCode: courseUnit.code,
       groupId: courseUnit.organisations[0]?.id ?? null,
     }
