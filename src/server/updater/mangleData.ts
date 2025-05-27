@@ -45,7 +45,7 @@ export const mangleData = async <T = object>(
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const offsetKey = `${url}-offset`
   const start = Date.now()
-  let requestStart = null
+  let requestStart = null   
   let loopStart = Date.now()
 
   let offset = Number(await redis.get(offsetKey))
