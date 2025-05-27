@@ -16,10 +16,7 @@ const CourseRecommendation = ({ course }: { course: CourseRealization }) => {
         <Typography variant="body2" color="textSecondary">
          opintopisteet: {course.credits}
         </Typography>
-        <p>
-          Jännitys: {course.fear}, Opetusmuoto: {course.teachingMethod}, Kokemus: {course.experience}
-        </p>
-      </Box>
+       </Box>
     </Paper>
   )
 }
