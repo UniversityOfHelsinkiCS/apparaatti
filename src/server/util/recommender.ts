@@ -55,7 +55,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
 
     const distance = Math.sqrt(sum)
 
-    return { ...course, distance }
+    return {course: course, distance: distance }
   })
 
   return distances

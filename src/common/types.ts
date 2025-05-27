@@ -1,3 +1,5 @@
+import Cur from "../server/db/models/cur";
+
 export type LocalizedString = Partial<{
   fi: string;
   sv: string;
@@ -30,12 +32,8 @@ export const DIMENSIONS = [
 export type Dimension = typeof DIMENSIONS[number]
 
 export type CourseRecommendation = {
-  id: string;
-  name: string;
-  description: string;
-  courseCode: string;
-  credits: number;
-  url: string;
+  course: CourseRealization,
+  distance: number,
 } & Record<Dimension, number>
 
 

@@ -3,7 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import type { CourseRealization, CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import CourseRecommendation from './CourseRecommendation'
 
-const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRealization[] }) => {
+const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRecommendationType[] }) => {
   const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
