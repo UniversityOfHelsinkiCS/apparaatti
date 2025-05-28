@@ -21,7 +21,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         position: 'fixed',
         top: 0,
         right: 0,
-        width: '300px',
+        width: '30vw',
         height: '100%',
         backgroundColor: '#f5f5f5',
         boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',

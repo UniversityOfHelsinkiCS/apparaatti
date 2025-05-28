@@ -10,7 +10,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
         variant="h5" 
         component="h1" 
         gutterBottom 
-        sx={{ fontSize: '2rem' }}
+        sx={{ fontSize: '2rem', width: '70vw' }}
       >
         {question.question.fi}
       </Typography>
