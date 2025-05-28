@@ -144,45 +144,130 @@ const seedForm = async () => {
       {
         id: '1',
         question: {
-          fi: 'Kuinka paljon jännität?',
-          sv: 'Hur mycket oroar du dig?',
-          en: 'How much do you worry?',
-        },
-        type: 'select',
-        options: [
-          { id: '1', name: { fi: 'En ollenkaan', sv: '', en: '' } },
-          { id: '2', name: { fi: 'Jonkin verran', sv: '', en: '' } },
-          { id: '3', name: { fi: 'Paljon', sv: '', en: '' } },
-        ],
-      },
-      {
-        id: '2',
-        question: {
-          fi: 'Mikä on suosimasi opetuksen muoto?',
-          sv: 'Vad är din favoritfärg?',
-          en: 'What is your favorite color?',
-        },
-        type: 'select',
-        options: [
-          { id: '1', name: { fi: 'Täysin etäopetus', sv: '', en: '' } },
-          { id: '2', name: { fi: 'Puolet etänä puolet läsnä', sv: '', en: '' } },
-          { id: '3', name: { fi: 'Vain lähiopetus', sv: '', en: '' } },
-        ],
-      },
-      {
-        id: '3',
-        question: {
-          fi: 'Kuinka paljon kokemusta sinulla on?',
+          fi: 'Mikä on haluamasi kurssin suoritusajankohta',
           sv: '',
           en: '',
         },
         type: 'select',
         options: [
-          { id: '1', name: { fi: 'Ei ollenkaan', sv: '', en: '' } },
-          { id: '2', name: { fi: 'Perusteet', sv: '', en: '' } },
-          { id: '3', name: { fi: 'Edistynyt', sv: '', en: '' } },
+          { id: '1', name: { fi: '1. periodi', sv: '', en: '' } },
+          { id: '2', name: { fi: '2. periodi', sv: '', en: '' } },
+          { id: '3', name: { fi: '3. periodi', sv: '', en: '' } },
+          { id: '4', name: { fi: '4. periodi', sv: '', en: '' } },
+          { id: '5', name: { fi: '5. periodi', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '2',
+        question: {
+          fi: 'Valmistutko lähiaikoina?',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'Kyllä suunnitelen valmistuvani vuoden sisällä', sv: '', en: '' } },
+          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '3',
+        question: {
+          fi: 'Koetko häiritsevää jännitystä tai pelkoa kielikursseilla?',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'En niin että se häiritsisi opiskelua', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Jännittäminen/Pelko häiritsee merkittävästi opiskeluani ', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '4',
+        question: {
+          fi: 'Mikä on suosimasi opetusmuoto',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'täysin etäopiskelu', sv: '', en: '' } },
+          { id: '2', name: { fi: 'etäopiskelu ja lähiopetus', sv: '', en: '' } },
+          { id: '3', name: { fi: 'täysin lähiopetus', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '5',
+        question: {
+          fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'itsenäinen ajan käyttö', sv: '', en: '' } },
+          { id: '2', name: { fi: 'itsenäinen, mutta kurssilla mahdollisuus osallistua ohjattuun toimintaan', sv: '', en: '' } },
+          { id: '3', name: { fi: 'kurssi asettaa tiukat säännöt aikataululle', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '6',
+        question: {
+          fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia', sv: '', en: '' } },
+          { id: '2', name: { fi: 'En koe tarvitsevani kertausta', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '7',
+        question: {
+          fi: 'Koen taitotasokseni',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'Välttäväksi', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Hyväksi', sv: '', en: '' } },
+          { id: '3', name: { fi: 'Erinomaiseksi', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '8',
+        question: {
+          fi: 'Vanhentuneet viekie opinnot',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'ei väliä', sv: '', en: '' } },
+          { id: '2', name: { fi: 'ei', sv: '', en: '' } },
+          { id: '3', name: { fi: 'kyllä', sv: '', en: '' } },
+        ],
+      },
+      {
+        id: '9',
+        question: {
+          fi: 'Integroitu opetus',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'ei väliä', sv: '', en: '' } },
+          { id: '2', name: { fi: 'ei', sv: '', en: '' } },
+          { id: '3', name: { fi: 'kyllä', sv: '', en: '' } },
         ],
       }
+
+    
     ],
   })
 }
