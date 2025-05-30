@@ -1,7 +1,7 @@
 import path from 'path'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { connectToDatabase } from './db/connection.ts'
+import { connectToDatabase, sequelize } from './db/connection.ts'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
@@ -49,6 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
+  await sequelize.sync({force: false})
  // await seed()
 
   if (UPDATER_CRON_ENABLED === false){

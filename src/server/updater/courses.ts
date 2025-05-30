@@ -11,6 +11,7 @@ import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
+import { sequelize } from '../db/connection.ts'
 // Find the newest course unit that has started before the course realisation
 const getCourseUnit = (
   courseUnits: SisuCourseUnit[],
