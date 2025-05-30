@@ -1,6 +1,8 @@
 import { Model, DataTypes } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
+import Cu from './cu.ts'
+import Cur from './cur.ts'
 
 class CurCu extends Model<
   InferAttributes<CurCu>,
@@ -24,10 +26,18 @@ CurCu.init(
     cuId: {
       type: DataTypes.STRING,
       allowNull: false,
+      references: {
+        model: Cu,
+        key: 'id'
+      }
     },
     curId: {
       type: DataTypes.STRING,
       allowNull: false,
+      references: {
+        model: Cur,
+        key: 'id'
+      }
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -46,5 +56,6 @@ CurCu.init(
     timestamps: true, // Automatically manages createdAt and updatedAt
   }
 )
-
+Cur.belongsToMany(Cu, {through: CurCu, foreignKey: 'cuId'})
+Cu.belongsToMany(Cur, {through: CurCu, foreignKey: 'curId'})
 export default CurCu
