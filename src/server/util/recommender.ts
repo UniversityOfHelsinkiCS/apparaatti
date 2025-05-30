@@ -72,6 +72,13 @@ async function getRealisationsWithCourseUnitCodesNew(courseCodeStrings: string[]
     }
   })
 
+  const debug = await Cur.findAll({
+    include: {
+      model: Cu
+    }
+  })
+  console.log(debug)
+
   return realisations
 }
 
