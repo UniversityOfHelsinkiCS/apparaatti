@@ -68,6 +68,7 @@ async function getRealisationsWithCourseUnitCodesNew(courseCodeStrings: string[]
     include: {
       model: Cu,
       where: {courseCode: courseCodeStrings},
+      required: true
     }
   })
 
@@ -146,7 +147,7 @@ async function getRecommendations(userCoordinates: any) {
   }
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-
+  console.log(courseCodeStrings)
   const courseData = await getRealisationsWithCourseUnitCodesNew(courseCodeStrings)
   console.log(courseData)
 
