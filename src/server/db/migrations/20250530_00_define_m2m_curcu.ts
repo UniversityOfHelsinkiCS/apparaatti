@@ -7,22 +7,23 @@ import CurCu from '../models/curCu.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {
   
-  queryInterface.addColumn('CurCu', 'CurId', {
+  await queryInterface.addColumn('CurCu', 'CurId', {
     type: DataTypes.STRING,
     references: {
       model: Cur,
       key: 'id'
     }
   })
-  queryInterface.addColumn('CurCu', 'CuId', {
+  
+  await queryInterface.addColumn('CurCu', 'CuId', {
     type: DataTypes.STRING,
     references: {
       model: Cu,
       key: 'id'
     }
   })
-  Cur.belongsToMany(Cu, {through: 'CurCu'})
-  Cu.belongsToMany(Cur, {through: 'CurCu'})
+  Cur.belongsToMany(Cu, {through: CurCu})
+  Cu.belongsToMany(Cur, {through: CurCu})
 }
 
 export const down: Migration = async ({ context: queryInterface }) => {
