@@ -1,5 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
+import type { DataTypes } from 'sequelize'
 import type { CourseRecommendation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
@@ -61,6 +62,17 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   return distances
 }
 
+
+async function getRealisationsWithCourseUnitCodesNew(courseCodeStrings: string[]){
+  const realisations = await Cur.findAll({
+    include: {
+      model: Cu,
+      where: {courseCode: courseCodeStrings},
+    }
+  })
+
+  return realisations
+}
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
@@ -135,7 +147,7 @@ async function getRecommendations(userCoordinates: any) {
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
 
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
+  const courseData = await getRealisationsWithCourseUnitCodesNew(courseCodeStrings)
 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
