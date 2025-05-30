@@ -148,6 +148,7 @@ async function getRecommendations(userCoordinates: any) {
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
 
   const courseData = await getRealisationsWithCourseUnitCodesNew(courseCodeStrings)
+  console.log(courseData)
 
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
