@@ -1,5 +1,35 @@
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 
+const dateIsInPeriod = (date: Date, period) => {
+  const start = parseDate(period.start_date)
+  const end = parseDate(period.end_date)
+  return date >= start && date <= end
+}
+
+
+const parseDate = (date: string) =>  {
+  const [day, month, year] = date.split(".").map(Number)
+  return new Date(year, month - 1, day)
+}
+
+export const dateToPeriod = (date: string) => {
+  const dateObj = parseDate(date)
+  console.log("wanted date obj", dateObj) 
+  let hits = []
+  studyPeriods.years.forEach(year => {
+    year.periods.forEach((period) => {
+      if(dateIsInPeriod(dateObj, period)){
+        hits.push(period)
+      }
+    })
+  })
+
+  console.log("searched for: ", date)
+  console.log("found", hits) 
+  return hits
+}
+
+
 const studyPeriods = {
   years: [
     {
