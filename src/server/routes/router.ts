@@ -86,6 +86,18 @@ router.get('/logout', async (req, res, next) => {
 
   
 })
+router.get('/cur/debug', async (req, res) => {
+ 
+
+  const realisations = await Cur.findAll({
+    include: {
+      model: Cu,
+      required: true
+    }
+  })
+
+  res.json(realisations)
+})
 
 
 router.get('/cur', async (req, res) => {
