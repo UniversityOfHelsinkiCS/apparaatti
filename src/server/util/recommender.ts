@@ -66,24 +66,6 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
 }
 
 
-async function getRealisationsWithCourseUnitCodesNew(courseCodeStrings: string[]){
-  const realisations = await Cur.findAll({
-    include: {
-      model: Cu,
-      where: {courseCode: courseCodeStrings},
-      required: true
-    }
-  })
-
-  const debug = await Cur.findAll({
-    include: {
-      model: Cu
-    }
-  })
-  console.log(debug)
-
-  return realisations
-}
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
@@ -158,7 +140,7 @@ async function getRecommendations(userCoordinates: any) {
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
   console.log(courseCodeStrings)
-  const courseData = await getRealisationsWithCourseUnitCodesNew(courseCodeStrings)
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
   console.log(courseData)
   console.log("after getting realistations with course codes")
   const distances = calculateUserDistances(userCoordinates, courseData)
