@@ -63,7 +63,7 @@ const studyPeriods = {
         }
       ]
     },
-    { //
+    { 
       start_year: '2025',
       end_year: '2026',
       periods: [
@@ -461,27 +461,27 @@ const studyPeriods = {
         {
           name: 'intensive_2',
           start_date: '2.1.2032',
-          end_date: '12.1.2032',
+          end_date: '11.1.2032',
         },
         {
           name: 'period_3',
-          start_date: '13.1.2032',
-          end_date: '2.3.2032',
+          start_date: '12.1.2032',
+          end_date: '29.2.2032',
         },
         {
           name: 'exam_week_3',
-          start_date: '3.3.2032',
-          end_date: '9.3.2032',
+          start_date: '1.3.2032',
+          end_date: '7.3.2032',
         },
         {
           name: 'period_4',
-          start_date: '10.3.2032',
-          end_date: '4.5.2032',
+          start_date: '8.3.2032',
+          end_date: '2.5.2032',
         },
         {
           name: 'exam_week_4',
-          start_date: '5.5.2032',
-          end_date: '11.5.2032',
+          start_date: '3.5.2032',
+          end_date: '9.5.2032',
         },
         {
           name: 'intensive_3',
