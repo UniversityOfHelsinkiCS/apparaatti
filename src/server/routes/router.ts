@@ -23,7 +23,6 @@ router.get('/form/1', async (_req, res) => {
 
 
 async function saveAnswer(answerData: any, user: User) {
-
   const answer = await Answer.create({
     answer: answerData,
     userId: user.id,
@@ -34,16 +33,18 @@ async function saveAnswer(answerData: any, user: User) {
 
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
+  console.log(answerData)
 
-
+  console.log("before user")
   const user = await User.findByPk('1')
 
   if (!user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
-
+  console.log("after user")
   await saveAnswer(answerData, user)
+  console.log("after answer")
   const recommendations = await recommendCourses(answerData)
   res.json(recommendations)
 })
@@ -88,10 +89,7 @@ router.get('/logout', async (req, res, next) => {
 
 
 router.get('/cur', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }  
+ 
   const { name } = req.query 
 
   const nameQuery = name
@@ -109,10 +107,7 @@ router.get('/cur', async (req, res) => {
 })
 
 router.get('/cu', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
+
   const { name, code } = req.query
 
   const nameQuery = name
@@ -146,10 +141,7 @@ router.get('/cu', async (req, res) => {
 
 
 router.get('/curcu', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
+  
 
   const curcus = await CurCu.findAll()
   res.json(curcus)

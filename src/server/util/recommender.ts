@@ -10,7 +10,9 @@ import _ from 'lodash'
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
+  console.log("after user coordinates")
   const recommendations = getRecommendations(userCoordinates)
+  console.log("after recommendations")
   return recommendations
 }
 
@@ -29,10 +31,11 @@ function convertAnswerValueToFloat(answerValue: any) {
 
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
-    fear: convertAnswerValueToFloat(answerData['1']),
-    teachingMethod: convertAnswerValueToFloat(answerData['2']),
-    experience: convertAnswerValueToFloat(answerData['3']),
+    'fear': Math.random(),
+    'teachingMethod': Math.random(), 
+    'experience': Math.random(), 
   }
+
   return userCoordinates
 }
 
@@ -157,7 +160,7 @@ async function getRecommendations(userCoordinates: any) {
   console.log(courseCodeStrings)
   const courseData = await getRealisationsWithCourseUnitCodesNew(courseCodeStrings)
   console.log(courseData)
-
+  console.log("after getting realistations with course codes")
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)

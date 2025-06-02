@@ -49,8 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
-  await sequelize.sync({force: false})
- // await seed()
+  await seed()
 
   if (UPDATER_CRON_ENABLED === false){
     await setupAuthentication()
