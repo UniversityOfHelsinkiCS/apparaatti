@@ -14,7 +14,6 @@ const parseDate = (date: string) =>  {
 
 export const dateToPeriod = (date: string) => {
   const dateObj = parseDate(date)
-  console.log("wanted date obj", dateObj) 
   let hits = []
   studyPeriods.years.forEach(year => {
     year.periods.forEach((period) => {
@@ -24,8 +23,7 @@ export const dateToPeriod = (date: string) => {
     })
   })
 
-  console.log("searched for: ", date)
-  console.log("found", hits) 
+ 
   return hits
 }
 
