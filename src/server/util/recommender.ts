@@ -78,6 +78,7 @@ function coursePeriodValue(course){
 
 //returns a list of [{course, distance}] 
 function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
+  console.log("calculating user distances")
   const dimensions = Object.keys(userCoordinates)
 
   const distances = availableCourses.map(course => {
@@ -100,7 +101,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
     return {course: course, distance: distance }
     
   })
-
+  console.log("distances calculated")
   return distances
 }
 
