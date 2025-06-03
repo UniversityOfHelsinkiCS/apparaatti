@@ -57,16 +57,23 @@ function convertUserPeriodPickToFloat(answerValue){
 }
 
 function coursePeriodValue(course: Cur){
-  console.log("calculating course period value")
+  console.log('calculating course period value')
   //technically course can be in multiple periods but will use the first one returned for now...
-  console.log("before date to period")
+  console.log('before date to period')
 
   
   const periods = dateObjToPeriod(course.startDate)
   console.log(periods)
-  console.log("after date to period")
+  if(periods.length == 0){
+    console.log('!! no period found for course: ', course)
+    return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
+  }
+  console.log('after date to period')
   const period = periods[0]
   console.log(period)
+  
+
+
   switch (period.name) {
   case 'period_1':
     return 1.0
@@ -85,7 +92,7 @@ function coursePeriodValue(course: Cur){
 
 //returns a list of [{course, distance}] 
 function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
-  console.log("calculating user distances")
+  console.log('calculating user distances')
   const dimensions = Object.keys(userCoordinates)
 
   const distances = availableCourses.map(course => {
@@ -93,7 +100,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
     const courseCoordinates = {
       'period': coursePeriodValue(course)
     }
-    console.log("calculated course period value")
+    console.log('calculated course period value')
 
     console.log(courseCoordinates)
     const sum = dimensions.reduce((acc, key) => {
@@ -109,7 +116,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
     return {course: course, distance: distance }
     
   })
-  console.log("distances calculated")
+  console.log('distances calculated')
   return distances
 }
 
