@@ -158,6 +158,21 @@ const seedForm = async () => {
         ],
       },
       {
+        id: 'lang-1',
+        question: {
+          fi: 'Mistä kielestä haet kursseja?',
+          sv: '',
+          en: '',
+        },
+        type: 'select',
+        options: [
+          { id: '1', name: { fi: 'ei valintaa', sv: '', en: '' } },
+          { id: '2', name: { fi: 'Suomi', sv: '', en: '' } },
+          { id: '3', name: { fi: 'Ruotsi', sv: '', en: '' } },
+          { id: '4', name: { fi: 'Englanti', sv: '', en: '' } },
+        ],
+      },
+      {
         id: '2',
         question: {
           fi: 'Valmistutko lähiaikoina?',
