@@ -7,12 +7,13 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
+import { dateToPeriod } from './studyPeriods.ts'
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
-  console.log("after user coordinates")
-  const recommendations = getRecommendations(userCoordinates)
-  console.log("after recommendations")
+  console.log('after user coordinates')
+  const recommendations = getRecommendations(userCoordinates, answerData)
+  console.log('after recommendations')
   return recommendations
 }
 
@@ -31,12 +32,48 @@ function convertAnswerValueToFloat(answerValue: any) {
 
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
-    'fear': Math.random(),
-    'teachingMethod': Math.random(), 
-    'experience': Math.random(), 
+    'period': convertUserPeriodPickToFloat(answerData['1'])
   }
 
   return userCoordinates
+}
+
+
+
+function convertUserPeriodPickToFloat(answerValue){
+  switch (answerValue) {
+  case '1':
+    return 1.0
+  case '2':
+    return 2.0
+  case '3':
+    return 3.0
+  case '4':
+    return 4.0  
+  default:
+    return 0.0
+  }
+
+}
+
+function coursePeriodValue(course){
+  //technically course can be in multiple periods but will use the first one returned for now...
+  const periods = dateToPeriod(course.start_date)
+  const period = periods[0]
+  switch (period.name) {
+  case 'period_1':
+    return 1.0
+  case 'period_2':
+    return 2.0
+  case 'period_3':
+    return 3.0
+  case 'period_4':
+    return 4.0
+  default: //the intensives and exam weeks are considered a value of 0 for now...
+    return 0.0
+  }
+  
+
 }
 
 //returns a list of [{course, distance}] 
@@ -46,20 +83,22 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   const distances = availableCourses.map(course => {
     // using random values for now...
     const courseCoordinates = {
-      'fear': Math.random(),
-      'teachingMethod': Math.random(), 
-      'experience': Math.random(), 
+      'period': coursePeriodValue(course)
     }
-  
+
+    console.log(courseCoordinates)
     const sum = dimensions.reduce((acc, key) => {
       const userValue = userCoordinates[key]
       const courseValue = courseCoordinates[key as keyof typeof dimensions]
       return acc + Math.pow(userValue - courseValue, 2)
     }, 0.0)
+    console.log(sum)
 
     const distance = Math.sqrt(sum)
+    console.log(distance)
 
     return {course: course, distance: distance }
+    
   })
 
   return distances
@@ -131,7 +170,9 @@ async function addCourseCodesToRecommendations(courses) {
   return recommendations
 }
 
-async function getRecommendations(userCoordinates: any) {
+
+
+async function getRecommendations(userCoordinates: any, answerData) {
   
   
   type courseCode = {
@@ -142,7 +183,8 @@ async function getRecommendations(userCoordinates: any) {
   console.log(courseCodeStrings)
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
   console.log(courseData)
-  console.log("after getting realistations with course codes")
+  console.log('after getting realistations with course codes')
+
   const distances = calculateUserDistances(userCoordinates, courseData)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
