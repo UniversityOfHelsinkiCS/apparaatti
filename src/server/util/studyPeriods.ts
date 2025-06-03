@@ -18,6 +18,12 @@ const parseDate = (date: string) =>  {
 
 export const dateToPeriod = (date: string) => {
   const dateObj = parseDate(date)
+  let hits = dateObjToPeriod(dateObj)
+  return hits
+}
+
+
+export const dateObjToPeriod = (dateObj: Date) => {
   let hits = []
   studyPeriods.years.forEach(year => {
     year.periods.forEach((period) => {
@@ -30,7 +36,6 @@ export const dateToPeriod = (date: string) => {
  
   return hits
 }
-
 
 const studyPeriods = {
   years: [

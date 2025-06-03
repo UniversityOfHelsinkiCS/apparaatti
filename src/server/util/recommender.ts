@@ -7,7 +7,7 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
-import { dateToPeriod } from './studyPeriods.ts'
+import { dateObjToPeriod, dateToPeriod } from './studyPeriods.ts'
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
@@ -56,10 +56,14 @@ function convertUserPeriodPickToFloat(answerValue){
 
 }
 
-function coursePeriodValue(course){
+function coursePeriodValue(course: Cur){
   console.log("calculating course period value")
   //technically course can be in multiple periods but will use the first one returned for now...
-  const periods = dateToPeriod(course.start_date)
+  console.log("before date to period")
+
+  
+  const periods = dateObjToPeriod(course.startDate)
+  console.log("after date to period")
   const period = periods[0]
   switch (period.name) {
   case 'period_1':
