@@ -30,15 +30,46 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
+function convertNoOptionChoiceToFloat(answerValue){
+  switch (answerValue) {
+  case '1':
+    return 0.0
+  case '2':
+    return 1.0
+  case '3':
+    return 2.0
+  case '4':
+    return 3.0  
+  default:
+    return 0.0
+  }
+  
+}
+
+
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
-    'period': convertUserPeriodPickToFloat(answerData['1'])
+    'period': convertUserPeriodPickToFloat(answerData['1']),
+    'course_lang': convertNoOptionChoiceToFloat(answerData['lang-1'])
   }
 
   return userCoordinates
 }
 
+async function getCodesForCur(course: Cur){
+  const curcus: CurCu[] = await CurCu.findAll({
+    where: {curId: course.id},
+    include: Cu
+  })
+  console.log(curcus)
+  
+  return curcus
+}
 
+function courseLangValue(course: Cur){
+  const codesForCur = await getCodesForCur(course)
+  return 1.0
+}
 
 function convertUserPeriodPickToFloat(answerValue){
   switch (answerValue) {
@@ -98,7 +129,8 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   const distances = availableCourses.map(course => {
     // using random values for now...
     const courseCoordinates = {
-      'period': coursePeriodValue(course)
+      'period': coursePeriodValue(course),
+      'course_lang': courseLangValue(course)
     }
     console.log('calculated course period value')
 
