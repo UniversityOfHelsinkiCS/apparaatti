@@ -75,8 +75,24 @@ async function getCodesForCur(course: Cur){
   return codes
 }
 
+
+function langCoordFromCode (code: string){
+  if(code.includes('KK-FI')){
+    return 1.0
+  }
+  if(code.includes('KK-RU')){
+    return 2.0
+  }
+  if(code.includes('KK-EN')){
+    return 3.0
+  }
+}
 async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
+  return langCoordFromCode(codesForCur[0])
+
+  const courseLang = codesForCur.forEach((code) => langCoordFromCode(code))
+
   return 1.0
 }
 
