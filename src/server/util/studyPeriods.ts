@@ -1,5 +1,5 @@
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
-
+//end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
 export const dateIsInPeriod = (date: Date, period) => {
   const start = parseDate(period.start_date)
   const end = parseDate(period.end_date)
@@ -96,7 +96,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '5.5.2025',
-          end_date: '31.5.2025',
+          end_date: '25.8.2025', //modified to end at the 25 period I boundary
         }
       ]
     },
@@ -157,7 +157,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '4.5.2026',
-          end_date: '31.5.2026',
+          end_date: '24.8.2026', //modified to end at the 26 period I boundary
         }
       ]
     },
@@ -279,7 +279,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '8.5.2028',
-          end_date: '31.5.2028',
+          end_date: '28.8.2028', 
         }
       ]
     },
@@ -340,7 +340,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '7.5.2029',
-          end_date: '31.5.2029',
+          end_date: '27.8.2029',
         }
       ]
     },
@@ -401,7 +401,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '6.5.2030',
-          end_date: '31.5.2030',
+          end_date: '26.8.2030',
         }
       ]
     },
@@ -462,7 +462,7 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '5.5.2031',
-          end_date: '31.5.2031',
+          end_date: '25.8.2031',
         }
       ]
     },
