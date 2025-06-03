@@ -66,7 +66,7 @@ async function getCodesForCur(course: Cur){
   return curcus
 }
 
-function courseLangValue(course: Cur){
+async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
   return 1.0
 }
