@@ -57,6 +57,7 @@ function convertUserPeriodPickToFloat(answerValue){
 }
 
 function coursePeriodValue(course){
+  console.log("calculating course period value")
   //technically course can be in multiple periods but will use the first one returned for now...
   const periods = dateToPeriod(course.start_date)
   const period = periods[0]
@@ -86,6 +87,7 @@ function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
     const courseCoordinates = {
       'period': coursePeriodValue(course)
     }
+    console.log("calculated course period value")
 
     console.log(courseCoordinates)
     const sum = dimensions.reduce((acc, key) => {
