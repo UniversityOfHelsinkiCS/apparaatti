@@ -65,6 +65,7 @@ function coursePeriodValue(course: Cur){
   const periods = dateObjToPeriod(course.startDate)
   console.log("after date to period")
   const period = periods[0]
+  console.log(period)
   switch (period.name) {
   case 'period_1':
     return 1.0
