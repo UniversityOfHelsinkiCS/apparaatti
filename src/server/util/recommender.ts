@@ -59,11 +59,20 @@ function calculateUserCoordinates(answerData: any) {
 async function getCodesForCur(course: Cur){
   const curcus: CurCu[] = await CurCu.findAll({
     where: {curId: course.id},
-    include: Cu
   })
-  console.log(curcus)
+
+  const cuIds = curcus.map((curcu) => curcu.cuId)
+
+  const cus: Cu[] = await Cu.findAll({
+    where: {id: cuIds}
+  })
+
+  const codes = cus.map(cu => cu.courseCode)
+
+
+  console.log(codes)
   
-  return curcus
+  return codes
 }
 
 async function courseLangValue(course: Cur){
