@@ -149,13 +149,6 @@ const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]
 const coursesHandler = async (
   courseRealizations: any[]
 ) => {
- // console.log(courseRealizations)
- courseRealizations.forEach((course) => {
-  console.log(course)
-  console.log(course.assesmentItemIds)
-  console.log("-----")
-}) 
-// console.log(courseRealizations[0].assesmentItemIds)
   const filteredCourseRealizations = courseRealizations.filter(
     (course) =>
       course.courseUnits.length &&
@@ -164,10 +157,6 @@ const coursesHandler = async (
   )
 
   console.log(`Found ${filteredCourseRealizations.length} valid course realizations`)
-  console.log(courseRealizations)
-  console.log(courseRealizations[0].courseUnits)
-
-
   await createCursFromUpdater(filteredCourseRealizations)
   await createCusFromUpdater(filteredCourseRealizations)
   await createCurCusFromUpdater(filteredCourseRealizations)
@@ -179,5 +168,5 @@ const coursesHandler = async (
 const SPEED = 10000
 
 export const fetchCoursesAndResponsibilities = async () => {
-  await mangleData('courses', SPEED, coursesHandler)
+  await mangleData('courses', SPEED, coursesHandler, new Date(2023, 0, 1))
 }
