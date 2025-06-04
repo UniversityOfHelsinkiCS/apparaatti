@@ -138,7 +138,7 @@ function coursePeriodValue(course: Cur){
 
   const periodDistances =  filteredPeriods.map((period) => {
     return {
-      period,
+      period: period,
       distance: course.startDate.getTime() - parseDate(period.start_date).getTime()
     }
   }).filter((p) => p.distance > 0)
