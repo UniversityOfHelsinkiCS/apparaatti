@@ -241,7 +241,6 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice){
       return true
     }
 
-    console.log({ a: typeof lang, b: typeof langChoice })
     return false
   })
 
