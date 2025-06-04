@@ -31,27 +31,11 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
-function convertNoOptionChoiceToFloat(answerValue){
-  switch (answerValue) {
-  case '1':
-    return 0.0
-  case '2':
-    return 1.0
-  case '3':
-    return 2.0
-  case '4':
-    return 3.0  
-  default:
-    return 0.0
-  }
-  
-}
 
 
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
-    //'course_lang': convertNoOptionChoiceToFloat(answerData['lang-1'])
   }
 
   return userCoordinates
@@ -79,16 +63,16 @@ async function getCodesForCur(course: Cur){
 
 function langCoordFromCode (code: string){
   if(code.includes('KK-FI')){
-    return 1.0
+    return '2'
   }
   if(code.includes('KK-RU')){
-    return 2.0
+    return '3'
   }
   if(code.includes('KK-EN')){
-    return 3.0
+    return '4'
   }
 
-  return 0.0 //default
+  return '1' //default = no choice
 }
 async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
@@ -257,6 +241,7 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice){
       return true
     }
 
+    console.log({ a: typeof lang, b: typeof langChoice })
     return false
   })
 
@@ -278,7 +263,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
 
 
   console.log('course count before lang selection: ', courseData.length)
-  const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, convertNoOptionChoiceToFloat(answerData['lang-1']))
+  const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, answerData['lang-1'])
   console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
   console.log(coursesAboutCorrectLanguage)
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
