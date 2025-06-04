@@ -171,7 +171,7 @@ function coursePeriodValue(course: Cur){
 //returns a list of [{course, distance}] 
 async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   const distancePromises = availableCourses.map(course => {
-    calculateCourseDistance(course, userCoordinates)
+    return calculateCourseDistance(course, userCoordinates)
   })
   const distances = await Promise.all(distancePromises)
 
