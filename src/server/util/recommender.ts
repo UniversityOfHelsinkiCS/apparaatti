@@ -62,7 +62,7 @@ async function getCodesForCur(course: Cur){
 
 
 function langCoordFromCode (code: string){
-  if(code.includes('KK-FI')){
+  if(code.includes('KK-FI') || code.includes('KK-AIAK')){
     return '2'
   }
   if(code.includes('KK-RU')){
