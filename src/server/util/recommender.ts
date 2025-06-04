@@ -228,7 +228,7 @@ async function addCourseCodesToRecommendations(courses) {
   return recommendations
 }
 
-async function filterCoursesForLanguage(courses: Cur[], langChoice){
+async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
  
   const hits = courses.filter(async (course) => {
