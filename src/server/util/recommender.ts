@@ -116,7 +116,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   // using random values for now...
   const courseCoordinates = {
     'period': coursePeriodValue(course),
-    'course_lang': courseLangValue(course)
+    'course_lang': await courseLangValue(course)
   }
   console.log('calculated course period value')
 
