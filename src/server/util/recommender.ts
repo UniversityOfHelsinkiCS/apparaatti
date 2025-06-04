@@ -137,13 +137,13 @@ function coursePeriodValue(course: Cur){
   console.log(periods)
 
   switch (period.name) {
-  case 'period_1':
+  case 'period_1' || 'intensive_1':
     return 1.0
-  case 'period_2':
+  case 'period_2' || 'intensive_2':
     return 2.0
   case 'period_3':
     return 3.0
-  case 'period_4':
+  case 'period_4' || 'intensive_3':
     return 4.0
   default: //the intensives and exam weeks are considered a value of 0 for now...
     return 0.0
