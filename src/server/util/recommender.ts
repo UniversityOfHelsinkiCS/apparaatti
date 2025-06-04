@@ -83,6 +83,7 @@ async function courseLangValue(course: Cur){
 }
 
 function convertUserPeriodPickToFloat(answerValue){
+  console.log("answer value", answerValue)
   switch (answerValue) {
   case '1':
     return 1.0
@@ -270,7 +271,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
   console.log('course count before lang selection: ', courseData.length)
   const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, answerData['lang-1'])
   console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
-  console.log(coursesAboutCorrectLanguage)
+
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
