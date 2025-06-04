@@ -229,26 +229,17 @@ async function addCourseCodesToRecommendations(courses) {
 }
 
 async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
-
- 
-  const hits = courses.filter(async (course) => {
-    const lang = await courseLangValue(course) as string
-    console.log('user lang', lang)
-    console.log('course lang', langChoice)
-    console.log(lang === langChoice )
-    console.log(lang == langChoice )
-    console.log(typeof(lang))
-    console.log(typeof(langChoice))
-    if(lang.localeCompare(langChoice) === 0)
-    {
-      return true
+  const coursesWithLangPromise = courses.map(async (course) => {
+    return{
+      course: course,
+      lang: await courseLangValue(course) as string
     }
-
-    return false
   })
-
-  const filtered = await Promise.all(hits)
-  return filtered
+  const coursesWithLang = await Promise.all(coursesWithLangPromise)
+ 
+  const hits = coursesWithLang.filter((course) => course.lang === langChoice)
+  const correctCourses = hits.map((hit) => hit.course)
+  return correctCourses
 
 }
 
