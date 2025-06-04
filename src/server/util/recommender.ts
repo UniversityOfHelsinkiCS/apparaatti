@@ -86,6 +86,8 @@ function langCoordFromCode (code: string){
   if(code.includes('KK-EN')){
     return 3.0
   }
+
+  return 0.0 //default
 }
 async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
