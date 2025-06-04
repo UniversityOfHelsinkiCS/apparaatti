@@ -89,11 +89,10 @@ function langCoordFromCode (code: string){
 }
 async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
-  return langCoordFromCode(codesForCur[0])
 
-  const courseLang = codesForCur.forEach((code) => langCoordFromCode(code))
-
-  return 1.0
+  const langValue = langCoordFromCode(codesForCur[0])
+  console.log('lang value for course', langValue)
+  return langValue
 }
 
 function convertUserPeriodPickToFloat(answerValue){
@@ -110,6 +109,29 @@ function convertUserPeriodPickToFloat(answerValue){
     return 0.0
   }
 
+}
+
+async function calculateCourseDistance(course: Cur, userCoordinates: any){
+  const dimensions = Object.keys(userCoordinates)
+  // using random values for now...
+  const courseCoordinates = {
+    'period': coursePeriodValue(course),
+    'course_lang': courseLangValue(course)
+  }
+  console.log('calculated course period value')
+
+  console.log(courseCoordinates)
+  const sum = dimensions.reduce((acc, key) => {
+    const userValue = userCoordinates[key]
+    const courseValue = courseCoordinates[key as keyof typeof dimensions]
+    return acc + Math.pow(userValue - courseValue, 2)
+  }, 0.0)
+  console.log(sum)
+
+  const distance = Math.sqrt(sum)
+  console.log(distance)
+
+  return {course: course, distance: distance }
 }
 
 function coursePeriodValue(course: Cur){
@@ -147,32 +169,15 @@ function coursePeriodValue(course: Cur){
 }
 
 //returns a list of [{course, distance}] 
-function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
+async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
   console.log('calculating user distances')
   const dimensions = Object.keys(userCoordinates)
 
-  const distances = availableCourses.map(course => {
-    // using random values for now...
-    const courseCoordinates = {
-      'period': coursePeriodValue(course),
-      'course_lang': courseLangValue(course)
-    }
-    console.log('calculated course period value')
-
-    console.log(courseCoordinates)
-    const sum = dimensions.reduce((acc, key) => {
-      const userValue = userCoordinates[key]
-      const courseValue = courseCoordinates[key as keyof typeof dimensions]
-      return acc + Math.pow(userValue - courseValue, 2)
-    }, 0.0)
-    console.log(sum)
-
-    const distance = Math.sqrt(sum)
-    console.log(distance)
-
-    return {course: course, distance: distance }
-    
+  const distancePromises = availableCourses.map(course => {
+    calculateCourseDistance(course, userCoordinates)
   })
+  const distances = await Promise.all(distancePromises)
+
   console.log('distances calculated')
   return distances
 }
