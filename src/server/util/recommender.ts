@@ -239,7 +239,7 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
     console.log(lang == langChoice )
     console.log(typeof(lang))
     console.log(typeof(langChoice))
-    if(lang == langChoice)
+    if(lang === langChoice)
     {
       return true
     }
