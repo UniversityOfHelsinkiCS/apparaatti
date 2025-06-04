@@ -85,15 +85,17 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
 const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
   const cus = realisations.map((realisation) => {
     const { id, name, courseUnits, activityPeriod } = realisation
-    const courseUnit = getCourseUnit(courseUnits, activityPeriod)
-
-    return {
-      id: courseUnit.id,
-      name: courseUnit.name,
-      courseCode: courseUnit.code,
-      groupId: courseUnit.organisations[0]?.id ?? null,
-    }
+    return courseUnits
   })
+    .flat().map((courseUnit: any) => {
+      return {
+        id: courseUnit.id,
+        name: courseUnit.name,
+        courseCode: courseUnit.code,
+        groupId: courseUnit.organisations[0]?.id ?? null,
+      }
+    })
+  
 
   try{
     Cu.bulkCreate(cus, {ignoreDuplicates: true})
@@ -121,7 +123,7 @@ const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]
 
   })
   
-  let curCuRelations: CurCuRelation[] = []
+  const curCuRelations: CurCuRelation[] = []
   CourseUnitIdsOfRealization.forEach((relation) => {
     const { curId, cuIds } = relation
     cuIds.forEach((cuId) => {
