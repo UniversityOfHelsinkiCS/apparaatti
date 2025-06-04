@@ -7,8 +7,8 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
-import { dateObjToPeriod, dateToPeriod } from './studyPeriods.ts'
-import { promise } from 'zod'
+import { dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
+
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
@@ -132,10 +132,22 @@ function coursePeriodValue(course: Cur){
     console.log('!! no period found for course: ', course)
     return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
   }
- 
-  const period = periods[0]
-  console.log(periods)
 
+  const filteredPeriods = periods.filter((period) => parseDate(period.start_date) > new Date(2027, 1, 1))
+  console.log(filteredPeriods)
+
+  const periodDistances =  filteredPeriods.map((period) => {
+    return {
+      period,
+      distance: course.startDate.getTime() - parseDate(period.start_date).getTime()
+    }
+  }).filter((p) => p.distance > 0)
+    .sort((a, b) => a.distance - b.distance)
+  console.log(periodDistances)
+  
+
+  const period = periodDistances[0].period
+  console.log('picked period: ', period)
   switch (period.name) {
   case 'period_1' || 'intensive_1':
     return 1.0
