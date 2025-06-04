@@ -133,7 +133,7 @@ function coursePeriodValue(course: Cur){
     return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
   }
 
-  const filteredPeriods = periods.filter((period) => parseDate(period.start_date) > new Date(2027, 1, 1))
+  const filteredPeriods = periods.filter((period) => parseDate(period.start_date) < new Date(2027, 1, 1))
   console.log(filteredPeriods)
 
   const periodDistances =  filteredPeriods.map((period) => {
