@@ -170,9 +170,6 @@ function coursePeriodValue(course: Cur){
 
 //returns a list of [{course, distance}] 
 async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
- 
-  const dimensions = Object.keys(userCoordinates)
-
   const distancePromises = availableCourses.map(course => {
     calculateCourseDistance(course, userCoordinates)
   })
@@ -279,8 +276,8 @@ async function getRecommendations(userCoordinates: any, answerData) {
 
   console.log("course count before lang selection: ", courseData.length)
   const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, convertNoOptionChoiceToFloat(answerData['lang-1']))
-  console.log("couse count after selection: ", coursesAboutCorrectLanguage.length)
-  const distances = calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
+  console.log("course count after selection: ", coursesAboutCorrectLanguage.length)
+  const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
  
