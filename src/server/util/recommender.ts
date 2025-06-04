@@ -134,7 +134,7 @@ function coursePeriodValue(course: Cur){
   }
  
   const period = periods[0]
-
+  console.log(periods)
 
   switch (period.name) {
   case 'period_1':
