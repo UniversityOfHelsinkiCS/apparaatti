@@ -94,7 +94,7 @@ async function courseLangValue(course: Cur){
   const codesForCur = await getCodesForCur(course)
 
   const langValue = langCoordFromCode(codesForCur[0])
-  console.log('lang value for course', langValue)
+ 
   return langValue
 }
 
@@ -121,7 +121,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
     'period': coursePeriodValue(course),
     //'course_lang': await courseLangValue(course)
   }
-  console.log('calculated course period value')
+  
 
   console.log(courseCoordinates)
   const sum = dimensions.reduce((acc, key) => {
@@ -129,30 +129,27 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
     const courseValue = courseCoordinates[key as keyof typeof dimensions]
     return acc + Math.pow(userValue - courseValue, 2)
   }, 0.0)
-  console.log(sum)
+
 
   const distance = Math.sqrt(sum)
-  console.log(distance)
+
 
   return {course: course, distance: distance }
 }
 
 function coursePeriodValue(course: Cur){
-  console.log('calculating course period value')
+  
   //technically course can be in multiple periods but will use the first one returned for now...
-  console.log('before date to period')
-
+ 
   
   const periods = dateObjToPeriod(course.startDate)
-  console.log(periods)
+ 
   if(periods.length == 0){
     console.log('!! no period found for course: ', course)
     return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
   }
-  console.log('after date to period')
+ 
   const period = periods[0]
-  console.log(period)
-  
 
 
   switch (period.name) {
@@ -173,7 +170,7 @@ function coursePeriodValue(course: Cur){
 
 //returns a list of [{course, distance}] 
 async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
-  console.log('calculating user distances')
+ 
   const dimensions = Object.keys(userCoordinates)
 
   const distancePromises = availableCourses.map(course => {
@@ -181,7 +178,6 @@ async function calculateUserDistances(userCoordinates: any, availableCourses: Cu
   })
   const distances = await Promise.all(distancePromises)
 
-  console.log('distances calculated')
   return distances
 }
 
@@ -277,19 +273,19 @@ async function getRecommendations(userCoordinates: any, answerData) {
   }
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  console.log(courseCodeStrings)
+ 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
-  console.log(courseData)
-  console.log('after getting realistations with course codes')
 
+
+  console.log("course count before lang selection: ", courseData.length)
   const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, convertNoOptionChoiceToFloat(answerData['lang-1']))
-
+  console.log("couse count after selection: ", coursesAboutCorrectLanguage.length)
   const distances = calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
-  console.log('Recommendations:', recommendations)
+ 
   const recommendationsWithCodes  = await addCourseCodesToRecommendations(recommendations)
-  console.log('Recommendations with codes:', recommendationsWithCodes)
+ 
   return recommendationsWithCodes
 }
 
