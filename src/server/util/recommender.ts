@@ -277,6 +277,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
   console.log("course count before lang selection: ", courseData.length)
   const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, convertNoOptionChoiceToFloat(answerData['lang-1']))
   console.log("course count after selection: ", coursesAboutCorrectLanguage.length)
+  console.log(coursesAboutCorrectLanguage)
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
