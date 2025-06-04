@@ -12,7 +12,7 @@ import { dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
-  console.log('after user coordinates')
+  console.log('after user coordinates', userCoordinates)
   const recommendations = getRecommendations(userCoordinates, answerData)
   console.log('after recommendations')
   return recommendations
