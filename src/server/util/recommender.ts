@@ -232,7 +232,7 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
  
   const hits = courses.filter(async (course) => {
-    const lang = await courseLangValue(course)
+    const lang = await courseLangValue(course) as string
     console.log('user lang', lang)
     console.log('course lang', lang)
     console.log(lang === langChoice )
