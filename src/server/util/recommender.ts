@@ -8,6 +8,7 @@ import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 import { dateObjToPeriod, dateToPeriod } from './studyPeriods.ts'
+import { promise } from 'zod'
 
 function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
@@ -50,7 +51,7 @@ function convertNoOptionChoiceToFloat(answerValue){
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
-    'course_lang': convertNoOptionChoiceToFloat(answerData['lang-1'])
+    //'course_lang': convertNoOptionChoiceToFloat(answerData['lang-1'])
   }
 
   return userCoordinates
@@ -118,7 +119,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   // using random values for now...
   const courseCoordinates = {
     'period': coursePeriodValue(course),
-    'course_lang': await courseLangValue(course)
+    //'course_lang': await courseLangValue(course)
   }
   console.log('calculated course period value')
 
@@ -250,7 +251,23 @@ async function addCourseCodesToRecommendations(courses) {
   return recommendations
 }
 
+async function filterCoursesForLanguage(courses: Cur[], langChoice){
 
+ 
+  const hits = courses.filter(async (course) => {
+    const lang = await courseLangValue(course)
+    if(lang == langChoice)
+    {
+      return true
+    }
+
+    return false
+  })
+
+  const filtered = await Promise.all(hits)
+  return filtered
+
+}
 
 async function getRecommendations(userCoordinates: any, answerData) {
   
@@ -265,7 +282,9 @@ async function getRecommendations(userCoordinates: any, answerData) {
   console.log(courseData)
   console.log('after getting realistations with course codes')
 
-  const distances = calculateUserDistances(userCoordinates, courseData)
+  const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, convertNoOptionChoiceToFloat(answerData['lang-1']))
+
+  const distances = calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
   console.log('Recommendations:', recommendations)
