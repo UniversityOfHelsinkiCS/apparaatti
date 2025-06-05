@@ -8,7 +8,7 @@ import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
-import { parse } from 'papaparse'
+
 
 
 function recommendCourses(answerData: any) {
