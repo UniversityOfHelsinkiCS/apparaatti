@@ -42,6 +42,7 @@ export const closestPeriod = (name: string = '') => {
   const date = new Date()
   const year = date.getFullYear().toString()
   const studyYears = studyPeriods.years.filter((y) => y.start_year === year || y.end_year === year)
+  console.log('years', studyYears)
   
   const periods = studyYears.map(y => y.periods).flat()
     .filter((p) => {
