@@ -59,7 +59,7 @@ function calculateUserCoordinates(answerData: any) {
   console.log('picked study period for user: ', period)
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
-    'period_date': new Date(answerData['date-start-1']).getTime()
+    'date': new Date(answerData['date-start-1']).getTime()
   }
 
   return userCoordinates
@@ -129,7 +129,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   // using random values for now...
   const courseCoordinates = {
     'period': coursePeriodValue(period),
-    'period_date': parseDate(period.start_date).getTime()
+    'date': parseDate(period.start_date).getTime()
   }
   
 
@@ -312,7 +312,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
   const sortedCourses = distances.filter((c) => c.course.startDate >= start).sort((a, b) => a.distance - b.distance)
   sortedCourses.forEach((course) => {
     console.log('---')
-    console.log('distance in time: ', (course.course.startDate.getTime() - userCoordinates['period_date'])  / 10000000)
+    console.log('distance in time: ', (course.course.startDate.getTime() - userCoordinates['date'])  / 10000000)
     console.log('distance: ', course.distance / 10000000)
   })
   const recommendations = sortedCourses.slice(0, 3)
