@@ -5,6 +5,7 @@ import { AnswerSchema } from '../common/validators.ts'
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
 import { useState } from 'react'
 import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx'
+import MultiChoiceFormV2 from './components/MultiChoiceFormV2.tsx'
 
 function App() {
   const [courseRecommendations, setCourseRecommendations] = useState([])
@@ -88,7 +89,7 @@ function App() {
       <Box sx={{
         paddingTop: 10,
       }}>  
-        <MultiChoiceForm form={form} onSubmit={handleSubmit} />
+        <MultiChoiceForm onSubmit={handleSubmit}/>
       
       </Box>
       {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}
