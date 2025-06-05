@@ -42,6 +42,7 @@ export const closestPeriod = (name: string = '') => {
   const date = new Date()
   const year = date.getFullYear().toString()
   const studyYears = studyPeriods.years.filter((y) => y.start_year === year || y.end_year === year)
+  
   const periods = studyYears.map(y => y.periods).flat()
     .filter((p) => {
       if(name.length === 0)
@@ -52,7 +53,7 @@ export const closestPeriod = (name: string = '') => {
         return true
       }
     })
-  
+  console.log('study periods: ', studyYears)
  
   
   const distances = periods.map((p) => {return {
@@ -61,6 +62,11 @@ export const closestPeriod = (name: string = '') => {
   }})
     .filter((p) => p.distance > 0)
     .sort((a, b) => a.distance - b.distance)
+  distances.forEach((dis) => {
+    console.log('--period distance--')
+    console.log('distance: ', dis.distance / 10000000)
+  })
+
 
   const period = distances[0]
   return period

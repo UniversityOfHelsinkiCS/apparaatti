@@ -40,6 +40,7 @@ function getClosestPeriodFromUserPick(answerValue){
   case '2':
     return closestPeriod('period_2').period
   case '3':
+    console.log('hit the correct one')
     return closestPeriod('period_3').period
   case '4':
     return  closestPeriod('period_4').period
