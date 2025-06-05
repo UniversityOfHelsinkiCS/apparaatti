@@ -205,9 +205,10 @@ async function calculateUserDistances(userCoordinates: any, availableCourses: Cu
 
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
+  const search = 'KK-'
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
-      courseCode: {[Op.like]: '${KK-}%'},
+      courseCode: {[Op.like]: `${search}%`},
     },
   })
 
