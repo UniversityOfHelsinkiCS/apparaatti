@@ -18,7 +18,7 @@ const DateQuestion = ({ question, id }) => {
         <TextField
           label=""
           type="date"
-          name={`date-start-${id}`}
+          name={`date-end-${id}`}
           slotProps={{ input: { placeholder: 'Loppuu' } }}
           variant="outlined"
         />
