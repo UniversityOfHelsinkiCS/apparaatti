@@ -47,13 +47,13 @@ export const closestPeriod = (name: string = '') => {
     .filter((p) => {
       if(name.length === 0)
       {
-        return p.name === name
+        return p.name.localeCompare(name) === 0
       }
       else{
         return true
       }
     })
-  console.log('study periods: ', studyYears)
+  console.log('study periods: ', periods)
  
   
   const distances = periods.map((p) => {return {
