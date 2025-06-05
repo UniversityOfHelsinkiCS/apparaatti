@@ -7,7 +7,7 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
-import { dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
+import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
 
 
 function recommendCourses(answerData: any) {
@@ -31,11 +31,26 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
+function getPeriodDateFromUserPick(answerValue) {
+  switch (answerValue) {
+  case '1':
+    return parseDate(closestPeriod('period_1').period.start_date).getTime()
+  case '2':
+    return parseDate(closestPeriod('period_2').period.start_date).getTime()
+  case '3':
+    return parseDate(closestPeriod('period_3').period.start_date).getTime()
+  case '4':
+    return parseDate(closestPeriod('period_4').period.start_date).getTime()
+  default:
+    return parseDate(closestPeriod().period.start_date).getTime()
+  }
+}
 
 
 function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
+    'period_date': getPeriodDateFromUserPick(answerData['1'])
   }
 
   return userCoordinates
@@ -83,7 +98,7 @@ async function courseLangValue(course: Cur){
 }
 
 function convertUserPeriodPickToFloat(answerValue){
-  console.log("answer value", answerValue)
+  console.log('answer value', answerValue)
   switch (answerValue) {
   case '1':
     return 1.0
@@ -100,11 +115,12 @@ function convertUserPeriodPickToFloat(answerValue){
 }
 
 async function calculateCourseDistance(course: Cur, userCoordinates: any){
+  const period = coursePeriod(course)
   const dimensions = Object.keys(userCoordinates)
   // using random values for now...
   const courseCoordinates = {
-    'period': coursePeriodValue(course),
-    //'course_lang': await courseLangValue(course)
+    'period': coursePeriodValue(period),
+    'period_date': period.start_date.getTime()
   }
   
 
@@ -122,11 +138,8 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   return {course: course, distance: distance }
 }
 
-function coursePeriodValue(course: Cur){
-  
-  //technically course can be in multiple periods but will use the first one returned for now...
- 
-  
+
+function coursePeriod(course: Cur){
   const periods = dateObjToPeriod(course.startDate)
  
   if(periods.length == 0){
@@ -146,8 +159,13 @@ function coursePeriodValue(course: Cur){
     .sort((a, b) => a.distance - b.distance)
   console.log(periodDistances)
   
-
+  //technically course can be in multiple periods but will use the first one returned for now...
   const period = periodDistances[0].period
+  return period
+}
+
+function coursePeriodValue(period){
+ 
   console.log('picked period: ', period)
   switch (period.name) {
   case 'period_1' || 'intensive_1':

@@ -11,20 +11,20 @@ export const dateIsInPeriod = (date: Date, period) => {
  
 
 export const parseDate = (date: string) =>  {
-  const [day, month, year] = date.split(".").map(Number)
+  const [day, month, year] = date.split('.').map(Number)
   return new Date(year, month - 1, day)
 }
 
 
 export const dateToPeriod = (date: string) => {
   const dateObj = parseDate(date)
-  let hits = dateObjToPeriod(dateObj)
+  const hits = dateObjToPeriod(dateObj)
   return hits
 }
 
 
 export const dateObjToPeriod = (dateObj: Date) => {
-  let hits = []
+  const hits = []
   studyPeriods.years.forEach(year => {
     year.periods.forEach((period) => {
       if(dateIsInPeriod(dateObj, period)){
@@ -36,6 +36,38 @@ export const dateObjToPeriod = (dateObj: Date) => {
  
   return hits
 }
+
+//returns closest period in the future given the string
+export const closestPeriod = (name: string = '') => {
+  const date = new Date()
+  const year = date.getFullYear().toString()
+  const studyYears = studyPeriods.years.filter((y) => y.start_year === year || y.end_year === year)
+  const periods = studyYears.map(y => y.periods).flat()
+    .filter((p) => {
+      if(name.length === 0)
+      {
+        return p.name === name
+      }
+      else{
+        return true
+      }
+    })
+  
+ 
+  
+  const distances = periods.map((p) => {return {
+    period: p, 
+    distance: parseDate(p.start_date).getTime() - date.getTime()
+  }})
+    .filter((p) => p.distance > 0)
+    .sort((a, b) => a.distance - b.distance)
+
+  const period = distances[0]
+  return period
+
+}
+
+
 
 const studyPeriods = {
   years: [
