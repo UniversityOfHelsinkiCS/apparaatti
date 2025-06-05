@@ -32,23 +32,30 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
-function getPeriodDateFromUserPick(answerValue) {
+
+function getClosestPeriodFromUserPick(answerValue){
   switch (answerValue) {
   case '1':
-    return parseDate(closestPeriod('period_1').period.start_date).getTime()
+    return closestPeriod('period_1').period
   case '2':
-    return parseDate(closestPeriod('period_2').period.start_date).getTime()
+    return closestPeriod('period_2').period
   case '3':
-    return parseDate(closestPeriod('period_3').period.start_date).getTime()
+    return closestPeriod('period_3').period
   case '4':
-    return parseDate(closestPeriod('period_4').period.start_date).getTime()
+    return  closestPeriod('period_4').period
   default:
-    return parseDate(closestPeriod().period.start_date).getTime()
+    return  closestPeriod().period
   }
+}
+function getPeriodDateFromUserPick(answerValue) {
+  const period = getClosestPeriodFromUserPick(answerValue)
+  return parseDate(period.start_date).getTime()
 }
 
 
 function calculateUserCoordinates(answerData: any) {
+  const period = getClosestPeriodFromUserPick(answerData['1'])
+  console.log('picked study period for user: ', period)
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
     'period_date': getPeriodDateFromUserPick(answerData['1'])
