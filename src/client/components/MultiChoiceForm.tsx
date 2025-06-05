@@ -1,20 +1,23 @@
 import React from 'react'
 import { Box, Button, FormControl } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
+import DateQuestion from './DateQuestion.tsx'
 const questions = [
   {
     id: '1',
+    type: 'date',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
       { id: '1', name: { fi: '1. periodi' } },
       { id: '2', name: { fi: '2. periodi' } },
       { id: '3', name: { fi: '3. periodi' } },
       { id: '4', name: { fi: '4. periodi' } },
-      { id: '5', name: { fi: '5. periodi' } },
+      { id: '5', name: { fi: 'kesän intensiivikurssi' } },
     ],
   },
   {
     id: 'lang-1',
+    type: 'multi',
     question: { fi: 'Mistä kielestä haet kursseja?' },
     options: [
       { id: '1', name: { fi: 'ei valintaa' } },
@@ -25,6 +28,7 @@ const questions = [
   },
   {
     id: '2',
+    type: 'multi',
     question: { fi: 'Valmistutko lähiaikoina?' },
     options: [
       { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
@@ -33,6 +37,7 @@ const questions = [
   },
   {
     id: '3',
+    type: 'multi',
     question: { fi: 'Koetko häiritsevää jännitystä tai pelkoa kielikursseilla?' },
     options: [
       { id: '1', name: { fi: 'En niin että se häiritsisi opiskelua' } },
@@ -41,6 +46,7 @@ const questions = [
   },
   {
     id: '4',
+    type: 'multi',
     question: { fi: 'Mikä on suosimasi opetusmuoto?' },
     options: [
       { id: '1', name: { fi: 'täysin etäopiskelu' } },
@@ -50,6 +56,7 @@ const questions = [
   },
   {
     id: '5',
+    type: 'multi',
     question: { fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?' },
     options: [
       { id: '1', name: { fi: 'itsenäinen ajan käyttö' } },
@@ -59,6 +66,7 @@ const questions = [
   },
   {
     id: '6',
+    type: 'multi',
     question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
     options: [
       { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
@@ -67,6 +75,7 @@ const questions = [
   },
   {
     id: '7',
+    type: 'multi',
     question: { fi: 'Koen taitotasokseni' },
     options: [
       { id: '1', name: { fi: 'Välttäväksi' } },
@@ -76,6 +85,7 @@ const questions = [
   },
   {
     id: '8',
+    type: 'multi',
     question: { fi: 'Vanhentuneet viekie opinnot' },
     options: [
       { id: '1', name: { fi: 'ei väliä' } },
@@ -85,6 +95,7 @@ const questions = [
   },
   {
     id: '9',
+    type: 'multi',
     question: { fi: 'Integroitu opetus' },
     options: [
       { id: '1', name: { fi: 'ei väliä' } },
@@ -93,6 +104,18 @@ const questions = [
     ],
   },
 ]
+
+const renderFormQuestion = (key, question) => {
+  switch(question.type){
+  case 'date':
+    return <DateQuestion key={key} question={question.question} id={key} />;
+  case 'multi':
+    return  <FormQuestion key={key} question={question} />
+  default:
+    return <p>unkown quesion type</p>
+  }
+
+}
 
 const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promise<void> }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
@@ -116,9 +139,7 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
         }}
       >
         <FormControl component="fieldset">
-          {questions.map((q) => (
-            <FormQuestion key={q.id} question={q} />
-          ))}
+          {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <Button
           variant="outlined"
