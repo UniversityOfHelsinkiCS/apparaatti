@@ -300,7 +300,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
   console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
 
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
-  const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.filter((c) => c.course.startDate.getTime() - userCoordinates['period_date'] > 0).sort((a, b) => a.distance - b.distance)
   sortedCourses.forEach((course) => {
     console.log('---')
     console.log('distance in time: ', (course.course.startDate.getTime() - userCoordinates['period_date'])  / 10000000)
