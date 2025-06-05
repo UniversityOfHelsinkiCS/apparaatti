@@ -292,9 +292,9 @@ async function getRecommendations(userCoordinates: any, answerData) {
 
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
-  sortedCourses.forEach((course) => console.log('distance: ', course.distance / 100000))
+  sortedCourses.forEach((course) => console.log('distance: ', course.distance / 10000000))
   const recommendations = sortedCourses.slice(0, 3)
-  console.log(recommendations)
+  //console.log(recommendations)
   const recommendationsWithCodes  = await addCourseCodesToRecommendations(recommendations)
  
   return recommendationsWithCodes
