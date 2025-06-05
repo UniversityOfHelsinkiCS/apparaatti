@@ -14,14 +14,7 @@ const DateQuestion = ({ question, id }) => {
           slotProps={{ input: { placeholder: 'Alkaa' } }}
           variant="outlined"
         />
-        Loppu
-        <TextField
-          label=""
-          type="date"
-          name={`date-end-${id}`}
-          slotProps={{ input: { placeholder: 'Loppuu' } }}
-          variant="outlined"
-        />
+       
       </FormControl>
     </Box>
   )
