@@ -31,7 +31,7 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
-function getPeriodDateFromUserPick(answerValue) {
+function getPeriodDateFromUserprodPick(answerValue) {
   switch (answerValue) {
   case '1':
     return parseDate(closestPeriod('period_1').period.start_date).getTime()
@@ -120,7 +120,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   // using random values for now...
   const courseCoordinates = {
     'period': coursePeriodValue(period),
-    'period_date': period.start_date.getTime()
+    'period_date': parseDate(period.start_date).getTime()
   }
   
 
