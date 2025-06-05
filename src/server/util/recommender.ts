@@ -8,6 +8,7 @@ import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
+import { parse } from 'papaparse'
 
 
 function recommendCourses(answerData: any) {
@@ -292,7 +293,11 @@ async function getRecommendations(userCoordinates: any, answerData) {
 
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
-  sortedCourses.forEach((course) => console.log('distance: ', course.distance / 10000000))
+  sortedCourses.forEach((course) => {
+    console.log('---')
+    console.log('distance in time: ', course.course.startDate.getTime() - userCoordinates['period_date'])
+    console.log('distance: ', course.distance / 10000000)
+  })
   const recommendations = sortedCourses.slice(0, 3)
   //console.log(recommendations)
   const recommendationsWithCodes  = await addCourseCodesToRecommendations(recommendations)
