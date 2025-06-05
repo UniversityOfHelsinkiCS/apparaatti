@@ -45,7 +45,7 @@ export const closestPeriod = (name: string = '') => {
   
   const periods = studyYears.map(y => y.periods).flat()
     .filter((p) => {
-      if(name.length === 0)
+      if(name.length > 0)
       {
         return p.name.localeCompare(name) === 0
       }
