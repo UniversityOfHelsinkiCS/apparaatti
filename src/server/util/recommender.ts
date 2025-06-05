@@ -208,7 +208,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const search = 'KK-'
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
-      courseCode: {[Op.like]: `${search}%`},
+      courseCode: courseCodeStrings//{[Op.like]: `${search}%`},
     },
   })
 
