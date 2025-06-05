@@ -1,6 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import type { DataTypes } from 'sequelize'
+import { Op, type DataTypes } from 'sequelize'
 import type { CourseRecommendation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
@@ -207,7 +207,7 @@ async function calculateUserDistances(userCoordinates: any, availableCourses: Cu
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
-      courseCode: courseCodeStrings,
+      courseCode: {[Op.like]: '${KK-}%'},
     },
   })
 
