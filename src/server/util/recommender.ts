@@ -269,6 +269,11 @@ async function addCourseCodesToRecommendations(courses) {
 }
 
 async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
+  if(langChoice === '1')
+  {
+    return courses
+  }
+
   const coursesWithLangPromise = courses.map(async (course) => {
     return{
       course: course,
