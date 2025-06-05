@@ -59,7 +59,7 @@ function calculateUserCoordinates(answerData: any) {
   console.log('picked study period for user: ', period)
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
-    'period_date': getPeriodDateFromUserPick(answerData['1'])
+    'period_date': new Date(answerData['date-start-1'])
   }
 
   return userCoordinates
@@ -309,8 +309,6 @@ async function getRecommendations(userCoordinates: any, answerData) {
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   
   const start = new Date(answerData['date-start-1'])
-  const end = new Date(answerData['date-start-1'])
-
   const sortedCourses = distances.filter((c) => c.course.startDate >= start).sort((a, b) => a.distance - b.distance)
   sortedCourses.forEach((course) => {
     console.log('---')
