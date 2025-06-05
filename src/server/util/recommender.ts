@@ -59,7 +59,7 @@ function calculateUserCoordinates(answerData: any) {
   console.log('picked study period for user: ', period)
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['1']),
-    'period_date': new Date(answerData['date-start-1'])
+    'period_date': new Date(answerData['date-start-1']).getTime()
   }
 
   return userCoordinates
