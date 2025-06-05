@@ -31,7 +31,7 @@ function convertAnswerValueToFloat(answerValue: any) {
   }
 }
 
-function getPeriodDateFromUserprodPick(answerValue) {
+function getPeriodDateFromUserPick(answerValue) {
   switch (answerValue) {
   case '1':
     return parseDate(closestPeriod('period_1').period.start_date).getTime()
