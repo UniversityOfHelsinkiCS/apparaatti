@@ -1,5 +1,5 @@
-import { User } from '../db/models'
-import { importerClient } from './importerClient'
+import User from '../db/models/user.ts'
+import { importerClient } from './importerClient.ts'
 
 
 
