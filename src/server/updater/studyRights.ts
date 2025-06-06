@@ -15,6 +15,8 @@ export const fetchStudyRights = async () => {
   let runCount = 0
   for (const user of users){
     runCount += 1
+    console.log('user whose studyright is to be fetched: ')
+    console.log(user)
     const studentNumber = user?.studentNumber
     if(studentNumber){
       const studyRights = await importerClient.get(`/${studentNumber}/studyrights`)
