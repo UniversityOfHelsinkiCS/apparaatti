@@ -32,9 +32,6 @@ const usersHandler = async (users: SisuUser[]) => {
       studentNumber: user.studentNumber, 
     }
   })
-  console.log('--got users--')
-  console.log(parsedUsers)
-
   const fieldsToUpdate = [
     'language',
     'username',
