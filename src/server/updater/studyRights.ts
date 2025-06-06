@@ -22,7 +22,7 @@ export const fetchStudyRights = async () => {
     console.log(studentNumber)
     if(studentNumber){
       console.log('successfully started fetching studyrights')
-      const studyRights = await importerClient.get(`/${studentNumber}/studyrights`)
+      const studyRights = await importerClient.get(`/apparaatti/${studentNumber}/studyrights`)
       console.log(studyRights)
     }
 
