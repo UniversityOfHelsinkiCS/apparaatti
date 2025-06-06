@@ -1,12 +1,15 @@
 
 import { fetchCoursesAndResponsibilities } from './courses.ts'
 import { fetchEnrolments } from './enrolments.ts'
+import { fetchStudyRights } from './studyRights.ts'
 import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
 
 const runUpdater = async () => {
   await fetchUsers()
+  await fetchStudyRights()
   await fetchCoursesAndResponsibilities()
+
 //  await fetchEnrolments()
 }
 
