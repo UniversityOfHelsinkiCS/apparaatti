@@ -17,7 +17,7 @@ export const fetchStudyRights = async () => {
     runCount += 1
     console.log('user whose studyright is to be fetched: ')
     console.log(user)
-    const studentNumber = user.studentNumber
+    const studentNumber = user.dataValues.studentNumber
     console.log(studentNumber)
     if(studentNumber){
       console.log('successfully started fetching studyrights')
