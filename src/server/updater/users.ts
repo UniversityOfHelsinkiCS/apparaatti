@@ -29,22 +29,16 @@ const usersHandler = async (users: SisuUser[]) => {
       username: user.eduPersonPrincipalName
         ? user.eduPersonPrincipalName.split('@')[0]
         : user.id,
-      active_course_ids: [],
-      lastName: user.lastName,
-      firstNames: user.firstNames,
-      studentNumber: user.studentNumber,
-      primaryEmail: user.primaryEmail,
+      studentNumber: user.studentNumber, 
     }
   })
+  console.log('--got users--')
+  console.log(parsedUsers)
 
   const fieldsToUpdate = [
     'language',
     'username',
-    'lastName',
-    'last_name',
-    'firstNames',
     'studentNumber',
-    'primaryEmail',
   ]
 
   await safeBulkCreate({
