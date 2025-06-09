@@ -1,5 +1,5 @@
 
-import { Model, BIGINT, STRING, JSONB, DATE } from 'sequelize'
+import { Model, BIGINT, STRING, JSONB, DATE, DataTypes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model {}
@@ -19,6 +19,7 @@ StudyRight.init(
     },
     state: {
       type: STRING
+
     },
     educationId: {
       type: STRING
@@ -81,14 +82,15 @@ StudyRight.init(
       type: STRING
     },
     createdAt: {
-      type: DATE
+      type: DataTypes.DATE,
     },
     updatedAt: {
-      type: DATE
+      type: DataTypes.DATE,
     }
   },
   {
     underscored: true,
+    timestamps: true,
     sequelize,
     modelName: 'studyright',
     tableName: 'studyrights',
