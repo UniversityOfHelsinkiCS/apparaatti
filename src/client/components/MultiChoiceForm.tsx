@@ -142,7 +142,7 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
           <TextField
             id="student-number-1"
             label="Lisätietoja"
-            name="additionalInfo"
+            name="student-number-1"
             variant="outlined"
             fullWidth
             margin="normal"
