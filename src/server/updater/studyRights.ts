@@ -13,16 +13,64 @@ export const fetchStudyRights = async () => {
     raw: true
   })
   console.log('number of users to find study rights for', users.length)
+  
+  const userChunks = []
+  const size = 1000
+  for (let i = 0; i < users.length; i += size) {
+    userChunks.push(users.slice(i, i + size))
+  }
 
+  const userCodeChunks = userChunks.map(chunk => chunk.map(user => user.student_number))
   let runCount = 0
-  for (const user of users){
+  for (const userCodeChunk of userCodeChunks){
     runCount += 1
-    const studentNumber = user.student_number
-    if(studentNumber){
-      const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
-      const studyRights = studyRightsReq.data
-      studyRights.forEach((studyRight: any) => {
-        StudyRight.upsert(
+    const studentNumbers = userCodeChunk
+    const studyRightsReq = await importerClient.get('apparaatti/studyrights', {
+      data: {
+        studentNumbers: studentNumbers
+      }
+    })
+    const studyRights = studyRightsReq.data    
+    console.log(studyRights)
+    studyRights.forEach((studyRight: any) => {
+      StudyRight.upsert(
+        {
+          id: studyRight.id,
+          personId: studyRight.personId,
+          state: studyRight.state,
+          educationId: studyRight.educationId,
+          organisationId: studyRight.organisationId,
+          modificationOrdinal: studyRight.modificationOrdinal,
+          documentState: studyRight.documentState,
+          valid: studyRight.valid,
+          grantDate: studyRight.grantDate,
+          studyStartDate: studyRight.studyStartDate,
+          transferOutDate: studyRight.transferOutDate,
+          termRegistrations: studyRight.termRegistrations,
+          studyRightCancellation: studyRight.studyRightCancellation,
+          studyRightGraduation: studyRight.studyRightGraduation,
+          snapshotDateTime: studyRight.snapshotDateTime,
+          acceptedSelectionPath: studyRight.acceptedSelectionPath,
+          studyRightTransfer: studyRight.studyRightTransfer,
+          studyRightExtensions: studyRight.studyRightExtensions,
+          transferOutUniversityUrn: studyRight.transferOutUniversityUrn,
+          requestedSelectionPath: studyRight.requestedSelectionPath,
+          phase1MinorSelection: studyRight.phase1MinorSelection,
+          phase2MinorSelection: studyRight.phase2MinorSelection,
+          admissionTypeUrn: studyRight.admissionTypeUrn,
+          createdAt: studyRight.createdAt,
+          updatedAt: studyRight.updatedAt
+        })
+    })
+    return   
+  }
+  
+  console.log('fetched study rights for', runCount, 'chunks of users')
+}
+
+/**
+ * 
+ *  StudyRight.upsert(
           {
             id: studyRight.id,
             personId: user.student_number,
@@ -49,18 +97,6 @@ export const fetchStudyRights = async () => {
             admissionTypeUrn: studyRight.admissionTypeUrn,
             createdAt: studyRight.createdAt,
             updatedAt: studyRight.updatedAt
-          })        
-          .then(() => {
-            if(runCount % 1000 === 0) {
-              console.log('run count for studyrights', runCount)
-            }
           })
-      })
-    }
-
-   
-  }
-
-  console.log('fetched study rights')
-}
-
+ * 
+ */
