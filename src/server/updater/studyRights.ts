@@ -20,7 +20,11 @@ export const fetchStudyRights = async () => {
     userChunks.push(users.slice(i, i + size))
   }
 
-  const userCodeChunks = userChunks.map(chunk => chunk.map(user => user.student_number))
+  const userCodeChunks = userChunks.map(chunk => 
+    chunk
+      .map(user => user.student_number)
+      .filter(studentNumber => studentNumber !== null && studentNumber !== undefined))
+
   let runCount = 0
   for (const userCodeChunk of userCodeChunks){
     runCount += 1
