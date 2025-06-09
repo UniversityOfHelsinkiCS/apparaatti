@@ -26,8 +26,6 @@ export const fetchStudyRights = async () => {
       const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
       const studyRights = studyRightsReq.data
       studyRights.forEach((studyRight: any) => {
-        console.log('creating study right for user', user.student_number)
-        console.log(studyRight)
         StudyRight.create({
           id: studyRight.id,
           personId: user.student_number,
