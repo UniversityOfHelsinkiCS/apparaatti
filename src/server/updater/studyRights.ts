@@ -64,41 +64,8 @@ export const fetchStudyRights = async () => {
           updatedAt: studyRight.updatedAt
         })
     })
-    return   
+    console.log('fetched study rights for', runCount, 'chunks of users')
   }
   
-  console.log('fetched study rights for', runCount, 'chunks of users')
+  console.log('done... all study rights fetched')
 }
-
-/**
- * 
- *  StudyRight.upsert(
-          {
-            id: studyRight.id,
-            personId: user.student_number,
-            state: studyRight.state,
-            educationId: studyRight.educationId,
-            organisationId: studyRight.organisationId,
-            modificationOrdinal: studyRight.modificationOrdinal,
-            documentState: studyRight.documentState,
-            valid: studyRight.valid,
-            grantDate: studyRight.grantDate,
-            studyStartDate: studyRight.studyStartDate,
-            transferOutDate: studyRight.transferOutDate,
-            termRegistrations: studyRight.termRegistrations,
-            studyRightCancellation: studyRight.studyRightCancellation,
-            studyRightGraduation: studyRight.studyRightGraduation,
-            snapshotDateTime: studyRight.snapshotDateTime,
-            acceptedSelectionPath: studyRight.acceptedSelectionPath,
-            studyRightTransfer: studyRight.studyRightTransfer,
-            studyRightExtensions: studyRight.studyRightExtensions,
-            transferOutUniversityUrn: studyRight.transferOutUniversityUrn,
-            requestedSelectionPath: studyRight.requestedSelectionPath,
-            phase1MinorSelection: studyRight.phase1MinorSelection,
-            phase2MinorSelection: studyRight.phase2MinorSelection,
-            admissionTypeUrn: studyRight.admissionTypeUrn,
-            createdAt: studyRight.createdAt,
-            updatedAt: studyRight.updatedAt
-          })
- * 
- */
