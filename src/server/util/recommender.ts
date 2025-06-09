@@ -8,6 +8,7 @@ import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
+import StudyRight from '../db/models/studyRight.ts'
 
 
 
@@ -290,7 +291,14 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 }
 
 async function getRecommendations(userCoordinates: any, answerData) {
-  
+  //for debugging purposes
+  const studyRights = await StudyRight.findAll({
+    where: { personId: answerData['student-number-1'] },
+    order: [['modificationOrdinal', 'DESC']],
+    raw: true
+  })
+  console.log('study rights: ', studyRights)
+
   
   type courseCode = {
     code: string;

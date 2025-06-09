@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, FormControl } from '@mui/material'
+import { Box, Button, FormControl, TextField } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 const questions = [
@@ -108,7 +108,7 @@ const questions = [
 const renderFormQuestion = (key, question) => {
   switch(question.type){
   case 'date':
-    return <DateQuestion key={key} question={question.question} id={key} />;
+    return <DateQuestion key={key} question={question.question} id={key} />
   case 'multi':
     return  <FormQuestion key={key} question={question} />
   default:
@@ -139,6 +139,14 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
         }}
       >
         <FormControl component="fieldset">
+          <TextField
+            id="student-number-1"
+            label="Lisätietoja"
+            name="additionalInfo"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+          />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <Button
