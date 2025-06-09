@@ -25,7 +25,6 @@ export const fetchStudyRights = async () => {
       console.log('successfully started fetching studyrights')
       const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
       const studyRights = studyRightsReq.data
-      console.log(studyRights)
       studyRights.forEach((studyRight: any) => {
         console.log('creating study right for user', user.student_number)
         console.log(studyRight)
@@ -57,14 +56,14 @@ export const fetchStudyRights = async () => {
           updatedAt: studyRight.updatedAt
         })        
           .then(() => {
-            console.log('study right created successfully for user')
+            if(runCount % 1000 === 0) {
+              console.log('run count for studyrights', runCount)
+            }
           })
       })
     }
 
-    if(runCount > 1){
-      return
-    }
+   
   }
 
   console.log('fetched study rights')
