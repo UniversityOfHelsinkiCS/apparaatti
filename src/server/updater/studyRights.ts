@@ -29,7 +29,7 @@ export const fetchStudyRights = async () => {
   for (const userCodeChunk of userCodeChunks){
     runCount += 1
     const studentNumbers = userCodeChunk
-    const studyRightsReq = await importerClient.get('apparaatti/studyrights', {
+    const studyRightsReq = await importerClient.post('apparaatti/studyrights', {
       data: {
         studentNumbers: studentNumbers
       }
