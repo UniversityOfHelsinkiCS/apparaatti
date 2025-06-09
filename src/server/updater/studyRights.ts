@@ -19,7 +19,6 @@ export const fetchStudyRights = async () => {
     runCount += 1
     const studentNumber = user.student_number
     if(studentNumber){
-      console.log('successfully started fetching studyrights')
       const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
       const studyRights = studyRightsReq.data
       studyRights.forEach((studyRight: any) => {
