@@ -1,6 +1,6 @@
 
 import { Model, BIGINT, STRING, JSONB, DATE } from 'sequelize'
-import { sequelize } from '../connection'
+import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model {}
 
