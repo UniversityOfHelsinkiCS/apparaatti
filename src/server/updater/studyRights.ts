@@ -1,3 +1,5 @@
+import { create } from 'lodash'
+import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
 import { importerClient } from './importerClient.ts'
 
@@ -22,8 +24,43 @@ export const fetchStudyRights = async () => {
     console.log(studentNumber)
     if(studentNumber){
       console.log('successfully started fetching studyrights')
-      const studyRights = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
+      const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
+      const studyRights = studyRightsReq.data
       console.log(studyRights)
+      studyRights.forEach((studyRight: any) => {
+        console.log('creating study right for user', user.student_number)
+        console.log(studyRight)
+        StudyRight.create({
+          id: studyRight.id,
+          personId: user.student_number,
+          state: studyRight.state,
+          educationId: studyRight.educationId,
+          organisationId: studyRight.organisationId,
+          modificationOrdinal: studyRight.modificationOrdinal,
+          documentState: studyRight.documentState,
+          valid: studyRight.valid,
+          grantDate: studyRight.grantDate,
+          studyStartDate: studyRight.studyStartDate,
+          transferOutDate: studyRight.transferOutDate,
+          termRegistrations: studyRight.termRegistrations,
+          studyRightCancellation: studyRight.studyRightCancellation,
+          studyRightGraduation: studyRight.studyRightGraduation,
+          snapshotDateTime: studyRight.snapshotDateTime,
+          acceptedSelectionPath: studyRight.acceptedSelectionPath,
+          studyRightTransfer: studyRight.studyRightTransfer,
+          studyRightExtensions: studyRight.studyRightExtensions,
+          transferOutUniversityUrn: studyRight.transferOutUniversityUrn,
+          requestedSelectionPath: studyRight.requestedSelectionPath,
+          phase1MinorSelection: studyRight.phase1MinorSelection,
+          phase2MinorSelection: studyRight.phase2MinorSelection,
+          admissionTypeUrn: studyRight.admissionTypeUrn,
+          createdAt: studyRight.createdAt,
+          updatedAt: studyRight.updatedAt
+        })        
+          .then(() => {
+            console.log('study right created successfully for user')
+          })
+      })
     }
 
     if(runCount > 1){

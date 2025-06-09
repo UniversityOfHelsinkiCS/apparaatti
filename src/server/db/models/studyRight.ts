@@ -106,5 +106,4 @@ StudyRight.init(
     ]
   }
 )
-
-module.exports = StudyRight
+export default StudyRight
