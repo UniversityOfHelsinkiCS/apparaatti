@@ -32,8 +32,7 @@ export const fetchStudyRights = async () => {
     const studyRightsReq = await importerClient.post('apparaatti/studyrights', {
       studentNumbers: studentNumbers
     })
-    const studyRights = studyRightsReq.data    
-    console.log(studyRights)
+    const studyRights = studyRightsReq.data
     studyRights.forEach((studyRight: any) => {
       StudyRight.upsert(
         {
