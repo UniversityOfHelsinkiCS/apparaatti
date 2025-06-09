@@ -23,33 +23,38 @@ export const fetchStudyRights = async () => {
       const studyRightsReq = await importerClient.get(`apparaatti/${studentNumber}/studyrights`)
       const studyRights = studyRightsReq.data
       studyRights.forEach((studyRight: any) => {
-        StudyRight.create({
-          id: studyRight.id,
-          personId: user.student_number,
-          state: studyRight.state,
-          educationId: studyRight.educationId,
-          organisationId: studyRight.organisationId,
-          modificationOrdinal: studyRight.modificationOrdinal,
-          documentState: studyRight.documentState,
-          valid: studyRight.valid,
-          grantDate: studyRight.grantDate,
-          studyStartDate: studyRight.studyStartDate,
-          transferOutDate: studyRight.transferOutDate,
-          termRegistrations: studyRight.termRegistrations,
-          studyRightCancellation: studyRight.studyRightCancellation,
-          studyRightGraduation: studyRight.studyRightGraduation,
-          snapshotDateTime: studyRight.snapshotDateTime,
-          acceptedSelectionPath: studyRight.acceptedSelectionPath,
-          studyRightTransfer: studyRight.studyRightTransfer,
-          studyRightExtensions: studyRight.studyRightExtensions,
-          transferOutUniversityUrn: studyRight.transferOutUniversityUrn,
-          requestedSelectionPath: studyRight.requestedSelectionPath,
-          phase1MinorSelection: studyRight.phase1MinorSelection,
-          phase2MinorSelection: studyRight.phase2MinorSelection,
-          admissionTypeUrn: studyRight.admissionTypeUrn,
-          createdAt: studyRight.createdAt,
-          updatedAt: studyRight.updatedAt
-        })        
+        StudyRight.findOrCreate(
+          {
+            where: {
+              id: studyRight.id
+            },
+            defaults:{
+              id: studyRight.id,
+              personId: user.student_number,
+              state: studyRight.state,
+              educationId: studyRight.educationId,
+              organisationId: studyRight.organisationId,
+              modificationOrdinal: studyRight.modificationOrdinal,
+              documentState: studyRight.documentState,
+              valid: studyRight.valid,
+              grantDate: studyRight.grantDate,
+              studyStartDate: studyRight.studyStartDate,
+              transferOutDate: studyRight.transferOutDate,
+              termRegistrations: studyRight.termRegistrations,
+              studyRightCancellation: studyRight.studyRightCancellation,
+              studyRightGraduation: studyRight.studyRightGraduation,
+              snapshotDateTime: studyRight.snapshotDateTime,
+              acceptedSelectionPath: studyRight.acceptedSelectionPath,
+              studyRightTransfer: studyRight.studyRightTransfer,
+              studyRightExtensions: studyRight.studyRightExtensions,
+              transferOutUniversityUrn: studyRight.transferOutUniversityUrn,
+              requestedSelectionPath: studyRight.requestedSelectionPath,
+              phase1MinorSelection: studyRight.phase1MinorSelection,
+              phase2MinorSelection: studyRight.phase2MinorSelection,
+              admissionTypeUrn: studyRight.admissionTypeUrn,
+              createdAt: studyRight.createdAt,
+              updatedAt: studyRight.updatedAt
+            }})        
           .then(() => {
             if(runCount % 1000 === 0) {
               console.log('run count for studyrights', runCount)
