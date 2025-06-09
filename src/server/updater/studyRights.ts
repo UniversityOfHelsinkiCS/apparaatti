@@ -1,4 +1,3 @@
-import { create } from 'lodash'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
 import { importerClient } from './importerClient.ts'
