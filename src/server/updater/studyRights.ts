@@ -15,7 +15,7 @@ export const fetchStudyRights = async () => {
   console.log('number of users to find study rights for', users.length)
   
   const userChunks = []
-  const size = 1000
+  const size = 10000
   for (let i = 0; i < users.length; i += size) {
     userChunks.push(users.slice(i, i + size))
   }
