@@ -1,10 +1,9 @@
 import { DataTypes, JSONB } from 'sequelize'
 import { sequelize, type Migration } from '../connection.ts'
 
-
 export const up: Migration = async ({ context: queryInterface }) => {  
   await queryInterface.createTable('studyrights', {
-    autoId: {
+    auto_id: {
       type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
@@ -13,77 +12,77 @@ export const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    personId: {
+    person_id: {
       type: DataTypes.STRING,
     },
     state: {
       type: DataTypes.STRING,
     },
-    educationId: {
+    education_id: {
       type: DataTypes.STRING,
     },
-    organisationId: {
+    organisation_id: {
       type: DataTypes.STRING,
     },
-    modificationOrdinal: {
+    modification_ordinal: {
       type: DataTypes.BIGINT,
     },
-    documentState: {
+    document_state: {
       type: DataTypes.STRING,
     },
     valid: {
       type: JSONB,
     },
-    grantDate: {
+    grant_date: {
       type: DataTypes.DATE,
     },
-    studyStartDate: {
+    study_start_date: {
       type: DataTypes.DATE,
     },
-    transferOutDate: {
+    transfer_out_date: {
       type: DataTypes.DATE,
     },
-    termRegistrations: {
+    term_registrations: {
       type: JSONB,
     },
-    studyRightCancellation: {
+    study_right_cancellation: {
       type: JSONB,
     },
-    studyRightGraduation: {
+    study_right_graduation: {
       type: JSONB,
     },
-    snapshotDateTime: {
+    snapshot_date_time: {
       type: DataTypes.DATE,
     },
-    acceptedSelectionPath: {
+    accepted_selection_path: {
       type: JSONB,
     },
-    studyRightTransfer: {
+    study_right_transfer: {
       type: JSONB,
     },
-    studyRightExtensions: {
+    study_right_extensions: {
       type: JSONB,
     },
-    transferOutUniversityUrn: {
+    transfer_out_university_urn: {
       type: DataTypes.STRING,
     },
-    requestedSelectionPath: {
+    requested_selection_path: {
       type: JSONB,
     },
-    phase1MinorSelections: {
+    phase1_minor_selections: {
       type: JSONB,
     },
-    phase2MinorSelections: {
+    phase2_minor_selections: {
       type: JSONB,
     },
-    admissionTypeUrn: {
+    admission_type_urn: {
       type: DataTypes.STRING,
     },
-    createdAt: {
+    created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-    updatedAt: {
+    updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
@@ -91,11 +90,11 @@ export const up: Migration = async ({ context: queryInterface }) => {
 
   await queryInterface.addIndex('studyrights', {
     unique: true,
-    fields: ['id', 'modificationOrdinal'],
+    fields: ['id', 'modification_ordinal'],
   })
 
   await queryInterface.addIndex('studyrights', ['id'])
-  await queryInterface.addIndex('studyrights', ['personId'])
+  await queryInterface.addIndex('studyrights', ['person_id'])
 }
 
 export const down: Migration = async ({ context: queryInterface }) => {
