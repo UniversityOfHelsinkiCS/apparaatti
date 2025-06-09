@@ -28,7 +28,7 @@ export const fetchStudyRights = async () => {
       .filter(studentNumber => studentNumber !== null && studentNumber !== undefined))
 
   console.log('number of user code chunks', userCodeChunks.length)
-  return
+
   let runCount = 0
   for (const userCodeChunk of userCodeChunks){
     runCount += 1
@@ -37,8 +37,8 @@ export const fetchStudyRights = async () => {
       studentNumbers: studentNumbers
     })
     const studyRights = studyRightsReq.data
-    studyRights.forEach((studyRight: any) => {
-      StudyRight.upsert(
+    const creations = studyRights.map((studyRight: any) => {
+      return StudyRight.upsert(
         {
           id: studyRight.id,
           personId: studyRight.personId,
@@ -67,6 +67,7 @@ export const fetchStudyRights = async () => {
           updatedAt: studyRight.updatedAt
         })
     })
+    await Promise.all(creations)
     console.log('fetched study rights for', runCount, 'chunks of users')
   }
   
