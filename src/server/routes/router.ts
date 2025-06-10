@@ -87,7 +87,10 @@ router.get('/logout', async (req, res, next) => {
   
 })
 router.get('/cur/debug', async (req, res) => {
- 
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
 
   const realisations = await Cur.findAll({
     include: {
@@ -101,7 +104,10 @@ router.get('/cur/debug', async (req, res) => {
 
 
 router.get('/cur', async (req, res) => {
- 
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
   const { name } = req.query 
 
   const nameQuery = name
@@ -119,7 +125,10 @@ router.get('/cur', async (req, res) => {
 })
 
 router.get('/cu', async (req, res) => {
-
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
   const { name, code } = req.query
 
   const nameQuery = name
@@ -153,7 +162,10 @@ router.get('/cu', async (req, res) => {
 
 
 router.get('/curcu', async (req, res) => {
-  
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }  
 
   const curcus = await CurCu.findAll()
   res.json(curcus)
