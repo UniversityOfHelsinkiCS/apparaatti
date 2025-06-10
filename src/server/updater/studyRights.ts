@@ -66,6 +66,8 @@ export const fetchStudyRights = async () => {
           phase1MinorSelection: studyRight.phase1MinorSelection,
           phase2MinorSelection: studyRight.phase2MinorSelection,
           admissionTypeUrn: studyRight.admissionTypeUrn,
+          educationPhase1: studyRight.educationPhase1,
+          educationPhase2: studyRight.educationPhase2,
           createdAt: studyRight.createdAt,
           updatedAt: studyRight.updatedAt
         })

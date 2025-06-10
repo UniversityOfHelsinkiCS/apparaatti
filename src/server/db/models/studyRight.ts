@@ -78,6 +78,12 @@ StudyRight.init(
     phase2MinorSelections: {
       type: JSONB
     },
+    educationPhase1: {
+      type: JSONB
+    },
+    educationPhase2: {
+      type: JSONB
+    },
     admissionTypeUrn: {
       type: STRING
     },
