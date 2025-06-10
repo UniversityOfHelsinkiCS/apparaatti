@@ -37,8 +37,10 @@ export const fetchStudyRights = async () => {
       studentNumbers: studentNumbers
     })
     const studyRights = studyRightsReq.data
-    console.log(studyRights)
+    
     const creations = studyRights.map((studyRight: any) => {
+      console.log('phase 1', studyRight.educationPhase1)
+      console.log('phase 2', studyRight.educationPhase1)
       return StudyRight.upsert(
         {
           id: studyRight.id,
