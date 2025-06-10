@@ -315,7 +315,12 @@ async function studyRightsForUser(user: any) {
 
 
 async function getRecommendations(userCoordinates: any, answerData, user) {
- 
+  
+  const studyRigthDebug = await StudyRight.findAll({
+    limit: 1,
+  })
+  console.log('study rights debug: ', studyRigthDebug)
+
   console.log('user: ', user)
 
   //will be used in the future to filter courses by study rights
