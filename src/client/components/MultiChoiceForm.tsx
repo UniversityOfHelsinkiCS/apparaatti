@@ -4,8 +4,8 @@ import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 const questions = [
   {
-    id: '1',
-    type: 'study-year',
+    id: 'study-year',
+    type: 'multi',
     question: { fi: 'Mikä on haluamasi vuosi?' },
     options: [
       { id: '1', name: { fi: '2024-2025' } },
@@ -14,8 +14,8 @@ const questions = [
     ],
   },
   {
-    id: '1',
-    type: 'study-period',
+    id: 'study-period',
+    type: 'multi',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
       { id: '1', name: { fi: '1. kesän intensiivi kurssi' } },
