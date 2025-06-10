@@ -39,6 +39,7 @@ export const fetchStudyRights = async () => {
     })
     console.log('fetched study rights for', studyRightsReq.data.length, 'users in chunk', runCount)
     const studyRights = studyRightsReq.data
+    console.log(studyRights)
     const creations = studyRights.map((studyRight: any) => {
       return StudyRight.upsert(
         {
@@ -71,6 +72,7 @@ export const fetchStudyRights = async () => {
     })
     await Promise.all(creations)
     console.log('fetched study rights for', runCount, 'chunks of users')
+    return
   }
   
   console.log('done... all study rights fetched')
