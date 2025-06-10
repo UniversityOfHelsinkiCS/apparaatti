@@ -7,6 +7,20 @@ export const dateIsInPeriod = (date: Date, period) => {
 }
 
 
+export const getStudyPeriod = (year: string, period: string) => {
+  const studyYear = studyPeriods.years.find(y => y.start_year === year || y.end_year === year)
+  if (!studyYear) {
+    return null
+  }
+  
+  const studyPeriod = studyYear.periods.find(p => p.name === period)
+  if (!studyPeriod) {
+    return null
+  }
+  
+  return studyPeriod
+}
+
 
  
 

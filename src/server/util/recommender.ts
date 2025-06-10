@@ -7,9 +7,10 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
-import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
+import { closestPeriod, dateObjToPeriod, dateToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
+
 
 
 
@@ -56,12 +57,15 @@ function getPeriodDateFromUserPick(answerValue) {
 }
 
 
+
+
 function calculateUserCoordinates(answerData: any) {
-  const period = getClosestPeriodFromUserPick(answerData['1'])
+  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
+ 
   console.log('picked study period for user: ', period)
   const userCoordinates = {
-    'period': convertUserPeriodPickToFloat(answerData['1']),
-    'date': new Date(answerData['date-start-1']).getTime()
+    'period': convertUserPeriodPickToFloat(answerData['study-period']),
+    'date': new Date(parseDate(pickedPeriod?.start_date)).getTime()
   }
 
   return userCoordinates
@@ -111,14 +115,16 @@ async function courseLangValue(course: Cur){
 function convertUserPeriodPickToFloat(answerValue){
   console.log('answer value', answerValue)
   switch (answerValue) {
-  case '1':
+  case 'period_1':
     return 1.0
-  case '2':
+  case 'period_2':
     return 2.0
-  case '3':
+  case 'period_3':
     return 3.0
-  case '4':
+  case 'period_4':
     return 4.0  
+  case 'intensive_3':
+    return 5.0
   default:
     return 0.0
   }
@@ -316,7 +322,9 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   //will be used in the future to filter courses by study rights
   const studyRights = studyRightsForUser(user)
 
-  
+  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period']
+  console.log('picked period: ', pickedPeriod)
+
   type courseCode = {
     code: string;
   }
@@ -333,7 +341,8 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
 
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   
-  const start = new Date(answerData['date-start-1'])
+  
+  const start = parseDate(pickedPeriod.start_date)
   const sortedCourses = distances.filter((c) => c.course.startDate >= start).sort((a, b) => a.distance - b.distance)
   sortedCourses.forEach((course) => {
     console.log('---')
