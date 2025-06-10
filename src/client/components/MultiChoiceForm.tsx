@@ -18,12 +18,11 @@ const questions = [
     type: 'multi',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
-      { id: 'intensive_3', name: { fi: '1. kesän intensiivi kurssi' } },
       { id: 'period_1', name: { fi: '1. periodi' } },
       { id: 'period_2', name: { fi: '2. periodi' } },
       { id: 'period_3', name: { fi: '3. periodi' } },
       { id: 'period_4', name: { fi: '4. periodi' } },
-      { id: 'intensive_3', name: { fi: '2. kesän intensiivikurssi' } },
+      { id: 'intensive_3', name: { fi: 'kesä' } },
     ],
   },
   {
