@@ -322,7 +322,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   //will be used in the future to filter courses by study rights
   const studyRights = studyRightsForUser(user)
 
-  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period']
+  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
   console.log('picked period: ', pickedPeriod)
 
   type courseCode = {
