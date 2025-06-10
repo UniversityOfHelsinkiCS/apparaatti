@@ -62,7 +62,7 @@ function getPeriodDateFromUserPick(answerValue) {
 function calculateUserCoordinates(answerData: any) {
   const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
  
-  console.log('picked study period for user: ', period)
+  console.log('picked study period for user: ', pickedPeriod)
   const userCoordinates = {
     'period': convertUserPeriodPickToFloat(answerData['study-period']),
     'date': new Date(parseDate(pickedPeriod?.start_date)).getTime()
