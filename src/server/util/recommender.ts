@@ -13,10 +13,10 @@ import User from '../db/models/user.ts'
 
 
 
-function recommendCourses(answerData: any) {
+function recommendCourses(answerData: any, user) {
   const userCoordinates = calculateUserCoordinates(answerData)
   console.log('after user coordinates', userCoordinates)
-  const recommendations = getRecommendations(userCoordinates, answerData)
+  const recommendations = getRecommendations(userCoordinates, answerData, user)
   console.log('after recommendations')
   return recommendations
 }
@@ -291,24 +291,30 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 }
 
-async function getRecommendations(userCoordinates: any, answerData) {
-  //for debugging purposes
-
-  const user = await User.findOne({
-    where: {
-      studentNumber: answerData['student-number-1'],
-    },
-    raw: true
-  })
-  console.log('user: ', user)
+async function studyRightsForUser(user: any) {
   const studyRights = await StudyRight.findAll({
     where: {
-      personId: user?.id,
+      personId: user.id,
     },
     order: [['modificationOrdinal', 'DESC']],
     raw: true
   })
+  if(studyRights.length === 0) {
+    console.log('no study rights found for user: ', user.id)
+    return []
+  }
   console.log('study rights: ', studyRights)
+  return studyRights
+}
+
+
+
+async function getRecommendations(userCoordinates: any, answerData, user) {
+ 
+  console.log('user: ', user)
+
+  //will be used in the future to filter courses by study rights
+  const studyRights = studyRightsForUser(user)
 
   
   type courseCode = {

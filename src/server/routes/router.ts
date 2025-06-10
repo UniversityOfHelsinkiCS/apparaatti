@@ -45,7 +45,7 @@ router.post('/form/1/answer', async (req, res) => {
   console.log('after user')
   //  await saveAnswer(answerData, user)
   console.log('after answer')
-  const recommendations = await recommendCourses(answerData)
+  const recommendations = await recommendCourses(answerData, user)
   res.json(recommendations)
 })
 
