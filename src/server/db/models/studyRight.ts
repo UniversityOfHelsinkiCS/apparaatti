@@ -1,6 +1,6 @@
 
-import { Model } from 'sequelize'
-import {BIGINT, STRING, JSONB, DATE, DataTypes, CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { Model, BIGINT, STRING, JSONB, DATE, DataTypes,  } from 'sequelize'
+import type {CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model<
@@ -40,7 +40,7 @@ class StudyRight extends Model<
 StudyRight.init(
   {
     autoId: {
-      type: DataTypes.BIGINT,
+      type: BIGINT,
       primaryKey: true,
       autoIncrement: true
     },
