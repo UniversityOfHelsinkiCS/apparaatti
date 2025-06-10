@@ -35,16 +35,16 @@ router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
   console.log(answerData)
 
-  console.log("before user")
+  console.log('before user')
   const user = await User.findByPk('1')
 
   if (!user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  console.log("after user")
-//  await saveAnswer(answerData, user)
-  console.log("after answer")
+  console.log('after user')
+  //  await saveAnswer(answerData, user)
+  console.log('after answer')
   const recommendations = await recommendCourses(answerData)
   res.json(recommendations)
 })
@@ -106,12 +106,12 @@ router.get('/cur', async (req, res) => {
 
   const nameQuery = name
     ? { 
-        [Op.or]: [
-          { 'name.fi': { [Op.like]: `%${name}%` } },
-          { 'name.en': { [Op.like]: `%${name}%` } },
-          { 'name.sv': { [Op.like]: `%${name}%` } },
-        ],
-     }
+      [Op.or]: [
+        { 'name.fi': { [Op.like]: `%${name}%` } },
+        { 'name.en': { [Op.like]: `%${name}%` } },
+        { 'name.sv': { [Op.like]: `%${name}%` } },
+      ],
+    }
     : {}
 
   const curs = await Cur.findAll({where: nameQuery})
@@ -124,24 +124,24 @@ router.get('/cu', async (req, res) => {
 
   const nameQuery = name
     ? {
-        [Op.or]: [
-          { 'name.fi': { [Op.like]: `%${name}%` } },
-          { 'name.en': { [Op.like]: `%${name}%` } },
-          { 'name.sv': { [Op.like]: `%${name}%` } },
-        ],
-      }
-    : {}
-
-    const codeQuery = code
-    ? {
-        courseCode: { [Op.like]: `%${code}%` },
-      }
-    : {}
-
-    const whereQuery = {
-      ...nameQuery,
-      ...codeQuery,
+      [Op.or]: [
+        { 'name.fi': { [Op.like]: `%${name}%` } },
+        { 'name.en': { [Op.like]: `%${name}%` } },
+        { 'name.sv': { [Op.like]: `%${name}%` } },
+      ],
     }
+    : {}
+
+  const codeQuery = code
+    ? {
+      courseCode: { [Op.like]: `%${code}%` },
+    }
+    : {}
+
+  const whereQuery = {
+    ...nameQuery,
+    ...codeQuery,
+  }
   const cus = await Cu.findAll({ where: whereQuery })
   res.json(cus)
 })
