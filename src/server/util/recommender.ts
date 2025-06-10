@@ -328,10 +328,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
     limit: 10,
     raw: true
   })
-  console.log(debugStudyRights)
-  console.log(debugStudyRights[0].educationPhase1)
-  console.log(debugStudyRights[0].educationPhase2)
-  
+
 
   //will be used in the future to filter courses by study rights
   const studyRights = studyRightsForUser(user)
