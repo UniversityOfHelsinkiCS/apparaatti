@@ -292,12 +292,14 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 async function getRecommendations(userCoordinates: any, answerData) {
   //for debugging purposes
-  const studyRights = await StudyRight.findAll({
-    where: { personId: answerData['student-number-1'] },
-    order: [['modificationOrdinal', 'DESC']],
-    raw: true
+  const studyRights = await StudyRight.count({})
+  console.log('study rights count: ', studyRights)
+
+  const firstCoupleOfStudyRights = await StudyRight.findAll({
+    limit: 5,
+    order: [['id', 'ASC']],
   })
-  console.log('study rights: ', studyRights)
+  console.log('first 5 study rights: ', firstCoupleOfStudyRights)
 
   
   type courseCode = {
