@@ -150,14 +150,7 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
         }}
       >
         <FormControl component="fieldset">
-          <TextField
-            id="student-number-1"
-            label="Lisätietoja"
-            name="student-number-1"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-          />
+         
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <Button
