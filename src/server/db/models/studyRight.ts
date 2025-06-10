@@ -1,8 +1,37 @@
 
-import { Model, BIGINT, STRING, JSONB, DATE, DataTypes } from 'sequelize'
+import { Model, BIGINT, STRING, JSONB, DATE, DataTypes, CreationOptional } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
-class StudyRight extends Model {}
+class StudyRight extends Model {
+  declare autoId: CreationOptional<number>
+  declare id: string
+  declare personId: string
+  declare state: string
+  declare educationId: string
+  declare organisationId: string
+  declare modificationOrdinal: number
+  declare documentState: string
+  declare valid: object
+  declare grantDate: Date
+  declare studyStartDate: Date
+  declare transferOutDate: Date
+  declare termRegistrations: object
+  declare studyRightCancellation: object
+  declare studyRightGraduation: object
+  declare snapshotDateTime: Date
+  declare acceptedSelectionPath: object
+  declare studyRightTransfer: object
+  declare studyRightExtensions: object
+  declare transferOutUniversityUrn: string
+  declare requestedSelectionPath: object
+  declare phase1MinorSelections: object
+  declare phase2MinorSelections: object
+  declare educationPhase1: CreationOptional<object>
+  declare educationPhase2: CreationOptional<object>
+  declare admissionTypeUrn: string
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
+}
 
 StudyRight.init(
   {

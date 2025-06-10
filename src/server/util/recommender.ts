@@ -318,16 +318,21 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   console.log('user: ', user)
 
   const debugStudyRights = await StudyRight.findAll({
+
     where: {
       [Op.or]: [
         { educationPhase1: { [Op.not]: null } },
         { educationPhase2: { [Op.not]: null } }
       ]
     },
-    limit: 10
+    limit: 10,
+    raw: true
   })
   console.log(debugStudyRights)
+  console.log(debugStudyRights[0].educationPhase1)
+  console.log(debugStudyRights[0].educationPhase2)
   
+
   //will be used in the future to filter courses by study rights
   const studyRights = studyRightsForUser(user)
   
