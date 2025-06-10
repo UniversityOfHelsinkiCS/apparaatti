@@ -71,7 +71,6 @@ export const fetchStudyRights = async () => {
     })
     await Promise.all(creations)
     console.log('fetched study rights for', runCount, 'chunks of users')
-    return
   }
   
   console.log('done... all study rights fetched')
