@@ -6,8 +6,8 @@ import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
 
 const runUpdater = async () => {
-  await fetchUsers()
-  await fetchCoursesAndResponsibilities()
+  //await fetchUsers()
+  //await fetchCoursesAndResponsibilities()
   await fetchStudyRights()
 //  await fetchEnrolments()
 }
