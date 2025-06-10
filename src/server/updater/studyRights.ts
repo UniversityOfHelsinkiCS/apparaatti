@@ -33,13 +33,10 @@ export const fetchStudyRights = async () => {
   for (const userCodeChunk of userCodeChunks){
     runCount += 1
     const studentNumbers = userCodeChunk
-    console.log('fetching study rights for', studentNumbers.length, 'users in chunk', runCount)
     const studyRightsReq = await importerClient.post('apparaatti/studyrights', {
       studentNumbers: studentNumbers
     })
-    console.log('fetched study rights for', studyRightsReq.data.length, 'users in chunk', runCount)
     const studyRights = studyRightsReq.data
-    console.log(studyRights)
     const creations = studyRights.map((studyRight: any) => {
       return StudyRight.upsert(
         {
