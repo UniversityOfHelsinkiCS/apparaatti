@@ -350,6 +350,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
     console.log('---')
     console.log('course: ', course.course.name)
     console.log('start date: ', course.course.startDate)
+    console.log('target date: ', start)
     console.log('distance: ', course.distance / 10000000)
   })
   const recommendations = sortedCourses.slice(0, 3)
