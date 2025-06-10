@@ -300,9 +300,10 @@ async function getRecommendations(userCoordinates: any, answerData) {
     },
     raw: true
   })
+  console.log('user: ', user)
   const studyRights = await StudyRight.findAll({
     where: {
-      userId: user?.id,
+      personId: user?.id,
     },
     order: [['modificationOrdinal', 'DESC']],
     raw: true
