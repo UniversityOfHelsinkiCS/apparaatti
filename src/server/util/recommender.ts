@@ -174,7 +174,6 @@ function coursePeriod(course: Cur){
     }
   }).filter((p) => p.distance > 0)
     .sort((a, b) => a.distance - b.distance)
-  console.log(periodDistances)
   
   //technically course can be in multiple periods but will use the first one returned for now...
   const period = periodDistances[0].period
