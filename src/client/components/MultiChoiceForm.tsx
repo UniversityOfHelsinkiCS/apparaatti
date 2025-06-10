@@ -8,9 +8,9 @@ const questions = [
     type: 'multi',
     question: { fi: 'Mikä on haluamasi vuosi?' },
     options: [
-      { id: '1', name: { fi: '2024-2025' } },
-      { id: '2', name: { fi: '2025-2026' } },
-      { id: '3', name: { fi: '2026-2027' } },
+      { id: '2024', name: { fi: '2024-2025' } },
+      { id: '2025', name: { fi: '2025-2026' } },
+      { id: '2026', name: { fi: '2026-2027' } },
     ],
   },
   {
@@ -18,12 +18,12 @@ const questions = [
     type: 'multi',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
-      { id: '1', name: { fi: '1. kesän intensiivi kurssi' } },
-      { id: '2', name: { fi: '1. periodi' } },
-      { id: '3', name: { fi: '2. periodi' } },
-      { id: '4', name: { fi: '3. periodi' } },
-      { id: '5', name: { fi: '4. periodi' } },
-      { id: '6', name: { fi: '2. kesän intensiivikurssi' } },
+      { id: 'intensive_3', name: { fi: '1. kesän intensiivi kurssi' } },
+      { id: 'period_1', name: { fi: '1. periodi' } },
+      { id: 'period_2', name: { fi: '2. periodi' } },
+      { id: 'period_3', name: { fi: '3. periodi' } },
+      { id: 'period_4', name: { fi: '4. periodi' } },
+      { id: 'intensive_3', name: { fi: '2. kesän intensiivikurssi' } },
     ],
   },
   {
@@ -150,7 +150,6 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
         }}
       >
         <FormControl component="fieldset">
-         
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <Button
