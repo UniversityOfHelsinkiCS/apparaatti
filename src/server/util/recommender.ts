@@ -64,7 +64,7 @@ function calculateUserCoordinates(answerData: any) {
  
   console.log('picked study period for user: ', pickedPeriod)
   const userCoordinates = {
-    'period': convertUserPeriodPickToFloat(answerData['study-period']),
+  //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
     'date': new Date(parseDate(pickedPeriod?.start_date)).getTime()
   }
 
@@ -136,7 +136,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   const dimensions = Object.keys(userCoordinates)
   // using random values for now...
   const courseCoordinates = {
-    'period': coursePeriodValue(period),
+    //'period': coursePeriodValue(period),
     'date': course.startDate.getTime()
   }
   
@@ -164,7 +164,7 @@ function coursePeriod(course: Cur){
     return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
   }
 
-  const filteredPeriods = periods.filter((period) => parseDate(period.start_date) < new Date(2027, 1, 1))
+  const filteredPeriods = periods
   console.log(filteredPeriods)
 
   const periodDistances =  filteredPeriods.map((period) => {
