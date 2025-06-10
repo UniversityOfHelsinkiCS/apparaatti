@@ -343,7 +343,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   
   
   const start = parseDate(pickedPeriod.start_date)
-  const sortedCourses = distances.filter((c) => c.course.startDate >= start).sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.sort((a, b) => Math.abs(a.distance - b.distance))
   sortedCourses.forEach((course) => {
     console.log('---')
     console.log('distance in time: ', (course.course.startDate.getTime() - userCoordinates['date'])  / 10000000)
