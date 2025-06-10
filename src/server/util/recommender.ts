@@ -9,6 +9,7 @@ import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
 import { closestPeriod, dateObjToPeriod, dateToPeriod, parseDate } from './studyPeriods.ts'
 import StudyRight from '../db/models/studyRight.ts'
+import User from '../db/models/user.ts'
 
 
 
@@ -292,14 +293,21 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 async function getRecommendations(userCoordinates: any, answerData) {
   //for debugging purposes
-  const studyRights = await StudyRight.count({})
-  console.log('study rights count: ', studyRights)
 
-  const firstCoupleOfStudyRights = await StudyRight.findAll({
-    limit: 5,
-    order: [['id', 'ASC']],
+  const user = await User.findOne({
+    where: {
+      studentNumber: answerData['student-number-1'],
+    },
+    raw: true
   })
-  console.log('first 5 study rights: ', firstCoupleOfStudyRights)
+  const studyRights = await StudyRight.findAll({
+    where: {
+      userId: user?.id,
+    },
+    order: [['modificationOrdinal', 'DESC']],
+    raw: true
+  })
+  console.log('study rights: ', studyRights)
 
   
   type courseCode = {
