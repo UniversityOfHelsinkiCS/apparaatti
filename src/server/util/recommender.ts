@@ -137,7 +137,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   // using random values for now...
   const courseCoordinates = {
     'period': coursePeriodValue(period),
-    'date': parseDate(period.start_date).getTime()
+    'date': course.startDate.getTime()
   }
   
 
