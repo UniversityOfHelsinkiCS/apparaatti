@@ -145,7 +145,7 @@ const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormDat
           justifyContent: 'left',
           padding: 2,
           gap: 0,
-          maxWidth: '45vw',
+          maxWidth: '30vw',
           margin: '0 auto',
         }}
       >

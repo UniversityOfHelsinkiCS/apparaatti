@@ -6,11 +6,9 @@ const FormQuestion = ({ question }: { question: Question }) => {
     <Box sx={{
       paddingTop: 4,
     }}>
-      <Typography 
-        variant="h5" 
-        component="h1" 
+      <Typography
         gutterBottom 
-        sx={{ fontSize: '2rem', width: '70vw' }}
+        sx={{ fontSize: '1rem', width: 'auto' }}
       >
         {question.question.fi}
       </Typography>
