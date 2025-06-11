@@ -14,7 +14,7 @@ const studyRightsForUser = async (user: any) => {
     console.log('no study rights found for user: ', user.id)
     return []
   }
-  console.log('study rights: ', studyRights)
+  //console.log('study rights: ', studyRights)
   return studyRights
 }
 

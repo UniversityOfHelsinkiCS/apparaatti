@@ -301,9 +301,7 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 async function getRecommendations(userCoordinates: any, answerData, user) {  
   console.log('user: ', user)
-  //will be used in the future to filter courses by study rights
-  const studyRights = studyRightsForUser(user)
-  console.log('study rights: ', studyRights)
+  
 
   const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
   console.log('picked period: ', pickedPeriod)
@@ -318,9 +316,9 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
 
   
 
-  console.log('course count before lang selection: ', courseData.length)
+  //console.log('course count before lang selection: ', courseData.length)
   const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, answerData['lang-1'])
-  console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
+  //console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
 
   const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
   
@@ -330,6 +328,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   
   const start = parseDate(pickedPeriod.start_date)
   const sortedCourses = recommendationsWithCodes.filter((a) => a.course.startDate >= start ).sort((a, b) => a.distance - b.distance)
+  /*
   sortedCourses.forEach((course) => {
     console.log('---')
     console.log('course: ', course.course.name)
@@ -337,6 +336,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
     console.log('target date: ', start)
     console.log('distance: ', course.distance / 10000000)
   })
+  */
   const recommendations = sortedCourses.slice(0, 3)
   //console.log(recommendations)
  
