@@ -83,7 +83,7 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-              <Button color="inherit">Welcome, {user.username}, {studyData.studyPhaseName.fi}</Button>
+              <Button color="inherit">Welcome, {user.username}</Button>
               <Button color="inherit" href="/api/logout">
               Logout
               </Button>
@@ -98,7 +98,7 @@ function App() {
       <Box sx={{
         paddingTop: 10,
       }}>  
-        <MultiChoiceForm onSubmit={handleSubmit}/>
+        <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData}/>
       
       </Box>
       {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}

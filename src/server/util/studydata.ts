@@ -20,27 +20,34 @@ const studyRightsForUser = async (user: any) => {
 
 
 export const getStudyData = async (user: any) => {
-  const studyRights = await studyRightsForUser(user)
+  const studyRights = await studyRightsForUser(user) as any[]
   if (studyRights.length === 0) {
     console.log('No study rights found for user:', user.id)
     return { studyPhaseName: {fi: 'Opintoa ei löytynyt'} }
   }
   
 
-  const educationPhase1 = studyRights[0].educationPhase1 as any
-  const educationPhase2 = studyRights[0].educationPhase2 as any
-  
-  if(educationPhase1){
-    console.log('education phase 2 found for user:', user.id)
-    return { studyPhaseName: educationPhase1.name}
-  } 
-  else if(educationPhase2){
-    console.log('education phase 2 found for user:', user.id)
-    return { studyPhaseName: educationPhase2.name}
-  }
-  else {
-    console.log('no education phase found for user:', user.id)
-    return { studyPhaseName: {fi: 'Opintoa ei löytynyt'} }
+  const phase1EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase1)
+  const phase1StudyData = phase1EducationPhases.filter((studyRight) => studyRight.educationPhase1 !== null).map((phase) =>{
+    return {
+      id: phase.id,
+      code: phase.code,
+      name: phase.name,
+    }
+  })
+
+  const phase2EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase2)
+  const phase2StudyData = phase2EducationPhases.filter((studyRight) => studyRight.educationPhase2 !== null).map((phase) =>{
+    return {
+      id: phase.id,
+      code: phase.code,
+      name: phase.name,
+    }
+  })
+
+  return {
+    phase1Data: phase1StudyData,
+    phase2Data: phase2StudyData,
   }
 }
 

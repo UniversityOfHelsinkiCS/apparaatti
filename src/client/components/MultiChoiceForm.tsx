@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button, FormControl, TextField } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
+import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 const questions = [
   {
     id: 'study-year',
@@ -122,12 +123,12 @@ const renderFormQuestion = (key, question) => {
   case 'multi':
     return  <FormQuestion key={key} question={question} />
   default:
-    return <p>unkown quesion type</p>
+    return <p>Unknown question type</p>
   }
 
 }
 
-const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promise<void> }) => {
+const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault()
     const formData = new FormData(ev.currentTarget)
@@ -149,6 +150,7 @@ const MultiChoiceForm = ({ onSubmit }: { onSubmit: (formData: FormData) => Promi
         }}
       >
         <FormControl component="fieldset">
+          <StudyPhaseQuestion studyData={studyData} />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <Button
