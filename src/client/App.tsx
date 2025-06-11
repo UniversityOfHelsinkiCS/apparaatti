@@ -73,7 +73,7 @@ function App() {
   return (
     <>
       <AppBar position="fixed" sx={{ 
-        backgroundColor: 'white', 
+        backgroundColor: '#f5f5f5', 
         color: 'black', 
         boxShadow: 'none', 
         borderBottom: '1px solid #e0e0e0' }}>
@@ -96,7 +96,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Box sx={{
-        filter: isSidePanelOpen ? 'blur(4px)' : 'none',
+        filter: isSidePanelOpen ? 'blur(1px)' : 'none',
         paddingTop: 10,
         backgroundColor: 'white',
         minHeight: '100vh',
