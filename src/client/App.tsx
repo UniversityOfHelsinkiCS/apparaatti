@@ -66,7 +66,7 @@ function App() {
     setIsSidePanelOpen(true)
   }
 
-  if (isLoading || !form || !isStudyDataLoading) {
+  if (isLoading || !form || isStudyDataLoading) {
     return <div>Loading...</div>
   }
 
