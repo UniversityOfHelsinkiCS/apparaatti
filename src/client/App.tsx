@@ -73,7 +73,7 @@ function App() {
   return (
     <>
       <AppBar position="fixed" sx={{ 
-        backgroundColor: 'white', 
+        backgroundColor: '#f5f5f5', 
         color: 'black', 
         boxShadow: 'none', 
         borderBottom: '1px solid #e0e0e0' }}>
