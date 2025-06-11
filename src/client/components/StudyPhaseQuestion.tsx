@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 
 const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
@@ -13,6 +13,22 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   const handleFieldChange = (event: any ) => {
     setSelectedField(event.target.value)
   }
+
+  const getFirstSelection = () => {
+    if (studyData?.phase1Data?.length) {
+      return 'phase1'
+    } else if (studyData?.phase2Data?.length) {
+      return 'phase2'
+    }
+    return ''
+  }
+
+  useEffect(() => {
+    const initialPhase = getFirstSelection()
+    if (initialPhase) {
+      setSelectedPhase(initialPhase)
+    }
+  }, [studyData])
 
   const currentData = selectedPhase === 'phase1' ? studyData?.phase1Data : studyData?.phase2Data
 
