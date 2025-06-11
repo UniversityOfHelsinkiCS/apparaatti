@@ -1,4 +1,4 @@
-import StudyRight from '../db/models/studyRight'
+import StudyRight from '../db/models/studyRight.ts'
 
 
 
