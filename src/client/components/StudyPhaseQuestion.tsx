@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 
 const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   const [selectedPhase, setSelectedPhase] = useState('')
@@ -19,20 +19,20 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
       <FormControl fullWidth sx={{ marginBottom: 2 }}>
-        <InputLabel id="study-phase-select-label">Select Phase</InputLabel>
+        <Typography id="study-phase-select-label">Select Phase</Typography>
         <Select
           labelId="study-phase-select-label"
           value={selectedPhase}
           onChange={handlePhaseChange}
         >
-          <MenuItem value="phase1">Phase 1</MenuItem>
-          <MenuItem value="phase2">Phase 2</MenuItem>
+          <MenuItem value="phase1">1. vaiheen opinnot</MenuItem>
+          <MenuItem value="phase2">2. vaiheen opinnot</MenuItem>
         </Select>
       </FormControl>
 
       {selectedPhase && (
         <FormControl fullWidth>
-          <InputLabel id="study-field-select-label">Select Study Data</InputLabel>
+          <Typography id="study-field-select-label">Valitse suunta</Typography>
           <Select
             labelId="study-field-select-label"
             value={selectedField}
