@@ -35,17 +35,15 @@ router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
   console.log(answerData)
 
-  console.log('before user')
-  const user = await User.findByPk('1')
-
-  if (!user) {
+ 
+  if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
   console.log('after user')
   //  await saveAnswer(answerData, user)
   console.log('after answer')
-  const recommendations = await recommendCourses(answerData, user)
+  const recommendations = await recommendCourses(answerData, req.user)
   res.json(recommendations)
 })
 
