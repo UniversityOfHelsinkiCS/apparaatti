@@ -21,7 +21,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     
       <Typography id="study-phase-select-label">Valitse opintojen vaihe:</Typography>
       <Select
-        sx={{ marginBottom: 2, minWidth: 100 }}
+        sx={{ padding: 2, minWidth: 100, border: '1px solid lightgray' }}
         labelId="study-phase-select-label"
         name='study-phase-select'
         value={selectedPhase}
@@ -35,7 +35,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
         <>
           <Typography id="study-field-select-label">Valitse opintojen suunta</Typography>
           <Select
-            sx={{ marginBottom: 2, minWidth: 100 }}
+            sx={{ padding: 2, minWidth: 100, border: '1px solid lightgray' }}
             name='study-field-select'
             labelId="study-field-select-label"
             value={selectedField}
