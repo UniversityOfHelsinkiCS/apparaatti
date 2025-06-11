@@ -296,21 +296,6 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 }
 
-async function studyRightsForUser(user: any) {
-  const studyRights = await StudyRight.findAll({
-    where: {
-      personId: user.id,
-    },
-    order: [['modificationOrdinal', 'DESC']],
-    raw: true
-  })
-  if(studyRights.length === 0) {
-    console.log('no study rights found for user: ', user.id)
-    return []
-  }
-  console.log('study rights: ', studyRights)
-  return studyRights
-}
 
 
 

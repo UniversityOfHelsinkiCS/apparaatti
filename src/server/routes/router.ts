@@ -9,6 +9,9 @@ import Cur from '../db/models/cur.ts'
 import { json, Op } from 'sequelize'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
+import StudyRight from '../db/models/studyRight.ts'
+import { get } from 'lodash'
+import { getStudyData } from '../util/studydata.ts'
 
 const router = express.Router()
 
@@ -60,6 +63,16 @@ router.get('/user', async (req, res) => {
     return
   }
   res.json(req.user)
+})
+
+
+router.get('/user/studydata', async (req, res) => {
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
+  const studydata = await getStudyData(req.user)
+  res.json({ studydata })
 })
 
 router.get('/fail', async (_req, res) => {
