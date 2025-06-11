@@ -28,7 +28,7 @@ export const getStudyData = async (user: any) => {
   
 
   const phase1EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase1)
-  const phase1StudyData = phase1EducationPhases.filter((studyRight) => studyRight.educationPhase1 !== null).map((phase) =>{
+  const phase1StudyData = phase1EducationPhases.filter((phase) => phase !== null).map((phase) =>{
     return {
       id: phase.id,
       code: phase.code,
@@ -37,7 +37,7 @@ export const getStudyData = async (user: any) => {
   })
 
   const phase2EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase2)
-  const phase2StudyData = phase2EducationPhases.filter((studyRight) => studyRight.educationPhase2 !== null).map((phase) =>{
+  const phase2StudyData = phase2EducationPhases.filter((phase) => phase !== null).map((phase) =>{
     return {
       id: phase.id,
       code: phase.code,
