@@ -58,7 +58,7 @@ const getClient = async () => {
 const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (err: any, user?: unknown) => void) => {
 
   const user: User = {
-    id: userinfo.sub as string,
+    id: userinfo.hyPersonSisuId as string,
     username: userinfo.uid as string,
     language: 'fi',
     createdAt: new Date(),
