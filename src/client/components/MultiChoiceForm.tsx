@@ -141,11 +141,11 @@ const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormDat
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: 'left',
+          justifyContent: 'left',
           padding: 2,
           gap: 0,
-          maxWidth: 1000,
+          maxWidth: '45vw',
           margin: '0 auto',
         }}
       >
