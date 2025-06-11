@@ -316,23 +316,9 @@ async function studyRightsForUser(user: any) {
 
 async function getRecommendations(userCoordinates: any, answerData, user) {  
   console.log('user: ', user)
-
-  const debugStudyRights = await StudyRight.findAll({
-
-    where: {
-      [Op.or]: [
-        { educationPhase1: { [Op.not]: null } },
-        { educationPhase2: { [Op.not]: null } }
-      ]
-    },
-    limit: 10,
-    raw: true
-  })
-
-
   //will be used in the future to filter courses by study rights
   const studyRights = studyRightsForUser(user)
-  
+  console.log('study rights: ', studyRights)
 
   const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
   console.log('picked period: ', pickedPeriod)
