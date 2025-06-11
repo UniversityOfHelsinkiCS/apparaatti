@@ -146,7 +146,7 @@ const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormDat
           padding: 2,
           gap: 0,
           maxWidth: '30vw',
-          marginLeft: '3vw',
+          marginLeft: '20vw',
         }}
       >
         <FormControl component="fieldset">
