@@ -96,7 +96,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Box sx={{
-        filter: isSidePanelOpen ? 'blur(1px)' : 'none',
+        filter: isSidePanelOpen ? 'brightness(0.5)' : 'none',
         paddingTop: 10,
         backgroundColor: 'white',
         minHeight: '100vh',
