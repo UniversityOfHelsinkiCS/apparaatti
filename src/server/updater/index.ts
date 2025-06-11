@@ -26,3 +26,23 @@ export const run = async () => {
   console.log('updater finished')
   return
 }
+
+
+export const runDev = async () => {
+  console.log('running development updater')
+  try {
+    await clearOffsets()
+   
+    //await fetchUsers()
+    //await fetchCoursesAndResponsibilities()
+    //await fetchStudyRights()
+
+  } catch (error) {
+    
+    console.log(error)
+    return
+  }
+
+  console.log('updater finished')
+  return
+}
