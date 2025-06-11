@@ -19,8 +19,9 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
     
-      <Typography id="study-phase-select-label">Select Phase</Typography>
+      <Typography id="study-phase-select-label">Valitse minkä vaiheen opinnot</Typography>
       <Select
+        sx={{ marginBottom: 2, minWidth: 100 }}
         labelId="study-phase-select-label"
         name='study-phase-select'
         value={selectedPhase}
@@ -34,6 +35,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
         <>
           <Typography id="study-field-select-label">Valitse suunta</Typography>
           <Select
+            sx={{ marginBottom: 2, minWidth: 100 }}
             name='study-field-select'
             labelId="study-field-select-label"
             value={selectedField}
