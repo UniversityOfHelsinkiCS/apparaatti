@@ -83,7 +83,7 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-              <Button color="inherit">Welcome, {user.username}</Button>
+              <Button color="inherit">Tervetuloa, {user.username}</Button>
               <Button color="inherit" href="/api/logout">
               Logout
               </Button>

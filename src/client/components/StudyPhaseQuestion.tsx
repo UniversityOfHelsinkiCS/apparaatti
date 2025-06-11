@@ -19,7 +19,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
     
-      <Typography id="study-phase-select-label">Valitse minkä vaiheen opinnot</Typography>
+      <Typography id="study-phase-select-label">Valitse opintojen vaihe:</Typography>
       <Select
         sx={{ marginBottom: 2, minWidth: 100 }}
         labelId="study-phase-select-label"
@@ -33,7 +33,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     
       {selectedPhase && (
         <>
-          <Typography id="study-field-select-label">Valitse suunta</Typography>
+          <Typography id="study-field-select-label">Valitse opintojen suunta</Typography>
           <Select
             sx={{ marginBottom: 2, minWidth: 100 }}
             name='study-field-select'
