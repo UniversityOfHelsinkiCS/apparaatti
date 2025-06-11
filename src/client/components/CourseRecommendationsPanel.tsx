@@ -26,7 +26,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         backgroundColor: '#f5f5f5',
         boxShadow: '-2px 0 5px rgba(0,0,0,0.1)',
         marginTop: 8,
-        padding: 2,
+        padding: 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -82,7 +82,7 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6}}>
           Ehdotetut kurssit:
         </Typography>
-        <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 1, paddingRight: 1, paddingTop: 2, paddingBottom: 10 }}>
+        <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 0, paddingRight: 2, paddingTop: 2, paddingBottom: 10 }}>
           {recommendations.map((course) => (
             <CourseRecommendation key={course.course.id} course={course} />
           ))}
