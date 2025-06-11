@@ -98,6 +98,9 @@ function App() {
       <Box sx={{
         filter: isSidePanelOpen ? 'blur(4px)' : 'none',
         paddingTop: 10,
+        backgroundColor: 'white',
+        minHeight: '100vh',
+        minWidth: '100vw',
       }}>  
         <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData}/>
       
