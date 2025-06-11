@@ -10,7 +10,6 @@ import { json, Op } from 'sequelize'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
 import StudyRight from '../db/models/studyRight.ts'
-import { get } from 'lodash'
 import { getStudyData } from '../util/studydata.ts'
 
 const router = express.Router()
