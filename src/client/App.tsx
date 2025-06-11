@@ -96,6 +96,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Box sx={{
+        filter: isSidePanelOpen ? 'blur(4px)' : 'none',
         paddingTop: 10,
       }}>  
         <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData}/>
