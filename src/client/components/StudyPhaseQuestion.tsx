@@ -23,10 +23,21 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     return ''
   }
 
+  const getFirstFieldSelection = (initialPhase) => {
+    if (initialPhase === 'phase1' && studyData?.phase1Data?.length) {
+      return studyData.phase1Data[0].id
+    } else if (initialPhase === 'phase2' && studyData?.phase2Data?.length) {
+      return studyData.phase2Data[0].id
+    }
+    return ''
+  }
+
   useEffect(() => {
     const initialPhase = getFirstSelection()
+    const initialField = getFirstFieldSelection(initialPhase)
     if (initialPhase) {
       setSelectedPhase(initialPhase)
+      setSelectedField(initialField)
     }
   }, [studyData])
 
@@ -37,7 +48,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     
       <Typography id="study-phase-select-label">Valitse opintojen vaihe:</Typography>
       <Select
-        sx={{ padding: '2px', minWidth: 100, border: '1px solid lightgray' }}
+        sx={{ padding: '1px', minWidth: 100, border: '1px solid lightgray' }}
         labelId="study-phase-select-label"
         name='study-phase-select'
         value={selectedPhase}
