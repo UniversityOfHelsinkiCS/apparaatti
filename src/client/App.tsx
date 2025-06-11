@@ -27,6 +27,15 @@ function App() {
     },
   })
 
+
+  const {data: studyData, isLoading: isStudyDataLoading} = useQuery({
+    queryKey: ['studyData'],
+    queryFn: async () => {
+      const res = await fetch('/api/user/studydata')
+      return res.json()
+    },
+  })
+
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const answerData = AnswerSchema.parse(Object.fromEntries(formData))
@@ -57,7 +66,7 @@ function App() {
     setIsSidePanelOpen(true)
   }
 
-  if (isLoading || !form) {
+  if (isLoading || !form || !isStudyDataLoading) {
     return <div>Loading...</div>
   }
 
@@ -74,7 +83,7 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-              <Button color="inherit">Welcome, {user.username}</Button>
+              <Button color="inherit">Welcome, {user.username}, {studyData.studyPhaseName.fi}</Button>
               <Button color="inherit" href="/api/logout">
               Logout
               </Button>

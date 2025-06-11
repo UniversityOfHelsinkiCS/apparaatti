@@ -71,7 +71,7 @@ router.get('/user/studydata', async (req, res) => {
     return
   }
   const studydata = await getStudyData(req.user)
-  res.json({ studydata })
+  res.json(studydata)
 })
 
 router.get('/fail', async (_req, res) => {
