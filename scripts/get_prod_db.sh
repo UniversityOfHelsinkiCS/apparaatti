@@ -4,7 +4,8 @@ CONTAINER=apparaatti_db
 SERVICE_NAME=db
 DB_NAME=postgres
 
-apparaatti_FILE_NAME=apparaatti.sql.gz
+# currently it is not gzipped
+apparaatti_FILE_NAME=apparaatti.sql
 
 SERVER=toska.cs.helsinki.fi
 SERVER_PATH=/home/toska_user/most_recent_backup_store/
@@ -50,7 +51,7 @@ mkdir -p ${BACKUPS}
 
 echo "Fetching a new dump"
 get_username
-scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
+#scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
 
 echo "Removing database and related volume"
 docker compose -f $DOCKER_COMPOSE down -v
@@ -61,4 +62,7 @@ docker compose -f $DOCKER_COMPOSE up -d $SERVICE_NAME $JAMI_DB
 retry docker compose -f $DOCKER_COMPOSE exec $SERVICE_NAME pg_isready --dbname=$DB_NAME
 
 echo "Populating apparaatti"
-docker exec -i $CONTAINER /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${apparaatti_FILE_NAME}
+docker exec -i $CONTAINER /bin/bash -c "psql -U postgres" < ${BACKUPS}${apparaatti_FILE_NAME}
+
+# currently the backup file is gzipped
+# docker exec -i $CONTAINER /bin/bash -c "gunzip | psql -U postgres" < ${BACKUPS}${apparaatti_FILE_NAME}
