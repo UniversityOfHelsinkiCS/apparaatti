@@ -9,13 +9,13 @@ import passport from 'passport'
 import router from './routes/router.ts'
 
 import { seed } from './test/seed.ts'
-import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, UPDATER_CRON_ENABLED } from './util/config.ts'
+import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, UPDATER_CRON_ENABLED, inDevelopment } from './util/config.ts'
 import { createClient } from 'redis'
 import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
-
+import mockUserMiddleware from './middleware/mock_user.ts'
 
 redis.on('ready', () => {console.log('connected to redis')}).connect().catch(console.error)
 
@@ -30,6 +30,10 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+console.log(process.env.NODE_ENV, 'NODE_ENV')
+
+// in develoment, fake the user
+if (inDevelopment) app.use(mockUserMiddleware)
 
 app.use('/api', router)
 app.use('/api/ping', (_req, res) => { res.send('pong') })

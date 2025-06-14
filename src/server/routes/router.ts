@@ -22,8 +22,6 @@ router.get('/form/1', async (_req, res) => {
   res.json(form)
 })
 
-
-
 async function saveAnswer(answerData: any, user: User) {
   const answer = await Answer.create({
     answer: answerData,
@@ -37,7 +35,6 @@ router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
   console.log(answerData)
 
- 
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
