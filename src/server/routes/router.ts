@@ -70,7 +70,7 @@ router.get('/user/studydata', async (req, res) => {
   const studydata = await getStudyData(req.user)
 
   const mockStudyData = {
-    phase1Data: [{id: 'id123', code: 'code123', name: {fi: "Matemaattis luonnontieteellinen"}}],
+    phase1Data: [{id: 'id123', code: 'code123', name: {fi: 'Matemaattis luonnontieteellinen'}}],
     phase2Data:  []
     //phase2Data: [{id: 'id321', code: 'code321', name: {fi: "Biologian maisteri"}}]
   }

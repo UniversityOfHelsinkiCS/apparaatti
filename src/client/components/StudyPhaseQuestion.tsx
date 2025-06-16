@@ -38,7 +38,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   const currentData = studyData?.phase1Data.concat(studyData?.phase2Data)
   console.log(currentData.length)
 
-    useEffect(() => {
+  useEffect(() => {
     const initialPhase = getFirstSelection()
     //const initialField = getFirstFieldSelection(initialPhase)
     if (initialPhase) {
@@ -49,14 +49,14 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
 
         
    
-     //console.log("1 ehto")
-      if (studyData.phase1Data != null) {
-        //console.log("phase1")
-        setSelectedField(studyData.phase1Data[0].id)
-      } else if (studyData.phase2Data) {
-        //console.log("phase2")
-        setSelectedField(studyData.phase2Data[0].id)
-      }
+    //console.log("1 ehto")
+    if (studyData.phase1Data != null) {
+      //console.log("phase1")
+      setSelectedField(studyData.phase1Data[0].id)
+    } else if (studyData.phase2Data) {
+      //console.log("phase2")
+      setSelectedField(studyData.phase2Data[0].id)
+    }
     
   }, [studyData])
 

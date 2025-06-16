@@ -24,7 +24,7 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
         >
           näytä
         </Button>
-       </Box>
+      </Box>
     </Paper>
   )
 }

@@ -180,24 +180,7 @@ function coursePeriod(course: Cur){
   return period
 }
 
-function coursePeriodValue(period){
- 
-  console.log('picked period: ', period)
-  switch (period.name) {
-  case 'period_1' || 'intensive_1':
-    return 1.0
-  case 'period_2' || 'intensive_2':
-    return 2.0
-  case 'period_3':
-    return 3.0
-  case 'period_4' || 'intensive_3':
-    return 4.0
-  default: //the intensives and exam weeks are considered a value of 0 for now...
-    return 0.0
-  }
-  
 
-}
 
 //returns a list of [{course, distance}] 
 async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
