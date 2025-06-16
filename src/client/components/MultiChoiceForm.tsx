@@ -7,6 +7,7 @@ const questions = [
   {
     id: 'study-year',
     type: 'multi',
+    explanation: "dwqfe ffwfew ferfeew",
     question: { fi: 'Mikä on haluamasi vuosi?' },
     options: [
       { id: '2024', name: { fi: '2024-2025' } },
@@ -17,6 +18,7 @@ const questions = [
   {
     id: 'study-period',
     type: 'multi',
+    explanation: "sit amet, consectetur adipiscing elit.",
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
       { id: 'period_1', name: { fi: '1. periodi' } },
@@ -119,8 +121,10 @@ const questions = [
 const renderFormQuestion = (key, question) => {
   switch(question.type){
   case 'date':
+    console.log("date")
     return <DateQuestion key={key} question={question.question} id={key} />
   case 'multi':
+    //console.log("multi")
     return  <FormQuestion key={key} question={question} />
   default:
     return <p>Unknown question type</p>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, TextField, FormControl } from '@mui/material'
+import { Box, TextField, FormControl, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 
 const DateQuestion = ({ question, id }) => {
   return (
@@ -7,6 +7,18 @@ const DateQuestion = ({ question, id }) => {
       <FormControl component="fieldset">
         <p>{question.fi}</p>
         <p>Alku</p>
+
+        <Accordion>
+          <AccordionSummary id="panel-header" aria-controls="panel-content">
+            Lisätietoa
+          </AccordionSummary>
+          <AccordionDetails>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </AccordionDetails>
+        </Accordion>
+
+
+
         <TextField
           label=""
           type="date"

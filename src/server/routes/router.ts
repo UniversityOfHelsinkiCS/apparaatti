@@ -74,7 +74,7 @@ router.get('/user/studydata', async (req, res) => {
     phase2Data:  []
     //phase2Data: [{id: 'id321', code: 'code321', name: {fi: "Biologian maisteri"}}]
   }
-  res.json(mockStudyData)
+  res.json(studydata)
 })
 
 router.get('/fail', async (_req, res) => {

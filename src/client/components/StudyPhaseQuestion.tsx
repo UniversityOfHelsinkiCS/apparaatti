@@ -49,12 +49,12 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
 
         
    
-     console.log("1 ehto")
+     //console.log("1 ehto")
       if (studyData.phase1Data != null) {
-        console.log("phase1")
+        //console.log("phase1")
         setSelectedField(studyData.phase1Data[0].id)
       } else if (studyData.phase2Data) {
-        console.log("phase2")
+        //console.log("phase2")
         setSelectedField(studyData.phase2Data[0].id)
       }
     
