@@ -1,7 +1,8 @@
 import React from 'react'
 import { Box, TextField, FormControl, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { Question } from '../../common/types'
 
-const DateQuestion = ({ question, id }) => {
+const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 2 }}>
       <FormControl component="fieldset">
@@ -13,7 +14,7 @@ const DateQuestion = ({ question, id }) => {
             Lisätietoa
           </AccordionSummary>
           <AccordionDetails>
-            {question.explanation ? question.explanation : "Ei lisätietoa"}
+            {question.explanation ? question.explanation : 'Ei lisätietoa'}
           </AccordionDetails>
         </Accordion>
 

@@ -16,7 +16,7 @@ export type Question = {
   value: string;
   question: LocalizedString;
   type: string;
-  explanation: "string";
+  explanation: 'string';
   options: Option[];
 }
 

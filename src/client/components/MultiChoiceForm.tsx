@@ -10,7 +10,7 @@ const questions = [
     explanation: 'sit amet, consectetur adipiscing elit.',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
-      { id: 'intensive_3', value: "intensive_3", name: { fi: 'kesä 25' } },
+      { id: 'intensive_3', value: 'intensive_3', name: { fi: 'kesä 25' } },
       { id: 'period_1', name: { fi: '1. periodi' } },
       { id: 'period_2', name: { fi: '2. periodi' } },
       { id: 'period_3', name: { fi: '3. periodi' } },
