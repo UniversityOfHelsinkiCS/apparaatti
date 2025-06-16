@@ -11,13 +11,7 @@ function App() {
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
 
-  const { data: form, isLoading } = useQuery<Form>({
-    queryKey: ['form'],
-    queryFn: async () => {
-      const res = await fetch('/api/form/1')
-      return res.json()
-    },
-  })
+ 
 
   const { data: user } = useQuery({
     queryKey: ['user'],
@@ -66,7 +60,7 @@ function App() {
     setIsSidePanelOpen(true)
   }
 
-  if (isLoading || !form || isStudyDataLoading) {
+  if (isStudyDataLoading) {
     return <div>Loading...</div>
   }
 

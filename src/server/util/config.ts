@@ -38,7 +38,4 @@ export const PATE_URL =
     ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate/'
     : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/pate/'
 
-export const IMPORTER_URL =
-  true
-    ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/importer'
-    : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/importer'
+export const IMPORTER_URL = process.env.IMPORTER_URL || 'localhost:3003/importer'
