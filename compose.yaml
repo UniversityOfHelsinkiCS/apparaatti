@@ -21,13 +21,12 @@ services:
     image: apparaatti_dev
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - PORT=8000
+      - PORT=4004
       - UPDATER_ENABLED=true
     volumes:
       - ./:/opt/app-root/src
     ports:
       - 4004:4004
-      - 8000:8000
     container_name: apparaatti_dev_updater
 
 
