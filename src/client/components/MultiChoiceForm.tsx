@@ -5,27 +5,17 @@ import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 const questions = [
   {
-    id: 'study-year',
-    type: 'multi',
-    explanation: 'dwqfe ffwfew ferfeew',
-    question: { fi: 'Mikä on haluamasi vuosi?' },
-    options: [
-      { id: '2024', name: { fi: '2024-2025' } },
-      { id: '2025', name: { fi: '2025-2026' } },
-      { id: '2026', name: { fi: '2026-2027' } },
-    ],
-  },
-  {
     id: 'study-period',
     type: 'multi',
     explanation: 'sit amet, consectetur adipiscing elit.',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
+      { id: 'intensive_3', value: "intensive_3", name: { fi: 'kesä 25' } },
       { id: 'period_1', name: { fi: '1. periodi' } },
       { id: 'period_2', name: { fi: '2. periodi' } },
       { id: 'period_3', name: { fi: '3. periodi' } },
       { id: 'period_4', name: { fi: '4. periodi' } },
-      { id: 'intensive_3', name: { fi: 'kesä' } },
+      { id: 'intensive_3_next', name: { fi: 'kesä 26' } },
     ],
   },
   {

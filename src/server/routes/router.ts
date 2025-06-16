@@ -169,11 +169,6 @@ router.get('/cu', async (req, res) => {
 })
 
 
-
-
-
-
-
 router.get('/curcu', async (req, res) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })

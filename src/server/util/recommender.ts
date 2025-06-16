@@ -10,6 +10,7 @@ import _ from 'lodash'
 import { closestPeriod, dateObjToPeriod, dateToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
+import Answer from '../db/models/answer.ts'
 
 
 
@@ -283,8 +284,12 @@ async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
 
 
 async function getRecommendations(userCoordinates: any, answerData, user) {  
-  console.log('user: ', user)
   
+  console.log('user: ', user)
+  console.log(answerData)
+
+  const year = new Date().getFullYear()
+  console.log(year)
 
   const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
   console.log('picked period: ', pickedPeriod)

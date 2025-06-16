@@ -36,7 +36,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
 
   //const currentData = selectedPhase === 'phase1' ? studyData?.phase1Data : studyData?.phase2Data
   const currentData = studyData?.phase1Data.concat(studyData?.phase2Data)
-  console.log(currentData.length)
+  //console.log(currentData.length)
 
   useEffect(() => {
     const initialPhase = getFirstSelection()

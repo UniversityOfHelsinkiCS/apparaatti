@@ -13,7 +13,7 @@ const DateQuestion = ({ question, id }) => {
             Lisätietoa
           </AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            {question.explanation ? question.explanation : "Ei lisätietoa"}
           </AccordionDetails>
         </Accordion>
 

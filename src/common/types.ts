@@ -13,8 +13,10 @@ export type Option = {
 
 export type Question = {
   id: string;
+  value: string;
   question: LocalizedString;
   type: string;
+  explanation: "string";
   options: Option[];
 }
 

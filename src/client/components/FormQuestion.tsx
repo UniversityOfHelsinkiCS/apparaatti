@@ -9,6 +9,8 @@ const FormQuestion = ({ question }: { question: Question }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const questionValue =  question.value ? question.value : question.id
+
   const style = {
     position: 'absolute',
     top: '50%',
