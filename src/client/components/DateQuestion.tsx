@@ -7,51 +7,51 @@ import { Console } from 'winston/lib/winston/transports'
 
 const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
 
-    const [open, setOpen] = React.useState(false)
-    const [choice, setChoice ] = React.useState("")
-    const [ year, setYear ] = React.useState("")
-    const handleOpen = () => setOpen(true)
-    const handleClose = () => setOpen(false)
+  const [ open, setOpen ] = React.useState(false)
+  const [ choice, setChoice ] = React.useState('')
+  const [ year, setYear ] = React.useState('')
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-    const handleChoice = (id: string) => {
-      setChoice(id)
+  const handleChoice = (id: string) => {
+    setChoice(id)
 
-      //const d = new Date();
-      const d = new Date("December 21, 2025 01:15:00")
-      let y = d.getFullYear();
-      let m = d.getMonth() +1
+    const d = new Date()
+    //const d = new Date("December 21, 2025 01:15:00")
+    const y = d.getFullYear()
+    const m = d.getMonth() +1
 
-      if (m < 9) { //kevät (jan-aug)
-        if (id === "intensive_3_previous" || id === "period_1" || id === "period_2") {
-          setYear(String(y-1))
-        } else {
-          setYear(String(y))
-        }
-
-      } else if (m > 8 && m < 13) {  //syksy (sep-dec)
-        if (id === "intensive_3_previous" || id === "period_1" || id === "period_2") {
-          setYear(String(y))
-        } else {
-          setYear(String(y+1))
-        }
+    if (m < 9) { //kevät (jan-aug)
+      if (id === 'intensive_3_previous' || id === 'period_1' || id === 'period_2') {
+        setYear(String(y-1))
+      } else {
+        setYear(String(y))
       }
 
+    } else if (m > 8 && m < 13) {  //syksy (sep-dec)
+      if (id === 'intensive_3_previous'|| id === 'period_1' || id === 'period_2') {
+        setYear(String(y))
+      } else {
+        setYear(String(y+1))
+      }
     }
+
+  }
   
-    const questionValue =  question.value ? question.value : question.id
+  const questionValue =  question.value ? question.value : question.id
   
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 400,
-      bgcolor: 'background.paper',
-      border: '2px solid #545454',
-      borderRadius: '10px',
-      boxShadow: 24,
-      p: 4,
-    }
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #545454',
+    borderRadius: '10px',
+    boxShadow: 24,
+    p: 4,
+  }
 
 
 
@@ -68,7 +68,7 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
       </Typography>
 
       {choice}
-      {" "}
+      {' '}
       {year}
       <Modal
         open={open}
