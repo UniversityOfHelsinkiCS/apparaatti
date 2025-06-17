@@ -6,14 +6,23 @@ export const dateIsInPeriod = (date: Date, period) => {
   return date >= start && date <= end
 }
 
+const correctedPeriod = (period: string) => {
+  if (period == "intensive_3_previous") {
+    return "intensive_3"
+  }
+  else {
+    return period
+  }
+}
 
 export const getStudyPeriod = (year: string, period: string) => {
+  const newPeriod = correctedPeriod(period)
   const studyYear = studyPeriods.years.find(y => y.start_year === year)
   if (!studyYear) {
     return null
   }
   
-  const studyPeriod = studyYear.periods.find(p => p.name === period)
+  const studyPeriod = studyYear.periods.find(p => p.name === newPeriod)
   if (!studyPeriod) {
     return null
   }

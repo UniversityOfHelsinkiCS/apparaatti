@@ -16,26 +16,6 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
   const handleChoice = (id: string) => {
     setChoice(id)
 
-    const d = new Date()
-    //const d = new Date("December 21, 2025 01:15:00")
-    const y = d.getFullYear()
-    const m = d.getMonth() +1
-
-    if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
-      if (id === 'intensive_3_previous') {
-        setYear(String(y-1))
-      } else {
-        setYear(String(y))
-      }
-
-    } else if (m > 8 && m < 13) {  //syksy (sep-dec)
-      if (id === 'intensive_3_previous') {
-        setYear(String(y))
-      } else {
-        setYear(String(y+1))
-      }
-    }
-
   }
   
   const questionValue =  question.value ? question.value : question.id
@@ -69,7 +49,6 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
 
       {choice}
       {' '}
-      {year}
       <Modal
         open={open}
         onClose={handleClose}
@@ -85,8 +64,6 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
           </Typography>
         </Box>
       </Modal>
-
-      <input type="hidden" name='study-year' value={year} /> 
 
       <RadioGroup name={question.id}>
 
