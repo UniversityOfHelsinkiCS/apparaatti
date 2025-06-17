@@ -35,7 +35,7 @@ const questions = [
 
     variants: {
       default: {
-        id: 1,
+        id: '1',
         name:'default_texts',
         question: { fi: 'Valmistutko lähiaikoina?' },
         options: [
@@ -44,7 +44,7 @@ const questions = [
         ],
       },
       onlyFi: {
-        id: 2,
+        id: '2',
         name: 'onlyFi_texts',
         question: { fi: 'Valmistutko lähiaikoina2?' },
         options: [

@@ -11,14 +11,32 @@ export type Option = {
   name: LocalizedString;
 }
 
+export type Variant = {
+  question: LocalizedString;
+  options: Option[];
+  name: string,
+  id: string
+}
+
 export type Question = {
   id: string;
   value: string;
   question: LocalizedString;
   type: string;
-  explanation: 'string';
+  explanation: string;
   options: Option[];
 }
+
+export type QuestionWithVariant = {
+  id: string;
+  value: string;
+
+  type: string;
+  explanation: string;
+
+  variants: Variant[]
+}
+
 
 export type Form = {
   id: string;
