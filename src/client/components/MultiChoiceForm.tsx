@@ -32,12 +32,29 @@ const questions = [
   {
     id: '2',
     type: 'multi',
-    question: { fi: 'Valmistutko lähiaikoina?' },
-    options: [
-      { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-      { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-    ],
+
+    variants: {
+      default: {
+        id: 1,
+        name:"default_texts",
+        question: { fi: 'Valmistutko lähiaikoina?' },
+        options: [
+          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+        ],
+      },
+      onlyFi: {
+        id: 2,
+        name: "onlyFi_texts",
+        question: { fi: 'Valmistutko lähiaikoina2?' },
+        options: [
+          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+        ],
+      }
+    }
   },
+
   {
     id: '3',
     type: 'multi',
