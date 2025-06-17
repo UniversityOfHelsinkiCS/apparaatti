@@ -1,7 +1,8 @@
 import { Box, FormControlLabel, Radio, RadioGroup, Typography , Button, Modal } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
-import { Question } from '../../common/types.tsx'
+import { Question  } from '../../common/types.tsx'
+//import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
 const FormQuestion = ({ question }: { question: Question }) => {
 
@@ -32,6 +33,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
         sx={{ fontSize: '1rem', width: 'auto' }}
       >
         {question.question.fi}
+       
         <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
       </Typography>
 

@@ -27,14 +27,12 @@ export type Question = {
   options: Option[];
 }
 
-export type QuestionWithVariant = {
+export type QuestionWithVariants = {
   id: string;
   value: string;
-
   type: string;
   explanation: string;
-
-  variants: Variant[]
+  variants: Variant[];
 }
 
 

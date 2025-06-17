@@ -32,7 +32,11 @@ const questions = [
   {
     id: '2',
     type: 'multi',
-
+    options: [
+      { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+      { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+    ],
+    question: {fi: "Valmistutko lähiaikoina?"},
     variants: {
       default: {
         id: '1',
