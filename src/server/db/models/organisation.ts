@@ -1,4 +1,4 @@
-import { InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Model } from "sequelize"
+import { InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, Model } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 /**
@@ -39,7 +39,7 @@ Organisation.init(
     parentId: {
       type: DataTypes.STRING
     },
-     createdAt: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
     },
