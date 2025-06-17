@@ -46,6 +46,7 @@ export const getStudyData = async (user: any) => {
   })
 
   return {
+    studyRights: studyRights,
     phase1Data: phase1StudyData,
     phase2Data: phase2StudyData,
   }

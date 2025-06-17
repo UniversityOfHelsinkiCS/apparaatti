@@ -84,6 +84,9 @@ router.get('/fail', async (_req, res) => {
 })
 
 
+
+
+
 router.get('/logout', async (req, res, next) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
