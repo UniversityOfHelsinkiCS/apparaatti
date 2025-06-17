@@ -21,15 +21,15 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
     const y = d.getFullYear()
     const m = d.getMonth() +1
 
-    if (m < 9) { //kevät (jan-aug)
-      if (id === 'intensive_3_previous' || id === 'period_1' || id === 'period_2') {
+    if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
+      if (id === 'intensive_3_previous') {
         setYear(String(y-1))
       } else {
         setYear(String(y))
       }
 
     } else if (m > 8 && m < 13) {  //syksy (sep-dec)
-      if (id === 'intensive_3_previous'|| id === 'period_1' || id === 'period_2') {
+      if (id === 'intensive_3_previous') {
         setYear(String(y))
       } else {
         setYear(String(y+1))
@@ -86,7 +86,10 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
         </Box>
       </Modal>
 
+      <input type="hidden" name='study-year' value={year} /> 
+
       <RadioGroup name={question.id}>
+
         {question.options.map((option) => (
           <FormControlLabel
             onClick={() => handleChoice(option.id)}
