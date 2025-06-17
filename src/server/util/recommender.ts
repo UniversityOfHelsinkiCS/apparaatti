@@ -44,7 +44,7 @@ function getClosestPeriodFromUserPick(answerValue){
   case '2':
     return closestPeriod('period_2').period
   case '3':
-   return closestPeriod('period_3').period
+    return closestPeriod('period_3').period
   case '4':
     return  closestPeriod('period_4').period
   default:
@@ -256,7 +256,7 @@ async function addCourseCodesToRecommendations(courses) {
   })
   const recommendations = await Promise.all(recommendationsAsync)
   const codeTimerEnd = new Date()
-  console.log("code timers: ",  codeTimerEnd - codeTimer)
+  console.log('code timers: ',  codeTimerEnd - codeTimer)
   return recommendations
 }
 
@@ -285,7 +285,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
 
   const courseData = await getRealisationsWithCourseUnitCodes(filteredCourseCodeStrings)
   const courseEndTimer = Date.now()
-  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`);
+  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
 
   
@@ -298,7 +298,7 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
   
 
   const end = Date.now()
-  console.log(`Execution time: ${end - startBench} ms`);
+  console.log(`Execution time: ${end - startBench} ms`)
   return recommendations
 }
 
