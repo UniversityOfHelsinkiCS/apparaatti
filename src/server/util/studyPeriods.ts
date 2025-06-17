@@ -7,8 +7,8 @@ export const dateIsInPeriod = (date: Date, period) => {
 }
 
 const correctedPeriod = (period: string) => {
-  if (period == "intensive_3_previous") {
-    return "intensive_3"
+  if (period == 'intensive_3_previous') {
+    return 'intensive_3'
   }
   else {
     return period

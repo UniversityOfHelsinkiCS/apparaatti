@@ -8,26 +8,26 @@ import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
-   const d = new Date()
-    //const d = new Date("December 21, 2025 01:15:00")
-    const y = d.getFullYear()
-    const m = d.getMonth() +1
+  const d = new Date()
+  //const d = new Date("December 21, 2025 01:15:00")
+  const y = d.getFullYear()
+  const m = d.getMonth() +1
 
-    if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
-      if (id === 'intensive_3_previous') {
-        return String(y-1)
-      } else {
-        return String(y)
-      }
-
-    } else if (m > 8 && m < 13) {  //syksy (sep-dec)
-      if (id === 'intensive_3_previous') {
-        return String(y)
-      } else {
-        return String(y+1)
-      }
+  if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
+    if (id === 'intensive_3_previous') {
+      return String(y-1)
+    } else {
+      return String(y)
     }
-    return ""
+
+  } else if (m > 8 && m < 13) {  //syksy (sep-dec)
+    if (id === 'intensive_3_previous') {
+      return String(y)
+    } else {
+      return String(y+1)
+    }
+  }
+  return ''
 }
 
 function recommendCourses(answerData: any, user) {
