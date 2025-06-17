@@ -10,7 +10,7 @@ const runUpdater = async () => {
   await fetchUsers()
   await fetchCoursesAndResponsibilities()
   await fetchStudyRights()
-  await updateOrganisations()
+  await fetchOrganisations()
 //  await fetchEnrolments()
 }
 
