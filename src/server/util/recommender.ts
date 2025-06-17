@@ -178,7 +178,7 @@ function coursePeriod(course: Cur){
 
 
 //returns a list of [{course, distance}] 
-async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
+async function calculateUserDistances(userCoordinates: any, availableCourses: any) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map(course => {
     return calculateCourseDistance(course, userCoordinates)
@@ -212,7 +212,8 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
-    }
+    },
+    raw: true
   })
   
   const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
@@ -220,9 +221,23 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     where: {
       id: wantedIds,
     },
+    raw: true
   })
 
-  return courseRealizationsWithCourseUnit
+  const courseRealisationsWithCourseUnits = courseRealizationsWithCourseUnit.map((cur) => {
+    return{
+      ...cur,
+      unitIds: courseRealizationIdsWithCourseUnit.filter((curcu) => curcu.curId === cur.id).map((curcu) => curcu.cuId)
+    }
+  })
+ 
+  const courseRealisationsWithCodes = courseRealisationsWithCourseUnits.map((cur) => {
+    return{
+      ...cur,
+      courseCodes: courseUnitsWithCodes.filter((cu) => cur.unitIds.includes(cu.id)).map((cu) => cu.courseCode)
+    }
+  })
+  return courseRealisationsWithCodes
 }
 
 async function codesForCur(curId: string) {
@@ -242,24 +257,6 @@ async function codesForCur(curId: string) {
   return courseUnits.map(courseUnit => courseUnit.courseCode)
 
 }
-
-
-async function addCourseCodesToRecommendations(courses) {
-  const codeTimer = new Date()
-  const recommendationsAsync: CourseRecommendation[] = courses.map(async (recommendation) => {
-    const codes = await codesForCur(recommendation.course.id)
-    return {
-      course: recommendation.course,
-      distance: recommendation.distance,
-      courseCodes: codes //the codes could be saved in the previus steps?
-    }
-  })
-  const recommendations = await Promise.all(recommendationsAsync)
-  const codeTimerEnd = new Date()
-  console.log('code timers: ',  codeTimerEnd - codeTimer)
-  return recommendations
-}
-
 
 
 async function getRecommendations(userCoordinates: any, answerData, user) {  
@@ -290,10 +287,10 @@ async function getRecommendations(userCoordinates: any, answerData, user) {
 
   
   const distances = await calculateUserDistances(userCoordinates, courseData)
-  const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
+  //const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
   
   const start = parseDate(pickedPeriod.start_date)
-  const sortedCourses = recommendationsWithCodes.filter((a) => a.course.startDate >= start ).sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.filter((a) => a.course.startDate >= start ).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
   
 

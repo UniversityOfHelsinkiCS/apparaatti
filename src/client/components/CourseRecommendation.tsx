@@ -12,7 +12,7 @@ const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) 
           {course.course.name.fi}
         </Typography>
         <Typography variant="body2" color="textSecondary" gutterBottom>
-          {course.courseCodes.map(code => code.toString()).join(', ')}
+          {course.course.courseCodes.map(code => code.toString()).join(', ')}
         </Typography>
         <Button
           variant="contained"
