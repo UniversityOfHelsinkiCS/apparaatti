@@ -6,16 +6,16 @@ import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 const questions = [
   {
     id: 'study-period',
-    type: 'multi',
+    type: 'date',
     explanation: 'sit amet, consectetur adipiscing elit.',
     question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
     options: [
-      { id: 'intensive_3', value: 'intensive_3', name: { fi: 'kesä 25' } },
+      { id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' } },
       { id: 'period_1', name: { fi: '1. periodi' } },
       { id: 'period_2', name: { fi: '2. periodi' } },
       { id: 'period_3', name: { fi: '3. periodi' } },
       { id: 'period_4', name: { fi: '4. periodi' } },
-      { id: 'intensive_3_next', name: { fi: 'kesä 26' } },
+      { id: 'intensive_3', name: { fi: 'kesä 26' } },
     ],
   },
   {
@@ -111,15 +111,14 @@ const questions = [
 const renderFormQuestion = (key, question) => {
   switch(question.type){
   case 'date':
-    console.log('date')
-    return <DateQuestion key={key} question={question.question} id={key} />
+    //console.log('date')
+    return <DateQuestion key={key} question={question} id={key} />
   case 'multi':
     //console.log("multi")
     return  <FormQuestion key={key} question={question} />
   default:
     return <p>Unknown question type</p>
   }
-
 }
 
 const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {

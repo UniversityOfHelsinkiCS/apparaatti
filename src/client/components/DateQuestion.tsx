@@ -1,34 +1,116 @@
 import React from 'react'
-import { Box, TextField, FormControl, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { Box, TextField, FormControl, Accordion, AccordionSummary, AccordionDetails, Button, FormControlLabel, Modal, Radio, RadioGroup, Typography,  } from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+
 import { Question } from '../../common/types'
+import { Console } from 'winston/lib/winston/transports'
 
 const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
+
+    const [open, setOpen] = React.useState(false)
+    const [choice, setChoice ] = React.useState("")
+    const [ year, setYear ] = React.useState("")
+    const handleOpen = () => setOpen(true)
+    const handleClose = () => setOpen(false)
+
+    const handleChoice = (id: string) => {
+      setChoice(id)
+
+      //const d = new Date();
+      const d = new Date("December 21, 2025 01:15:00")
+      let y = d.getFullYear();
+      let m = d.getMonth() +1
+
+      if (m < 9) { //kevät (jan-aug)
+        if (id === "intensive_3_previous" || id === "period_1" || id === "period_2") {
+          setYear(String(y-1))
+        } else {
+          setYear(String(y))
+        }
+
+      } else if (m > 8 && m < 13) {  //syksy (sep-dec)
+        if (id === "intensive_3_previous" || id === "period_1" || id === "period_2") {
+          setYear(String(y))
+        } else {
+          setYear(String(y+1))
+        }
+      }
+
+    }
+  
+    const questionValue =  question.value ? question.value : question.id
+  
+    const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #545454',
+      borderRadius: '10px',
+      boxShadow: 24,
+      p: 4,
+    }
+
+
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 2 }}>
-      <FormControl component="fieldset">
-        <p>{question.fi}</p>
-        <p>Alku</p>
+    <Box sx={{
+      paddingTop: 4,
+    }}>
+      <Typography
+        gutterBottom 
+        sx={{ fontSize: '1rem', width: 'auto' }}
+      >
+        {question.question.fi}
+        <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
+      </Typography>
 
-        <Accordion>
-          <AccordionSummary id="panel-header" aria-controls="panel-content">
-            Lisätietoa
-          </AccordionSummary>
-          <AccordionDetails>
+      {choice}
+      {" "}
+      {year}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+          Lisätietoa
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {question.explanation ? question.explanation : 'Ei lisätietoa'}
-          </AccordionDetails>
-        </Accordion>
+          </Typography>
+        </Box>
+      </Modal>
 
-
-
-        <TextField
-          label=""
-          type="date"
-          name={`date-start-${id}`}
-          slotProps={{ input: { placeholder: 'Alkaa' } }}
-          variant="outlined"
-        />
-       
-      </FormControl>
+      <RadioGroup name={question.id}>
+        {question.options.map((option) => (
+          <FormControlLabel
+            onClick={() => handleChoice(option.id)}
+            key={option.id}
+            value={option.id}
+            control={
+              <Radio
+                sx={{
+                  '&.Mui-checked': {
+                    color: '#4caf50',
+                  },
+                }}
+              />
+            }
+            label={option.name.fi}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#e0e0e0',
+                borderRadius: '4px',
+              },
+            }}
+          />
+        ))}
+      </RadioGroup>
     </Box>
   )
 }
