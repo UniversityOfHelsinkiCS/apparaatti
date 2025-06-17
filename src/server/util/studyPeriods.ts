@@ -77,10 +77,7 @@ export const closestPeriod = (name: string = '') => {
   }})
     .filter((p) => p.distance > 0)
     .sort((a, b) => a.distance - b.distance)
-  distances.forEach((dis) => {
-    console.log('--period distance--')
-    console.log('distance: ', dis.distance / 10000000)
-  })
+ 
 
 
   const period = distances[0]

@@ -17,9 +17,9 @@ import Answer from '../db/models/answer.ts'
 
 function recommendCourses(answerData: any, user) {
   const userCoordinates = calculateUserCoordinates(answerData)
-  console.log('after user coordinates', userCoordinates)
+  
   const recommendations = getRecommendations(userCoordinates, answerData, user)
-  console.log('after recommendations')
+  
   return recommendations
 }
 
@@ -44,8 +44,7 @@ function getClosestPeriodFromUserPick(answerValue){
   case '2':
     return closestPeriod('period_2').period
   case '3':
-    console.log('hit the correct one')
-    return closestPeriod('period_3').period
+   return closestPeriod('period_3').period
   case '4':
     return  closestPeriod('period_4').period
   default:
@@ -61,9 +60,9 @@ function getPeriodDateFromUserPick(answerValue) {
 
 
 function calculateUserCoordinates(answerData: any) {
-  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
+  const pickedPeriod = getStudyPeriod('2025', answerData['study-period'])
  
-  console.log('picked study period for user: ', pickedPeriod)
+ 
   const userCoordinates = {
   //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
     'date': new Date(parseDate(pickedPeriod?.start_date)).getTime()
@@ -85,9 +84,6 @@ async function getCodesForCur(course: Cur){
 
   const codes = cus.map(cu => cu.courseCode)
 
-
-  console.log(codes)
-  
   return codes
 }
 
@@ -142,7 +138,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any){
   }
   
 
-  console.log(courseCoordinates)
+ 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
     const courseValue = courseCoordinates[key as keyof typeof dimensions]
@@ -165,10 +161,8 @@ function coursePeriod(course: Cur){
     return 0.0 // 0.0 is the value for courses that somehow didnt fit any period
   }
 
-  const filteredPeriods = periods
-  console.log(filteredPeriods)
 
-  const periodDistances =  filteredPeriods.map((period) => {
+  const periodDistances =  periods.map((period) => {
     return {
       period: period,
       distance: course.startDate.getTime() - parseDate(period.start_date).getTime()
@@ -185,10 +179,13 @@ function coursePeriod(course: Cur){
 
 //returns a list of [{course, distance}] 
 async function calculateUserDistances(userCoordinates: any, availableCourses: Cur[]) {
+  const distanceS = new Date()
   const distancePromises = availableCourses.map(course => {
     return calculateCourseDistance(course, userCoordinates)
   })
   const distances = await Promise.all(distancePromises)
+  const distanceE = new Date()
+  console.log('distance timer: ', distanceE - distanceS)
 
   return distances
 }
@@ -202,12 +199,13 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       courseCode: courseCodeStrings//{[Op.like]: `${search}%`},
     },
   })
-
+  /*
   courseCodeStrings.map((code) => {
     if (!courseUnitsWithCodes.some(course => course.courseCode === code)) {
       console.log(`Course code ${code} not found in course data`)
     }
   })
+    */
 
   //probably should be a join, but ill roll with this one
   const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
@@ -247,6 +245,7 @@ async function codesForCur(curId: string) {
 
 
 async function addCourseCodesToRecommendations(courses) {
+  const codeTimer = new Date()
   const recommendationsAsync: CourseRecommendation[] = courses.map(async (recommendation) => {
     const codes = await codesForCur(recommendation.course.id)
     return {
@@ -256,79 +255,50 @@ async function addCourseCodesToRecommendations(courses) {
     }
   })
   const recommendations = await Promise.all(recommendationsAsync)
-  
+  const codeTimerEnd = new Date()
+  console.log("code timers: ",  codeTimerEnd - codeTimer)
   return recommendations
 }
-
-async function filterCoursesForLanguage(courses: Cur[], langChoice: string){
-  if(langChoice === '1')
-  {
-    return courses
-  }
-
-  const coursesWithLangPromise = courses.map(async (course) => {
-    return{
-      course: course,
-      lang: await courseLangValue(course) as string
-    }
-  })
-  const coursesWithLang = await Promise.all(coursesWithLangPromise)
- 
-  const hits = coursesWithLang.filter((course) => course.lang === langChoice)
-  const correctCourses = hits.map((hit) => hit.course)
-  return correctCourses
-
-}
-
 
 
 
 async function getRecommendations(userCoordinates: any, answerData, user) {  
-  
-  console.log('user: ', user)
-  console.log(answerData)
-
+  console.log(userCoordinates)
+  const startBench = Date.now()
+ 
   const year = new Date().getFullYear()
-  console.log(year)
-
-  const pickedPeriod = getStudyPeriod(answerData['study-year'], answerData['study-period'])
-  console.log('picked period: ', pickedPeriod)
-
+  
+  const pickedPeriod = getStudyPeriod('2025', answerData['study-period'])
+  
   type courseCode = {
     code: string;
   }
+
+  const courseTimer = Date.now()
   const courseCodes = await readCodeData() as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
- 
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodeStrings)
-
+  
   
 
-  //console.log('course count before lang selection: ', courseData.length)
-  const coursesAboutCorrectLanguage = await filterCoursesForLanguage(courseData, answerData['lang-1'])
-  //console.log('course count after selection: ', coursesAboutCorrectLanguage.length)
 
-  const distances = await calculateUserDistances(userCoordinates, coursesAboutCorrectLanguage)
+  const filteredCourseCodeStrings = courseCodeStrings.filter((code) => langCoordFromCode(code) === answerData['lang-1'])
+
+  const courseData = await getRealisationsWithCourseUnitCodes(filteredCourseCodeStrings)
+  const courseEndTimer = Date.now()
+  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`);
+
+
   
-  
-  
-  const recommendationsWithCodes  = await addCourseCodesToRecommendations(distances)
+  const distances = await calculateUserDistances(userCoordinates, courseData)
+  const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
   
   const start = parseDate(pickedPeriod.start_date)
   const sortedCourses = recommendationsWithCodes.filter((a) => a.course.startDate >= start ).sort((a, b) => a.distance - b.distance)
-  /*
-  sortedCourses.forEach((course) => {
-    console.log('---')
-    console.log('course: ', course.course.name)
-    console.log('start date: ', course.course.startDate)
-    console.log('target date: ', start)
-    console.log('distance: ', course.distance / 10000000)
-  })
-  */
   const recommendations = sortedCourses.slice(0, 3)
-  //console.log(recommendations)
- 
- 
+  
+
+  const end = Date.now()
+  console.log(`Execution time: ${end - startBench} ms`);
   return recommendations
 }
 
