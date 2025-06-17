@@ -57,4 +57,4 @@ Organisation.init(
   }
 )
 
-module.exports = Organisation
+export default Organisation

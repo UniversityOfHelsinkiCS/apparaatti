@@ -1,6 +1,7 @@
 
 import { fetchCoursesAndResponsibilities } from './courses.ts'
 import { fetchEnrolments } from './enrolments.ts'
+import fetchOrganisations from './organisations.ts'
 import { fetchStudyRights } from './studyRights.ts'
 import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
@@ -9,6 +10,7 @@ const runUpdater = async () => {
   await fetchUsers()
   await fetchCoursesAndResponsibilities()
   await fetchStudyRights()
+  await updateOrganisations()
 //  await fetchEnrolments()
 }
 
@@ -36,6 +38,7 @@ export const runDev = async () => {
     //await fetchUsers()
     //await fetchCoursesAndResponsibilities()
     //await fetchStudyRights()
+     await fetchOrganisations()
 
   } catch (error) {
     
