@@ -1,19 +1,11 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import { Op, type DataTypes } from 'sequelize'
-import type { CourseRecommendation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData, readCsvData } from './dataImport.ts'
 import _ from 'lodash'
-import { closestPeriod, dateObjToPeriod, dateToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
-import StudyRight from '../db/models/studyRight.ts'
-import User from '../db/models/user.ts'
-import Answer from '../db/models/answer.ts'
-
-
-
+import { closestPeriod, dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 
 function recommendCourses(answerData: any, user) {
   const userCoordinates = calculateUserCoordinates(answerData)
@@ -21,19 +13,6 @@ function recommendCourses(answerData: any, user) {
   const recommendations = getRecommendations(userCoordinates, answerData, user)
   
   return recommendations
-}
-
-function convertAnswerValueToFloat(answerValue: any) {
-  switch (answerValue) {
-  case '1':
-    return 0.0
-  case '2':
-    return 0.5
-  case '3':
-    return 1.0
-  default:
-    return 0.0
-  }
 }
 
 
@@ -51,12 +30,6 @@ function getClosestPeriodFromUserPick(answerValue){
     return  closestPeriod().period
   }
 }
-function getPeriodDateFromUserPick(answerValue) {
-  const period = getClosestPeriodFromUserPick(answerValue)
-  return parseDate(period.start_date).getTime()
-}
-
-
 
 
 function calculateUserCoordinates(answerData: any) {
@@ -100,32 +73,6 @@ function langCoordFromCode (code: string){
   }
 
   return '1' //default = no choice
-}
-async function courseLangValue(course: Cur){
-  const codesForCur = await getCodesForCur(course)
-
-  const langValue = langCoordFromCode(codesForCur[0])
- 
-  return langValue
-}
-
-function convertUserPeriodPickToFloat(answerValue){
-  console.log('answer value', answerValue)
-  switch (answerValue) {
-  case 'period_1':
-    return 1.0
-  case 'period_2':
-    return 2.0
-  case 'period_3':
-    return 3.0
-  case 'period_4':
-    return 4.0  
-  case 'intensive_3':
-    return 5.0
-  default:
-    return 0.0
-  }
-
 }
 
 async function calculateCourseDistance(course: Cur, userCoordinates: any){
@@ -238,24 +185,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     }
   })
   return courseRealisationsWithCodes
-}
-
-async function codesForCur(curId: string) {
-  const curCuRelations = await CurCu.findAll({
-    where: {
-      curId: curId,
-    },
-  })
-
-  const cuIds = curCuRelations.map(relation => relation.cuId)
-  const courseUnits = await Cu.findAll({
-    where: {
-      id: cuIds,
-    },
-  })
-
-  return courseUnits.map(courseUnit => courseUnit.courseCode)
-
 }
 
 
