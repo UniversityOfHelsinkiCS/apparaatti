@@ -13,7 +13,7 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
 
   const variant = question.variants[0]
 
-    const handleChoice = (id: string) => {
+  const handleChoice = (id: string) => {
     setChoice(id)
 
   }

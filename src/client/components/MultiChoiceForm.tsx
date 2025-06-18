@@ -12,7 +12,7 @@ const questions = [
 
 
     variants: [{    
-      name: "default",
+      name: 'default',
       question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
       options: [
         { id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' } },
@@ -22,14 +22,14 @@ const questions = [
         { id: 'period_4', name: { fi: '4. periodi' } },
         { id: 'intensive_3', name: { fi: 'kesä 26' } },
       ]
-    ,}]
+      ,}]
   },
   {
     id: 'lang-1',
     type: 'language',
 
     variants: [{
-      name: "default",
+      name: 'default',
       question: { fi: 'Mistä kielestä haet kursseja?' },
       options: [
         { id: '1', name: { fi: 'ei valintaa' } },
@@ -44,16 +44,16 @@ const questions = [
     type: 'multi',
 
     variants: [{
-      name: "default",
+      name: 'default',
       options: [
         { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
         { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
       ],
       question: {fi: 'Valmistutko lähiaikoina?'},
-  }]
+    }]
   },
 
- /*  {
+  /*  {
     id: '3',
     type: 'multi',
     question: { fi: 'Koetko häiritsevää jännitystä tai pelkoa kielikursseilla?' },
