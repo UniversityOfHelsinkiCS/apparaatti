@@ -21,17 +21,19 @@ const questions = [
   {
     id: 'lang-1',
     type: 'multi',
+
     question: { fi: 'Mistä kielestä haet kursseja?' },
     options: [
       { id: '1', name: { fi: 'ei valintaa' } },
       { id: '2', name: { fi: 'Suomi' } },
       { id: '3', name: { fi: 'Ruotsi' } },
       { id: '4', name: { fi: 'Englanti' } },
-    ],
+    ]
   },
   {
     id: '2',
     type: 'multi',
+<<<<<<< HEAD
     options: [
       { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
       { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
@@ -41,6 +43,13 @@ const questions = [
       default: {
         id: '1',
         name:'default_texts',
+=======
+
+    variants: {
+      default: {
+        id: 1,
+        name: "default_texts",
+>>>>>>> 8ea2573 (variants for question)
         question: { fi: 'Valmistutko lähiaikoina?' },
         options: [
           { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
@@ -48,15 +57,26 @@ const questions = [
         ],
       },
       onlyFi: {
+<<<<<<< HEAD
         id: '2',
         name: 'onlyFi_texts',
+=======
+        id: 2,
+        name: "onlyFi_texts",
+>>>>>>> 8ea2573 (variants for question)
         question: { fi: 'Valmistutko lähiaikoina2?' },
         options: [
           { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
           { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
         ],
       }
+<<<<<<< HEAD
     }
+=======
+    },
+
+
+>>>>>>> 8ea2573 (variants for question)
   },
 
   {

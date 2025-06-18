@@ -13,11 +13,27 @@ const getStudyYearFromPeriod = (id: string) => {
   const y = d.getFullYear()
   const m = d.getMonth() +1
 
+<<<<<<< HEAD
   if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
     if (id === 'intensive_3_previous') {
       return String(y-1)
     } else {
       return String(y)
+=======
+    if (m < 9) { //kevät (jan-aug)  //Huom! voi alka jo elokuun lopulla
+      if (id === 'intensive_3_previous') {
+        return String(y-1)
+      } else {
+        return String(y)
+      }
+
+    } else if (m > 8 && m < 13) {  //syksy (sep-dec)
+      if (id === 'intensive_3_previous') {
+        return String(y)
+      } else {
+        return String(y+1)
+      }
+>>>>>>> 8ea2573 (variants for question)
     }
 
   } else if (m > 8 && m < 13) {  //syksy (sep-dec)
