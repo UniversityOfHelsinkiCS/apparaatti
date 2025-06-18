@@ -1,11 +1,10 @@
 import React from 'react'
-import { Box, TextField, FormControl, Accordion, AccordionSummary, AccordionDetails, Button, FormControlLabel, Modal, Radio, RadioGroup, Typography,  } from '@mui/material'
+import { Box, Button, FormControlLabel, Modal, Radio, RadioGroup, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
-import { Console } from 'winston/lib/winston/transports'
 
-const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
+const DateQuestion = ({ question }: {question: Question, id: string}) => {
 
   const [ open, setOpen ] = React.useState(false)
   const [ choice, setChoice ] = React.useState('')
@@ -20,7 +19,6 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
 
   }
   
-  const questionValue =  question.value ? question.value : question.id
   
   const style = {
     position: 'absolute',

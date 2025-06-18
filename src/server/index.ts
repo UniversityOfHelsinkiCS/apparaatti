@@ -1,16 +1,14 @@
 import path from 'path'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { connectToDatabase, sequelize } from './db/connection.ts'
+import { connectToDatabase } from './db/connection.ts'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
 
 import router from './routes/router.ts'
 
-import { seed } from './test/seed.ts'
-import { REDIS_URL, SESSION_SECRET, OIDC_AUTHORIZATION_URL, OIDC_ISSUER, OIDC_TOKEN_URL, OIDC_USERINFO_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, UPDATER_CRON_ENABLED, inDevelopment } from './util/config.ts'
-import { createClient } from 'redis'
+import { SESSION_SECRET, UPDATER_CRON_ENABLED, inDevelopment } from './util/config.ts'
 import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'

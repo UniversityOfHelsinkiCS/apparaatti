@@ -1,4 +1,3 @@
-import Cur from '../server/db/models/cur'
 
 export type LocalizedString = Partial<{
   fi: string;

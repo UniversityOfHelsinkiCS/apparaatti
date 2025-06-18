@@ -12,7 +12,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
 
   const variant = question.variants[0]
 
-  const questionValue =  question.value ? question.value : question.id
+
 
   const style = {
     position: 'absolute',

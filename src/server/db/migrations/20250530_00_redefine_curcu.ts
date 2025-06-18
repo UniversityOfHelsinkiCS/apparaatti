@@ -1,9 +1,6 @@
-import { DataTypes, JSONB } from 'sequelize'
+import { DataTypes } from 'sequelize'
 
-import { sequelize, type Migration } from '../connection.ts'
-import Cur from '../models/cur.ts'
-import Cu from '../models/cu.ts'
-import CurCu from '../models/curCu.ts'
+import { type Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {  
   await queryInterface.createTable('cur_cu', {

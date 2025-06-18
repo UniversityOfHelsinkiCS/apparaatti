@@ -1,5 +1,5 @@
 import { DataTypes, JSONB } from 'sequelize'
-import { sequelize, type Migration } from '../connection.ts'
+import { type Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {  
   await queryInterface.createTable('studyrights', {

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Box, MenuItem, Select, Typography } from '@mui/material'
 
 const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
   const [selectedPhase, setSelectedPhase] = useState('')

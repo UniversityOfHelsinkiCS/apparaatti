@@ -1,6 +1,5 @@
 
 import { fetchCoursesAndResponsibilities } from './courses.ts'
-import { fetchEnrolments } from './enrolments.ts'
 import fetchOrganisations from './organisations.ts'
 import { fetchStudyRights } from './studyRights.ts'
 import { fetchUsers } from './users.ts'

@@ -63,7 +63,6 @@ export const dateObjToPeriod = (dateObj: Date) => {
 //returns closest period in the future given the string
 export const closestPeriod = (name: string = '') => {
   const date = new Date()
-  const year = date.getFullYear().toString()
   const studyYears = studyPeriods.years
   // console.log('years', studyYears)
   

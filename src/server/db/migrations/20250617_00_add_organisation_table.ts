@@ -1,4 +1,4 @@
-import { DataTypes, Sequelize } from 'sequelize'
+import { DataTypes } from 'sequelize'
 import type { Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {

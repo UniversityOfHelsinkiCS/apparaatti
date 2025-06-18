@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, FormControl, TextField } from '@mui/material'
+import { Box, Button, FormControl } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'

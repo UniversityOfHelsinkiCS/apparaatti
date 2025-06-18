@@ -1,15 +1,13 @@
 import express from 'express'
 import { AnswerSchema } from '../../common/validators.ts'
-import Answer from '../db/models/answer.ts'
-import User from '../db/models/user.ts'
+
 import passport from 'passport'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
 import Cur from '../db/models/cur.ts'
-import { json, Op } from 'sequelize'
+import { Op } from 'sequelize'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
-import StudyRight from '../db/models/studyRight.ts'
 import { getStudyData } from '../util/studydata.ts'
 
 const router = express.Router()
@@ -22,14 +20,6 @@ router.get('/form/1', async (_req, res) => {
   res.json(form)
 })
 
-async function saveAnswer(answerData: any, user: User) {
-  const answer = await Answer.create({
-    answer: answerData,
-    userId: user.id,
-    formId: 1,
-  })
-  return answer
-}
 
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
@@ -69,11 +59,6 @@ router.get('/user/studydata', async (req, res) => {
   }
   const studydata = await getStudyData(req.user)
 
-  const mockStudyData = {
-    phase1Data: [{id: 'id123', code: 'code123', name: {fi: 'Matemaattis luonnontieteellinen'}}],
-    phase2Data:  []
-    //phase2Data: [{id: 'id321', code: 'code321', name: {fi: "Biologian maisteri"}}]
-  }
   res.json(studydata)
 })
 

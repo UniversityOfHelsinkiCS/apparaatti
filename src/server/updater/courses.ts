@@ -1,62 +1,15 @@
 
 import type {
-  ActivityPeriod,
-  SisuCourseUnit,
   SisuCourseWithRealization,
 } from './types.ts'
 import { mangleData } from './mangleData.ts'
 
-import { safeBulkCreate } from './util.ts'
 import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
-import { sequelize } from '../db/connection.ts'
 // Find the newest course unit that has started before the course realisation
-const getCourseUnit = (
-  courseUnits: SisuCourseUnit[],
-  activityPeriod: ActivityPeriod
-) => {
-  let courseUnit = courseUnits[0] // old default
 
-  const { startDate: realisationStartDate } = activityPeriod
-
-  courseUnits.sort((a, b) => {
-    const { startDate: aStartDate } = a.validityPeriod
-    const { startDate: bStartDate } = b.validityPeriod
-
-    if (!aStartDate || !bStartDate) return 0
-
-    return Date.parse(aStartDate) - Date.parse(bStartDate)
-  })
-
-  courseUnit =
-    courseUnits.find(({ validityPeriod }) => {
-      const { startDate } = validityPeriod
-
-      if (!startDate) return false
-
-      return Date.parse(realisationStartDate) > Date.parse(startDate)
-    }) ?? courseUnit
-
-  return courseUnit
-}
-
-const courseUnitsOf = ({ courseUnits }: any) => {
-  const relevantFields = courseUnits.map((unit) => ({
-    code: unit.code,
-    organisations: unit.organisations,
-  }))
-
-  // take only unique values
-  return relevantFields.reduce((acc, curr) => {
-    const found = acc.find((item) => item.code === curr.code)
-    if (!found) {
-      acc.push(curr)
-    }
-    return acc
-  }, [])
-}
 
 const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
   const curs: CourseRealization[] = realisations.map((realisation) => {
@@ -84,7 +37,7 @@ const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) 
 
 const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
   const cus = realisations.map((realisation) => {
-    const { id, name, courseUnits, activityPeriod } = realisation
+    const { courseUnits } = realisation
     return courseUnits
   })
     .flat().map((courseUnit: any) => {
@@ -112,7 +65,7 @@ const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) =
 
 const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
   const CourseUnitIdsOfRealization = realisations.map((realisation) => {
-    const { id, courseUnits } = realisation
+    const { id } = realisation
     const courseUnitIds = realisation.courseUnits.map((unit) => unit.id)
 
     return({

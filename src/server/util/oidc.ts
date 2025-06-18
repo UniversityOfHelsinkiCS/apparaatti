@@ -3,19 +3,9 @@ import passport from 'passport'
 
 
 import User from '../db/models/user.ts'
-import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI, OIDC_AUTHORIZATION_URL, OIDC_TOKEN_URL, OIDC_USERINFO_URL } from './config.ts'
-import { response } from 'express'
+import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
 
 
-type OpenIDAttributes = {
-  uid: string
-  hyPersonSisuId: string
-  given_name: string
-  family_name: string
-  schacDateOfBirth: string
-  email: string
-  hyGroupCn: string[]
-}
 
 
 const params = {
@@ -65,7 +55,7 @@ const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (er
     updatedAt: new Date(),
   } as User
 
-  const [_, created] = await User.upsert({
+  const [_] = await User.upsert({
     ...user,
   })
 

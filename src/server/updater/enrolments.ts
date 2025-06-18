@@ -3,11 +3,6 @@ import _ from 'lodash'
 import { mangleData } from './mangleData.ts'
 
 
-interface SisuEnrolment {
-  courseId: string
-  courseUnitRealisationId: string
-  personId: string
-}
 
 export const fetchEnrolments = async () => {
   const getDataSince = new Date()

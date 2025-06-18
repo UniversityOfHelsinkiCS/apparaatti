@@ -20,11 +20,6 @@ const checkTimeout = (start: number) => {
   return true
 }
 
-const checkTimeoutSmall = (start: number) => {
-  if (Date.now() - start > 1_000)
-    throw new Error('Updater time limit exceeded!')
-  return true
-}
 
 /**
  * mangle === mangel === mankeloida in Finnish. Usually means 'to do some heavy processing on data to transform it into another format'.

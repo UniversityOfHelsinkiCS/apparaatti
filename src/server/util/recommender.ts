@@ -3,7 +3,7 @@
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
-import { readCodeData, readCsvData } from './dataImport.ts'
+import { readCodeData } from './dataImport.ts'
 import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 
@@ -109,7 +109,6 @@ async function calculateUserDistances(userCoordinates: any, availableCourses: an
 
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
-  const search = 'KK-'
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
       courseCode: courseCodeStrings//{[Op.like]: `${search}%`},
@@ -157,7 +156,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
 }
 
 
-async function getRecommendations(userCoordinates: any, answerData, user) {  
+async function getRecommendations(userCoordinates: any, answerData, _user) {  
   console.log(userCoordinates)
   const startBench = Date.now()
   

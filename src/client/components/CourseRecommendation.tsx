@@ -1,5 +1,5 @@
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
-import { Box, Button, Container, Grid, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 
 const CourseRecommendation = ({ course }: { course: CourseRecommendationType }) => {
   if (!course) return null

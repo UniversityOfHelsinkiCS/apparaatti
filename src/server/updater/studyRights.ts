@@ -1,6 +1,4 @@
 import StudyRight from '../db/models/studyRight.ts'
-import User from '../db/models/user.ts'
-import { importerClient } from './importerClient.ts'
 import { mangleData } from './mangleData.ts'
 
 

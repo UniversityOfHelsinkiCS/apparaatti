@@ -17,9 +17,6 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
     setChoice(id)
 
   }
-
-  const questionValue =  question.value ? question.value : question.id
-
   const style = {
     position: 'absolute',
     top: '50%',
