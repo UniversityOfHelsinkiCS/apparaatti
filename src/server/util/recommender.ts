@@ -14,7 +14,7 @@ const getStudyYearFromPeriod = (id: string) => {
   const m = d.getMonth() + 1
 
   if (m < 9) {
-    //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
+    //kevät (jan-aug)  //voi alka jo elokuun lopulla
     if (id === 'intensive_3_previous') {
       return String(y - 1)
     } else {
