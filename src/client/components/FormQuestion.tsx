@@ -4,13 +4,21 @@ import InfoIcon from '@mui/icons-material/Info'
 import { Question  } from '../../common/types.tsx'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
-const FormQuestion = ({ question }: { question: Question }) => {
+const FormQuestion = ({ question, languageId }: { question: Question, languageId: string }) => {
 
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const variant = question.variants[0]
+  const pickVariant = () => {
+    if (languageId === "2") {
+      return question.variants[1]
+    } else {
+      return question.variants[0]
+    }
+  }
+
+  const variant = pickVariant()
 
 
 

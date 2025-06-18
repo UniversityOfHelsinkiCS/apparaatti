@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import { Question  } from '../../common/types.ts'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
-const LanguageQuestion = ({ question }: { question: Question }) => {
+const LanguageQuestion = ({ question, getLanguageId }: { question: Question, getLanguageId: (id: string) => void }) => {
 
   const [open, setOpen] = React.useState(false)
   const [ choice, setChoice ] = React.useState('')
@@ -15,6 +15,7 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
 
   const handleChoice = (id: string) => {
     setChoice(id)
+    getLanguageId(id)
 
   }
   const style = {

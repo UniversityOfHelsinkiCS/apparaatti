@@ -50,6 +50,14 @@ const questions = [
         { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
       ],
       question: {fi: 'Valmistutko lähiaikoina?'},
+    },
+  {
+      name: 'onlyFi',
+      options: [
+        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+      ],
+      question: {fi: 'Valmistutko lähiaikoina (Suomi kysymys)?'},
     }]
   },
 
@@ -123,22 +131,33 @@ const questions = [
   }, */
 ]
 
-const renderFormQuestion = (key, question) => {
+
+
+const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {
+
+
+  const [ language, setLanguage ] = React.useState("")
+
+
+  const renderFormQuestion = (key, question) => {
   switch(question.type){
   case 'date':
     //console.log('date')
     return <DateQuestion key={key} question={question} id={key} />
   case 'multi':
     //console.log("multi")
-    return  <FormQuestion key={key} question={question} />
+    return  <FormQuestion key={key} question={question} languageId={language}/>
   case 'language':
-    return <LanguageQuestion key={key} question= {question}/>
+    return <LanguageQuestion key={key} question= {question} getLanguageId={getLanguageId}/>
   default:
     return <p>Unknown question type</p>
   }
 }
 
-const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {
+  const getLanguageId= (id: string) => {
+    console.log(id)
+    setLanguage(id)
+  }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault()
     const formData = new FormData(ev.currentTarget)
@@ -147,6 +166,7 @@ const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormDat
 
   return (
     <form onSubmit={handleSubmit}>
+      {language}
       <Box
         sx={{
           display: 'flex',
