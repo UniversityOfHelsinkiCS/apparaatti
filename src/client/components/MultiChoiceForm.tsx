@@ -75,7 +75,7 @@ const questions = [
     }]
   },
 
-   /*
+  /*
   {
     id: '4',
     type: 'multi',
