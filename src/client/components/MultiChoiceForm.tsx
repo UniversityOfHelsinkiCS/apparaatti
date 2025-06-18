@@ -8,59 +8,51 @@ const questions = [
     id: 'study-period',
     type: 'date',
     explanation: 'sit amet, consectetur adipiscing elit.',
-    question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
-    options: [
-      { id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' } },
-      { id: 'period_1', name: { fi: '1. periodi' } },
-      { id: 'period_2', name: { fi: '2. periodi' } },
-      { id: 'period_3', name: { fi: '3. periodi' } },
-      { id: 'period_4', name: { fi: '4. periodi' } },
-      { id: 'intensive_3', name: { fi: 'kesä 26' } },
-    ],
+
+
+    variants: [{    
+      name: "default",
+      question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
+      options: [
+        { id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' } },
+        { id: 'period_1', name: { fi: '1. periodi' } },
+        { id: 'period_2', name: { fi: '2. periodi' } },
+        { id: 'period_3', name: { fi: '3. periodi' } },
+        { id: 'period_4', name: { fi: '4. periodi' } },
+        { id: 'intensive_3', name: { fi: 'kesä 26' } },
+      ]
+    ,}]
   },
   {
     id: 'lang-1',
     type: 'multi',
 
-    question: { fi: 'Mistä kielestä haet kursseja?' },
-    options: [
-      { id: '1', name: { fi: 'ei valintaa' } },
-      { id: '2', name: { fi: 'Suomi' } },
-      { id: '3', name: { fi: 'Ruotsi' } },
-      { id: '4', name: { fi: 'Englanti' } },
-    ]
+    variants: [{
+      name: "default",
+      question: { fi: 'Mistä kielestä haet kursseja?' },
+      options: [
+        { id: '1', name: { fi: 'ei valintaa' } },
+        { id: '2', name: { fi: 'Suomi' } },
+        { id: '3', name: { fi: 'Ruotsi' } },
+        { id: '4', name: { fi: 'Englanti' } },
+      ]
+    }]
   },
   {
     id: '2',
     type: 'multi',
-    options: [
-      { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-      { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-    ],
-    question: {fi: 'Valmistutko lähiaikoina?'},
-    variants: {
-      default: {
-        id: '1',
-        name:'default_texts',
-        question: { fi: 'Valmistutko lähiaikoina?' },
-        options: [
-          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-        ],
-      },
-      onlyFi: {
-        id: '2',
-        name: 'onlyFi_texts',
-        question: { fi: 'Valmistutko lähiaikoina2?' },
-        options: [
-          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-        ],
-      }
-    }
+
+    variants: [{
+      name: "default",
+      options: [
+        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+      ],
+      question: {fi: 'Valmistutko lähiaikoina?'},
+  }]
   },
 
-  {
+ /*  {
     id: '3',
     type: 'multi',
     question: { fi: 'Koetko häiritsevää jännitystä tai pelkoa kielikursseilla?' },
@@ -127,7 +119,7 @@ const questions = [
       { id: '2', name: { fi: 'ei' } },
       { id: '3', name: { fi: 'kyllä' } },
     ],
-  },
+  }, */
 ]
 
 const renderFormQuestion = (key, question) => {

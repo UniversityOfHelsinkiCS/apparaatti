@@ -13,6 +13,8 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const variant = question.variants[0]
+
   const handleChoice = (id: string) => {
     setChoice(id)
 
@@ -43,7 +45,7 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
         gutterBottom 
         sx={{ fontSize: '1rem', width: 'auto' }}
       >
-        {question.question.fi}
+        {variant.question.fi}
         <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
       </Typography>
 
@@ -67,7 +69,7 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
 
       <RadioGroup name={question.id}>
 
-        {question.options.map((option) => (
+        {variant.options.map((option) => (
           <FormControlLabel
             onClick={() => handleChoice(option.id)}
             key={option.id}

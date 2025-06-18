@@ -10,6 +10,8 @@ const FormQuestion = ({ question }: { question: Question }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const variant = question.variants[0]
+
   const questionValue =  question.value ? question.value : question.id
 
   const style = {
@@ -32,7 +34,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
         gutterBottom 
         sx={{ fontSize: '1rem', width: 'auto' }}
       >
-        {question.question.fi}
+        {variant.question.fi}
        
         <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
       </Typography>
@@ -55,7 +57,7 @@ const FormQuestion = ({ question }: { question: Question }) => {
       </Modal>
 
       <RadioGroup name={question.id}>
-        {question.options.map((option) => (
+        {variant.options.map((option) => (
           <FormControlLabel
             key={option.id}
             value={option.id}
