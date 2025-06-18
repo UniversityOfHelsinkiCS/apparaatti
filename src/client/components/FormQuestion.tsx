@@ -11,8 +11,12 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
   const handleClose = () => setOpen(false)
 
   const pickVariant = () => {
-    if (languageId === "2") {
-      return question.variants[1]
+    if (languageId === '2') {
+      if (question.variants[1]) {
+        return question.variants[1]
+      }else {
+        return question.variants[0]
+      }
     } else {
       return question.variants[0]
     }

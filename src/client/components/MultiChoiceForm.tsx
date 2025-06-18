@@ -51,7 +51,7 @@ const questions = [
       ],
       question: {fi: 'Valmistutko lähiaikoina?'},
     },
-  {
+    {
       name: 'onlyFi',
       options: [
         { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
@@ -61,15 +61,21 @@ const questions = [
     }]
   },
 
-  /*  {
+  {
     id: '3',
     type: 'multi',
-    question: { fi: 'Koetko häiritsevää jännitystä tai pelkoa kielikursseilla?' },
-    options: [
-      { id: '1', name: { fi: 'En niin että se häiritsisi opiskelua' } },
-      { id: '2', name: { fi: 'Jännittäminen/Pelko häiritsee merkittävästi opiskeluani' } },
-    ],
+
+    variants: [{
+      name: 'default',
+      options: [
+        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+      ],
+      question: {fi: 'Mikä on suosimasi opetusmuoto?'},
+    }]
   },
+
+   /*
   {
     id: '4',
     type: 'multi',
@@ -136,23 +142,23 @@ const questions = [
 const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {
 
 
-  const [ language, setLanguage ] = React.useState("")
+  const [ language, setLanguage ] = React.useState('')
 
 
   const renderFormQuestion = (key, question) => {
-  switch(question.type){
-  case 'date':
+    switch(question.type){
+    case 'date':
     //console.log('date')
-    return <DateQuestion key={key} question={question} id={key} />
-  case 'multi':
+      return <DateQuestion key={key} question={question} id={key} />
+    case 'multi':
     //console.log("multi")
-    return  <FormQuestion key={key} question={question} languageId={language}/>
-  case 'language':
-    return <LanguageQuestion key={key} question= {question} getLanguageId={getLanguageId}/>
-  default:
-    return <p>Unknown question type</p>
+      return  <FormQuestion key={key} question={question} languageId={language}/>
+    case 'language':
+      return <LanguageQuestion key={key} question= {question} getLanguageId={getLanguageId}/>
+    default:
+      return <p>Unknown question type</p>
+    }
   }
-}
 
   const getLanguageId= (id: string) => {
     console.log(id)
