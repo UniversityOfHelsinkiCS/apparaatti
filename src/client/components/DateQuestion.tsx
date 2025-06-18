@@ -9,7 +9,7 @@ const DateQuestion = ({ question, id }: {question: Question, id: string}) => {
 
   const [ open, setOpen ] = React.useState(false)
   const [ choice, setChoice ] = React.useState('')
-  const [ year, setYear ] = React.useState('')
+  //const [ year, setYear ] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 

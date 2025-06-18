@@ -7,10 +7,16 @@ import React from 'react'
 const LanguageQuestion = ({ question }: { question: Question }) => {
 
   const [open, setOpen] = React.useState(false)
+  const [ choice, setChoice ] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   const variant = question.variants[0]
+
+    const handleChoice = (id: string) => {
+    setChoice(id)
+
+  }
 
   const questionValue =  question.value ? question.value : question.id
 
@@ -38,7 +44,7 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
        
         <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
       </Typography>
-
+      {choice}
     
       <Modal
         open={open}
@@ -59,6 +65,7 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
           <FormControlLabel
+            onClick={() => handleChoice(option.id)}
             key={option.id}
             value={option.id}
             control={
@@ -83,5 +90,6 @@ const LanguageQuestion = ({ question }: { question: Question }) => {
     </Box>
   )
 }
+
 
 export default LanguageQuestion
