@@ -13,7 +13,7 @@
     "lint:fix:all": "eslint 'src/**/*.{ts,tsx}' --fix && prettier --write 'src/**/*.{ts,tsx,json,css,md}'",
     "format": "prettier --write '*.{ts,json,css,md}'",
     "build": "vite build",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "prettier": {
     "trailingComma": "es5",
