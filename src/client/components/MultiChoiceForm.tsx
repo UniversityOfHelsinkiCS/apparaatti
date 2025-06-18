@@ -3,6 +3,7 @@ import { Box, Button, FormControl, TextField } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
+import LanguageQuestion from './LanguageQuestion.tsx'
 const questions = [
   {
     id: 'study-period',
@@ -25,7 +26,7 @@ const questions = [
   },
   {
     id: 'lang-1',
-    type: 'multi',
+    type: 'language',
 
     variants: [{
       name: "default",
@@ -130,6 +131,8 @@ const renderFormQuestion = (key, question) => {
   case 'multi':
     //console.log("multi")
     return  <FormQuestion key={key} question={question} />
+  case 'language':
+    return <LanguageQuestion key={key} question= {question}/>
   default:
     return <p>Unknown question type</p>
   }
