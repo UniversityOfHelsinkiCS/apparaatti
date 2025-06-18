@@ -6,7 +6,7 @@ import { DATABASE_URL } from '../util/config.ts'
 
 const DB_CONNECTION_RETRY_LIMIT = 10
 
-if(DATABASE_URL === ''){
+if (DATABASE_URL === '') {
   console.log('database url not set!')
 }
 
@@ -29,7 +29,6 @@ const runMigrations = async () => {
 const testConnection = async () => {
   await sequelize.authenticate()
   await runMigrations()
-
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

@@ -1,5 +1,3 @@
-
-
 import logger from '../util/logger.ts'
 import { fetchData } from './importerClient.ts'
 import * as redis from '../util/redis.ts'
@@ -7,7 +5,6 @@ import { IMPORTER_URL } from '../util/config.ts'
 
 const logError = (message: string, error: Error) => {
   logger.error(`[UPDATER] ${message} ${error.name}, ${error.message}`)
-  
 }
 
 /**
@@ -19,7 +16,6 @@ const checkTimeout = (start: number) => {
     throw new Error('Updater time limit exceeded!')
   return true
 }
-
 
 /**
  * mangle === mangel === mankeloida in Finnish. Usually means 'to do some heavy processing on data to transform it into another format'.
@@ -40,7 +36,7 @@ export const mangleData = async <T = object>(
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const offsetKey = `${url}-offset`
   const start = Date.now()
-  let requestStart = null   
+  let requestStart = null
   let loopStart = Date.now()
 
   let offset = Number(await redis.get(offsetKey))

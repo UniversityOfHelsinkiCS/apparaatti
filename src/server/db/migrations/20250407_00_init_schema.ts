@@ -1,6 +1,6 @@
 import { DataTypes, JSONB, STRING } from 'sequelize'
 
-import type{ Migration } from '../connection.ts'
+import type { Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.createTable('users', {
@@ -31,7 +31,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     user_id: {
       type: DataTypes.STRING,
@@ -39,7 +39,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
     course_realisation_id: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -59,7 +59,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
     name: {
       type: JSONB,
-      allowNull: false
+      allowNull: false,
     },
     start_date: {
       type: DataTypes.DATE,
@@ -87,15 +87,15 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
     course_code: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     group_id: {
       type: STRING,
-      allowNull: true
+      allowNull: true,
     },
     name: {
       type: JSONB,
-      allowNull: false
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -116,11 +116,11 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
     cur_id: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     cu_id: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -131,7 +131,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   })
-  
+
   await queryInterface.createTable('answers', {
     id: {
       type: DataTypes.INTEGER,
@@ -141,11 +141,11 @@ export const up: Migration = async ({ context: queryInterface }) => {
     },
     answer: {
       type: JSONB,
-      allowNull: false
+      allowNull: false,
     },
     form_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     user_id: {
       type: DataTypes.STRING,

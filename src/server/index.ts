@@ -8,22 +8,33 @@ import passport from 'passport'
 
 import router from './routes/router.ts'
 
-import { SESSION_SECRET, UPDATER_CRON_ENABLED, inDevelopment } from './util/config.ts'
+import {
+  SESSION_SECRET,
+  UPDATER_CRON_ENABLED,
+  inDevelopment,
+} from './util/config.ts'
 import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
 
-redis.on('ready', () => {console.log('connected to redis')}).connect().catch(console.error)
+redis
+  .on('ready', () => {
+    console.log('connected to redis')
+  })
+  .connect()
+  .catch(console.error)
 
 const app = express()
-app.use(session({
-  secret: SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: new RedisStore({client: redis}),
-}))
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: new RedisStore({ client: redis }),
+  })
+)
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -34,7 +45,9 @@ console.log(process.env.NODE_ENV, 'NODE_ENV')
 if (inDevelopment) app.use(mockUserMiddleware)
 
 app.use('/api', router)
-app.use('/api/ping', (_req, res) => { res.send('pong') })
+app.use('/api/ping', (_req, res) => {
+  res.send('pong')
+})
 app.use('/api', (_, res) => {
   res.sendStatus(404)
 })
@@ -53,11 +66,11 @@ app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   //  await seed()
 
-  if (UPDATER_CRON_ENABLED === false){
+  if (UPDATER_CRON_ENABLED === false) {
     await setupAuthentication()
   }
 
-  if(UPDATER_CRON_ENABLED){
+  if (UPDATER_CRON_ENABLED) {
     await setupCron()
     console.log('Cron jobs started')
   }

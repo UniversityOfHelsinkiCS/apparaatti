@@ -5,7 +5,6 @@ import type { PartialRecord } from './types.ts'
 const logError = (message: string, error: Error) => {
   console.log(message)
   console.log(error)
-
 }
 
 type AllowedBulkCreateOptionField =

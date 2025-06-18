@@ -20,7 +20,6 @@ router.get('/form/1', async (_req, res) => {
   res.json(form)
 })
 
-
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
   console.log(answerData)
@@ -37,10 +36,13 @@ router.post('/form/1/answer', async (req, res) => {
 
 router.get('/login', passport.authenticate('oidc'))
 
-router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), async (req, res) => {
-  res.redirect('/')
-})
-
+router.get(
+  '/login/callback',
+  passport.authenticate('oidc', { failureRedirect: '/' }),
+  async (req, res) => {
+    res.redirect('/')
+  }
+)
 
 router.get('/user', async (req, res) => {
   if (!req.user) {
@@ -49,7 +51,6 @@ router.get('/user', async (req, res) => {
   }
   res.json(req.user)
 })
-
 
 router.get('/user/studydata', async (req, res) => {
   if (!req.user) {
@@ -67,10 +68,6 @@ router.get('/fail', async (_req, res) => {
   })
 })
 
-
-
-
-
 router.get('/logout', async (req, res, next) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
@@ -79,12 +76,10 @@ router.get('/logout', async (req, res, next) => {
 
   req.logout((err) => {
     if (err) return next(err)
-    res.redirect('/')  
+    res.redirect('/')
   })
 
   res.redirect('/')
-
-  
 })
 router.get('/cur/debug', async (req, res) => {
   if (!req.user) {
@@ -95,23 +90,22 @@ router.get('/cur/debug', async (req, res) => {
   const realisations = await Cur.findAll({
     include: {
       model: Cu,
-      required: true
-    }
+      required: true,
+    },
   })
 
   res.json(realisations)
 })
-
 
 router.get('/cur', async (req, res) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const { name } = req.query 
+  const { name } = req.query
 
   const nameQuery = name
-    ? { 
+    ? {
       [Op.or]: [
         { 'name.fi': { [Op.like]: `%${name}%` } },
         { 'name.en': { [Op.like]: `%${name}%` } },
@@ -120,7 +114,7 @@ router.get('/cur', async (req, res) => {
     }
     : {}
 
-  const curs = await Cur.findAll({where: nameQuery})
+  const curs = await Cur.findAll({ where: nameQuery })
   res.json(curs)
 })
 
@@ -155,16 +149,14 @@ router.get('/cu', async (req, res) => {
   res.json(cus)
 })
 
-
 router.get('/curcu', async (req, res) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
-  }  
+  }
 
   const curcus = await CurCu.findAll()
   res.json(curcus)
 })
-
 
 export default router

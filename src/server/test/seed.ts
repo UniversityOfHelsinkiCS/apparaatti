@@ -46,7 +46,7 @@ const seedUsers = async () => {
       id: '2',
       username: 'szmatias',
       language: 'sv',
-    }
+    },
   ])
 }
 
@@ -54,20 +54,20 @@ const seedCurs = async () => {
   await Cur.bulkCreate([
     {
       id: '1',
-      name: { 
-        fi: 'E-urheilun perusteet - Luento-opetus', 
+      name: {
+        fi: 'E-urheilun perusteet - Luento-opetus',
         en: 'Introduction to E-sports - Lectures',
-        sv: 'E-sportens grunder - Föreläsningar'
+        sv: 'E-sportens grunder - Föreläsningar',
       },
       startDate: new Date('2025-01-01'),
       endDate: new Date('2025-06-01'),
     },
     {
       id: '2',
-      name: { 
-        fi: 'E-urheilun syventävät opinnot - Luento-opetus', 
+      name: {
+        fi: 'E-urheilun syventävät opinnot - Luento-opetus',
         en: 'Advanced E-sports Studies - Lectures',
-        sv: 'Avancerade studier i e-sport - Föreläsningar'
+        sv: 'Avancerade studier i e-sport - Föreläsningar',
       },
       startDate: new Date('2025-01-01'),
       endDate: new Date('2025-06-01'),
@@ -88,7 +88,7 @@ const seedEnrolments = async () => {
     {
       userId: '2',
       courseRealisationId: '2',
-    }
+    },
   ])
 }
 
@@ -99,7 +99,7 @@ const seedCus = async () => {
       name: {
         fi: 'E-urheilun perusteet',
         en: 'Introduction to E-sports',
-        sv: 'E-sportens grunder'
+        sv: 'E-sportens grunder',
       },
       groupId: '1',
       courseCode: 'E-URHEILU-101',
@@ -109,12 +109,12 @@ const seedCus = async () => {
       name: {
         fi: 'E-urheilun syventävät opinnot',
         en: 'Advanced E-sports Studies',
-        sv: 'Avancerade studier i e-sport'
+        sv: 'Avancerade studier i e-sport',
       },
       groupId: '2',
       courseCode: 'E-URHEILU-102',
     },
-  ])  
+  ])
 }
 
 const seedCurCus = async () => {
@@ -181,8 +181,18 @@ const seedForm = async () => {
         },
         type: 'select',
         options: [
-          { id: '1', name: { fi: 'Kyllä suunnitelen valmistuvani vuoden sisällä', sv: '', en: '' } },
-          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä', sv: '', en: '' } },
+          {
+            id: '1',
+            name: {
+              fi: 'Kyllä suunnitelen valmistuvani vuoden sisällä',
+              sv: '',
+              en: '',
+            },
+          },
+          {
+            id: '2',
+            name: { fi: 'En ole valmistumassa vuoden sisällä', sv: '', en: '' },
+          },
         ],
       },
       {
@@ -194,8 +204,22 @@ const seedForm = async () => {
         },
         type: 'select',
         options: [
-          { id: '1', name: { fi: 'En niin että se häiritsisi opiskelua', sv: '', en: '' } },
-          { id: '2', name: { fi: 'Jännittäminen/Pelko häiritsee merkittävästi opiskeluani ', sv: '', en: '' } },
+          {
+            id: '1',
+            name: {
+              fi: 'En niin että se häiritsisi opiskelua',
+              sv: '',
+              en: '',
+            },
+          },
+          {
+            id: '2',
+            name: {
+              fi: 'Jännittäminen/Pelko häiritsee merkittävästi opiskeluani ',
+              sv: '',
+              en: '',
+            },
+          },
         ],
       },
       {
@@ -208,7 +232,10 @@ const seedForm = async () => {
         type: 'select',
         options: [
           { id: '1', name: { fi: 'täysin etäopiskelu', sv: '', en: '' } },
-          { id: '2', name: { fi: 'etäopiskelu ja lähiopetus', sv: '', en: '' } },
+          {
+            id: '2',
+            name: { fi: 'etäopiskelu ja lähiopetus', sv: '', en: '' },
+          },
           { id: '3', name: { fi: 'täysin lähiopetus', sv: '', en: '' } },
         ],
       },
@@ -222,8 +249,22 @@ const seedForm = async () => {
         type: 'select',
         options: [
           { id: '1', name: { fi: 'itsenäinen ajan käyttö', sv: '', en: '' } },
-          { id: '2', name: { fi: 'itsenäinen, mutta kurssilla mahdollisuus osallistua ohjattuun toimintaan', sv: '', en: '' } },
-          { id: '3', name: { fi: 'kurssi asettaa tiukat säännöt aikataululle', sv: '', en: '' } },
+          {
+            id: '2',
+            name: {
+              fi: 'itsenäinen, mutta kurssilla mahdollisuus osallistua ohjattuun toimintaan',
+              sv: '',
+              en: '',
+            },
+          },
+          {
+            id: '3',
+            name: {
+              fi: 'kurssi asettaa tiukat säännöt aikataululle',
+              sv: '',
+              en: '',
+            },
+          },
         ],
       },
       {
@@ -235,8 +276,14 @@ const seedForm = async () => {
         },
         type: 'select',
         options: [
-          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia', sv: '', en: '' } },
-          { id: '2', name: { fi: 'En koe tarvitsevani kertausta', sv: '', en: '' } },
+          {
+            id: '1',
+            name: { fi: 'Kaipaisin kertausta ennen kurssia', sv: '', en: '' },
+          },
+          {
+            id: '2',
+            name: { fi: 'En koe tarvitsevani kertausta', sv: '', en: '' },
+          },
         ],
       },
       {
@@ -280,9 +327,7 @@ const seedForm = async () => {
           { id: '2', name: { fi: 'ei', sv: '', en: '' } },
           { id: '3', name: { fi: 'kyllä', sv: '', en: '' } },
         ],
-      }
-
-    
+      },
     ],
   })
 }

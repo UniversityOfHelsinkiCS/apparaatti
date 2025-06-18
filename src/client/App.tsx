@@ -9,8 +9,6 @@ function App() {
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
 
- 
-
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -19,8 +17,7 @@ function App() {
     },
   })
 
-
-  const {data: studyData, isLoading: isStudyDataLoading} = useQuery({
+  const { data: studyData, isLoading: isStudyDataLoading } = useQuery({
     queryKey: ['studyData'],
     queryFn: async () => {
       const res = await fetch('/api/user/studydata')
@@ -64,11 +61,15 @@ function App() {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ 
-        backgroundColor: '#f5f5f5', 
-        color: 'black', 
-        boxShadow: 'none', 
-        borderBottom: '1px solid #e0e0e0' }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: '#f5f5f5',
+          color: 'black',
+          boxShadow: 'none',
+          borderBottom: '1px solid #e0e0e0',
+        }}
+      >
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Apparaatti
@@ -77,7 +78,7 @@ function App() {
             <>
               <Button color="inherit">Tervetuloa, {user.username}</Button>
               <Button color="inherit" href="/api/logout">
-              Logout
+                Logout
               </Button>
             </>
           ) : (
@@ -87,17 +88,23 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <Box sx={{
-        filter: isSidePanelOpen ? 'brightness(0.5)' : 'none',
-        paddingTop: 10,
-        backgroundColor: 'white',
-        minHeight: '100vh',
-        minWidth: '100vw',
-      }}>  
-        <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData}/>
-      
+      <Box
+        sx={{
+          filter: isSidePanelOpen ? 'brightness(0.5)' : 'none',
+          paddingTop: 10,
+          backgroundColor: 'white',
+          minHeight: '100vh',
+          minWidth: '100vw',
+        }}
+      >
+        <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData} />
       </Box>
-      {isSidePanelOpen && <CourseRecommendationsPanel onClose={() => setIsSidePanelOpen(false)}  recommendations={courseRecommendations}/>}
+      {isSidePanelOpen && (
+        <CourseRecommendationsPanel
+          onClose={() => setIsSidePanelOpen(false)}
+          recommendations={courseRecommendations}
+        />
+      )}
     </>
   )
 }

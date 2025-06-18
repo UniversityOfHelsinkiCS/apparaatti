@@ -1,4 +1,4 @@
-import  User  from '../db/models/user.ts'
+import User from '../db/models/user.ts'
 import { mangleData } from './mangleData.ts'
 import { safeBulkCreate } from './util.ts'
 
@@ -29,14 +29,10 @@ const usersHandler = async (users: SisuUser[]) => {
       username: user.eduPersonPrincipalName
         ? user.eduPersonPrincipalName.split('@')[0]
         : user.id,
-      studentNumber: user.studentNumber, 
+      studentNumber: user.studentNumber,
     }
   })
-  const fieldsToUpdate = [
-    'language',
-    'username',
-    'studentNumber',
-  ]
+  const fieldsToUpdate = ['language', 'username', 'studentNumber']
 
   await safeBulkCreate({
     entityName: 'User',

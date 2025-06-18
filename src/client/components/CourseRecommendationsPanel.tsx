@@ -3,7 +3,13 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import CourseRecommendation from './CourseRecommendation'
 
-const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () => void, recommendations: CourseRecommendationType[] }) => {
+const CourseRecommendationsPanel = ({
+  onClose,
+  recommendations,
+}: {
+  onClose: () => void
+  recommendations: CourseRecommendationType[]
+}) => {
   const [isClosing, setIsClosing] = useState(false)
 
   const handleClose = () => {
@@ -32,7 +38,9 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
         alignItems: 'center',
         justifyContent: 'space-between',
         transform: isClosing ? 'translateX(100%)' : 'translateX(0)',
-        animation: isClosing ? 'slide-out 0.3s forwards' : 'slide-in 0.3s forwards',
+        animation: isClosing
+          ? 'slide-out 0.3s forwards'
+          : 'slide-in 0.3s forwards',
         '@keyframes slide-in': {
           from: {
             transform: 'translateX(100%)',
@@ -78,18 +86,26 @@ const CourseRecommendationsPanel = ({ onClose, recommendations }: { onClose: () 
       >
         X
       </Button>
-      <Stack >
-        <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6}}>
+      <Stack>
+        <Typography variant="h6" sx={{ marginBottom: 2, marginTop: 6 }}>
           Ehdotetut kurssit:
         </Typography>
-        <Stack spacing={2} sx={{ maxHeight: '80vh', overflowY: 'auto', paddingLeft: 0, paddingRight: 2, paddingTop: 2, paddingBottom: 10 }}>
+        <Stack
+          spacing={2}
+          sx={{
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            paddingLeft: 0,
+            paddingRight: 2,
+            paddingTop: 2,
+            paddingBottom: 10,
+          }}
+        >
           {recommendations.map((course) => (
             <CourseRecommendation key={course.course.id} course={course} />
           ))}
         </Stack>
       </Stack>
-  
-      
     </Box>
   )
 }

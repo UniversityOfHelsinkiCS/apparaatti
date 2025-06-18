@@ -9,35 +9,30 @@ export const dateIsInPeriod = (date: Date, period) => {
 const correctedPeriod = (period: string) => {
   if (period == 'intensive_3_previous') {
     return 'intensive_3'
-  }
-  else {
+  } else {
     return period
   }
 }
 
 export const getStudyPeriod = (year: string, period: string) => {
   const newPeriod = correctedPeriod(period)
-  const studyYear = studyPeriods.years.find(y => y.start_year === year)
+  const studyYear = studyPeriods.years.find((y) => y.start_year === year)
   if (!studyYear) {
     return null
   }
-  
-  const studyPeriod = studyYear.periods.find(p => p.name === newPeriod)
+
+  const studyPeriod = studyYear.periods.find((p) => p.name === newPeriod)
   if (!studyPeriod) {
     return null
   }
-  
+
   return studyPeriod
 }
 
-
- 
-
-export const parseDate = (date: string) =>  {
+export const parseDate = (date: string) => {
   const [day, month, year] = date.split('.').map(Number)
   return new Date(year, month - 1, day)
 }
-
 
 export const dateToPeriod = (date: string) => {
   const dateObj = parseDate(date)
@@ -45,18 +40,16 @@ export const dateToPeriod = (date: string) => {
   return hits
 }
 
-
 export const dateObjToPeriod = (dateObj: Date) => {
   const hits = []
-  studyPeriods.years.forEach(year => {
+  studyPeriods.years.forEach((year) => {
     year.periods.forEach((period) => {
-      if(dateIsInPeriod(dateObj, period)){
+      if (dateIsInPeriod(dateObj, period)) {
         hits.push(period)
       }
     })
   })
 
- 
   return hits
 }
 
@@ -65,35 +58,32 @@ export const closestPeriod = (name: string = '') => {
   const date = new Date()
   const studyYears = studyPeriods.years
   // console.log('years', studyYears)
-  
-  const periods = studyYears.map(y => y.periods).flat()
+
+  const periods = studyYears
+    .map((y) => y.periods)
+    .flat()
     .filter((p) => {
-      if(name.length > 0)
-      {
+      if (name.length > 0) {
         return p.name.localeCompare(name) === 0
-      }
-      else{
+      } else {
         return true
       }
     })
   // console.log('study periods: ', periods)
- 
-  
-  const distances = periods.map((p) => {return {
-    period: p, 
-    distance: parseDate(p.start_date).getTime() - date.getTime()
-  }})
+
+  const distances = periods
+    .map((p) => {
+      return {
+        period: p,
+        distance: parseDate(p.start_date).getTime() - date.getTime(),
+      }
+    })
     .filter((p) => p.distance > 0)
     .sort((a, b) => a.distance - b.distance)
- 
-
 
   const period = distances[0]
   return period
-
 }
-
-
 
 const studyPeriods = {
   years: [
@@ -155,10 +145,10 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '5.5.2025',
           end_date: '25.8.2025', //modified to end at the 25 period I boundary
-        }
-      ]
+        },
+      ],
     },
-    { 
+    {
       start_year: '2025',
       end_year: '2026',
       periods: [
@@ -216,8 +206,8 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '4.5.2026',
           end_date: '24.8.2026', //modified to end at the 26 period I boundary
-        }
-      ]
+        },
+      ],
     },
     {
       start_year: '2026',
@@ -277,8 +267,8 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '10.5.2027',
           end_date: '31.5.2027',
-        }
-      ]
+        },
+      ],
     },
     {
       start_year: '2027',
@@ -337,9 +327,9 @@ const studyPeriods = {
         {
           name: 'intensive_3',
           start_date: '8.5.2028',
-          end_date: '28.8.2028', 
-        }
-      ]
+          end_date: '28.8.2028',
+        },
+      ],
     },
     {
       start_year: '2028',
@@ -399,8 +389,8 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '7.5.2029',
           end_date: '27.8.2029',
-        }
-      ]
+        },
+      ],
     },
     {
       start_year: '2029',
@@ -460,8 +450,8 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '6.5.2030',
           end_date: '26.8.2030',
-        }
-      ]
+        },
+      ],
     },
     {
       start_year: '2030',
@@ -521,8 +511,8 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '5.5.2031',
           end_date: '25.8.2031',
-        }
-      ]
+        },
+      ],
     },
     {
       start_year: '2031',
@@ -582,10 +572,10 @@ const studyPeriods = {
           name: 'intensive_3',
           start_date: '10.5.2032',
           end_date: '31.5.2032',
-        }
-      ]
-    }
-  ]
+        },
+      ],
+    },
+  ],
 }
 
 export default studyPeriods

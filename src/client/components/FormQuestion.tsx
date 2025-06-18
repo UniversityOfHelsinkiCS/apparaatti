@@ -1,11 +1,24 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography , Button, Modal } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+  Button,
+  Modal,
+} from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
-import { Question  } from '../../common/types.tsx'
+import { Question } from '../../common/types.tsx'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
-const FormQuestion = ({ question, languageId }: { question: Question, languageId: string }) => {
-
+const FormQuestion = ({
+  question,
+  languageId,
+}: {
+  question: Question
+  languageId: string
+}) => {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -14,8 +27,8 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
     if (languageId === '2') {
       if (question.variants[1]) {
         //return question.variants[1]
-        return question.variants.find((v) => v.name=='onlyFi')
-      }else {
+        return question.variants.find((v) => v.name == 'onlyFi')
+      } else {
         return question.variants[0]
       }
     } else {
@@ -24,8 +37,6 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
   }
 
   const variant = pickVariant()
-
-
 
   const style = {
     position: 'absolute',
@@ -40,19 +51,19 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
     p: 4,
   }
   return (
-    <Box sx={{
-      paddingTop: 4,
-    }}>
-      <Typography
-        gutterBottom 
-        sx={{ fontSize: '1rem', width: 'auto' }}
-      >
+    <Box
+      sx={{
+        paddingTop: 4,
+      }}
+    >
+      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
         {variant.question.fi}
-       
-        <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
+
+        <Button onClick={handleOpen} style={{ color: 'black' }}>
+          <InfoIcon></InfoIcon>
+        </Button>
       </Typography>
 
-    
       <Modal
         open={open}
         onClose={handleClose}
@@ -61,7 +72,7 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-          Lisätietoa
+            Lisätietoa
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {question.explanation ? question.explanation : 'Ei lisätietoa'}

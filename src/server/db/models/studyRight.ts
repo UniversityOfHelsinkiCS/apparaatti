@@ -1,12 +1,15 @@
-
-import { Model, BIGINT, STRING, JSONB, DATE, DataTypes,  } from 'sequelize'
-import type {CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { Model, BIGINT, STRING, JSONB, DATE, DataTypes } from 'sequelize'
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model<
   InferAttributes<StudyRight>,
   InferCreationAttributes<StudyRight>
->  {
+> {
   declare autoId: CreationOptional<number>
   declare id: string
   declare personId: string
@@ -42,90 +45,89 @@ StudyRight.init(
     autoId: {
       type: BIGINT,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     id: {
-      type: STRING
+      type: STRING,
     },
     personId: {
-      type: STRING
+      type: STRING,
     },
     state: {
-      type: STRING
-
+      type: STRING,
     },
     educationId: {
-      type: STRING
+      type: STRING,
     },
     organisationId: {
-      type: STRING
+      type: STRING,
     },
     modificationOrdinal: {
-      type: BIGINT
+      type: BIGINT,
     },
     documentState: {
-      type: STRING
+      type: STRING,
     },
     valid: {
-      type: JSONB
+      type: JSONB,
     },
     grantDate: {
-      type: DATE
+      type: DATE,
     },
     studyStartDate: {
-      type: DATE
+      type: DATE,
     },
     transferOutDate: {
-      type: DATE
+      type: DATE,
     },
     termRegistrations: {
-      type: JSONB
+      type: JSONB,
     },
     studyRightCancellation: {
-      type: JSONB
+      type: JSONB,
     },
     studyRightGraduation: {
-      type: JSONB
+      type: JSONB,
     },
     snapshotDateTime: {
-      type: DATE
+      type: DATE,
     },
     acceptedSelectionPath: {
-      type: JSONB
+      type: JSONB,
     },
     studyRightTransfer: {
-      type: JSONB
+      type: JSONB,
     },
     studyRightExtensions: {
-      type: JSONB
+      type: JSONB,
     },
     transferOutUniversityUrn: {
-      type: STRING
+      type: STRING,
     },
     requestedSelectionPath: {
-      type: JSONB
+      type: JSONB,
     },
     phase1MinorSelections: {
-      type: JSONB
+      type: JSONB,
     },
     phase2MinorSelections: {
-      type: JSONB
+      type: JSONB,
     },
     educationPhase1: {
-      type: JSONB
+      type: JSONB,
     },
     educationPhase2: {
-      type: JSONB
+      type: JSONB,
     },
     admissionTypeUrn: {
-      type: STRING
+      type: STRING,
     },
     createdAt: {
       type: DataTypes.DATE,
     },
     updatedAt: {
       type: DataTypes.DATE,
-    }
+    },
   },
   {
     underscored: true,
@@ -136,15 +138,15 @@ StudyRight.init(
     indexes: [
       {
         unique: true,
-        fields: ['id', 'modification_ordinal']
+        fields: ['id', 'modification_ordinal'],
       },
       {
-        fields: ['id']
+        fields: ['id'],
       },
       {
-        fields: ['person_id']
-      }
-    ]
+        fields: ['person_id'],
+      },
+    ],
   }
 )
 export default StudyRight

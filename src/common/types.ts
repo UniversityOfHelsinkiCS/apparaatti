@@ -1,60 +1,51 @@
-
 export type LocalizedString = Partial<{
-  fi: string;
-  sv: string;
-  en: string;
+  fi: string
+  sv: string
+  en: string
 }>
 
 export type Option = {
-  id: string;
-  name: LocalizedString;
+  id: string
+  name: LocalizedString
 }
-
 
 export type Question = {
-  id: string;
-  value: string;
-  type: string;
-  explanation: string;
-  variants: Variant[];
+  id: string
+  value: string
+  type: string
+  explanation: string
+  variants: Variant[]
 }
 
-export type Variant= {
-  name: string;
-  question: LocalizedString;
-  options: Option[];
+export type Variant = {
+  name: string
+  question: LocalizedString
+  options: Option[]
 }
-
 
 export type Form = {
-  id: string;
-  questions: Question[];
+  id: string
+  questions: Question[]
 }
 
-export const DIMENSIONS = [
-  'fear',
-  'teachingMethod',
-  'experience',
-] as const
+export const DIMENSIONS = ['fear', 'teachingMethod', 'experience'] as const
 
-export type Dimension = typeof DIMENSIONS[number]
+export type Dimension = (typeof DIMENSIONS)[number]
 
 export type CourseRecommendation = {
-  course: CourseRealization,
-  distance: number,
+  course: CourseRealization
+  distance: number
   courseCodes: number[]
 } & Record<Dimension, number>
 
-
 export type CourseRealization = {
-  id: string;
-  name: LocalizedString;
-  startDate: Date;
-  endDate: Date;
+  id: string
+  name: LocalizedString
+  startDate: Date
+  endDate: Date
 }
 
-
 export type CurCuRelation = {
-  cuId: string;
-  curId: string;
+  cuId: string
+  curId: string
 }

@@ -1,16 +1,14 @@
 import StudyRight from '../db/models/studyRight.ts'
 
-
-
 const studyRightsForUser = async (user: any) => {
   const studyRights = await StudyRight.findAll({
     where: {
       personId: user.id,
     },
     order: [['modificationOrdinal', 'DESC']],
-    raw: true
+    raw: true,
   })
-  if(studyRights.length === 0) {
+  if (studyRights.length === 0) {
     console.log('no study rights found for user: ', user.id)
     return []
   }
@@ -18,38 +16,41 @@ const studyRightsForUser = async (user: any) => {
   return studyRights
 }
 
-
 export const getStudyData = async (user: any) => {
-  const studyRights = await studyRightsForUser(user) as any[]
+  const studyRights = (await studyRightsForUser(user)) as any[]
   if (studyRights.length === 0) {
     console.log('No study rights found for user:', user.id)
-    return { studyPhaseName: {fi: 'Opintoa ei löytynyt'} }
+    return { studyPhaseName: { fi: 'Opintoa ei löytynyt' } }
   }
-  
 
-  const phase1EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase1)
-  const phase1StudyData = phase1EducationPhases.filter((phase) => phase !== null).map((phase) =>{
-    return {
-      id: phase.id,
-      code: phase.code,
-      name: phase.name,
-    }
-  })
+  const phase1EducationPhases = studyRights.map(
+    (studyRight) => studyRight.educationPhase1
+  )
+  const phase1StudyData = phase1EducationPhases
+    .filter((phase) => phase !== null)
+    .map((phase) => {
+      return {
+        id: phase.id,
+        code: phase.code,
+        name: phase.name,
+      }
+    })
 
-  const phase2EducationPhases = studyRights.map((studyRight) => studyRight.educationPhase2)
-  const phase2StudyData = phase2EducationPhases.filter((phase) => phase !== null).map((phase) =>{
-    return {
-      id: phase.id,
-      code: phase.code,
-      name: phase.name,
-    }
-  })
+  const phase2EducationPhases = studyRights.map(
+    (studyRight) => studyRight.educationPhase2
+  )
+  const phase2StudyData = phase2EducationPhases
+    .filter((phase) => phase !== null)
+    .map((phase) => {
+      return {
+        id: phase.id,
+        code: phase.code,
+        name: phase.name,
+      }
+    })
 
   return {
     phase1Data: phase1StudyData,
     phase2Data: phase2StudyData,
   }
 }
-
-
-

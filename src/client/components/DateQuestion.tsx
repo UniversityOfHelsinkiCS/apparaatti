@@ -1,13 +1,20 @@
 import React from 'react'
-import { Box, Button, FormControlLabel, Modal, Radio, RadioGroup, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Modal,
+  Radio,
+  RadioGroup,
+  Typography,
+} from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
 
-const DateQuestion = ({ question }: {question: Question, id: string}) => {
-
-  const [ open, setOpen ] = React.useState(false)
-  const [ choice, setChoice ] = React.useState('')
+const DateQuestion = ({ question }: { question: Question; id: string }) => {
+  const [open, setOpen] = React.useState(false)
+  const [choice, setChoice] = React.useState('')
   //const [ year, setYear ] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -16,10 +23,8 @@ const DateQuestion = ({ question }: {question: Question, id: string}) => {
 
   const handleChoice = (id: string) => {
     setChoice(id)
-
   }
-  
-  
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -33,22 +38,19 @@ const DateQuestion = ({ question }: {question: Question, id: string}) => {
     p: 4,
   }
 
-
-
   return (
-    <Box sx={{
-      paddingTop: 4,
-    }}>
-      <Typography
-        gutterBottom 
-        sx={{ fontSize: '1rem', width: 'auto' }}
-      >
+    <Box
+      sx={{
+        paddingTop: 4,
+      }}
+    >
+      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
         {variant.question.fi}
-        <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
+        <Button onClick={handleOpen} style={{ color: 'black' }}>
+          <InfoIcon></InfoIcon>
+        </Button>
       </Typography>
-
-      {choice}
-      {' '}
+      {choice}{' '}
       <Modal
         open={open}
         onClose={handleClose}
@@ -57,16 +59,14 @@ const DateQuestion = ({ question }: {question: Question, id: string}) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-          Lisätietoa
+            Lisätietoa
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {question.explanation ? question.explanation : 'Ei lisätietoa'}
           </Typography>
         </Box>
       </Modal>
-
       <RadioGroup name={question.id}>
-
         {variant.options.map((option) => (
           <FormControlLabel
             onClick={() => handleChoice(option.id)}

@@ -1,7 +1,7 @@
 import { DataTypes, JSONB } from 'sequelize'
 import { type Migration } from '../connection.ts'
 
-export const up: Migration = async ({ context: queryInterface }) => {  
+export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.createTable('studyrights', {
     auto_id: {
       type: DataTypes.BIGINT,

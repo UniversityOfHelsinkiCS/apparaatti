@@ -24,10 +24,10 @@ export const up: Migration = async ({ context: queryInterface }) => {
     updated_at: {
       type: DataTypes.DATE,
       allowNull: false,
-    }
+    },
   })
 }
 
-export const down: Migration = async ({ context: queryInterface }) =>  {
+export const down: Migration = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('organisations')
 }

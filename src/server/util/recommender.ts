@@ -11,20 +11,21 @@ const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
   //const d = new Date("December 21, 2025 01:15:00")
   const y = d.getFullYear()
-  const m = d.getMonth() +1
+  const m = d.getMonth() + 1
 
-  if (m < 9) { //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
+  if (m < 9) {
+    //kevät (jan-aug)  //voi alka jo elokuun lopulla??!!QQ
     if (id === 'intensive_3_previous') {
-      return String(y-1)
+      return String(y - 1)
     } else {
       return String(y)
     }
-
-  } else if (m > 8 && m < 13) {  //syksy (sep-dec)
+  } else if (m > 8 && m < 13) {
+    //syksy (sep-dec)
     if (id === 'intensive_3_previous') {
       return String(y)
     } else {
-      return String(y+1)
+      return String(y + 1)
     }
   }
   return ''
@@ -32,9 +33,9 @@ const getStudyYearFromPeriod = (id: string) => {
 
 function recommendCourses(answerData: any, user) {
   const userCoordinates = calculateUserCoordinates(answerData)
-  
+
   const recommendations = getRecommendations(userCoordinates, answerData, user)
-  
+
   return recommendations
 }
 
@@ -42,61 +43,55 @@ function calculateUserCoordinates(answerData: any) {
   const year = getStudyYearFromPeriod(answerData['study-period'])
   console.log(year)
   const pickedPeriod = getStudyPeriod(year, answerData['study-period'])
- 
- 
+
   const userCoordinates = {
-  //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
-    'date': new Date(parseDate(pickedPeriod?.start_date)).getTime()
+    //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
+    date: new Date(parseDate(pickedPeriod?.start_date)).getTime(),
   }
 
   return userCoordinates
 }
 
-
-function langCoordFromCode (code: string){
-  if(code.includes('KK-FI') || code.includes('KK-AIAK')){
+function langCoordFromCode(code: string) {
+  if (code.includes('KK-FI') || code.includes('KK-AIAK')) {
     return '2'
   }
-  if(code.includes('KK-RU')){
+  if (code.includes('KK-RU')) {
     return '3'
   }
-  if(code.includes('KK-EN')){
+  if (code.includes('KK-EN')) {
     return '4'
   }
 
   return '1' //default = no choice
 }
 
-async function calculateCourseDistance(course: Cur, userCoordinates: any){
+async function calculateCourseDistance(course: Cur, userCoordinates: any) {
   const dimensions = Object.keys(userCoordinates)
   // using random values for now...
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
-    'date': course.startDate.getTime()
+    date: course.startDate.getTime(),
   }
-  
 
- 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
     const courseValue = courseCoordinates[key as keyof typeof dimensions]
     return acc + Math.pow(userValue - courseValue, 2)
   }, 0.0)
 
-
   const distance = Math.sqrt(sum)
 
-
-  return {course: course, distance: distance }
+  return { course: course, distance: distance }
 }
 
-
-
-
-//returns a list of [{course, distance}] 
-async function calculateUserDistances(userCoordinates: any, availableCourses: any) {
+//returns a list of [{course, distance}]
+async function calculateUserDistances(
+  userCoordinates: any,
+  availableCourses: any
+) {
   const distanceS = new Date()
-  const distancePromises = availableCourses.map(course => {
+  const distancePromises = availableCourses.map((course) => {
     return calculateCourseDistance(course, userCoordinates)
   })
   const distances = await Promise.all(distancePromises)
@@ -106,12 +101,10 @@ async function calculateUserDistances(userCoordinates: any, availableCourses: an
   return distances
 }
 
-
-
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
-      courseCode: courseCodeStrings//{[Op.like]: `${search}%`},
+      courseCode: courseCodeStrings, //{[Op.like]: `${search}%`},
     },
   })
   /*
@@ -123,71 +116,84 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     */
 
   //probably should be a join, but ill roll with this one
-  const courseUnitIds = courseUnitsWithCodes.map(course => course.id)
+  const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
     },
-    raw: true
+    raw: true,
   })
-  
-  const wantedIds = courseRealizationIdsWithCourseUnit.map(curCu => curCu.curId)
+
+  const wantedIds = courseRealizationIdsWithCourseUnit.map(
+    (curCu) => curCu.curId
+  )
   const courseRealizationsWithCourseUnit = await Cur.findAll({
     where: {
       id: wantedIds,
     },
-    raw: true
+    raw: true,
   })
 
-  const courseRealisationsWithCourseUnits = courseRealizationsWithCourseUnit.map((cur) => {
-    return{
-      ...cur,
-      unitIds: courseRealizationIdsWithCourseUnit.filter((curcu) => curcu.curId === cur.id).map((curcu) => curcu.cuId)
+  const courseRealisationsWithCourseUnits =
+    courseRealizationsWithCourseUnit.map((cur) => {
+      return {
+        ...cur,
+        unitIds: courseRealizationIdsWithCourseUnit
+          .filter((curcu) => curcu.curId === cur.id)
+          .map((curcu) => curcu.cuId),
+      }
+    })
+
+  const courseRealisationsWithCodes = courseRealisationsWithCourseUnits.map(
+    (cur) => {
+      return {
+        ...cur,
+        courseCodes: courseUnitsWithCodes
+          .filter((cu) => cur.unitIds.includes(cu.id))
+          .map((cu) => cu.courseCode),
+      }
     }
-  })
- 
-  const courseRealisationsWithCodes = courseRealisationsWithCourseUnits.map((cur) => {
-    return{
-      ...cur,
-      courseCodes: courseUnitsWithCodes.filter((cu) => cur.unitIds.includes(cu.id)).map((cu) => cu.courseCode)
-    }
-  })
+  )
   return courseRealisationsWithCodes
 }
 
-
-async function getRecommendations(userCoordinates: any, answerData, _user) {  
+async function getRecommendations(userCoordinates: any, answerData, _user) {
   console.log(userCoordinates)
   const startBench = Date.now()
-  
-  const pickedPeriod = getStudyPeriod(getStudyYearFromPeriod(answerData['study-period']), answerData['study-period'])
-  
+
+  const pickedPeriod = getStudyPeriod(
+    getStudyYearFromPeriod(answerData['study-period']),
+    answerData['study-period']
+  )
+
   type courseCode = {
-    code: string;
+    code: string
   }
 
   const courseTimer = Date.now()
-  const courseCodes = await readCodeData() as courseCode[]
+  const courseCodes = (await readCodeData()) as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  
-  
 
+  const filteredCourseCodeStrings = courseCodeStrings.filter(
+    (code) => langCoordFromCode(code) === answerData['lang-1']
+  )
 
-  const filteredCourseCodeStrings = courseCodeStrings.filter((code) => langCoordFromCode(code) === answerData['lang-1'])
-
-  const courseData = await getRealisationsWithCourseUnitCodes(filteredCourseCodeStrings)
+  const courseData = await getRealisationsWithCourseUnitCodes(
+    filteredCourseCodeStrings
+  )
   const courseEndTimer = Date.now()
-  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
+  console.log(
+    `Execution time for course end: ${courseEndTimer - courseTimer} ms`
+  )
 
-
-  
   const distances = await calculateUserDistances(userCoordinates, courseData)
   //const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
-  
+
   const start = parseDate(pickedPeriod.start_date)
-  const sortedCourses = distances.filter((a) => a.course.startDate >= start ).sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances
+    .filter((a) => a.course.startDate >= start)
+    .sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
-  
 
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)

@@ -12,11 +12,7 @@ const organisationsHandler = async (organisations: any) => {
     return false
   })
 
-  const fieldsToUpdate = [
-    'name', 
-    'code', 
-    'parentId'
-  ]
+  const fieldsToUpdate = ['name', 'code', 'parentId']
 
   await safeBulkCreate({
     entityName: 'Organisation',

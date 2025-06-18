@@ -1,16 +1,18 @@
 import { DataTypes, Model } from 'sequelize'
-import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 /**
  * Organisation is for example:
  *  Matemaattisluonnontieteellinen H50
- * 
+ *
  * A studyright refences An organisation using organisation id
- * 
+ *
  */
-
-
 
 class Organisation extends Model<
   InferAttributes<Organisation>,
@@ -32,13 +34,13 @@ Organisation.init(
       allowNull: false,
     },
     name: {
-      type: DataTypes.JSONB
+      type: DataTypes.JSONB,
     },
     code: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     parentId: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     createdAt: {
       type: DataTypes.DATE,

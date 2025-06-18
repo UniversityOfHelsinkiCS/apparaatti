@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize'
 
 import { type Migration } from '../connection.ts'
 
-export const up: Migration = async ({ context: queryInterface }) => {  
+export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.createTable('cur_cu', {
     id: {
       type: DataTypes.INTEGER,
@@ -14,19 +14,17 @@ export const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: 'cu', 
+        model: 'cu',
         key: 'id',
       },
-    
     },
     cur_id: {
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: 'cur', 
+        model: 'cur',
         key: 'id',
       },
-    
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -37,7 +35,6 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
     },
   })
- 
 }
 
 export const down: Migration = async ({ context: queryInterface }) => {

@@ -1,4 +1,3 @@
-
 import { fetchCoursesAndResponsibilities } from './courses.ts'
 import fetchOrganisations from './organisations.ts'
 import { fetchStudyRights } from './studyRights.ts'
@@ -10,7 +9,7 @@ const runUpdater = async () => {
   await fetchCoursesAndResponsibilities()
   await fetchStudyRights()
   await fetchOrganisations()
-//  await fetchEnrolments()
+  //  await fetchEnrolments()
 }
 
 export const run = async () => {
@@ -19,7 +18,6 @@ export const run = async () => {
     await clearOffsets()
     await runUpdater()
   } catch (error) {
-    
     console.log(error)
     return
   }
@@ -28,19 +26,16 @@ export const run = async () => {
   return
 }
 
-
 export const runDev = async () => {
   console.log('running development updater')
   try {
     await clearOffsets()
-   
+
     //await fetchUsers()
     //await fetchCoursesAndResponsibilities()
     //await fetchStudyRights()
     await fetchOrganisations()
-
   } catch (error) {
-    
     console.log(error)
     return
   }

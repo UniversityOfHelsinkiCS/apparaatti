@@ -10,69 +10,83 @@ const questions = [
     type: 'date',
     explanation: 'sit amet, consectetur adipiscing elit.',
 
-
-    variants: [{    
-      name: 'default',
-      question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
-      options: [
-        { id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' } },
-        { id: 'period_1', name: { fi: '1. periodi' } },
-        { id: 'period_2', name: { fi: '2. periodi' } },
-        { id: 'period_3', name: { fi: '3. periodi' } },
-        { id: 'period_4', name: { fi: '4. periodi' } },
-        { id: 'intensive_3', name: { fi: 'kesä 26' } },
-      ]
-      ,}]
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
+        options: [
+          {
+            id: 'intensive_3_previous',
+            value: 'intensive_3',
+            name: { fi: 'kesä 25' },
+          },
+          { id: 'period_1', name: { fi: '1. periodi' } },
+          { id: 'period_2', name: { fi: '2. periodi' } },
+          { id: 'period_3', name: { fi: '3. periodi' } },
+          { id: 'period_4', name: { fi: '4. periodi' } },
+          { id: 'intensive_3', name: { fi: 'kesä 26' } },
+        ],
+      },
+    ],
   },
   {
     id: 'lang-1',
     type: 'language',
 
-    variants: [{
-      name: 'default',
-      question: { fi: 'Mistä kielestä haet kursseja?' },
-      options: [
-        { id: '1', name: { fi: 'ei valintaa' } },
-        { id: '2', name: { fi: 'Suomi' } },
-        { id: '3', name: { fi: 'Ruotsi' } },
-        { id: '4', name: { fi: 'Englanti' } },
-      ]
-    }]
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Mistä kielestä haet kursseja?' },
+        options: [
+          { id: '1', name: { fi: 'ei valintaa' } },
+          { id: '2', name: { fi: 'Suomi' } },
+          { id: '3', name: { fi: 'Ruotsi' } },
+          { id: '4', name: { fi: 'Englanti' } },
+        ],
+      },
+    ],
   },
   {
     id: '2',
     type: 'multi',
 
-    variants: [{
-      name: 'default',
-      options: [
-        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-      ],
-      question: {fi: 'Valmistutko lähiaikoina?'},
-    },
-    {
-      name: 'onlyFi',
-      options: [
-        { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
-        { id: '2', name: { fi: 'En ole valmistumassa puolen vuoden sisällä' } },
-      ],
-      question: {fi: 'Valmistutko lähiaikoina (Suomi kysymys)?'},
-    }]
+    variants: [
+      {
+        name: 'default',
+        options: [
+          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+        ],
+        question: { fi: 'Valmistutko lähiaikoina?' },
+      },
+      {
+        name: 'onlyFi',
+        options: [
+          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
+          {
+            id: '2',
+            name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
+          },
+        ],
+        question: { fi: 'Valmistutko lähiaikoina (Suomi kysymys)?' },
+      },
+    ],
   },
 
   {
     id: '3',
     type: 'multi',
 
-    variants: [{
-      name: 'default',
-      options: [
-        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
-      ],
-      question: {fi: 'Mikä on suosimasi opetusmuoto?'},
-    }]
+    variants: [
+      {
+        name: 'default',
+        options: [
+          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
+          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+        ],
+        question: { fi: 'Mikä on suosimasi opetusmuoto?' },
+      },
+    ],
   },
 
   /*
@@ -137,30 +151,39 @@ const questions = [
   }, */
 ]
 
-
-
-const MultiChoiceForm = ({ onSubmit, studyData }: { onSubmit: (formData: FormData) => Promise<void>, studyData: any }) => {
-
-
-  const [ language, setLanguage ] = React.useState('')
-
+const MultiChoiceForm = ({
+  onSubmit,
+  studyData,
+}: {
+  onSubmit: (formData: FormData) => Promise<void>
+  studyData: any
+}) => {
+  const [language, setLanguage] = React.useState('')
 
   const renderFormQuestion = (key, question) => {
-    switch(question.type){
+    switch (question.type) {
     case 'date':
-    //console.log('date')
+      //console.log('date')
       return <DateQuestion key={key} question={question} id={key} />
     case 'multi':
-    //console.log("multi")
-      return  <FormQuestion key={key} question={question} languageId={language}/>
+      //console.log("multi")
+      return (
+        <FormQuestion key={key} question={question} languageId={language} />
+      )
     case 'language':
-      return <LanguageQuestion key={key} question= {question} getLanguageId={getLanguageId}/>
+      return (
+        <LanguageQuestion
+          key={key}
+          question={question}
+          getLanguageId={getLanguageId}
+        />
+      )
     default:
       return <p>Unknown question type</p>
     }
   }
 
-  const getLanguageId= (id: string) => {
+  const getLanguageId = (id: string) => {
     console.log(id)
     setLanguage(id)
   }

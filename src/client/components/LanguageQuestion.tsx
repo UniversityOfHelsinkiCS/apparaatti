@@ -1,13 +1,26 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography , Button, Modal } from '@mui/material'
+import {
+  Box,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+  Button,
+  Modal,
+} from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 
-import { Question  } from '../../common/types.ts'
+import { Question } from '../../common/types.ts'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
-const LanguageQuestion = ({ question, getLanguageId }: { question: Question, getLanguageId: (id: string) => void }) => {
-
+const LanguageQuestion = ({
+  question,
+  getLanguageId,
+}: {
+  question: Question
+  getLanguageId: (id: string) => void
+}) => {
   const [open, setOpen] = React.useState(false)
-  const [ choice, setChoice ] = React.useState('')
+  const [choice, setChoice] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
@@ -16,7 +29,6 @@ const LanguageQuestion = ({ question, getLanguageId }: { question: Question, get
   const handleChoice = (id: string) => {
     setChoice(id)
     getLanguageId(id)
-
   }
   const style = {
     position: 'absolute',
@@ -31,19 +43,20 @@ const LanguageQuestion = ({ question, getLanguageId }: { question: Question, get
     p: 4,
   }
   return (
-    <Box sx={{
-      paddingTop: 4,
-    }}>
-      <Typography
-        gutterBottom 
-        sx={{ fontSize: '1rem', width: 'auto' }}
-      >
+    <Box
+      sx={{
+        paddingTop: 4,
+      }}
+    >
+      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
         {variant.question.fi}
-       
-        <Button onClick={handleOpen} style={{color: 'black'}}><InfoIcon></InfoIcon></Button>
+
+        <Button onClick={handleOpen} style={{ color: 'black' }}>
+          <InfoIcon></InfoIcon>
+        </Button>
       </Typography>
       {choice}
-    
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -52,7 +65,7 @@ const LanguageQuestion = ({ question, getLanguageId }: { question: Question, get
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-          Lisätietoa
+            Lisätietoa
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {question.explanation ? question.explanation : 'Ei lisätietoa'}
@@ -88,6 +101,5 @@ const LanguageQuestion = ({ question, getLanguageId }: { question: Question, get
     </Box>
   )
 }
-
 
 export default LanguageQuestion

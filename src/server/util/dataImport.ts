@@ -10,7 +10,10 @@ export function readCsvData(): Promise<object[]> {
     return Promise.resolve(cachedData)
   }
 
-  const filePath = path.resolve(import.meta.dirname, '../../../data/course_data.test.csv')
+  const filePath = path.resolve(
+    import.meta.dirname,
+    '../../../data/course_data.test.csv'
+  )
   const fileContent = fs.readFileSync(filePath, 'utf8')
 
   return new Promise((resolve, reject) => {
@@ -26,13 +29,15 @@ export function readCsvData(): Promise<object[]> {
   })
 }
 
-
 export function readCodeData(): Promise<object[]> {
   if (cachedCodeData) {
     return Promise.resolve(cachedCodeData)
   }
 
-  const filePath = path.resolve(import.meta.dirname, '../../../data/recommended_course_data.csv')
+  const filePath = path.resolve(
+    import.meta.dirname,
+    '../../../data/recommended_course_data.csv'
+  )
   const fileContent = fs.readFileSync(filePath, 'utf8')
 
   return new Promise((resolve, reject) => {
