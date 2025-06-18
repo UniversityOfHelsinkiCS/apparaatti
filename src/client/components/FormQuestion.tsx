@@ -14,7 +14,7 @@ const FormQuestion = ({ question, languageId }: { question: Question, languageId
     if (languageId === '2') {
       if (question.variants[1]) {
         //return question.variants[1]
-        return question.variants.find((v) => v.name=="onlyFi")
+        return question.variants.find((v) => v.name=='onlyFi')
       }else {
         return question.variants[0]
       }

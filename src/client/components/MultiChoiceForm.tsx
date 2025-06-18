@@ -54,8 +54,8 @@ const questions = [
     {
       name: 'onlyFi',
       options: [
-        { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-        { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+        { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
+        { id: '2', name: { fi: 'En ole valmistumassa puolen vuoden sisällä' } },
       ],
       question: {fi: 'Valmistutko lähiaikoina (Suomi kysymys)?'},
     }]
