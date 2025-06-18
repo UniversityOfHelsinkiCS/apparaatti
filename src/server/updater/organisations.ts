@@ -1,6 +1,6 @@
-import Organisation from '../db/models/organisation'
-import { mangleData } from './mangleData'
-import { safeBulkCreate } from './util'
+import Organisation from '../db/models/organisation.ts'
+import { mangleData } from './mangleData.ts'
+import { safeBulkCreate } from './util.ts'
 
 const organisationsHandler = async (organisations: any) => {
   const ids = new Set()

@@ -33,7 +33,6 @@ const questions = [
   {
     id: '2',
     type: 'multi',
-<<<<<<< HEAD
     options: [
       { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
       { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
@@ -43,13 +42,6 @@ const questions = [
       default: {
         id: '1',
         name:'default_texts',
-=======
-
-    variants: {
-      default: {
-        id: 1,
-        name: "default_texts",
->>>>>>> 8ea2573 (variants for question)
         question: { fi: 'Valmistutko lähiaikoina?' },
         options: [
           { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
@@ -57,26 +49,15 @@ const questions = [
         ],
       },
       onlyFi: {
-<<<<<<< HEAD
         id: '2',
         name: 'onlyFi_texts',
-=======
-        id: 2,
-        name: "onlyFi_texts",
->>>>>>> 8ea2573 (variants for question)
         question: { fi: 'Valmistutko lähiaikoina2?' },
         options: [
           { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
           { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
         ],
       }
-<<<<<<< HEAD
     }
-=======
-    },
-
-
->>>>>>> 8ea2573 (variants for question)
   },
 
   {
