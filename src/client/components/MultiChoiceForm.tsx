@@ -112,7 +112,7 @@ const questions = [
         { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
         { id: '3', name: { fi: 'täysin lähiopetus' } },
       ],
-   }]
+    }]
   },
 
   {
@@ -134,8 +134,16 @@ const questions = [
     type: 'multi',
 
     variants: [{
-     name: 'default',
+      name: 'default',
       question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
+      options: [
+        { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
+        { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+      ],
+    },
+    {
+      name: 'onlyEn',
+      question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia (Vain englanti)?' },
       options: [
         { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
         { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
