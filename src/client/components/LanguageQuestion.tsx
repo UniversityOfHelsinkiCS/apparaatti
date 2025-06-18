@@ -55,7 +55,6 @@ const LanguageQuestion = ({
           <InfoIcon></InfoIcon>
         </Button>
       </Typography>
-      {choice}
 
       <Modal
         open={open}

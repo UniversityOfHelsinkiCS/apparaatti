@@ -70,6 +70,18 @@ const questions = [
         ],
         question: { fi: 'Valmistutko lähiaikoina (Suomi kysymys)?' },
       },
+
+      {
+        name: 'onlySe',
+        options: [
+          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
+          {
+            id: '2',
+            name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
+          },
+        ],
+        question: { fi: 'Valmistutko lähiaikoina (Ruotsi kysymys)?' },
+      },
     ],
   },
 
@@ -195,7 +207,6 @@ const MultiChoiceForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      {language}
       <Box
         sx={{
           display: 'flex',
