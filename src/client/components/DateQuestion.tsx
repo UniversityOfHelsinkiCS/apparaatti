@@ -12,9 +12,9 @@ import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
 
-const DateQuestion = ({ question }: { question: Question; id: string }) => {
+const DateQuestion = ({ question, }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
-  const [choice, setChoice] = React.useState('')
+  const [_choice, setChoice] = React.useState('')
   //const [ year, setYear ] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -50,7 +50,7 @@ const DateQuestion = ({ question }: { question: Question; id: string }) => {
           <InfoIcon></InfoIcon>
         </Button>
       </Typography>
-      {choice}{' '}
+
       <Modal
         open={open}
         onClose={handleClose}

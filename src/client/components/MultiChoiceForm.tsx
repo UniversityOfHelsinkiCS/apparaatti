@@ -8,7 +8,7 @@ const questions = [
   {
     id: 'study-period',
     type: 'date',
-    explanation: 'sit amet, consectetur adipiscing elit.',
+    explanation: 'Mistä periodista haluat kursseja?.',
 
     variants: [
       {
@@ -101,66 +101,86 @@ const questions = [
     ],
   },
 
-  /*
+  
   {
     id: '4',
     type: 'multi',
-    question: { fi: 'Mikä on suosimasi opetusmuoto?' },
-    options: [
-      { id: '1', name: { fi: 'täysin etäopiskelu' } },
-      { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
-      { id: '3', name: { fi: 'täysin lähiopetus' } },
-    ],
+    variants: [{
+      question: { fi: 'Mikä on suosimasi opetusmuoto?' },
+      options: [
+        { id: '1', name: { fi: 'täysin etäopiskelu' } },
+        { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
+        { id: '3', name: { fi: 'täysin lähiopetus' } },
+      ],
+   }]
   },
+
   {
     id: '5',
     type: 'multi',
-    question: { fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?' },
-    options: [
-      { id: '1', name: { fi: 'itsenäinen ajan käyttö' } },
-      { id: '2', name: { fi: 'itsenäinen, mutta mahdollisuus ohjattuun toimintaan' } },
-      { id: '3', name: { fi: 'kurssi asettaa tiukat säännöt aikataululle' } },
-    ],
+    variants: [{
+      name: 'default',
+      question: { fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?' },
+      options: [
+        { id: '1', name: { fi: 'itsenäinen ajan käyttö' } },
+        { id: '2', name: { fi: 'itsenäinen, mutta mahdollisuus ohjattuun toimintaan' } },
+        { id: '3', name: { fi: 'kurssi asettaa tiukat säännöt aikataululle' } },
+      ],
+    }]
   },
+
   {
     id: '6',
     type: 'multi',
-    question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
-    options: [
-      { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-      { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
-    ],
+
+    variants: [{
+     name: 'default',
+      question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
+      options: [
+        { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
+        { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+      ],
+    }]
   },
+
   {
     id: '7',
     type: 'multi',
-    question: { fi: 'Koen taitotasokseni' },
-    options: [
-      { id: '1', name: { fi: 'Välttäväksi' } },
-      { id: '2', name: { fi: 'Hyväksi' } },
-      { id: '3', name: { fi: 'Erinomaiseksi' } },
-    ],
+    variants: [{
+      question: { fi: 'Koen taitotasokseni' },
+      options: [
+        { id: '1', name: { fi: 'Välttäväksi' } },
+        { id: '2', name: { fi: 'Hyväksi' } },
+        { id: '3', name: { fi: 'Erinomaiseksi' } },
+      ],
+    }]
   },
+
   {
     id: '8',
     type: 'multi',
-    question: { fi: 'Vanhentuneet viekie opinnot' },
-    options: [
-      { id: '1', name: { fi: 'ei väliä' } },
-      { id: '2', name: { fi: 'ei' } },
-      { id: '3', name: { fi: 'kyllä' } },
-    ],
+    variants: [{
+      question: { fi: 'Vanhentuneet viekie opinnot' },
+      options: [
+        { id: '1', name: { fi: 'ei väliä' } },
+        { id: '2', name: { fi: 'ei' } },
+        { id: '3', name: { fi: 'kyllä' } },
+      ],
+    }]
   },
   {
     id: '9',
     type: 'multi',
-    question: { fi: 'Integroitu opetus' },
-    options: [
-      { id: '1', name: { fi: 'ei väliä' } },
-      { id: '2', name: { fi: 'ei' } },
-      { id: '3', name: { fi: 'kyllä' } },
-    ],
-  }, */
+    variants: [{
+      question: { fi: 'Integroitu opetus' },
+      options: [
+        { id: '1', name: { fi: 'ei väliä' } },
+        { id: '2', name: { fi: 'ei' } },
+        { id: '3', name: { fi: 'kyllä' } },
+      ],
+    }]
+  }, 
+
 ]
 
 const MultiChoiceForm = ({
