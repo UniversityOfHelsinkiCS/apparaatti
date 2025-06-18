@@ -15,11 +15,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
         options: [
-          {
-            id: 'intensive_3_previous',
-            value: 'intensive_3',
-            name: { fi: 'kesä 25' },
-          },
+          {id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' }},
           { id: 'period_1', name: { fi: '1. periodi' } },
           { id: 'period_2', name: { fi: '2. periodi' } },
           { id: 'period_3', name: { fi: '3. periodi' } },
@@ -54,8 +50,8 @@ const questions = [
       {
         name: 'default',
         options: [
-          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
+          { id: '2', name: { fi: 'En ole valmistumassa peuolen vuoden sisällä' } },
         ],
         question: { fi: 'Valmistutko lähiaikoina?' },
       },
@@ -85,7 +81,7 @@ const questions = [
     ],
   },
 
-  {
+  /*{
     id: '3',
     type: 'multi',
 
@@ -93,15 +89,13 @@ const questions = [
       {
         name: 'default',
         options: [
-          { id: '1', name: { fi: 'Kyllä, vuoden sisällä' } },
-          { id: '2', name: { fi: 'En ole valmistumassa vuoden sisällä' } },
+          { id: '1', name: { fi: 'Vastaus1' } },
+          { id: '2', name: { fi: 'Vastaus2' } },
         ],
         question: { fi: 'Mikä on suosimasi opetusmuoto?' },
       },
     ],
-  },
-
-  
+  },*/
   {
     id: '4',
     type: 'multi',
@@ -204,7 +198,7 @@ const MultiChoiceForm = ({
     switch (question.type) {
     case 'date':
       //console.log('date')
-      return <DateQuestion key={key} question={question} id={key} />
+      return <DateQuestion key={key} question={question} />
     case 'multi':
       //console.log("multi")
       return (
@@ -212,11 +206,7 @@ const MultiChoiceForm = ({
       )
     case 'language':
       return (
-        <LanguageQuestion
-          key={key}
-          question={question}
-          getLanguageId={getLanguageId}
-        />
+        <LanguageQuestion key={key} question={question} getLanguageId={getLanguageId}/>
       )
     default:
       return <p>Unknown question type</p>
@@ -224,7 +214,6 @@ const MultiChoiceForm = ({
   }
 
   const getLanguageId = (id: string) => {
-    console.log(id)
     setLanguage(id)
   }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
