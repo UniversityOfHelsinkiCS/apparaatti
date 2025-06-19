@@ -37,7 +37,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
       {selectedPhase && (
         <>
           <Typography id="study-field-select-label">
-            Valitse opintojen suunta
+            Valitse opinto-oikeus
           </Typography>
           {currentData.length > 1 && (
             <Select
