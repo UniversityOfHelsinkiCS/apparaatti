@@ -28,7 +28,6 @@ function App() {
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const answerData = AnswerSchema.parse(Object.fromEntries(formData))
-
       const res = await fetch('/api/form/1/answer', {
         method: 'POST',
         body: JSON.stringify(answerData),
@@ -36,10 +35,13 @@ function App() {
           'Content-Type': 'application/json',
         },
       })
+      console.log(res)
+      //if (res.status === 500) {
+      //  throw new Error("Internal server error")
+      //}
       const recommendations = await res.json()
       console.log(recommendations)
       setCourseRecommendations(recommendations)
-
       if (!res.ok) {
         throw new Error('Network response was not ok')
       }

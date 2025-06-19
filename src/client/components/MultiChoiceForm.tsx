@@ -240,8 +240,8 @@ const MultiChoiceForm = ({
       )
     case 'period-date':
       return (
-        <PeriodQuestion key={key} question={question} />
-        //<FormQuestion key={key} question={question} languageId={language} /> //toimiva
+        //<PeriodQuestion key={key} question={question} />
+        <FormQuestion key={key} question={question} languageId={language} /> //toimiva
       )
     default:
       return <p>Unknown question type</p>
