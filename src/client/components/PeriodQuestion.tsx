@@ -29,7 +29,7 @@ const PeriodQuestion = ({ question, }: { question: Question }) => {
     setState({...state, [event.target.name]: event.target.checked})
   }
 
-  const {intensive_3_previous, period_1, period_2, period_3, period_4, intensive_3} = state
+  //const {intensive_3_previous, period_1, period_2, period_3, period_4, intensive_3} = state
 
   const style = {
     position: 'absolute',
@@ -82,14 +82,14 @@ const PeriodQuestion = ({ question, }: { question: Question }) => {
 
           {question.variants[0].options.map((option) => (
             <FormControlLabel key = {option.id}
-            control={
-              <Checkbox checked={eval(option.id)} onChange={handleChoice} name={option.id} color="default" sx={{'&.Mui-checked': {color: green[500]}}} />
-            }
-            label={option.name.fi}
-          />
+              control={
+                <Checkbox checked={eval(option.id)} onChange={handleChoice} name={option.id} color="default" sx={{'&.Mui-checked': {color: green[500]}}} />
+              }
+              label={option.name.fi}
+            />
           ))}
 
-          {"väli"}
+          {'väli'}
 
 
         </FormGroup>
