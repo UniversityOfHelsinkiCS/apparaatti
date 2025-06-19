@@ -4,7 +4,7 @@ import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
-//import PeriodQuestion from './PeriodQuestion.tsx'
+import PeriodQuestion from './PeriodQuestion.tsx'
 const questions = [
   {
     id: 'study-period',
@@ -240,8 +240,8 @@ const MultiChoiceForm = ({
       )
     case 'period-date':
       return (
-        //<PeriodQuestion key={key} question={question} />
-        <FormQuestion key={key} question={question} languageId={language} /> //toimiva
+        <PeriodQuestion key={key} question={question} />
+        //<FormQuestion key={key} question={question} languageId={language} /> //toimiva
       )
     default:
       return <p>Unknown question type</p>
