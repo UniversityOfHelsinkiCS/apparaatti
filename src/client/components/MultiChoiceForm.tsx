@@ -15,7 +15,11 @@ const questions = [
         name: 'default',
         question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
         options: [
-          {id: 'intensive_3_previous', value: 'intensive_3', name: { fi: 'kesä 25' }},
+          {
+            id: 'intensive_3_previous',
+            value: 'intensive_3',
+            name: { fi: 'kesä 25' },
+          },
           { id: 'period_1', name: { fi: '1. periodi' } },
           { id: 'period_2', name: { fi: '2. periodi' } },
           { id: 'period_3', name: { fi: '3. periodi' } },
@@ -51,7 +55,10 @@ const questions = [
         name: 'default',
         options: [
           { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
-          { id: '2', name: { fi: 'En ole valmistumassa peuolen vuoden sisällä' } },
+          {
+            id: '2',
+            name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
+          },
         ],
         question: { fi: 'Valmistutko lähiaikoina?' },
       },
@@ -99,90 +106,109 @@ const questions = [
   {
     id: '4',
     type: 'multi',
-    variants: [{
-      question: { fi: 'Mikä on suosimasi opetusmuoto?' },
-      options: [
-        { id: '1', name: { fi: 'täysin etäopiskelu' } },
-        { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
-        { id: '3', name: { fi: 'täysin lähiopetus' } },
-      ],
-    }]
+    variants: [
+      {
+        question: { fi: 'Mikä on suosimasi opetusmuoto?' },
+        options: [
+          { id: '1', name: { fi: 'täysin etäopiskelu' } },
+          { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
+          { id: '3', name: { fi: 'täysin lähiopetus' } },
+        ],
+      },
+    ],
   },
 
   {
     id: '5',
     type: 'multi',
-    variants: [{
-      name: 'default',
-      question: { fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?' },
-      options: [
-        { id: '1', name: { fi: 'itsenäinen ajan käyttö' } },
-        { id: '2', name: { fi: 'itsenäinen, mutta mahdollisuus ohjattuun toimintaan' } },
-        { id: '3', name: { fi: 'kurssi asettaa tiukat säännöt aikataululle' } },
-      ],
-    }]
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Mikä on suosimasi opiskelun aikataulun joustavuus?' },
+        options: [
+          { id: '1', name: { fi: 'itsenäinen ajan käyttö' } },
+          {
+            id: '2',
+            name: { fi: 'itsenäinen, mutta mahdollisuus ohjattuun toimintaan' },
+          },
+          {
+            id: '3',
+            name: { fi: 'kurssi asettaa tiukat säännöt aikataululle' },
+          },
+        ],
+      },
+    ],
   },
 
   {
     id: '6',
     type: 'multi',
 
-    variants: [{
-      name: 'default',
-      question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
-      options: [
-        { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-        { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
-      ],
-    },
-    {
-      name: 'onlyEn',
-      question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia (Vain englanti)?' },
-      options: [
-        { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-        { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
-      ],
-    }]
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
+        options: [
+          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
+          { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+        ],
+      },
+      {
+        name: 'onlyEn',
+        question: {
+          fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia (Vain englanti)?',
+        },
+        options: [
+          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
+          { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+        ],
+      },
+    ],
   },
 
   {
     id: '7',
     type: 'multi',
-    variants: [{
-      question: { fi: 'Koen taitotasokseni' },
-      options: [
-        { id: '1', name: { fi: 'Välttäväksi' } },
-        { id: '2', name: { fi: 'Hyväksi' } },
-        { id: '3', name: { fi: 'Erinomaiseksi' } },
-      ],
-    }]
+    variants: [
+      {
+        question: { fi: 'Koen taitotasokseni' },
+        options: [
+          { id: '1', name: { fi: 'Välttäväksi' } },
+          { id: '2', name: { fi: 'Hyväksi' } },
+          { id: '3', name: { fi: 'Erinomaiseksi' } },
+        ],
+      },
+    ],
   },
 
   {
     id: '8',
     type: 'multi',
-    variants: [{
-      question: { fi: 'Vanhentuneet viekie opinnot' },
-      options: [
-        { id: '1', name: { fi: 'ei väliä' } },
-        { id: '2', name: { fi: 'ei' } },
-        { id: '3', name: { fi: 'kyllä' } },
-      ],
-    }]
+    variants: [
+      {
+        question: { fi: 'Vanhentuneet viekie opinnot' },
+        options: [
+          { id: '1', name: { fi: 'ei väliä' } },
+          { id: '2', name: { fi: 'ei' } },
+          { id: '3', name: { fi: 'kyllä' } },
+        ],
+      },
+    ],
   },
   {
     id: '9',
     type: 'multi',
-    variants: [{
-      question: { fi: 'Integroitu opetus' },
-      options: [
-        { id: '1', name: { fi: 'ei väliä' } },
-        { id: '2', name: { fi: 'ei' } },
-        { id: '3', name: { fi: 'kyllä' } },
-      ],
-    }]
-  }, 
-
+    variants: [
+      {
+        question: { fi: 'Integroitu opetus' },
+        options: [
+          { id: '1', name: { fi: 'ei väliä' } },
+          { id: '2', name: { fi: 'ei' } },
+          { id: '3', name: { fi: 'kyllä' } },
+        ],
+      },
+    ],
+  },
 ]
 
 const MultiChoiceForm = ({
@@ -206,12 +232,16 @@ const MultiChoiceForm = ({
       )
     case 'language':
       return (
-        <LanguageQuestion key={key} question={question} getLanguageId={getLanguageId}/>
+        <LanguageQuestion
+          key={key}
+          question={question}
+          getLanguageId={getLanguageId}
+        />
       )
     case 'period-date':
       return (
         <PeriodQuestion key={key} question={question} />
-        //<FormQuestion key={key} question={question} languageId={language} /> //toimiva 
+        //<FormQuestion key={key} question={question} languageId={language} /> //toimiva
       )
     default:
       return <p>Unknown question type</p>

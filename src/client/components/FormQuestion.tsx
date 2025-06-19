@@ -27,44 +27,37 @@ const FormQuestion = ({
     if (languageId === '2') {
       if (question.variants[1]) {
         const v = question.variants.find((v) => v.name == 'onlyFi')
-        if (v)  { 
+        if (v) {
           return v
         } else {
           return question.variants[0]
         }
-
       } else {
         return question.variants[0]
       }
-    } 
-    else if (languageId === '3') {
+    } else if (languageId === '3') {
       if (question.variants[1]) {
         const v = question.variants.find((v) => v.name == 'onlySe')
-        if (v)  { 
+        if (v) {
           return v
         } else {
           return question.variants[0]
         }
-
       } else {
         return question.variants[0]
       }
-    } 
-    else if (languageId === '4') {
+    } else if (languageId === '4') {
       if (question.variants[1]) {
         const v = question.variants.find((v) => v.name == 'onlyEn')
-        if (v)  { 
+        if (v) {
           return v
         } else {
           return question.variants[0]
         }
-
       } else {
         return question.variants[0]
       }
-    } 
- 
-    else {
+    } else {
       return question.variants[0]
     }
   }

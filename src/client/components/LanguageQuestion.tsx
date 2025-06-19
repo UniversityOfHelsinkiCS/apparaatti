@@ -20,7 +20,7 @@ const LanguageQuestion = ({
   getLanguageId: (id: string) => void
 }) => {
   const [open, setOpen] = React.useState(false)
-  const [ _choice, setChoice] = React.useState('')
+  const [_choice, setChoice] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 

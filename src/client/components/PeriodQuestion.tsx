@@ -7,17 +7,24 @@ import {
   Typography,
   Checkbox,
   FormGroup,
-  FormControl
+  FormControl,
 } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import { green } from '@mui/material/colors'
 import { Question } from '../../common/types'
 
-const PeriodQuestion = ({ question, }: { question: Question }) => {
+const PeriodQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
-  //const [_choice, setChoice] = React.useState('')
+  const [choice, setChoice] = React.useState('')
 
-  const [state, setState] = React.useState({intensive_3_previous: false, period_1: false, period_2: false, period_3: false, period_4: false, intensive_3: false})
+  const [state, setState] = React.useState({
+    intensive_3_previous: false,
+    period_1: false,
+    period_2: false,
+    period_3: false,
+    period_4: false,
+    intensive_3: false,
+  })
 
   //const [ year, setYear ] = React.useState('')
   const handleOpen = () => setOpen(true)
@@ -26,10 +33,11 @@ const PeriodQuestion = ({ question, }: { question: Question }) => {
   const variant = question.variants[0]
 
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({...state, [event.target.name]: event.target.checked})
+    setState({ ...state, [event.target.name]: event.target.checked })
+    setChoice(event.target.name)
   }
-
-  //const {intensive_3_previous, period_1, period_2, period_3, period_4, intensive_3} = state
+  // eslint-disable-next-line
+  const { intensive_3_previous, period_1, period_2, period_3, period_4, intensive_3 } = state
 
   const style = {
     position: 'absolute',
@@ -44,10 +52,6 @@ const PeriodQuestion = ({ question, }: { question: Question }) => {
     p: 4,
   }
 
-
-  //console.log(question.variants[0].options[0].id)
-  
-  //console.log(eval(question.variants[0].options[0].id))
   return (
     <Box
       sx={{
@@ -79,19 +83,23 @@ const PeriodQuestion = ({ question, }: { question: Question }) => {
 
       <FormControl sx={{ m: 0 }} component="fieldset" variant="standard">
         <FormGroup>
-
           {question.variants[0].options.map((option) => (
-            <FormControlLabel key = {option.id}
+            <FormControlLabel
+              key={option.id}
               control={
-                <Checkbox checked={eval(option.id)} onChange={handleChoice} name={option.id} color="default" sx={{'&.Mui-checked': {color: green[500]}}} />
+                <Checkbox
+                  value={option.id}
+                  checked={eval(option.id)}
+                  onChange={handleChoice}
+                  name={option.id}
+                  color="default"
+                  sx={{ '&.Mui-checked': { color: green[500] } }}
+                />
               }
               label={option.name.fi}
             />
           ))}
-
-          {'väli'}
-
-
+          {choice}
         </FormGroup>
       </FormControl>
     </Box>

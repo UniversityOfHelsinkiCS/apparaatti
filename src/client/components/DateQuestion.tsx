@@ -12,7 +12,7 @@ import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
 
-const DateQuestion = ({ question, }: { question: Question }) => {
+const DateQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
   const [_choice, setChoice] = React.useState('')
   //const [ year, setYear ] = React.useState('')

@@ -43,7 +43,7 @@ const CourseRecommendation = ({
             gutterBottom
           >
             {course.course.courseCodes
-              .map((code) =>  + code.toString())
+              .map((code) => +code.toString())
               .join(', ')}
           </Typography>
 
