@@ -4,7 +4,7 @@ import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
-import PeriodQuestion from './PeriodQuestion.tsx'
+//import PeriodQuestion from './PeriodQuestion.tsx'
 const questions = [
   {
     id: 'study-period',
