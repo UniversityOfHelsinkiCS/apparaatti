@@ -40,13 +40,13 @@ function recommendCourses(answerData: any, user) {
 }
 
 function calculateUserCoordinates(answerData: any) {
-  const year = getStudyYearFromPeriod(answerData['study-period'])
-  console.log(year)
-  const pickedPeriod = getStudyPeriod(year, answerData['study-period'])
+  const periods = getRelevantPeriods(answerData['study-period'])
+  // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
+  const pickedPeriod = periods[0] 
 
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
-    date: new Date(parseDate(pickedPeriod?.start_date)).getTime(),
+    date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
   }
 
   return userCoordinates
@@ -157,14 +157,50 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   return courseRealisationsWithCodes
 }
 
+
+//Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
+//For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
+function getRelevantPeriods(periodsArg: string[] | string) {
+  const periods = Array.isArray(periodsArg) ? periodsArg : [periodsArg]
+   
+  const pickedPeriods = periods.map((period: string) => {
+    const year = getStudyYearFromPeriod(period)
+    const pickedPeriod = getStudyPeriod(year, period)
+    return pickedPeriod
+  })
+
+ 
+  return pickedPeriods
+}
+
+//Returns true if the course starts or ends within any of the picked periods
+function correctCoursePeriod(course: any, pickedPeriods: any){
+  const courseStart = new Date(course.startDate).getTime()
+  const courseEnd = new Date(course.endDate).getTime()
+  for (const period of pickedPeriods) {
+    const periodStart = new Date(period.start_date).getTime()
+    const periodEnd = new Date(period.end_date).getTime()
+    
+    //if the course starts within the period it is considered to be in that period
+    if (courseStart >= periodStart && courseStart <= periodEnd) {
+      return true
+    }
+
+    //if the course ends within the period it is considered to be in that period
+    if (courseEnd >= periodStart && courseEnd <= periodEnd) {
+      return true
+    }
+  }
+  return false
+} 
+
+
 async function getRecommendations(userCoordinates: any, answerData, _user) {
   console.log(userCoordinates)
   const startBench = Date.now()
 
-  const pickedPeriod = getStudyPeriod(
-    getStudyYearFromPeriod(answerData['study-period']),
-    answerData['study-period']
-  )
+  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
+  console.log(pickedPeriods)
 
   type courseCode = {
     code: string
@@ -189,10 +225,7 @@ async function getRecommendations(userCoordinates: any, answerData, _user) {
   const distances = await calculateUserDistances(userCoordinates, courseData)
   //const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
 
-  const start = parseDate(pickedPeriod.start_date)
-  const sortedCourses = distances
-    .filter((a) => a.course.startDate >= start)
-    .sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
 
   const end = Date.now()
