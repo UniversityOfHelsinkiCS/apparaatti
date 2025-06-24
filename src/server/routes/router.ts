@@ -9,6 +9,7 @@ import { Op } from 'sequelize'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
 import { getStudyData } from '../util/studydata.ts'
+import Organisation from '../db/models/organisation.ts'
 
 const router = express.Router()
 
@@ -61,6 +62,20 @@ router.get('/user/studydata', async (req, res) => {
 
   res.json(studydata)
 })
+
+
+router.get('/organisations', async (req, res) => {
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
+  const organisations = await Organisation.findAll({})
+  res.json(organisations)
+    
+
+})
+
+
 
 router.get('/fail', async (_req, res) => {
   res.json({
