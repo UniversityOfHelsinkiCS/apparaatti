@@ -1,6 +1,5 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AnswerSchema } from '../common/validators.ts'
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
 import { useState } from 'react'
 import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx'
@@ -27,8 +26,19 @@ function App() {
 
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      console.log(formData.getAll('study-period'))
-      const answerData = AnswerSchema.parse(Object.fromEntries(formData))
+      
+      
+      const keys = Array.from(formData.keys())
+      const answerData = Object.fromEntries(
+        keys.map((key) => {
+          const value = formData.getAll(key)
+          return [key, value.length > 1 ? value : value[0]]
+        })
+      )
+
+
+     
+      console.log(answerData)
       const res = await fetch('/api/form/1/answer', {
         method: 'POST',
         body: JSON.stringify(answerData),

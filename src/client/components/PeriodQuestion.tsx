@@ -15,7 +15,7 @@ import { Question } from '../../common/types'
 
 const PeriodQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
-  const [choice, setChoice] = React.useState('')
+ 
 
   const [state, setState] = React.useState({
     intensive_3_previous: false,
@@ -34,10 +34,8 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
 
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked })
-    setChoice(event.target.name)
   }
-  // eslint-disable-next-line
-  const { intensive_3_previous, period_1, period_2, period_3, period_4, intensive_3 } = state
+ 
 
   const style = {
     position: 'absolute',
