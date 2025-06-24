@@ -210,10 +210,9 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
 //Tries to check if the course is in the same organistion as the user
 function courseInSameOrgAsUser(course: any, studyData: any){
   console.log('studydata', studyData)
-  const organisations = studyData.organisations.map((org) => org.id)
   const courseOrgIds = course.course.groupIds
 
-  for (const org of organisations) {
+  for (const org of studyData.organisations) {
     console.log('checking', org)
     //course contains an groupid which tells if the course is in the same organisation as the user, but sometimes groupId is not correctly set
     if (courseOrgIds.includes(org.id)) {
