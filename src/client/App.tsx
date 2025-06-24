@@ -27,6 +27,7 @@ function App() {
 
   const submitAnswerMutation = useMutation({
     mutationFn: async (formData: FormData) => {
+      console.log(formData.getAll('study-period'))
       const answerData = AnswerSchema.parse(Object.fromEntries(formData))
       const res = await fetch('/api/form/1/answer', {
         method: 'POST',

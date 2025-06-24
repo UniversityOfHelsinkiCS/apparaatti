@@ -86,12 +86,14 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
           {question.variants[0].options.map((option) => (
             <FormControlLabel
               key={option.id}
+              name={question.id}
+              value={option.id}
               control={
                 <Checkbox
-                  value={option.id}
-                  checked={eval(option.id)}
+                  
+                  
+                 
                   onChange={handleChoice}
-                  name={option.id}
                   color="default"
                   sx={{ '&.Mui-checked': { color: green[500] } }}
                 />
@@ -99,7 +101,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
               label={option.name.fi}
             />
           ))}
-          {choice}
+         
         </FormGroup>
       </FormControl>
     </Box>
