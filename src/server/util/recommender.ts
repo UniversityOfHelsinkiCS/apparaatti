@@ -175,23 +175,24 @@ function getRelevantPeriods(periodsArg: string[] | string) {
 
 //Returns true if the course starts or ends within any of the picked periods
 function correctCoursePeriod(course: any, pickedPeriods: any){
-  const courseStart = new Date(course.startDate).getTime()
-  const courseEnd = new Date(course.endDate).getTime()
+ 
+  const courseStart = new Date(course.course.startDate)
+  const courseEnd = new Date(course.course.endDate)
   for (const period of pickedPeriods) {
-    const periodStart = new Date(period.start_date).getTime()
-    const periodEnd = new Date(period.end_date).getTime()
-    
-    //if the course starts within the period it is considered to be in that period
+    const periodStart = new Date(parseDate(period.start_date))
+    const periodEnd = new Date(parseDate(period.end_date))
+
     if (courseStart >= periodStart && courseStart <= periodEnd) {
       return true
     }
-
-    //if the course ends within the period it is considered to be in that period
+   
     if (courseEnd >= periodStart && courseEnd <= periodEnd) {
       return true
     }
+    
   }
   return false
+  
 } 
 
 
@@ -223,11 +224,9 @@ async function getRecommendations(userCoordinates: any, answerData, _user) {
   )
 
   const distances = await calculateUserDistances(userCoordinates, courseData)
-  //const recommendationsWithCodes = await addCourseCodesToRecommendations(distances)
-
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
-
+  
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)
   return recommendations
