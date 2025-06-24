@@ -56,7 +56,7 @@ function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
     date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
-    organisation: 0 // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
+    org: 0 // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
   }
 
   return userCoordinates
