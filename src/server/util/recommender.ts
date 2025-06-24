@@ -222,7 +222,10 @@ function courseInSameOrgAsUser(course: any, studyData: any){
     }
 
     //course name sometimes contains an organisation shortcode (for example for Matemaattisluonnontieteellinen H50 it is mat-lu)
-    if(course.course.name.fi.includes(courseNameOrgStrings[org.code])){
+    console.log("fallback with: ", org.code)
+    const shortCode = courseNameOrgStrings[org.code]
+    console.log(shortCode)
+    if(course.course.name.fi.includes(shortCode)){
       console.log(`Course ${course.course.name.fi} is in the same organisation as user based on course name`)
       return true
     }
