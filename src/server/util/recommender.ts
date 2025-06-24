@@ -202,13 +202,16 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
 function courseInSameOrgAsUser(course: any, studyData: any){
   
   const orgIds = studyData.organisations.map((org) => org.id)
-  const courseOrgIds = course.course.groupIds || [] 
+  const courseOrgIds = course.course.groupIds
   for (const groupId of courseOrgIds) {
     if (orgIds.includes(groupId)) {
       console.log(`Course ${course.course.name.fi} is in the same organisation as user`)
       return true
     }
   }
+  console.log(`Course ${course.course.name.fi} is NOT in the same organisation as user`)
+  console.log(`User organisations: ${orgIds}`)
+  console.log(`Course organisations: ${courseOrgIds}`)
   return false
 }
 
