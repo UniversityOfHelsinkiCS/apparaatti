@@ -152,6 +152,9 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
         courseCodes: courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
           .map((cu) => cu.courseCode),
+        groupIds: courseUnitsWithCodes
+          .filter((cu) => cur.unitIds.includes(cu.id))
+          .map((cu) => cu.groupId),
       }
     }
   )
@@ -199,9 +202,14 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
 function courseInSameOrgAsUser(course: any, studyData: any){
   
   const orgIds = studyData.organisations.map((org) => org.id)
-  console.log('orgIds: ', orgIds)
-  console.log('course groupId: ', course.course.groupId)
-  return orgIds.includes(course.course.groupId)
+  const courseOrgIds = course.course.groupIds || [] 
+  for (const groupId of courseOrgIds) {
+    if (orgIds.includes(groupId)) {
+      console.log(`Course ${course.course.name.fi} is in the same organisation as user`)
+      return true
+    }
+  }
+  return false
 }
 
 
@@ -231,6 +239,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseData = await getRealisationsWithCourseUnitCodes(
     filteredCourseCodeStrings
   )
+  console.log(courseData)
   const courseEndTimer = Date.now()
   console.log(
     `Execution time for course end: ${courseEndTimer - courseTimer} ms`
