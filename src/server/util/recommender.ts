@@ -273,6 +273,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
 
   const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
+  console.log(sortedCourses)
   const recommendations = sortedCourses.slice(0, 3)
   
   const end = Date.now()
