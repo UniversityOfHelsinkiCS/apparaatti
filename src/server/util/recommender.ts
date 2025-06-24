@@ -6,6 +6,7 @@ import CurCu from '../db/models/curCu.ts'
 import { readCodeData } from './dataImport.ts'
 import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
+import { getStudyData } from './studydata.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -195,8 +196,20 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   
 } 
 
+function courseInSameOrgAsUser(course: any, studyData: any){
+  
+  const orgIds = studyData.organisations.map((org) => org.id)
+  console.log('orgIds: ', orgIds)
+  console.log('course groupId: ', course.course.groupId)
+  return orgIds.includes(course.course.groupId)
+}
 
-async function getRecommendations(userCoordinates: any, answerData, _user) {
+
+
+async function getRecommendations(userCoordinates: any, answerData, user: any) {
+
+  const studyData = await getStudyData(user) //used to filter courses by organisation
+
   console.log(userCoordinates)
   const startBench = Date.now()
 
@@ -224,7 +237,7 @@ async function getRecommendations(userCoordinates: any, answerData, _user) {
   )
 
   const distances = await calculateUserDistances(userCoordinates, courseData)
-  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).filter((course) => courseInSameOrgAsUser(course, studyData)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
   
   const end = Date.now()
