@@ -222,7 +222,7 @@ function courseInSameOrgAsUser(course: any, studyData: any){
     }
 
     //course name sometimes contains an organisation shortcode (for example for Matemaattisluonnontieteellinen H50 it is mat-lu)
-    console.log("fallback with: ", org.code)
+    console.log('fallback with: ', org.code)
     const shortCode = courseNameOrgStrings[org.code]
     console.log(shortCode)
     if(course.course.name.fi.includes(shortCode)){
