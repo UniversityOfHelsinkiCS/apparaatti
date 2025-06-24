@@ -1,3 +1,4 @@
+import Organisation from '../db/models/organisation.ts'
 import StudyRight from '../db/models/studyRight.ts'
 
 const studyRightsForUser = async (user: any) => {
@@ -48,9 +49,26 @@ export const getStudyData = async (user: any) => {
         name: phase.name,
       }
     })
+  
+  const organisationIds: string[] = []
+  for (const studyRight of studyRights) {
+    if (studyRight.organisationId && !organisationIds.includes(studyRight.organisationId)) {
+      organisationIds.push(studyRight.organisationId)
+    }
+  }
+
+  const organisations = await Organisation.findAll({
+    attributes: ['id', 'name', 'code'],
+    where: {
+      id: organisationIds,
+    },
+    raw: true,
+  })
+
 
   return {
     phase1Data: phase1StudyData,
     phase2Data: phase2StudyData,
+    organisations: organisations
   }
 }
