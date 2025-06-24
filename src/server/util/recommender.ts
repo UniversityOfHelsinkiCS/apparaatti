@@ -239,7 +239,6 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseData = await getRealisationsWithCourseUnitCodes(
     filteredCourseCodeStrings
   )
-  console.log(courseData)
   const courseEndTimer = Date.now()
   console.log(
     `Execution time for course end: ${courseEndTimer - courseTimer} ms`
