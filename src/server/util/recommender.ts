@@ -8,6 +8,15 @@ import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
 
+const courseNameOrgStrings: Record<string, string> = {
+  'H50':'mat-lu',
+  'H60':'kasv',
+  'H200':'oik.',
+  'H70':'valt'
+}
+
+
+
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
   //const d = new Date("December 21, 2025 01:15:00")
@@ -198,20 +207,29 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   return false
   
 } 
-
+//Tries to check if the course is in the same organistion as the user
 function courseInSameOrgAsUser(course: any, studyData: any){
   
-  const orgIds = studyData.organisations.map((org) => org.id)
+  const organisations = studyData.organisations.map((org) => org.id)
   const courseOrgIds = course.course.groupIds
-  for (const groupId of courseOrgIds) {
-    if (orgIds.includes(groupId)) {
+
+  for (const org of organisations) {
+    
+    //course contains an groupid which tells if the course is in the same organisation as the user, but sometimes groupId is not correctly set
+    if (courseOrgIds.includes(org.id)) {
       console.log(`Course ${course.course.name.fi} is in the same organisation as user`)
+      return true
+    }
+
+    //course name sometimes contains an organisation shortcode (for example for Matemaattisluonnontieteellinen H50 it is mat-lu)
+    if(course.course.name.fi.includes(courseNameOrgStrings[org.code])){
+      console.log(`Course ${course.course.name.fi} is in the same organisation as user based on course name`)
       return true
     }
   }
   console.log(`Course ${course.course.name.fi} is NOT in the same organisation as user`)
-  console.log(`User organisations: ${orgIds}`)
-  console.log(`Course organisations: ${courseOrgIds}`)
+  //console.log(`User organisations: ${orgIds}`)
+  //console.log(`Course organisations: ${courseOrgIds}`)
   return false
 }
 
