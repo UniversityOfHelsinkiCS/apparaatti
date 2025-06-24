@@ -7,7 +7,6 @@ import { readCodeData } from './dataImport.ts'
 import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-
 const courseNameOrgStrings: Record<string, string> = {
   'H50':'mat-lu',
   'H60':'kasv',
@@ -57,6 +56,7 @@ function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
     date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
+    organisation: 0 // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
   }
 
   return userCoordinates
@@ -76,12 +76,15 @@ function langCoordFromCode(code: string) {
   return '1' //default = no choice
 }
 
-async function calculateCourseDistance(course: Cur, userCoordinates: any) {
+async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any) {
+  
   const dimensions = Object.keys(userCoordinates)
-  // using random values for now...
+  
+  const sameOrganisationAsUser = courseInSameOrgAsUser(course, studyData)
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),
+    org: sameOrganisationAsUser ? 0 : 1000 // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
   }
 
   const sum = dimensions.reduce((acc, key) => {
@@ -98,11 +101,12 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any) {
 //returns a list of [{course, distance}]
 async function calculateUserDistances(
   userCoordinates: any,
-  availableCourses: any
+  availableCourses: any,
+  studyData: any
 ) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates)
+    return calculateCourseDistance(course, userCoordinates, studyData)
   })
   const distances = await Promise.all(distancePromises)
   const distanceE = new Date()
@@ -210,13 +214,13 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
 //Tries to check if the course is in the same organistion as the user
 function courseInSameOrgAsUser(course: any, studyData: any){
   console.log('studydata', studyData)
-  const courseOrgIds = course.course.groupIds
+  const courseOrgIds = course.groupIds
 
   for (const org of studyData.organisations) {
     console.log('checking', org)
     //course contains an groupid which tells if the course is in the same organisation as the user, but sometimes groupId is not correctly set
     if (courseOrgIds.includes(org.id)) {
-      console.log(`Course ${course.course.name.fi} is in the same organisation as user`)
+      console.log(`Course ${course.name.fi} is in the same organisation as user`)
       return true
     }
 
@@ -224,12 +228,12 @@ function courseInSameOrgAsUser(course: any, studyData: any){
     console.log('fallback with: ', org.code)
     const shortCode = courseNameOrgStrings[org.code]
     console.log(shortCode)
-    if(course.course.name.fi.includes(shortCode)){
-      console.log(`Course ${course.course.name.fi} is in the same organisation as user based on course name`)
+    if(course.name.fi.includes(shortCode)){
+      console.log(`Course ${course.name.fi} is in the same organisation as user based on course name`)
       return true
     }
   }
-  console.log(`Course ${course.course.name.fi} is NOT in the same organisation as user`)
+  console.log(`Course ${course.name.fi} is NOT in the same organisation as user`)
   //console.log(`User organisations: ${orgIds}`)
   //console.log(`Course organisations: ${courseOrgIds}`)
   return false
@@ -267,8 +271,8 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
     `Execution time for course end: ${courseEndTimer - courseTimer} ms`
   )
 
-  const distances = await calculateUserDistances(userCoordinates, courseData)
-  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).filter((course) => courseInSameOrgAsUser(course, studyData)).sort((a, b) => a.distance - b.distance)
+  const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
+  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses.slice(0, 3)
   
   const end = Date.now()
