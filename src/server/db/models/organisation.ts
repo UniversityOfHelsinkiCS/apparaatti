@@ -55,8 +55,8 @@ Organisation.init(
     underscored: true,
     timestamps: true,
     sequelize,
-    modelName: 'Form',
-    tableName: 'forms',
+    modelName: 'Organisation',
+    tableName: 'organisations',
   }
 )
 
