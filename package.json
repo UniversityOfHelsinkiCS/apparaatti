@@ -80,6 +80,7 @@
     "umzug": "^3.8.2",
     "winston": "^3.17.0",
     "winston-gelf-transporter": "^1.0.2",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.2"
   }
 }

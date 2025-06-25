@@ -4,15 +4,10 @@ import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { readCodeData } from './dataImport.ts'
-import _ from 'lodash'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-const courseNameOrgStrings: Record<string, string> = {
-  'H50':'mat-lu',
-  'H60':'kasv',
-  'H200':'oik.',
-  'H70':'valt'
-}
+import { readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+
 
 
 
@@ -88,9 +83,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any, studyD
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12) // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
   }
   
-  console.log('course is same organisation: ', sameOrganisationAsUser)
-  console.log('course coord: ', courseCoordinates.org)
-
+  
 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
@@ -220,31 +213,40 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   return false
   
 } 
+const data = readOrganisationRecommendationData()
 //Tries to check if the course is in the same organistion as the user
 function courseInSameOrgAsUser(course: any, studyData: any){
-  //console.log('studydata', studyData)
-  const courseOrgIds = course.groupIds
+  console.log('--course organisation check--')
+  console.log('studydata', studyData)
+  
+  const userOrganisations = [{code: 'H50'}]
+  
+  const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
+  console.log(usersOrganisationCodes)
 
-  for (const org of studyData.organisations) {
-    //console.log('checking', org)
-    //course contains an groupid which tells if the course is in the same organisation as the user, but sometimes groupId is not correctly set
-    if (courseOrgIds.includes(org.id)) {
-      console.log(`Course ${course.name.fi} is in the same organisation as user`)
-      return true
-    }
+  const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
+  console.log('data org: ', dataOrganisations)
+  
+  const allCourseCodesInOrganisation = dataOrganisations.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
+  console.log(allCourseCodesInOrganisation)
+  
 
-    //course name sometimes contains an organisation shortcode (for example for Matemaattisluonnontieteellinen H50 it is mat-lu)
-    //console.log('fallback with: ', org.code)
-    const shortCode = courseNameOrgStrings[org.code]
-    //console.log(shortCode)
-    if(course.name.fi.includes(shortCode)){
-      console.log(`Course ${course.name.fi} is in the same organisation as user based on course name`)
+  console.log('final check')
+  console.log(course.name)
+  console.log(course.courseCodes)
+  for(const code of course.courseCodes){
+    console.log('final check for code : ', code)
+    console.log(course.courseCodes[0])
+    console.log(allCourseCodesInOrganisation.includes(code))
+    if(allCourseCodesInOrganisation.includes(code)){
+      console.log('course' + course.name + ' found organisation' )
       return true
     }
   }
-  //console.log(`Course ${course.name.fi} is NOT in the same organisation as user`)
-  //console.log(`User organisations: ${orgIds}`)
-  //console.log(`Course organisations: ${courseOrgIds}`)
+  
+
+
+  
   return false
 }
 
@@ -255,6 +257,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const studyData = await getStudyData(user) //used to filter courses by organisation
 
   console.log(userCoordinates)
+ 
  
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
@@ -282,7 +285,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
 
   const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
-  console.log(sortedCourses)
+  // console.log(sortedCourses)
   const recommendations = sortedCourses
   
   const end = Date.now()

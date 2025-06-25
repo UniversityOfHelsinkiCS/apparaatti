@@ -66,6 +66,7 @@ app.listen(process.env.PORT, async () => {
   await connectToDatabase()
   //  await seed()
 
+
   if (UPDATER_CRON_ENABLED === false) {
     await setupAuthentication()
   }
