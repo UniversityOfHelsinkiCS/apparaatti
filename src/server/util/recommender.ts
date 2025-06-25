@@ -79,12 +79,13 @@ function langCoordFromCode(code: string) {
 async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any) {
   
   const dimensions = Object.keys(userCoordinates)
+
   
   const sameOrganisationAsUser = courseInSameOrgAsUser(course, studyData)
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
-    date: course.startDate.getTime(),
-    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 9) // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    date: course.startDate.getTime(),  
+    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12) // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
   }
   
   console.log('course is same organisation: ', sameOrganisationAsUser)

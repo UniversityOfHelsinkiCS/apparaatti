@@ -15,13 +15,13 @@ const CourseRecommendation = ({
     const endDate = new Date(course.endDate)
 
     const start =
-      startDate.getDay() +
+      startDate.getDate() +
       '.' +
       (startDate.getMonth() + 1) +
       '.' +
       startDate.getFullYear()
     const end =
-      endDate.getDay() +
+      endDate.getDate() +
       '.' +
       (endDate.getMonth() + 1) +
       '.' +
