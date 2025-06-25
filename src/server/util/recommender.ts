@@ -214,39 +214,22 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   
 } 
 const data = readOrganisationRecommendationData()
-//Tries to check if the course is in the same organistion as the user
+
+//Checks if the course is in the same org as the user based on the provided data spreadsheet.
 function courseInSameOrgAsUser(course: any, studyData: any){
-  console.log('--course organisation check--')
-  console.log('studydata', studyData)
-  
   const userOrganisations = studyData.organisations
   
   const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
-  console.log(usersOrganisationCodes)
-
+  
   const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
-  console.log('data org: ', dataOrganisations)
   
   const allCourseCodesInOrganisation = dataOrganisations.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
-  console.log(allCourseCodesInOrganisation)
   
-
-  console.log('final check')
-  console.log(course.name)
-  console.log(course.courseCodes)
   for(const code of course.courseCodes){
-    console.log('final check for code : ', code)
-    console.log(course.courseCodes[0])
-    console.log(allCourseCodesInOrganisation.includes(code))
     if(allCourseCodesInOrganisation.includes(code)){
-      console.log('course' + course.name + ' found organisation' )
       return true
     }
   }
-  
-
-
-  
   return false
 }
 
@@ -255,14 +238,8 @@ function courseInSameOrgAsUser(course: any, studyData: any){
 async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const startBench = Date.now()
   const studyData = await getStudyData(user) //used to filter courses by organisation
-
-  console.log(userCoordinates)
- 
- 
-
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
-  console.log(pickedPeriods)
-
+  
   type courseCode = {
     code: string
   }
