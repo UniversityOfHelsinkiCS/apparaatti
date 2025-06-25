@@ -120,6 +120,10 @@ async function calculateUserDistances(
   return distances
 }
 
+const uniqueVals = (arr: any[]) => {
+  return [...new Set(arr)]
+}
+
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
@@ -157,9 +161,9 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     courseRealizationsWithCourseUnit.map((cur) => {
       return {
         ...cur,
-        unitIds: courseRealizationIdsWithCourseUnit
+        unitIds: uniqueVals(courseRealizationIdsWithCourseUnit
           .filter((curcu) => curcu.curId === cur.id)
-          .map((curcu) => curcu.cuId),
+          .map((curcu) => curcu.cuId)),
       }
     })
 
@@ -167,12 +171,12 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     (cur) => {
       return {
         ...cur,
-        courseCodes: courseUnitsWithCodes
+        courseCodes: uniqueVals(courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
-          .map((cu) => cu.courseCode),
-        groupIds: courseUnitsWithCodes
+          .map((cu) => cu.courseCode)),
+        groupIds: uniqueVals(courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
-          .map((cu) => cu.groupId),
+          .map((cu) => cu.groupId)),
       }
     }
   )
@@ -247,11 +251,11 @@ function courseInSameOrgAsUser(course: any, studyData: any){
 
 
 async function getRecommendations(userCoordinates: any, answerData, user: any) {
-
+  const startBench = Date.now()
   const studyData = await getStudyData(user) //used to filter courses by organisation
 
   console.log(userCoordinates)
-  const startBench = Date.now()
+ 
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   console.log(pickedPeriods)
