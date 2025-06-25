@@ -219,7 +219,7 @@ function courseInSameOrgAsUser(course: any, studyData: any){
   console.log('--course organisation check--')
   console.log('studydata', studyData)
   
-  const userOrganisations = [{code: 'H50'}]
+  const userOrganisations = studyData.organisations
   
   const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
   console.log(usersOrganisationCodes)
