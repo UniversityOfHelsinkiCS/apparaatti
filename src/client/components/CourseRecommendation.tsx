@@ -6,11 +6,10 @@ const CourseRecommendation = ({
 }: {
   course: CourseRecommendationType
 }) => {
-  console.log(course)
   if (!course) return null
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
-
+  const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
   const courseDateRange = (course: any) => {
     const startDate = new Date(course.startDate)
     const endDate = new Date(course.endDate)
@@ -43,9 +42,7 @@ const CourseRecommendation = ({
             color="textSecondary"
             gutterBottom
           >
-            {course.course.courseCodes
-              .map((code) => +code.toString())
-              .join(', ')}
+            {courseCodes}
           </Typography>
 
           <Typography>{courseDateRange(course.course)}</Typography>
