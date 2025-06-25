@@ -84,7 +84,7 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any, studyD
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),
-    org: sameOrganisationAsUser ? 0 : 100000 // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    org: sameOrganisationAsUser === true ? 0 : 100000 // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
   }
   
   console.log('course is same organisation: ', sameOrganisationAsUser)
@@ -217,11 +217,11 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
 } 
 //Tries to check if the course is in the same organistion as the user
 function courseInSameOrgAsUser(course: any, studyData: any){
-  console.log('studydata', studyData)
+  //console.log('studydata', studyData)
   const courseOrgIds = course.groupIds
 
   for (const org of studyData.organisations) {
-    console.log('checking', org)
+    //console.log('checking', org)
     //course contains an groupid which tells if the course is in the same organisation as the user, but sometimes groupId is not correctly set
     if (courseOrgIds.includes(org.id)) {
       console.log(`Course ${course.name.fi} is in the same organisation as user`)
@@ -229,15 +229,15 @@ function courseInSameOrgAsUser(course: any, studyData: any){
     }
 
     //course name sometimes contains an organisation shortcode (for example for Matemaattisluonnontieteellinen H50 it is mat-lu)
-    console.log('fallback with: ', org.code)
+    //console.log('fallback with: ', org.code)
     const shortCode = courseNameOrgStrings[org.code]
-    console.log(shortCode)
+    //console.log(shortCode)
     if(course.name.fi.includes(shortCode)){
       console.log(`Course ${course.name.fi} is in the same organisation as user based on course name`)
       return true
     }
   }
-  console.log(`Course ${course.name.fi} is NOT in the same organisation as user`)
+  //console.log(`Course ${course.name.fi} is NOT in the same organisation as user`)
   //console.log(`User organisations: ${orgIds}`)
   //console.log(`Course organisations: ${courseOrgIds}`)
   return false
@@ -278,7 +278,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   console.log(sortedCourses)
-  const recommendations = sortedCourses.slice(0, 3)
+  const recommendations = sortedCourses
   
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)

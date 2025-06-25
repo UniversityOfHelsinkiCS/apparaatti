@@ -43,6 +43,7 @@ export type CourseRealization = {
   name: LocalizedString
   startDate: Date
   endDate: Date
+  courseCodes: string[]
 }
 
 export type CurCuRelation = {

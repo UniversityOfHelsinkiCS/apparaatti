@@ -6,6 +6,7 @@ const CourseRecommendation = ({
 }: {
   course: CourseRecommendationType
 }) => {
+  console.log(course)
   if (!course) return null
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
