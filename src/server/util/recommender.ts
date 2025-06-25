@@ -86,6 +86,10 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any, studyD
     date: course.startDate.getTime(),
     org: sameOrganisationAsUser ? 0 : 100000 // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
   }
+  
+  console.log("course is same organisation: ", sameOrganisationAsUser)
+  console.log("course coord: ", courseCoordinates.org)
+
 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
