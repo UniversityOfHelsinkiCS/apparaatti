@@ -10,6 +10,60 @@ export type OrganisationRecommendation = {
   languages: Language[]
 }
 
+
+
+export function getUserOrganisationRecommendations(studyData: any, data: OrganisationRecommendation[]){
+  const userOrganisations = studyData.organisations
+  const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
+  const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
+  return dataOrganisations
+}
+
+export function codesInOrganisations(data: OrganisationRecommendation[]){
+  return data.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
+}
+
+
+export function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string){
+  return organisationData.map(
+    (org) => org.languages.find((lang) => lang.name.includes(nameContains))?.codes)
+    .flat()
+}
+
+export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){
+  //if the user picks the same language as the primary language then we want to return primary language course codes
+  if(langCode === primaryLanguage ){
+    switch(langCode){
+    case '1':
+      return codesFromLanguagesContaining(organisationData,'Äidinkieli, suomi')
+    case '2':
+      return codesFromLanguagesContaining(organisationData,'Äidinkieli, ruotsi')
+    case '3':
+      return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
+    default:
+      console.log('No primary language codes found')
+      return []
+    }
+  }
+  //the codes differ so return secondary language course codes
+  else{
+    switch(langCode){
+    case '1':
+      return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, suomi')
+    case '2':
+      return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, ruotsi')
+    case '3':
+      return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
+    default:
+      console.log('No secondary language codes found')
+      return []
+    }
+  }
+}
+
+
+
+
 export function readOrganisationRecommendationData(): OrganisationRecommendation[] {
   const filePath = path.resolve(
     import.meta.dirname,
