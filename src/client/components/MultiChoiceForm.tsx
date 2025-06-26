@@ -39,9 +39,9 @@ const questions = [
         question: { fi: 'Mikä on koulusivistyskielesi?' },
         options: [
           { id: '1', name: { fi: 'ei valintaa' } },
-          { id: '2', name: { fi: 'Suomi' } },
-          { id: '3', name: { fi: 'Ruotsi' } },
-          { id: '4', name: { fi: 'Englanti' } },
+          { id: 'fi', name: { fi: 'Suomi' } },
+          { id: 'ru', name: { fi: 'Ruotsi' } },
+          { id: 'en', name: { fi: 'Englanti' } },
         ],
       },
     ],

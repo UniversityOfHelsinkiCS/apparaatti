@@ -34,11 +34,11 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
   //if the user picks the same language as the primary language then we want to return primary language course codes
   if(langCode === primaryLanguage ){
     switch(langCode){
-    case '1':
+    case 'fi':
       return codesFromLanguagesContaining(organisationData,'Äidinkieli, suomi')
-    case '2':
+    case 'ru':
       return codesFromLanguagesContaining(organisationData,'Äidinkieli, ruotsi')
-    case '3':
+    case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
     default:
       console.log('No primary language codes found')
@@ -48,11 +48,11 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
   //the codes differ so return secondary language course codes
   else{
     switch(langCode){
-    case '1':
+    case 'fi':
       return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, suomi')
-    case '2':
+    case 'ru':
       return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, ruotsi')
-    case '3':
+    case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
     default:
       console.log('No secondary language codes found')
