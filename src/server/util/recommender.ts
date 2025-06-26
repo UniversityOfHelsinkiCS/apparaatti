@@ -85,7 +85,7 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),  
-    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 24), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
     lang: correctLang === true ? 0 : Math.pow(10, 12)
   }
   
