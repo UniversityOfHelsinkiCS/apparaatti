@@ -23,20 +23,19 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
   if (data.length < 2) return []
 
   const headers: string[] = data[0]
-  console.log(headers)
+  
   const dataRows = data.slice(1)
-  console.log(dataRows)
+  
   return dataRows.map((row: string[]) => {
     const name = row[0]
-    console.log(name)
+    
     const languages: Language[] = []
-    console.log(languages)
-    console.log('-------')
+    
     for (let i = 1; i < headers.length; i++) {
       const langName = headers[i]
-      console.log(langName)
+      
       const codesRaw = row[i]
-      console.log(codesRaw)
+      
       if (codesRaw && codesRaw.trim()) {
         const codes = codesRaw.split('\n').map(c => c.trim()).filter(Boolean)
         languages.push({ name: langName, codes })
