@@ -36,7 +36,7 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
     switch(langCode){
     case 'fi':
       return codesFromLanguagesContaining(organisationData,'Äidinkieli, suomi')
-    case 'ru':
+    case 'sv':
       return codesFromLanguagesContaining(organisationData,'Äidinkieli, ruotsi')
     case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
@@ -50,7 +50,7 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
     switch(langCode){
     case 'fi':
       return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, suomi')
-    case 'ru':
+    case 'sv':
       return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, ruotsi')
     case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
