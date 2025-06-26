@@ -55,16 +55,38 @@ function calculateUserCoordinates(answerData: any) {
   return userCoordinates
 }
 
-async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any, codes: any) {
+function courseInSameOrganisationAsUser(course: any, codes: courseCodes){
+  for(const courseCode of course.courseCodes){
+    if (codes.userOrganisation.includes(courseCode)){
+      return true
+    }
+  }
+  return false
+} 
+
+function courseIsCorrectLang(course: any, codes: courseCodes){
+  for(const courseCode of course.courseCodes){
+    if (codes.languageSpesific.includes(courseCode)){
+      return true
+    }
+  }
+  return false
+} 
+
+
+async function calculateCourseDistance(course: any, userCoordinates: any, studyData: any, codes: courseCodes) {
   
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = codes.organisationSp
+  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
+  const correctLang = courseIsCorrectLang(course, codes)
+  
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),  
-    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12) // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    lang: correctLang === true ? 0 : Math.pow(10, 12)
   }
   
   
