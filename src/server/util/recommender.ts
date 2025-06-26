@@ -241,7 +241,9 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
 
   const courseTimer = Date.now()
   const courseCodes = await getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
+  console.log('course code info: ', courseCodes)
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.all) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
+  
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
