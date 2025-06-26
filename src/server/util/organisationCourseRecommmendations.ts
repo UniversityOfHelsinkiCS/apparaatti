@@ -19,15 +19,21 @@ export function getUserOrganisationRecommendations(studyData: any, data: Organis
   return dataOrganisations
 }
 
-export function codesInOrganisations(data: OrganisationRecommendation[]){
+export function codesInOrganisations(data: OrganisationRecommendation[]): string[]{
   return data.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
 }
 
 
-export function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string){
-  return organisationData.map(
-    (org) => org.languages.find((lang) => lang.name.includes(nameContains))?.codes)
+export function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string): string[]{
+  const codes = organisationData.map(
+    (org) => org.languages.filter((lang) => lang.name.includes(nameContains)).map((lang) => lang.codes).flat())
     .flat()
+  if(codes != undefined){
+    return codes
+  }
+  else{
+    return []
+  }
 }
 
 export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){

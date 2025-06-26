@@ -48,18 +48,19 @@ function calculateUserCoordinates(answerData: any) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
     date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
-    org: 0 // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
+    org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
+    lang: 0 // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
   }
 
   return userCoordinates
 }
 
-async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any, organisationRecommendations: OrganisationRecommendation[]) {
+async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any, codes: any) {
   
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = courseInSameOrgAsUser(course, studyData, organisationRecommendations)
+  const sameOrganisationAsUser = codes.organisationSp
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),  
@@ -84,11 +85,11 @@ async function calculateUserDistances(
   userCoordinates: any,
   availableCourses: any,
   studyData: any,
-  organisationRecommendations: OrganisationRecommendation[]
+  courseCodes: any
 ) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, studyData, organisationRecommendations)
+    return calculateCourseDistance(course, userCoordinates, studyData, courseCodes)
   })
   const distances = await Promise.all(distancePromises)
   const distanceE = new Date()
@@ -190,21 +191,6 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   
 } 
 
-//Checks if the course is in the same org as the user based on the provided data spreadsheet.
-function courseInSameOrgAsUser(course: any, studyData: any, data: OrganisationRecommendation[]){
- 
-  const dataOrganisations = getUserOrganisationRecommendations(studyData, data)
-  
-  const allCourseCodesInOrganisation = codesInOrganisations(dataOrganisations)
-  
-  for(const code of course.courseCodes){
-    if(allCourseCodesInOrganisation.includes(code)){
-      return true
-    }
-  }
-  return false
-}
-
 /**
  * 
  * @param langCode 
@@ -222,7 +208,13 @@ function courseInSameOrgAsUser(course: any, studyData: any, data: OrganisationRe
  * 
  * languageSpesific: course codes that are in the same organisation AND are correct given the language choices of the user
  */
-async function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], studyData: any){
+type courseCodes = {
+  all: string[],
+  userOrganisation: string[],
+  languageSpesific: string[]
+}
+
+function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], studyData: any): courseCodes{
   const allCodes = codesInOrganisations(organisationRecommendations)
   const userOrganisations = getUserOrganisationRecommendations(studyData, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
@@ -240,7 +232,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const studyData = await getStudyData(user) //used to filter courses by organisation
 
   const courseTimer = Date.now()
-  const courseCodes = await getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
+  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
   console.log('course code info: ', courseCodes)
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.all) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   
@@ -248,7 +240,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
  
-  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, organisationRecommendations)
+  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, courseCodes)
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
