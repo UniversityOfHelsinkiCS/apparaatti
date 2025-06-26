@@ -30,7 +30,7 @@ const questions = [
     ],
   },
   {
-    id: 'teached-language',
+    id: 'primary-language',
     type: 'multi',
 
     variants: [

@@ -3,13 +3,9 @@
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
-import { readCodeData } from './dataImport.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-import { readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
-
-
-
+import { OrganisationRecommendation, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -57,26 +53,12 @@ function calculateUserCoordinates(answerData: any) {
   return userCoordinates
 }
 
-function langCoordFromCode(code: string) {
-  if (code.includes('KK-FI') || code.includes('KK-AIAK')) {
-    return '2'
-  }
-  if (code.includes('KK-RU')) {
-    return '3'
-  }
-  if (code.includes('KK-EN')) {
-    return '4'
-  }
-
-  return '1' //default = no choice
-}
-
-async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any) {
+async function calculateCourseDistance(course: Cur, userCoordinates: any, studyData: any, organisationRecommendations: OrganisationRecommendation[]) {
   
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = courseInSameOrgAsUser(course, studyData)
+  const sameOrganisationAsUser = courseInSameOrgAsUser(course, studyData, organisationRecommendations)
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),  
@@ -100,11 +82,12 @@ async function calculateCourseDistance(course: Cur, userCoordinates: any, studyD
 async function calculateUserDistances(
   userCoordinates: any,
   availableCourses: any,
-  studyData: any
+  studyData: any,
+  organisationRecommendations: OrganisationRecommendation[]
 ) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, studyData)
+    return calculateCourseDistance(course, userCoordinates, studyData, organisationRecommendations)
   })
   const distances = await Promise.all(distancePromises)
   const distanceE = new Date()
@@ -205,17 +188,64 @@ function correctCoursePeriod(course: any, pickedPeriods: any){
   return false
   
 } 
-const data = readOrganisationRecommendationData()
+
+
+
+function getUserOrganisationRecommendations(studyData: any, data: OrganisationRecommendation[]){
+  const userOrganisations = studyData.organisations
+  const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
+  const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
+  return dataOrganisations
+}
+
+function codesInOrganisations(data: OrganisationRecommendation[]){
+  return data.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
+}
+
+
+function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string){
+  return organisationData.map(
+    (org) => org.languages.find((lang) => lang.name.includes(nameContains))?.codes)
+    .flat()
+}
+
+function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){
+  //if the user picks the same language as the primary language then we want to return primary language course codes
+  if(langCode === primaryLanguage ){
+    switch(langCode){
+    case '1':
+      return codesFromLanguagesContaining(organisationData,'Äidinkieli, suomi')
+    case '2':
+      return codesFromLanguagesContaining(organisationData,'Äidinkieli, ruotsi')
+    case '3':
+      return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
+    default:
+      console.log('No primary language codes found')
+      return []
+    }
+  }
+  //the codes differ so return secondary language course codes
+  else{
+    switch(langCode){
+    case '1':
+      return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, suomi')
+    case '2':
+      return codesFromLanguagesContaining(organisationData,'Toinen kotimainen, ruotsi')
+    case '3':
+      return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
+    default:
+      console.log('No secondary language codes found')
+      return []
+    }
+  }
+}
 
 //Checks if the course is in the same org as the user based on the provided data spreadsheet.
-function courseInSameOrgAsUser(course: any, studyData: any){
-  const userOrganisations = studyData.organisations
+function courseInSameOrgAsUser(course: any, studyData: any, data: OrganisationRecommendation[]){
+ 
+  const dataOrganisations = getUserOrganisationRecommendations(studyData, data)
   
-  const usersOrganisationCodes: string[] = userOrganisations.map((org: any) => org.code)
-  
-  const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
-  
-  const allCourseCodesInOrganisation = dataOrganisations.map((org) => org.languages.map((lang) => lang.codes).flat()).flat()
+  const allCourseCodesInOrganisation = codesInOrganisations(dataOrganisations)
   
   for(const code of course.courseCodes){
     if(allCourseCodesInOrganisation.includes(code)){
@@ -224,30 +254,48 @@ function courseInSameOrgAsUser(course: any, studyData: any){
   }
   return false
 }
-
-async function getCourseCodes(langCode: string){
-  type courseCode = {
-    code: string
+/**
+ * 
+ * @param langCode 
+ * Language that the user wants a course about
+ * 
+ * @param primaryLanguage 
+ * Language that is the users primary language in school
+ * 
+ * @returns 
+ * object that contains lists of course codes:
+ * 
+ * all: all possible course codes that could be recommended
+ * 
+ * userOrganisation: course codes that are in the same organisation as the user
+ * 
+ * languageSpesific: course codes that are in the same organisation AND are correct given the language choices of the user
+ */
+async function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], studyData: any){
+  const allCodes = codesInOrganisations(organisationRecommendations)
+  const userOrganisations = getUserOrganisationRecommendations(studyData, organisationRecommendations)
+  const organisationCodes = codesInOrganisations(userOrganisations)
+  const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage)  
+  return {
+    all: allCodes, 
+    userOrganisation: organisationCodes, 
+    languageSpesific: languageSpesific, 
   }
-  const courseCodes = (await readCodeData()) as courseCode[]
-  const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-  const filteredCourseCodeStrings = courseCodeStrings.filter(
-    (code) => langCoordFromCode(code) === langCode
-  )
-  return filteredCourseCodeStrings
 }
 
 async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const startBench = Date.now()
+  const organisationRecommendations = readOrganisationRecommendationData()
+  const studyData = await getStudyData(user) //used to filter courses by organisation
 
   const courseTimer = Date.now()
-  const courseCodes = await getCourseCodes(answerData['lang-1'])
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes)
+  const courseCodes = await getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.all) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
-  const studyData = await getStudyData(user) //used to filter courses by organisation
-  const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
+ 
+  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, organisationRecommendations)
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)

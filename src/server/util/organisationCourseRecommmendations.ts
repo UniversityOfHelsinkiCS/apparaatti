@@ -5,7 +5,7 @@ type Language = {
   codes: string[]
 }
 
-type OrganisationRecommendation = {
+export type OrganisationRecommendation = {
   name: string
   languages: Language[]
 }
