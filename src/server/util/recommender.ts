@@ -120,18 +120,10 @@ const uniqueVals = (arr: any[]) => {
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
-      courseCode: courseCodeStrings, //{[Op.like]: `${search}%`},
+      courseCode: courseCodeStrings,
     },
   })
-  /*
-  courseCodeStrings.map((code) => {
-    if (!courseUnitsWithCodes.some(course => course.courseCode === code)) {
-      console.log(`Course code ${code} not found in course data`)
-    }
-  })
-    */
-
-  //probably should be a join, but ill roll with this one
+ 
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
@@ -233,34 +225,31 @@ function courseInSameOrgAsUser(course: any, studyData: any){
   return false
 }
 
-
-
-async function getRecommendations(userCoordinates: any, answerData, user: any) {
-  const startBench = Date.now()
-  const studyData = await getStudyData(user) //used to filter courses by organisation
-  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
-  
+async function getCourseCodes(langCode: string){
   type courseCode = {
     code: string
   }
-
-  const courseTimer = Date.now()
   const courseCodes = (await readCodeData()) as courseCode[]
   const courseCodeStrings: string[] = courseCodes.map((course) => course.code)
-
   const filteredCourseCodeStrings = courseCodeStrings.filter(
-    (code) => langCoordFromCode(code) === answerData['lang-1']
+    (code) => langCoordFromCode(code) === langCode
   )
+  return filteredCourseCodeStrings
+}
 
-  const courseData = await getRealisationsWithCourseUnitCodes(
-    filteredCourseCodeStrings
-  )
+async function getRecommendations(userCoordinates: any, answerData, user: any) {
+  const startBench = Date.now()
+
+  const courseTimer = Date.now()
+  const courseCodes = await getCourseCodes(answerData['lang-1'])
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes)
   const courseEndTimer = Date.now()
-  console.log(
-    `Execution time for course end: ${courseEndTimer - courseTimer} ms`
-  )
+  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
+  const studyData = await getStudyData(user) //used to filter courses by organisation
   const distances = await calculateUserDistances(userCoordinates, courseData, studyData)
+
+  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   // console.log(sortedCourses)
   const recommendations = sortedCourses

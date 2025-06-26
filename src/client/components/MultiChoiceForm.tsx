@@ -30,6 +30,23 @@ const questions = [
     ],
   },
   {
+    id: 'teached-language',
+    type: 'multi',
+
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Mikä on koulusivistyskielesi?' },
+        options: [
+          { id: '1', name: { fi: 'ei valintaa' } },
+          { id: '2', name: { fi: 'Suomi' } },
+          { id: '3', name: { fi: 'Ruotsi' } },
+          { id: '4', name: { fi: 'Englanti' } },
+        ],
+      },
+    ],
+  },
+  {
     id: 'lang-1',
     type: 'language',
 
