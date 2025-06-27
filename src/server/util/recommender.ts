@@ -86,7 +86,7 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
     //'period': coursePeriodValue(period),
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
-    lang: correctLang === true ? 0 : Math.pow(10, 24) // if the course is different language than the users pick we want to have it very far away
+    lang: correctLang === true ? 0 : Math.pow(10, 24) // if the course is different language than the users pick we want to have it very far away. 
   }
   
   
@@ -256,7 +256,9 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseTimer = Date.now()
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
   console.log('course code info: ', courseCodes)
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.all) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
+
+  
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
