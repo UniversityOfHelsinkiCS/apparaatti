@@ -64,7 +64,7 @@ const questions = [
     ],
   },
   {
-    id: '2',
+    id: 'graduation',
     type: 'multi',
 
     variants: [

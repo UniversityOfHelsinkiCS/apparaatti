@@ -7,6 +7,7 @@ import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
 import { codesInOrganisations, getUserOrganisationRecommendations, languageSpesificCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import type {OrganisationRecommendation} from './organisationCourseRecommmendations.ts'
+import { CourseRealization } from '../../common/types.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -73,6 +74,23 @@ function courseIsCorrectLang(course: any, codes: courseCodes){
   return false
 } 
 
+function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
+  const customCodeUrns = course.customCodeUrns
+  
+  for(const key of customCodeUrns.keys()){
+    if(key.includes('kk-apparaatti')){
+      const values = customCodeUrns.get(key)
+      const hasCodeUrn = values?.includes(codeUrn)
+      if(hasCodeUrn){
+        return true
+      }
+    }
+  }
+
+  return false
+}
+
+
 
 async function calculateCourseDistance(course: any, userCoordinates: any, studyData: any, codes: courseCodes) {
   
@@ -81,6 +99,13 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
   
   const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
   const correctLang = courseIsCorrectLang(course, codes)
+  //for debugging using a hard coded value
+  const hasCorrectUrn = courseHasCustomCodeUrn(course, 'val')
+  if(hasCorrectUrn){
+    console.log('course has correct urn: '+ course.name.fi)
+
+  }
+  console.log('course has urn: ', hasCorrectUrn)
   
   const courseCoordinates = {
     //'period': coursePeriodValue(period),

@@ -37,12 +37,13 @@ export type CourseRecommendation = {
   distance: number
 } & Record<Dimension, number>
 
+
 export type CourseRealization = {
   id: string
   name: LocalizedString
   startDate: Date
   endDate: Date
-  customCodeUrns: JSON
+  customCodeUrns: Map<string, string[]>
   courseCodes: string[]
 }
 
