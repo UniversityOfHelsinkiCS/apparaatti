@@ -76,7 +76,9 @@ function courseIsCorrectLang(course: any, codes: courseCodes){
 } 
 
 function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
+  console.log(course)
   const customCodeUrns = course.customCodeUrns
+  console.log(customCodeUrns)
   
   for(const key of Array.from(customCodeUrns.keys())){
     if(key.includes('kk-apparaatti')){
