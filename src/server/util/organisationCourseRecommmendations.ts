@@ -25,7 +25,7 @@ export function codesInOrganisations(data: OrganisationRecommendation[]): string
 
 
 export function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string): string[]{
-  let codes: string[] = []
+  const codes: string[] = []
 
   for (const org of organisationData){
     const languagesWithCorrectName = org.languages.filter((lang) => lang.name.includes(nameContains))
