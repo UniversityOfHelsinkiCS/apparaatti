@@ -42,6 +42,7 @@ export type CourseRealization = {
   name: LocalizedString
   startDate: Date
   endDate: Date
+  customCodeUrns: JSON
   courseCodes: string[]
 }
 

@@ -11,6 +11,7 @@ class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
   declare name: LocalizedString
   declare startDate: Date
   declare endDate: Date
+  declare customCodeUrns: JSON
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 }
@@ -34,6 +35,9 @@ Cur.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    customCodeUrns: {
+      type: DataTypes.JSONB
+    }, 
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
