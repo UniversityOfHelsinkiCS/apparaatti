@@ -29,10 +29,12 @@ export function codesFromLanguagesContaining(organisationData: OrganisationRecom
 
   for (const org of organisationData){
     const languagesWithCorrectName = org.languages.filter((lang) => lang.name.includes(nameContains))
+    console.log(languagesWithCorrectName)
     const languageCodes = languagesWithCorrectName.map((lang) => lang.codes).flat()
+    console.log(languageCodes)
     codes.concat(languageCodes)
   }
-
+  console.log(codes)
   return codes
 }
 
