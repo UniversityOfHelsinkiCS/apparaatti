@@ -25,7 +25,11 @@ const createCursFromUpdater = async (
   })
 
   try {
-    Cur.bulkCreate(curs, { ignoreDuplicates: true })
+    //Cur.bulkCreate(curs, { ignoreDuplicates: true })
+    for (const cur of curs){
+      Cur.upsert(cur)
+    }
+
     console.log('Curs created successfully')
   } catch (error) {
     console.error('Error creating curs:', error)
@@ -51,7 +55,10 @@ const createCusFromUpdater = async (
     })
 
   try {
-    Cu.bulkCreate(cus, { ignoreDuplicates: true })
+    //Cu.bulkCreate(cus, { ignoreDuplicates: true })
+    for (const cur of cus){
+      Cu.upsert(cur)
+    }
     console.log('Cus created successfully')
   } catch (error) {
     console.error('Error creating cus:', error)
