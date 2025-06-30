@@ -101,6 +101,7 @@ const coursesHandler = async (courseRealizations: any[]) => {
   console.log(
     `Found ${filteredCourseRealizations.length} valid course realizations`
   )
+  console.log(filteredCourseRealizations)
   await createCursFromUpdater(filteredCourseRealizations)
   await createCusFromUpdater(filteredCourseRealizations)
   await createCurCusFromUpdater(filteredCourseRealizations)
