@@ -83,7 +83,7 @@ function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
 
   for(const key of Object.keys(customCodeUrns)){
     if(key.includes('kk-apparaatti')){
-      const values = customCodeUrns.get(key)
+      const values = customCodeUrns[key]
       const hasCodeUrn = values?.includes(codeUrn)
       if(hasCodeUrn){
         return true

@@ -11,7 +11,7 @@ class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
   declare name: LocalizedString
   declare startDate: Date
   declare endDate: Date
-  declare customCodeUrns: Map<string, string[]>
+  declare customCodeUrns: Record<string, string[]> 
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 }
