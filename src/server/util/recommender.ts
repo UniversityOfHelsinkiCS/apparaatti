@@ -7,7 +7,7 @@ import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
 import { codesInOrganisations, getUserOrganisationRecommendations, languageSpesificCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import type {OrganisationRecommendation} from './organisationCourseRecommmendations.ts'
-import { CourseRealization } from '../../common/types.ts'
+import type { CourseRealization } from '../../common/types.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
