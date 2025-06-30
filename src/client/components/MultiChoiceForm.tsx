@@ -73,7 +73,7 @@ const questions = [
         options: [
           { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
           {
-            id: '2',
+            id: '0',
             name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
           },
         ],
@@ -84,7 +84,7 @@ const questions = [
         options: [
           { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
           {
-            id: '2',
+            id: '0',
             name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
           },
         ],
@@ -96,7 +96,7 @@ const questions = [
         options: [
           { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
           {
-            id: '2',
+            id: '0',
             name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
           },
         ],
