@@ -25,17 +25,17 @@ export function codesInOrganisations(data: OrganisationRecommendation[]): string
 
 
 export function codesFromLanguagesContaining(organisationData: OrganisationRecommendation[], nameContains: string): string[]{
-  const codes: string[] = []
+  const codes: string[][] = []
 
   for (const org of organisationData){
     const languagesWithCorrectName = org.languages.filter((lang) => lang.name.includes(nameContains))
     console.log(languagesWithCorrectName)
     const languageCodes = languagesWithCorrectName.map((lang) => lang.codes).flat()
     console.log(languageCodes)
-    codes.concat(languageCodes)
+    codes.push(languageCodes)
   }
   console.log(codes)
-  return codes
+  return codes.flat()
 }
 
 export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){
