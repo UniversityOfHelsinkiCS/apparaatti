@@ -78,6 +78,10 @@ function courseIsCorrectLang(course: any, codes: courseCodes){
 function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
   console.log(course)
   const customCodeUrns = course.customCodeUrns
+  if(customCodeUrns === null){
+    return false
+  }
+  
   console.log(customCodeUrns)
    
 
