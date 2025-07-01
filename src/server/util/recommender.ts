@@ -132,9 +132,9 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
   case courseName?.includes('etäopetus'):
     return baseCoordinate * 1    
   case courseName?.includes('monimuoto'):
-    return baseCoordinate * 2
+    return baseCoordinate * 10
   case courseName?.includes('lähiopetus'):
-    return baseCoordinate * 3
+    return baseCoordinate * 20
   default:
     return 0
   }
