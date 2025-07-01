@@ -71,7 +71,8 @@ function calculateUserCoordinates(answerData: any) {
     graduation: answerData['graduation'] === '1' ? Math.pow(10, 12) : 0,
     mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 12) : 0,
     integrated: answerData['integrated'] === '1' ? Math.pow(10, 12) : 0,
-    studyPlace:  studyPlaceCoordinate(answerData['study-place'])
+    studyPlace:  studyPlaceCoordinate(answerData['study-place']),
+    replacement: answerData['replacement'] === '1' ? Math.pow(10,12) : 0
   }
 
   return userCoordinates
@@ -158,6 +159,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
+  const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
+  
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
   
   const courseCoordinates = {
@@ -167,7 +170,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
     integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
-    studyPlace: courseStudyPlaceCoordinate(course)
+    studyPlace: courseStudyPlaceCoordinate(course),
+    replacement:  hasReplacementCodeUrn ? Math.pow(10, 12) : 0
   }
   
   
