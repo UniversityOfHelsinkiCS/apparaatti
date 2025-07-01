@@ -51,8 +51,8 @@ function calculateUserCoordinates(answerData: any) {
     date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
     org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
-    graduation: answerData['graduation'] === '1' ? Math.pow(10, 9) : 0,
-    mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 9) : 0
+    graduation: answerData['graduation'] === '1' ? Math.pow(10, 12) : 0,
+    mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 12) : 0
   }
 
   return userCoordinates
@@ -115,7 +115,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
   const correctLang = courseIsCorrectLang(course, codes)
   
-  const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val')
+  const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
 
@@ -124,8 +124,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
-    graduation: hasGraduationCodeUrn ? Math.pow(10, 9) : 0,
-    mentoring: isMentoringCourse ? Math.pow(10, 9) : 0
+    graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
+    mentoring: isMentoringCourse ? Math.pow(10, 12) : 0
   }
   
   
