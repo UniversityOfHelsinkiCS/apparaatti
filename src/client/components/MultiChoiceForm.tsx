@@ -158,26 +158,26 @@ const questions = [
   },
 
   {
-    id: '6',
+    id: 'mentoring',
     type: 'multi',
 
     variants: [
       {
         name: 'default',
-        question: { fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia?' },
+        question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
         options: [
-          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-          { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+          { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
+          { id: '0', name: { fi: 'En koe tarvitsevani valmennusta' } },
         ],
       },
       {
         name: 'onlyEn',
         question: {
-          fi: 'Tarvitsetko kertausta/harjoitusta ennen kurssia (Vain englanti)?',
+          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
         },
         options: [
           { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-          { id: '2', name: { fi: 'En koe tarvitsevani kertausta' } },
+          { id: '0', name: { fi: 'En koe tarvitsevani kertausta' } },
         ],
       },
     ],
