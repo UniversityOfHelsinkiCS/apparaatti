@@ -131,7 +131,7 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
   
   switch (courseName){
   case courseName?.includes('etäopetus'):
-    console.log("course is remote: , ", course.name.fi)
+    console.log('course is remote: , ', course.name.fi)
     return baseCoordinate * 1    
   case courseName?.includes('monimuoto'):
     return baseCoordinate * 10
@@ -175,7 +175,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
 
   const distance = Math.sqrt(sum)
 
-  return { course: course, distance: distance }
+  return { course: course, distance: distance, coordinates: courseCoordinates }
 }
 
 //returns a list of [{course, distance}]
