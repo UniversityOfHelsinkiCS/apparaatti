@@ -77,29 +77,20 @@ function courseIsCorrectLang(course: any, codes: courseCodes){
 } 
 
 function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
-  console.log('----')
-  console.log('checking course', course)
   const customCodeUrns = course.customCodeUrns
   if(customCodeUrns === null){
-    console.log('course didnt have codeUrns')
-    console.log('-----')
     return false
   }
-  console.log('checking keys', Object.keys(customCodeUrns))
 
   for(const key of Object.keys(customCodeUrns)){
-    console.log('checking keys')
     if(key.includes('kk-apparaatti')){
       const values = customCodeUrns[key]
       const hasCodeUrn = values.find((val) => val.includes(codeUrn))
       if(hasCodeUrn){
-        console.log('course had correct codeUrn')
         return true
       }
     }
   }
-  console.log('course had codeUrns but not the wanted one')
-  console.log('-----')
   
   return false
 }
@@ -115,9 +106,6 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
   const correctLang = courseIsCorrectLang(course, codes)
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'val')
-  if(hasGraduationCodeUrn){
-    console.log('course is for graduating students ', course)
-  }
   
   const hasMentoringCodeUrn = courseHasCustomCodeUrn(course, 'kks-val')
 
@@ -308,8 +296,9 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
-  // console.log(sortedCourses)
   const recommendations = sortedCourses
+  
+  console.log(recommendations)
   
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)
