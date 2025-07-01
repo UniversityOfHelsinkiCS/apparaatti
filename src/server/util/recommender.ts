@@ -128,8 +128,10 @@ function courseHasAnyOfCodes(course: CourseRealization, codes: string[]){
 function courseStudyPlaceCoordinate(course: CourseRealization){
   const baseCoordinate = Math.pow(10, 12)
   const courseName = course.name.fi?.toLowerCase()
+  
   switch (courseName){
   case courseName?.includes('etäopetus'):
+    console.log("course is remote: , ", course.name.fi)
     return baseCoordinate * 1    
   case courseName?.includes('monimuoto'):
     return baseCoordinate * 10
