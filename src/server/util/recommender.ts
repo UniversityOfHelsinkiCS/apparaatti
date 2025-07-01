@@ -133,9 +133,9 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
   const baseCoordinate = Math.pow(10, 12)
   const courseName = course.name.fi?.toLowerCase()
   console.log(courseName)  
-  console.log(courseName?.includes('etäopetus'))
+  console.log(courseName?.includes('etäopetus') || courseName?.includes('verkko-opetus'))
 
-  if(courseName?.includes('etäopetus')){
+  if(courseName?.includes('etäopetus' ) || courseName?.includes('verkko-opetus')){
     return baseCoordinate * 1  
   }
   if(courseName?.includes('monimuo')){
