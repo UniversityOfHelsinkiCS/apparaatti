@@ -300,8 +300,8 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   
   recommendations.forEach((r) => {
     console.log('---')
-    console.log(r.name.fi)
-    console.log(r.customCodeUrns)
+    console.log(r.course.name.fi)
+    console.log(r.course.customCodeUrns)
     console.log('---')
   })
   
