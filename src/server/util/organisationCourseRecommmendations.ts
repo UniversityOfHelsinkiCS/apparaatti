@@ -11,6 +11,12 @@ export type OrganisationRecommendation = {
 }
 
 
+export const mentoringCourseCodes =  [
+  'KK-ENG301', 'KK-ENG302', 'KK-ENG303', 
+  'KK-RUO204', 'KK-RUO205', 'KK-RUO206', 
+  'KK-FIN01', 'KK-FIN02', 'KK-FIN08',
+  
+]
 
 export function getUserOrganisationRecommendations(studyData: any, data: OrganisationRecommendation[]){
   const userOrganisations = studyData.organisations

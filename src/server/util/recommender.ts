@@ -5,7 +5,7 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-import { codesInOrganisations, getUserOrganisationRecommendations, languageSpesificCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import { codesInOrganisations, getUserOrganisationRecommendations, languageSpesificCodes, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import type {OrganisationRecommendation} from './organisationCourseRecommmendations.ts'
 import type { CourseRealization } from '../../common/types.ts'
 
@@ -96,8 +96,18 @@ function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
 }
 
 
+function courseHasAnyOfCodes(course: CourseRealization, codes: string[]){
+  for (const code of course.courseCodes){
+    if(codes.includes(code)){
+      return true
+    }
+  }
 
-async function calculateCourseDistance(course: any, userCoordinates: any, studyData: any, codes: courseCodes) {
+  return false
+}
+
+
+async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes) {
   
   const dimensions = Object.keys(userCoordinates)
 
@@ -105,9 +115,9 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
   const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
   const correctLang = courseIsCorrectLang(course, codes)
   
-  const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'val')
+  const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val')
   
-  const hasMentoringCodeUrn = courseHasCustomCodeUrn(course, 'kks-val')
+  const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
 
   const courseCoordinates = {
     //'period': coursePeriodValue(period),
@@ -115,7 +125,7 @@ async function calculateCourseDistance(course: any, userCoordinates: any, studyD
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 9) : 0,
-    mentoring: hasMentoringCodeUrn ? Math.pow(10, 9) : 0
+    mentoring: isMentoringCourse ? Math.pow(10, 9) : 0
   }
   
   
