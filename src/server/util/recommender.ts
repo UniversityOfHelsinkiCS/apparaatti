@@ -48,9 +48,9 @@ function studyPlaceCoordinate(studyPlace: string){
   case 'remote':
     return baseCoordinate * 1
   case 'hybrid':
-    return baseCoordinate * 2
+    return baseCoordinate * 10
   case 'onsite':
-    return baseCoordinate * 3
+    return baseCoordinate * 20
   default:
     return 0
   
