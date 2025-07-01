@@ -182,6 +182,20 @@ const questions = [
       },
     ],
   },
+  {
+    id: 'integrated',
+    type: 'multi',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Olen kiinnostonut kurssista joka on integroitu oman alani opintoihin' },
+        options: [
+          { id: '0', name: { fi: 'ei' } },
+          { id: '1', name: { fi: 'kyllä' } },
+        ],
+      },
+    ],
+  },
 
   {
     id: '7',
@@ -204,20 +218,6 @@ const questions = [
     variants: [
       {
         question: { fi: 'Vanhentuneet viekie opinnot' },
-        options: [
-          { id: '1', name: { fi: 'ei väliä' } },
-          { id: '2', name: { fi: 'ei' } },
-          { id: '3', name: { fi: 'kyllä' } },
-        ],
-      },
-    ],
-  },
-  {
-    id: '9',
-    type: 'multi',
-    variants: [
-      {
-        question: { fi: 'Integroitu opetus' },
         options: [
           { id: '1', name: { fi: 'ei väliä' } },
           { id: '2', name: { fi: 'ei' } },
