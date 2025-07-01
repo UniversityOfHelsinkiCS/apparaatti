@@ -52,7 +52,7 @@ function studyPlaceCoordinate(studyPlace: string){
   case 'onsite':
     return baseCoordinate * 3
   default:
-    return 0
+    return baseCoordinate * 2 // in between is a good default since it gives balanced results 
   
   }
 }
@@ -145,7 +145,7 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
     return baseCoordinate * 3  
   }
 
-  return 0 
+  return baseCoordinate * 2 // course will be something in between remote and onsite and should be based in between as a default if nothing works
 }
 
 
