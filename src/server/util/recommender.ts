@@ -298,7 +298,12 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
   
-  console.log(recommendations)
+  recommendations.forEach((r) => {
+    console.log('---')
+    console.log(r.name.fi)
+    console.log(r.customCodeUrns)
+    console.log('---')
+  })
   
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)
