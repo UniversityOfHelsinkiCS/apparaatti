@@ -121,15 +121,15 @@ const questions = [
     ],
   },*/
   {
-    id: '4',
+    id: 'study-place',
     type: 'multi',
     variants: [
       {
         question: { fi: 'Mikä on suosimasi opetusmuoto?' },
         options: [
-          { id: '1', name: { fi: 'täysin etäopiskelu' } },
-          { id: '2', name: { fi: 'etäopiskelu ja lähiopetus' } },
-          { id: '3', name: { fi: 'täysin lähiopetus' } },
+          { id: 'remote', name: { fi: 'täysin etäopiskelu' } },
+          { id: 'hybrid', name: { fi: 'etäopiskelu ja lähiopetus' } },
+          { id: 'onsite', name: { fi: 'täysin lähiopetus' } },
         ],
       },
     ],

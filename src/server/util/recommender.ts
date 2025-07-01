@@ -41,6 +41,23 @@ function recommendCourses(answerData: any, user) {
   return recommendations
 }
 
+function studyPlaceCoordinate(studyPlace: string){
+  const baseCoordinate = Math.pow(10, 12)
+  
+  switch(studyPlace){
+  case 'remote':
+    return baseCoordinate * 1
+  case 'hybrid':
+    return baseCoordinate * 2
+  case 'onsite':
+    return baseCoordinate * 3
+  default:
+    return 0
+  
+  }
+}
+
+
 function calculateUserCoordinates(answerData: any) {
   const periods = getRelevantPeriods(answerData['study-period'])
   // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
@@ -53,7 +70,8 @@ function calculateUserCoordinates(answerData: any) {
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
     graduation: answerData['graduation'] === '1' ? Math.pow(10, 12) : 0,
     mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 12) : 0,
-    integrated: answerData['integrated'] === '1' ? Math.pow(10, 12) : 0
+    integrated: answerData['integrated'] === '1' ? Math.pow(10, 12) : 0,
+    studyPlace:  studyPlaceCoordinate(answerData['study-place'])
   }
 
   return userCoordinates
@@ -107,6 +125,21 @@ function courseHasAnyOfCodes(course: CourseRealization, codes: string[]){
   return false
 }
 
+function courseStudyPlaceCoordinate(course: CourseRealization){
+  const baseCoordinate = Math.pow(10, 12)
+  const courseName = course.name.fi?.toLowerCase()
+  switch (courseName){
+  case courseName?.includes('etäopetus'):
+    return baseCoordinate * 1    
+  case courseName?.includes('monimuoto'):
+    return baseCoordinate * 2
+  case courseName?.includes('lähiopetus'):
+    return baseCoordinate * 3
+  default:
+    return 0
+  }
+}
+
 
 async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes) {
   
@@ -119,15 +152,15 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
-
+  
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
-    integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0
-
+    integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
+    studyPlace: courseStudyPlaceCoordinate(course)
   }
   
   
