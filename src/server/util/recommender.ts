@@ -341,29 +341,17 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseTimer = Date.now()
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
 
-  
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
- 
   const distances = await calculateUserDistances(userCoordinates, courseData, studyData, courseCodes)
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
-  
-  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX')
-  recommendations.forEach((r) => {
-    console.log('---')
-    console.log(r.course.name.fi)
-    console.log(r.course.customCodeUrns)
-    console.log('---')
-  })
-  console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX')
- 
-  
+
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)
   return recommendations
