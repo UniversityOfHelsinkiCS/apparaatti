@@ -48,9 +48,9 @@ function studyPlaceCoordinate(studyPlace: string){
   case 'remote':
     return baseCoordinate * 1
   case 'hybrid':
-    return baseCoordinate * 10
+    return baseCoordinate * 2
   case 'onsite':
-    return baseCoordinate * 20
+    return baseCoordinate * 3
   default:
     return 0
   
@@ -134,17 +134,17 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
   console.log(courseName)  
   console.log(courseName?.includes('etäopetus'))
 
-  switch (courseName){
-  case courseName?.includes('etäopetus'):
-    console.log('course is remote: , ', course.name.fi)
-    return baseCoordinate * 1    
-  case courseName?.includes('monimuoto'):
-    return baseCoordinate * 10
-  case courseName?.includes('lähiopetus'):
-    return baseCoordinate * 20
-  default:
-    return 0
+  if(courseName?.includes('etäopetus')){
+    return baseCoordinate * 1  
   }
+  if(courseName?.includes('monimuo')){
+    return baseCoordinate * 2
+  }
+  if(courseName?.includes('lähiopetus')){
+    return baseCoordinate * 3  
+  }
+
+  return 0 
 }
 
 
