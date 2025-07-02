@@ -5,6 +5,7 @@ import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
 import PeriodQuestion from './PeriodQuestion.tsx'
+import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 const questions = [
   {
     id: 'study-period',
@@ -61,6 +62,20 @@ const questions = [
           { id: 'en', name: { fi: 'Englanti' } },
         ],
       },
+    ],
+  },
+  {
+    id: 'previusly-done-lang',
+    type: 'previusly-done-lang',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa'},
+        options: [
+          { id: '0', name: { fi: 'ei' } },
+          { id: '1', name: { fi: 'kyllä' } },
+        ],
+      }
     ],
   },
   {
@@ -236,6 +251,10 @@ const MultiChoiceForm = ({
       return (
         <PeriodQuestion key={key} question={question} />
         //<FormQuestion key={key} question={question} languageId={language} /> //toimiva
+      )
+    case 'previusly-done-lang':
+      return (
+        <PreviuslyDoneLangQuestion key={key} question={question} languageId={language}></PreviuslyDoneLangQuestion>
       )
     default:
       return <p>Unknown question type</p>
