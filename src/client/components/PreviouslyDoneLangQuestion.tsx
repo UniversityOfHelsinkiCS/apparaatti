@@ -1,7 +1,9 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails, Modal, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
 import { Question } from '../../common/types'
+import InfoIcon from '@mui/icons-material/Info'
+
 
 const PreviuslyDoneLangQuestion = ({
   question,
@@ -11,7 +13,11 @@ const PreviuslyDoneLangQuestion = ({
   languageId: string;
 }) => {
   console.log('language id is: ', languageId)
-  
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+
   const variant = question.variants[0]
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')
@@ -28,11 +34,51 @@ const PreviuslyDoneLangQuestion = ({
     setAccordionOpen(event.target.value === yesOption.id) // Open accordion if "Yes" is selected
   }
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #545454',
+    borderRadius: '10px',
+    boxShadow: 24,
+    p: 4,
+  }
+
+
   return (
     <Box sx={{
       paddingTop: 4,
     }}>
-      <Typography>{variant.question.fi}</Typography>
+      <Typography>{variant.question.fi}
+
+
+        <Button onClick={handleOpen} style={{ color: 'black' }}>
+          <InfoIcon></InfoIcon>
+        </Button>
+ 
+      </Typography>
+      
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Lisätietoa
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {question.explanation ? question.explanation : 'Ei lisätietoa'}
+          </Typography>
+        </Box>
+      </Modal>
+
+
+      
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
         <FormControlLabel
           key={yesOption.id}
