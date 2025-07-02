@@ -1,6 +1,6 @@
 import xlsx from 'xlsx'
 import path from 'path'
-import { CourseRealization } from '../../common/types'
+import type { CourseRealization } from '../../common/types.ts'
 type Language = {
   name: string
   codes: string[]

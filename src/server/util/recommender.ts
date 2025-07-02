@@ -1,13 +1,13 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
+import type { CourseRealization } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
+import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
+import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, languageToStudy, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
-import type {OrganisationRecommendation} from './organisationCourseRecommmendations.ts'
-import type { CourseRealization } from '../../common/types.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
