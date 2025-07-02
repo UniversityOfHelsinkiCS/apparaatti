@@ -112,6 +112,14 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
 }
 
 
+
+function isIndependentCourse(course: CourseRealization){
+  const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
+  const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
+
+  return hasIndependentCodeUrn || hasIndependentInName
+}
+
 async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes,  courseLanguageType: string
 ) {
   
@@ -124,8 +132,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
-  const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
-
+  
+  const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType) 
   const courseCoordinates = {
@@ -138,7 +146,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
     studyPlace: courseStudyPlaceCoordinate(course),
     replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
     challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
-    independent: hasIndependentCodeUrn ? Math.pow(10, 24) : 0
+    independent: isIndependent ? Math.pow(10, 24) : 0
   }
   
   
