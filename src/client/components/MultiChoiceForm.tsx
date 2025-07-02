@@ -205,15 +205,15 @@ const questions = [
     ],
   },
   {
-    id: 'challenge',
+    id: 'independent',
     type: 'multi',
     variants: [
       {
         name: 'default',
-        question: { fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon'},
+        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti'},
         options: [
-          { id: '0', name: { fi: 'ei' } },
-          { id: '1', name: { fi: 'kyllä' } },
+          { id: '0', name: { fi: 'en' } },
+          { id: '1', name: { fi: 'haluan' } },
         ],
       },
     ],
