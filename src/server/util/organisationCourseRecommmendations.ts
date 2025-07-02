@@ -26,12 +26,12 @@ export const mentoringCourseCodes =  [
 
 export const challegeCourseCodes: CourseMatchCase[]= [
   {
-    language: 'en',
+    language: 'en-secondary',
     codes:  ['KK-ENERI'],
     customCodeUrns: null
   },
   {
-    language: 'sve-secondary',
+    language: 'sv-secondary',
     codes:  ['KK-RUERI'],
     customCodeUrns: null
   },
@@ -48,11 +48,16 @@ export const challegeCourseCodes: CourseMatchCase[]= [
   { 
     //svedish as a primary currently does not have any courses 
     //that should be recommended to help with challenges
-    language: 'sve-primary',
+    language: 'sv-primary',
+    codes: null,
+    customCodeUrns: null
+  },
+  {
+    //same for english primary
+    language: 'en-primary',
     codes: null,
     customCodeUrns: null
   }
-
 ]
 
 
@@ -105,7 +110,7 @@ export function courseHasAnyCustomCodeUrn(course: CourseRealization, codeUrns: s
       return true
     }
   }
-  
+
   return false
 }
 
