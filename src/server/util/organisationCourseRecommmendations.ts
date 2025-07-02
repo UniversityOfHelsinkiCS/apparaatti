@@ -10,12 +10,48 @@ export type OrganisationRecommendation = {
   languages: Language[]
 }
 
+export type CourseMatchCase = {
+  language: string
+  code: string[] | null,
+  customCodeUrn: string[] | null
+}
 
 export const mentoringCourseCodes =  [
   'KK-ENG301', 'KK-ENG302', 'KK-ENG303', 
   'KK-RUO204', 'KK-RUO205', 'KK-RUO206', 
   'KK-FIN01', 'KK-FIN02', 'KK-FIN08',
   
+]
+
+export const challegeCourseCodes: CourseMatchCase[]= [
+  {
+    language: 'en',
+    code:  ['KK-ENERI'],
+    customCodeUrn: null
+  },
+  {
+    language: 'sve-secondary',
+    code:  ['KK-RUERI'],
+    customCodeUrn: null
+  },
+  {
+    language: 'fi-second',
+    code: null,
+    customCodeUrn: ['kks-kor']
+  },
+  { //fi is split into spoken and written but currently both are put under fi-primary
+    language: 'fi-primary',
+    code: ['KK-AIAKVUERI'],
+    customCodeUrn: ['kks-kor']
+  },
+  { 
+    //svedish as a primary currently does not have any courses 
+    //that should be recommended to help with challenges
+    language: 'sve-primary',
+    code: null,
+    customCodeUrn: null
+  }
+
 ]
 
 export function getUserOrganisationRecommendations(studyData: any, data: OrganisationRecommendation[]){

@@ -189,9 +189,20 @@ const questions = [
       },
     ],
   },
-
-
-  
+  {
+    id: 'challenge',
+    type: 'multi',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon'},
+        options: [
+          { id: '0', name: { fi: 'ei' } },
+          { id: '1', name: { fi: 'kyllä' } },
+        ],
+      },
+    ],
+  },  
 ]
 
 const MultiChoiceForm = ({

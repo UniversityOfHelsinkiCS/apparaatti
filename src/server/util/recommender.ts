@@ -72,7 +72,8 @@ function calculateUserCoordinates(answerData: any) {
     mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 12) : 0,
     integrated: answerData['integrated'] === '1' ? Math.pow(10, 12) : 0,
     studyPlace:  studyPlaceCoordinate(answerData['study-place']),
-    replacement: answerData['replacement'] === '1' ? Math.pow(10, 24) : 0
+    replacement: answerData['replacement'] === '1' ? Math.pow(10, 24) : 0,
+    challenge: answerData['challenge'] === '1' ? Math.pow(10, 24) : 0
   }
 
   return userCoordinates
@@ -162,7 +163,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
 
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
-  
+  //const isChallengeCourse = courseHasAnyOfCodes(course, challegeCourseCodes) 
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
@@ -339,7 +340,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const studyData = await getStudyData(user) //used to filter courses by organisation
 
   const courseTimer = Date.now()
-  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], organisationRecommendations, studyData)
+  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, studyData)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   
