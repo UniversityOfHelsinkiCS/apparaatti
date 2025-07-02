@@ -29,7 +29,9 @@ const PreviuslyDoneLangQuestion = ({
   }
 
   return (
-    <Box>
+    <Box sx={{
+      paddingTop: 4,
+    }}>
       <Typography>{variant.question.fi}</Typography>
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
         <FormControlLabel
@@ -77,7 +79,7 @@ const PreviuslyDoneLangQuestion = ({
       {selectedValue === yesOption.id && (
         <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Additional Options</Typography>
+            <Typography>Lisätietoja: </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
