@@ -36,7 +36,7 @@ export const challegeCourseCodes: CourseMatchCase[]= [
     customCodeUrns: null
   },
   {
-    language: 'fi-second',
+    language: 'fi-secondary',
     codes: null,
     customCodeUrns: ['kks-kor']
   },
@@ -69,7 +69,10 @@ export function courseHasAnyOfCodes(course: CourseRealization, codes: string[] |
   return false
 }
 
-export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
+export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string | null){
+  if(!codeUrn){
+    return false
+  }
   const customCodeUrns = course.customCodeUrns
   if(customCodeUrns === null){
     return false
@@ -90,6 +93,21 @@ export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: strin
 
 
 
+export function courseHasAnyCustomCodeUrn(course: CourseRealization, codeUrns: string[] | null)
+{
+  if(!codeUrns){
+    return false
+  }
+
+  for(const urn of codeUrns){
+    const found = courseHasCustomCodeUrn(course, urn)
+    if(found){
+      return true
+    }
+  }
+  
+  return false
+}
 
 export function courseMatches(course: CourseRealization, cases: CourseMatchCase[], languageToStudy: string)
 {
@@ -100,7 +118,7 @@ export function courseMatches(course: CourseRealization, cases: CourseMatchCase[
 
   
   const codesMatch = courseHasAnyOfCodes(course, matchCase.codes) 
-  const codeUrnsMatch = courseHasCustomCodeUrn(course, matchCase.customCodeUrns)
+  const codeUrnsMatch = courseHasAnyCustomCodeUrn(course, matchCase.customCodeUrns)
 
   return codesMatch || codeUrnsMatch 
   
