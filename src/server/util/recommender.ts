@@ -5,7 +5,7 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { getStudyData } from './studydata.ts'
-import { codesInOrganisations, getUserOrganisationRecommendations, languageSpesificCodes, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, languageToStudy, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import type {OrganisationRecommendation} from './organisationCourseRecommmendations.ts'
 import type { CourseRealization } from '../../common/types.ts'
 
@@ -88,45 +88,6 @@ function courseInSameOrganisationAsUser(course: any, codes: courseCodes){
   return false
 } 
 
-function courseIsCorrectLang(course: any, codes: courseCodes){
-  for(const courseCode of course.courseCodes){
-    if (codes.languageSpesific.includes(courseCode)){
-      return true
-    }
-  }
-  return false
-} 
-
-function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
-  const customCodeUrns = course.customCodeUrns
-  if(customCodeUrns === null){
-    return false
-  }
-
-  for(const key of Object.keys(customCodeUrns)){
-    if(key.includes('kk-apparaatti')){
-      const values = customCodeUrns[key]
-      const hasCodeUrn = values.find((val) => val.includes(codeUrn))
-      if(hasCodeUrn){
-        return true
-      }
-    }
-  }
-  
-  return false
-}
-
-
-function courseHasAnyOfCodes(course: CourseRealization, codes: string[]){
-  for (const code of course.courseCodes){
-    if(codes.includes(code)){
-      return true
-    }
-  }
-
-  return false
-}
-
 function courseStudyPlaceCoordinate(course: CourseRealization){
   console.log('calculating the study place value for, ', course.name.fi)
 
@@ -150,20 +111,21 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
 }
 
 
-async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes) {
+async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes,  courseLanguageType: string
+) {
   
   const dimensions = Object.keys(userCoordinates)
 
   
   const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
-  const correctLang = courseIsCorrectLang(course, codes)
+  const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
 
-  const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes) 
-  //const isChallengeCourse = courseHasAnyOfCodes(course, challegeCourseCodes) 
+  const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
+  const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType) 
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
@@ -172,7 +134,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
     integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
     studyPlace: courseStudyPlaceCoordinate(course),
-    replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0
+    replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
+    challenge: isChallengeCourse ? Math.pow(10, 24) : 0
   }
   
   
@@ -193,11 +156,12 @@ async function calculateUserDistances(
   userCoordinates: any,
   availableCourses: any,
   studyData: any,
-  courseCodes: any
+  courseCodes: any,
+  courseLanguageType: string
 ) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, studyData, courseCodes)
+    return calculateCourseDistance(course, userCoordinates, studyData, courseCodes, courseLanguageType)
   })
   const distances = await Promise.all(distancePromises)
   const distanceE = new Date()
@@ -338,6 +302,8 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
   const studyData = await getStudyData(user) //used to filter courses by organisation
+  const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
+
 
   const courseTimer = Date.now()
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, studyData)
@@ -347,7 +313,8 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
-  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, courseCodes)
+  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, courseCodes, courseLanguageType )
+  
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)

@@ -1,5 +1,6 @@
 import xlsx from 'xlsx'
 import path from 'path'
+import { CourseRealization } from '../../common/types'
 type Language = {
   name: string
   codes: string[]
@@ -12,8 +13,8 @@ export type OrganisationRecommendation = {
 
 export type CourseMatchCase = {
   language: string
-  code: string[] | null,
-  customCodeUrn: string[] | null
+  codes: string[] | null,
+  customCodeUrns: string[] | null
 }
 
 export const mentoringCourseCodes =  [
@@ -26,33 +27,85 @@ export const mentoringCourseCodes =  [
 export const challegeCourseCodes: CourseMatchCase[]= [
   {
     language: 'en',
-    code:  ['KK-ENERI'],
-    customCodeUrn: null
+    codes:  ['KK-ENERI'],
+    customCodeUrns: null
   },
   {
     language: 'sve-secondary',
-    code:  ['KK-RUERI'],
-    customCodeUrn: null
+    codes:  ['KK-RUERI'],
+    customCodeUrns: null
   },
   {
     language: 'fi-second',
-    code: null,
-    customCodeUrn: ['kks-kor']
+    codes: null,
+    customCodeUrns: ['kks-kor']
   },
   { //fi is split into spoken and written but currently both are put under fi-primary
     language: 'fi-primary',
-    code: ['KK-AIAKVUERI'],
-    customCodeUrn: ['kks-kor']
+    codes: ['KK-AIAKVUERI'],
+    customCodeUrns: ['kks-kor']
   },
   { 
     //svedish as a primary currently does not have any courses 
     //that should be recommended to help with challenges
     language: 'sve-primary',
-    code: null,
-    customCodeUrn: null
+    codes: null,
+    customCodeUrns: null
   }
 
 ]
+
+
+export function courseHasAnyOfCodes(course: CourseRealization, codes: string[] | null){
+  if(!codes){
+    return false
+  }
+  for (const code of course.courseCodes){
+    if(codes.includes(code)){
+      return true
+    }
+  }
+
+  return false
+}
+
+export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string){
+  const customCodeUrns = course.customCodeUrns
+  if(customCodeUrns === null){
+    return false
+  }
+
+  for(const key of Object.keys(customCodeUrns)){
+    if(key.includes('kk-apparaatti')){
+      const values = customCodeUrns[key]
+      const hasCodeUrn = values.find((val) => val.includes(codeUrn))
+      if(hasCodeUrn){
+        return true
+      }
+    }
+  }
+  
+  return false
+}
+
+
+
+
+export function courseMatches(course: CourseRealization, cases: CourseMatchCase[], languageToStudy: string)
+{
+  const matchCase: (CourseMatchCase | undefined) = cases.find((m) => m.language === languageToStudy)
+  if(matchCase === undefined){
+    return false
+  }
+
+  
+  const codesMatch = courseHasAnyOfCodes(course, matchCase.codes) 
+  const codeUrnsMatch = courseHasCustomCodeUrn(course, matchCase.customCodeUrns)
+
+  return codesMatch || codeUrnsMatch 
+  
+}
+
 
 export function getUserOrganisationRecommendations(studyData: any, data: OrganisationRecommendation[]){
   const userOrganisations = studyData.organisations
@@ -79,6 +132,19 @@ export function codesFromLanguagesContaining(organisationData: OrganisationRecom
   console.log(codes)
   return codes.flat()
 }
+
+//returns a string telling wheter or not the language to be studied is primary or secondary
+//for example: if ('fi', 'fi') -> 'fi-primary' and if ('sve', 'fi') -> 'sve-secondary'
+export function languageToStudy(langCode: string, primaryLanguage: string): string{
+  if(langCode === primaryLanguage){
+    return langCode + '-primary'
+  }
+  else{
+    return langCode + '-secondary'
+  }
+} 
+
+
 
 export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){
   //if the user picks the same language as the primary language then we want to return primary language course codes
