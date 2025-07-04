@@ -74,9 +74,9 @@ function calculateUserCoordinates(answerData: any) {
     studyPlace:  studyPlaceCoordinate(answerData['study-place']),
     replacement: answerData['replacement'] === '1' ? Math.pow(10, 24) : 0,
     challenge: answerData['challenge'] === '1' ? Math.pow(10, 24) : 0,
-    independent: answerData['independent'] === '1' ? Math.pow(10, 24) : 0
+    independent: answerData['independent'] === '1' ? Math.pow(10, 24) : 0,
+    flexible: answerData['flexible'] === '1' ? Math.pow(10, 24) : 0
   }
-
   return userCoordinates
 }
 
@@ -132,6 +132,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
+  const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
   
   const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
@@ -146,7 +147,8 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
     studyPlace: courseStudyPlaceCoordinate(course),
     replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
     challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
-    independent: isIndependent ? Math.pow(10, 24) : 0
+    independent: isIndependent ? Math.pow(10, 24) : 0,
+    flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0
   }
   
   

@@ -217,6 +217,20 @@ const questions = [
         ],
       },
     ],
+  },
+  {
+    id: 'flexible',
+    type: 'multi',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava'},
+        options: [
+          { id: '0', name: { fi: 'en' } },
+          { id: '1', name: { fi: 'haluan' } },
+        ],
+      },
+    ],
   },  
 ]
 
