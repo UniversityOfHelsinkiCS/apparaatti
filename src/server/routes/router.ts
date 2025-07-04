@@ -10,7 +10,7 @@ import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
-import { courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
+import { courseHasCustomCodeUrn, urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
 
 const router = express.Router()
 
@@ -131,10 +131,10 @@ router.get('/cur', async (req, res) => {
     : {}
 
   const curs = await Cur.findAll({ where: nameQuery, raw: true })
-
+  console.log('code urn is: ', codeurn)
   if(codeurn){
     const urnFilteredCourses = curs.filter((cur) => {
-      return courseHasCustomCodeUrn({...cur, courseCodes: []}, codeurn)
+      return urnInCustomCodeUrns(course.customCodeUrns, codeurn)
     })
     return res.json(urnFilteredCourses)
   }

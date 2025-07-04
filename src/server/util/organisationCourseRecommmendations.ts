@@ -96,7 +96,27 @@ export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: strin
   return false
 }
 
-
+export function urnInCustomCodeUrns(customCodeUrns: Record<string, string[]> | null, codeUrn: string | null){
+  if(!customCodeUrns){
+    return false
+  }
+  if(!codeUrn)
+  {
+    return false
+  }
+  
+  for(const key of Object.keys(customCodeUrns)){
+    if(key.includes('kk-apparaatti')){
+      const values = customCodeUrns[key]
+      const hasCodeUrn = values.find((val) => val.includes(codeUrn))
+      if(hasCodeUrn){
+        return true
+      }
+    }
+  }
+  
+  return false
+}
 
 export function courseHasAnyCustomCodeUrn(course: CourseRealization, codeUrns: string[] | null)
 {
