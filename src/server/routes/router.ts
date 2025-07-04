@@ -130,7 +130,7 @@ router.get('/cur', async (req, res) => {
     }
     : {}
 
-  const curs = await Cur.findAll({ where: nameQuery })
+  const curs = await Cur.findAll({ where: nameQuery, raw: true })
 
   if(codeurn){
     const urnFilteredCourses = curs.filter((cur) => {
