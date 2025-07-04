@@ -43,7 +43,8 @@ export type CourseRealization = {
   name: LocalizedString
   startDate: Date
   endDate: Date
-  customCodeUrns: Record<string, string[]> 
+  customCodeUrns: Record<string, string[]>
+  courseUnitRealisationTypeUrn: string
   courseCodes: string[]
 }
 
