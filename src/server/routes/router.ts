@@ -10,6 +10,7 @@ import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
+import { courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
 
 const router = express.Router()
 
@@ -117,7 +118,7 @@ router.get('/cur', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const { name } = req.query
+  const { name, codeurn } = req.query
 
   const nameQuery = name
     ? {
@@ -130,6 +131,14 @@ router.get('/cur', async (req, res) => {
     : {}
 
   const curs = await Cur.findAll({ where: nameQuery })
+
+  if(nameQuery){
+    const urnFilteredCourses = curs.filter((cur) => {
+      return courseHasCustomCodeUrn({...cur, courseCodes: []}, codeurn)
+    })
+    return res.json(urnFilteredCourses)
+  }
+  
   res.json(curs)
 })
 
