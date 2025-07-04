@@ -40,7 +40,7 @@ Cur.init(
       type: DataTypes.JSONB
     }, 
     courseUnitRealisationTypeUrn: {
-      type:DataTypes.string,
+      type: DataTypes.STRING,
       allowNull: true
     },
     createdAt: {
