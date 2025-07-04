@@ -38,6 +38,10 @@ Cur.init(
     customCodeUrns: {
       type: DataTypes.JSONB
     }, 
+    courseUnitRealisationTypeUrn: {
+      type:string,
+      allowNull: true
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
