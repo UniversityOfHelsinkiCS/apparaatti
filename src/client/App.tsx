@@ -1,13 +1,14 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepLabel } from '@mui/material'
 import { useState } from 'react'
 import CourseRecommendationsPanel from './components/CourseRecommendationsPanel.tsx'
+import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 
 function App() {
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
-
+  const [questionarePhase, setQuestionarePhase] = useState(0)
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -66,10 +67,21 @@ function App() {
       },
     })
     setIsSidePanelOpen(true)
+    setQuestionarePhase(1)
   }
 
   if (isStudyDataLoading) {
     return <div>Loading...</div>
+  }
+
+
+  const renderQuestionare = () => {
+    switch(questionarePhase){
+    case 0:
+      return <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData} />
+    case 1:
+      return <CourseRecommendationsPage onClose={() => setQuestionarePhase(0)} recommendations={courseRecommendations}></CourseRecommendationsPage>
+    }
   }
 
   return (
@@ -111,6 +123,14 @@ function App() {
         }}
       >
         <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData} />
+        <Stepper activeStep={0}>
+          <Step key={0}><StepLabel>Kysely</StepLabel></Step>
+          <Step key={1}><StepLabel>Ehdotukset</StepLabel></Step>
+        </Stepper>
+
+        {renderQuestionare()}
+      
+
       </Box>
       {isSidePanelOpen && (
         <CourseRecommendationsPanel
