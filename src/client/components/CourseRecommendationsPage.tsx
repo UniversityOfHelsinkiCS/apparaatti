@@ -9,7 +9,8 @@ const CourseRecommendationsPage = ({onClose, recommendations}: {onClose: () => v
           Ehdotetut kurssit:
       </Typography>
 
-      <Button onClick={onClose}>Edellinen</Button>
+      <Button color={'inherit'}
+        onClick={onClose}>Edellinen</Button>
       <Stack
         spacing={2}
         sx={{

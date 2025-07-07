@@ -66,7 +66,6 @@ function App() {
         console.log('Form submitted successfully')
       },
     })
-    setIsSidePanelOpen(true)
     setQuestionarePhase(1)
   }
 
@@ -122,8 +121,12 @@ function App() {
           minWidth: '100vw',
         }}
       >
-        <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData} />
-        <Stepper activeStep={0}>
+        <Stepper sx={{
+          width: '30vw',
+          padding: 3,
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }} activeStep={questionarePhase}>
           <Step key={0}><StepLabel>Kysely</StepLabel></Step>
           <Step key={1}><StepLabel>Ehdotukset</StepLabel></Step>
         </Stepper>
@@ -132,12 +135,6 @@ function App() {
       
 
       </Box>
-      {isSidePanelOpen && (
-        <CourseRecommendationsPanel
-          onClose={() => setIsSidePanelOpen(false)}
-          recommendations={courseRecommendations}
-        />
-      )}
     </>
   )
 }
