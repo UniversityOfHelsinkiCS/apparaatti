@@ -58,6 +58,17 @@ function studyPlaceCoordinate(studyPlace: string){
 }
 
 
+function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number){
+  switch(value){
+  case '1':
+    return yesValue
+  case '0':
+    return noValue
+  case 'neutral':
+    return neutralValue
+  }
+}
+
 function calculateUserCoordinates(answerData: any) {
   const periods = getRelevantPeriods(answerData['study-period'])
   // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
@@ -68,14 +79,14 @@ function calculateUserCoordinates(answerData: any) {
     date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
     org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
-    graduation: answerData['graduation'] === '1' ? Math.pow(10, 12) : 0,
-    mentoring: answerData['mentoring'] === '1' ? Math.pow(10, 12) : 0,
-    integrated: answerData['integrated'] === '1' ? Math.pow(10, 12) : 0,
+    graduation: commonCoordinateFromAnswerData(answerData['graduation'], Math.pow(10, 12), 0, null),
+    mentoring: commonCoordinateFromAnswerData(answerData['mentoring'], Math.pow(10, 12), 0, null),
+    integrated: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 12), 0, null),
     studyPlace:  studyPlaceCoordinate(answerData['study-place']),
-    replacement: answerData['replacement'] === '1' ? Math.pow(10, 24) : 0,
-    challenge: answerData['challenge'] === '1' ? Math.pow(10, 24) : 0,
-    independent: answerData['independent'] === '1' ? Math.pow(10, 24) : 0,
-    flexible: answerData['flexible'] === '1' ? Math.pow(10, 24) : 0
+    replacement: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
+    challenge: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
+    independent: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
+    flexible: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
   }
   return userCoordinates
 }
@@ -155,6 +166,12 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
+    
+    //If the user value is null it means that that dimension is to be ignored in the recommendation,
+    //because the user has not chosen to use that dimension as a recommendation paramenter.
+    if(!userValue){
+      return acc
+    }
     const courseValue = courseCoordinates[key as keyof typeof dimensions]
     return acc + Math.pow(userValue - courseValue, 2)
   }, 0.0)

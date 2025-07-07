@@ -119,22 +119,6 @@ const questions = [
       },
     ],
   },
-
-  /*{
-    id: '3',
-    type: 'multi',
-
-    variants: [
-      {
-        name: 'default',
-        options: [
-          { id: '1', name: { fi: 'Vastaus1' } },
-          { id: '2', name: { fi: 'Vastaus2' } },
-        ],
-        question: { fi: 'Mikä on suosimasi opetusmuoto?' },
-      },
-    ],
-  },*/
   {
     id: 'study-place',
     type: 'multi',
@@ -149,8 +133,6 @@ const questions = [
       },
     ],
   },
-
-
   {
     id: 'mentoring',
     type: 'multi',
@@ -160,6 +142,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
           { id: '0', name: { fi: 'En koe tarvitsevani valmennusta' } },
         ],
@@ -170,6 +153,7 @@ const questions = [
           fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
         },
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
           { id: '0', name: { fi: 'En koe tarvitsevani kertausta' } },
         ],
@@ -184,6 +168,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Olen kiinnostonut kurssista joka on integroitu oman alani opintoihin' },
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '0', name: { fi: 'ei' } },
           { id: '1', name: { fi: 'kyllä' } },
         ],
@@ -198,6 +183,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).' },
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '0', name: { fi: 'en' } },
           { id: '1', name: { fi: 'kyllä' } },
         ],
@@ -212,6 +198,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti'},
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '0', name: { fi: 'en' } },
           { id: '1', name: { fi: 'haluan' } },
         ],
@@ -226,6 +213,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava'},
         options: [
+          {id: 'neutral', name: {fi: 'ei valintaa'}},
           { id: '0', name: { fi: 'en' } },
           { id: '1', name: { fi: 'haluan' } },
         ],
