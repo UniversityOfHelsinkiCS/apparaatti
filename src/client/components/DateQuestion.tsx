@@ -11,6 +11,7 @@ import {
 import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
+import QuestionTitle from './questionTitle'
 
 const DateQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
@@ -44,13 +45,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
-        {variant.question.fi}
-        <Button onClick={handleOpen} style={{ color: 'black' }}>
-          <InfoIcon></InfoIcon>
-        </Button>
-      </Typography>
-
+      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
       <Modal
         open={open}
         onClose={handleClose}

@@ -12,6 +12,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import { Question } from '../../common/types.tsx'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
+import QuestionTitle from './questionTitle.tsx'
 const FormQuestion = ({
   question,
   languageId,
@@ -82,14 +83,7 @@ const FormQuestion = ({
         paddingTop: 4,
       }}
     >
-      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
-        {variant.question.fi}
-
-        <Button onClick={handleOpen} style={{ color: 'black' }}>
-          <InfoIcon></InfoIcon>
-        </Button>
-      </Typography>
-
+      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
       <Modal
         open={open}
         onClose={handleClose}

@@ -4,14 +4,12 @@ import {
   Radio,
   RadioGroup,
   Typography,
-  Button,
   Modal,
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
-
 import { Question } from '../../common/types.ts'
 //import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
+import QuestionTitle from './questionTitle.tsx'
 const LanguageQuestion = ({
   question,
   getLanguageId,
@@ -48,14 +46,7 @@ const LanguageQuestion = ({
         paddingTop: 4,
       }}
     >
-      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
-        {variant.question.fi}
-
-        <Button onClick={handleOpen} style={{ color: 'black' }}>
-          <InfoIcon></InfoIcon>
-        </Button>
-      </Typography>
-
+      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
       <Modal
         open={open}
         onClose={handleClose}
