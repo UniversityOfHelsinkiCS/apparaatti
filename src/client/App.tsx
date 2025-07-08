@@ -18,20 +18,20 @@ function App() {
   //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
   const stepStyle = {
     '& .MuiStepLabel-root .Mui-completed': {
-      color: 'secondary.dark', 
+      color: '#2196f3', 
     },
     '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel': {
       color: 'grey',
     },
     '& .MuiStepLabel-root .Mui-active': {
-      color: 'secondary.main',
+      color: '#2196f3',
     },
     '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
             {
               color: 'grey', 
             },
     '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-      fill: '#2196f3',
+      fill: 'black',
     },
   }
  
@@ -154,7 +154,7 @@ function App() {
             background: '#f5f5f5'
           }} activeStep={questionarePhase} alternativeLabel>
             <Step sx={stepStyle}  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>Kysely</StepButton></Step>
-            <Step sx={stepStyle} key={1} completed={questionarePhase === 1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
+            <Step sx={stepStyle} key={1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
           </Stepper>
 
           {renderQuestionare()}
