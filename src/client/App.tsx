@@ -141,8 +141,7 @@ function App() {
 
       
         <Box
-          sx={{
-            paddingTop: 10,
+          sx={{        
             paddingLeft: 2,
             paddingRight: 1,
             backgroundColor: 'white',
