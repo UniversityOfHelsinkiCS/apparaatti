@@ -118,19 +118,27 @@ function App() {
           minWidth: '100vw',
         }}
       >
-        <Stepper sx={{
-          width: '30vw',
-          padding: 3,
-          marginLeft: '20vw',
-          background: '#f5f5f5'
-        }} activeStep={questionarePhase} alternativeLabel>
-          <Step  key={0}><StepLabel>Kysely</StepLabel></Step>
-          <Step key={1}><StepLabel >Ehdotukset</StepLabel></Step>
-        </Stepper>
 
-        {renderQuestionare()}
       
+        <Box
+          sx={{
+            paddingTop: 10,
+            backgroundColor: 'white',
+            marginLeft: '20vw',
+            width: '50vw'
+          }}
+        >
+          <Stepper sx={{
+            padding: 3,
+            background: '#f5f5f5'
+          }} activeStep={questionarePhase} alternativeLabel>
+            <Step  key={0}><StepLabel>Kysely</StepLabel></Step>
+            <Step key={1}><StepLabel >Ehdotukset</StepLabel></Step>
+          </Stepper>
 
+          {renderQuestionare()}
+      
+        </Box>
       </Box>
     </>
   )
