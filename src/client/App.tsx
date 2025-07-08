@@ -133,8 +133,8 @@ function App() {
             padding: 3,
             background: '#f5f5f5'
           }} activeStep={questionarePhase} alternativeLabel>
-            <Step  key={0}><StepLabel>Kysely</StepLabel></Step>
-            <Step key={1}><StepLabel >Ehdotukset</StepLabel></Step>
+            <Step  key={0} completed={questionarePhase === 1}><StepLabel>Kysely</StepLabel></Step>
+            <Step key={1} completed={questionarePhase === 1}><StepLabel >Ehdotukset</StepLabel></Step>
           </Stepper>
 
           {renderQuestionare()}
