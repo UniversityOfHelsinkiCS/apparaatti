@@ -92,7 +92,7 @@ function App() {
   }
 
   if(user?.message === 'Unauthorized'){
-    
+    window.location.assign('/api/login')
     return (
       <Box>
         <Typography>Please log in: <a href="/api/login">here</a></Typography>
