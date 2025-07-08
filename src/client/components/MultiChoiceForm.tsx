@@ -280,10 +280,7 @@ const MultiChoiceForm = ({
           flexDirection: 'column',
           alignItems: 'left',
           justifyContent: 'left',
-          padding: 2,
           gap: 0,
-          maxWidth: '30vw',
-          marginLeft: '20vw',
           backgroundColor: 'white',
         }}
       >

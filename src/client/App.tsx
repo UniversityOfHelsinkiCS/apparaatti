@@ -124,7 +124,8 @@ function App() {
           sx={{
             paddingTop: 10,
             backgroundColor: 'white',
-            marginLeft: '20vw',
+            marginLeft: 'auto',
+            marginRight: 'auto',
             width: '50vw'
           }}
         >
