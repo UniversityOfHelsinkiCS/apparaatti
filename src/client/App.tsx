@@ -31,7 +31,7 @@ function App() {
               color: 'grey', 
             },
     '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-      fill: 'black',
+      fill: '#2196f3',
     },
   }
  
