@@ -91,7 +91,15 @@ function App() {
     return <div>Loading...</div>
   }
 
+  if(user?.message === 'Unauthorized'){
+    
+    return (
+      <Box>
+        <Typography>Please log in: <a href="/api/login">here</a></Typography>
 
+      </Box>
+    )
+  }
   const renderQuestionare = () => {
     switch(questionarePhase){
     case 0:
