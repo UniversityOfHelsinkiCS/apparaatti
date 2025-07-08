@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import CourseRecommendation from './CourseRecommendation'
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import ActionButton from './actionButton'

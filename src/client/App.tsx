@@ -143,6 +143,8 @@ function App() {
         <Box
           sx={{
             paddingTop: 10,
+            paddingLeft: 2,
+            paddingRight: 1,
             backgroundColor: 'white',
             marginLeft: 'auto',
             marginRight: 'auto',
