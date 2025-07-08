@@ -72,13 +72,19 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
         </Box>
       </Modal>
 
-      <FormControl sx={{ m: 0 }} component="fieldset" variant="standard">
+      <FormControl sx={{m: 0, display: 'flex'}} component="fieldset" variant="standard">
         <FormGroup>
           {question.variants[0].options.map((option) => (
             <FormControlLabel
               key={option.id}
               name={question.id}
               value={option.id}
+              sx={{
+                '&:hover': {
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: '4px',
+                },
+              }}
               control={
                 <Checkbox
                   

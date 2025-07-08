@@ -147,6 +147,7 @@ function App() {
             backgroundColor: 'white',
             marginLeft: 'auto',
             marginRight: 'auto',
+            marginBottom: '5vh',
             width: {sm: '50vw', sx: '100vw'}
           }}
         >
