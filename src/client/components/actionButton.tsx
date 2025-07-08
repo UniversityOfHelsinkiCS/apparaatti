@@ -16,7 +16,7 @@ const ActionButton = ({onClick = () => {}, text = ''}: actionButtonProps) => {
       sx={{
         borderColor: '#90caf9',
         color: 'black',
-        width: '2rem',
+        width: '6rem',
         '&:hover': {
           backgroundColor: '#2196f3',
           color: 'white',
