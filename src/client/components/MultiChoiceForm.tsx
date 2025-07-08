@@ -6,6 +6,7 @@ import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
 import PeriodQuestion from './PeriodQuestion.tsx'
 import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
+import ActionButton from './actionButton.tsx'
 const questions = [
   {
     id: 'study-period',
@@ -288,21 +289,8 @@ const MultiChoiceForm = ({
           <StudyPhaseQuestion studyData={studyData} />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
-        <Button
-          variant="outlined"
-          type="submit"
-          sx={{
-            borderColor: '#90caf9',
-            color: 'black',
-            '&:hover': {
-              backgroundColor: '#2196f3',
-              color: 'white',
-            },
-            marginTop: 4,
-          }}
-        >
-          Submit
-        </Button>
+        <ActionButton text="Lähetä"/>
+         
       </Box>
     </form>
   )
