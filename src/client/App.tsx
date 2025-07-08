@@ -1,6 +1,6 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepLabel, StepButton } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton } from '@mui/material'
 import { useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 
@@ -15,6 +15,26 @@ function App() {
     },
   })
 
+  //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
+  const stepStyle = {
+    '& .MuiStepLabel-root .Mui-completed': {
+      color: 'secondary.dark', 
+    },
+    '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel': {
+      color: 'grey',
+    },
+    '& .MuiStepLabel-root .Mui-active': {
+      color: 'secondary.main',
+    },
+    '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+            {
+              color: 'grey', 
+            },
+    '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+      fill: 'black',
+    },
+  }
+ 
   const { data: studyData, isLoading: isStudyDataLoading } = useQuery({
     queryKey: ['studyData'],
     queryFn: async () => {
@@ -133,8 +153,8 @@ function App() {
             padding: 3,
             background: '#f5f5f5'
           }} activeStep={questionarePhase} alternativeLabel>
-            <Step  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>Kysely</StepButton></Step>
-            <Step key={1} completed={questionarePhase === 1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
+            <Step sx={stepStyle}  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>Kysely</StepButton></Step>
+            <Step sx={stepStyle} key={1} completed={questionarePhase === 1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
           </Stepper>
 
           {renderQuestionare()}
