@@ -126,14 +126,14 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-              <Button color="inherit">Tervetuloa, {user.username}</Button>
+              <Button color="inherit">{user.username}</Button>
               <Button color="inherit" href="/api/logout">
-                Logout
+                Kirjaudu ulos
               </Button>
             </>
           ) : (
             <Button color="inherit" href="/api/login">
-              Login
+              Kirjaudu
             </Button>
           )}
         </Toolbar>
