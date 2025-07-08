@@ -146,7 +146,7 @@ function App() {
             backgroundColor: 'white',
             marginLeft: 'auto',
             marginRight: 'auto',
-            width: '50vw'
+            width: {sm: '50vw', sx: '100vw'}
           }}
         >
           <Stepper sx={{
