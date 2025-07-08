@@ -1,6 +1,6 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepLabel } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepLabel, StepButton } from '@mui/material'
 import { useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 
@@ -133,8 +133,8 @@ function App() {
             padding: 3,
             background: '#f5f5f5'
           }} activeStep={questionarePhase} alternativeLabel>
-            <Step  key={0} completed={questionarePhase === 1}><StepLabel>Kysely</StepLabel></Step>
-            <Step key={1} completed={questionarePhase === 1}><StepLabel >Ehdotukset</StepLabel></Step>
+            <Step  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>Kysely</StepButton></Step>
+            <Step key={1} completed={questionarePhase === 1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
           </Stepper>
 
           {renderQuestionare()}
