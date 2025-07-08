@@ -1,10 +1,11 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton } from '@mui/material'
-import { useState } from 'react'
+import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, } from '@mui/material'
+import {  useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
-
+import MenuIcon from '@mui/icons-material/Menu'
 function App() {
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
   const { data: user } = useQuery({
@@ -126,10 +127,7 @@ function App() {
           </Typography>
           {user?.username ? (
             <>
-              <Button color="inherit">{user.username}</Button>
-              <Button color="inherit" href="/api/logout">
-                Kirjaudu ulos
-              </Button>
+              <Button onClick={() => setSettingsOpen(true)} color="inherit"><MenuIcon></MenuIcon></Button>
             </>
           ) : (
             <Button color="inherit" href="/api/login">
@@ -138,6 +136,18 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
+      <SwipeableDrawer anchor='right' open={settingsOpen} onOpen={() => {setSettingsOpen(true)}} onClose={() => {setSettingsOpen(false)}}>
+        <Box sx={{minWidth: '50vw', padding: 3}}>
+          <Stack direction={'row'}>
+            <Typography>{user?.username}    
+              <Button sx={{marginLeft: '3rem'}} color={'inherit'} href="/api/logout">
+                     Kirjaudu ulos
+              </Button>
+            </Typography>
+          </Stack>
+        </Box>
+      </SwipeableDrawer>
+
       <Box
         sx={{
           paddingTop: 10,
