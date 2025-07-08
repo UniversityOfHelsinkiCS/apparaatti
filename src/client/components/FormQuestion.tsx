@@ -4,13 +4,9 @@ import {
   Radio,
   RadioGroup,
   Typography,
-  Button,
   Modal,
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
-
 import { Question } from '../../common/types.tsx'
-//import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
 const FormQuestion = ({

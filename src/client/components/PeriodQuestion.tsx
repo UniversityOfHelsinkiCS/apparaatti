@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Button,
   FormControlLabel,
   Modal,
   Typography,
@@ -9,9 +8,9 @@ import {
   FormGroup,
   FormControl,
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
 import { green } from '@mui/material/colors'
 import { Question } from '../../common/types'
+import QuestionTitle from './questionTitle'
 
 const PeriodQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
@@ -56,13 +55,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }}>
-        {variant.question.fi}
-        <Button onClick={handleOpen} style={{ color: 'black' }}>
-          <InfoIcon></InfoIcon>
-        </Button>
-      </Typography>
-
+      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
       <Modal
         open={open}
         onClose={handleClose}

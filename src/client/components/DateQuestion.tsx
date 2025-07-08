@@ -1,14 +1,12 @@
 import React from 'react'
 import {
   Box,
-  Button,
   FormControlLabel,
   Modal,
   Radio,
   RadioGroup,
   Typography,
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
 
 import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'

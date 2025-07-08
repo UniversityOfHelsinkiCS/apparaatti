@@ -1,8 +1,9 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails, Modal, Button } from '@mui/material'
+import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails, Modal } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
 import { Question } from '../../common/types'
-import InfoIcon from '@mui/icons-material/Info'
+import QuestionTitle from './questionTitle'
+
 
 
 const PreviuslyDoneLangQuestion = ({
@@ -52,15 +53,8 @@ const PreviuslyDoneLangQuestion = ({
     <Box sx={{
       paddingTop: 4,
     }}>
-      <Typography>{variant.question.fi}
-
-
-        <Button onClick={handleOpen} style={{ color: 'black' }}>
-          <InfoIcon></InfoIcon>
-        </Button>
- 
-      </Typography>
-      
+      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
+     
       <Modal
         open={open}
         onClose={handleClose}

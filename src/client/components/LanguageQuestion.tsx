@@ -7,7 +7,6 @@ import {
   Modal,
 } from '@mui/material'
 import { Question } from '../../common/types.ts'
-//import { QuestionWithVariants} from '../../common/types.tsx'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
 const LanguageQuestion = ({
