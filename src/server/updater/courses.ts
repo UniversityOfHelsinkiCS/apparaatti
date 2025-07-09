@@ -93,23 +93,7 @@ const createCurCusFromUpdater = async (
   try {
     //delete old relations
     await CurCu.destroy({where: {}})
-    
-    // CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
-    for(const curcu of curCuRelations){
-      const curcuExists = await CurCu.findOne({
-        where: {
-          curId: curcu.curId,
-          cuId: curcu.cuId
-        },
-      })
-
-      if (curcuExists){
-        console.log('skipped duplicate')
-        continue
-      }
-      
-      CurCu.upsert(curcu)
-    }
+    CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
     console.log('kurkut created successfully')
   } catch (error) {
     console.error('Error creating kurkkuja:', error)
