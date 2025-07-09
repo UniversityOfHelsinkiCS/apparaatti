@@ -101,7 +101,7 @@ function courseInSameOrganisationAsUser(course: any, codes: courseCodes){
 } 
 
 function courseStudyPlaceCoordinate(course: CourseRealization){
-  console.log('calculating the study place value for, ', course.name.fi)
+  // console.log('calculating the study place value for, ', course.name.fi)
 
 
   const baseCoordinate = Math.pow(10, 12)
@@ -240,6 +240,8 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       }
     })
 
+
+  const codesAndGroupsTimer = Date.now()
   const courseRealisationsWithCodes = courseRealisationsWithCourseUnits.map(
     (cur) => {
       return {
@@ -253,8 +255,12 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       }
     }
   )
+  const codesAndGroupsTimerE = Date.now()
+  console.log('codes and groups timer: ', realisationTimerE - realisationTimer)
+  
+
   const realisationTimerE = Date.now()
-  console.log('realisation timer: ', realisationTimerE - realisationTimer)
+  console.log('realisation timer: ', codesAndGroupsTimerE - codesAndGroupsTimer)
   
   return courseRealisationsWithCodes
 }

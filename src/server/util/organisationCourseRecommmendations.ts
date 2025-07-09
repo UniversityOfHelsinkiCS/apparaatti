@@ -167,12 +167,10 @@ export function codesFromLanguagesContaining(organisationData: OrganisationRecom
 
   for (const org of organisationData){
     const languagesWithCorrectName = org.languages.filter((lang) => lang.name.includes(nameContains))
-    console.log(languagesWithCorrectName)
     const languageCodes = languagesWithCorrectName.map((lang) => lang.codes).flat()
-    console.log(languageCodes)
     codes.push(languageCodes)
   }
-  console.log(codes)
+ 
   return codes.flat()
 }
 
@@ -200,7 +198,6 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
     case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
     default:
-      console.log('No primary language codes found')
       return []
     }
   }
@@ -214,7 +211,6 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
     case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
     default:
-      console.log('No secondary language codes found')
       return []
     }
   }
