@@ -214,6 +214,8 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     },
   })
 
+
+  const curcuTimer = Date.now()
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
@@ -221,11 +223,13 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     },
     raw: true,
   })
+  const curcuTimerE = Date.now()
+  console.log('curcu timer: ', curcuTimerE - curcuTimer)
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(
     (curCu) => curCu.curId
   )
-  const courseRealizationsWithCourseUnit = await Cur.findAll({
+  const courseRealizations = await Cur.findAll({
     where: {
       id: wantedIds,
     },
@@ -239,7 +243,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
 
 
   const courseRealisationsWithCourseUnits =
-    courseRealizationsWithCourseUnit.map((cur) => {
+    courseRealizations.map((cur) => {
       return {
         ...cur,
         unitIds: uniqueVals(courseRealizationIdsWithCourseUnit
