@@ -53,6 +53,16 @@ CurCu.init(
     },
   },
   {
+    indexes: [
+      {
+        name: 'cu_index',
+        fields: ['cu_id']
+      },
+      {
+        name: 'cur_index',
+        fields: ['cur_id']
+      }
+    ],
     sequelize,
     modelName: 'CurCu',
     tableName: 'cur_cu',
