@@ -5,6 +5,7 @@ import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
+import { Op } from 'sequelize'
 // Find the newest course unit that has started before the course realisation
 
 const createCursFromUpdater = async (
@@ -92,7 +93,13 @@ const createCurCusFromUpdater = async (
 
   try {
     //delete old relations
-    await CurCu.destroy({where: {}})
+    const today = Date.now()
+    await CurCu.destroy({
+      where: {
+        createdAt: {[Op.lt]: today,},
+      },
+    }
+    )
     CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
     console.log('kurkut created successfully')
   } catch (error) {
