@@ -256,11 +256,11 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     }
   )
   const codesAndGroupsTimerE = Date.now()
-  console.log('codes and groups timer: ', realisationTimerE - realisationTimer)
+  console.log('codes and groups timer: ', codesAndGroupsTimerE - codesAndGroupsTimer)
   
 
   const realisationTimerE = Date.now()
-  console.log('realisation timer: ', codesAndGroupsTimerE - codesAndGroupsTimer)
+  console.log('realisation timer: ', realisationTimerE - realisationTimer)
   
   return courseRealisationsWithCodes
 }
