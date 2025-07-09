@@ -106,8 +106,8 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
 
   const baseCoordinate = Math.pow(10, 12)
   const courseName = course.name.fi?.toLowerCase()
-  console.log(courseName)  
-  console.log(courseName?.includes('etäopetus') || courseName?.includes('verkko-opetus'))
+  // console.log(courseName)  
+  // console.log(courseName?.includes('etäopetus') || courseName?.includes('verkko-opetus'))
 
   if(courseName?.includes('etäopetus' ) || courseName?.includes('verkko-opetus')){
     return baseCoordinate * 1  
@@ -205,6 +205,7 @@ const uniqueVals = (arr: any[]) => {
 }
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
+  const realisationTimer = Date.now()
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
       courseCode: courseCodeStrings,
@@ -252,6 +253,9 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       }
     }
   )
+  const realisationTimerE = Date.now()
+  console.log('realisation timer: ', realisationTimerE - realisationTimer)
+  
   return courseRealisationsWithCodes
 }
 
@@ -317,10 +321,14 @@ type courseCodes = {
 }
 
 function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], studyData: any): courseCodes{
+  const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)
   const userOrganisations = getUserOrganisationRecommendations(studyData, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
   const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage)  
+
+  const codeTimerE = Date.now()
+  console.log('code time: ', codeTimerE - codeTimer)
   return {
     all: allCodes, 
     userOrganisation: organisationCodes, 
