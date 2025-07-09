@@ -91,7 +91,10 @@ const createCurCusFromUpdater = async (
   })
 
   try {
-    CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
+    // CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
+    for(const curcu of curCuRelations){
+      CurCu.upsert(curcu)
+    }
     console.log('kurkut created successfully')
   } catch (error) {
     console.error('Error creating kurkkuja:', error)
