@@ -93,7 +93,8 @@ const createCurCusFromUpdater = async (
 
   try {
     //delete old relations
-    const today = Date.now()
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
     await CurCu.destroy({
       where: {
         createdAt: {[Op.lt]: today,},
