@@ -91,7 +91,7 @@ const createCurCusFromUpdater = async (
   })
 
   try {
-    //delee old relations
+    //delete old relations
     await CurCu.destroy({where: {}})
     
     // CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
@@ -104,6 +104,7 @@ const createCurCusFromUpdater = async (
       })
 
       if (curcuExists){
+        console.log('skipped duplicate')
         continue
       }
       
