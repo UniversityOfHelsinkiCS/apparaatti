@@ -213,9 +213,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
       courseCode: courseCodeStrings,
     },
   })
-  const end = Date.now()
-  console.log('first find with codes: ', end - start)
- 
+
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
     where: {
@@ -233,6 +231,12 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
     },
     raw: true,
   })
+  
+
+  const end = Date.now()
+  console.log('getting the data out of db: ', end - start)
+ 
+
 
   const courseRealisationsWithCourseUnits =
     courseRealizationsWithCourseUnit.map((cur) => {
