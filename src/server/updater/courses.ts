@@ -92,7 +92,7 @@ const createCurCusFromUpdater = async (
 
   try {
     //delee old relations
-    await CurCu.destroy({})
+      await CurCu.destroy({where: {}})
     
     // CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
     for(const curcu of curCuRelations){
