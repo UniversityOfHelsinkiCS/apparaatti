@@ -206,11 +206,15 @@ const uniqueVals = (arr: any[]) => {
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const realisationTimer = Date.now()
+
+  const start = Date.now()
   const courseUnitsWithCodes = await Cu.findAll({
     where: {
       courseCode: courseCodeStrings,
     },
   })
+  const end = Date.now()
+  console.log('first find with codes: ', end - start)
  
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
