@@ -226,9 +226,11 @@ const questions = [
 const MultiChoiceForm = ({
   onSubmit,
   studyData,
+  display
 }: {
   onSubmit: (formData: FormData) => Promise<void>
-  studyData: any
+  studyData: any,
+  display: boolean
 }) => {
   const [language, setLanguage] = React.useState('')
 
@@ -277,7 +279,7 @@ const MultiChoiceForm = ({
     <form onSubmit={handleSubmit}>
       <Box
         sx={{
-          display: 'flex',
+          display: display === true ? 'flex' : 'none',
           flexDirection: 'column',
           alignItems: 'left',
           justifyContent: 'left',

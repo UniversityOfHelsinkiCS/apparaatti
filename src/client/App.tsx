@@ -101,15 +101,7 @@ function App() {
       </Box>
     )
   }
-  const renderQuestionare = () => {
-    switch(questionarePhase){
-    case 0:
-      return <MultiChoiceForm onSubmit={handleSubmit} studyData={studyData} />
-    case 1:
-      return <CourseRecommendationsPage onClose={() => setQuestionarePhase(0)} recommendations={courseRecommendations}></CourseRecommendationsPage>
-    }
-  }
-
+ 
   return (
     <>
       <AppBar
@@ -177,7 +169,11 @@ function App() {
             <Step sx={stepStyle} key={1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
           </Stepper>
 
-          {renderQuestionare()}
+          
+          <MultiChoiceForm display={questionarePhase === 0} onSubmit={handleSubmit} studyData={studyData} />
+
+          <CourseRecommendationsPage display={questionarePhase === 1} onClose={() => setQuestionarePhase(0)} recommendations={courseRecommendations}></CourseRecommendationsPage>
+         
       
         </Box>
       </Box>

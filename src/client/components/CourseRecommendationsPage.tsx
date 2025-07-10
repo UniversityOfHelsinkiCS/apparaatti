@@ -4,13 +4,15 @@ import type { CourseRecommendation as CourseRecommendationType } from '../../com
 import ActionButton from './actionButton'
 import { useEffect, useRef } from 'react'
 
-const CourseRecommendationsPage = ({onClose, recommendations}: {onClose: () => void, recommendations: CourseRecommendationType[]}) => {
+const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendationType[], display: boolean}) => {
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
   useEffect(() => {
-    topOfPage.current?.scrollIntoView()
-  }, [])
+    if(display){    
+      topOfPage.current?.scrollIntoView()  
+    }
+  }, [display])
   return (
-    <Box>
+    <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
         <a ref={topOfPage} style={{display: 'none'}}></a>
         <ActionButton onClick={onClose} text="Takaisin"/>
