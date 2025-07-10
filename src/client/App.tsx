@@ -1,10 +1,12 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, } from '@mui/material'
-import {  useState } from 'react'
+import {  useRef, useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 import MenuIcon from '@mui/icons-material/Menu'
 function App() {
+
+  const topOfPage = useRef<HTMLAnchorElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
@@ -85,7 +87,9 @@ function App() {
         console.log('Form submitted successfully')
       },
     })
+    
     setQuestionarePhase(1)
+    topOfPage.current?.scrollIntoView(true)
   }
 
   if (isStudyDataLoading) {
@@ -161,6 +165,7 @@ function App() {
             width: {sm: '50vw', sx: '100vw'}
           }}
         >
+          <a ref={topOfPage} style={{display: 'none'}}></a>
           <Stepper sx={{
             padding: 3,
             background: '#f5f5f5'

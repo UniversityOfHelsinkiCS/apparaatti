@@ -2,19 +2,11 @@ import { Box, Stack } from '@mui/material'
 import CourseRecommendation from './CourseRecommendation'
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import ActionButton from './actionButton'
-import { useEffect, useRef } from 'react'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendationType[], display: boolean}) => {
-  const topOfPage = useRef<HTMLAnchorElement | null>(null)
-  useEffect(() => {
-    if(display){    
-      topOfPage.current?.scrollIntoView(true) //true makes it align to top of the screen see: https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView  
-    }
-  }, [display])
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
-        <a ref={topOfPage} style={{display: 'none'}}></a>
         <ActionButton onClick={onClose} text="Takaisin"/>
         <Stack
           spacing={2}
