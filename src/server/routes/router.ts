@@ -11,6 +11,7 @@ import CurCu from '../db/models/curCu.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import {urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
+import { uniqueVals } from '../util/misc.ts'
 
 const router = express.Router()
 
@@ -107,9 +108,11 @@ router.get('/cur/debug', async (req, res) => {
   const realisationCodeUrns = realisations.map(r => r.customCodeUrns)
     .filter(u => urnInCustomCodeUrns(u, 'kkt'))
     .flatMap(u => Object.values(u))
-  
+    .flat()
 
-  res.json(realisationCodeUrns)
+  const unique = uniqueVals(realisationCodeUrns)
+
+  res.json(unique)
 })
 
 router.get('/cur', async (req, res) => {
