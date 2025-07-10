@@ -173,7 +173,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType) 
   const courseCoordinates = {
     date: course.startDate.getTime(),  
-    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 12), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 24), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
