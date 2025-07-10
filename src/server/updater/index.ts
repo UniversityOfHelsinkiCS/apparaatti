@@ -34,7 +34,7 @@ export const runDev = async () => {
 
     //await fetchUsers()
     //await fetchCoursesAndResponsibilities()
-    //await fetchStudyRights()
+    await fetchStudyRights()
     await fetchOrganisations()
   } catch (error) {
     console.log(error)
