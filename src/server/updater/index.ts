@@ -32,9 +32,9 @@ export const runDev = async () => {
     await clearOffsets()
 
     //await fetchUsers()
-    await fetchCoursesAndResponsibilities()
+    //await fetchCoursesAndResponsibilities()
     //await fetchStudyRights()
-    //await fetchOrganisations()
+    await fetchOrganisations()
   } catch (error) {
     console.log(error)
     return
