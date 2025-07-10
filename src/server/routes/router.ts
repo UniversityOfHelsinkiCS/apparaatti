@@ -103,14 +103,11 @@ router.get('/cur/debug', async (req, res) => {
     return
   }
 
-  const realisations = await Cur.findAll({
-    include: {
-      model: Cu,
-      required: true,
-    },
-  })
+  const realisations = await Cur.findAll({})
+  const realisationCodeUrns = realisations.map((r) => r.customCodeUrns).filter((u) => urnInCustomCodeUrns(r, 'kkt'))
+  
 
-  res.json(realisations)
+  res.json(realisationCodeUrns)
 })
 
 router.get('/cur', async (req, res) => {
