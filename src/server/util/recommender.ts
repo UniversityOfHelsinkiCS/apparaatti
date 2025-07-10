@@ -4,6 +4,7 @@ import type { CourseRealization } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
+import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
@@ -91,10 +92,31 @@ function calculateUserCoordinates(answerData: any) {
   return userCoordinates
 }
 
-function courseInSameOrganisationAsUser(course: any, codes: courseCodes){
-  for(const courseCode of course.courseCodes){
-    if (codes.userOrganisation.includes(courseCode)){
-      return true
+const organisationCodeToUrn: Record<string, string> = {
+  'H50': 'kkt-mat',
+  'H20': 'kkt-oik',
+  'H10': 'kkt-teo',
+  'H74': 'kkt-ssk',
+  'H70': 'kkt-val', //kkt-val -> valtiotieteel. might be confused with kks-val -> valmistuville, graduation,
+  'H90': 'kkt-ela',
+  'H60': 'kkt-kas', //kasvatustieteel.
+  'H57': 'kkt-bio',
+  'H80': 'kkt-mm', //maa metsa
+  '4141': 'kkt-sps', //soveltava spykologia
+  'H305': 'kkt-ham',
+  'H30': 'kkt-laa',
+  'H3456': 'kkt-log', //logopedia seems to have multiple entries in organisations with the same name
+  '414': 'kkt-psy',
+  'H55': 'kkt-far'
+ 
+}
+
+function courseInSameOrganisationAsUser(course: any, studyData: any){
+  const codes = studyData.organisations.flatMap((o) => o.code)
+  for(code of codes){
+    const urnHit = organisationCodeToUrn[code]
+    if(urnHit){
+      return courseHasCustomCodeUrn(course, urnHit)
     }
   }
   return false
@@ -137,7 +159,7 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, codes)
+  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, studyData)
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
@@ -200,9 +222,7 @@ async function calculateUserDistances(
   return distances
 }
 
-const uniqueVals = (arr: any[]) => {
-  return [...new Set(arr)]
-}
+
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   const realisationTimer = Date.now()
