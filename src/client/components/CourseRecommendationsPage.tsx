@@ -8,7 +8,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
   useEffect(() => {
     if(display){    
-      topOfPage.current?.scrollIntoView()  
+      topOfPage.current?.scrollIntoView(true) //true makes it align to top of the screen see: https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView  
     }
   }, [display])
   return (
