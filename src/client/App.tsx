@@ -99,11 +99,11 @@ function App() {
   if(user?.message === 'Unauthorized'){
     // window.location.assign('/api/login')
     return (
-      <Box sx={{width: '100vw', height: '100vh'}}>
+      <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
         <Typography variant='h2' sx={{marginLeft: 'auto', marginRight: 'auto'}}>Apparaatti</Typography> 
         <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>Please log in: <a href="/api/login">here</a></Typography>
         
-      </Box>
+      </Stack>
     )
   }
  
