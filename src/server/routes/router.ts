@@ -105,8 +105,8 @@ router.get('/cur/debug', async (req, res) => {
 
   const realisations = await Cur.findAll({})
   const realisationCodeUrns = realisations.map(r => r.customCodeUrns)
-  .filter(u => urnInCustomCodeUrns(u, 'kkt'))
-  .flatMap(u => Object.values(u))
+    .filter(u => urnInCustomCodeUrns(u, 'kkt'))
+    .flatMap(u => Object.values(u))
   
 
   res.json(realisationCodeUrns)
