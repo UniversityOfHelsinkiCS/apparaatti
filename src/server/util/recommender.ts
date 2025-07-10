@@ -112,7 +112,8 @@ const organisationCodeToUrn: Record<string, string> = {
 }
 
 function courseInSameOrganisationAsUser(course: any, studyData: any){
-  const codes = studyData.organisations.flatMap((o) => o.code)
+  const codes = studyData.organisations.flatMap(o => o.code)
+  console.log(codes)
   for(code of codes){
     const urnHit = organisationCodeToUrn[code]
     if(urnHit){
