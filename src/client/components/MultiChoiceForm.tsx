@@ -26,7 +26,7 @@ const questions = [
           { id: 'period_2', name: { fi: '2. periodi' } },
           { id: 'period_3', name: { fi: '3. periodi' } },
           { id: 'period_4', name: { fi: '4. periodi' } },
-          { id: 'intensive_3', name: { fi: 'kesä 26' } },
+          { id: 'intensive_3', name: { fi: 'Kesä 26' } },
         ],
       },
     ],
@@ -40,7 +40,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Mikä on koulusivistyskielesi?' },
         options: [
-          { id: '0', name: { fi: 'ei valintaa' } },
+          { id: '0', name: { fi: 'Ei valintaa' } },
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
           { id: 'en', name: { fi: 'Englanti' } },
@@ -57,7 +57,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Mistä kielestä haet kursseja?' },
         options: [
-          { id: '0', name: { fi: 'ei valintaa' } },
+          { id: '0', name: { fi: 'Ei valintaa' } },
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
           { id: 'en', name: { fi: 'Englanti' } },
@@ -71,10 +71,10 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa'},
+        question: { fi: 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.'},
         options: [
-          { id: '0', name: { fi: 'ei' } },
-          { id: '1', name: { fi: 'kyllä' } },
+          { id: '0', name: { fi: 'Ei' } },
+          { id: '1', name: { fi: 'Kyllä' } },
         ],
       }
     ],
@@ -127,9 +127,9 @@ const questions = [
       {
         question: { fi: 'Mikä on suosimasi opetusmuoto?' },
         options: [
-          { id: 'remote', name: { fi: 'täysin etäopiskelu' } },
-          { id: 'hybrid', name: { fi: 'etäopiskelu ja lähiopetus' } },
-          { id: 'onsite', name: { fi: 'täysin lähiopetus' } },
+          { id: 'remote', name: { fi: 'Täysin etäopiskelu' } },
+          { id: 'hybrid', name: { fi: 'Etäopiskelu ja lähiopetus' } },
+          { id: 'onsite', name: { fi: 'Täysin lähiopetus' } },
         ],
       },
     ],
@@ -143,7 +143,7 @@ const questions = [
         name: 'default',
         question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
           { id: '0', name: { fi: 'En koe tarvitsevani valmennusta' } },
         ],
@@ -154,7 +154,7 @@ const questions = [
           fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
         },
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
           { id: '0', name: { fi: 'En koe tarvitsevani kertausta' } },
         ],
@@ -167,11 +167,11 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Olen kiinnostonut kurssista joka on integroitu oman alani opintoihin' },
+        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.' },
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
-          { id: '0', name: { fi: 'ei' } },
-          { id: '1', name: { fi: 'kyllä' } },
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'Ei' } },
+          { id: '1', name: { fi: 'Kyllä' } },
         ],
       },
     ],
@@ -184,9 +184,9 @@ const questions = [
         name: 'default',
         question: { fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).' },
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
-          { id: '0', name: { fi: 'en' } },
-          { id: '1', name: { fi: 'kyllä' } },
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'En' } },
+          { id: '1', name: { fi: 'Kyllä' } },
         ],
       },
     ],
@@ -197,11 +197,11 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti'},
+        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.'},
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
-          { id: '0', name: { fi: 'en' } },
-          { id: '1', name: { fi: 'haluan' } },
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'En' } },
+          { id: '1', name: { fi: 'Haluan' } },
         ],
       },
     ],
@@ -212,11 +212,11 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava'},
+        question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava.'},
         options: [
-          {id: 'neutral', name: {fi: 'ei valintaa'}},
-          { id: '0', name: { fi: 'en' } },
-          { id: '1', name: { fi: 'haluan' } },
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'En' } },
+          { id: '1', name: { fi: 'Haluan' } },
         ],
       },
     ],
