@@ -5,9 +5,8 @@ import ActionButton from './actionButton'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
 
-  if(!recommendations.relevantRecommendations || !recommendations.recommendations){
-    return (<p>sorry something went wrong</p>)
-  }
+  const relevant = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
+  const other = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
 
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
@@ -23,13 +22,13 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
           }}
         >
           <Typography>Tarkimmat suositukset: </Typography>
-          {recommendations.relevantRecommendations.map((course) => (
+          {relevant.map((course) => (
             <CourseRecommendation key={course.course.id} course={course} />
           ))}
 
 
           <Typography>Kaikki suositukset (tarkkuus voi vaihdella): </Typography>
-          {recommendations.recommendations.map((course) => (
+          {other.map((course) => (
             <CourseRecommendation key={course.course.id} course={course} />
           ))}
 
