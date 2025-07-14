@@ -11,7 +11,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
       
       <>
         <Typography id="study-field-select-label">
-            Valitse opinto-laitos
+            Valitse tiedekunta
         </Typography>
         {organisations.length > 1 && (
           <Select
@@ -23,7 +23,6 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
             name="study-field-select"
             labelId="study-field-select-label"
             value={selectedField.code}
-            onChange={}
           >
             {organisations?.map((item: any) => (
               <MenuItem key={item.id} value={item.code}>
@@ -31,18 +30,6 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
               </MenuItem>
             ))}
           </Select>
-        )}
-        {organisations.length < 2 && (
-          <p
-            style={{
-              border: '2px solid lightgrey',
-              padding: '10px',
-              borderRadius: '5px',
-              minWidth: '100px',
-            }}
-          >
-            {organisations[0].name.fi}
-          </p>
         )}
       </>
       
