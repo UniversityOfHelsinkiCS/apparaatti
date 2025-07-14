@@ -6,7 +6,7 @@ import ActionButton from './actionButton'
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
 
   const relevant = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
-  const other = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
+  const other = recommendations?.recommendations != null ? recommendations.recommendations : []
 
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
