@@ -31,7 +31,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
             </MenuItem>
           ))}
         </Select>
-        {organisations.lenght < 2 && <input type='hidden' value={selectedField.code} name="study-field-select"/>}     
+        {organisations.length < 2 && <input type='hidden' value={selectedField.code} name="study-field-select"/>}     
       </>
       
     </Box>
