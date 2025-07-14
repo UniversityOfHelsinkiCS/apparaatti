@@ -33,10 +33,10 @@ const getStudyYearFromPeriod = (id: string) => {
   return ''
 }
 
-function recommendCourses(answerData: any, user) {
+function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
 
-  const recommendations = getRecommendations(userCoordinates, answerData, user)
+  const recommendations = getRecommendations(userCoordinates, answerData)
 
   return recommendations
 }
@@ -374,7 +374,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
   }
 }
 
-async function getRecommendations(userCoordinates: any, answerData, user: any) {
+async function getRecommendations(userCoordinates: any, answerData) {
   const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
   //used to filter courses by organisation

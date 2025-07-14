@@ -150,8 +150,7 @@ export function courseMatches(course: CourseRealization, cases: CourseMatchCase[
 }
 
 
-export function getUserOrganisationRecommendations(userOrganisationCode: string, data: OrganisationRecommendation[]){
-  const userOrganisations = studyData.organisations
+export function getUserOrganisationRecommendations(userOrganisationCode: string, data: OrganisationRecommendation[]){ 
   const usersOrganisationCodes: string[] = [userOrganisationCode]
   const dataOrganisations = data.filter((org) => usersOrganisationCodes.includes(org.name))
   return dataOrganisations

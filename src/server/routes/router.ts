@@ -33,7 +33,7 @@ router.post('/form/1/answer', async (req, res) => {
   
   //  await saveAnswer(answerData, user)
   
-  const recommendations = await recommendCourses(answerData, req.user)
+  const recommendations = await recommendCourses(answerData)
   res.json(recommendations)
 })
 
