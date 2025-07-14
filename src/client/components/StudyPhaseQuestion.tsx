@@ -1,11 +1,6 @@
-import { useEffect, useState } from 'react'
 import { Box, MenuItem, Select, Typography } from '@mui/material'
 
 const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
-  const handleFieldChange = (event: any) => {
-    setSelectedField(event.target.value)
-  }
-
   const organisations = studyData?.organisations
   if(!organisations){
     return (<p>no organisation found</p>)
@@ -16,7 +11,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
       
       <>
         <Typography id="study-field-select-label">
-            Valitse opinto-oikeus
+            Valitse opinto-laitos
         </Typography>
         {organisations.length > 1 && (
           <Select
@@ -28,7 +23,7 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
             name="study-field-select"
             labelId="study-field-select-label"
             value={selectedField.code}
-            onChange={handleFieldChange}
+            onChange={}
           >
             {organisations?.map((item: any) => (
               <MenuItem key={item.id} value={item.code}>
