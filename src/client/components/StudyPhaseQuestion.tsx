@@ -19,7 +19,9 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
             padding: '1px',
             minWidth: 100,
             border: '1px solid lightgray',
+           
           }}
+          disabled={organisations.lenght < 2 ? true : false} //makes drop down disabled if there is only one option to choose
           name="study-field-select"
           labelId="study-field-select-label"
           value={selectedField.code}
