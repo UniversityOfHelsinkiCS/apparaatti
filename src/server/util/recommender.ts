@@ -361,6 +361,7 @@ type courseCodes = {
 function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
   const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)
+  console.log(userOrganisationCode)
   const userOrganisations = getUserOrganisationRecommendations(userOrganisationCode, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
   const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage)  
@@ -384,6 +385,7 @@ async function getRecommendations(userCoordinates: any, answerData) {
 
 
   const courseTimer = Date.now()
+  console.log(organisationCode)
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
