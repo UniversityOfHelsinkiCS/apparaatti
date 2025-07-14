@@ -8,7 +8,6 @@ import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
-import { getStudyData } from './studydata.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -359,10 +358,10 @@ type courseCodes = {
   languageSpesific: string[]
 }
 
-function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], studyData: any): courseCodes{
+function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
   const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)
-  const userOrganisations = getUserOrganisationRecommendations(studyData, organisationRecommendations)
+  const userOrganisations = getUserOrganisationRecommendations(userOrganisationCode, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
   const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage)  
 
@@ -385,7 +384,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
 
 
   const courseTimer = Date.now()
-  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, studyData)
+  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
   
