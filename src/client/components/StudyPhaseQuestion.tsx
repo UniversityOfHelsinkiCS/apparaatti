@@ -17,7 +17,9 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     }
     return ''
   }
-
+  if(studyData.phase1Data === undefined  && studyData.phase2Data === undefined){
+    return <p>no study data found</p>
+  }
   const currentData = studyData?.phase1Data.concat(studyData?.phase2Data)
 
   useEffect(() => {

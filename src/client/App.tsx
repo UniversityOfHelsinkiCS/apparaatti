@@ -10,7 +10,7 @@ function App() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await fetch('/api/user')
@@ -41,6 +41,9 @@ function App() {
   const { data: studyData, isLoading: isStudyDataLoading } = useQuery({
     queryKey: ['studyData'],
     queryFn: async () => {
+      if(isUserLoading === true){
+        return {message: 'no user'}
+      }
       const res = await fetch('/api/user/studydata')
       return res.json()
     },
@@ -92,11 +95,7 @@ function App() {
     topOfPage.current?.scrollIntoView(true)
   }
 
-  if (isStudyDataLoading) {
-    return <div>Loading...</div>
-  }
-
-  if(user?.message === 'Unauthorized'){
+  if(isUserLoading || user?.message === 'Unauthorized'){
     // window.location.assign('/api/login')
     return (
       <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
@@ -107,6 +106,10 @@ function App() {
     )
   }
  
+
+  if (isStudyDataLoading) {
+    return <div>Loading...</div>
+  }
   return (
     <>
       <AppBar
