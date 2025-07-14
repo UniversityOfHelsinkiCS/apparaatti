@@ -1,6 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import type { CourseRealization } from '../../common/types.ts'
+import type { CourseRealization, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
@@ -154,7 +154,7 @@ function isIndependentCourse(course: CourseRealization){
 }
 
 async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
-) {
+): CourseRecommendation {
   
   const dimensions = Object.keys(userCoordinates)
 
@@ -210,7 +210,7 @@ async function calculateUserDistances(
   courseCodes: any,
   courseLanguageType: string,
   organisationCode:string
-) {
+): CourseRecommendation[] {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
     return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode)
@@ -375,7 +375,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
   }
 }
 
-async function getRecommendations(userCoordinates: any, answerData) {
+async function getRecommendations(userCoordinates: any, answerData): CourseRecommendations {
   const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
   //used to filter courses by organisation
@@ -400,9 +400,16 @@ async function getRecommendations(userCoordinates: any, answerData) {
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
 
+  const relevantRecommendations = sortedCourses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+
+  const allRecommendations= {
+    relevantRecommendations: relevantRecommendations,
+    recommendations: recommendations
+  }
+  
   const end = Date.now()
   console.log(`Execution time: ${end - startBench} ms`)
-  return recommendations
+  return allRecommendations
 }
 
 export default recommendCourses

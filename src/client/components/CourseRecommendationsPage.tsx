@@ -1,9 +1,9 @@
-import { Box, Stack } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import CourseRecommendation from './CourseRecommendation'
-import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseRecommendations, CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import ActionButton from './actionButton'
 
-const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendationType[], display: boolean}) => {
+const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
@@ -17,9 +17,17 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          {recommendations.map((course) => (
+          <Typography>Tarkimmat suositukset: </Typography>
+          {recommendations.relevantRecommendations.map((course) => (
             <CourseRecommendation key={course.course.id} course={course} />
           ))}
+
+
+          <Typography>Kaikki suositukset (tarkkuus voi vaihdella): </Typography>
+          {recommendations.recommendations.map((course) => (
+            <CourseRecommendation key={course.course.id} course={course} />
+          ))}
+
         </Stack>
       
       </Stack>
