@@ -378,7 +378,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
 //applies a set of filters until the list of relevant courses is of certain lenght
 function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //the courses in relevant always must be within the same organisation
-  const recommendationsInOrganisation = sortedCourses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+  const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
   if(recommendationsInOrganisation.length < 5){
     return recommendationsInOrganisation
   }
