@@ -375,6 +375,25 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
   }
 }
 
+//applies a set of filters until the list of relevant courses is of certain lenght
+function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
+  //the courses in relevant always must be within the same organisation
+  const recommendationsInOrganisation = sortedCourses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+  if(recommendationsInOrganisation.length < 5){
+    return recommendationsInOrganisation
+  }
+
+  const recommendationsInSameStudyMethod = recommendationsInOrganisation.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
+  if(recommendationsInSameStudyMethod.length < 5){
+    return recommendationsInSameStudyMethod
+  }
+
+  return recommendationsInSameStudyMethod
+
+
+}
+
+
 async function getRecommendations(userCoordinates: any, answerData): CourseRecommendations {
   const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
@@ -400,7 +419,7 @@ async function getRecommendations(userCoordinates: any, answerData): CourseRecom
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
 
-  const relevantRecommendations = sortedCourses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+  const relevantRecommendations = relevantCourses(recommendations, userCoordinates)
 
   const allRecommendations= {
     relevantRecommendations: relevantRecommendations,
