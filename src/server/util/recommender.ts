@@ -111,8 +111,8 @@ const organisationCodeToUrn: Record<string, string> = {
  
 }
 
-function courseInSameOrganisationAsUser(course: any, studyData: any){
-  const codes = studyData.organisations.flatMap(o => o.code)
+function courseInSameOrganisationAsUser(course: any, organisationCode: string){
+  const codes = [organisationCode]
   // console.log(codes)
   for(const code of codes){
     const urnHit = organisationCodeToUrn[code]
@@ -154,13 +154,13 @@ function isIndependentCourse(course: CourseRealization){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, studyData: any, codes: courseCodes,  courseLanguageType: string
+async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
 ) {
   
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, studyData)
+  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, organisationCode)
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
@@ -208,13 +208,13 @@ async function calculateCourseDistance(course: CourseRealization, userCoordinate
 async function calculateUserDistances(
   userCoordinates: any,
   availableCourses: any,
-  studyData: any,
   courseCodes: any,
-  courseLanguageType: string
+  courseLanguageType: string,
+  organisationCode:string
 ) {
   const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, studyData, courseCodes, courseLanguageType)
+    return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode)
   })
   const distances = await Promise.all(distancePromises)
   const distanceE = new Date()
@@ -378,7 +378,9 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
 async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
-  const studyData = await getStudyData(user) //used to filter courses by organisation
+  //used to filter courses by organisation
+  const organisationCode = answerData['study-field-select']
+
   const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
 
 
@@ -390,7 +392,7 @@ async function getRecommendations(userCoordinates: any, answerData, user: any) {
   const courseEndTimer = Date.now()
   console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
 
-  const distances = await calculateUserDistances(userCoordinates, courseData, studyData, courseCodes, courseLanguageType )
+  const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
   
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
