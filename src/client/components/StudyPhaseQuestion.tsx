@@ -13,24 +13,24 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
         <Typography id="study-field-select-label">
             Valitse tiedekunta
         </Typography>
-        {organisations.length > 1 && (
-          <Select
-            sx={{
-              padding: '1px',
-              minWidth: 100,
-              border: '1px solid lightgray',
-            }}
-            name="study-field-select"
-            labelId="study-field-select-label"
-            value={selectedField.code}
-          >
-            {organisations?.map((item: any) => (
-              <MenuItem key={item.id} value={item.code}>
-                {item.name.fi}
-              </MenuItem>
-            ))}
-          </Select>
-        )}
+       
+        <Select
+          sx={{
+            padding: '1px',
+            minWidth: 100,
+            border: '1px solid lightgray',
+          }}
+          name="study-field-select"
+          labelId="study-field-select-label"
+          value={selectedField.code}
+        >
+          {organisations?.map((item: any) => (
+            <MenuItem key={item.id} value={item.code}>
+              {item.name.fi}
+            </MenuItem>
+          ))}
+        </Select>
+     
       </>
       
     </Box>
