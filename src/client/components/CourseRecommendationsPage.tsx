@@ -4,6 +4,11 @@ import type { CourseRecommendations, CourseRecommendation as CourseRecommendatio
 import ActionButton from './actionButton'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
+
+  if(!recommendations.relevantRecommendations || !recommendations.recommendations){
+    return (<p>sorry something went wrong</p>)
+  }
+
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
