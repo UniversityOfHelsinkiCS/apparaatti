@@ -17,7 +17,7 @@ function App() {
       return res.json()
     },
   })
-
+  const userId = user?.id
   //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
   const stepStyle = {
     '& .MuiStepLabel-root .Mui-completed': {
@@ -41,12 +41,10 @@ function App() {
   const { data: studyData, isLoading: isStudyDataLoading } = useQuery({
     queryKey: ['studyData'],
     queryFn: async () => {
-      if(isUserLoading === true){
-        return {message: 'no user'}
-      }
       const res = await fetch('/api/user/studydata')
       return res.json()
     },
+    enabled: !!userId
   })
 
   const submitAnswerMutation = useMutation({
