@@ -22,6 +22,10 @@ Cu.init(
       allowNull: false,
       primaryKey: true,
     },
+    credits: {
+      type: DataTypes.JSONB,
+      allowNull: true
+    },
     name: {
       type: DataTypes.JSONB,
       allowNull: false,

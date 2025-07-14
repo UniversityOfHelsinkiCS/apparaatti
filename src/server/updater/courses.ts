@@ -50,6 +50,7 @@ const createCusFromUpdater = async (
     .map((courseUnit: any) => {
       return {
         id: courseUnit.id,
+        credits: courseUnit.credits,
         name: courseUnit.name,
         courseCode: courseUnit.code,
         groupId: courseUnit.organisations[0]?.id ?? null,

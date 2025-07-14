@@ -77,6 +77,7 @@ export interface SisuCourseUnit {
   id: string
   code: string
   name: Locales
+  credits: JSON
   validityPeriod: ActivityPeriod
 }
 export interface SisuResponsibilityInfo {
