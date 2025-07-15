@@ -64,7 +64,7 @@ const CourseRecommendation = ({
             color="textSecondary"
             gutterBottom
           >
-            {creditString()}
+            {creditString()} op
           </Typography>
 
           <Typography
