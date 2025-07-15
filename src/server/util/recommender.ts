@@ -387,11 +387,11 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   }
 
   const recommendationsInSameStudyMethod = recommendationsInOrganisation.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
-  if(recommendationsInSameStudyMethod.length < 5){
+  if(recommendationsInSameStudyMethod.length > 0){
     return recommendationsInSameStudyMethod
   }
 
-  return recommendationsInSameStudyMethod
+  return recommendationsInOrganisation
 
 
 }
