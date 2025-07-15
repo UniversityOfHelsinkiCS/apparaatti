@@ -20,13 +20,13 @@ const CourseRecommendation = ({
     if(!maxCredits && !minCredits){
       return ''
     }
-    if(!minCredits){
+    else if(!minCredits){
       return maxCredits.toString()
     }
-    if(!maxCredits){
+    else if(!maxCredits){
       return minCredits.toString()
     }
-    if(maxCredits === minCredits){
+    else if(maxCredits === minCredits){
       return maxCredits.toString()
     }
 
