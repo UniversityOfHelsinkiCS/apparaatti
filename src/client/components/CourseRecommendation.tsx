@@ -10,6 +10,9 @@ const CourseRecommendation = ({
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
+
+  const maxCredit = course.course.credits.map((c) => c['max']).sort()[0]
+  const minCredit: number = course.course.credits.map((c) => c.credits['min']).sort()[-1]
   const courseDateRange = (course: any) => {
     const startDate = new Date(course.startDate)
     const endDate = new Date(course.endDate)
@@ -36,6 +39,15 @@ const CourseRecommendation = ({
           {course.course.name.fi}
         </Typography>
         <Stack direction={'row'}>
+          <Typography
+            sx={{ marginRight: 'auto' }}
+            variant="body2"
+            color="textSecondary"
+            gutterBottom
+          >
+            {minCredit}-{maxCredit} op
+          </Typography>
+
           <Typography
             sx={{ marginRight: 'auto' }}
             variant="body2"

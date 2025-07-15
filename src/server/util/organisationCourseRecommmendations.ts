@@ -83,7 +83,7 @@ export function courseHasCustomCodeUrn(course: CourseData, codeUrn: string | nul
     return false
   }
   return urnInCustomCodeUrns(course.customCodeUrns, codeUrn)
- }
+}
 
 export function urnInCustomCodeUrns(customCodeUrns: Record<string, string[]> | null, codeUrn: string | null){
   if(!customCodeUrns){
