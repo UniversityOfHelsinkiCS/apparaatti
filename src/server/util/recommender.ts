@@ -382,11 +382,14 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
 function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //the courses in relevant always must be within the same organisation
   const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+  console.log(recommendationsInOrganisation.length)
   if(recommendationsInOrganisation.length < 5){
     return recommendationsInOrganisation
   }
 
   const recommendationsInSameStudyMethod = recommendationsInOrganisation.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
+
+  console.log(recommendationsInSameStudyMethod.length)
   if(recommendationsInSameStudyMethod.length > 0){
     return recommendationsInSameStudyMethod
   }
