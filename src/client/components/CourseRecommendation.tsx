@@ -11,8 +11,27 @@ const CourseRecommendation = ({
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
 
-  const maxCredit = course.course.credits.map((c) => c['max']).sort()[0]
-  const minCredit: number = course.course.credits.map((c) => c['min']).sort()[-1]
+
+  const creditString:() => string = () => {
+
+    const maxCredits: number = course.course.credits.map(c=>c['max']).sort((a, b) => b - a )[0]
+    const minCredits: number= course.course.credits.map(c => c['min']).sort()[0]
+
+    if(!maxCredits && !minCredits){
+      return ''
+    }
+    if(!minCredits){
+      return maxCredits.toString()
+    }
+    if(!maxCredits){
+      return minCredits.toString()
+    }
+    if(maxCredits === minCredits){
+      return maxCredits.toString()
+    }
+
+    return  minCredits + '-' + maxCredits
+  }
   const courseDateRange = (course: any) => {
     const startDate = new Date(course.startDate)
     const endDate = new Date(course.endDate)
@@ -45,7 +64,7 @@ const CourseRecommendation = ({
             color="textSecondary"
             gutterBottom
           >
-            {minCredit}-{maxCredit} op
+            {creditString()}
           </Typography>
 
           <Typography
