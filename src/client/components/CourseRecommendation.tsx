@@ -13,7 +13,9 @@ const CourseRecommendation = ({
 
 
   const creditString:() => string = () => {
-
+    if(!course.course.credits){
+      return ''
+    }
     const maxCredits: number = course.course.credits.map(c=>c['max']).sort((a, b) => b - a )[0]
     const minCredits: number= course.course.credits.map(c => c['min']).sort()[0]
 
