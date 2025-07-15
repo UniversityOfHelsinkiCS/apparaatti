@@ -284,6 +284,9 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
         groupIds: uniqueVals(courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
           .map((cu) => cu.groupId)),
+        credits: courseUnitsWithCodes
+          .filter((cu)=> cur.unitIds.includes(cu.id))
+          .map((cu) => cu.credits),
       }
     }
   )

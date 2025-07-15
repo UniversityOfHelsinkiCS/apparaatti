@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 import CourseRecommendation from './CourseRecommendation'
-import type { CourseRecommendations, CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseRecommendations } from '../../common/types'
 import ActionButton from './actionButton'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {

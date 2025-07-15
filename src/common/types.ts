@@ -52,6 +52,7 @@ export type CourseRealization = {
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
   courseCodes: string[]
+  credits: Record<string, number>[]
 }
 
 export type CurCuRelation = {
