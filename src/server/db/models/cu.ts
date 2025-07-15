@@ -8,6 +8,7 @@ import { sequelize } from '../connection.ts'
 import type { LocalizedString } from '../../../common/types.ts'
 class Cu extends Model<InferAttributes<Cu>, InferCreationAttributes<Cu>> {
   declare id: string
+  declare credits: Record<string, number>
   declare name: LocalizedString
   declare courseCode: string
   declare groupId: string
