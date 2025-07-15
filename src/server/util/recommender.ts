@@ -1,6 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import type { CourseRealization, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
+import type { CourseData, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
@@ -122,7 +122,7 @@ function courseInSameOrganisationAsUser(course: any, organisationCode: string){
   return false
 } 
 
-function courseStudyPlaceCoordinate(course: CourseRealization){
+function courseStudyPlaceCoordinate(course: CourseData){
   // console.log('calculating the study place value for, ', course.name.fi)
 
 
@@ -146,14 +146,14 @@ function courseStudyPlaceCoordinate(course: CourseRealization){
 
 
 
-function isIndependentCourse(course: CourseRealization){
+function isIndependentCourse(course: CourseData){
   const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
   const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
 
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-async function calculateCourseDistance(course: CourseRealization, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
+async function calculateCourseDistance(course: CourseData, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
 ): CourseRecommendation {
   
   const dimensions = Object.keys(userCoordinates)

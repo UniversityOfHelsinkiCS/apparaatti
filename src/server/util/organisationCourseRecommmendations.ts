@@ -1,6 +1,6 @@
 import xlsx from 'xlsx'
 import path from 'path'
-import type { CourseRealization } from '../../common/types.ts'
+import type { CourseData } from '../../common/types.ts'
 type Language = {
   name: string
   codes: string[]
@@ -61,7 +61,7 @@ export const challegeCourseCodes: CourseMatchCase[]= [
 ]
 
 
-export function courseHasAnyOfCodes(course: CourseRealization, codes: string[] | null){
+export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null){
   if(!codes){
     return false
   }
@@ -74,7 +74,7 @@ export function courseHasAnyOfCodes(course: CourseRealization, codes: string[] |
   return false
 }
 
-export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: string | null){
+export function courseHasCustomCodeUrn(course: CourseData, codeUrn: string | null){
   if(!codeUrn){
     return false
   }
@@ -82,19 +82,8 @@ export function courseHasCustomCodeUrn(course: CourseRealization, codeUrn: strin
   if(customCodeUrns === null){
     return false
   }
-
-  for(const key of Object.keys(customCodeUrns)){
-    if(key.includes('kk-apparaatti')){
-      const values = customCodeUrns[key]
-      const hasCodeUrn = values.find((val) => val.includes(codeUrn))
-      if(hasCodeUrn){
-        return true
-      }
-    }
-  }
-  
-  return false
-}
+  return urnInCustomCodeUrns(course.customCodeUrns, codeUrn)
+ }
 
 export function urnInCustomCodeUrns(customCodeUrns: Record<string, string[]> | null, codeUrn: string | null){
   if(!customCodeUrns){
@@ -118,7 +107,7 @@ export function urnInCustomCodeUrns(customCodeUrns: Record<string, string[]> | n
   return false
 }
 
-export function courseHasAnyCustomCodeUrn(course: CourseRealization, codeUrns: string[] | null)
+export function courseHasAnyCustomCodeUrn(course: CourseData, codeUrns: string[] | null)
 {
   if(!codeUrns){
     return false
@@ -134,7 +123,7 @@ export function courseHasAnyCustomCodeUrn(course: CourseRealization, codeUrns: s
   return false
 }
 
-export function courseMatches(course: CourseRealization, cases: CourseMatchCase[], languageToStudy: string)
+export function courseMatches(course: CourseData, cases: CourseMatchCase[], languageToStudy: string)
 {
   const matchCase: (CourseMatchCase | undefined) = cases.find((m) => m.language === languageToStudy)
   if(matchCase === undefined){

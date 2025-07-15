@@ -33,7 +33,7 @@ export const DIMENSIONS = ['fear', 'teachingMethod', 'experience'] as const
 export type Dimension = (typeof DIMENSIONS)[number]
 
 export type CourseRecommendation = {
-  course: CourseRealization
+  course: CourseData
   distance: number
   coordinates: Record<string, number>
 } 
@@ -43,8 +43,8 @@ export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
 }
-
-export type CourseRealization = {
+//this is a combination of a course realisation and course unit
+export type CourseData = {
   id: string
   name: LocalizedString
   startDate: Date
@@ -53,6 +53,16 @@ export type CourseRealization = {
   courseUnitRealisationTypeUrn: string
   courseCodes: string[]
   credits: Record<string, number>[]
+}
+
+export type CourseRealization = {
+  id: string
+  name: LocalizedString
+  startDate: Date
+  endDate: Date
+  customCodeUrns: Record<string, string[]>
+  courseUnitRealisationTypeUrn: string
+
 }
 
 export type CurCuRelation = {

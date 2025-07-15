@@ -19,10 +19,9 @@ const createCursFromUpdater = async (
       id,
       name,
       customCodeUrns, 
+      courseUnitRealisationTypeUrn,
       startDate,
       endDate,
-      courseUnitRealisationTypeUrn,
-      courseCodes: []
     }
   })
 
