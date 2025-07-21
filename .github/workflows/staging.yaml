@@ -31,10 +31,8 @@ jobs:
       run: docker compose up -d
     - name: Wait
       run: |
-        until curl -s http://localhost:3000/; do
         echo "Waiting..."
-        sleep 1
-        done
+        sleep 30
     - name: Install dependencies
       run: npm install --include=dev
     - name: Run cypress
