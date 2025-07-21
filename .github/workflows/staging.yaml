@@ -23,9 +23,18 @@ jobs:
 
       - name: Run lint
         run: npm run lint
+  Cypress:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v4
+     - name: Run Testing image in the background
+       run: |
+        docker compose up -d
+        sleep 120
+     - name: Run cypress
+       run: npx cypress run
 
-
-  build-test-and-push:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -47,12 +56,6 @@ jobs:
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
           extra-args: |
             --ulimit nofile=4096:4096 
-      - name: run application
-        run: |
-          docker run -d --name apparaatti_testing -p 3000:3000 apparaatti:staging
-          sleep 5
-      - name: Run cypress
-        run: npx cypress run
       - name: Push staging image to quay.io
         uses: redhat-actions/push-to-registry@v2
         with:
