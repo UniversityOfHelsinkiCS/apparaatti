@@ -7,8 +7,7 @@ RUN apk add --no-cache tzdata
 WORKDIR /opt/app-root/src
 
 COPY package* ./
-RUN npm i --include=dev
-
+RUN npm install
 EXPOSE 3000
 
 CMD ["npm", "run", "e2e"]
