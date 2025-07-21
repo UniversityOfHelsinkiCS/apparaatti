@@ -6,6 +6,10 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     return (<p>no organisation found</p>)
   }
   const selectedField = organisations[0]
+  if(!selectedField){
+    return(<p>no field found</p>)
+  }
+
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
       
