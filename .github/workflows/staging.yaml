@@ -40,7 +40,7 @@ jobs:
         run: npm install
 
       - name: Run cypress
-        run: npm cypress run
+        run: npx cypress run
 
 
   build-test-and-push:
