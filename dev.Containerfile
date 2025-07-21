@@ -7,7 +7,7 @@ RUN apk add --no-cache tzdata
 WORKDIR /opt/app-root/src
 
 COPY package* ./
-RUN npm i
+RUN npm i --include=dev
 
 EXPOSE 3000
 
