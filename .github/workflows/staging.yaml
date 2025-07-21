@@ -26,13 +26,15 @@ jobs:
   Cypress:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v4
-     - name: Run Testing image in the background
-       run: |
+    - uses: actions/checkout@v4
+    - name: Run Testing image in the background
+      run: |
         docker compose up -d
-        sleep 120
-     - name: Run cypress
-       run: npx cypress run
+        sleep 5
+    - name: Install dependencies
+      run: npm install
+    - name: Run cypress
+      run: npx cypress run
 
   build-and-push:
     runs-on: ubuntu-latest
