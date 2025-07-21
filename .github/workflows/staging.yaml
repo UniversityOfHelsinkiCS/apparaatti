@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run testing image in the background
-      run: docker compose up -d
+      run: docker compose up
     - name: Wait
       run: |
         until curl -s http://localhost:3000/; do
