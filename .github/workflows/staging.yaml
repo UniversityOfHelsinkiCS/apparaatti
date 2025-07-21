@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run app
+        run: |
+         npm start
       - name: Run cypress
         run: npx cypress run
 
