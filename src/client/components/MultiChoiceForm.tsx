@@ -9,29 +9,6 @@ import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 const questions = [
   {
-    id: 'study-period',
-    type: 'period-date',
-    explanation: 'Mistä periodista haluat kursseja?',
-    variants: [
-      {
-        name: 'default',
-        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
-        options: [
-          {
-            id: 'intensive_3_previous',
-            value: 'intensive_3',
-            name: { fi: 'kesä 25' },
-          },
-          { id: 'period_1', name: { fi: '1. periodi' } },
-          { id: 'period_2', name: { fi: '2. periodi' } },
-          { id: 'period_3', name: { fi: '3. periodi' } },
-          { id: 'period_4', name: { fi: '4. periodi' } },
-          { id: 'intensive_3', name: { fi: 'Kesä 26' } },
-        ],
-      },
-    ],
-  },
-  {
     id: 'primary-language',
     type: 'multi',
 
@@ -77,6 +54,86 @@ const questions = [
       }
     ],
   },
+  {
+    id: 'study-period',
+    type: 'period-date',
+    explanation: 'Mistä periodista haluat kursseja?',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
+        options: [
+          {
+            id: 'intensive_3_previous',
+            value: 'intensive_3',
+            name: { fi: 'kesä 25' },
+          },
+          { id: 'period_1', name: { fi: '1. periodi' } },
+          { id: 'period_2', name: { fi: '2. periodi' } },
+          { id: 'period_3', name: { fi: '3. periodi' } },
+          { id: 'period_4', name: { fi: '4. periodi' } },
+          { id: 'intensive_3', name: { fi: 'Kesä 26' } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'replacement',
+    type: 'multi',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).' },
+        options: [
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'En' } },
+          { id: '1', name: { fi: 'Kyllä' } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mentoring',
+    type: 'multi',
+
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
+        options: [
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
+          { id: '0', name: { fi: 'En koe tarvitsevani valmennusta' } },
+        ],
+      },
+      {
+        name: 'onlyEn',
+        question: {
+          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
+        },
+        options: [
+          {id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
+          { id: '0', name: { fi: 'En koe tarvitsevani kertausta' } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'challenge',
+    type: 'multi',
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon'},
+        options: [
+          { id: 'neutral', name: {fi: 'ei valintaa'}},
+          { id: '0', name: { fi: 'ei' } },
+          { id: '1', name: { fi: 'kyllä' } },
+        ],
+      },
+    ],
+  },  
   {
     id: 'graduation',
     type: 'multi',
@@ -133,33 +190,6 @@ const questions = [
     ],
   },
   {
-    id: 'mentoring',
-    type: 'multi',
-
-    variants: [
-      {
-        name: 'default',
-        question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
-        options: [
-          {id: 'neutral', name: {fi: 'Ei valintaa'}},
-          { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
-          { id: '0', name: { fi: 'En koe tarvitsevani valmennusta' } },
-        ],
-      },
-      {
-        name: 'onlyEn',
-        question: {
-          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
-        },
-        options: [
-          {id: 'neutral', name: {fi: 'Ei valintaa'}},
-          { id: '1', name: { fi: 'Kaipaisin kertausta ennen kurssia' } },
-          { id: '0', name: { fi: 'En koe tarvitsevani kertausta' } },
-        ],
-      },
-    ],
-  },
-  {
     id: 'integrated',
     type: 'multi',
     variants: [
@@ -169,21 +199,6 @@ const questions = [
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'Ei' } },
-          { id: '1', name: { fi: 'Kyllä' } },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'replacement',
-    type: 'multi',
-    variants: [
-      {
-        name: 'default',
-        question: { fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).' },
-        options: [
-          {id: 'neutral', name: {fi: 'Ei valintaa'}},
-          { id: '0', name: { fi: 'En' } },
           { id: '1', name: { fi: 'Kyllä' } },
         ],
       },

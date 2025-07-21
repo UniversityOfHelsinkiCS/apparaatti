@@ -83,10 +83,10 @@ function calculateUserCoordinates(answerData: any) {
     mentoring: commonCoordinateFromAnswerData(answerData['mentoring'], Math.pow(10, 12), 0, null),
     integrated: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 12), 0, null),
     studyPlace:  studyPlaceCoordinate(answerData['study-place']),
-    replacement: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
-    challenge: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
-    independent: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
-    flexible: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 24), 0, null),
+    replacement: commonCoordinateFromAnswerData(answerData['replacement'], Math.pow(10, 24), 0, null),
+    challenge: commonCoordinateFromAnswerData(answerData['challenge'], Math.pow(10, 24), 0, null),
+    independent: commonCoordinateFromAnswerData(answerData['independent'], Math.pow(10, 24), 0, null),
+    flexible: commonCoordinateFromAnswerData(answerData['flexible'], Math.pow(10, 24), 0, null),
   }
   return userCoordinates
 }
