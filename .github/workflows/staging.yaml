@@ -24,27 +24,6 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-  cypress:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '23'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run app
-        run: |
-         npm start
-      - name: Run cypress
-        run: npx cypress run
-
 
   build-test-and-push:
     runs-on: ubuntu-latest
@@ -68,7 +47,12 @@ jobs:
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
           extra-args: |
             --ulimit nofile=4096:4096 
-      
+      - name: run application
+        run: |
+          docker run -d --name apparaatti_testing -p 3000:3000 apparaatti:staging
+          sleep 5
+      - name: Run cypress
+        run: npx cypress run
       - name: Push staging image to quay.io
         uses: redhat-actions/push-to-registry@v2
         with:
