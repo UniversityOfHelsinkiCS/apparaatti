@@ -40,7 +40,6 @@ const questions = [
         name: 'default',
         question: { fi: 'Mikä on koulusivistyskielesi?' },
         options: [
-          { id: '0', name: { fi: 'Ei valintaa' } },
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
           { id: 'en', name: { fi: 'Englanti' } },
@@ -57,7 +56,6 @@ const questions = [
         name: 'default',
         question: { fi: 'Mistä kielestä haet kursseja?' },
         options: [
-          { id: '0', name: { fi: 'Ei valintaa' } },
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
           { id: 'en', name: { fi: 'Englanti' } },
