@@ -24,6 +24,24 @@ jobs:
       - name: Run lint
         run: npm run lint
 
+  cypress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run cypress
+        run: npm cypress run
+
 
   build-test-and-push:
     runs-on: ubuntu-latest
