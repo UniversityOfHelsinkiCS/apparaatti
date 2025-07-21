@@ -30,7 +30,7 @@ jobs:
     - name: Run Testing image in the background
       run: |
         docker compose up -d
-        sleep 5
+        sleep 60
     - name: Install dependencies
       run: npm install
     - name: Run cypress
