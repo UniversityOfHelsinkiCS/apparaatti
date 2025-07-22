@@ -381,20 +381,25 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
 //applies a set of filters until the list of relevant courses is of certain lenght
 function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //the courses in relevant always must be within the same organisation
-  const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
-  console.log(recommendationsInOrganisation.length)
-  if(recommendationsInOrganisation.length < 5){
-    return recommendationsInOrganisation
-  }
+  // const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
+  // console.log(recommendationsInOrganisation.length)
+  // if(recommendationsInOrganisation.length < 5){
+  //   return recommendationsInOrganisation
+  // }
 
-  const recommendationsInSameStudyMethod = recommendationsInOrganisation.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
-
-  console.log(recommendationsInSameStudyMethod.length)
-  if(recommendationsInSameStudyMethod.length > 0){
+  const recommendationsInSameStudyMethod = courses.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
+  if(recommendationsInSameStudyMethod.length > 0 && recommendationsInSameStudyMethod.length < 5){
     return recommendationsInSameStudyMethod
   }
 
-  return recommendationsInOrganisation
+
+  const recommendationsWithSameIntegration = recommendationsInSameStudyMethod.filter((c) => c.coordinates.integrated === userCoordinates.integrated)
+  if(recommendationsWithSameIntegration.length > 0){
+    return recommendationsInSameStudyMethod
+  }
+
+  
+  return recommendationsInSameStudyMethod
 
 
 }
