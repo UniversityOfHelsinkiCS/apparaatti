@@ -32,8 +32,9 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: npm install
           start: docker compose up -d
+          wait-on: http://apparaatti_dev:3000
+          config: baseurl=http://apparaatti_dev:3000
   build-and-push:
     runs-on: ubuntu-latest
 
