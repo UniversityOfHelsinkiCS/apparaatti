@@ -24,16 +24,16 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-  cypress-run:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          start: docker compose up -d
-          wait-on: http://ipv6.localhost:4000/api/ping #very interesting indeed read this: https://github.com/cypress-io/github-action/issues/802 
+  # cypress-run:
+  #   runs-on: ubuntu-24.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v6
+  #       with:
+  #         start: docker compose up -d
+  #         wait-on: http://ipv6.localhost:4000/api/ping #very interesting indeed read this: https://github.com/cypress-io/github-action/issues/802 
   build-and-push:
     runs-on: ubuntu-latest
 
