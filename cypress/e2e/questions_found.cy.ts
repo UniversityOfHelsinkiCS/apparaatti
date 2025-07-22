@@ -1,12 +1,12 @@
 describe('template spec', () => {
   it('passes', () => {
-    cy.visit('https://example.cypress.io')
+    cy.visit('/api/ping')
   })
 
   /* ==== Test Created with Cypress Studio ==== */
   it('questions visible', function() {
     /* ==== Generated with Cypress Studio ==== */
-    cy.visit('localhost:3000');
+    cy.visit('/');
     cy.get(':nth-child(2) > .MuiStack-root > .MuiTypography-root').click();
     cy.get(':nth-child(2) > .MuiStack-root').click();
     cy.get(':nth-child(2) > .MuiStack-root').should('have.text', 'Mikä on koulusivistyskielesi?');
