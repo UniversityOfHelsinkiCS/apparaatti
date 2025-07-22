@@ -1,6 +1,7 @@
 describe('template spec', () => {
   it('passes', () => {
     cy.visit('/api/ping')
+    cy.visit('/')
   })
 
   /* ==== Test Created with Cypress Studio ==== */
