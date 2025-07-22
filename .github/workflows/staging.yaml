@@ -33,7 +33,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: docker compose up -d
-          wait-on: http://ipv6.localhost:8000/api/ping 
+          wait-on: http://ipv6.localhost:8000/api/ping #very interesting indeed read this: https://github.com/cypress-io/github-action/issues/802 
   build-and-push:
     runs-on: ubuntu-latest
 
