@@ -32,10 +32,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: npm install
-          start: |
-            npm start &
-            sleep 120 
+          start: docker compose up 
           # config: baseurl=http://ip6-localhost:8000
   build-and-push:
     runs-on: ubuntu-latest
