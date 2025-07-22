@@ -34,8 +34,8 @@ jobs:
         with:
           build: npm install
           start: npm start
-          wait-on: http://localhost:3000
-          config: baseurl=http://localhost:3000
+          wait-on: http://localhost:8000
+          config: baseurl=http://localhost:8000
   build-and-push:
     runs-on: ubuntu-latest
 
