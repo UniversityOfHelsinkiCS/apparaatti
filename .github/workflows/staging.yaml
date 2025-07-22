@@ -32,7 +32,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          run: docker compose up -d
+          start: docker compose up -d
           wait-on: http://ipv6.localhost:8000/api/ping 
   build-and-push:
     runs-on: ubuntu-latest
