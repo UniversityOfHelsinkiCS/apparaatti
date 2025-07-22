@@ -13,7 +13,18 @@ services:
       - 3000:3000
       - 8000:8000
     container_name: apparaatti_dev
-
+    networks:
+      - internal
+  nginx:
+      image: nginx:latest
+      ports:
+        - 4000:4000 
+      volumes:
+        - ./dev_proxy/default.conf:/etc/nginx/conf.d/default.conf
+      depends_on:
+        - app
+      networks:
+        - internal
   # updater:
   #   build:
   #     context: ./
@@ -40,10 +51,16 @@ services:
     volumes:
       - pg_data:/data
     container_name: apparaatti_db
-  
+    networks:
+      - internal
   redis:
     image: redis:7-alpine
     container_name: apparaatti_redis
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
 
 volumes:
   pg_data:
