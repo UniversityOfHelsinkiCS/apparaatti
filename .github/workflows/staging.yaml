@@ -23,6 +23,17 @@ jobs:
 
       - name: Run lint
         run: npm run lint
+
+  cypress-run:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm install
+          start: npm start
   build-and-push:
     runs-on: ubuntu-latest
 
