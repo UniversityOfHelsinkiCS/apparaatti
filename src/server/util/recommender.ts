@@ -394,11 +394,16 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 
 
   const recommendationsWithSameIntegration = recommendationsInSameStudyMethod.filter((c) => c.coordinates.integrated === userCoordinates.integrated)
-  if(recommendationsWithSameIntegration.length > 0){
-    return recommendationsInSameStudyMethod
+  if(recommendationsWithSameIntegration.length > 0 && recommendationsWithSameIntegration.length < 5){
+    return recommendationsWithSameIntegration
   }
 
   
+
+  const recommendationsWithSameChallenge = recommendationsWithSameIntegration.filter((c) => c.coordinates.challenge === userCoordinates.challenge)
+  if(recommendationsWithSameChallenge.length > 0){
+    return recommendationsWithSameChallenge
+  }
   return recommendationsInSameStudyMethod
 
 
