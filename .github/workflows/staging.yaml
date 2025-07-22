@@ -33,7 +33,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           build: npm install
-          start: npm run e2e
+          start: docker compose up -d
   build-and-push:
     runs-on: ubuntu-latest
 
