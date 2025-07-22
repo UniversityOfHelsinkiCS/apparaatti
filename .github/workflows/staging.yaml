@@ -34,7 +34,7 @@ jobs:
         with:
           start: docker compose up -d
           wait-on: http://apparaatti_dev:3000
-          config: baseurl=http://apparaatti_dev:3000
+          config: baseurl=http://app:3000
   build-and-push:
     runs-on: ubuntu-latest
 
