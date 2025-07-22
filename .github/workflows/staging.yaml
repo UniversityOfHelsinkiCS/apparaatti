@@ -34,7 +34,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          wait-on: 'http://app:3000' 
+          wait-on: http://app:3000/api/ping 
   build-and-push:
     runs-on: ubuntu-latest
 
