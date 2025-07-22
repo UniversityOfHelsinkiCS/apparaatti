@@ -3,7 +3,7 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   experimentalStudio: true,
   e2e: {
-    baseUrl: 'http://127.0.0.1:4000',
+    baseUrl: 'http://localhost:4000',
    setupNodeEvents(on, config) {
       // implement node event listeners here
     },
