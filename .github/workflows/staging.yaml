@@ -34,8 +34,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          run: sleep 1
-          wait-on: 'http://localhost:3000' 
+          wait-on: 'http://app:3000' 
   build-and-push:
     runs-on: ubuntu-latest
 
