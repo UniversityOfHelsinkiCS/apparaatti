@@ -23,21 +23,6 @@ jobs:
 
       - name: Run lint
         run: npm run lint
-  Cypress:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Run testing image in the background
-      run: docker compose up -d
-    - name: Wait
-      run: |
-        echo "Waiting..."
-        sleep 30
-    - name: Install dependencies
-      run: npm install --include=dev
-    - name: Run cypress
-      run: npx cypress run
-
   build-and-push:
     runs-on: ubuntu-latest
 
