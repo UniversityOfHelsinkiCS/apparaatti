@@ -35,7 +35,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{background: 'lightgray'}} >
             <AccordionSummary
               aria-controls="panel1-content"
               id="panel1-header"
