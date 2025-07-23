@@ -387,46 +387,28 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //   return recommendationsInOrganisation
   // }
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
-  const recommendationsInSameStudyMethod = noExams.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
-  if(recommendationsInSameStudyMethod.length > 0 && recommendationsInSameStudyMethod.length < 5){
-    return recommendationsInSameStudyMethod
-  }
 
-
-  const recommendationsWithSameIntegration = recommendationsInSameStudyMethod.filter((c) => c.coordinates.integrated === userCoordinates.integrated)
-  if(recommendationsWithSameIntegration.length > 0 && recommendationsWithSameIntegration.length < 5){
-    return recommendationsWithSameIntegration
-  }
-
-  const recommendationsWithSameIndependence = recommendationsWithSameIntegration.filter((c) => c.coordinates.independent === userCoordinates.independent)
-  if(recommendationsWithSameIndependence.length > 0 && recommendationsWithSameIndependence.length < 5){
-    return recommendationsWithSameIndependence
-  }
-
-  
-  const recommendationsWithSameFlexibility = recommendationsWithSameIndependence.filter((c) => c.coordinates.flexible === userCoordinates.flexible)
-  if(recommendationsWithSameFlexibility.length > 0 && recommendationsWithSameFlexibility.length < 5){
-    return recommendationsWithSameFlexibility
-  }
-
-
-
-  const recommendationsWithSameChallenge = recommendationsWithSameFlexibility.filter((c) => c.coordinates.challenge === userCoordinates.challenge)
-  if(recommendationsWithSameChallenge.length > 0){
-    return recommendationsWithSameChallenge
-  }
-
-  const options = [
-    recommendationsInSameStudyMethod,
-    recommendationsWithSameIntegration,
-    recommendationsWithSameFlexibility,
-    recommendationsWithSameIndependence,
-    recommendationsWithSameChallenge,
+  const comparisons = [
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.integration === userCoordinates.integration},
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
+    (c: CourseRecommendation, userCoordinates) => { return c.coordinates.independent === userCoordinates.independent},
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org},
   ]
+  let final = noExams
+  for(const comp of comparisons){
+    const newFilter = final.filter((c) => comp(c, userCoordinates) === true)
+    console.log(newFilter.length)
+    if( newFilter.length < final.length && newFilter.length > 0){
 
+      console.log('found a better filtering!')
+      final = [...newFilter]
 
-  const final = options.filter((o) => o.length > 0).sort((a, b) => b.length - a.length)[0]
-  
+    }
+  }
+
   return final
   
 
