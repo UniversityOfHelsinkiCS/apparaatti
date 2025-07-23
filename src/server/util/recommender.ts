@@ -1,5 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
+import { record } from 'zod'
 import type { CourseData, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
@@ -8,6 +9,7 @@ import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
+import Organisation from '../db/models/organisation.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -110,7 +112,7 @@ const organisationCodeToUrn: Record<string, string> = {
  
 }
 
-function courseInSameOrganisationAsUser(course: any, organisationCode: string){
+async function courseInSameOrganisationAsUser(course: any, organisationCode: string){
   const codes = [organisationCode]
   // console.log(codes)
   for(const code of codes){
@@ -119,9 +121,19 @@ function courseInSameOrganisationAsUser(course: any, organisationCode: string){
       return courseHasCustomCodeUrn(course, urnHit)
     }
   }
+  const organisations  = await Organisation.findAll({
+    where:{
+      id: [course.groupIds]
+    },
+    raw: true,
+  })
+
+  const orgCodes = organisations.map(o => o.code)
+  if( organisationCode in orgCodes){
+    return true
+  }
   return false
 } 
-
 function courseStudyPlaceCoordinate(course: CourseData){
   // console.log('calculating the study place value for, ', course.name.fi)
 
@@ -152,14 +164,16 @@ function isIndependentCourse(course: CourseData){
 
   return hasIndependentCodeUrn || hasIndependentInName
 }
-
+function courseOrganisationCoord(){
+  
+}
 async function calculateCourseDistance(course: CourseData, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
 ): CourseRecommendation {
   
   const dimensions = Object.keys(userCoordinates)
 
   
-  const sameOrganisationAsUser = courseInSameOrganisationAsUser(course, organisationCode)
+  const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode)
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
   
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
@@ -172,7 +186,8 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType) 
   const courseCoordinates = {
     date: course.startDate.getTime(),  
-    org: sameOrganisationAsUser === true ? 0 : Math.pow(10, 24), // the user has coordinate of 0 in the org dimension, we want to prioritise courses that have the same organisation as the users...
+    org: sameOrganisationAsUser === true ? 0 : 1, // there is a offset value for this field to make sure that different organisation leads to a really high distance
+
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
@@ -184,7 +199,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
     flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0
   }
   
-  
+  const offsetValue = sameOrganisationAsUser === true ? 0 : Math.pow(10, 12)
 
   const sum = dimensions.reduce((acc, key) => {
     const userValue = userCoordinates[key]
@@ -195,10 +210,10 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
       return acc
     }
     const courseValue = courseCoordinates[key as keyof typeof dimensions]
-    return acc + Math.pow(userValue - courseValue, 2)
+    return acc + Math.pow(userValue - courseValue, 2) 
   }, 0.0)
 
-  const distance = Math.sqrt(sum)
+  const distance = Math.sqrt(sum) + offsetValue
 
   return { course: course, distance: distance, coordinates: courseCoordinates }
 }
@@ -388,13 +403,14 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const comparisons = [
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.integration === userCoordinates.integration},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
     (c: CourseRecommendation, userCoordinates) => { return c.coordinates.independent === userCoordinates.independent},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
-    // (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org}, the sorting makes sure that this shows at the top
+    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org}
   ]
   let final = noExams
   for(const comp of comparisons){
@@ -407,7 +423,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 
     }
   }
-
+  
   return final
   
 
