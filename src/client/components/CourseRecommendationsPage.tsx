@@ -5,8 +5,8 @@ import CourseRecommendation from './CourseRecommendation'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
 
-  const relevant = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
-  const other = recommendations?.recommendations != null ? recommendations.recommendations : []
+  const relevant: CourseRecommendationType[] = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
+  const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
 
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
