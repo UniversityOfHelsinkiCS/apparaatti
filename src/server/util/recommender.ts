@@ -377,7 +377,6 @@ function getCourseCodes(langCode: string, primaryLanguage: string, organisationR
     languageSpesific: languageSpesific, 
   }
 }
-
 //applies a set of filters until the list of relevant courses is of certain lenght
 function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //the courses in relevant always must be within the same organisation
@@ -387,7 +386,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   //   return recommendationsInOrganisation
   // }
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
-
+ 
   const comparisons = [
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.integration === userCoordinates.integration},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
@@ -395,7 +394,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
     (c: CourseRecommendation, userCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org},
+    // (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org}, the sorting makes sure that this shows at the top
   ]
   let final = noExams
   for(const comp of comparisons){
