@@ -1,7 +1,7 @@
-import { Box, Stack, Typography } from '@mui/material'
-import CourseRecommendation from './CourseRecommendation'
-import type { CourseRecommendations } from '../../common/types'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations } from '../../common/types'
 import ActionButton from './actionButton'
+import CourseRecommendation from './CourseRecommendation'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
 
@@ -21,22 +21,39 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          <Typography>Tarkimmat suositukset: </Typography>
-          {relevant.map((course) => (
-            <CourseRecommendation key={course.course.id} course={course} />
-          ))}
+          <Accordion defaultExpanded sx={{background: 'lightgray'}}>
+            <AccordionSummary
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography>Tarkimmat suositukset: </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {relevant.map((course) => (
+                <CourseRecommendation key={course.course.id} course={course} />
+              ))}
+            </AccordionDetails>
+          </Accordion>
 
-
-          <Typography>Kaikki suositukset (tarkkuus voi vaihdella): </Typography>
-          {other.map((course) => (
-            <CourseRecommendation key={course.course.id} course={course} />
-          ))}
-
+          <Accordion>
+            <AccordionSummary
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography>Kaikki suositukset (tarkkuus voi vaihdella) </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {other.map((course) => (
+                <CourseRecommendation key={course.course.id} course={course} />
+              ))}
+            </AccordionDetails>
+          </Accordion>
         </Stack>
       
       </Stack>
     </Box>
   )
 }
+
 
 export default CourseRecommendationsPage
