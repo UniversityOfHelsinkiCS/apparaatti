@@ -386,8 +386,8 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   // if(recommendationsInOrganisation.length < 5){
   //   return recommendationsInOrganisation
   // }
-
-  const recommendationsInSameStudyMethod = courses.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
+  const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
+  const recommendationsInSameStudyMethod = noExams.filter((c) => c.coordinates.studyPlace === userCoordinates.studyPlace)
   if(recommendationsInSameStudyMethod.length > 0 && recommendationsInSameStudyMethod.length < 5){
     return recommendationsInSameStudyMethod
   }
@@ -398,14 +398,37 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
     return recommendationsWithSameIntegration
   }
 
-  
+  const recommendationsWithSameIndependence = recommendationsWithSameIntegration.filter((c) => c.coordinates.independent === userCoordinates.independent)
+  if(recommendationsWithSameIndependence.length > 0 && recommendationsWithSameIndependence.length < 5){
+    return recommendationsWithSameIndependence
+  }
 
-  const recommendationsWithSameChallenge = recommendationsWithSameIntegration.filter((c) => c.coordinates.challenge === userCoordinates.challenge)
+  
+  const recommendationsWithSameFlexibility = recommendationsWithSameIndependence.filter((c) => c.coordinates.flexible === userCoordinates.flexible)
+  if(recommendationsWithSameFlexibility.length > 0 && recommendationsWithSameFlexibility.length < 5){
+    return recommendationsWithSameFlexibility
+  }
+
+
+
+  const recommendationsWithSameChallenge = recommendationsWithSameFlexibility.filter((c) => c.coordinates.challenge === userCoordinates.challenge)
   if(recommendationsWithSameChallenge.length > 0){
     return recommendationsWithSameChallenge
   }
-  return recommendationsInSameStudyMethod
 
+  const options = [
+    recommendationsInSameStudyMethod,
+    recommendationsWithSameIntegration,
+    recommendationsWithSameFlexibility,
+    recommendationsWithSameIndependence,
+    recommendationsWithSameChallenge,
+  ]
+
+
+  const final = options.filter((o) => o.length > 0).sort((a, b) => b.length - a.length)[0]
+  
+  return final
+  
 
 }
 
