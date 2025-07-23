@@ -21,39 +21,35 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          <Accordion defaultExpanded sx={{background: 'lightgray'}}>
-            <AccordionSummary
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              <Typography>Tarkimmat suositukset: </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {relevant.map((course) => (
-                <CourseRecommendation key={course.course.id} course={course} />
-              ))}
-            </AccordionDetails>
-          </Accordion>
+          <CourseListing titleText = {'Tarkimmat suositukset: '} defaultExpanded={true} courses={relevant}/>
 
-          <Accordion sx={{background: 'lightgray'}} >
-            <AccordionSummary
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              <Typography>Kaikki suositukset (tarkkuus voi vaihdella) </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {other.map((course) => (
-                <CourseRecommendation key={course.course.id} course={course} />
-              ))}
-            </AccordionDetails>
-          </Accordion>
+          <CourseListing titleText = {'Kaikki suositukset (tarkkuus voi vaihdella): '} defaultExpanded={false}  courses={other}/>
+        
         </Stack>
       
       </Stack>
     </Box>
   )
 }
+const CourseListing = ({defaultExpanded, courses, titleText}: {defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
 
+  return (
+    
+    <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'lightgray'}}>
+      <AccordionSummary
+        aria-controls="panel1-content"
+        id="panel1-header"
+      >
+        <Typography>{titleText}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {courses.map((course) => (
+          <CourseRecommendation key={course.course.id} course={course} />
+        ))}
+      </AccordionDetails>
+    </Accordion>
+
+  )
+}
 
 export default CourseRecommendationsPage
