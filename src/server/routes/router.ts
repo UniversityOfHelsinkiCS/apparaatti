@@ -3,9 +3,10 @@ import { AnswerSchema } from '../../common/validators.ts'
 
 import passport from 'passport'
 import Form from '../db/models/form.ts'
-import recommendCourses from '../util/recommender.ts'
+import recommendCourses, { organisationCodeToUrn } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
+import { Op } from 'sequelize'
 
 const router = express.Router()
 
@@ -15,6 +16,22 @@ router.get('/form/1', async (_req, res) => {
   const form = await Form.findByPk(1)
 
   res.json(form)
+})
+
+router.get('/organisations/supported', async(req, res) => {
+  if(!req.user){
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
+  const organisationCodes:string[]= Object.keys(organisationCodeToUrn)
+  const organisations:Organisation[] = await Organisation.findAll({
+    where: {
+      code: {[Op.in]: organisationCodes}
+    },
+    raw: true
+  })
+  res.json(organisations)
+  
 })
 
 router.post('/form/1/answer', async (req, res) => {

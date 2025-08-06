@@ -93,7 +93,7 @@ function calculateUserCoordinates(answerData: any) {
   return userCoordinates
 }
 
-const organisationCodeToUrn: Record<string, string> = {
+export const organisationCodeToUrn: Record<string, string> = {
   'H50': 'kkt-mat',
   'H20': 'kkt-oik',
   'H10': 'kkt-teo',
