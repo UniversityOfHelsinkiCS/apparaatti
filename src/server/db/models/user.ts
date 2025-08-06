@@ -27,7 +27,7 @@ User.init(
       allowNull: false,
     },
     hyGroupCn: {
-      type: DataTypes.ARRAY(DataTypes.String),
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
     language: {
