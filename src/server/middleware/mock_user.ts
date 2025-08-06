@@ -6,7 +6,7 @@ const mockUser = {
   email: 'grp-toska@helsinki.fi',
   language: 'fi',
   isAdmin: true,
-  iamGroups: ['grp-toska'],
+  hyGroupsCn: ['grp-toska'],
 }
 
 const mockUserMiddleware = (req, _, next) => {
