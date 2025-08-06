@@ -6,7 +6,7 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
   console.log(user)
   const getOrgansations = () => {
     //its ok to do this check on the client side since organisations is public anyways
-    const showAllOptions = user?.hyGroupCn?.includes('hy-employee') === true
+    const showAllOptions = user?.hyGroupCn?.includes('hy-kielikeskus-employees') === true
     console.log('was an employee')
     if (showAllOptions){
       console.log('returning all organisations')
