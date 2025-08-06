@@ -171,7 +171,6 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
 ): CourseRecommendation {
   
   const dimensions = Object.keys(userCoordinates)
-
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode)
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
@@ -226,14 +225,10 @@ async function calculateUserDistances(
   courseLanguageType: string,
   organisationCode:string
 ): CourseRecommendation[] {
-  const distanceS = new Date()
   const distancePromises = availableCourses.map((course) => {
     return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode)
   })
   const distances = await Promise.all(distancePromises)
-  const distanceE = new Date()
-  console.log('distance timer: ', distanceE - distanceS)
-
   return distances
 }
 
@@ -431,30 +426,18 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 
 
 async function getRecommendations(userCoordinates: any, answerData): CourseRecommendations {
-  const startBench = Date.now()
   const organisationRecommendations = readOrganisationRecommendationData()
-  //used to filter courses by organisation
-  const organisationCode = answerData['study-field-select']
-
-  const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
-
-
-  const courseTimer = Date.now()
-  console.log(organisationCode)
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, organisationCode)
 
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) // currently we want to use all course codes and the recommender uses distances to prioritise between different selections 
-  
-  const courseEndTimer = Date.now()
-  console.log(`Execution time for course end: ${courseEndTimer - courseTimer} ms`)
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 
+  const organisationCode = answerData['study-field-select']
+  const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
-  
 
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
-
   const relevantRecommendations = relevantCourses(recommendations, userCoordinates)
 
   const allRecommendations= {
@@ -462,8 +445,6 @@ async function getRecommendations(userCoordinates: any, answerData): CourseRecom
     recommendations: recommendations
   }
   
-  const end = Date.now()
-  console.log(`Execution time: ${end - startBench} ms`)
   return allRecommendations
 }
 
