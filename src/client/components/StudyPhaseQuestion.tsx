@@ -1,9 +1,23 @@
 import { Box, MenuItem, Select, Typography } from '@mui/material'
 import { useState } from 'react'
+import { User } from '../../common/types'
 
-const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
-  const organisations = studyData?.organisations
+const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { studyData: any, user: User, supportedOrganisations: any }) => {
+  console.log(user)
+  const getOrgansations = () => {
+    //its ok to do this check on the client side since organisations is public anyways
+    const showAllOptions = user?.hyGroupCn?.includes('hy-employee') === true
+    console.log('was an employee')
+    if (showAllOptions){
+      console.log('returning all organisations')
+      return supportedOrganisations
+    }
+    return studyData?.organisations
+  }
+  const organisations = getOrgansations()
+
   const startValue = () => {   
+    console.log(organisations)
     if(!organisations){
       return null
     }
@@ -11,7 +25,6 @@ const StudyPhaseQuestion = ({ studyData }: { studyData: any }) => {
     return selectedField.code
   }
   const [selectedValue, setSelectedValue] = useState(startValue())
-  
 
   const handleChange = (e) => {
     e.preventDefault()

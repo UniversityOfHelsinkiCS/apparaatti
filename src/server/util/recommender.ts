@@ -426,12 +426,13 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 
 
 async function getRecommendations(userCoordinates: any, answerData): CourseRecommendations {
+  const organisationCode = answerData['study-field-select']
+
   const organisationRecommendations = readOrganisationRecommendationData()
   const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 
-  const organisationCode = answerData['study-field-select']
   const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
 

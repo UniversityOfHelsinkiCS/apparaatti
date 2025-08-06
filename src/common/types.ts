@@ -65,6 +65,15 @@ export type CourseRealization = {
 
 }
 
+
+export type User = {
+  id: string
+  username: string
+  hyGroupCn: string[] | null
+  language: string | null
+  studentNumber: string | null
+ }
+
 export type CurCuRelation = {
   cuId: string
   curId: string

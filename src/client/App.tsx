@@ -17,6 +17,14 @@ function App() {
       return res.json()
     },
   })
+
+  const { data: supportedOrganisations, isLoading: isSupportedOrganisationsLoading } = useQuery({
+    queryKey: ['supportedOrganisations'],
+    queryFn: async () => {
+      const res = await fetch('/api/organisations/supported')
+      return res.json()
+    },
+  })
   const userId = user?.id
   //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
   const stepStyle = {
@@ -105,7 +113,7 @@ function App() {
   }
  
 
-  if (isStudyDataLoading) {
+  if (isStudyDataLoading || isSupportedOrganisationsLoading) {
     return <div>Loading...</div>
   }
   return (
@@ -177,7 +185,7 @@ function App() {
           </Stepper>
 
           
-          <MultiChoiceForm display={questionarePhase === 0} onSubmit={handleSubmit} studyData={studyData} />
+          <MultiChoiceForm supportedOrganisations={supportedOrganisations} user={user} display={questionarePhase === 0} onSubmit={handleSubmit} studyData={studyData} />
 
           <CourseRecommendationsPage display={questionarePhase === 1} onClose={() => setQuestionarePhase(0)} recommendations={courseRecommendations}></CourseRecommendationsPage>
          

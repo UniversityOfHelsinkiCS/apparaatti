@@ -7,6 +7,8 @@ import LanguageQuestion from './LanguageQuestion.tsx'
 import PeriodQuestion from './PeriodQuestion.tsx'
 import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
+import { User } from '../../common/types.ts'
+import { OrganisationData } from '../../server/updater/types.ts'
 const questions = [
   {
     id: 'primary-language',
@@ -239,11 +241,15 @@ const questions = [
 const MultiChoiceForm = ({
   onSubmit,
   studyData,
-  display
+  display,
+  user,
+  supportedOrganisations
 }: {
   onSubmit: (formData: FormData) => Promise<void>
   studyData: any,
-  display: boolean
+  display: boolean,
+  user: User,
+  supportedOrganisations: any
 }) => {
   const [language, setLanguage] = React.useState('')
 
@@ -301,7 +307,7 @@ const MultiChoiceForm = ({
         }}
       >
         <FormControl component="fieldset">
-          <StudyPhaseQuestion studyData={studyData} />
+          <StudyPhaseQuestion supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <ActionButton text="Lähetä"/>
