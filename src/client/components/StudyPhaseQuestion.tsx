@@ -4,12 +4,14 @@ import { User } from '../../common/types'
 
 const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { studyData: any, user: User, supportedOrganisations: any }) => {
   console.log(user)
+  const showAllOptions = (user: User) => {
+    const groups = user?.hyGroupCn
+    return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') 
+
+  }
   const getOrgansations = () => {
     //its ok to do this check on the client side since organisations is public anyways
-    const showAllOptions = user?.hyGroupCn?.includes('hy-kielikeskus-employees') === true
-    console.log('was an employee')
-    if (showAllOptions){
-      console.log('returning all organisations')
+    if (showAllOptions(user)){
       return supportedOrganisations
     }
     return studyData?.organisations
