@@ -9,7 +9,7 @@ import {
 import { Question } from '../../common/types.ts'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
-const LanguageQuestion = ({
+const PrimaryLanguageSpecificationQuestion  = ({
   question,
   setLanguage,
 }: {
@@ -91,4 +91,4 @@ const LanguageQuestion = ({
   )
 }
 
-export default LanguageQuestion
+export default PrimaryLanguageSpecificationQuestion

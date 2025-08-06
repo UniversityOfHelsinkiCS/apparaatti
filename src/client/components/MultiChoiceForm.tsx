@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Box, FormControl } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
@@ -9,10 +9,11 @@ import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
 import { OrganisationData } from '../../server/updater/types.ts'
+import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
 const questions = [
   {
     id: 'primary-language',
-    type: 'multi',
+    type: 'primary-language',
 
     variants: [
       {
@@ -43,6 +44,22 @@ const questions = [
     ],
   },
   {
+    id: 'primary-language-specification',
+    type: 'primary-language-specification',
+
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Kumman ensisijaisen kielen tyypin haluat valita?' },
+        options: [
+          { id: 'writtenAndSpoken', name: { fi: 'Molemmat' } },
+          { id: 'written', name: { fi: 'Kirjoitusviestintä' } },
+          { id: 'spoken', name: { fi: 'Puheviestintä' } },
+        ],
+      },
+    ],
+  },
+  {
     id: 'previusly-done-lang',
     type: 'previusly-done-lang',
     variants: [
@@ -68,7 +85,7 @@ const questions = [
           {
             id: 'intensive_3_previous',
             value: 'intensive_3',
-            name: { fi: 'kesä 25' },
+            name: { fi: 'Kesä 25' },
           },
           { id: 'period_1', name: { fi: '1. periodi' } },
           { id: 'period_2', name: { fi: '2. periodi' } },
@@ -129,9 +146,9 @@ const questions = [
         name: 'default',
         question: { fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon'},
         options: [
-          { id: 'neutral', name: {fi: 'ei valintaa'}},
-          { id: '0', name: { fi: 'ei' } },
-          { id: '1', name: { fi: 'kyllä' } },
+          { id: 'neutral', name: {fi: 'Ei valintaa'}},
+          { id: '0', name: { fi: 'Ei' } },
+          { id: '1', name: { fi: 'Kyllä' } },
         ],
       },
     ],
@@ -251,7 +268,8 @@ const MultiChoiceForm = ({
   user: User,
   supportedOrganisations: any
 }) => {
-  const [language, setLanguage] = React.useState('')
+  const [primaryLanguage, setPrimaryLanguage] = useState('')
+  const [language, setLanguage] = useState('')
 
   const renderFormQuestion = (key, question) => {
     switch (question.type) {
@@ -263,18 +281,35 @@ const MultiChoiceForm = ({
       return (
         <FormQuestion key={key} question={question} languageId={language} />
       )
+
+    case 'primary-language':
+      return (
+        <LanguageQuestion
+          key={key}
+          question={question}
+          setLanguage={setPrimaryLanguage}
+        />
+      )
+    case 'primary-language-specification':
+      return (
+        <PrimaryLanguageSpecificationQuestion
+          key={key}
+          question={question}
+          language={language}
+          primaryLanguage={primaryLanguage}
+        />
+      )
     case 'language':
       return (
         <LanguageQuestion
           key={key}
           question={question}
-          getLanguageId={getLanguageId}
+          setLanguage={setLanguage}
         />
       )
     case 'period-date':
       return (
         <PeriodQuestion key={key} question={question} />
-        //<FormQuestion key={key} question={question} languageId={language} /> //toimiva
       )
     case 'previusly-done-lang':
       return (
@@ -283,10 +318,6 @@ const MultiChoiceForm = ({
     default:
       return <p>Unknown question type</p>
     }
-  }
-
-  const getLanguageId = (id: string) => {
-    setLanguage(id)
   }
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault()

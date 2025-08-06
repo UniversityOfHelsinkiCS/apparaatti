@@ -9,24 +9,20 @@ import {
 import { Question } from '../../common/types.ts'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
-const LanguageQuestion = ({
+const PrimaryLanguageSpecificationQuestion  = ({
   question,
-  setLanguage,
+  language,
+  primaryLanguage,
 }: {
   question: Question
-  setLanguage: (id: string) => void
+  language: string,
+  primaryLanguage: string
 }) => {
   const [open, setOpen] = React.useState(false)
-  const [_choice, setChoice] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-
+  const shouldShow: boolean = language === primaryLanguage // when the user chooses fi=fi it means he/she is looking for a primary language and we need this question to be shown
   const variant = question.variants[0]
-
-  const handleChoice = (id: string) => {
-    setChoice(id)
-    setLanguage(id)
-  }
   const style = {
     position: 'absolute',
     top: '50%',
@@ -39,9 +35,13 @@ const LanguageQuestion = ({
     boxShadow: 24,
     p: 4,
   }
+  if(!shouldShow){
+    return(<></>)
+  }
   return (
     <Box
       sx={{
+
         paddingTop: 4,
       }}
     >
@@ -65,7 +65,6 @@ const LanguageQuestion = ({
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
           <FormControlLabel
-            onClick={() => handleChoice(option.id)}
             key={option.id}
             value={option.id}
             control={
@@ -91,4 +90,4 @@ const LanguageQuestion = ({
   )
 }
 
-export default LanguageQuestion
+export default PrimaryLanguageSpecificationQuestion
