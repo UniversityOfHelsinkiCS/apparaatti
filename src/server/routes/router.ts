@@ -4,14 +4,8 @@ import { AnswerSchema } from '../../common/validators.ts'
 import passport from 'passport'
 import Form from '../db/models/form.ts'
 import recommendCourses from '../util/recommender.ts'
-import Cur from '../db/models/cur.ts'
-import { Op } from 'sequelize'
-import Cu from '../db/models/cu.ts'
-import CurCu from '../db/models/curCu.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
-import {urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
-import { uniqueVals } from '../util/misc.ts'
 
 const router = express.Router()
 
@@ -97,92 +91,6 @@ router.get('/logout', async (req, res, next) => {
   })
 
   res.redirect('/')
-})
-router.get('/cur/debug', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
-  const realisations = await Cur.findAll({})
-  const realisationCodeUrns = realisations.map(r => r.customCodeUrns)
-    .filter(u => urnInCustomCodeUrns(u, 'kkt'))
-    .flatMap(u => Object.values(u))
-    .flat()
-
-  const unique = uniqueVals(realisationCodeUrns)
-
-  res.json(unique)
-})
-
-router.get('/cur', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-  const { name, codeurn } = req.query
-
-  const nameQuery = name
-    ? {
-      [Op.or]: [
-        { 'name.fi': { [Op.like]: `%${name}%` } },
-        { 'name.en': { [Op.like]: `%${name}%` } },
-        { 'name.sv': { [Op.like]: `%${name}%` } },
-      ],
-    }
-    : {}
-
-  const curs = await Cur.findAll({ where: nameQuery, raw: true })
-  console.log('code urn is: ', codeurn)
-  if(codeurn){
-    const urnFilteredCourses = curs.filter((cur) => {
-      return urnInCustomCodeUrns(cur.customCodeUrns, codeurn)
-    })
-    return res.json(urnFilteredCourses)
-  }
-  
-  res.json(curs)
-})
-
-router.get('/cu', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-  const { name, code } = req.query
-
-  const nameQuery = name
-    ? {
-      [Op.or]: [
-        { 'name.fi': { [Op.like]: `%${name}%` } },
-        { 'name.en': { [Op.like]: `%${name}%` } },
-        { 'name.sv': { [Op.like]: `%${name}%` } },
-      ],
-    }
-    : {}
-
-  const codeQuery = code
-    ? {
-      courseCode: { [Op.like]: `%${code}%` },
-    }
-    : {}
-
-  const whereQuery = {
-    ...nameQuery,
-    ...codeQuery,
-  }
-  const cus = await Cu.findAll({ where: whereQuery })
-  res.json(cus)
-})
-
-router.get('/curcu', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
-  const curcus = await CurCu.findAll()
-  res.json(curcus)
 })
 
 export default router
