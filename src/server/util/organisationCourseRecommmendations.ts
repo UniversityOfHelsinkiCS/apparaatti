@@ -24,6 +24,9 @@ export const mentoringCourseCodes =  [
   
 ]
 
+
+
+
 export const challegeCourseCodes: CourseMatchCase[]= [
   {
     language: 'en-secondary',
@@ -60,7 +63,7 @@ export const challegeCourseCodes: CourseMatchCase[]= [
   }
 ]
 
-
+ 
 export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null){
   if(!codes){
     return false
@@ -175,16 +178,28 @@ export function languageToStudy(langCode: string, primaryLanguage: string): stri
   }
 } 
 
+function codesFromLanguagesWithCorrectSpecification(organisationData: OrganisationRecommendation[], searchStringSpoken: string, searchStringWritten: string, searchStringWrittenAndSpoken: string, primaryLanguageSpecification: string){
+  switch(primaryLanguageSpecification){
+  case 'written':
+    return codesFromLanguagesContaining(organisationData, searchStringWritten)
+  case 'spoken':
+    return codesFromLanguagesContaining(organisationData, searchStringSpoken)
+  case 'writtenAndSpoken':
+    return codesFromLanguagesContaining(organisationData, searchStringWrittenAndSpoken)
+  default:
+    console.log('ERROR: recommender could not find codes')
+    return []
+  }
+}
 
-
-export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string ){
+export function languageSpesificCodes(organisationData: OrganisationRecommendation[], langCode: string, primaryLanguage: string, primaryLanguageSpecification: string,){
   //if the user picks the same language as the primary language then we want to return primary language course codes
   if(langCode === primaryLanguage ){
     switch(langCode){
     case 'fi':
-      return codesFromLanguagesContaining(organisationData,'Äidinkieli, suomi')
+      return codesFromLanguagesWithCorrectSpecification(organisationData, 'Äidinkieli, suomi: puheviestintä', 'Äidinkieli, suomi: kirjoitusviestintä', 'Äidinkieli, suomi', primaryLanguageSpecification)
     case 'sv':
-      return codesFromLanguagesContaining(organisationData,'Äidinkieli, ruotsi')
+      return codesFromLanguagesWithCorrectSpecification(organisationData, 'Äidinkieli, ruotsi: puheviestintä', 'Äidinkieli, ruotsi: kirjoitusviestintä', 'Äidinkieli, ruotsi', primaryLanguageSpecification)
     case 'en':
       return codesFromLanguagesContaining(organisationData,'Englanti') //english courses do not seem to have primary secodary split?
     default:

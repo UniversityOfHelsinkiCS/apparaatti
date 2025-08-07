@@ -71,6 +71,21 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
   }
 }
 
+function primaryLanguageSpecificationCoord(answerData: any){
+  const baseCoordinate = Math.pow(10, 12)
+  switch(value){
+  case 'spoken':
+    return baseCoordinate * 1
+  case 'writtenAndSpoken':
+    return baseCoordinate * 2
+  case 'written':
+    return baseCoordinate * 3
+  default:
+    return null
+  }
+}
+
+
 function calculateUserCoordinates(answerData: any) {
   const periods = getRelevantPeriods(answerData['study-period'])
   // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
@@ -89,6 +104,7 @@ function calculateUserCoordinates(answerData: any) {
     challenge: commonCoordinateFromAnswerData(answerData['challenge'], Math.pow(10, 24), 0, null),
     independent: commonCoordinateFromAnswerData(answerData['independent'], Math.pow(10, 24), 0, null),
     flexible: commonCoordinateFromAnswerData(answerData['flexible'], Math.pow(10, 24), 0, null),
+    primaryLanguageSpecification: primaryLanguageSpecificationCoord(answerData['primary-language-specification']) 
   }
   return userCoordinates
 }
@@ -156,17 +172,13 @@ function courseStudyPlaceCoordinate(course: CourseData){
   return baseCoordinate * 2 // course will be something in between remote and onsite and should be based in between as a default if nothing works
 }
 
-
-
 function isIndependentCourse(course: CourseData){
   const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
   const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
 
   return hasIndependentCodeUrn || hasIndependentInName
 }
-function courseOrganisationCoord(){
-  
-}
+
 async function calculateCourseDistance(course: CourseData, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
 ): CourseRecommendation {
   
@@ -174,7 +186,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode)
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
-  
+ 
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
@@ -182,7 +194,8 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
   
   const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
-  const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType) 
+  const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
+  
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : 1, // there is a offset value for this field to make sure that different organisation leads to a really high distance
@@ -371,13 +384,12 @@ type courseCodes = {
   languageSpesific: string[]
 }
 
-function getCourseCodes(langCode: string, primaryLanguage: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
+function getCourseCodes(langCode: string, primaryLanguage: string, primaryLanguageSpecification: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
   const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)
-  console.log(userOrganisationCode)
   const userOrganisations = getUserOrganisationRecommendations(userOrganisationCode, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
-  const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage)  
+  const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage, primaryLanguageSpecification)  
 
   const codeTimerE = Date.now()
   console.log('code time: ', codeTimerE - codeTimer)
@@ -429,7 +441,7 @@ async function getRecommendations(userCoordinates: any, answerData): CourseRecom
   const organisationCode = answerData['study-field-select']
 
   const organisationRecommendations = readOrganisationRecommendationData()
-  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'],  organisationRecommendations, organisationCode)
+  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], answerData['primary-language-specification'], organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 
