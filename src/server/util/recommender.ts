@@ -104,7 +104,6 @@ function calculateUserCoordinates(answerData: any) {
     challenge: commonCoordinateFromAnswerData(answerData['challenge'], Math.pow(10, 24), 0, null),
     independent: commonCoordinateFromAnswerData(answerData['independent'], Math.pow(10, 24), 0, null),
     flexible: commonCoordinateFromAnswerData(answerData['flexible'], Math.pow(10, 24), 0, null),
-    primaryLanguageSpecification: primaryLanguageSpecificationCoord(answerData['primary-language-specification']) 
   }
   return userCoordinates
 }
