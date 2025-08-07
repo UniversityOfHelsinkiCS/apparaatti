@@ -147,6 +147,12 @@ async function courseInSameOrganisationAsUser(course: any, organisationCode: str
   if( organisationCode in orgCodes){
     return true
   }
+  //there are courses that are not marked with customCodeUrn and do not have an organisationCode marked on them, in that case we fall back to hard coded lookup exel =)
+  const organisationSpesificCourseCodes =  readOrganisationRecommendationData()
+  const courseCodesInOrganisation = organisationSpesificCourseCodes.find(r => r.name === organisationCode)
+  if(courseCodesInOrganisation.includes(course.course.code)){
+    return true
+  }
   return false
 } 
 function courseStudyPlaceCoordinate(course: CourseData){
