@@ -21,7 +21,14 @@ const PrimaryLanguageSpecificationQuestion  = ({
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const shouldShow: boolean = language === primaryLanguage // when the user chooses fi=fi it means he/she is looking for a primary language and we need this question to be shown
+  const checkShouldShow = () => {
+    //english is not split into spoken or written yet so return false
+    if(language === '' || language === 'en'){
+      return false
+    }
+    return language === primaryLanguage
+  }
+  const shouldShow: boolean = checkShouldShow()// when the user chooses fi=fi it means he/she is looking for a primary language and we need this question to be shown
   const variant = question.variants[0]
   const style = {
     position: 'absolute',
