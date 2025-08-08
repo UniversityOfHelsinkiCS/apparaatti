@@ -1,4 +1,8 @@
 describe('template spec', () => {
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('session_id', 'auth_token');
+  })
+
   it('passes', () => {
     cy.visit('/api/ping')
     cy.visit('/')

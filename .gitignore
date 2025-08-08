@@ -12,3 +12,5 @@ my_username
 .npm
 screenshots/
 *.gz
+*videos*
+/cypress/videos/*

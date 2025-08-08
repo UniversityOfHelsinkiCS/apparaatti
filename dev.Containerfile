@@ -10,4 +10,4 @@ COPY package* ./
 RUN npm install
 EXPOSE 3000
 
-CMD ["npm", "run", "e2e"]
+CMD ["npm", "run", "dev"]

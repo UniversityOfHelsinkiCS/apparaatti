@@ -10,22 +10,12 @@ services:
     volumes:
       - ./:/opt/app-root/src
     ports:
-      - 3000
-      - 8000
+      - 3000:3000
+      - 8000:8000
     container_name: apparaatti_dev
     networks:
-      - internal
-  nginx:
-      image: nginx:latest
-      ports:
-        - 4000:4000 
-      volumes:
-        - ./dev_proxy/default.conf:/etc/nginx/conf.d/default.conf
-      depends_on:
-        - app
-      networks:
-        - internal
-  # updater:
+      - localhost-network
+ # updater:
   #   build:
   #     context: ./
   #     dockerfile: dev.Containerfile
@@ -52,14 +42,35 @@ services:
       - pg_data:/data
     container_name: apparaatti_db
     networks:
-      - internal
+        - localhost-network
+    
   redis:
     image: redis:7-alpine
     container_name: apparaatti_redis
     networks:
-      - internal
+        - localhost-network
+
+  cypress:
+    build:
+      context: ./
+      dockerfile: cypress.Containerfile
+    image: apparaatti_cypress
+    depends_on:
+      - app
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e
+    environment:
+      - CYPRESS_baseUrl=http://app:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - localhost-network
+      
+    # command: ./scripts/run-cypress.sh
+
 networks:
-  internal:
+  localhost-network:
     driver: bridge
 
 volumes:
