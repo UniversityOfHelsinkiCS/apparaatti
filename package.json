@@ -6,7 +6,7 @@
   "scripts": {
     "start": "docker compose up",
     "prod": "NODE_ENV=production node --no-warnings --experimental-strip-types src/server/index.ts",
-    "dev": "NODE_ENV=development concurrently \"nodemon --ignore 'cypress/*' --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
+    "dev": "NODE_ENV=development concurrently \"nodemon --ignore '*cypress*' --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
     "e2e": "npx cypress run",
     "tsc": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
@@ -45,7 +45,8 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "e2e"
+      "e2e",
+      "cypress"
     ],
     "watch": [
       "src"
