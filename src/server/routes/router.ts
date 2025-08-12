@@ -43,11 +43,11 @@ router.post('/form/1/answer', async (req, res) => {
     return
   }
   const submitInfo = {user, answerData}
-  logger.info("User submitted a form", submitInfo)
+  logger.info('User submitted a form', submitInfo)
   //  await saveAnswer(answerData, user)
   
   const recommendations = await recommendCourses(answerData)
-  logger.info("User got answer from a form", recommendations)
+  logger.info('User got answer from a form', recommendations)
   res.json(recommendations)
 })
 
