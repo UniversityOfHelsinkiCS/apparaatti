@@ -42,12 +42,13 @@ router.post('/form/1/answer', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const submitInfo = {user, answerData}
+  const submitInfo = {user: req.user, answerData}
   logger.info('User submitted a form', submitInfo)
   //  await saveAnswer(answerData, user)
   
   const recommendations = await recommendCourses(answerData)
-  logger.info('User got answer from a form', recommendations)
+  const resultData = {user: req.user, answerData, recommendations}
+  logger.info('User got answer from a form', resultData)
   res.json(recommendations)
 })
 
