@@ -42,7 +42,14 @@ app.use(passport.session())
 console.log(process.env.NODE_ENV, 'NODE_ENV')
 
 // in develoment, fake the user
-if (inDevelopment) app.use(mockUserMiddleware)
+if (inDevelopment) {
+  app.use(mockUserMiddleware)
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    next()
+  })
+}
+
 
 app.use('/api', router)
 app.use('/api/ping', (_req, res) => {

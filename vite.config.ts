@@ -10,10 +10,15 @@ export default defineConfig({
     strictPort: true,
     proxy: {
         '/api': {
-          target: 'http://localhost:8000',
+          target: 'http://app:8000',
           changeOrigin: true,
           // rewrite: path => path.replace(/^\/api/, ''),
         },
       },
+    cors: true,
+    headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
+
   }
 })

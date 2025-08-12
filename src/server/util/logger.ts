@@ -1,7 +1,6 @@
 import os from 'os'
 
 import winston from 'winston'
-import { WinstonGelfTransporter } from 'winston-gelf-transporter'
 
 import { inProduction } from './config.ts'
 
@@ -42,21 +41,7 @@ if (!inProduction) {
   )
   transports.push(new winston.transports.Console({ format: prodFormat }))
 
-  transports.push(
-    new WinstonGelfTransporter({
-      handleExceptions: true,
-      host: 'svm-116.cs.helsinki.fi',
-      port: 9503,
-      protocol: 'udp',
-      hostName: os.hostname(),
-      additional: {
-        app: 'apparaatti',
-        environment: 'production',
-      },
-    })
-  )
+
 }
-
 const logger = winston.createLogger({ transports })
-
 export default logger

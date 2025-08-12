@@ -1,11 +1,26 @@
 describe('template spec', () => {
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('session_id', 'auth_token');
+  const headers= {
+            'accept': 'application/json, text/plain, */*',
+            'user-agent': 'axios/0.27.2'
+  }
+     beforeEach(() => {
+      cy.session('user-session', () => {
+        console.log("backend ping")
+        cy.visit('http://host.docker.internal:8000/api/ping')
+
+        console.log("frontend ping")
+        cy.visit('http://host.docker.internal:3000', { headers })
+
+        console.log("frontend front page")
+        cy.visit('/', {headers})
+        console.log("frontend proxy route to backend")
+        cy.visit('/api/ping', {headers})
+      })
   })
 
   it('passes', () => {
-    cy.visit('/api/ping')
-    cy.visit('/')
+    cy.visit('/api/ping', {headers})
+    cy.visit('/', {headers})
   })
 
   /* ==== Test Created with Cypress Studio ==== */
