@@ -61,9 +61,11 @@ services:
     volumes:
       - ./:/e2e
     environment:
-      - CYPRESS_baseUrl=http://host.docker.internal:3000
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - CYPRESS_baseUrl=http://app:3000
+    networks:
+      - localhost-network
+    # extra_hosts:
+      # - "host.docker.internal:host-gateway"
     # networks:
       # - localhost-network
       

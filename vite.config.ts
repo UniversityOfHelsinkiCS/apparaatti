@@ -10,9 +10,9 @@ export default defineConfig({
     strictPort: true,
     proxy: {
         '/api': {
-          target: 'http://app:8000',
+          target: 'http://app:8000/api',
           changeOrigin: true,
-          // rewrite: path => path.replace(/^\/api/, ''),
+          rewrite: path => path.replace(/^\/api/, ''),
         },
       },
     cors: true,

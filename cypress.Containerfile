@@ -7,4 +7,4 @@ COPY ./ ./
 RUN npm install
 RUN npm install cypress
 RUN npx cypress install
-CMD ["npx", "cypress", "run"]
+CMD ["npx", "cypress", "run", "--browser", "chrome"]
