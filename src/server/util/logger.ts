@@ -1,8 +1,8 @@
 import os from 'os'
-
+import LokiTransport from 'winston-loki'
 import winston from 'winston'
 
-import { inProduction } from './config.ts'
+import { IMPORTER_URL, inProduction, LOKI_HOST } from './config.ts'
 
 const { combine, timestamp, printf, splat } = winston.format
 
@@ -40,7 +40,12 @@ if (!inProduction) {
     })
   )
   transports.push(new winston.transports.Console({ format: prodFormat }))
-
+  transports.push(new LokiTransport(
+    {
+      host: LOKI_HOST,
+      labels: {app: 'apparaatti', environment: process.env.NODE_ENV || 'production'}
+    }
+  ))
 
 }
 const logger = winston.createLogger({ transports })

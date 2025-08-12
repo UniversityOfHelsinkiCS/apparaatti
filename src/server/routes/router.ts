@@ -7,6 +7,7 @@ import recommendCourses, { organisationCodeToUrn } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
+import logger from '../util/logger.ts'
 
 const router = express.Router()
 
@@ -41,10 +42,12 @@ router.post('/form/1/answer', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  
+  const submitInfo = {user, answerData}
+  logger.info("User submitted a form", submitInfo)
   //  await saveAnswer(answerData, user)
   
   const recommendations = await recommendCourses(answerData)
+  logger.info("User got answer from a form", recommendations)
   res.json(recommendations)
 })
 
