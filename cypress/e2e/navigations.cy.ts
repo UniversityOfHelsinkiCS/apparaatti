@@ -3,15 +3,7 @@ describe('template spec', () => {
             'accept': 'application/json, text/plain, */*',
             'user-agent': 'axios/0.27.2'
   }
-     // beforeEach(() => {
-      // cy.session('user-session', () => {
-              // })
-  // })
-
   it('passes', () => {
-    // cy.wait(10000)
-    console.log("backend ping")
-    cy.visit('http://app:8000/api/ping')
 
     console.log("frontend ping")
     cy.visit('/', {headers})
