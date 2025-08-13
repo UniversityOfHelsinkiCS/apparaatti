@@ -15,7 +15,7 @@ services:
     container_name: apparaatti_dev
     networks:
       - localhost-network
- # updater:
+ # # updater:
   #   build:
   #     context: ./
   #     dockerfile: dev.Containerfile
@@ -50,21 +50,21 @@ services:
     networks:
         - localhost-network
 
-  cypress:
-    build:
-      context: ./
-      dockerfile: cypress.Containerfile
-    image: apparaatti_cypress
-    depends_on:
-      - app
-    working_dir: /e2e
-    volumes:
-      - ./:/e2e
-    environment:
-      - CYPRESS_baseUrl=http://app:3000
-    networks:
-      - localhost-network
-    # extra_hosts:
+  # cypress:
+  #   build:
+  #     context: ./
+  #     dockerfile: cypress.Containerfile
+  #   image: apparaatti_cypress
+  #   depends_on:
+  #     - app
+  #   working_dir: /e2e
+  #   volumes:
+  #     - ./:/e2e
+  #   environment:
+  #     - CYPRESS_baseUrl=http://app:3000
+  #   networks:
+  #     - localhost-network
+  #   # extra_hosts:
       # - "host.docker.internal:host-gateway"
     # networks:
       # - localhost-network
@@ -74,6 +74,7 @@ services:
 networks:
   localhost-network:
     driver: bridge
-
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
 volumes:
   pg_data:
