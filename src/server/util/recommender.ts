@@ -148,12 +148,12 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
   return false
 } 
 async function organisationWithGroupIdOf(groupIds: any) {
-    return await Organisation.findAll({
-        where: {
-            id: [groupIds]
-        },
-        raw: true,
-    })
+  return await Organisation.findAll({
+    where: {
+      id: [groupIds]
+    },
+    raw: true,
+  })
 }
 
 function courseStudyPlaceCoordinate(course: CourseData){
@@ -317,29 +317,29 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): 
 
 
 async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
-    return await Cu.findAll({
-        where: {
-            courseCode: courseCodeStrings,
-        },
-    })
+  return await Cu.findAll({
+    where: {
+      courseCode: courseCodeStrings,
+    },
+  })
 }
 
 async function curWithIdOf(wantedIds: string[]) {
-    return await Cur.findAll({
-        where: {
-            id: wantedIds,
-        },
-        raw: true,
-    })
+  return await Cur.findAll({
+    where: {
+      id: wantedIds,
+    },
+    raw: true,
+  })
 }
 
 async function curcusWithUnitIdOf(courseUnitIds: string[]) {
-    return await CurCu.findAll({
-        where: {
-            cuId: courseUnitIds,
-        },
-        raw: true,
-    })
+  return await CurCu.findAll({
+    where: {
+      cuId: courseUnitIds,
+    },
+    raw: true,
+  })
 }
 
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
