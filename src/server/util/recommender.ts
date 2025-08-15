@@ -1,14 +1,12 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
 import type { CourseData, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
-import Cu from '../db/models/cu.ts'
-import Cur from '../db/models/cur.ts'
-import CurCu from '../db/models/curCu.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import Organisation from '../db/models/organisation.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -315,32 +313,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): 
   return courseRealisationsWithCodes
 }
 
-
-async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
-  return await Cu.findAll({
-    where: {
-      courseCode: courseCodeStrings,
-    },
-  })
-}
-
-async function curWithIdOf(wantedIds: string[]) {
-  return await Cur.findAll({
-    where: {
-      id: wantedIds,
-    },
-    raw: true,
-  })
-}
-
-async function curcusWithUnitIdOf(courseUnitIds: string[]) {
-  return await CurCu.findAll({
-    where: {
-      cuId: courseUnitIds,
-    },
-    raw: true,
-  })
-}
 
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
