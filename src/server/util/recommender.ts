@@ -1,6 +1,5 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import { record } from 'zod'
 import type { CourseData, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
@@ -34,9 +33,22 @@ const getStudyYearFromPeriod = (id: string) => {
   }
   return ''
 }
+type UserCoordinates = {
+  date: number;
+  org: number;
+  lang: number;
+  graduation?: number | null;
+  mentoring?: number | null;
+  integrated?: number | null;
+  studyPlace: number;
+  replacement?: number | null;
+  challenge?: number | null;
+  independent?: number | null;
+  flexible?: number | null;
+};
 
 async function recommendCourses(answerData: any) {
-  const userCoordinates = calculateUserCoordinates(answerData)
+  const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
 
   const recommendations = await getRecommendations(userCoordinates, answerData)
 
@@ -60,7 +72,7 @@ function studyPlaceCoordinate(studyPlace: string){
 }
 
 
-function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number){
+function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){
   switch(value){
   case '1':
     return yesValue
@@ -70,21 +82,6 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
     return neutralValue
   }
 }
-
-function primaryLanguageSpecificationCoord(answerData: any){
-  const baseCoordinate = Math.pow(10, 12)
-  switch(value){
-  case 'spoken':
-    return baseCoordinate * 1
-  case 'writtenAndSpoken':
-    return baseCoordinate * 2
-  case 'written':
-    return baseCoordinate * 3
-  default:
-    return null
-  }
-}
-
 
 function calculateUserCoordinates(answerData: any) {
   const periods = getRelevantPeriods(answerData['study-period'])
@@ -185,7 +182,7 @@ function isIndependentCourse(course: CourseData){
 }
 
 async function calculateCourseDistance(course: CourseData, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
-): CourseRecommendation {
+): Promise<CourseRecommendation> {
   
   const dimensions = Object.keys(userCoordinates)
   
@@ -242,7 +239,7 @@ async function calculateUserDistances(
   courseCodes: any,
   courseLanguageType: string,
   organisationCode:string
-): CourseRecommendation[] {
+): Promise<CourseRecommendation[]> {
   const distancePromises = availableCourses.map((course) => {
     return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode)
   })
@@ -405,7 +402,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
   }
 }
 //applies a set of filters until the list of relevant courses is of certain lenght
-function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
+function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates){
   //the courses in relevant always must be within the same organisation
   // const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
   // console.log(recommendationsInOrganisation.length)
@@ -415,14 +412,14 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const comparisons = [
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.integration === userCoordinates.integration},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
-    (c: CourseRecommendation, userCoordinates) => { return c.coordinates.independent === userCoordinates.independent},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
-    (c: CourseRecommendation, userCoordinates) => {return c.coordinates.org === userCoordinates.org}
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => { return c.coordinates.independent === userCoordinates.independent},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
   ]
   let final = noExams
   for(const comp of comparisons){
@@ -442,7 +439,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 }
 
 
-async function getRecommendations(userCoordinates: any, answerData): Promise<CourseRecommendations> {
+async function getRecommendations(userCoordinates: UserCoordinates, answerData): Promise<CourseRecommendations> {
   const organisationCode = answerData['study-field-select']
 
   const organisationRecommendations = readOrganisationRecommendationData()
