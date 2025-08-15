@@ -252,29 +252,16 @@ async function calculateUserDistances(
 
 
 async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData> {
-  const realisationTimer = Date.now()
 
-  const start = Date.now()
   const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
-
-
-  const curcuTimer = Date.now()
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await curcusWithUnitIdOf(courseUnitIds)
-  const curcuTimerE = Date.now()
-  console.log('curcu timer: ', curcuTimerE - curcuTimer)
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(
     (curCu) => curCu.curId
   )
   const courseRealizations = await curWithIdOf(wantedIds)
   
-
-  const end = Date.now()
-  console.log('getting the data out of db: ', end - start)
- 
-
-
   const courseRealisationsWithCourseUnits =
     courseRealizations.map((cur) => {
       return {
@@ -285,8 +272,6 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): 
       }
     })
 
-
-  const codesAndGroupsTimer = Date.now()
   const courseRealisationsWithCodes: CourseData[] = courseRealisationsWithCourseUnits.map(
     (cur) => {
       return {
@@ -303,13 +288,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): 
       }
     }
   )
-  const codesAndGroupsTimerE = Date.now()
-  console.log('codes and groups timer: ', codesAndGroupsTimerE - codesAndGroupsTimer)
-  
-
-  const realisationTimerE = Date.now()
-  console.log('realisation timer: ', realisationTimerE - realisationTimer)
-  
+ 
   return courseRealisationsWithCodes
 }
 
