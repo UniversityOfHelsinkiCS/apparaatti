@@ -52,6 +52,8 @@ export type CourseData = {
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
   courseCodes: string[]
+  groupIds: string[]
+  unitIds: string[]
   credits: Record<string, number>[]
 }
 

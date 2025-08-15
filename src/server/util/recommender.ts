@@ -124,7 +124,7 @@ export const organisationCodeToUrn: Record<string, string> = {
  
 }
 
-async function courseInSameOrganisationAsUser(course: any, organisationCode: string){
+async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string){
   const codes = [organisationCode]
   // console.log(codes)
   for(const code of codes){
@@ -133,12 +133,7 @@ async function courseInSameOrganisationAsUser(course: any, organisationCode: str
       return courseHasCustomCodeUrn(course, urnHit)
     }
   }
-  const organisations  = await Organisation.findAll({
-    where:{
-      id: [course.groupIds]
-    },
-    raw: true,
-  })
+  const organisations  = await organisationWithGroupIdOf(course.groupIds)
 
   const orgCodes = organisations.map(o => o.code)
   if( organisationCode in orgCodes){
@@ -152,6 +147,15 @@ async function courseInSameOrganisationAsUser(course: any, organisationCode: str
   }
   return false
 } 
+async function organisationWithGroupIdOf(groupIds: any) {
+    return await Organisation.findAll({
+        where: {
+            id: [groupIds]
+        },
+        raw: true,
+    })
+}
+
 function courseStudyPlaceCoordinate(course: CourseData){
   // console.log('calculating the study place value for, ', course.name.fi)
 
@@ -249,37 +253,23 @@ async function calculateUserDistances(
 
 
 
-async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
+async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData> {
   const realisationTimer = Date.now()
 
   const start = Date.now()
-  const courseUnitsWithCodes = await Cu.findAll({
-    where: {
-      courseCode: courseCodeStrings,
-    },
-  })
+  const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
 
 
   const curcuTimer = Date.now()
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
-  const courseRealizationIdsWithCourseUnit = await CurCu.findAll({
-    where: {
-      cuId: courseUnitIds,
-    },
-    raw: true,
-  })
+  const courseRealizationIdsWithCourseUnit = await curcusWithUnitIdOf(courseUnitIds)
   const curcuTimerE = Date.now()
   console.log('curcu timer: ', curcuTimerE - curcuTimer)
 
   const wantedIds = courseRealizationIdsWithCourseUnit.map(
     (curCu) => curCu.curId
   )
-  const courseRealizations = await Cur.findAll({
-    where: {
-      id: wantedIds,
-    },
-    raw: true,
-  })
+  const courseRealizations = await curWithIdOf(wantedIds)
   
 
   const end = Date.now()
@@ -299,7 +289,7 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
 
 
   const codesAndGroupsTimer = Date.now()
-  const courseRealisationsWithCodes = courseRealisationsWithCourseUnits.map(
+  const courseRealisationsWithCodes: CourseData[] = courseRealisationsWithCourseUnits.map(
     (cur) => {
       return {
         ...cur,
@@ -325,6 +315,32 @@ async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]) {
   return courseRealisationsWithCodes
 }
 
+
+async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
+    return await Cu.findAll({
+        where: {
+            courseCode: courseCodeStrings,
+        },
+    })
+}
+
+async function curWithIdOf(wantedIds: string[]) {
+    return await Cur.findAll({
+        where: {
+            id: wantedIds,
+        },
+        raw: true,
+    })
+}
+
+async function curcusWithUnitIdOf(courseUnitIds: string[]) {
+    return await CurCu.findAll({
+        where: {
+            cuId: courseUnitIds,
+        },
+        raw: true,
+    })
+}
 
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
