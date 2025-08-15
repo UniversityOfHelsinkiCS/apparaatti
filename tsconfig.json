@@ -1,7 +1,9 @@
 {
-  "files": [],
+"files": [],
 "compilerOptions": {
-  "module": "ESNext"
+  "module": "ESNext",
+  "allowImportingTsExtensions": true,
+  "esModuleInterop": true
 },
   "references": [
     { "path": "./tsconfig.app.json" },
