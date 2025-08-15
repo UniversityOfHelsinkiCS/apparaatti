@@ -35,10 +35,10 @@ const getStudyYearFromPeriod = (id: string) => {
   return ''
 }
 
-function recommendCourses(answerData: any) {
+async function recommendCourses(answerData: any) {
   const userCoordinates = calculateUserCoordinates(answerData)
 
-  const recommendations = getRecommendations(userCoordinates, answerData)
+  const recommendations = await getRecommendations(userCoordinates, answerData)
 
   return recommendations
 }
@@ -442,7 +442,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: any){
 }
 
 
-async function getRecommendations(userCoordinates: any, answerData): CourseRecommendations {
+async function getRecommendations(userCoordinates: any, answerData): Promise<CourseRecommendations> {
   const organisationCode = answerData['study-field-select']
 
   const organisationRecommendations = readOrganisationRecommendationData()
