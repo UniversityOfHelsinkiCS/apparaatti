@@ -127,7 +127,7 @@ const questions = [
           sv: 'Jag känner att jag fortfarande behöver lite övning innan jag slutför CEFR B1/B2-nivåstudierna som ingår i min examen.',
           en: 'I feel that I need more studying before completing the CEFR B1/B2 level studies included in my degree.'
 
-         },
+        },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
@@ -184,7 +184,7 @@ const questions = [
           },
         ],
       },
-   ],
+    ],
   },
   {
     id: 'study-place',
