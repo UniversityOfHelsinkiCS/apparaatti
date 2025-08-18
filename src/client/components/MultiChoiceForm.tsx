@@ -8,7 +8,6 @@ import PeriodQuestion from './PeriodQuestion.tsx'
 import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
-import { OrganisationData } from '../../server/updater/types.ts'
 import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
 const questions = [
   {
@@ -18,7 +17,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mikä on koulusivistyskielesi?' },
+        question: { fi: 'Mikä on koulusivistyskielesi?', sv: 'Vilket är ditt undervisningsspråk?', en: 'What is your language of instruction?' },
         options: [
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
@@ -34,7 +33,8 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mistä kielestä haet kursseja?' },
+        question: { fi: 'Mistä kielestä haet kursseja?', sv: 'Vilket språk letar du efter kurser i?', en: 'What language are you looking for?' },
+
         options: [
           { id: 'fi', name: { fi: 'Suomi' } },
           { id: 'sv', name: { fi: 'Ruotsi' } },
@@ -50,7 +50,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Kumman ensisijaisen kielen tyypin haluat valita?' },
+        question: { fi: 'Kumman ensisijaisen kielen tyypin haluat valita?', sv: 'Vilken primär språktyp skulle du vilja välja?', en: 'Which primary language type do you want to choose?' },
         options: [
           { id: 'writtenAndSpoken', name: { fi: 'Molemmat' } },
           { id: 'written', name: { fi: 'Kirjoitusviestintä' } },
@@ -65,7 +65,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.'},
+        question: { fi: 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.', sv: 'Jag har redan avslutat en språkkurs som en del av min examen i tidigare studier.', en: 'I have already completed a language course as part of my degree in previous studies'},
         options: [
           { id: '0', name: { fi: 'Ei' } },
           { id: '1', name: { fi: 'Kyllä' } },
@@ -80,7 +80,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?' },
+        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?', sv: 'Vilket datum är din önskade kurs?', en: 'What is the date of your desired course?' },
         options: [
           {
             id: 'intensive_3_previous',
@@ -102,7 +102,11 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).' },
+        question: {
+          fi: 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).',
+          sv: 'Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid. (CEFR B1/B2)',
+          en: 'I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)'
+        },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'En' } },
@@ -118,7 +122,12 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' },
+        question: {
+          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.',
+          sv: 'Jag känner att jag fortfarande behöver lite övning innan jag slutför CEFR B1/B2-nivåstudierna som ingår i min examen.',
+          en: 'I feel that I need more studying before completing the CEFR B1/B2 level studies included in my degree.'
+
+         },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta' } },
@@ -128,7 +137,9 @@ const questions = [
       {
         name: 'onlyEn',
         question: {
-          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.' 
+          fi: 'Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.',
+          sv: 'Jag känner att jag fortfarande behöver lite övning innan jag slutför CEFR B1/B2-nivåstudierna som ingår i min examen.',
+          en: 'I feel that I need more studying before completing the CEFR B1/B2 level studies included in my degree.'
         },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
@@ -144,7 +155,11 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon'},
+        question: {
+          fi: 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon',
+          sv: 'För mig är det särskilt utmanande att lära sig ett språk och det gör mig väldigt nervös/rädd.',
+          en: 'For me, learning a language is particularly challenging and it makes me very nervous/scared.'
+        },
         options: [
           { id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'Ei' } },
@@ -160,6 +175,7 @@ const questions = [
     variants: [
       {
         name: 'default',
+        question: { fi: 'Valmistutko lähiaikoina?', sv: 'Tar du examen snart?', en: 'Are you graduating soon?' },
         options: [
           { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
           {
@@ -167,39 +183,15 @@ const questions = [
             name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
           },
         ],
-        question: { fi: 'Valmistutko lähiaikoina?' },
       },
-      {
-        name: 'onlyFi',
-        options: [
-          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
-          {
-            id: '0',
-            name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
-          },
-        ],
-        question: { fi: 'Valmistutko lähiaikoina (Suomi kysymys)?' },
-      },
-
-      {
-        name: 'onlySe',
-        options: [
-          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä' } },
-          {
-            id: '0',
-            name: { fi: 'En ole valmistumassa puolen vuoden sisällä' },
-          },
-        ],
-        question: { fi: 'Valmistutko lähiaikoina (Ruotsi kysymys)?' },
-      },
-    ],
+   ],
   },
   {
     id: 'study-place',
     type: 'multi',
     variants: [
       {
-        question: { fi: 'Mikä on suosimasi opetusmuoto?' },
+        question: { fi: 'Mikä on suosimasi opetusmuoto?', sv: 'Vilken är din föredragna undervisningsmetod?', en: 'What is your preferred teaching method?' },
         options: [
           { id: 'remote', name: { fi: 'Täysin etäopiskelu' } },
           { id: 'hybrid', name: { fi: 'Etäopiskelu ja lähiopetus' } },
@@ -214,7 +206,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.' },
+        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.', sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.', en: 'I am interedted in a course that is integrated into the studies in my field.' },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'Ei' } },
@@ -229,7 +221,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.'},
+        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.', sv: 'Jag vill arbeta självständigt eller autonomt.', en: 'I want to work independently or autonomously.'},
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'En' } },
@@ -244,7 +236,7 @@ const questions = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava.'},
+        question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava.', sv: 'Jag vill ta en kurs med ett flexibelt schema.', en: 'I want to take a course with a flexible schedule'  },
         options: [
           {id: 'neutral', name: {fi: 'Ei valintaa'}},
           { id: '0', name: { fi: 'En' } },
