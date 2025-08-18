@@ -136,7 +136,7 @@ const questions = [
 
         },
         options: [
-          {id: 'neutral', neutralText},
+          {id: 'neutral', name: neutralText},
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta', sv: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.', en: 'I would like to have a litle bit of training before starting my studies' } },
           { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta',  sv: 'Jag känner inte att jag behöver motion.', en: 'I dont think that i need training' }},
         ],
@@ -155,7 +155,7 @@ const questions = [
           en: 'For me, learning a language is particularly challenging and it makes me very nervous/scared.'
         },
         options: [
-          { id: 'neutral', neutralText},
+          { id: 'neutral', name: neutralText},
           { id: '0', name: noText },
           { id: '1', name: yesText },
         ],
@@ -185,6 +185,7 @@ const questions = [
     type: 'multi',
     variants: [
       {
+        name: 'default',
         question: { fi: 'Mikä on suosimasi opetusmuoto?', sv: 'Vilken är din föredragna undervisningsmetod?', en: 'What is your preferred teaching method?' },
         options: [
           { id: 'remote', name: { fi: 'Täysin etäopiskelu', sv: 'Helt distansundervisning', en: 'Only Distance learning' } },
@@ -217,9 +218,9 @@ const questions = [
         name: 'default',
         question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.', sv: 'Jag vill arbeta självständigt eller autonomt.', en: 'I want to work independently or autonomously.'},
         options: [
-          {id: 'neutral', neutralText},
-          { id: '0', noText },
-          { id: '1', yesText },
+          {id: 'neutral', name: neutralText},
+          { id: '0', name: noText },
+          { id: '1', name: yesText },
         ],
       },
     ],
@@ -232,9 +233,9 @@ const questions = [
         name: 'default',
         question: { fi: 'Haluan osallistua kurssille, jonka aikataulu on joustava.', sv: 'Jag vill ta en kurs med ett flexibelt schema.', en: 'I want to take a course with a flexible schedule'  },
         options: [
-          {id: 'neutral', neutralText},
-          { id: '0', noText},
-          { id: '1', yesText},
+          {id: 'neutral', name: neutralText},
+          { id: '0', name: noText},
+          { id: '1', name: yesText},
         ],
       },
     ],

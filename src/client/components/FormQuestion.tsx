@@ -60,7 +60,7 @@ const FormQuestion = ({
   }
 
   const variant = pickVariant()
-
+  console.log(question)
   const style = {
     position: 'absolute',
     top: '50%',
