@@ -1,10 +1,11 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, InputLabel, Select, MenuItem, FormControl, } from '@mui/material'
 import {  useContext, useRef, useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 import MenuIcon from '@mui/icons-material/Menu'
 import { LanguageContext } from './contexts/languageContext.tsx'
+import LanguageSelect from './components/LanguageSelect.tsx'
 function App() {
   const languageContext = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
@@ -152,6 +153,7 @@ function App() {
               </Button>
             </Typography>
           </Stack>
+          <LanguageSelect/>
         </Box>
       </SwipeableDrawer>
 
