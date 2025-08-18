@@ -141,7 +141,7 @@ const questions = [
           { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta',  sv: 'Jag känner inte att jag behöver motion.', en: 'I dont think that i need training' }},
         ],
       },
-     ],
+    ],
   },
   {
     id: 'challenge',
