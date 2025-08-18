@@ -1,11 +1,12 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, } from '@mui/material'
-import {  useRef, useState } from 'react'
+import {  useContext, useRef, useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 import MenuIcon from '@mui/icons-material/Menu'
+import { LanguageContext } from './contexts/languageContext.tsx'
 function App() {
-
+  const languageContext = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])

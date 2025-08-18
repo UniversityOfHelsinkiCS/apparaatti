@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
+import { LanguageContextProvider } from './contexts/languageContext.tsx'
 
 const queryClient = new QueryClient()
 const theme = createTheme({
@@ -29,7 +30,9 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <LanguageContextProvider>
+          <App />
+        </LanguageContextProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>
