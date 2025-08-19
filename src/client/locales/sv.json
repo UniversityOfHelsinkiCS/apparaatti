@@ -3,6 +3,9 @@
   "form": {
     "primaryLanguageQuestion": "Vilket är ditt undervisningsspråk?",
     "languageQuestion": "Vilket språk letar du efter kurser i?",
-    "primaryLanguageSpecificationQuestion": "Vilken primär språktyp skulle du vilja välja?"
+    "primaryLanguageSpecificationQuestion": "Vilken primär språktyp skulle du vilja välja?",
+    "previouslyDoneLangQuestion": "Jag har redan avslutat en språkkurs som en del av min examen i tidigare studier.",
+    "studyPeriodQuestion": "Vilket datum är din önskade kurs?",
+    "replacementQuestion": "Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid. (CEFR B1/B2)"
   }
 }

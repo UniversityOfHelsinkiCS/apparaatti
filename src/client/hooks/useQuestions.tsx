@@ -17,6 +17,11 @@ const useQuestions = () => {
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')
   const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
+  const previouslyDoneLangQuestion = t('form:previouslyDoneLangQuestion')
+  const studyPeriodQuestion = t('form:studyPeriodQuestion')
+  const replacementQuestion = t('form:replacementQuestion')
+
+  
   const questions = [
     {
       id: 'primary-language',

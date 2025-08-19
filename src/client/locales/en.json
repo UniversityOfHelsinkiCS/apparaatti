@@ -3,6 +3,9 @@
   "form": {
     "primaryLanguageQuestion": "What is your language of instruction?",
     "languageQuestion": "What language are you looking for?",
-    "primaryLanguageSpecificationQuestion": "Which primary language type do you want to choose?"
+    "primaryLanguageSpecificationQuestion": "Which primary language type do you want to choose?",
+    "previouslyDoneLangQuestion": "I have already completed a language course as part of my degree in previous studies",
+    "studyPeriodQuestion": "What is the date of your desired course?",
+    "replacementQuestion": "I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)"
   }
 }

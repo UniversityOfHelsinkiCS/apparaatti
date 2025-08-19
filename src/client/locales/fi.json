@@ -3,6 +3,9 @@
   "form": {
     "primaryLanguageQuestion": "Mikä on koulusivistyskielesi?",
     "languageQuestion": "Mistä kielestä haet kursseja?",
-    "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?"
+    "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?",
+    "previouslyDoneLangQuestion": "Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.",
+    "studyPeriodQuestion": "Mikä on haluamasi kurssin suoritusajankohta?",
+    "replacementQuestion": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2)."
   }
 }
