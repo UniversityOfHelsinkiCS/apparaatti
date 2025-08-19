@@ -6,14 +6,16 @@ import { useTranslation } from 'react-i18next'
 
 const useQuestions = () => {
 
-  const finnishChoiceText = {fi: 'suomi', sv: 'finska', en: 'finnish'}
-  const swedishChoiceText = {fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
-  const englishChoiceText = {fi: 'englanti', sv: 'engelska', en: 'english'}
-  const yesText = {fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
-  const noText = {fi: 'Ei', sv: 'Nej', en: 'No'}
-  const neutralText = {fi: 'Ei valintaa', sv: 'Inget val', en: 'No choice'}
+    const {t, i18n} = useTranslation()
+  const finnishChoiceText = t('form:finnish') //{fi: 'suomi', sv: 'finska', en: 'finnish'}
+  const swedishChoiceText = t('form:swedish')//{fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
+  const englishChoiceText = t('form:english')//{fi: 'englanti', sv: 'engelska', en: 'english'}
+  const yesText = t('form:yes')//{fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
+  const noText = t('form:no')//{fi: 'Ei', sv: 'Nej', en: 'No'}
+  const neutralText = t('form:neutralChoice') //{fi: 'Ei valintaa', sv: 'Inget val', en: 'No choice'}
+  const summerText = t('form:summer')
+  const periodText = t('form:period')
 
-  const {t, i18n} = useTranslation()
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')
   const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
@@ -70,9 +72,9 @@ const useQuestions = () => {
           name: 'default',
           question: primaryLanguageSpecificationQuestion,
           options: [
-            { id: 'writtenAndSpoken', name: { fi: 'Molemmat', sv: 'Både', en: 'Both' } },
-            { id: 'written', name: { fi: 'Kirjoitusviestintä', sv: 'skriftlig kommunikation', en: 'Written communication' } },
-            { id: 'spoken', name: { fi: 'Puheviestintä', sv: 'Röstkommunikation', en: 'Verbal communication' } },
+            { id: 'writtenAndSpoken', name: t('form:both') /*{ fi: 'Molemmat', sv: 'Både', en: 'Both' }*/ },
+            { id: 'written', name: t('form:written')/*{ fi: 'Kirjoitusviestintä', sv: 'skriftlig kommunikation', en: 'Written communication' }*/ },
+            { id: 'spoken', name: t('form:spoken') /*{ fi: 'Puheviestintä', sv: 'Röstkommunikation', en: 'Verbal communication' }*/ },
           ],
         },
       ],
@@ -103,13 +105,13 @@ const useQuestions = () => {
             {
               id: 'intensive_3_previous',
               value: 'intensive_3',
-              name: { fi: 'Kesä 25', sv: 'Sommar 25', en: 'Summer 25' },
+              name: summerText + ' 25',
             },
-            { id: 'period_1', name: { fi: '1. periodi', sv: '1. period', en: '1. period' } },
-            { id: 'period_2', name: { fi: '2. periodi' , sv: '2. period', en: '2. period' } },
-            { id: 'period_3', name: { fi: '3. periodi' , sv: '3. period', en: '3. period' } },
-            { id: 'period_4', name: { fi: '4. periodi' , sv: '4. period', en: '4. period' } },
-            { id: 'intensive_3', name: { fi: 'Kesä 26', sv: 'Sommar 26', en: 'Summer 26' } },
+            { id: 'period_1', name:'1. ' + periodText},
+            { id: 'period_2', name:'2. ' + periodText },
+            { id: 'period_3', name:'3. ' + periodText },
+            { id: 'period_4', name:'4. ' + periodText },
+            { id: 'intensive_3', name: summerText + ' 26'},
           ],
         },
       ],

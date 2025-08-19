@@ -13,6 +13,17 @@
     "studyPlaceQuestion": "What is your preferred teaching method?",
     "integratedQuestion": "I am interedted in a course that is integrated into the studies in my field.",
     "independentQuestion": "I want to work independently or autonomously.",
-    "flexibleQuestion": "I want to take a course with a flexible schedule"
+    "flexibleQuestion": "I want to take a course with a flexible schedule",
+    "finnish": "finnish",
+    "swedish": "swedish",
+    "english": "english",
+    "yes": "Yes",
+    "no": "No",
+    "neutralChoice": "No choice",
+    "both": "Both",
+    "written": "Written communication",
+    "spoken": "Verbal communication",
+    "summer": "Summer",
+    "period": "period"
   }
 }

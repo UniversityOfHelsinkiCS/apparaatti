@@ -13,6 +13,17 @@
     "studyPlaceQuestion": "Vilken är din föredragna undervisningsmetod?",
     "integratedQuestion": "Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.",
     "independentQuestion": "Jag vill arbeta självständigt eller autonomt.",
-    "flexibleQuestion": "Jag vill ta en kurs med ett flexibelt schema."
+    "flexibleQuestion": "Jag vill ta en kurs med ett flexibelt schema.",
+    "finnish": "finska",
+    "swedish": "svenska",
+    "english": "engelska",
+    "yes": "Ja",
+    "no": "Nej",
+    "neutralChoice": "Inget val",
+    "both": "Både",
+    "written": "Skriftlig kommunikation",
+    "spoken": "Röstkommunikation",
+    "summer": "Sommar",
+    "period": "period"
   }
 }

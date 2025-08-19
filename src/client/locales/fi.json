@@ -13,6 +13,17 @@
     "studyPlaceQuestion": "Mikä on suosimasi opetusmuoto?",
     "integratedQuestion": "Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.",
     "independentQuestion": "Haluan työskennellä itsenäisesti tai autonomisesti.",
-    "flexibleQuestion": "Haluan osallistua kurssille, jonka aikataulu on joustava."
+    "flexibleQuestion": "Haluan osallistua kurssille, jonka aikataulu on joustava.",
+    "finnish": "suomi",
+    "swedish": "ruotsi",
+    "english": "englanti",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "neutralChoice": "Ei valintaa",
+    "both": "Molemmat",
+    "written": "Kirjoitusviestintä",
+    "spoken": "Puheviestintä",
+    "summer": "Kesä",
+    "period": "periodi"
   }
 }
