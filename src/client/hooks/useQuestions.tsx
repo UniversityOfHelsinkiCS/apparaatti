@@ -1,16 +1,16 @@
-import { useTranslation } from "react-i18next"
+import { useTranslation } from 'react-i18next'
 
 
 
 
 
 const useQuestions = () => {
-const finnishChoiceText = {fi: 'suomi', sv: 'finska', en: 'finnish'}
-const swedishChoiceText = {fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
-const englishChoiceText = {fi: 'englanti', sv: 'engelska', en: 'english'}
-const yesText = {fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
-const noText = {fi: 'Ei', sv: 'Nej', en: 'No'}
-const neutralText = {fi: 'Ei valintaa', sv: 'Inget val', en: 'No choice'}
+  const finnishChoiceText = {fi: 'suomi', sv: 'finska', en: 'finnish'}
+  const swedishChoiceText = {fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
+  const englishChoiceText = {fi: 'englanti', sv: 'engelska', en: 'english'}
+  const yesText = {fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
+  const noText = {fi: 'Ei', sv: 'Nej', en: 'No'}
+  const neutralText = {fi: 'Ei valintaa', sv: 'Inget val', en: 'No choice'}
 
   const {t, i18n} = useTranslation()
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
