@@ -1,6 +1,8 @@
 {
   "common": {},
   "form": {
-    "primaryLanguageQuestion": "Mikä on koulusivistyskielesi?"
+    "primaryLanguageQuestion": "Mikä on koulusivistyskielesi?",
+    "languageQuestion": "Mistä kielestä haet kursseja?",
+    "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?"
   }
 }

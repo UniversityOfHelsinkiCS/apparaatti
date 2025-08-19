@@ -1,6 +1,8 @@
 {
   "common": {},
   "form": {
-    "primaryLanguageQuestion": "Vilket är ditt undervisningsspråk?"
+    "primaryLanguageQuestion": "Vilket är ditt undervisningsspråk?",
+    "languageQuestion": "Vilket språk letar du efter kurser i?",
+    "primaryLanguageSpecificationQuestion": "Vilken primär språktyp skulle du vilja välja?"
   }
 }

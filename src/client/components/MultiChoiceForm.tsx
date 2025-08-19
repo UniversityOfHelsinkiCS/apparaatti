@@ -9,7 +9,6 @@ import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
 import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
-import { useTranslation } from 'react-i18next'
 import useQuestions from '../hooks/useQuestions.tsx'
 
 const MultiChoiceForm = ({

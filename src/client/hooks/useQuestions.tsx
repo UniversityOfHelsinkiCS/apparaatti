@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 
 const useQuestions = () => {
+
   const finnishChoiceText = {fi: 'suomi', sv: 'finska', en: 'finnish'}
   const swedishChoiceText = {fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
   const englishChoiceText = {fi: 'englanti', sv: 'engelska', en: 'english'}
@@ -14,6 +15,8 @@ const useQuestions = () => {
 
   const {t, i18n} = useTranslation()
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
+  const languageQuestion = t('form:languageQuestion')
+  const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
   const questions = [
     {
       id: 'primary-language',
@@ -22,7 +25,7 @@ const useQuestions = () => {
       variants: [
         {
           name: 'default',
-          question: { fi: 'Mikä on koulusivistyskielesi?', sv: 'Vilket är ditt undervisningsspråk?', en: 'What is your language of instruction?' },
+          question: { fi: primaryLanguageQuestion, sv: 'Vilket är ditt undervisningsspråk?', en: 'What is your language of instruction?' },
           options: [
             { id: 'fi', name: finnishChoiceText },
             { id: 'sv', name: swedishChoiceText },

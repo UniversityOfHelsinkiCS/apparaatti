@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface LanguageContextType {
   language: string
@@ -12,9 +13,11 @@ export const LanguageContext = createContext<LanguageContextType | undefined>(un
 
 
 export const LanguageContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const {t, i18n} = useTranslation()
   const supportedLangs: string[] = ['fi', 'sv', 'en']
-  const [language, setLanguage] = useState('')
-
+  useEffect(() => {
+    i18n.changeLanguage('fi')
+  }, [])
   //Sets language to the wanted value if it is supported and there is no language set yet
   const setDefaultLanguage = (lang: string) => {
     if(language === ''){
@@ -28,7 +31,7 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
   //changes the language if the language is valid
   const setAppLanguage = (lang: string)=> {
     if(supportedLangs.includes(lang)){
-      setLanguage(lang)
+      i18n.changeLanguage(lang)
     }
     else{ 
       console.log('language not supported', lang)
@@ -36,7 +39,7 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setDefaultLanguage, setAppLanguage }}>
+    <LanguageContext.Provider value={{ language: i18n.language, setDefaultLanguage, setAppLanguage }}>
       {children}
     </LanguageContext.Provider>
   )

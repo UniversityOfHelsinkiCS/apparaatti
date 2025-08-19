@@ -1,6 +1,8 @@
 {
   "common": {},
   "form": {
-    "primaryLanguageQuestion": "What is your language of instruction?"
+    "primaryLanguageQuestion": "What is your language of instruction?",
+    "languageQuestion": "What language are you looking for?",
+    "primaryLanguageSpecificationQuestion": "Which primary language type do you want to choose?"
   }
 }
