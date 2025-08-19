@@ -6,6 +6,13 @@
     "primaryLanguageSpecificationQuestion": "Which primary language type do you want to choose?",
     "previouslyDoneLangQuestion": "I have already completed a language course as part of my degree in previous studies",
     "studyPeriodQuestion": "What is the date of your desired course?",
-    "replacementQuestion": "I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)"
+    "replacementQuestion": "I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)",
+    "mentoringQuestion": "I feel that I need more studying before completing the CEFR B1/B2 level studies included in my degree.",
+    "challengeQuestion": "For me, learning a language is particularly challenging and it makes me very nervous/scared.",
+    "graduationQuestion": "Are you graduating soon?",
+    "studyPlaceQuestion": "What is your preferred teaching method?",
+    "integratedQuestion": "I am interedted in a course that is integrated into the studies in my field.",
+    "independentQuestion": "I want to work independently or autonomously.",
+    "flexibleQuestion": "I want to take a course with a flexible schedule"
   }
 }

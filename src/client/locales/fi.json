@@ -6,6 +6,13 @@
     "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?",
     "previouslyDoneLangQuestion": "Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.",
     "studyPeriodQuestion": "Mikä on haluamasi kurssin suoritusajankohta?",
-    "replacementQuestion": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2)."
+    "replacementQuestion": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).",
+    "mentoringQuestion": "Koen tarvitsevani vielä jonkin verran harjoitusta ennen tutkintooni sisältyvien CEFR B1/B2 -tason opintojen suorittamista.",
+    "challengeQuestion": "Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon",
+    "graduationQuestion": "Valmistutko lähiaikoina?",
+    "studyPlaceQuestion": "Mikä on suosimasi opetusmuoto?",
+    "integratedQuestion": "Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.",
+    "independentQuestion": "Haluan työskennellä itsenäisesti tai autonomisesti.",
+    "flexibleQuestion": "Haluan osallistua kurssille, jonka aikataulu on joustava."
   }
 }

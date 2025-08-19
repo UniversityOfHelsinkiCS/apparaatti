@@ -20,8 +20,13 @@ const useQuestions = () => {
   const previouslyDoneLangQuestion = t('form:previouslyDoneLangQuestion')
   const studyPeriodQuestion = t('form:studyPeriodQuestion')
   const replacementQuestion = t('form:replacementQuestion')
-
-  
+  const mentoringQuestion = t('form:mentoringQuestion')
+  const challengeQuestion = t('form:challengeQuestion')
+  const graduationQuestion = t('form:graduationQuestion')
+  const studyPlaceQuestion = t('form:studyPlaceQuestion')
+  const integratedQuestion = t('form:integratedQuestion')
+  const independentQuestion = t('form:independentQuestion')
+  const flexibleQuestion = t('form:flexibleQuestion')
   const questions = [
     {
       id: 'primary-language',
