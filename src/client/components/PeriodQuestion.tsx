@@ -55,7 +55,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
+      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
       <Modal
         open={open}
         onClose={handleClose}

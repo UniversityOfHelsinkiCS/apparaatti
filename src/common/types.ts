@@ -19,7 +19,7 @@ export type Question = {
 
 export type Variant = {
   name: string
-  question: LocalizedString
+  question: string
   options: Option[]
 }
 
