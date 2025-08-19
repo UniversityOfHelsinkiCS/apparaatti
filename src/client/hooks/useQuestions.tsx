@@ -41,7 +41,7 @@ const useQuestions = () => {
       variants: [
         {
           name: 'default',
-          question: { fi: 'Mistä kielestä haet kursseja?', sv: 'Vilket språk letar du efter kurser i?', en: 'What language are you looking for?' },
+          question: { fi: languageQuestion, sv: 'Vilket språk letar du efter kurser i?', en: 'What language are you looking for?' },
 
           options: [
             { id: 'fi', name: finnishChoiceText },
@@ -58,7 +58,7 @@ const useQuestions = () => {
       variants: [
         {
           name: 'default',
-          question: { fi: 'Kumman ensisijaisen kielen tyypin haluat valita?', sv: 'Vilken primär språktyp skulle du vilja välja?', en: 'Which primary language type do you want to choose?' },
+          question: { fi: primaryLanguageSpecificationQuestion, sv: 'Vilken primär språktyp skulle du vilja välja?', en: 'Which primary language type do you want to choose?' },
           options: [
             { id: 'writtenAndSpoken', name: { fi: 'Molemmat', sv: 'Både', en: 'Both' } },
             { id: 'written', name: { fi: 'Kirjoitusviestintä', sv: 'skriftlig kommunikation', en: 'Written communication' } },
