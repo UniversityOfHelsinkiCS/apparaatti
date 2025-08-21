@@ -4,11 +4,21 @@ import { initReactI18next } from 'react-i18next'
 import en from '../locales/en.json'
 import fi from '../locales/fi.json'
 import sv from '../locales/sv.json'
+import { LocalizedString } from '../../common/types'
 
 declare global {
   interface Window {
     __i18n__: typeof i18n
   }
+}
+
+export function translateLocalizedString(text: LocalizedString): string{
+  const currentLanguage = i18n.language
+  const keys = Object.keys(text)
+  if(keys.includes(currentLanguage)){
+    return text[currentLanguage]
+  }
+  return text.currentLanguage.en
 }
 
 const initializeI18n = () =>

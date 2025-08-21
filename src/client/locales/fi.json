@@ -37,6 +37,7 @@
     "extrainfo": "Lisätietoa",
     "checkInstructionsCrediting": "Katso ohjeet hyväksilukemiseen",
     "fromHere": "täältä",
-    "noExtrainfo": "Ei lisätietoa"
+    "noExtrainfo": "Ei lisätietoa",
+    "pickStudy": "Valitse tiedekunta"
   }
 }

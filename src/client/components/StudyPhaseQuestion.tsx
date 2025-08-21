@@ -1,6 +1,9 @@
 import { Box, MenuItem, Select, Typography } from '@mui/material'
 import { useState } from 'react'
 import { User } from '../../common/types'
+import { useTranslation } from 'react-i18next'
+import { translateLocalizedString } from '../util/i18n'
+import Organisation from '../../server/db/models/organisation'
 
 const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { studyData: any, user: User, supportedOrganisations: any }) => {
   console.log(user)
@@ -27,7 +30,7 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
     return selectedField.code
   }
   const [selectedValue, setSelectedValue] = useState(startValue())
-
+  const {t, i18n} = useTranslation()
   const handleChange = (e) => {
     e.preventDefault()
     setSelectedValue(e.target.value)
@@ -41,7 +44,7 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
       
       <>
         <Typography id="study-field-select-label">
-            Valitse tiedekunta
+          {t('question:pickStudy')}
         </Typography>
        
         <Select
@@ -58,7 +61,7 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
         >
           {organisations?.map((item: any) => (
             <MenuItem key={item.id} value={item.code}>
-              {item.name.fi}
+              {translateLocalizedString(item.name)}
             </MenuItem>
           ))}
         </Select>
