@@ -24,6 +24,13 @@
     "written": "Written communication",
     "spoken": "Verbal communication",
     "summer": "Summer",
-    "period": "period"
+    "period": "period",
+    "mentoringQuestionYes": "I would like to have a litle bit of training before starting my studies",
+    "mentoringQuestionNo": "I dont think that i need training",
+    "graduationQuestionYes": "Yes, within half a year.",
+    "graduationQuestionNo": "I am not graduating within half a year.",
+    "studyPlaceRemote": "Only Distance learning",
+    "studyPlaceCombined": "Distance learning and face-to-face teaching",
+    "studyPlaceF2F": "Only face-to-face teaching"
   }
 }

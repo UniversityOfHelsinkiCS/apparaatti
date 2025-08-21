@@ -24,6 +24,13 @@
     "written": "Skriftlig kommunikation",
     "spoken": "Röstkommunikation",
     "summer": "Sommar",
-    "period": "period"
+    "period": "period",
+    "mentoringQuestionYes": "Jag skulle vilja ha lite handledning innan jag avslutar mina studier.",
+    "mentoringQuestionNo": "Jag känner inte att jag behöver motion.",
+    "graduationQuestionYes": "Ja, inom sex månader.",
+    "graduationQuestionNo": "Jag tar inte examen om sex månader.",
+    "studyPlaceRemote": "Helt distansundervisning",
+    "studyPlaceCombined": "Distansundervisning och undervisning ansikte mot ansikte",
+    "studyPlaceF2F": "Helt ansikte mot ansikte-undervisning"
   }
 }

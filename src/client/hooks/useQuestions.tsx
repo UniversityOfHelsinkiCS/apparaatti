@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 const useQuestions = () => {
 
-    const {t, i18n} = useTranslation()
+  const {t, i18n} = useTranslation()
   const finnishChoiceText = t('form:finnish') //{fi: 'suomi', sv: 'finska', en: 'finnish'}
   const swedishChoiceText = t('form:swedish')//{fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
   const englishChoiceText = t('form:english')//{fi: 'englanti', sv: 'engelska', en: 'english'}
@@ -141,8 +141,8 @@ const useQuestions = () => {
           question: mentoringQuestion,
           options: [
             {id: 'neutral', name: neutralText},
-            { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta', sv: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.', en: 'I would like to have a litle bit of training before starting my studies' } },
-            { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta',  sv: 'Jag känner inte att jag behöver motion.', en: 'I dont think that i need training' }},
+            {id: '1', name: t('form:mentoringQuestionYes')},
+            {id: '0', name: t('form:mentoringQuestionNo')}
           ],
         },
       ],
@@ -171,11 +171,8 @@ const useQuestions = () => {
           name: 'default',
           question: graduationQuestion,
           options: [
-            { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä.', sv: 'Ja, inom sex månader.', en: 'Yes, within half a year.' } },
-            {
-              id: '0',
-              name: { fi: 'En ole valmistumassa puolen vuoden sisällä.', sv: 'Jag tar inte examen om sex månader.', en: 'I am not graduating within half a year.' },
-            },
+            { id: '1', name: t('form:graduationQuestionYes')},
+            { id: '0', name: t('form:graduationQuestionNo')},
           ],
         },
       ],
@@ -188,9 +185,9 @@ const useQuestions = () => {
           name: 'default',
           question: studyPlaceQuestion,
           options: [
-            { id: 'remote', name: { fi: 'Täysin etäopiskelu', sv: 'Helt distansundervisning', en: 'Only Distance learning' } },
-            { id: 'hybrid', name: { fi: 'Etäopiskelu ja lähiopetus', sv: 'Distansundervisning och undervisning ansikte mot ansikte', en: 'Distance learning and face-to-face teaching' } },
-            { id: 'onsite', name: { fi: 'Täysin lähiopetus', sv: 'Helt ansikte mot ansikte-undervisning', en: 'Only face-to-face teaching' } },
+            { id: 'remote', name: t('form:studyPlaceRemote')},
+            { id: 'hybrid', name: t('form:studyPlaceCombined')},
+            { id: 'onsite', name: t('form:studyPlaceF2F')},
           ],
         },
       ],

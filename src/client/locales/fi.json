@@ -24,6 +24,13 @@
     "written": "Kirjoitusviestintä",
     "spoken": "Puheviestintä",
     "summer": "Kesä",
-    "period": "periodi"
+    "period": "periodi",
+    "mentoringQuestionYes": "Kaipaisin valmennusta ennen opintojen suoritusta",
+    "mentoringQuestionNo": "En koe tarvitsevani harjoitusta",
+    "graduationQuestionYes": "Kyllä, puolen vuoden sisällä.",
+    "graduationQuestionNo": "En ole valmistumassa puolen vuoden sisällä.",
+    "studyPlaceRemote": "Täysin etäopiskelu.",
+    "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
+    "studyPlaceF2F": "Täysin lähiopetus"
   }
 }
