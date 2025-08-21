@@ -107,21 +107,26 @@ const CourseRecommendation = ({
 const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecommendationType, userCoordinates: UserCoordinates}) => {
   const getRecommendationNumbers = () => {
     const sameCoord = []
+    const incorrectCoord = []
     const courseCoordKeys = Object.keys(course.coordinates)
     for(const coordKey of courseCoordKeys){
       const userValue = userCoordinates[coordKey]
       if(userValue === course.coordinates[coordKey]){
         sameCoord.push(coordKey)
       }
+      else{
+        incorrectCoord.push(coordKey)
+      }
     }
-    return sameCoord
+    return {correct: sameCoord, incorrect: incorrectCoord}
     console.log('coord keys: ', sameCoord)
   }
 
   const numbers = getRecommendationNumbers()
   return (
     <Box>
-      {numbers.map((n) => <Box key={n}>{n}</Box>)}
+      {numbers.correct.map((n) => <Box sx={{backgroundColor: 'blue'}} key={n}>{n}</Box>)}
+      {numbers.incorrect.map((n) => <Box sx={{backgroundColor: 'red'}} key={n}>{n}</Box>)}
     </Box>
   )
 }
