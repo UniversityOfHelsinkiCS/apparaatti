@@ -50,5 +50,9 @@
   "recommendations": {
     "accurate": "De mest exakta rekommendationerna:",
     "all": "alla rekommendationer (noggrannheten kan variera):"
+  },
+  "course": {
+    "show": "Visa",
+    "credits": "kr"
   }
 }

@@ -50,5 +50,9 @@
   "recommendations": {
     "accurate": "Tarkimmat suositukset:",
     "all": "Kaikki suositukset (tarkuus voi vaihdella):"
+  },
+  "course": {
+    "show": "Näytä",
+    "credits": "op"
   }
 }

@@ -50,5 +50,9 @@
   "recommendations": {
     "accurate": "The most accurate recommendations:",
     "all": "all recommendations (accuracy may vary):"
+  },
+  "course": {
+    "show": "Show",
+    "credits": "cr"
   }
 }

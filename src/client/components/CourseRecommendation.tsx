@@ -1,16 +1,18 @@
 import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { translateLocalizedString } from '../util/i18n'
+import { useTranslation } from 'react-i18next'
 
 const CourseRecommendation = ({
   course,
 }: {
   course: CourseRecommendationType
 }) => {
+  const {t} = useTranslation()
   if (!course) return null
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
-
 
   const creditString:() => string = () => {
     if(!course.course.credits){
@@ -57,7 +59,7 @@ const CourseRecommendation = ({
     <Paper elevation={2} sx={{ padding: 2, margin: 1 }}>
       <Box>
         <Typography variant="h6" component="h2" gutterBottom>
-          {course.course.name.fi}
+          {translateLocalizedString(course.course.name)}
         </Typography>
         <Stack direction={'row'}>
           <Typography
@@ -66,7 +68,7 @@ const CourseRecommendation = ({
             color="textSecondary"
             gutterBottom
           >
-            {creditString()} op
+            {creditString()} {t('course:credits')}
           </Typography>
 
           <Typography
@@ -89,7 +91,7 @@ const CourseRecommendation = ({
           rel="noopener noreferrer"
           sx={{ marginTop: 1 }}
         >
-          näytä
+          {t('course:show')}
         </Button>
       </Box>
     </Paper>
