@@ -39,9 +39,24 @@ export type CourseRecommendation = {
 } 
 
 
+export type UserCoordinates = {
+  date: number;
+  org: number;
+  lang: number;
+  graduation?: number | null;
+  mentoring?: number | null;
+  integrated?: number | null;
+  studyPlace: number;
+  replacement?: number | null;
+  challenge?: number | null;
+  independent?: number | null;
+  flexible?: number | null;
+};
+
 export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
+  userCoordinates: UserCoordinates | undefined  
 }
 //this is a combination of a course realisation and course unit
 export type CourseData = {

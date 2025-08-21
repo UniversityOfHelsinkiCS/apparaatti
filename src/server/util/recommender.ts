@@ -1,6 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import type { CourseData, CourseRecommendation, CourseRecommendations } from '../../common/types.ts'
+import type { CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
@@ -31,19 +31,6 @@ const getStudyYearFromPeriod = (id: string) => {
   }
   return ''
 }
-type UserCoordinates = {
-  date: number;
-  org: number;
-  lang: number;
-  graduation?: number | null;
-  mentoring?: number | null;
-  integrated?: number | null;
-  studyPlace: number;
-  replacement?: number | null;
-  challenge?: number | null;
-  independent?: number | null;
-  flexible?: number | null;
-};
 
 async function recommendCourses(answerData: any) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
@@ -424,7 +411,8 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData):
 
   const allRecommendations= {
     relevantRecommendations: relevantRecommendations,
-    recommendations: recommendations
+    recommendations: recommendations,
+    userCoordinates: userCoordinates
   }
   
   return allRecommendations
