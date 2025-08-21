@@ -96,7 +96,7 @@ const useQuestions = () => {
     {
       id: 'study-period',
       type: 'period-date',
-      explanation: 'Mistä periodista haluat kursseja?',
+      // explanation: 'Mistä periodista haluat kursseja?',
       variants: [
         {
           name: 'default',

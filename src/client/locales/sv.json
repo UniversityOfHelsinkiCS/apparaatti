@@ -32,5 +32,11 @@
     "studyPlaceRemote": "Helt distansundervisning",
     "studyPlaceCombined": "Distansundervisning och undervisning ansikte mot ansikte",
     "studyPlaceF2F": "Helt ansikte mot ansikte-undervisning"
+  },
+  "question": {
+    "extrainfo": "Ytterligare information",
+    "checkInstructionsCrediting": "Se instruktioner för kreditering",
+    "fromHere": "härifrån",
+    "noExtrainfo": "ingen ytterligare information"
   }
 }

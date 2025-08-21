@@ -32,5 +32,11 @@
     "studyPlaceRemote": "Täysin etäopiskelu.",
     "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
     "studyPlaceF2F": "Täysin lähiopetus"
+  },
+  "question": {
+    "extrainfo": "Lisätietoa",
+    "checkInstructionsCrediting": "Katso ohjeet hyväksilukemiseen",
+    "fromHere": "täältä",
+    "noExtrainfo": "Ei lisätietoa"
   }
 }

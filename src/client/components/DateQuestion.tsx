@@ -10,6 +10,7 @@ import {
 
 import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'
+import ExtraInfoModal from './ExtraInfoModal'
 
 const DateQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
@@ -44,21 +45,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
       }}
     >
       <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Lisätietoa
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {question.explanation ? question.explanation : 'Ei lisätietoa'}
-          </Typography>
-        </Box>
-      </Modal>
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
           <FormControlLabel

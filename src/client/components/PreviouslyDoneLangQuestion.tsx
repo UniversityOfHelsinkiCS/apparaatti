@@ -3,6 +3,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
 import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'
+import { useTranslation } from 'react-i18next'
+import ExtraInfoModal from './ExtraInfoModal'
 
 
 
@@ -18,7 +20,7 @@ const PreviuslyDoneLangQuestion = ({
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-
+  const {t, i18n} = useTranslation()
   const variant = question.variants[0]
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')
@@ -55,23 +57,7 @@ const PreviuslyDoneLangQuestion = ({
     }}>
       <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
      
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Lisätietoa
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {question.explanation ? question.explanation : 'Ei lisätietoa'}
-          </Typography>
-        </Box>
-      </Modal>
-
-
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
       
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
         <FormControlLabel
@@ -119,11 +105,11 @@ const PreviuslyDoneLangQuestion = ({
       {selectedValue === yesOption.id && (
         <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Lisätietoja: </Typography>
+            <Typography>{t('question:extrainfo')}: </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Katso ohjeet hyväksilukemiseen <a href=' https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1'>täältä</a>
+              {t('question:checkInstructionsCrediting')} <a href=' https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1'>{t('question:fromHere')}</a>
             </Typography>
            
           </AccordionDetails>

@@ -32,5 +32,11 @@
     "studyPlaceRemote": "Only Distance learning",
     "studyPlaceCombined": "Distance learning and face-to-face teaching",
     "studyPlaceF2F": "Only face-to-face teaching"
+  },
+  "question": {
+    "extrainfo": "Extra information",
+    "checkInstructionsCrediting": "See instructions for crediting",
+    "fromHere": "from here",
+    "noExtrainfo": "No extra inforamtion"
   }
 }
