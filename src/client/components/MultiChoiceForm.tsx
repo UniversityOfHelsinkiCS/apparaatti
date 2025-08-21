@@ -10,6 +10,7 @@ import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
 import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
 import useQuestions from '../hooks/useQuestions.tsx'
+import { useTranslation } from 'react-i18next'
 
 const MultiChoiceForm = ({
   onSubmit,
@@ -24,6 +25,7 @@ const MultiChoiceForm = ({
   user: User,
   supportedOrganisations: any
 }) => {
+  const {t} = useTranslation()
   const [primaryLanguage, setPrimaryLanguage] = useState('')
   const [language, setLanguage] = useState('')
   const questions = useQuestions()
@@ -98,7 +100,7 @@ const MultiChoiceForm = ({
           <StudyPhaseQuestion supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
-        <ActionButton text="Lähetä"/>
+        <ActionButton text={t('app:send')}/>
          
       </Box>
     </form>

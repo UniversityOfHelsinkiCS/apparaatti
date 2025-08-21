@@ -6,12 +6,15 @@ import CourseRecommendationsPage from './components/CourseRecommendationsPage.ts
 import MenuIcon from '@mui/icons-material/Menu'
 import { LanguageContext } from './contexts/languageContext.tsx'
 import LanguageSelect from './components/LanguageSelect.tsx'
+import { useTranslation } from 'react-i18next'
 function App() {
   const languageContext = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
+
+  const {t, i18n} = useTranslation()
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -113,7 +116,6 @@ function App() {
       </Stack>
     )
   }
- 
 
   if (isStudyDataLoading || isSupportedOrganisationsLoading) {
     return <div>Loading...</div>
@@ -139,7 +141,7 @@ function App() {
             </>
           ) : (
             <Button color="inherit" href="/api/login">
-              Kirjaudu
+              Log In
             </Button>
           )}
         </Toolbar>
@@ -149,7 +151,7 @@ function App() {
           <Stack direction={'row'}>
             <Typography>{user?.username}    
               <Button sx={{marginLeft: '3rem'}} color={'inherit'} href="/api/logout">
-                     Kirjaudu ulos
+                {t('app:logout')}
               </Button>
             </Typography>
           </Stack>
@@ -183,8 +185,8 @@ function App() {
             padding: 3,
             background: '#f5f5f5'
           }} activeStep={questionarePhase} alternativeLabel>
-            <Step sx={stepStyle}  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>Kysely</StepButton></Step>
-            <Step sx={stepStyle} key={1}><StepButton color='inherit'>Ehdotukset</StepButton></Step>
+            <Step sx={stepStyle}  key={0} completed={questionarePhase === 1}><StepButton color='inherit'>{t('app:questionaire')}</StepButton></Step>
+            <Step sx={stepStyle} key={1}><StepButton color='inherit'>{t('app:recommendations')}</StepButton></Step>
           </Stepper>
 
           

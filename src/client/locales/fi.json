@@ -39,5 +39,16 @@
     "fromHere": "täältä",
     "noExtrainfo": "Ei lisätietoa",
     "pickStudy": "Valitse tiedekunta"
+  },
+  "app": {
+    "logout": "Kirjaudu ulos",
+    "questionaire": "Kysely",
+    "recommendations": "Suositukset",
+    "send": "Lähetä",
+    "back": "Takaisin"
+  },
+  "recommendations": {
+    "accurate": "Tarkimmat suositukset:",
+    "all": "Kaikki suositukset (tarkuus voi vaihdella):"
   }
 }

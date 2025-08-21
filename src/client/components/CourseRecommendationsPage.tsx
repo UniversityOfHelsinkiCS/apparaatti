@@ -2,16 +2,17 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography }
 import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
+import { useTranslation } from 'react-i18next'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
-
+  const {t} = useTranslation()
   const relevant: CourseRecommendationType[] = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
   const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
 
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
-        <ActionButton onClick={onClose} text="Takaisin"/>
+        <ActionButton onClick={onClose} text={t('app:back')}/>
         <Stack
           spacing={2}
           sx={{
@@ -21,9 +22,9 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          <CourseListing titleText = {'Tarkimmat suositukset: '} defaultExpanded={true} courses={relevant}/>
+          <CourseListing titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
 
-          <CourseListing titleText = {'Kaikki suositukset (tarkkuus voi vaihdella): '} defaultExpanded={false}  courses={other}/>
+          <CourseListing titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         
         </Stack>
       

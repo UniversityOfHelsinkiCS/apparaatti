@@ -39,5 +39,16 @@
     "fromHere": "from here",
     "noExtrainfo": "No extra inforamtion",
     "pickStudy": "Select a faculty"
+  },
+  "app": {
+    "logout": "Log out",
+    "questionaire": "Questionaire",
+    "recommendations": "Recommendations",
+    "send": "Send",
+    "back": "Back"
+  },
+  "recommendations": {
+    "accurate": "The most accurate recommendations:",
+    "all": "all recommendations (accuracy may vary):"
   }
 }

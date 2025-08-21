@@ -37,7 +37,18 @@
     "extrainfo": "Ytterligare information",
     "checkInstructionsCrediting": "Se instruktioner för kreditering",
     "fromHere": "härifrån",
-    "noExtrainfo": "ingen ytterligare information",
+    "noExtrainfo": "Ingen ytterligare information",
     "pickStudy": "Välja en fakultet"
+  },
+  "app": {
+    "logout": "Logga ut",
+    "questionaire": "Förfrågan",
+    "recommendations": "Rekommendationer",
+    "send": "Stäng in",
+    "back": "Tillbaka"
+  },
+  "recommendations": {
+    "accurate": "De mest exakta rekommendationerna:",
+    "all": "alla rekommendationer (noggrannheten kan variera):"
   }
 }
