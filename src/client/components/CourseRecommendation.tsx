@@ -63,26 +63,29 @@ const CourseRecommendation = ({
         <Typography variant="h6" component="h2" gutterBottom>
           {translateLocalizedString(course.course.name)}
         </Typography>
-        <Stack direction={'row'}>
-          <Typography
-            sx={{ marginRight: 'auto' }}
-            variant="body2"
-            color="textSecondary"
-            gutterBottom
-          >
-            {creditString()} {t('course:credits')}
-          </Typography>
+        <Stack direction={'column'}>
+          <Stack direction={'row'}>
+            <Typography
+              sx={{ marginRight: 'auto' }}
+              variant="body2"
+              color="textSecondary"
+              gutterBottom
+            >
+              {creditString()} {t('course:credits')}
+            </Typography>
 
-          <Typography
-            sx={{ marginRight: 'auto' }}
-            variant="body2"
-            color="textSecondary"
-            gutterBottom
-          >
-            {courseCodes}
-          </Typography>
+            <Typography
+              sx={{ marginRight: 'auto' }}
+              variant="body2"
+              color="textSecondary"
+              gutterBottom
+            >
+              {courseCodes}
+            </Typography>
 
-          <Typography>{courseDateRange(course.course)}</Typography>
+            <Typography>{courseDateRange(course.course)}</Typography>
+          </Stack>
+          <RecommendationReasons course={course} userCoordinates={userCoordinates}/>
         </Stack>
 
         <Button
@@ -97,6 +100,29 @@ const CourseRecommendation = ({
         </Button>
       </Box>
     </Paper>
+  )
+}
+
+
+const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecommendationType, userCoordinates: UserCoordinates}) => {
+  const getRecommendationNumbers = () => {
+    const sameCoord = []
+    const courseCoordKeys = Object.keys(course.coordinates)
+    for(const coordKey of courseCoordKeys){
+      const userValue = userCoordinates[coordKey]
+      if(userValue === course.coordinates[coordKey]){
+        sameCoord.push(coordKey)
+      }
+    }
+    return sameCoord
+    console.log('coord keys: ', sameCoord)
+  }
+
+  const numbers = getRecommendationNumbers()
+  return (
+    <Box>
+      {numbers.map((n) => <Box key={n}>{n}</Box>)}
+    </Box>
   )
 }
 
