@@ -9,7 +9,7 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
   console.log(user)
   const showAllOptions = (user: User) => {
     const groups = user?.hyGroupCn
-    return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') 
+    return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') || groups?.includes('grp-a90600-opintot')
 
   }
   const getOrgansations = () => {
