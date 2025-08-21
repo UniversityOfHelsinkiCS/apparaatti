@@ -61,19 +61,6 @@ const FormQuestion = ({
   }
 
   const variant = pickVariant()
-  console.log(question)
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #545454',
-    borderRadius: '10px',
-    boxShadow: 24,
-    p: 4,
-  }
   return (
     <Box
       sx={{

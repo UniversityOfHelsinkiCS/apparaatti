@@ -6,21 +6,42 @@ interface LanguageContextType {
   setDefaultLanguage: (lang: string) => void,
   setAppLanguage: (lang: string) => void
 }
-export const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+export const LanguageContext = createContext<LanguageContextType>({
+  language: '',
+  setDefaultLanguage: (lang: string) => {},
+  setAppLanguage: (lang: string) => {}
+})
 
 
-
+function readStorage(key:string): string | null{
+  const storageObject = localStorage.getItem(key)
+  if(storageObject){
+    const value = storageObject
+    return value
+  }
+  return null
+}
 
 
 export const LanguageContextProvider = ({ children }: { children: React.ReactNode }) => {
   const {t, i18n} = useTranslation()
   const supportedLangs: string[] = ['fi', 'sv', 'en']
   useEffect(() => {
-    i18n.changeLanguage('fi')
+    const localLang = readStorage('lang')
+    console.log(localLang)
+    if(localLang){
+      i18n.changeLanguage(localLang)
+    }
+    else{
+      i18n.changeLanguage('fi')
+    }
   }, [])
   //Sets language to the wanted value if it is supported and there is no language set yet
   const setDefaultLanguage = (lang: string) => {
-    if(language === ''){
+    const localLang = readStorage('lang')
+    console.log('local lang', localLang)
+    if(!localLang){
+      console.log('language is not set once, setting it..')
       setAppLanguage(lang)
     }
     else{
@@ -31,6 +52,7 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
   //changes the language if the language is valid
   const setAppLanguage = (lang: string)=> {
     if(supportedLangs.includes(lang)){
+      localStorage.setItem('lang', lang)
       i18n.changeLanguage(lang)
     }
     else{ 

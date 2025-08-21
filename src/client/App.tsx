@@ -1,20 +1,19 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, InputLabel, Select, MenuItem, FormControl, } from '@mui/material'
-import {  useContext, useRef, useState } from 'react'
+import {  useContext, useEffect, useRef, useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
 import MenuIcon from '@mui/icons-material/Menu'
 import { LanguageContext } from './contexts/languageContext.tsx'
 import LanguageSelect from './components/LanguageSelect.tsx'
 import { useTranslation } from 'react-i18next'
 function App() {
-  const languageContext = useContext(LanguageContext)
+  const {setDefaultLanguage} = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
-
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -22,6 +21,12 @@ function App() {
       return res.json()
     },
   })
+
+  useEffect(() => {
+    if(!isUserLoading){
+      setDefaultLanguage(user?.language) 
+    }
+  }, [user, isUserLoading])
 
   const { data: supportedOrganisations, isLoading: isSupportedOrganisationsLoading } = useQuery({
     queryKey: ['supportedOrganisations'],
