@@ -43,7 +43,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question.fi}/>
+      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
       <Modal
         open={open}
         onClose={handleClose}
@@ -74,7 +74,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
                 }}
               />
             }
-            label={option.name.fi}
+            label={option.name}
             sx={{
               '&:hover': {
                 backgroundColor: '#e0e0e0',

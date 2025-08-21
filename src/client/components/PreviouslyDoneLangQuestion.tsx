@@ -86,7 +86,7 @@ const PreviuslyDoneLangQuestion = ({
               }}
             />
           }
-          label={yesOption.name.fi}
+          label={yesOption.name}
           sx={{
             '&:hover': {
               backgroundColor: '#e0e0e0',
@@ -106,7 +106,7 @@ const PreviuslyDoneLangQuestion = ({
               }}
             />
           }
-          label={noOption.name.fi}
+          label={noOption.name}
           sx={{
             '&:hover': {
               backgroundColor: '#e0e0e0',

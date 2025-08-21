@@ -77,7 +77,7 @@ const LanguageQuestion = ({
                 }}
               />
             }
-            label={option.name.fi}
+            label={option.name}
             sx={{
               '&:hover': {
                 backgroundColor: '#e0e0e0',

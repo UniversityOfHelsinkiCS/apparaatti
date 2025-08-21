@@ -95,7 +95,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
                   sx={{ '&.Mui-checked': { color: green[500] } }}
                 />
               }
-              label={option.name.fi}
+              label={option.name}
             />
           ))}
          

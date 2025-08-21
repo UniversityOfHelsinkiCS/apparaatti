@@ -6,7 +6,7 @@ export type LocalizedString = Partial<{
 
 export type Option = {
   id: string
-  name: LocalizedString
+  name: string
 }
 
 export type Question = {
