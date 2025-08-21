@@ -1,5 +1,5 @@
 import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, major, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import useQuestions from '../hooks/useQuestions'
@@ -128,10 +128,43 @@ const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecomme
 
   const numbers = getRecommendationNumbers()
   return (
-    <Box>
-      {numbers.correct.map((n) => <Box sx={{backgroundColor: 'lightblue'}} key={n}>{n}</Box>)}
-      {numbers.incorrect.map((n) => <Box sx={{backgroundColor: 'red'}} key={n}>{n}</Box>)}
-    </Box>
+    <Stack direction={'row'}>
+      {numbers.correct.map((n) => <NumberBall key={n} number={n} numberType={'correct'}/>)}
+      {numbers.incorrect.map((n) => <NumberBall key={n} number={n} numberType={'incorrect'}/>)}
+    </Stack>
+  )
+}
+
+const NumberBall = ({number, numberType}: {number: string, numberType: string}) => {
+  const style = {
+    display: 'flex',
+    marginRight: '0.5rem',
+    width: '2rem',
+    height: '2rem',
+    borderRadius: '50%',
+    textAlign: 'center',
+    placeItems: 'center',
+    justifyItems: 'center',
+    alignContent: 'center',
+    flexWrap: 'wrap'
+  
+  }
+  return (
+    <>
+      {numberType === 'correct' ? 
+        <Box sx={{...style, backgroundColor: 'lightblue'}}>
+          <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
+            {number}
+          </Typography>
+        </Box>
+        :
+        <Box sx={{...style, backgroundColor: 'orangered'}}>
+          <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
+            {number}
+          </Typography>
+        </Box>
+      }
+    </>
   )
 }
 
