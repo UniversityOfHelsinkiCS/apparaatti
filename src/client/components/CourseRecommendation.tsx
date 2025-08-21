@@ -2,6 +2,7 @@ import type { CourseRecommendation as CourseRecommendationType, UserCoordinates 
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
+import useQuestions from '../hooks/useQuestions'
 
 const CourseRecommendation = ({
   course,
@@ -105,6 +106,7 @@ const CourseRecommendation = ({
 
 
 const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecommendationType, userCoordinates: UserCoordinates}) => {
+  const questions = useQuestions()
   const getRecommendationNumbers = () => {
     const sameCoord = []
     const incorrectCoord = []
@@ -118,14 +120,16 @@ const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecomme
         incorrectCoord.push(coordKey)
       }
     }
-    return {correct: sameCoord, incorrect: incorrectCoord}
+    const correctQuestionNumbers = questions.filter((q) => sameCoord.includes(q.effects)).map((q) => q.number)
+    const inCorrectQuestionNumbers = questions.filter((q) => incorrectCoord.includes(q.effects)).map((q) => q.number)
+    return {correct: correctQuestionNumbers, incorrect: inCorrectQuestionNumbers}
     console.log('coord keys: ', sameCoord)
   }
 
   const numbers = getRecommendationNumbers()
   return (
     <Box>
-      {numbers.correct.map((n) => <Box sx={{backgroundColor: 'blue'}} key={n}>{n}</Box>)}
+      {numbers.correct.map((n) => <Box sx={{backgroundColor: 'lightblue'}} key={n}>{n}</Box>)}
       {numbers.incorrect.map((n) => <Box sx={{backgroundColor: 'red'}} key={n}>{n}</Box>)}
     </Box>
   )

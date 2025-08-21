@@ -32,12 +32,14 @@ const useQuestions = () => {
   const questions = [
     {
       number: '1',
+      effects: 'org',
       id: 'study-field-select',
       type: 'studyphase',
       variants: [] //there are no variants for this one
     },
     {
       number: '2',
+      effects: 'lang',
       id: 'primary-language',
       type: 'primary-language',
       variants: [
@@ -54,6 +56,7 @@ const useQuestions = () => {
     },
     {
       number: '3',
+      effects: 'lang',
       id: 'lang-1',
       type: 'language',
 
@@ -72,6 +75,7 @@ const useQuestions = () => {
     },
     {
       number: '3.1',
+      effects: 'lang',
       id: 'primary-language-specification',
       type: 'primary-language-specification',
 
@@ -89,6 +93,7 @@ const useQuestions = () => {
     },
     {
       number: '5',
+      effects: 'none',
       id: 'previusly-done-lang',
       type: 'previusly-done-lang',
       variants: [
@@ -104,6 +109,7 @@ const useQuestions = () => {
     },
     {
       number: '6',
+      effects: 'date',
       id: 'study-period',
       type: 'period-date',
       // explanation: 'Mistä periodista haluat kursseja?',
@@ -128,6 +134,7 @@ const useQuestions = () => {
     },
     {
       number: '7',
+      effects: 'none',
       id: 'replacement',
       type: 'multi',
       variants: [
@@ -145,6 +152,7 @@ const useQuestions = () => {
     {
       number: '8',
       id: 'mentoring',
+      effects: 'mentoring',
       type: 'multi',
 
       variants: [
@@ -162,6 +170,7 @@ const useQuestions = () => {
     {
       number: '9',
       id: 'challenge',
+      effects: 'challenge',
       type: 'multi',
       variants: [
         {
@@ -180,6 +189,7 @@ const useQuestions = () => {
       id: 'graduation',
       type: 'multi',
 
+      effects: 'graduation',
       variants: [
         {
           name: 'default',
@@ -194,6 +204,7 @@ const useQuestions = () => {
     {
       number: '11',
       id: 'study-place',
+      effects: 'studyPlace',
       type: 'multi',
       variants: [
         {
@@ -210,6 +221,7 @@ const useQuestions = () => {
     {
       number: '12',
       id: 'integrated',
+      effects: 'integrated',
       type: 'multi',
       variants: [
         {
@@ -226,6 +238,7 @@ const useQuestions = () => {
     {
       number: '13',
       id: 'independent',
+      effects: 'independent',
       type: 'multi',
       variants: [
         {
@@ -242,6 +255,7 @@ const useQuestions = () => {
     {
       number: '14',
       id: 'flexible',
+      effects: 'flexible',
       type: 'multi',
       variants: [
         {
