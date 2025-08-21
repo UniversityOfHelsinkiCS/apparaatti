@@ -44,7 +44,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
+      <QuestionTitle number={question.number} handleOpen={handleOpen} title={variant.question}/>
       <FormControl sx={{m: 0, display: 'flex'}} component="fieldset" variant="standard">
         <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
         <FormGroup>

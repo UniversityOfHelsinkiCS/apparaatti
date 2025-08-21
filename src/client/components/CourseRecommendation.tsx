@@ -1,12 +1,14 @@
-import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 
 const CourseRecommendation = ({
   course,
+  userCoordinates
 }: {
-  course: CourseRecommendationType
+  course: CourseRecommendationType,
+  userCoordinates: UserCoordinates
 }) => {
   const {t} = useTranslation()
   if (!course) return null

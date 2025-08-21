@@ -11,6 +11,7 @@ export type Option = {
 
 export type Question = {
   id: string
+  number: string
   value: string
   type: string
   explanation: string
@@ -56,7 +57,7 @@ export type UserCoordinates = {
 export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
-  userCoordinates: UserCoordinates | undefined  
+  userCoordinates: UserCoordinates  
 }
 //this is a combination of a course realisation and course unit
 export type CourseData = {

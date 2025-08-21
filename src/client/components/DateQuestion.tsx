@@ -25,26 +25,13 @@ const DateQuestion = ({ question }: { question: Question }) => {
     setChoice(id)
   }
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #545454',
-    borderRadius: '10px',
-    boxShadow: 24,
-    p: 4,
-  }
-
   return (
     <Box
       sx={{
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question}/>
       <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (

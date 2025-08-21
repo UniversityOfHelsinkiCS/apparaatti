@@ -52,7 +52,7 @@ const PrimaryLanguageSpecificationQuestion  = ({
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
+      <QuestionTitle number={question.number} handleOpen={handleOpen} title={variant.question}/>
       <Modal
         open={open}
         onClose={handleClose}

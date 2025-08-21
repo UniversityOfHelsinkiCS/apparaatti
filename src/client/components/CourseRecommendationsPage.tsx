@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
 import { useTranslation } from 'react-i18next'
@@ -22,9 +22,9 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          <CourseListing titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
+          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
 
-          <CourseListing titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
+          <CourseListing  userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         
         </Stack>
       
@@ -32,7 +32,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
     </Box>
   )
 }
-const CourseListing = ({defaultExpanded, courses, titleText}: {defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
+const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
 
   return (
     
@@ -45,7 +45,7 @@ const CourseListing = ({defaultExpanded, courses, titleText}: {defaultExpanded: 
       </AccordionSummary>
       <AccordionDetails>
         {courses.map((course) => (
-          <CourseRecommendation key={course.course.id} course={course} />
+          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}
       </AccordionDetails>
     </Accordion>

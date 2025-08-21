@@ -29,9 +29,10 @@ const MultiChoiceForm = ({
   const [primaryLanguage, setPrimaryLanguage] = useState('')
   const [language, setLanguage] = useState('')
   const questions = useQuestions()
-  console.log(questions)
   const renderFormQuestion = (key, question) => {
     switch (question.type) {
+    case 'studyphase':
+      return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} />
     case 'date':
       //console.log('date')
       return <DateQuestion key={key} question={question} />
@@ -97,7 +98,6 @@ const MultiChoiceForm = ({
         }}
       >
         <FormControl component="fieldset">
-          <StudyPhaseQuestion supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} />
           {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <ActionButton text={t('app:send')}/>

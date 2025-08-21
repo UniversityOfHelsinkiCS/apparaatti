@@ -67,7 +67,7 @@ const FormQuestion = ({
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} title={variant.question}/>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question}/>
       <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (

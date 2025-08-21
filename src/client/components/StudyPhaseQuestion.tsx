@@ -1,12 +1,19 @@
 import { Box, MenuItem, Select, Typography } from '@mui/material'
 import { useState } from 'react'
-import { User } from '../../common/types'
+import { Question, User } from '../../common/types'
 import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../util/i18n'
 import Organisation from '../../server/db/models/organisation'
+import QuestionTitle from './questionTitle'
+import ExtraInfoModal from './ExtraInfoModal'
 
-const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { studyData: any, user: User, supportedOrganisations: any }) => {
+const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations }: {question: Question, studyData: any, user: User, supportedOrganisations: any }) => {
+  
   console.log(user)
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   const showAllOptions = (user: User) => {
     const groups = user?.hyGroupCn
     return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') || groups?.includes('grp-a90600-opintot')
@@ -39,34 +46,31 @@ const StudyPhaseQuestion = ({ studyData, user, supportedOrganisations }: { study
   if(!organisations){
     return (<p>no organisation found</p>)
   }
+
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
-      
-      <>
-        <Typography id="study-field-select-label">
-          {t('question:pickStudy')}
-        </Typography>
-       
-        <Select
-          sx={{
-            padding: '1px',
-            minWidth: 100,
-            border: '1px solid lightgray',          
-          }}
-          disabled={organisations.length < 2 ? true : false} //makes drop down disabled if there is only one option to choose
-          name="study-field-select"
-          labelId="study-field-select-label"
-          value={selectedValue}
-          onChange={handleChange}
-        >
-          {organisations?.map((item: any) => (
-            <MenuItem key={item.id} value={item.code}>
-              {translateLocalizedString(item.name)}
-            </MenuItem>
-          ))}
-        </Select>
-        {organisations.length < 2 && <input type='hidden' value={selectedValue} name="study-field-select"/>}     
-      </>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={t('question:pickStudy')}/>
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
+   
+      <Select
+        sx={{
+          padding: '1px',
+          minWidth: 100,
+          border: '1px solid lightgray',          
+        }}
+        disabled={organisations.length < 2 ? true : false} //makes drop down disabled if there is only one option to choose
+        name={question.id}
+        labelId="study-field-select-label"
+        value={selectedValue}
+        onChange={handleChange}
+      >
+        {organisations?.map((item: any) => (
+          <MenuItem key={item.id} value={item.code}>
+            {translateLocalizedString(item.name)}
+          </MenuItem>
+        ))}
+      </Select>
+      {organisations.length < 2 && <input type='hidden' value={selectedValue} name={question.id}/>}     
       
     </Box>
   )
