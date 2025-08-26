@@ -1,13 +1,26 @@
-debugRouter.get('/cur/debug', async (req, res) => {
+import express from 'express'
+import { Op } from 'sequelize'
+
+import { uniqueVals } from '../util/misc.ts'
+import Cur from '../db/models/cur.ts'
+import Cu from '../db/models/cu.ts'
+import CurCu from '../db/models/curCu.ts'
+import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
+
+const debugRouter = express.Router({mergeParams: true})
+
+debugRouter.use(express.json())
+
+debugRouter.get('/cur/debug', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
 
   const realisations = await Cur.findAll({})
-  const realisationCodeUrns = realisations.map(r => r.customCodeUrns)
-    .filter(u => urnInCustomCodeUrns(u, 'kkt'))
-    .flatMap(u => Object.values(u))
+  const realisationCodeUrns = realisations.map((r: any) => r.customCodeUrns)
+    .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
+    .flatMap((u: any) => Object.values(u))
     .flat()
 
   const unique = uniqueVals(realisationCodeUrns)
@@ -15,7 +28,7 @@ debugRouter.get('/cur/debug', async (req, res) => {
   res.json(unique)
 })
 
-debugRouter.get('/cur', async (req, res) => {
+debugRouter.get('/cur', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
@@ -35,8 +48,8 @@ debugRouter.get('/cur', async (req, res) => {
   const curs = await Cur.findAll({ where: nameQuery, raw: true })
   console.log('code urn is: ', codeurn)
   if(codeurn){
-    const urnFilteredCourses = curs.filter((cur) => {
-      return urnInCustomCodeUrns(cur.customCodeUrns, codeurn)
+    const urnFilteredCourses = curs.filter((cur: any) => {
+      return urnInCustomCodeUrns(cur.customCodeUrns, codeurn as string)
     })
     return res.json(urnFilteredCourses)
   }
@@ -44,7 +57,7 @@ debugRouter.get('/cur', async (req, res) => {
   res.json(curs)
 })
 
-debugRouter.get('/cu', async (req, res) => {
+debugRouter.get('/cu', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
@@ -75,14 +88,14 @@ debugRouter.get('/cu', async (req, res) => {
   res.json(cus)
 })
 
-debugRouter.get('/curcu', async (req, res) => {
+debugRouter.get('/curcu', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
 
   const curcur = await CurCu.findAll()
-  res.json(curcus)
+  res.json(curcur)
 })
 
 export default debugRouter

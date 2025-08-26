@@ -8,10 +8,16 @@ import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
 import logger from '../util/logger.ts'
+import debugRouter from './debugRouter.ts'
+import { inDevelopment } from '../util/config.ts'
 
-const router = express.Router()
+const router = express.Router({mergeParams: true})
 
 router.use(express.json())
+
+if(inDevelopment){
+ router.use('/debug', debugRouter)
+}
 
 router.get('/form/1', async (_req, res) => {
   const form = await Form.findByPk(1)
