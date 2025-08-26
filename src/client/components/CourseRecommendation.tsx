@@ -91,7 +91,7 @@ const CourseRecommendation = ({
           <Button
             variant="contained"
             color="primary"
-            sx={{ marginTop: 1 }}
+            sx={{ marginTop: 1, width: '7rem' }}
             onClick={() => {setShowReasons(true)}}
           >
             {t('course:reasons')}
@@ -106,7 +106,7 @@ const CourseRecommendation = ({
           href={courseUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ marginTop: 1 }}
+          sx={{ marginTop: 1, backgroundColor: 'lightblue' }}
         >
           {t('course:show')}
         </Button>
