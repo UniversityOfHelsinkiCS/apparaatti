@@ -1,8 +1,9 @@
 import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
-import { Box, Button, major, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import useQuestions from '../hooks/useQuestions'
+import { useState } from 'react'
 
 const CourseRecommendation = ({
   course,
@@ -136,17 +137,51 @@ const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecomme
     return {correct: correctQuestionNumbers, incorrect: inCorrectQuestionNumbers}
     console.log('coord keys: ', sameCoord)
   }
-
+   
   const numbers = getRecommendationNumbers()
+  const [questionToShow, setQuestionToShow] = useState<any>() 
+
+  const showQuestionNumber = (n: string) => {
+    const questionToBeShown = questions.find((q) => q.number === n)
+    if(questionToBeShown){
+      setQuestionToShow(questionToBeShown)
+    }
+  }
+
+  const hideQuestion = () => {
+    setQuestionToShow(null)
+  }
+
   return (
-    <Stack direction={'row'}>
-      {numbers.correct.map((n) => <NumberBall key={n} number={n} numberType={'correct'}/>)}
-      {numbers.incorrect.map((n) => <NumberBall key={n} number={n} numberType={'incorrect'}/>)}
+    <Stack direction={'column'}>
+      <Stack direction={'row'}>
+        {numbers.correct.map((n) => <NumberBall key={n} number={n} numberType={'correct'} onMouseEnter={() => {showQuestionNumber(n)}} onMouseLeave={hideQuestion}/>)}
+        {numbers.incorrect.map((n) => <NumberBall key={n} number={n} numberType={'incorrect'} onMouseEnter={() => {showQuestionNumber(n)}} onMouseLeave={hideQuestion} />)}
+      </Stack>
+      <QuestionExtraInfo question={questionToShow}/>
     </Stack>
   )
 }
 
-const NumberBall = ({number, numberType}: {number: string, numberType: string}) => {
+const QuestionExtraInfo = ({question}: {question: any}) => {
+  const {t} = useTranslation()
+  if(!question){
+    return(
+      <></>
+    )
+  }
+  return (
+    
+    <Box sx={{padding: '1rem', margin: '0.5rem', borderColor: 'gray', borderWidth: '1px', borderStyle: 'solid'}}>
+      <Typography sx={{fontSize: '1.2rem'}}>{question.variants[0].question}</Typography>
+      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        {question.explanation ? question.explanation : t('question:noExtrainfo')}
+      </Typography>
+    </Box>
+    
+  )
+}
+const NumberBall = ({number, numberType, onMouseEnter, onMouseLeave}: {number: string, numberType: string, onMouseEnter: (val: any) => void, onMouseLeave: (val: any) => void}) => {
   const style = {
     display: 'flex',
     marginRight: '0.5rem',
@@ -163,13 +198,13 @@ const NumberBall = ({number, numberType}: {number: string, numberType: string}) 
   return (
     <>
       {numberType === 'correct' ? 
-        <Box sx={{...style, backgroundColor: 'lightblue'}}>
+        <Box sx={{...style, backgroundColor: 'lightblue'}} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
             {number}
           </Typography>
         </Box>
         :
-        <Box sx={{...style, backgroundColor: 'orangered'}}>
+        <Box sx={{...style, backgroundColor: 'orangered'}}onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
             {number}
           </Typography>

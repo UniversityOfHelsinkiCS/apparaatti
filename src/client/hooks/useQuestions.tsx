@@ -35,7 +35,12 @@ const useQuestions = () => {
       effects: 'org',
       id: 'study-field-select',
       type: 'studyphase',
-      variants: [] //there are no variants for this one
+      variants: [
+        {
+          name: 'default',
+          question: t('question:pickStudy')
+        }
+      ] //there are no variants for this one
     },
     {
       number: '2',
