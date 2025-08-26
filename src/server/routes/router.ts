@@ -16,7 +16,7 @@ const router = express.Router({mergeParams: true})
 router.use(express.json())
 
 if(inDevelopment){
- router.use('/debug', debugRouter)
+  router.use('/debug', debugRouter)
 }
 
 router.get('/form/1', async (_req, res) => {

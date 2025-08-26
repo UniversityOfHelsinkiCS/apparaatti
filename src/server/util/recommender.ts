@@ -3,7 +3,7 @@
 import type { CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import { challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import { isMoocCourse, challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import Organisation from '../db/models/organisation.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions.ts'
@@ -86,6 +86,7 @@ function calculateUserCoordinates(answerData: any) {
     challenge: commonCoordinateFromAnswerData(answerData['challenge'], Math.pow(10, 24), 0, null),
     independent: commonCoordinateFromAnswerData(answerData['independent'], Math.pow(10, 24), 0, null),
     flexible: commonCoordinateFromAnswerData(answerData['flexible'], Math.pow(10, 24), 0, null),
+    mooc: commonCoordinateFromAnswerData(answerData['mooc'], Math.pow(10, 24), 0, null),
   }
   return userCoordinates
 }
@@ -186,6 +187,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
   const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
+  const isMooc = isMoocCourse(course)
   
   const courseCoordinates = {
     date: course.startDate.getTime(),  
@@ -199,7 +201,8 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
     replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
     challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
     independent: isIndependent ? Math.pow(10, 24) : 0,
-    flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0
+    flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0,
+    mooc: isMooc ? Math.pow(10, 24) : 0
   }
   
   const offsetValue = sameOrganisationAsUser === true ? 0 : Math.pow(10, 12)
@@ -366,6 +369,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const comparisons = [
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
