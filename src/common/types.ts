@@ -52,6 +52,7 @@ export type UserCoordinates = {
   challenge?: number | null;
   independent?: number | null;
   flexible?: number | null;
+  mooc?: number | null;
 };
 
 export type CourseRecommendations = {
