@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails, Modal } from '@mui/material'
+import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
 import { Question } from '../../common/types'
@@ -20,7 +20,7 @@ const PreviuslyDoneLangQuestion = ({
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
   const variant = question.variants[0]
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')

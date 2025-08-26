@@ -2,8 +2,6 @@ import React from 'react'
 import {
   Box,
   FormControlLabel,
-  Modal,
-  Typography,
   Checkbox,
   FormGroup,
   FormControl,
@@ -11,7 +9,7 @@ import {
 import { green } from '@mui/material/colors'
 import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'
-import { useTranslation } from 'react-i18next'
+
 import ExtraInfoModal from './ExtraInfoModal'
 
 const PeriodQuestion = ({ question }: { question: Question }) => {

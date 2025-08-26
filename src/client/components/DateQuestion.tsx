@@ -2,10 +2,8 @@ import React from 'react'
 import {
   Box,
   FormControlLabel,
-  Modal,
   Radio,
   RadioGroup,
-  Typography,
 } from '@mui/material'
 
 import { Question } from '../../common/types'

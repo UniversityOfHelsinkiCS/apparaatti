@@ -1,4 +1,4 @@
-import { Box, Modal, Stack, Typography } from '@mui/material'
+import { Box, Modal, Typography } from '@mui/material'
 import { CourseRecommendation, UserCoordinates } from '../../common/types'
 import useQuestions from '../hooks/useQuestions'
 import { useTranslation } from 'react-i18next'

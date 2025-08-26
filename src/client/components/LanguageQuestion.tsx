@@ -3,8 +3,6 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Typography,
-  Modal,
 } from '@mui/material'
 import { Question } from '../../common/types.ts'
 import React from 'react'

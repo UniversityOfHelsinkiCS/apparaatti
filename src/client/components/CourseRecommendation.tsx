@@ -2,7 +2,7 @@ import type { CourseRecommendation as CourseRecommendationType, UserCoordinates 
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
-import useQuestions from '../hooks/useQuestions'
+
 import { useState } from 'react'
 import RecommendationReasonsModal from './RecommendationReasons'
 

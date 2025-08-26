@@ -4,7 +4,7 @@ import { Question } from '../../common/types'
 
 
 const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open: boolean, handleClose: () => void}) => {
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
   const style = {
     position: 'absolute',
     top: '50%',

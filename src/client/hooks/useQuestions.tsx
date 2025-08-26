@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 const useQuestions = () => {
 
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
   const finnishChoiceText = t('form:finnish') //{fi: 'suomi', sv: 'finska', en: 'finnish'}
   const swedishChoiceText = t('form:swedish')//{fi: 'ruotsi', sv: 'svenska', en: 'swedish'}
   const englishChoiceText = t('form:english')//{fi: 'englanti', sv: 'engelska', en: 'english'}

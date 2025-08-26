@@ -1,15 +1,15 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface LanguageContextType {
   language: string
-  setDefaultLanguage: (lang: string) => void,
-  setAppLanguage: (lang: string) => void
+  setDefaultLanguage: (_lang: string) => void,
+  setAppLanguage: (_lang: string) => void
 }
 export const LanguageContext = createContext<LanguageContextType>({
   language: '',
-  setDefaultLanguage: (lang: string) => {},
-  setAppLanguage: (lang: string) => {}
+  setDefaultLanguage: (_lang: string) => {},
+  setAppLanguage: (_lang: string) => {}
 })
 
 
@@ -24,7 +24,7 @@ function readStorage(key:string): string | null{
 
 
 export const LanguageContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const {t, i18n} = useTranslation()
+  const { i18n } = useTranslation()
   const supportedLangs: string[] = ['fi', 'sv', 'en']
   useEffect(() => {
     const localLang = readStorage('lang')

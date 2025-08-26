@@ -1,9 +1,9 @@
-import { Box, MenuItem, Select, Typography } from '@mui/material'
+import { Box, MenuItem, Select } from '@mui/material'
 import { useState } from 'react'
 import { Question, User } from '../../common/types'
 import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../util/i18n'
-import Organisation from '../../server/db/models/organisation'
+
 import QuestionTitle from './questionTitle'
 import ExtraInfoModal from './ExtraInfoModal'
 
@@ -37,7 +37,7 @@ const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations 
     return selectedField.code
   }
   const [selectedValue, setSelectedValue] = useState(startValue())
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
   const handleChange = (e) => {
     e.preventDefault()
     setSelectedValue(e.target.value)
