@@ -108,11 +108,22 @@ const CourseRecommendation = ({
 const RecommendationReasons = ({course, userCoordinates}: {course: CourseRecommendationType, userCoordinates: UserCoordinates}) => {
   const questions = useQuestions()
   const getRecommendationNumbers = () => {
-    const sameCoord = []
-    const incorrectCoord = []
+    const sameCoord: string[] = []
+    const incorrectCoord: string[] = []
     const courseCoordKeys = Object.keys(course.coordinates)
     for(const coordKey of courseCoordKeys){
       const userValue = userCoordinates[coordKey]
+      if(coordKey === 'date'){
+        const userDate = new Date(userValue)
+        const courseDate = new Date(course.coordinates[coordKey])
+        const difference = Math.abs(userDate - courseDate)
+        const daysDifference = difference / (1000 * 60 * 60 * 24)
+        if(daysDifference < 30){
+          sameCoord.push(coordKey)
+          continue
+        }
+      }
+
       if(userValue === course.coordinates[coordKey]){
         sameCoord.push(coordKey)
       }
