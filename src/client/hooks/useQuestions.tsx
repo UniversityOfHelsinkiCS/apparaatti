@@ -273,6 +273,23 @@ const useQuestions = () => {
           ],
         },
       ],
+    },
+    {
+      number: '15',
+      id: 'mooc',
+      effects: 'mooc',
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: t('form:moocQuestion'),
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+      ],
     },  
   ]
   return(questions)
