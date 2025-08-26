@@ -53,6 +53,7 @@
   },
   "course": {
     "show": "Show",
-    "credits": "cr"
+    "credits": "cr",
+    "reasons": "reasons"
   }
 }

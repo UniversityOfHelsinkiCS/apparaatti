@@ -53,6 +53,7 @@
   },
   "course": {
     "show": "Visa",
-    "credits": "kr"
+    "credits": "kr",
+    "reasons": "grundläggande"
   }
 }

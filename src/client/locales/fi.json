@@ -53,6 +53,7 @@
   },
   "course": {
     "show": "Näytä",
-    "credits": "op"
+    "credits": "op",
+    "reasons": "perusteet"
   }
 }
