@@ -18,7 +18,11 @@ export function translateLocalizedString(text: LocalizedString): string{
   if(keys.includes(currentLanguage)){
     return text[currentLanguage]
   }
-  return text.currentLanguage.en
+  //sometimes sisu course does not have an english/svedish translation so checking both and preferring english
+  const englishFallBack:string | undefined = text['en']
+  const finnishFallBack:string | undefined = text['fi']
+  
+  return englishFallBack != undefined ? englishFallBack : finnishFallBack
 }
 
 const initializeI18n = () =>
