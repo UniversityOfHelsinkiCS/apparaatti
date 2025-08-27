@@ -3,13 +3,14 @@ import { AnswerSchema } from '../../common/validators.ts'
 
 import passport from 'passport'
 import Form from '../db/models/form.ts'
-import recommendCourses, { organisationCodeToUrn } from '../util/recommender.ts'
+import recommendCourses, { getRealisationsWithCourseUnitCodes, organisationCodeToUrn } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
 import logger from '../util/logger.ts'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment } from '../util/config.ts'
+import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -39,6 +40,27 @@ router.get('/organisations/supported', async(req, res) => {
   })
   res.json(organisations)
   
+})
+
+router.get('/organisations/integrated', async(req, res) => {
+  if(!req.user){
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
+
+  const organisationsWithIntegratedStudies = []
+  const organisationCodes = Object.keys(organisationCodeToUrn)
+  for (const code of organisationCodes){
+    const organisationRecommendations =  readOrganisationRecommendationData()
+    const recommendations = getUserOrganisationRecommendations(code, organisationRecommendations)
+    const organisationCourseCodes = codesInOrganisations(recommendations)
+    const courseData = await getRealisationsWithCourseUnitCodes(organisationCourseCodes) 
+    const integratedCourses = courseData.filter((c) => courseHasCustomCodeUrn(c, 'kks-int'))
+    if(integratedCourses.length > 0){
+      organisationsWithIntegratedStudies.push(code) 
+    }
+  }
+  res.json(organisationsWithIntegratedStudies)
 })
 
 router.post('/form/1/answer', async (req, res) => {
