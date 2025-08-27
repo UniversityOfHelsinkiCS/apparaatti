@@ -1,6 +1,6 @@
 //calculates distance between user and course coordinates, assumes 3 dimensions
 
-import type { CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
+import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import { isMoocCourse, challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
@@ -32,7 +32,7 @@ const getStudyYearFromPeriod = (id: string) => {
   return ''
 }
 
-async function recommendCourses(answerData: any) {
+async function recommendCourses(answerData: AnswerData) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
 
   const recommendations = await getRecommendations(userCoordinates, answerData)
@@ -68,7 +68,7 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
   }
 }
 
-function calculateUserCoordinates(answerData: any) {
+function calculateUserCoordinates(answerData: AnswerData) {
   const periods = getRelevantPeriods(answerData['study-period'])
   // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
   const pickedPeriod = periods[0] 
@@ -171,7 +171,7 @@ function isIndependentCourse(course: CourseData){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-async function calculateCourseDistance(course: CourseData, userCoordinates: any, codes: courseCodes,  courseLanguageType: string, organisationCode:string
+async function calculateCourseDistance(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string
 ): Promise<CourseRecommendation> {
   
   const dimensions = Object.keys(userCoordinates)
@@ -226,9 +226,9 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: any,
 
 //returns a list of [{course, distance}]
 async function calculateUserDistances(
-  userCoordinates: any,
-  availableCourses: any,
-  courseCodes: any,
+  userCoordinates: UserCoordinates,
+  availableCourses: CourseData[],
+  courseCodes: courseCodes,
   courseLanguageType: string,
   organisationCode:string
 ): Promise<CourseRecommendation[]> {
@@ -241,7 +241,7 @@ async function calculateUserDistances(
 
 
 
-async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData> {
+async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData[]> {
 
   const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
@@ -299,7 +299,7 @@ function getRelevantPeriods(periodsArg: string[] | string) {
 }
 
 //Returns true if the course starts or ends within any of the picked periods
-function correctCoursePeriod(course: any, pickedPeriods: any){
+function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { start_date: string; end_date: string; }[]){
  
   const courseStart = new Date(course.course.startDate)
   const courseEnd = new Date(course.course.endDate)
@@ -397,7 +397,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
 }
 
 
-async function getRecommendations(userCoordinates: UserCoordinates, answerData): Promise<CourseRecommendations> {
+async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
   const organisationCode = answerData['study-field-select']
 
   const organisationRecommendations = readOrganisationRecommendationData()

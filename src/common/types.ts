@@ -36,11 +36,10 @@ export type Dimension = (typeof DIMENSIONS)[number]
 export type CourseRecommendation = {
   course: CourseData
   distance: number
-  coordinates: Record<string, number>
+  coordinates: CourseCoordinates
 } 
 
-
-export type UserCoordinates = {
+export type CourseCoordinates = {
   date: number;
   org: number;
   lang: number;
@@ -53,7 +52,9 @@ export type UserCoordinates = {
   independent?: number | null;
   flexible?: number | null;
   mooc?: number | null;
-};
+}
+
+export type UserCoordinates = CourseCoordinates;
 
 export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
@@ -97,3 +98,20 @@ export type CurCuRelation = {
   cuId: string
   curId: string
 }
+
+export type AnswerData = {
+  'study-period': string[] | string;
+  'graduation': string;
+  'mentoring': string;
+  'integrated': string;
+  'study-place': string;
+  'replacement': string;
+  'challenge': string;
+  'independent': string;
+  'flexible': string;
+  'mooc': string;
+  'study-field-select': string;
+  'lang-1': string;
+  'primary-language': string;
+  'primary-language-specification': string;
+};

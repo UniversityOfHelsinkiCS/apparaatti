@@ -143,10 +143,7 @@ export function courseMatches(course: CourseData, cases: CourseMatchCase[], lang
 
 
 export function getUserOrganisationRecommendations(userOrganisationCode: string, data: OrganisationRecommendation[]){ 
-  console.log(data)
-  console.log(userOrganisationCode)
   const dataOrganisations = data.filter((org) => org.name === userOrganisationCode)
-  console.log(dataOrganisations)
   return dataOrganisations
 }
 
