@@ -255,10 +255,3 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
 
     return { name, languages }
   })}
-
-export function isMoocCourse(course: CourseData) {
-  if (!course.customCodeUrns) {
-    return false
-  }
-  return Object.keys(course.customCodeUrns).includes('opintotarjonta:mooc')
-}

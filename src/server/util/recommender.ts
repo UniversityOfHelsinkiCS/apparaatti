@@ -3,7 +3,7 @@
 import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import { isMoocCourse, challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
 import Organisation from '../db/models/organisation.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions.ts'
@@ -183,11 +183,11 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
   const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
-  
+  const hasMoocCodeUrn = courseHasCustomCodeUrn(course, 'opintotarjonta:mooc')  
+
   const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
-  const isMooc = isMoocCourse(course)
   
   const courseCoordinates = {
     date: course.startDate.getTime(),  
@@ -202,7 +202,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
     independent: isIndependent ? Math.pow(10, 24) : 0,
     flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0,
-    mooc: isMooc ? Math.pow(10, 24) : 0
+    mooc: hasMoocCodeUrn ? Math.pow(10, 24) : 0
   }
   
   const offsetValue = sameOrganisationAsUser === true ? 0 : Math.pow(10, 12)
