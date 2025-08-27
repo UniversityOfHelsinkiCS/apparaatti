@@ -50,7 +50,7 @@ const PreviuslyDoneLangQuestion = ({
         <FormControlLabel
           key={yesOption.id}
           value={yesOption.id}
-          data-cy={`previously-done-lang-option-${yesOption.id}`}
+          data-cy={'previously-done-lang-option-yes'}
           control={
             <Radio
               sx={{
@@ -71,7 +71,7 @@ const PreviuslyDoneLangQuestion = ({
         <FormControlLabel
           key={noOption.id}
           value={noOption.id}
-          data-cy={`previously-done-lang-option-${noOption.id}`}
+          data-cy={'previously-done-lang-option-no'}
           control={
             <Radio
               sx={{

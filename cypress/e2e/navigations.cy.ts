@@ -33,12 +33,7 @@ describe('template spec', () => {
   it('previus experience info shows', function() {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('/');
-    cy.get('[data-cy="primary-language-option-sv"]').click();
-    cy.get('[data-cy="primary-language-option-sv"] input').check();
-    cy.get('[data-cy="lang-1-option-sv"]').click();
-    cy.get('[data-cy="lang-1-option-sv"] input').check();
-    cy.get('[data-cy="primary-language-specification-option-writtenAndSpoken"]').click();
-    cy.get('[data-cy="primary-language-specification-option-writtenAndSpoken"] input').check();
+    cy.get('[data-cy="previously-done-lang-option-yes"]').click();
     cy.contains('Katso ohjeet hyväksilukemiseen').should('be.visible')    /* ==== End Cypress Studio ==== */
   });
 })
