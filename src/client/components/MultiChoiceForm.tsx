@@ -12,6 +12,7 @@ import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification
 import useQuestions from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
+import SkippedQuestion from './SkippedQuestion.tsx'
 
 const MultiChoiceForm = ({
   onSubmit,
@@ -54,7 +55,7 @@ const MultiChoiceForm = ({
             <FormQuestion key={key} question={question} languageId={language} />
           )
         }else{
-          return
+          return <SkippedQuestion key={key} question={question}/>
         }
 
       }

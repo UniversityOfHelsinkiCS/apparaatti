@@ -39,7 +39,8 @@
     "checkInstructionsCrediting": "See instructions for crediting",
     "fromHere": "from here",
     "noExtrainfo": "No extra inforamtion",
-    "pickStudy": "Select a faculty"
+    "pickStudy": "Select a faculty",
+    "skipped": "Question skipped: no effect"
   },
   "app": {
     "logout": "Log out",

@@ -39,7 +39,8 @@
     "checkInstructionsCrediting": "Se instruktioner för kreditering",
     "fromHere": "härifrån",
     "noExtrainfo": "Ingen ytterligare information",
-    "pickStudy": "Välja en fakultet"
+    "pickStudy": "Välja en fakultet",
+    "skipped": "Fråga överhoppad: ingen effekt"
   },
   "app": {
     "logout": "Logga ut",

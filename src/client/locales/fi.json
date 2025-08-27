@@ -39,7 +39,8 @@
     "checkInstructionsCrediting": "Katso ohjeet hyväksilukemiseen",
     "fromHere": "täältä",
     "noExtrainfo": "Ei lisätietoa",
-    "pickStudy": "Valitse tiedekunta"
+    "pickStudy": "Valitse tiedekunta",
+    "skipped": "Kysymys ohitettu: ei vaikutusta"
   },
   "app": {
     "logout": "Kirjaudu ulos",
