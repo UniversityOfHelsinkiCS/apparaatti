@@ -91,7 +91,7 @@ const CourseRecommendation = ({
           <Button
             variant="contained"
             color="primary"
-            sx={{ marginTop: 1, width: '7rem' }}
+            sx={{ marginTop: 1, width: 'fit-content' }}
             onClick={() => {setShowReasons(true)}}
           >
             {t('course:reasons')}
