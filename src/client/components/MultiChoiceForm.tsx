@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, FormControl } from '@mui/material'
+import { Box, FormControl, Typography } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
@@ -11,6 +11,7 @@ import { User } from '../../common/types.ts'
 import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
 import useQuestions from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
 
 const MultiChoiceForm = ({
   onSubmit,
@@ -28,15 +29,35 @@ const MultiChoiceForm = ({
   const {t} = useTranslation()
   const [primaryLanguage, setPrimaryLanguage] = useState('')
   const [language, setLanguage] = useState('')
+  const [userOrgCode, setUserOrgCode] = useState('')
   const questions = useQuestions()
-  const renderFormQuestion = (key, question) => {
+   
+  const { data: organisationsWithIntegrated, isLoading: isIntegratedLoading } = useQuery({
+    queryKey: ['integrated'],
+    queryFn: async () => {
+      const res = await fetch('/api/organisations/integrated')
+      return res.json()
+    },
+  })
+
+  const renderFormQuestion = (key, question, additionalInfo) => {
     switch (question.type) {
     case 'studyphase':
-      return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} />
+      return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} setUserOrgCode={setUserOrgCode} />
     case 'date':
       //console.log('date')
       return <DateQuestion key={key} question={question} />
     case 'multi':
+      if(question.id === 'integrated'){
+        if(additionalInfo.organisationsWithIntegrated.includes(userOrgCode)){
+          return (
+            <FormQuestion key={key} question={question} languageId={language} />
+          )
+        }else{
+          return
+        }
+
+      }
       //console.log("multi")
       return (
         <FormQuestion key={key} question={question} languageId={language} />
@@ -84,7 +105,9 @@ const MultiChoiceForm = ({
     const formData = new FormData(ev.currentTarget)
     await onSubmit(formData)
   }
-
+  if(isIntegratedLoading){
+    return (<Typography>loading...</Typography>)
+  }
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -98,7 +121,7 @@ const MultiChoiceForm = ({
         }}
       >
         <FormControl component="fieldset">
-          {questions.map((q) => renderFormQuestion(q.id, q))}
+          {questions.map((q) => renderFormQuestion(q.id, q, {organisationsWithIntegrated}))}
         </FormControl>
         <ActionButton text={t('app:send')}/>
          

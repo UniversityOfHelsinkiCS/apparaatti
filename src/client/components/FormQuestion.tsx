@@ -18,7 +18,6 @@ const FormQuestion = ({
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-
   const pickVariant = () => {
     if (languageId === '2') {
       if (question.variants[1]) {

@@ -1,5 +1,5 @@
 import { Box, MenuItem, Select } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Question, User } from '../../common/types'
 import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../util/i18n'
@@ -7,7 +7,7 @@ import { translateLocalizedString } from '../util/i18n'
 import QuestionTitle from './questionTitle'
 import ExtraInfoModal from './ExtraInfoModal'
 
-const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations }: {question: Question, studyData: any, user: User, supportedOrganisations: any }) => {
+const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations, setUserOrgCode }: {question: Question, studyData: any, user: User, supportedOrganisations: any, setUserOrgCode: (code: string) => void }) => {
   
   console.log(user)
   const [open, setOpen] = useState(false)
@@ -42,7 +42,9 @@ const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations 
     e.preventDefault()
     setSelectedValue(e.target.value)
   }
-
+  useEffect(() => {
+    setUserOrgCode(selectedValue)
+  }, [selectedValue])
   if(!organisations){
     return (<p>no organisation found</p>)
   }

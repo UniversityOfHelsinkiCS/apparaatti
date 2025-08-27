@@ -243,6 +243,7 @@ async function calculateUserDistances(
 
 export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData[]> {
 
+
   const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
   const courseUnitIds = courseUnitsWithCodes.map((course) => course.id)
   const courseRealizationIdsWithCourseUnit = await curcusWithUnitIdOf(courseUnitIds)
