@@ -124,7 +124,7 @@ const MultiChoiceForm = ({
         <FormControl component="fieldset">
           {questions.map((q) => renderFormQuestion(q.id, q, {organisationsWithIntegrated}))}
         </FormControl>
-        <ActionButton text={t('app:send')}/>
+        <ActionButton text={t('app:send')} dataCy="submit-form"/>
          
       </Box>
     </form>

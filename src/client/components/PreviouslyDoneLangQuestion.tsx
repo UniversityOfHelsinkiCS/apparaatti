@@ -50,6 +50,7 @@ const PreviuslyDoneLangQuestion = ({
         <FormControlLabel
           key={yesOption.id}
           value={yesOption.id}
+          data-cy={`previously-done-lang-option-${yesOption.id}`}
           control={
             <Radio
               sx={{
@@ -70,6 +71,7 @@ const PreviuslyDoneLangQuestion = ({
         <FormControlLabel
           key={noOption.id}
           value={noOption.id}
+          data-cy={`previously-done-lang-option-${noOption.id}`}
           control={
             <Radio
               sx={{
@@ -90,12 +92,12 @@ const PreviuslyDoneLangQuestion = ({
       </RadioGroup>
 
       {selectedValue === yesOption.id && (
-        <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)} data-cy="previously-done-lang-accordion">
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy="previously-done-lang-accordion-summary">
             <Typography>{t('question:extrainfo')}: </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Typography>
+          <AccordionDetails data-cy="previously-done-lang-accordion-details">
+            <Typography data-cy="instructions-for-crediting">
               {t('question:checkInstructionsCrediting')} <a href=' https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1'>{t('question:fromHere')}</a>
             </Typography>
            

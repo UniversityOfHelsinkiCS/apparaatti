@@ -51,6 +51,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
               key={option.id}
               name={question.id}
               value={option.id}
+              data-cy={`${question.id}-option-${option.id}`}
               sx={{
                 '&:hover': {
                   backgroundColor: '#e0e0e0',

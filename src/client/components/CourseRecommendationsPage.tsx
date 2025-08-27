@@ -12,7 +12,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
   return (
     <Box sx={{display: display === true ? 'block' : 'none'}}>
       <Stack>
-        <ActionButton onClick={onClose} text={t('app:back')}/>
+        <ActionButton onClick={onClose} text={t('app:back')} dataCy="back-to-form"/>
         <Stack
           spacing={2}
           sx={{

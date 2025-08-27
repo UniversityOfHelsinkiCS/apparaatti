@@ -97,7 +97,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '5',
+      number: '4',
       effects: 'none',
       id: 'previusly-done-lang',
       type: 'previusly-done-lang',
@@ -113,7 +113,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '6',
+      number: '5',
       effects: 'date',
       id: 'study-period',
       type: 'period-date',
@@ -138,7 +138,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '7',
+      number: '6',
       effects: 'none',
       id: 'replacement',
       type: 'multi',
@@ -155,7 +155,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '8',
+      number: '7',
       id: 'mentoring',
       effects: 'mentoring',
       type: 'multi',
@@ -173,7 +173,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '9',
+      number: '8',
       id: 'challenge',
       effects: 'challenge',
       type: 'multi',
@@ -190,7 +190,7 @@ const useQuestions = () => {
       ],
     },  
     {
-      number: '10',
+      number: '9',
       id: 'graduation',
       type: 'multi',
 
@@ -207,7 +207,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '11',
+      number: '10',
       id: 'study-place',
       effects: 'studyPlace',
       type: 'multi',
@@ -224,7 +224,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '12',
+      number: '11',
       id: 'integrated',
       effects: 'integrated',
       type: 'multi',
@@ -241,7 +241,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '13',
+      number: '12',
       id: 'independent',
       effects: 'independent',
       type: 'multi',
@@ -258,7 +258,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '14',
+      number: '13',
       id: 'flexible',
       effects: 'flexible',
       type: 'multi',
@@ -275,7 +275,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '15',
+      number: '14',
       id: 'mooc',
       effects: 'mooc',
       type: 'multi',

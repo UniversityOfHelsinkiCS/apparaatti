@@ -41,6 +41,7 @@ const LanguageQuestion = ({
             onClick={() => handleChoice(option.id)}
             key={option.id}
             value={option.id}
+            data-cy={`${question.id}-option-${option.id}`}
             control={
               <Radio
                 sx={{

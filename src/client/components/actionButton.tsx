@@ -4,12 +4,14 @@ import { Button } from '@mui/material'
 interface actionButtonProps {
   onClick?: () => void
   text?: string
+  dataCy?: string
 }
 
 
-const ActionButton = ({onClick = () => {}, text = ''}: actionButtonProps) => {
+const ActionButton = ({onClick = () => {}, text = '', dataCy}: actionButtonProps) => {
   return (
     <Button
+      data-cy={dataCy}
       variant="outlined"
       type="submit"
       onClick={onClick}

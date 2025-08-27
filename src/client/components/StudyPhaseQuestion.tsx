@@ -63,6 +63,8 @@ const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations,
         disabled={organisations.length < 2 ? true : false} //makes drop down disabled if there is only one option to choose
         name={question.id}
         labelId="study-field-select-label"
+        id="study-field-select"
+        data-cy="study-field-select"
         value={selectedValue}
         onChange={handleChange}
       >

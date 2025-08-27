@@ -14,9 +14,9 @@ describe('template spec', () => {
   it('can navigate to results and back', function() {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('/');
-    cy.get('.css-o13ras > .MuiButton-root').click();
-    cy.get('.css-nen11g-MuiStack-root > .MuiButtonBase-root').click();
-    cy.get('#study-field-select-label').click();
+    cy.get('[data-cy=submit-form]').click();
+    cy.get('[data-cy=back-to-form]').click();
+    cy.get('[data-cy=study-field-select]').click();
     /* ==== End Cypress Studio ==== */
   });
 
@@ -33,16 +33,12 @@ describe('template spec', () => {
   it('previus experience info shows', function() {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('/');
-    cy.get('.css-1iw3t7y-MuiFormControl-root > :nth-child(2) > .MuiFormGroup-root > :nth-child(2)').click();
-    cy.get('.css-1iw3t7y-MuiFormControl-root > :nth-child(2) > .MuiFormGroup-root > :nth-child(2) > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
-    cy.get(':nth-child(3) > .MuiFormGroup-root > :nth-child(2)').click();
-    cy.get(':nth-child(3) > .MuiFormGroup-root > :nth-child(2) > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
-    cy.get(':nth-child(4) > .MuiFormGroup-root > :nth-child(1)').click();
-    cy.get(':nth-child(4) > .MuiFormGroup-root > :nth-child(1) > .MuiButtonBase-root > .PrivateSwitchBase-input').check();
-    cy.get('.MuiAccordionSummary-content > .MuiTypography-root').click();
-    cy.get('.MuiAccordionSummary-content').click();
-    cy.get('.MuiAccordionDetails-root').click();
-    cy.get('.MuiAccordionDetails-root > .MuiTypography-root').should('have.text', 'Katso ohjeet hyväksilukemiseen täältä');
-    /* ==== End Cypress Studio ==== */
+    cy.get('[data-cy="primary-language-option-sv"]').click();
+    cy.get('[data-cy="primary-language-option-sv"] input').check();
+    cy.get('[data-cy="lang-1-option-sv"]').click();
+    cy.get('[data-cy="lang-1-option-sv"] input').check();
+    cy.get('[data-cy="primary-language-specification-option-writtenAndSpoken"]').click();
+    cy.get('[data-cy="primary-language-specification-option-writtenAndSpoken"] input').check();
+    cy.contains('Katso ohjeet hyväksilukemiseen').should('be.visible')    /* ==== End Cypress Studio ==== */
   });
 })
