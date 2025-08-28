@@ -33,7 +33,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
   const variant = question.variants[0]
 
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(event.target.value)
+    console.log(event.target.value)
     if(event.target.value === 'neutral'){
       console.log('reset')
       const newState = state

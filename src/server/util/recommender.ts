@@ -75,7 +75,7 @@ function getDateFromUserInput(answerData: AnswerData){
   const periods = getRelevantPeriods(answerData['study-period'])
   const pickedPeriod = periods[0]
   return new Date(parseDate(pickedPeriod.start_date)).getTime()
- }
+}
 function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
@@ -368,8 +368,8 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
- const comparisons = [
-   (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
+  const comparisons = [
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
