@@ -16,13 +16,14 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
  
 
-  const [state, setState] = React.useState({
-    intensive_3_previous: false,
-    period_1: false,
-    period_2: false,
-    period_3: false,
-    period_4: false,
-    intensive_3: false,
+  const [state, setState] = React.useState<Record<string, boolean>>({
+    'neutral': false,
+    'intensive_3_previous': false,
+    'period_1': false,
+    'period_2': false,
+    'period_3': false,
+    'period_4': false,
+    'intensive_3': false,
   })
 
   //const [ year, setYear ] = React.useState('')
@@ -32,9 +33,27 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
   const variant = question.variants[0]
 
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked })
+      console.log(event.target.value)
+    if(event.target.value === 'neutral'){
+      console.log('reset')
+      const newState = state
+      newState['neutral'] = true
+      newState['intensive_3'] = false
+      newState['intensive_3_previous'] = false
+      newState['period_1'] = false
+      newState['period_2'] = false
+      newState['period_3'] = false
+      newState['period_4'] = false
+      setState({...newState})
+    }else{
+      const newState = state
+      newState['neutral'] = false
+      newState[event.target.value] = event.target.checked
+      setState({...newState})
+    }
   }
- 
+
+  
 
   return (
     <Box
@@ -48,6 +67,7 @@ const PeriodQuestion = ({ question }: { question: Question }) => {
         <FormGroup>
           {question.variants[0].options.map((option) => (
             <FormControlLabel
+              checked={state[option.id] as any}
               key={option.id}
               name={question.id}
               value={option.id}

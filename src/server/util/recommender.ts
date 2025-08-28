@@ -4,7 +4,7 @@ import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendation
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
-import { getStudyPeriod, parseDate } from './studyPeriods.ts'
+import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
@@ -33,7 +33,7 @@ const getStudyYearFromPeriod = (id: string) => {
 
 async function recommendCourses(answerData: AnswerData) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-
+  console.log('usercoords done')
   const recommendations = await getRecommendations(userCoordinates, answerData)
 
   return recommendations
@@ -67,14 +67,19 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
   }
 }
 
-function calculateUserCoordinates(answerData: AnswerData) {
-  const periods = getRelevantPeriods(answerData['study-period'])
-  // even tho the user might pickk multiple periods, we want to prioritize the first one since it is the closest period the user wants
-  const pickedPeriod = periods[0] 
+function readAsStringArr(variable: string[] | string): string[]{
+  return Array.isArray(variable) ? variable : [variable]
+}
 
+function getDateFromUserInput(answerData: AnswerData){
+  const periods = getRelevantPeriods(answerData['study-period'])
+  const pickedPeriod = periods[0]
+  return new Date(parseDate(pickedPeriod.start_date)).getTime()
+ }
+function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
-    date: new Date(parseDate(pickedPeriod.start_date)).getTime(),
+    date: getDateFromUserInput(answerData),
     org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
     graduation: commonCoordinateFromAnswerData(answerData['graduation'], Math.pow(10, 12), 0, null),
@@ -278,8 +283,16 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 function getRelevantPeriods(periodsArg: string[] | string) {
-  const periods = Array.isArray(periodsArg) ? periodsArg : [periodsArg]
+  const periods = readAsStringArr(periodsArg)
    
+  if(periods.includes('neutral')){
+    console.log('returning today as period')
+    const today = new Date()
+    const currentPeriod = dateObjToPeriod(today)
+    console.log(currentPeriod)
+    return currentPeriod    
+  }
+
   const pickedPeriods = periods.map((period: string) => {
     const year = getStudyYearFromPeriod(period)
     const pickedPeriod = getStudyPeriod(year, period)
@@ -351,16 +364,12 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
   }
 }
 //applies a set of filters until the list of relevant courses is of certain lenght
-function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates){
-  //the courses in relevant always must be within the same organisation
-  // const recommendationsInOrganisation = courses.filter((c) => c.coordinates.org === 0).sort((a, b) => a.distance - b.distance)
-  // console.log(recommendationsInOrganisation.length)
-  // if(recommendationsInOrganisation.length < 5){
-  //   return recommendationsInOrganisation
-  // }
+function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData){
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
-  const comparisons = [
+  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
+ const comparisons = [
+   (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
@@ -400,10 +409,9 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
 
-  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
-  const sortedCourses = distances.filter((course) => correctCoursePeriod(course, pickedPeriods)).sort((a, b) => a.distance - b.distance)
+  const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
-  const relevantRecommendations = relevantCourses(recommendations, userCoordinates)
+  const relevantRecommendations = relevantCourses(recommendations, userCoordinates, answerData)
 
   const allRecommendations= {
     relevantRecommendations: relevantRecommendations,

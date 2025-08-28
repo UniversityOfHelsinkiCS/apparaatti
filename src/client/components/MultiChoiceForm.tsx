@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Box, FormControl, Typography } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
-import DateQuestion from './DateQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
 import PeriodQuestion from './PeriodQuestion.tsx'
@@ -45,9 +44,6 @@ const MultiChoiceForm = ({
     switch (question.type) {
     case 'studyphase':
       return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} setUserOrgCode={setUserOrgCode} />
-    case 'date':
-      //console.log('date')
-      return <DateQuestion key={key} question={question} />
     case 'multi':
       if(question.id === 'integrated'){
         if(additionalInfo.organisationsWithIntegrated.includes(userOrgCode)){
