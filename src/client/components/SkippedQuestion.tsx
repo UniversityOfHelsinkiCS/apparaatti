@@ -1,9 +1,6 @@
 
 import {
   Box,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Typography,
 } from '@mui/material'
 import { Question } from '../../common/types.tsx'

@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Radio, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import { Box, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
 import { Question } from '../../common/types'
@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next'
 import ExtraInfoModal from './ExtraInfoModal'
 
 
+
+import FormOption from './FormOption'
 
 const PreviuslyDoneLangQuestion = ({
   question,
@@ -22,10 +24,11 @@ const PreviuslyDoneLangQuestion = ({
 
   const {t} = useTranslation()
   const variant = question.variants[0]
+  const neutralOption = variant.options.find((o) => o.id === 'neutral')
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')
 
-  if (!yesOption || !noOption) {
+  if (!yesOption || !noOption || !neutralOption) {
     return <p>Unknown error on question</p>
   }
 
@@ -47,47 +50,25 @@ const PreviuslyDoneLangQuestion = ({
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
       
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
-        <FormControlLabel
-          key={yesOption.id}
-          value={yesOption.id}
-          data-cy={'previously-done-lang-option-yes'}
-          control={
-            <Radio
-              sx={{
-                '&.Mui-checked': {
-                  color: '#4caf50',
-                },
-              }}
-            />
-          }
-          label={yesOption.name}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-              borderRadius: '4px',
-            },
-          }}
+        <FormOption
+          id={neutralOption.id}
+          value={neutralOption.id}
+          label={neutralOption.name}
+          dataCy={'previously-done-lang-option-neutral'}
         />
-        <FormControlLabel
-          key={noOption.id}
+
+        <FormOption
+          id={yesOption.id}
+          value={yesOption.id}
+          label={yesOption.name}
+          dataCy={'previously-done-lang-option-yes'}
+        />
+
+        <FormOption
+          id={noOption.id}
           value={noOption.id}
-          data-cy={'previously-done-lang-option-no'}
-          control={
-            <Radio
-              sx={{
-                '&.Mui-checked': {
-                  color: '#4caf50',
-                },
-              }}
-            />
-          }
           label={noOption.name}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-              borderRadius: '4px',
-            },
-          }}
+          dataCy={'previously-done-lang-option-no'}
         />
       </RadioGroup>
 
@@ -107,6 +88,9 @@ const PreviuslyDoneLangQuestion = ({
     </Box>
   )
 }
+
+
+
 
 export default PreviuslyDoneLangQuestion
 

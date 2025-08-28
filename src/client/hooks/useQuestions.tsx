@@ -106,6 +106,7 @@ const useQuestions = () => {
           name: 'default',
           question: previouslyDoneLangQuestion,
           options: [
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
