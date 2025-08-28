@@ -202,6 +202,7 @@ const useQuestions = () => {
           name: 'default',
           question: graduationQuestion,
           options: [
+            {id: 'neutral', name: neutralText},
             { id: '1', name: t('form:graduationQuestionYes')},
             { id: '0', name: t('form:graduationQuestionNo')},
           ],
