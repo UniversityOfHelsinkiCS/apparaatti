@@ -369,6 +369,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
  
   const pickedPeriods = getRelevantPeriods(answerData['study-period'])
   const comparisons = [
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
@@ -378,7 +379,6 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
   ]
   let final = noExams
   for(const comp of comparisons){
