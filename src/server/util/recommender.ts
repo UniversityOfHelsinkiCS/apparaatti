@@ -5,8 +5,7 @@ import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { getStudyPeriod, parseDate } from './studyPeriods.ts'
-import Organisation from '../db/models/organisation.ts'
-import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const d = new Date()
@@ -133,14 +132,6 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
   }
   return false
 } 
-async function organisationWithGroupIdOf(groupIds: any) {
-  return await Organisation.findAll({
-    where: {
-      id: [groupIds]
-    },
-    raw: true,
-  })
-}
 
 function courseStudyPlaceCoordinate(course: CourseData){
   // console.log('calculating the study place value for, ', course.name.fi)

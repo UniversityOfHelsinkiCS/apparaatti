@@ -2,6 +2,7 @@
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
+import Organisation from '../db/models/organisation.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -24,6 +25,15 @@ export async function curcusWithUnitIdOf(courseUnitIds: string[]) {
   return await CurCu.findAll({
     where: {
       cuId: courseUnitIds,
+    },
+    raw: true,
+  })
+}
+
+export async function organisationWithGroupIdOf(groupIds: any) {
+  return await Organisation.findAll({
+    where: {
+      id: [groupIds]
     },
     raw: true,
   })
