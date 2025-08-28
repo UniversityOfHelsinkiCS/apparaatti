@@ -12,6 +12,7 @@ export type Option = {
 export type Question = {
   id: string
   number: string
+  mandatory: boolean
   value: string
   type: string
   explanation: string

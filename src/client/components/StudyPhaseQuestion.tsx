@@ -7,6 +7,7 @@ import { translateLocalizedString } from '../util/i18n'
 import QuestionTitle from './questionTitle'
 import ExtraInfoModal from './ExtraInfoModal'
 
+
 const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations, setUserOrgCode }: {question: Question, studyData: any, user: User, supportedOrganisations: any, setUserOrgCode: (code: string) => void }) => {
   
   console.log(user)
@@ -51,7 +52,7 @@ const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations,
 
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2 }}>
-      <QuestionTitle handleOpen={handleOpen} number={question.number} title={t('question:pickStudy')}/>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={t('question:pickStudy')} question={question}/>
       <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
    
       <Select

@@ -26,7 +26,7 @@ const SkippedQuestion = ({
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question}/>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question} question={question}/>
       <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
       <Typography>{t('question:skipped')}</Typography>
     </Box>

@@ -40,7 +40,8 @@
     "fromHere": "from here",
     "noExtrainfo": "No extra inforamtion",
     "pickStudy": "Select a faculty",
-    "skipped": "Question skipped: no effect"
+    "skipped": "Question skipped: no effect",
+    "mandatory": "Mandatory"
   },
   "app": {
     "logout": "Log out",

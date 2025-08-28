@@ -32,7 +32,7 @@ const LanguageQuestion = ({
         paddingTop: 4,
       }}
     >
-      <QuestionTitle number={question.number} handleOpen={handleOpen} title={variant.question}/>
+      <QuestionTitle number={question.number} handleOpen={handleOpen} title={variant.question} question={question}/>
       <ExtraInfoModal question={question} open={open} handleClose = {handleClose}/>
 
       <RadioGroup name={question.id}>

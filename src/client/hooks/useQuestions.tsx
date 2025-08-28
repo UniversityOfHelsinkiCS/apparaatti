@@ -32,6 +32,7 @@ const useQuestions = () => {
   const questions = [
     {
       number: '1',
+      mandatory: true,
       effects: 'org',
       id: 'study-field-select',
       type: 'studyphase',
@@ -44,6 +45,7 @@ const useQuestions = () => {
     },
     {
       number: '2',
+      mandatory: true,
       effects: 'lang',
       id: 'primary-language',
       type: 'primary-language',
@@ -61,6 +63,7 @@ const useQuestions = () => {
     },
     {
       number: '3',
+      mandatory: true,
       effects: 'lang',
       id: 'lang-1',
       type: 'language',
@@ -80,6 +83,7 @@ const useQuestions = () => {
     },
     {
       number: '3.1',
+      mandatory: true,
       effects: 'lang',
       id: 'primary-language-specification',
       type: 'primary-language-specification',
@@ -99,6 +103,7 @@ const useQuestions = () => {
     {
       number: '4',
       effects: 'none',
+      mandatory: false,
       id: 'previusly-done-lang',
       type: 'previusly-done-lang',
       variants: [
@@ -115,6 +120,7 @@ const useQuestions = () => {
     },
     {
       number: '5',
+      mandatory: false,
       effects: 'date',
       id: 'study-period',
       type: 'period-date',
@@ -141,6 +147,7 @@ const useQuestions = () => {
     },
     {
       number: '6',
+      mandatory: false,
       effects: 'none',
       id: 'replacement',
       type: 'multi',
@@ -158,6 +165,7 @@ const useQuestions = () => {
     },
     {
       number: '7',
+      mandatory: false,
       id: 'mentoring',
       effects: 'mentoring',
       type: 'multi',
@@ -176,6 +184,7 @@ const useQuestions = () => {
     },
     {
       number: '8',
+      mandatory: false,
       id: 'challenge',
       effects: 'challenge',
       type: 'multi',
@@ -193,6 +202,7 @@ const useQuestions = () => {
     },  
     {
       number: '9',
+      mandatory: false,
       id: 'graduation',
       type: 'multi',
 
@@ -211,6 +221,7 @@ const useQuestions = () => {
     },
     {
       number: '10',
+      mandatory: false,
       id: 'study-place',
       effects: 'studyPlace',
       type: 'multi',
@@ -229,6 +240,7 @@ const useQuestions = () => {
     },
     {
       number: '11',
+      mandatory: false,
       id: 'integrated',
       effects: 'integrated',
       type: 'multi',
@@ -246,6 +258,7 @@ const useQuestions = () => {
     },
     {
       number: '12',
+      mandatory: false,
       id: 'independent',
       effects: 'independent',
       type: 'multi',
@@ -263,6 +276,7 @@ const useQuestions = () => {
     },
     {
       number: '13',
+      mandatory: false,
       id: 'flexible',
       effects: 'flexible',
       type: 'multi',
@@ -280,6 +294,7 @@ const useQuestions = () => {
     },
     {
       number: '14',
+      mandatory: false,
       id: 'mooc',
       effects: 'mooc',
       type: 'multi',

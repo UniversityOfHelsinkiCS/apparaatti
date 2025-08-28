@@ -29,7 +29,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
         paddingTop: 4,
       }}
     >
-      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question}/>
+      <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question} question={question}/>
       <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (

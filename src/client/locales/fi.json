@@ -40,7 +40,8 @@
     "fromHere": "täältä",
     "noExtrainfo": "Ei lisätietoa",
     "pickStudy": "Valitse tiedekunta",
-    "skipped": "Kysymys ohitettu: ei vaikutusta"
+    "skipped": "Kysymys ohitettu: ei vaikutusta",
+    "mandatory": "Pakollinen"
   },
   "app": {
     "logout": "Kirjaudu ulos",

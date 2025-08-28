@@ -40,7 +40,8 @@
     "fromHere": "härifrån",
     "noExtrainfo": "Ingen ytterligare information",
     "pickStudy": "Välja en fakultet",
-    "skipped": "Fråga överhoppad: ingen effekt"
+    "skipped": "Fråga överhoppad: ingen effekt",
+    "mandatory": "Obligatorisk"
   },
   "app": {
     "logout": "Logga ut",
