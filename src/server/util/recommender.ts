@@ -67,30 +67,38 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
   }
 }
 
+function readAnswer(answerData: AnswerData, key: string){
+  const value = answerData[key]
+  if(!value){
+    return 'neutral'
+  }
+  return value
+}
+
 function readAsStringArr(variable: string[] | string): string[]{
   return Array.isArray(variable) ? variable : [variable]
 }
 
 function getDateFromUserInput(answerData: AnswerData){
-  const periods = getRelevantPeriods(answerData['study-period'])
+  const periods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
   const pickedPeriod = periods[0]
   return new Date(parseDate(pickedPeriod.start_date)).getTime()
 }
 function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
-    //  'period': convertUserPeriodPickToFloat(answerData['study-period']),
+    //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
     date: getDateFromUserInput(answerData),
     org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
-    graduation: commonCoordinateFromAnswerData(answerData['graduation'], Math.pow(10, 12), 0, null),
-    mentoring: commonCoordinateFromAnswerData(answerData['mentoring'], Math.pow(10, 12), 0, null),
-    integrated: commonCoordinateFromAnswerData(answerData['integrated'], Math.pow(10, 12), 0, null),
-    studyPlace:  studyPlaceCoordinate(answerData['study-place']),
-    replacement: commonCoordinateFromAnswerData(answerData['replacement'], Math.pow(10, 24), 0, null),
-    challenge: commonCoordinateFromAnswerData(answerData['challenge'], Math.pow(10, 24), 0, null),
-    independent: commonCoordinateFromAnswerData(answerData['independent'], Math.pow(10, 24), 0, null),
-    flexible: commonCoordinateFromAnswerData(answerData['flexible'], Math.pow(10, 24), 0, null),
-    mooc: commonCoordinateFromAnswerData(answerData['mooc'], Math.pow(10, 24), 0, null),
+    graduation: commonCoordinateFromAnswerData(readAnswer(answerData, 'graduation'), Math.pow(10, 12), 0, null),
+    mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
+    integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), Math.pow(10, 12), 0, null),
+    studyPlace:  studyPlaceCoordinate(readAnswer(answerData, 'study-place')),
+    replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), Math.pow(10, 24), 0, null),
+    challenge: commonCoordinateFromAnswerData(readAnswer(answerData, 'challenge'), Math.pow(10, 24), 0, null),
+    independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), Math.pow(10, 24), 0, null),
+    flexible: commonCoordinateFromAnswerData(readAnswer(answerData, 'flexible'), Math.pow(10, 24), 0, null),
+    mooc: commonCoordinateFromAnswerData(readAnswer(answerData, 'mooc'), Math.pow(10, 24), 0, null),
   }
   return userCoordinates
 }
@@ -367,7 +375,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
 function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData){
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
-  const pickedPeriods = getRelevantPeriods(answerData['study-period'])
+  const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
   const comparisons = [
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
@@ -399,14 +407,14 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
 
 
 async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
-  const organisationCode = answerData['study-field-select']
+  const organisationCode = readAnswer(answerData, 'study-field-select')
 
   const organisationRecommendations = readOrganisationRecommendationData()
-  const courseCodes = getCourseCodes(answerData['lang-1'], answerData['primary-language'], answerData['primary-language-specification'], organisationRecommendations, organisationCode)
+  const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 
-  const courseLanguageType = languageToStudy(answerData['lang-1'], answerData['primary-language'])
+  const courseLanguageType = languageToStudy(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'))
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
