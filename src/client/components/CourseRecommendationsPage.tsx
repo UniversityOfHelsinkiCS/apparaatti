@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
 import { useTranslation } from 'react-i18next'
