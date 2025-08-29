@@ -472,10 +472,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     }
 
     return {...c, points}
- })
+  })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
-  console.log("count after new filtering: ", filtered.length)
+  console.log('count after new filtering: ', filtered.length)
   const sorted = filtered.sort((a, b) => b.points - a.points)
   return filtered
 }
