@@ -6,7 +6,19 @@ export default defineConfig({
   e2e: {
    baseUrl: 'http://localhost:3000',
    setupNodeEvents(on, config) {
-      // implement node event listeners here
+      on('task', {
+        log(message: string) {
+          console.log('[CYPRESS LOG]:', message);
+          return null;
+        },
+        // You can add more tasks here
+        error(message: string) {
+          console.error('[CYPRESS ERROR]:', message);
+          return null;
+        }
+      });
+
+      return config;
     },
   },
 });
