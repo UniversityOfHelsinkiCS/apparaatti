@@ -31,11 +31,11 @@ const getStudyYearFromPeriod = (id: string) => {
 
 async function recommendCourses(answerData: AnswerData) {
   try{
-  const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-  console.log('usercoords done')
-  const recommendations = await getRecommendations(userCoordinates, answerData)
+    const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
+    console.log('usercoords done')
+    const recommendations = await getRecommendations(userCoordinates, answerData)
 
-  return recommendations
+    return recommendations
   }
   catch(e)
   {
