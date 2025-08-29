@@ -405,13 +405,13 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
 //each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
 //In this point based one a difference does not punish as much as it gets 'ignored'
-function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): PointsCourseRecommendation[]{
+function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): CourseRecommendation[]{
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
   const comparisons = [
     {
-      filterOnFail: true, 
+      filterOnFail: false, 
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
@@ -455,8 +455,8 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace}
     },
   ]
-
-  const recommendationWithPoints = courses.map((c) => {
+  console.log('count before: ', noExams.length)
+  const recommendationWithPoints = noExams.map((c) => {
     let points = 0 
 
     for(const comp of comparisons){
@@ -466,15 +466,17 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       }
       else{
         if(comp.filterOnFail){
-          return {c, points: -1}
+          return {...c, points: -1}
         }
       }
     }
-    return {c, points}
-  })
+
+    return {...c, points}
+ })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
-  const sorted = filtered.sort((a, b) => a.points - b.points)
+  console.log("count after new filtering: ", filtered.length)
+  const sorted = filtered.sort((a, b) => b.points - a.points)
   return filtered
 }
 

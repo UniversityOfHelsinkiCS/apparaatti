@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
   const {t} = useTranslation()
   const relevant: CourseRecommendationType[] = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
+  const points: PointsCourseRecommendation[] = recommendations?.pointBasedRecommendations != null ? recommendations.pointBasedRecommendations : []
   const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
 
   return (
@@ -23,6 +24,8 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
           }}
         >
           <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
+          <Typography>pisteperusteinen: </Typography>
+          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={points}/>
 
           <CourseListing  userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         

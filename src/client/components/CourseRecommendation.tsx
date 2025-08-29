@@ -19,6 +19,7 @@ const CourseRecommendation = ({
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
   const [showReasons, setShowReasons] = useState(false)
+  const points = course.points
   const creditString:() => string = () => {
     if(!course.course.credits){
       return ''
@@ -76,7 +77,6 @@ const CourseRecommendation = ({
             >
               {creditString()} {t('course:credits')}
             </Typography>
-
             <Typography
               sx={{ marginRight: 'auto' }}
               variant="body2"
@@ -88,6 +88,7 @@ const CourseRecommendation = ({
 
             <Typography>{courseDateRange(course.course)}</Typography>
           </Stack>
+          {points ? <Typography>tarkkuuspisteet: {points} / 12</Typography> : <></>}
           <Button
             variant="contained"
             color="primary"
@@ -99,7 +100,7 @@ const CourseRecommendation = ({
 
           <RecommendationReasonsModal userCoordinates={userCoordinates} recommendation={course} open={showReasons} handleClose={() => {setShowReasons(false)}}/>
         </Stack>
-
+        
         <Button
           variant="contained"
           color="primary"
