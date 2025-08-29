@@ -40,6 +40,12 @@ export type CourseRecommendation = {
   coordinates: CourseCoordinates
 } 
 
+
+export type PointsCourseRecommendation = {
+  c: CourseRecommendation
+  points: number
+} 
+
 export type CourseCoordinates = {
   date: number;
   org: number;
@@ -61,6 +67,7 @@ export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
   userCoordinates: UserCoordinates  
+  pointBasedRecommendations: PointsCourseRecommendation[]
 }
 //this is a combination of a course realisation and course unit
 export type CourseData = {

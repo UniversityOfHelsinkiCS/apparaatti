@@ -1,6 +1,4 @@
-//calculates distance between user and course coordinates, assumes 3 dimensions
-
-import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
+import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
@@ -84,6 +82,7 @@ function getDateFromUserInput(answerData: AnswerData){
   const pickedPeriod = periods[0]
   return new Date(parseDate(pickedPeriod.start_date)).getTime()
 }
+
 function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
@@ -383,7 +382,7 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => { return c.coordinates.independent === userCoordinates.independent},
+    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.independent === userCoordinates.independent},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
     (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
@@ -401,10 +400,83 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
   }
   
   return final
-  
-
 }
+//returns a list of courses that are ordered/filtered based on a point based method
+//each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
+//this is different from the distance based sorting where two opposing coordinates seem to counter each other.
+//In this point based one a difference does not punish as much as it gets 'ignored'
+function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): PointsCourseRecommendation[]{
+  const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
+ 
+  const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
+  const comparisons = [
+    {
+      filterOnFail: true, 
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
+    },
+    {
+      fillterOnFail: true,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)}
+    },
+    {
+      filterOnFail: true,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.lang === userCoordinates.lang}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.independent === userCoordinates.independent}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace}
+    },
+  ]
 
+  const recommendationWithPoints = courses.map((c) => {
+    let points = 0 
+
+    for(const comp of comparisons){
+      const comparison = comp.f(c, userCoordinates)
+      if(comparison){
+        points++
+      }
+      else{
+        if(comp.filterOnFail){
+          return {c, points: -1}
+        }
+      }
+    }
+    return {c, points}
+ })
+
+  const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
+  const sorted = filtered.sort((a, b) => a.points - b.points)
+  return filtered
+}
 
 async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
   const organisationCode = readAnswer(answerData, 'study-field-select')
@@ -420,11 +492,12 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
   const relevantRecommendations = relevantCourses(recommendations, userCoordinates, answerData)
-
-  const allRecommendations= {
+  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, answerData)
+  const allRecommendations = {
     relevantRecommendations: relevantRecommendations,
     recommendations: recommendations,
-    userCoordinates: userCoordinates
+    userCoordinates: userCoordinates,
+    pointBasedRecommendations: pointBasedRecommendations
   }
   
   return allRecommendations
