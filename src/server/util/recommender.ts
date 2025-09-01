@@ -492,6 +492,9 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const organisationRecommendations = readOrganisationRecommendationData()
   const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
 
+  console.log('course codes: ')
+  console.log(courseCodes.languageSpesific)
+
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 
   const courseLanguageType = languageToStudy(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'))

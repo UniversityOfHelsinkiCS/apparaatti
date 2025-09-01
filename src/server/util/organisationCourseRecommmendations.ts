@@ -275,12 +275,12 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
     return { codes, languages }
   })
 
-  const codeAndLanguages = []
+  const codeAndLanguages: OrganisationRecommendation[] = []
   for(const entry of codesWithLanguages){
     for(const code of entry.codes){
-      codeAndLanguages.push({code, languages: entry.languages})
+      codeAndLanguages.push({name: code, languages: entry.languages})
     }
   }
-  console.log(codeAndLanguages)
+  // console.log(codeAndLanguages)
   return codeAndLanguages
 }
