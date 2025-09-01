@@ -220,6 +220,24 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
 
 
 
+export const organisationCodeToName: Record<string, string> = {
+  'H50': 'Matemaattis-luonnontieteellinen',
+  'H20': 'Oikeustieteellinen',
+  'H10': 'Teologinen',
+  'H74': 'Svenska social- och kommunalhögskolan',
+  'H70': 'Valtiotieteellinen', //kkt-val -> valtiotieteel. might be confused with kks-val -> valmistuville, graduation,
+  'H90': 'Eläinlääketieteellinen',
+  'H60': 'Kasvatustieteellinen', //kasvatustieteel.
+  'H57': 'Bio- ja ympäristö',
+  'H80': 'Maatalous-metsä', //maa metsa
+  '4141': 'soveltava psykologia', //soveltava spykologia
+  'H305': 'hammaslääke',
+  'H30': 'lääketiede',
+  'H3456': 'logopedia', //logopedia seems to have multiple entries in organisations with the same name
+  '414': 'psykologia',
+  'H55': 'Farmasia'
+ 
+}
 
 export function readOrganisationRecommendationData(): OrganisationRecommendation[] {
   const filePath = path.resolve(
@@ -237,14 +255,15 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
   
   const dataRows = data.slice(1)
   
-  return dataRows.map((row: string[]) => {
+  const codesWithLanguages =  dataRows.map((row: string[]) => {
     const name = row[0]
-    
+
+    const codes = Object.keys(organisationCodeToName).filter(key => name.includes(organisationCodeToName[key]))    
+
     const languages: Language[] = []
     
     for (let i = 1; i < headers.length; i++) {
       const langName = headers[i]
-      
       const codesRaw = row[i]
       
       if (codesRaw && codesRaw.trim()) {
@@ -252,6 +271,16 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
         languages.push({ name: langName, codes })
       }
     }
+    
+    return { codes, languages }
+  })
 
-    return { name, languages }
-  })}
+  const codeAndLanguages = []
+  for(const entry of codesWithLanguages){
+    for(const code of entry.codes){
+      codeAndLanguages.push({code, languages: entry.languages})
+    }
+  }
+  console.log(codeAndLanguages)
+  return codeAndLanguages
+}
