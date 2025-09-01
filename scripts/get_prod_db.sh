@@ -51,7 +51,7 @@ mkdir -p ${BACKUPS}
 
 echo "Fetching a new dump"
 get_username
-scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
+# scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
 
 #for sending a file to server:
 # echo "sending a dump to storage"

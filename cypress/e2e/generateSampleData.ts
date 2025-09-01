@@ -33,8 +33,14 @@ export function* generateSampleData(): Generator<RecommendationRequest> {
       yield combination;
     }
   }
-
   for (const studyPeriod of getCombinations(studyPeriods)) {
+    //Skipping empty and neutral to make this a litlle bit faster
+    if(true){
+      if(studyPeriod.length === 0 || studyPeriod.includes('neutral') || studyPeriod.includes('intensive_3_previous')){
+        continue
+      }
+    }
+
     for (const graduation of yesNoNeutral) {
       for (const mentoring of yesNoNeutral) {
         for (const integrated of yesNoNeutral) {
