@@ -52,7 +52,8 @@
   },
   "recommendations": {
     "accurate": "The most accurate recommendations:",
-    "all": "all recommendations (accuracy may vary):"
+    "all": "all recommendations (accuracy may vary):",
+    "pointbased": "Point-based recommendations"
   },
   "course": {
     "show": "Show",

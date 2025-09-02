@@ -52,7 +52,8 @@
   },
   "recommendations": {
     "accurate": "De mest exakta rekommendationerna:",
-    "all": "alla rekommendationer (noggrannheten kan variera):"
+    "all": "alla rekommendationer (noggrannheten kan variera):",
+    "pointbased": "Poängbaserade rekommendationer"
   },
   "course": {
     "show": "Visa",

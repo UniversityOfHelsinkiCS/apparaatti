@@ -52,7 +52,8 @@
   },
   "recommendations": {
     "accurate": "Tarkimmat suositukset:",
-    "all": "Kaikki suositukset (tarkuus voi vaihdella):"
+    "all": "Kaikki suositukset (tarkuus voi vaihdella):",
+    "pointbased": "Pistepohjaiset suositukset"
   },
   "course": {
     "show": "Näytä",

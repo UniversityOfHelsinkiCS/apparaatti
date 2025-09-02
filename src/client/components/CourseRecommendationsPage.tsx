@@ -24,8 +24,8 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
           }}
         >
           <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
-          <Typography>pisteperusteinen: </Typography>
-          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={points}/>
+
+          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:pointbased')} defaultExpanded={true} courses={points}/>
 
           <CourseListing  userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         
