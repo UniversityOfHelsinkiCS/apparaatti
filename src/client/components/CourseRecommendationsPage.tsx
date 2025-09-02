@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation, CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
   const {t} = useTranslation()
   const relevant: CourseRecommendationType[] = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
-  const points: CourseRecommendation[] = recommendations?.pointBasedRecommendations != null ? recommendations.pointBasedRecommendations : []
+  const points: CourseRecommendationType[] = recommendations?.pointBasedRecommendations != null ? recommendations.pointBasedRecommendations : []
   const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
 
   return (
