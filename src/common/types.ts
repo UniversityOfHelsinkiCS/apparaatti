@@ -67,7 +67,7 @@ export type CourseRecommendations = {
 }
 
 export type Period = {
-  name: String
+  name: string
   startDate: Date
   endDate: Date
 }

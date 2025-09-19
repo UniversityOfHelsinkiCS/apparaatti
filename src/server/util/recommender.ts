@@ -296,23 +296,23 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
 
 const getPeriodForCourse = (cur) => {
     
-    const studyPeriods = dateObjToPeriod(cur.startDate) 
+  const studyPeriods = dateObjToPeriod(cur.startDate) 
 
-    const studyPeriod = studyPeriods[0]
-    if(!studyPeriod){
-      console.log("no period found!")
-      console.log(cur)
-      console.log(studyPeriods)
-      dateObjToPeriod(cur.startDate, true)
-      return null
-    }
+  const studyPeriod = studyPeriods[0]
+  if(!studyPeriod){
+    console.log('no period found!')
+    console.log(cur)
+    console.log(studyPeriods)
+    dateObjToPeriod(cur.startDate, true)
+    return null
+  }
 
-    const period: Period = {
-      name: studyPeriod.name,
-      startDate: parseDate(studyPeriod.start_date),
-      endDate: parseDate(studyPeriod.end_date)
-    }
-    return period
+  const period: Period = {
+    name: studyPeriod.name,
+    startDate: parseDate(studyPeriod.start_date),
+    endDate: parseDate(studyPeriod.end_date)
+  }
+  return period
 }
 
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
