@@ -272,10 +272,12 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
       }
     })
 
+
   const courseRealisationsWithCodes: CourseData[] = courseRealisationsWithCourseUnits.map(
     (cur) => {
       return {
         ...cur,
+        period: getPeriodForCourse(cur),
         courseCodes: uniqueVals(courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
           .map((cu) => cu.courseCode)),
@@ -292,6 +294,26 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
   return courseRealisationsWithCodes
 }
 
+const getPeriodForCourse = (cur) => {
+    
+    const studyPeriods = dateObjToPeriod(cur.startDate) 
+
+    const studyPeriod = studyPeriods[0]
+    if(!studyPeriod){
+      console.log("no period found!")
+      console.log(cur)
+      console.log(studyPeriods)
+      dateObjToPeriod(cur.startDate, true)
+      return null
+    }
+
+    const period: Period = {
+      name: studyPeriod.name,
+      startDate: parseDate(studyPeriod.start_date),
+      endDate: parseDate(studyPeriod.end_date)
+    }
+    return period
+}
 
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]

@@ -65,12 +65,20 @@ export type CourseRecommendations = {
   userCoordinates: UserCoordinates  
   pointBasedRecommendations: CourseRecommendation[]
 }
+
+export type Period = {
+  name: String
+  startDate: Date
+  endDate: Date
+}
+
 //this is a combination of a course realisation and course unit
 export type CourseData = {
   id: string
   name: LocalizedString
   startDate: Date
   endDate: Date
+  period: null | Period
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
   courseCodes: string[]

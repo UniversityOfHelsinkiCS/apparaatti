@@ -1,9 +1,16 @@
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
-export const dateIsInPeriod = (date: Date, period) => {
-  const start = parseDate(period.start_date)
-  const end = parseDate(period.end_date)
-  return date >= start && date <= end
+export const dateIsInPeriod = (date: Date, period, debug=false) => {
+  const compare = dateAtMidnight(date)
+  const start = dateAtMidnight(parseDate(period.start_date))
+  const end = dateAtMidnight(parseDate(period.end_date))
+  const comparison = date >= start && date <= end
+  return compare >= start && compare <= end
+}
+
+
+const dateAtMidnight = (date: Date) => {
+  return date.setUTCHours(0, 0, 0, 0)
 }
 
 const correctedPeriod = (period: string) => {
@@ -40,11 +47,11 @@ export const dateToPeriod = (date: string) => {
   return hits
 }
 
-export const dateObjToPeriod = (dateObj: Date) => {
+export const dateObjToPeriod = (dateObj: Date, debug=false) => {
   const hits = []
   studyPeriods.years.forEach((year) => {
     year.periods.forEach((period) => {
-      if (dateIsInPeriod(dateObj, period)) {
+      if (dateIsInPeriod(dateObj, period, debug)) {
         hits.push(period)
       }
     })
