@@ -318,6 +318,8 @@ const getPeriodForCourse = (cur) => {
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 function getRelevantPeriods(periodsArg: string[] | string) {
+  console.log("PERIOD DEBUG")
+  console.log(periodsArg)
   const periods = readAsStringArr(periodsArg)
    
   if(periods.includes('neutral')){
@@ -333,7 +335,8 @@ function getRelevantPeriods(periodsArg: string[] | string) {
     const pickedPeriod = getStudyPeriod(year, period)
     return pickedPeriod
   })
-
+  console.log(pickedPeriods)
+  console.log("PERIOD DEBUG")
  
   return pickedPeriods
 }
