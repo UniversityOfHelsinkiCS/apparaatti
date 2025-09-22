@@ -339,8 +339,8 @@ function getRelevantPeriods(periodsArg: string[] | string) {
 }
 
 //Returns true if the course starts or ends within any of the picked periods
-function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { start_date: string; end_date: string; }[]){
- 
+function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { start_date: string; end_date: string; }[]): boolean
+{
   const courseStart = new Date(course.course.startDate)
   const courseEnd = new Date(course.course.endDate)
   for (const period of pickedPeriods) {
@@ -357,7 +357,6 @@ function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { star
     
   }
   return false
-  
 } 
 
 /**
@@ -437,14 +436,24 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-  const comparisons = [
+
+  console.log("---DEBUG---")
+  console.log(pickedPeriods)
+  console.log("------")
+
+  type ComparisonType = {
+    filterOnFail: boolean,
+    f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
+  }
+
+  const comparisons: ComparisonType[] = [
     {
       filterOnFail: false, 
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
-      fillterOnFail: true,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)}
+      filterOnFail: true,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
     },
     {
       filterOnFail: true,
@@ -484,16 +493,29 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
   ]
   console.log('count before: ', noExams.length)
+  console.log(comparisons)
+  console.log("DEBUG")
+  for(const comp of comparisons){
+    console.log(comp.filterOnFail)
+  }
+  console.log("---")
+  
   const recommendationWithPoints = noExams.map((c) => {
     let points = 0 
 
     for(const comp of comparisons){
       const comparison = comp.f(c, userCoordinates)
+      console.log("comparison")
+      console.log(comparison)
       if(comparison){
         points++
       }
       else{
-        if(comp.filterOnFail){
+        console.log("filter didnt hit")
+        console.log(comp)
+        console.log(comp.filterOnFail)
+        if(comp.filterOnFail === true){
+          console.log("removed recommendation due to filter option")
           return {...c, points: -1}
         }
       }

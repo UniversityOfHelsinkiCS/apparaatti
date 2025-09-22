@@ -23,7 +23,6 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
             paddingBottom: 10,
           }}
         >
-          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={relevant}/>
 
           <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:pointbased')} defaultExpanded={true} courses={points}/>
 
@@ -37,6 +36,12 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
 }
 const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
 
+  const coursesByPeriod: Record<string, CourseRecommendationType[]> = {
+    '1': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_1'),
+    '2': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_2'),
+    '3': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_3'),
+    '4': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_4')
+  }
   return (
     
     <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'lightgray'}}>
@@ -47,10 +52,22 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
         <Typography>{titleText}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {courses.map((course) => (
+         <Typography>1</Typography>
+        {coursesByPeriod['1'].map((course) => (
           <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}
-      </AccordionDetails>
+         <Typography>2</Typography>
+         {coursesByPeriod['2'].map((course) => (
+          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
+        ))}
+         <Typography>3</Typography>
+         {coursesByPeriod['3'].map((course) => (
+          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
+        ))}
+         <Typography>4</Typography>
+         {coursesByPeriod['4'].map((course) => (
+          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
+        ))}      </AccordionDetails>
     </Accordion>
 
   )
