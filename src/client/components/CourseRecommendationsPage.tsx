@@ -52,20 +52,20 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
         <Typography>{titleText}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-         <Typography>1</Typography>
+        <Typography>1</Typography>
         {coursesByPeriod['1'].map((course) => (
           <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}
-         <Typography>2</Typography>
-         {coursesByPeriod['2'].map((course) => (
+        <Typography>2</Typography>
+        {coursesByPeriod['2'].map((course) => (
           <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}
-         <Typography>3</Typography>
-         {coursesByPeriod['3'].map((course) => (
+        <Typography>3</Typography>
+        {coursesByPeriod['3'].map((course) => (
           <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}
-         <Typography>4</Typography>
-         {coursesByPeriod['4'].map((course) => (
+        <Typography>4</Typography>
+        {coursesByPeriod['4'].map((course) => (
           <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
         ))}      </AccordionDetails>
     </Accordion>

@@ -437,9 +437,9 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
 
-  console.log("---DEBUG---")
+  console.log('---DEBUG---')
   console.log(pickedPeriods)
-  console.log("------")
+  console.log('------')
 
   type ComparisonType = {
     filterOnFail: boolean,
@@ -494,28 +494,28 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   ]
   console.log('count before: ', noExams.length)
   console.log(comparisons)
-  console.log("DEBUG")
+  console.log('DEBUG')
   for(const comp of comparisons){
     console.log(comp.filterOnFail)
   }
-  console.log("---")
+  console.log('---')
   
   const recommendationWithPoints = noExams.map((c) => {
     let points = 0 
 
     for(const comp of comparisons){
       const comparison = comp.f(c, userCoordinates)
-      console.log("comparison")
+      console.log('comparison')
       console.log(comparison)
       if(comparison){
         points++
       }
       else{
-        console.log("filter didnt hit")
+        console.log('filter didnt hit')
         console.log(comp)
         console.log(comp.filterOnFail)
         if(comp.filterOnFail === true){
-          console.log("removed recommendation due to filter option")
+          console.log('removed recommendation due to filter option')
           return {...c, points: -1}
         }
       }
