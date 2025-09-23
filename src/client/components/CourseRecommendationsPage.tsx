@@ -49,8 +49,8 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
     '2':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_2'), name: '2. ' + periodText},
     '3':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_3'), name: '3. ' + periodText},
     '4':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_4'), name: '4. ' + periodText},
-    '5':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_5'), name: summerText + ' 2026'},
-     }
+    '5':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'intensive_3'), name: summerText + ' 2026'},
+  }
   return (
     
     <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'lightgray'}}>
@@ -61,10 +61,10 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
         <Typography>{titleText}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-      {  Object.keys(coursesByPeriod).map((k) =>
-         <CoursesInAccordion key={k} userCoordinates={userCoordinates} defaultExpanded={false} courses={coursesByPeriod[k].courses} titleText={coursesByPeriod[k].name}></CoursesInAccordion>)}
+        {  Object.keys(coursesByPeriod).map((k) =>
+          <CoursesInAccordion key={k} userCoordinates={userCoordinates} defaultExpanded={false} courses={coursesByPeriod[k].courses} titleText={coursesByPeriod[k].name}></CoursesInAccordion>)}
 
-       </AccordionDetails>
+      </AccordionDetails>
     </Accordion>
 
   )

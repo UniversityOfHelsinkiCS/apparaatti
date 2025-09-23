@@ -299,17 +299,22 @@ const getPeriodForCourse = (cur) => {
   return period
 }
 
+const getPeriodsWantedByUser = (periodsArg) => {
+  
+  console.log('!!!!PERIOD DEBUG')
+  const periods = readAsStringArr(periodsArg)
+
+  if(periods.includes('neutral') || periods.length === 0){
+    return ['intensive_3_previous', 'period_1', 'period_2', 'period_3', 'period_4', 'intensive_3']     
+  }
+  return periods
+}
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 function getRelevantPeriods(periodsArg: string[] | string) {
-  console.log('!!!!PERIOD DEBUG')
-  const periods = readAsStringArr(periodsArg)
-  
-  if(periods.includes('neutral')){
-    return currentPeriod    
-  }
+   const periods = getPeriodsWantedByUser(periodsArg)
 
-  const pickedPeriods = periods.map((period: string) => {
+   const pickedPeriods = periods.map((period: string) => {
     const startYearOfPeriod = getStudyYearFromPeriod(period)
     const pickedPeriod = getStudyPeriod(startYearOfPeriod, period)
     return pickedPeriod
@@ -427,6 +432,8 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     filterOnFail: boolean,
     f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
   }
+
+  
 
   const comparisons: ComparisonType[] = [
     {
