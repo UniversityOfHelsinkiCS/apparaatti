@@ -24,7 +24,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
           }}
         >
 
-          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:pointbased')} defaultExpanded={true} courses={points}/>
+          <CourseListing userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:accurate')} defaultExpanded={true} courses={points}/>
 
           <CourseListing  userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         
@@ -34,14 +34,23 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
     </Box>
   )
 }
-const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
 
-  const coursesByPeriod: Record<string, CourseRecommendationType[]> = {
-    '1': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_1'),
-    '2': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_2'),
-    '3': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_3'),
-    '4': courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_4')
+const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
+  const {t} = useTranslation()
+  const summerText = t('form:summer')
+  const periodText = t('form:period')
+  type periodCourses = {
+    courses: CourseRecommendationType[]
+    name: string 
   }
+  const coursesByPeriod: Record<string,periodCourses> = {
+    '0': {courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'intensive_3_previous'), name: summerText + '2025'},
+    '1':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_1'), name: '1. ' + periodText},
+    '2':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_2'), name: '2. ' + periodText},
+    '3':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_3'), name: '3. ' + periodText},
+    '4':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_4'), name: '4. ' + periodText},
+    '5':{courses: courses.filter((c: CourseRecommendationType)=> c.course.period?.name === 'period_5'), name: summerText + ' 2026'},
+     }
   return (
     
     <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'lightgray'}}>
@@ -52,25 +61,33 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
         <Typography>{titleText}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>1</Typography>
-        {coursesByPeriod['1'].map((course) => (
-          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
-        ))}
-        <Typography>2</Typography>
-        {coursesByPeriod['2'].map((course) => (
-          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
-        ))}
-        <Typography>3</Typography>
-        {coursesByPeriod['3'].map((course) => (
-          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
-        ))}
-        <Typography>4</Typography>
-        {coursesByPeriod['4'].map((course) => (
-          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
-        ))}      </AccordionDetails>
+      {  Object.keys(coursesByPeriod).map((k) =>
+         <CoursesInAccordion key={k} userCoordinates={userCoordinates} defaultExpanded={false} courses={coursesByPeriod[k].courses} titleText={coursesByPeriod[k].name}></CoursesInAccordion>)}
+
+       </AccordionDetails>
     </Accordion>
 
   )
 }
 
+
+const CoursesInAccordion = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
+  return (
+    
+    <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'white'}}>
+      <AccordionSummary
+        aria-controls="panel1-content"
+        id="panel1-header"
+      >
+        <Typography>{titleText}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {courses.map((course) => (
+          <CourseRecommendation userCoordinates={userCoordinates} key={course.course.id} course={course} />
+        ))}
+      </AccordionDetails>
+    </Accordion>
+
+  )
+}
 export default CourseRecommendationsPage
