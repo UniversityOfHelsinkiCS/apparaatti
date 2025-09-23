@@ -434,7 +434,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
-      filterOnFail: true,
+      filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
     },
     {
