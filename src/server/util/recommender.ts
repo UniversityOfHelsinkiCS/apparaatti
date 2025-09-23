@@ -6,27 +6,11 @@ import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
-  const d = new Date()
-  //const d = new Date("December 21, 2025 01:15:00")
-  const y = d.getFullYear()
-  const m = d.getMonth() + 1
-
-  if (m < 9) {
-    //kevät (jan-aug)  //voi alka jo elokuun lopulla
-    if (id === 'intensive_3_previous') {
-      return String(y - 1)
-    } else {
-      return String(y)
-    }
-  } else if (m > 8 && m < 13) {
-    //syksy (sep-dec)
-    if (id === 'intensive_3_previous') {
-      return String(y)
-    } else {
-      return String(y + 1)
-    }
-  }
-  return ''
+  const today = new Date()
+  const currentPeriod = dateObjToPeriod(today)[0]
+  const currentPeriodDate = parseDate(currentPeriod['start_date'])
+  const currentStudyYearStart = currentPeriodDate.getFullYear()
+  return currentStudyYearStart.toString()
 }
 
 async function recommendCourses(answerData: AnswerData) {
@@ -318,25 +302,20 @@ const getPeriodForCourse = (cur) => {
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 function getRelevantPeriods(periodsArg: string[] | string) {
-  console.log('PERIOD DEBUG')
-  console.log(periodsArg)
+  console.log('!!!!PERIOD DEBUG')
   const periods = readAsStringArr(periodsArg)
-   
+  
   if(periods.includes('neutral')){
-    console.log('returning today as period')
-    const today = new Date()
-    const currentPeriod = dateObjToPeriod(today)
-    console.log(currentPeriod)
     return currentPeriod    
   }
 
   const pickedPeriods = periods.map((period: string) => {
-    const year = getStudyYearFromPeriod(period)
-    const pickedPeriod = getStudyPeriod(year, period)
+    const startYearOfPeriod = getStudyYearFromPeriod(period)
+    const pickedPeriod = getStudyPeriod(startYearOfPeriod, period)
     return pickedPeriod
   })
   console.log(pickedPeriods)
-  console.log('PERIOD DEBUG')
+  console.log('END PERIOD DEBUG')
  
   return pickedPeriods
 }
