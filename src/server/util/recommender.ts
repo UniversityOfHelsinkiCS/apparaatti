@@ -300,14 +300,10 @@ const getPeriodForCourse = (cur) => {
 }
 
 const getPeriodsWantedByUser = (periodsArg) => {
-  
-  console.log('!!!!PERIOD DEBUG')
   const periods = readAsStringArr(periodsArg)
-  console.log(periods)
   if(periods.includes('neutral') || periods.length === 0){
     return ['intensive_3_previous', 'period_1', 'period_2', 'period_3', 'period_4', 'intensive_3']     
   }
-  console.log('FILTER IS ON')
   return periods
 }
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
@@ -320,8 +316,6 @@ function getRelevantPeriods(periodsArg: string[] | string) {
     const pickedPeriod = getStudyPeriod(startYearOfPeriod, period)
     return pickedPeriod
   })
-  console.log(pickedPeriods)
-  console.log('END PERIOD DEBUG')
  
   return pickedPeriods
 }
@@ -433,9 +427,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     filterOnFail: boolean,
     f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
   }
-
-  
-
+ 
   const comparisons: ComparisonType[] = [
     {
       filterOnFail: false, 
@@ -483,29 +475,17 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
   ]
   console.log('count before: ', noExams.length)
-  console.log(comparisons)
-  console.log('DEBUG')
-  for(const comp of comparisons){
-    console.log(comp.filterOnFail)
-  }
-  console.log('---')
-  
+ 
   const recommendationWithPoints = noExams.map((c) => {
     let points = 0 
 
     for(const comp of comparisons){
       const comparison = comp.f(c, userCoordinates)
-      console.log('comparison')
-      console.log(comparison)
       if(comparison){
         points++
       }
       else{
-        console.log('filter didnt hit')
-        console.log(comp)
-        console.log(comp.filterOnFail)
         if(comp.filterOnFail === true){
-          console.log('removed recommendation due to filter option')
           return {...c, points: -1}
         }
       }
@@ -515,7 +495,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
-  console.log('count after new filtering: ', filtered.length)
   const sorted = filtered.sort((a, b) => b.points - a.points)
   return filtered
 }
@@ -525,9 +504,6 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const organisationRecommendations = readOrganisationRecommendationData()
   const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
-
-  console.log('course codes: ')
-  console.log(courseCodes.languageSpesific)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
 

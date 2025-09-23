@@ -65,11 +65,11 @@ router.get('/organisations/integrated', async(req, res) => {
 
 router.post('/form/1/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
-  console.log(answerData)
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
+  console.log(answerData)
   const submitInfo = {user: req.user, answerData}
   logger.info('User submitted a form', submitInfo)
   //  await saveAnswer(answerData, user)
