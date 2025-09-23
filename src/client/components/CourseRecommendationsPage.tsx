@@ -72,6 +72,11 @@ const CourseListing = ({userCoordinates, defaultExpanded, courses, titleText}: {
 
 
 const CoursesInAccordion = ({userCoordinates, defaultExpanded, courses, titleText}: {userCoordinates: UserCoordinates, defaultExpanded: boolean, courses: CourseRecommendationType[], titleText: string}) => {
+  if(courses.length === 0){
+    return(
+      <></>
+    )
+  }
   return (
     
     <Accordion defaultExpanded = {defaultExpanded} sx={{background: 'white'}}>

@@ -303,10 +303,11 @@ const getPeriodsWantedByUser = (periodsArg) => {
   
   console.log('!!!!PERIOD DEBUG')
   const periods = readAsStringArr(periodsArg)
-
+  console.log(periods)
   if(periods.includes('neutral') || periods.length === 0){
     return ['intensive_3_previous', 'period_1', 'period_2', 'period_3', 'period_4', 'intensive_3']     
   }
+  console.log('FILTER IS ON')
   return periods
 }
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
@@ -441,7 +442,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
     },
     {
