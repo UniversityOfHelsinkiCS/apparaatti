@@ -312,9 +312,9 @@ const getPeriodsWantedByUser = (periodsArg) => {
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 function getRelevantPeriods(periodsArg: string[] | string) {
-   const periods = getPeriodsWantedByUser(periodsArg)
+  const periods = getPeriodsWantedByUser(periodsArg)
 
-   const pickedPeriods = periods.map((period: string) => {
+  const pickedPeriods = periods.map((period: string) => {
     const startYearOfPeriod = getStudyYearFromPeriod(period)
     const pickedPeriod = getStudyPeriod(startYearOfPeriod, period)
     return pickedPeriod
