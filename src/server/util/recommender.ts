@@ -340,6 +340,12 @@ function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { star
   }
   return false
 } 
+type courseCodes = {
+  all: string[],
+  userOrganisation: string[],
+  languageSpesific: string[]
+}
+
 
 /**
  * 
@@ -358,12 +364,6 @@ function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { star
  * 
  * languageSpesific: course codes that are in the same organisation AND are correct given the language choices of the user
  */
-type courseCodes = {
-  all: string[],
-  userOrganisation: string[],
-  languageSpesific: string[]
-}
-
 function getCourseCodes(langCode: string, primaryLanguage: string, primaryLanguageSpecification: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
   const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)

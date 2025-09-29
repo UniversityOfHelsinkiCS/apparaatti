@@ -118,35 +118,36 @@ const useQuestions = () => {
         }
       ],
     },
+    // {
+    //   
+    //   number: '5',
+    //   mandatory: false,
+    //   effects: 'date',
+    //   id: 'study-period',
+    //   type: 'period-date',
+    //   // explanation: 'Mistä periodista haluat kursseja?',
+    //   variants: [
+    //     {
+    //       name: 'default',
+    //       question: studyPeriodQuestion,
+    //       options: [
+    //         {id: 'neutral', name: neutralText},
+    //         {
+    //           id: 'intensive_3_previous',
+    //           value: 'intensive_3',
+    //           name: summerText + ' 25',
+    //         },
+    //         { id: 'period_1', name:'1. ' + periodText},
+    //         { id: 'period_2', name:'2. ' + periodText },
+    //         { id: 'period_3', name:'3. ' + periodText },
+    //         { id: 'period_4', name:'4. ' + periodText },
+    //         { id: 'intensive_3', name: summerText + ' 26'},
+    //       ],
+    //     },
+    //   ],
+    // },
     {
       number: '5',
-      mandatory: false,
-      effects: 'date',
-      id: 'study-period',
-      type: 'period-date',
-      // explanation: 'Mistä periodista haluat kursseja?',
-      variants: [
-        {
-          name: 'default',
-          question: studyPeriodQuestion,
-          options: [
-            {id: 'neutral', name: neutralText},
-            {
-              id: 'intensive_3_previous',
-              value: 'intensive_3',
-              name: summerText + ' 25',
-            },
-            { id: 'period_1', name:'1. ' + periodText},
-            { id: 'period_2', name:'2. ' + periodText },
-            { id: 'period_3', name:'3. ' + periodText },
-            { id: 'period_4', name:'4. ' + periodText },
-            { id: 'intensive_3', name: summerText + ' 26'},
-          ],
-        },
-      ],
-    },
-    {
-      number: '6',
       mandatory: false,
       effects: 'none',
       id: 'replacement',
@@ -164,7 +165,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '7',
+      number: '6',
       mandatory: false,
       id: 'mentoring',
       effects: 'mentoring',
@@ -183,7 +184,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '8',
+      number: '7',
       mandatory: false,
       id: 'challenge',
       effects: 'challenge',
@@ -201,7 +202,7 @@ const useQuestions = () => {
       ],
     },  
     {
-      number: '9',
+      number: '8',
       mandatory: false,
       id: 'graduation',
       type: 'multi',
@@ -220,7 +221,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '10',
+      number: '9',
       mandatory: false,
       id: 'study-place',
       effects: 'studyPlace',
@@ -239,7 +240,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '11',
+      number: '10',
       mandatory: false,
       id: 'integrated',
       effects: 'integrated',
@@ -257,7 +258,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '12',
+      number: '11',
       mandatory: false,
       id: 'independent',
       effects: 'independent',
@@ -274,42 +275,42 @@ const useQuestions = () => {
         },
       ],
     },
-    {
-      number: '13',
-      mandatory: false,
-      id: 'flexible',
-      effects: 'flexible',
-      type: 'multi',
-      variants: [
-        {
-          name: 'default',
-          question: flexibleQuestion,
-          options: [
-            {id: 'neutral', name: neutralText},
-            {id: '0', name: noText},
-            {id: '1', name: yesText},
-          ],
-        },
-      ],
-    },
-    {
-      number: '14',
-      mandatory: false,
-      id: 'mooc',
-      effects: 'mooc',
-      type: 'multi',
-      variants: [
-        {
-          name: 'default',
-          question: t('form:moocQuestion'),
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
-        },
-      ],
-    },  
+    // {
+    //   number: '12',
+    //   mandatory: false,
+    //   id: 'flexible',
+    //   effects: 'flexible',
+    //   type: 'multi',
+    //   variants: [
+    //     {
+    //       name: 'default',
+    //       question: flexibleQuestion,
+    //       options: [
+    //         {id: 'neutral', name: neutralText},
+    //         {id: '0', name: noText},
+    //         {id: '1', name: yesText},
+    //       ],
+    //     },
+    //   ],
+    // },
+    // {
+    //   number: '13',
+    //   mandatory: false,
+    //   id: 'mooc',
+    //   effects: 'mooc',
+    //   type: 'multi',
+    //   variants: [
+    //     {
+    //       name: 'default',
+    //       question: t('form:moocQuestion'),
+    //       options: [
+    //         {id: 'neutral', name: neutralText},
+    //         { id: '0', name: noText },
+    //         { id: '1', name: yesText },
+    //       ],
+    //     },
+    //   ],
+    // },  
   ]
   return(questions)
   
