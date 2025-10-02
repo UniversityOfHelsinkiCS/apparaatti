@@ -257,24 +257,24 @@ const useQuestions = () => {
         },
       ],
     },
-    {
-      number: '11',
-      mandatory: false,
-      id: 'independent',
-      effects: 'independent',
-      type: 'multi',
-      variants: [
-        {
-          name: 'default',
-          question: independentQuestion,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
-        },
-      ],
-    },
+    // {
+    //   number: '11',
+    //   mandatory: false,
+    //   id: 'independent',
+    //   effects: 'independent',
+    //   type: 'multi',
+    //   variants: [
+    //     {
+    //       name: 'default',
+    //       question: independentQuestion,
+    //       options: [
+    //         {id: 'neutral', name: neutralText},
+    //         { id: '0', name: noText },
+    //         { id: '1', name: yesText },
+    //       ],
+    //     },
+    //   ],
+    // },
     // {
     //   number: '12',
     //   mandatory: false,
