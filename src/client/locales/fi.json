@@ -30,9 +30,9 @@
     "mentoringQuestionNo": "En koe tarvitsevani harjoitusta",
     "graduationQuestionYes": "Kyllä, puolen vuoden sisällä.",
     "graduationQuestionNo": "En ole valmistumassa puolen vuoden sisällä.",
-    "studyPlaceRemote": "Täysin etäopiskelu.",
+    "studyPlaceRemote": "Etätapaamisia sisältävä opiskelu.",
     "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
-    "studyPlaceF2F": "Täysin lähiopetus"
+    "studyPlaceF2F": "Lähitapaamisia sisältävä opiskelu"
   },
   "question": {
     "extrainfo": "Lisätietoa",

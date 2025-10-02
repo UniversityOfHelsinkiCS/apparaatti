@@ -22,7 +22,6 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
     .flatMap((u: any) => Object.values(u))
     .flat()
-
   const uniqueCodeUrns = uniqueVals(realisationCodeUrns)
 
   const realisationTypeUrns = realisations.map((r: any) => r.courseUnitRealisationTypeUrn)
