@@ -23,9 +23,12 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
     .flatMap((u: any) => Object.values(u))
     .flat()
 
-  const unique = uniqueVals(realisationCodeUrns)
+  const uniqueCodeUrns = uniqueVals(realisationCodeUrns)
 
-  res.json(unique)
+  const realisationTypeUrns = realisations.map((r: any) => r.courseUnitRealisationTypeUrn)
+  const uniqueTypeUrns = uniqueVals(realisationTypeUrns)
+
+  res.json({uniqueCodeUrns, uniqueTypeUrns})
 })
 
 debugRouter.get('/cur', async (req: any, res: any) => {
