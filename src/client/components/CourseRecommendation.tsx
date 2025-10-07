@@ -88,7 +88,7 @@ const CourseRecommendation = ({
 
             <Typography>{courseDateRange(course.course)}</Typography>
           </Stack>
-          {points ? <Typography>tarkkuuspisteet: {points} / 12</Typography> : <></>}
+          {points ? <Typography>tarkkuuspisteet: {points} / 10</Typography> : <></>}
           <Button
             variant="contained"
             color="primary"
