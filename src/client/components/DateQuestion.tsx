@@ -9,6 +9,7 @@ import {
 import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'
 import ExtraInfoModal from './ExtraInfoModal'
+import { pickVariant } from '../hooks/useQuestions'
 
 const DateQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
@@ -17,7 +18,7 @@ const DateQuestion = ({ question }: { question: Question }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const variant = question.variants[0]
+  const variant = pickVariant(question, 'default')
 
   const handleChoice = (id: string) => {
     setChoice(id)

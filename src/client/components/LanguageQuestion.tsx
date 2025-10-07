@@ -8,6 +8,7 @@ import { Question } from '../../common/types.ts'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
 import ExtraInfoModal from './ExtraInfoModal.tsx'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 const LanguageQuestion = ({
   question,
   setLanguage,
@@ -16,14 +17,12 @@ const LanguageQuestion = ({
   setLanguage: (id: string) => void
 }) => {
   const [open, setOpen] = React.useState(false)
-  const [_choice, setChoice] = React.useState('')
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const variant = question.variants[0]
+  const variant = pickVariant(question, 'default')
 
   const handleChoice = (id: string) => {
-    setChoice(id)
     setLanguage(id)
   }
   return (

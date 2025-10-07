@@ -9,6 +9,7 @@ import ExtraInfoModal from './ExtraInfoModal'
 
 
 import FormOption from './FormOption'
+import { pickVariant } from '../hooks/useQuestions'
 
 const PreviuslyDoneLangQuestion = ({
   question,
@@ -23,7 +24,7 @@ const PreviuslyDoneLangQuestion = ({
   const handleClose = () => setOpen(false)
 
   const {t} = useTranslation()
-  const variant = question.variants[0]
+  const variant = pickVariant(question, languageId)
   const neutralOption = variant.options.find((o) => o.id === 'neutral')
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')

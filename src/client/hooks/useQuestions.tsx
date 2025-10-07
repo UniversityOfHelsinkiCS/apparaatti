@@ -1,6 +1,17 @@
 import { useTranslation } from 'react-i18next'
+import { Question } from '../../common/types'
 
 
+
+export const pickVariant = (question: Question, languageId: string) => {
+  const hit = question.variants.find((v)=> v.name === languageId)
+  if(hit){
+    return hit
+  }
+
+  const fallback = question.variants.find((v) => v.name === 'default')
+  return fallback
+}
 
 
 
@@ -109,6 +120,15 @@ const useQuestions = () => {
       variants: [
         {
           name: 'default',
+          question: previouslyDoneLangQuestion,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'fi',
           question: previouslyDoneLangQuestion,
           options: [
             {id: 'neutral', name: neutralText},

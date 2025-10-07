@@ -8,6 +8,7 @@ import { Question } from '../../common/types.tsx'
 import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
 import ExtraInfoModal from './ExtraInfoModal.tsx'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 const FormQuestion = ({
   question,
   languageId,
@@ -18,46 +19,7 @@ const FormQuestion = ({
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const pickVariant = () => {
-    if (languageId === '2') {
-      if (question.variants[1]) {
-        const v = question.variants.find((v) => v.name == 'onlyFi')
-        if (v) {
-          return v
-        } else {
-          return question.variants[0]
-        }
-      } else {
-        return question.variants[0]
-      }
-    } else if (languageId === '3') {
-      if (question.variants[1]) {
-        const v = question.variants.find((v) => v.name == 'onlySe')
-        if (v) {
-          return v
-        } else {
-          return question.variants[0]
-        }
-      } else {
-        return question.variants[0]
-      }
-    } else if (languageId === '4') {
-      if (question.variants[1]) {
-        const v = question.variants.find((v) => v.name == 'onlyEn')
-        if (v) {
-          return v
-        } else {
-          return question.variants[0]
-        }
-      } else {
-        return question.variants[0]
-      }
-    } else {
-      return question.variants[0]
-    }
-  }
-
-  const variant = pickVariant()
+  const variant = pickVariant(question, languageId)
   return (
     <Box
       sx={{
