@@ -32,7 +32,9 @@
     "graduationQuestionNo": "Jag tar inte examen om sex månader.",
     "studyPlaceRemote": "Helt distansundervisning",
     "studyPlaceCombined": "Distansundervisning och undervisning ansikte mot ansikte",
-    "studyPlaceF2F": "Helt ansikte mot ansikte-undervisning"
+    "studyPlaceF2F": "Helt ansikte mot ansikte-undervisning",
+    "primaryLanguageExplanation": "Ditt allmänbildningsspråk, det vill säga det språk på vilket du har avlagt modersmålspensum i finsk grundskola och/eller gymnasium, påverkar slutförandet av dina studier. Läs mer detaljerade anvisningar på Studietjänstens sida",
+    "replacementQuestion_fi_primary_written": "Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?"
   },
   "question": {
     "extrainfo": "Ytterligare information",

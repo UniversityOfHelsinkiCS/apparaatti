@@ -60,7 +60,7 @@ const useQuestions = () => {
       effects: 'lang',
       id: 'primary-language',
       type: 'primary-language',
-      explanation: 'Opintojen suorittamiseen vaikuttaa koulusivistyskielesi, eli se kieli, jolla olet suorittanut suomalaisen peruskoulun ja/tai lukion äidinkielen oppimäärän. Lue tarkemmat ohjeet Opiskelu-palvelun sivulta ',
+      explanation: t('form:primaryLanguageExplanation'),
       variants: [
         {
           name: 'default',
@@ -176,7 +176,7 @@ const useQuestions = () => {
         },
         {
           name: 'fi_primary_written',
-          question: 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
+          question: t('form:replacementQuestion_fi_primary_written'),
           options: [
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },

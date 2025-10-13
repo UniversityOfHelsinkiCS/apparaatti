@@ -32,7 +32,9 @@
     "graduationQuestionNo": "En ole valmistumassa puolen vuoden sisällä.",
     "studyPlaceRemote": "Etätapaamisia sisältävä opiskelu.",
     "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
-    "studyPlaceF2F": "Lähitapaamisia sisältävä opiskelu"
+    "studyPlaceF2F": "Lähitapaamisia sisältävä opiskelu",
+    "primaryLanguageExplanation": "Opintojen suorittamiseen vaikuttaa koulusivistyskielesi, eli se kieli, jolla olet suorittanut suomalaisen peruskoulun ja/tai lukion äidinkielen oppimäärän. Lue tarkemmat ohjeet Opiskelu-palvelun sivulta",
+    "replacementQuestion_fi_primary_written": "Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?"
   },
   "question": {
     "extrainfo": "Lisätietoa",

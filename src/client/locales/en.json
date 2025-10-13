@@ -32,7 +32,9 @@
     "graduationQuestionNo": "I am not graduating within half a year.",
     "studyPlaceRemote": "Only Distance learning",
     "studyPlaceCombined": "Distance learning and face-to-face teaching",
-    "studyPlaceF2F": "Only face-to-face teaching"
+    "studyPlaceF2F": "Only face-to-face teaching",
+    "primaryLanguageExplanation": "Your language of general education, i.e. the language in which you have completed the mother tongue syllabus of a Finnish comprehensive school and/or upper secondary school, affects the completion of your studies. Read more detailed instructions on the Study Service page",
+    "replacementQuestion_fi_primary_written": "Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?"
   },
   "question": {
     "extrainfo": "Extra information",

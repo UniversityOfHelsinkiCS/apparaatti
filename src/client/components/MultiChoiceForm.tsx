@@ -56,15 +56,15 @@ const MultiChoiceForm = ({
   }
   // variant display is the different wording of a question given different choices of language, primary language and primary language specification
   const updateVariantToDisplayId = (): string => {
-   for(const key of variantLookUp.keys()){
-     if(checkVarianLookUpParam(language, key.language) &&
+    for(const key of variantLookUp.keys()){
+      if(checkVarianLookUpParam(language, key.language) &&
        checkVarianLookUpParam(primaryLanguage, key.primaryLanguage) &&
        checkVarianLookUpParam(primaryLanguageSpecification, key.primaryLanguageSpecification)
-     ){
-       return variantLookUp.get(key) || 'default'
-     }
-   }
-   return 'default'
+      ){
+        return variantLookUp.get(key) || 'default'
+      }
+    }
+    return 'default'
   }
   useEffect(() => {
     const newVariantId = updateVariantToDisplayId()
