@@ -220,6 +220,24 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
+        {
+          name: 'fi_primary_written',
+          question: t('form:challengeQuestion_fi_primary_written'),
+          options: [
+            { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'fi_primary_spoken',
+          question: t('form:challengeQuestion_fi_primary_spoken'),
+          options: [
+            { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
       ],
     },  
     {

@@ -34,7 +34,9 @@
     "studyPlaceCombined": "Distance learning and face-to-face teaching",
     "studyPlaceF2F": "Studies that include face-to-face sessions",
     "primaryLanguageExplanation": "Your language of general education, i.e. the language in which you have completed the mother tongue syllabus of a Finnish comprehensive school and/or upper secondary school, affects the completion of your studies. Read more detailed instructions on the Study Service page",
-    "replacementQuestion_fi_primary_written": "Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?"
+    "replacementQuestion_fi_primary_written": "Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?",
+    "challengeQuestion_fi_primary_written": "Is it difficult for you to participate in implementations that include attendance or joint online meetings due to your life situation or anxiety?",
+    "challengeQuestion_fi_primary_spoken": "I find social situations scary and I get very nervous in different interaction situations."
   },
   "question": {
     "extrainfo": "Extra information",
