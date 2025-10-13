@@ -13,10 +13,12 @@ const PrimaryLanguageSpecificationQuestion  = ({
   question,
   language,
   primaryLanguage,
+  setPrimaryLanguageSpecification
 }: {
   question: Question
   language: string,
   primaryLanguage: string
+  setPrimaryLanguageSpecification: (spec: string) => void 
 }) => {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
@@ -41,6 +43,9 @@ const PrimaryLanguageSpecificationQuestion  = ({
     borderRadius: '10px',
     boxShadow: 24,
     p: 4,
+  }
+  const handleChange = (e: any) => {
+    setPrimaryLanguageSpecification(e.target.value)
   }
   if(!shouldShow){
     return(<></>)
@@ -69,7 +74,7 @@ const PrimaryLanguageSpecificationQuestion  = ({
         </Box>
       </Modal>
 
-      <RadioGroup name={question.id}>
+      <RadioGroup name={question.id} onChange = {handleChange}>
         {variant.options.map((option) => (
           <FormControlLabel
             key={option.id}

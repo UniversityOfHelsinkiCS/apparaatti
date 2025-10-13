@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, FormControl, Typography } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
@@ -28,7 +28,9 @@ const MultiChoiceForm = ({
 }) => {
   const {t} = useTranslation()
   const [primaryLanguage, setPrimaryLanguage] = useState('')
+  const [primaryLanguageSpecification, setPrimaryLanguageSpecification] = useState('')
   const [language, setLanguage] = useState('')
+  const [variantToDisplayId, setVariantToDisplayId] = useState('default')
   const [userOrgCode, setUserOrgCode] = useState('')
   const questions = useQuestions()
    
@@ -40,6 +42,35 @@ const MultiChoiceForm = ({
     },
   })
 
+
+  const variantLookUp: Map<{language: string, primaryLanguage: string, primaryLanguageSpecification: string}, string> = new Map([
+    [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
+    [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
+  ])
+  const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
+    //if shouldBe is an empty string it is intended as 'anything is allowed for this'
+    if(shouldBe === ''){
+      return true
+    }
+    return cmpr === shouldBe
+  }
+  // variant display is the different wording of a question given different choices of language, primary language and primary language specification
+  const updateVariantToDisplayId = (): string => {
+   for(const key of variantLookUp.keys()){
+     if(checkVarianLookUpParam(language, key.language) &&
+       checkVarianLookUpParam(primaryLanguage, key.primaryLanguage) &&
+       checkVarianLookUpParam(primaryLanguageSpecification, key.primaryLanguageSpecification)
+     ){
+       return variantLookUp.get(key) || 'default'
+     }
+   }
+   return 'default'
+  }
+  useEffect(() => {
+    const newVariantId = updateVariantToDisplayId()
+    setVariantToDisplayId(newVariantId)
+  }, [language, primaryLanguage, primaryLanguageSpecification])
+
   const renderFormQuestion = (key, question, additionalInfo) => {
     switch (question.type) {
     case 'studyphase':
@@ -48,7 +79,7 @@ const MultiChoiceForm = ({
       if(question.id === 'integrated'){
         if(additionalInfo.organisationsWithIntegrated.includes(userOrgCode)){
           return (
-            <FormQuestion key={key} question={question} languageId={language} />
+            <FormQuestion key={key} question={question} questionVariantId={variantToDisplayId}/>
           )
         }else{
           return <SkippedQuestion key={key} question={question}/>
@@ -57,9 +88,9 @@ const MultiChoiceForm = ({
       }
       //console.log("multi")
       return (
-        <FormQuestion key={key} question={question} languageId={language} />
+        <FormQuestion key={key} question={question} questionVariantId={variantToDisplayId} />
       )
-
+    // this is for the primary language ie: what was the school language?
     case 'primary-language':
       return (
         <LanguageQuestion
@@ -68,6 +99,8 @@ const MultiChoiceForm = ({
           setLanguage={setPrimaryLanguage}
         />
       )
+
+    //is the language course for speaking or writing?
     case 'primary-language-specification':
       return (
         <PrimaryLanguageSpecificationQuestion
@@ -75,8 +108,11 @@ const MultiChoiceForm = ({
           question={question}
           language={language}
           primaryLanguage={primaryLanguage}
+          setPrimaryLanguageSpecification={setPrimaryLanguageSpecification}
         />
       )
+
+    // this is for the language that the user wants to search courses for
     case 'language':
       return (
         <LanguageQuestion

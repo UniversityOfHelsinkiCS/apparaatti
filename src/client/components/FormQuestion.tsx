@@ -11,15 +11,15 @@ import ExtraInfoModal from './ExtraInfoModal.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 const FormQuestion = ({
   question,
-  languageId,
+  questionVariantId,
 }: {
   question: Question
-  languageId: string
+  questionVariantId: string
 }) => {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const variant = pickVariant(question, languageId)
+  const variant = pickVariant(question, questionVariantId)
   return (
     <Box
       sx={{
