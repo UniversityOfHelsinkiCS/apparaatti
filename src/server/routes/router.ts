@@ -20,12 +20,6 @@ if(inDevelopment){
   router.use('/debug', debugRouter)
 }
 
-router.get('/form/1', async (_req, res) => {
-  const form = await Form.findByPk(1)
-
-  res.json(form)
-})
-
 router.get('/organisations/supported', async(req, res) => {
   if(!req.user){
     res.status(404).json({ message: 'User not found' })

@@ -1,7 +1,7 @@
 import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
-
+import Markdown from 'react-markdown'
 
 const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open: boolean, handleClose: () => void}) => {
   const {t} = useTranslation()
@@ -17,6 +17,7 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
     boxShadow: 24,
     p: 4,
   }
+
   return(
     <Modal
       open={open}
@@ -28,9 +29,8 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {t('question:extrainfo')}
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          {question.explanation ? question.explanation : t('question:noExtrainfo')}
-        </Typography>
+          <Markdown>
+          </Markdown>
       </Box>
     </Modal>
   )
