@@ -29,8 +29,8 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {t('question:extrainfo')}
         </Typography>
-          <Markdown>
-          </Markdown>
+        <Markdown>
+        </Markdown>
       </Box>
     </Modal>
   )

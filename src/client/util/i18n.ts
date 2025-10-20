@@ -1,9 +1,9 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
-import en from '../locales/en.json'
-import fi from '../locales/fi.json'
-import sv from '../locales/sv.json'
+import en from '../locales/en.ts'
+import fi from '../locales/fi.ts'
+import sv from '../locales/sv.ts'
 import { LocalizedString } from '../../common/types'
 
 declare global {
