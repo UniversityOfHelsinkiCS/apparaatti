@@ -4,6 +4,7 @@
 import { readFile, writeFile, opendir } from 'node:fs/promises'
 import { createInterface } from 'node:readline'
 import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import minimist from 'minimist'
 import _ from 'lodash'
 
@@ -106,7 +107,7 @@ const log = (...msg) => {
 
   // Load translation files for each language
   for await (const lang of LANGUAGES) {
-    locales[lang] = await readJSON(`${LOCALES_PATH}/${lang}.json`)
+    locales[lang] = await readTypescriptLocale(join(LOCALES_PATH, `${lang}.ts`))
   }
   log0('Imported translation modules')
 
@@ -309,14 +310,14 @@ const createMissingTranslations = async missingByLang => {
   console.log('Writing new translations to files...')
   await Promise.all(
     Object.entries(newTranslationsByLang).map(async ([lang, translations]) => {
-      const filePath = join(LOCALES_PATH, `${lang}.json`)
+      const filePath = join(LOCALES_PATH, `${lang}.ts`)
 
-      const translationObject = await readJSON(`${LOCALES_PATH}/${lang}.json`)
+      const translationObject = await readTypescriptLocale(filePath)
 
       // Deep merge
       const merged = _.merge(translationObject, translations)
 
-      await writeFile(filePath, JSON.stringify(merged, null, 2))
+      await writeFile(filePath, `export default ${JSON.stringify(merged, null, 2)};\n`)
     })
   )
 }
@@ -360,7 +361,8 @@ class Location {
   }
 }
 
-const readJSON = async (filePath) => {
-  const fileContent = await readFile(filePath, 'utf8')
-  return JSON.parse(fileContent)
-}
+const readTypescriptLocale = async (filePath) => {
+  // Dynamic import needs a file URL
+  const module = await import(pathToFileURL(filePath).href);
+  return module.default;
+};
