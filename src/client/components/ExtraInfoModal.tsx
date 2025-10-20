@@ -30,6 +30,7 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
           {t('question:extrainfo')}
         </Typography>
         <Markdown>
+          {question.explanation || t('question:noExtraInfo')}
         </Markdown>
       </Box>
     </Modal>

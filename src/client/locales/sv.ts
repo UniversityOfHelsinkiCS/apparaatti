@@ -1,3 +1,10 @@
+const primaryLanguageExplanationMarkdown = `
+Ditt utbildningsspråk påverkar slutförandet av dina studier.
+
+Läs mer detaljerade instruktioner på sidan Studietjänst
+[Vad är ditt utbildningsspråk?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)
+`
+
 export default {
   'common': {},
   'form': {
@@ -33,7 +40,7 @@ export default {
     'studyPlaceRemote': 'Studier som inkluderar distansmöten',
     'studyPlaceCombined': 'Distansundervisning och undervisning ansikte mot ansikte',
     'studyPlaceF2F': 'Studier som inkluderar möten på plats',
-    'primaryLanguageExplanation': 'Ditt allmänbildningsspråk, det vill säga det språk på vilket du har avlagt modersmålspensum i finsk grundskola och/eller gymnasium, påverkar slutförandet av dina studier. Läs mer detaljerade anvisningar på Studietjänstens sida',
+    'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
     'challengeQuestion_fi_primary_written': 'Är det svårt för dig att delta i genomföranden som inkluderar närvaro eller gemensamma onlinemöten på grund av din livssituation eller ångest?',
     'challengeQuestion_fi_primary_spoken': 'Jag tycker att sociala situationer är skrämmande och jag blir väldigt nervös i olika interaktionssituationer.'

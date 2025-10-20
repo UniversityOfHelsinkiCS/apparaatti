@@ -1,3 +1,12 @@
+
+const primaryLanguageExplanationMarkdown = `
+ Opintojen suorittamiseen vaikuttaa koulusivistyskielesi.  
+
+ Lue tarkemmat ohjeet Opiskelu-palvelun sivulta
+ [Mikä on koulusivistyskielesi?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni) 
+
+`
+
 export default {
   'common': {},
   'form': {
@@ -33,7 +42,7 @@ export default {
     'studyPlaceRemote': 'Etätapaamisia sisältävä opiskelu.',
     'studyPlaceCombined': 'Etäopiskelu ja lähiopetus',
     'studyPlaceF2F': 'Lähitapaamisia sisältävä opiskelu',
-    'primaryLanguageExplanation': 'Opintojen suorittamiseen vaikuttaa koulusivistyskielesi, eli se kieli, jolla olet suorittanut suomalaisen peruskoulun ja/tai lukion äidinkielen oppimäärän.  ## Lue tarkemmat ohjeet Opiskelu-palvelun sivulta',
+    'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
     'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
     'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.'
