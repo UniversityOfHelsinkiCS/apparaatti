@@ -1,67 +1,67 @@
 export default {
-  "common": {},
-  "form": {
-    "primaryLanguageQuestion": "Mikä on koulusivistyskielesi?",
-    "languageQuestion": "Mistä kielestä haet kursseja?",
-    "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?",
-    "previouslyDoneLangQuestion": "Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.",
-    "studyPeriodQuestion": "Mikä on haluamasi kurssin suoritusajankohta?",
-    "replacementQuestion": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).",
-    "mentoringQuestion": "Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?",
-    "challengeQuestion": "Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon",
-    "graduationQuestion": "Valmistutko lähiaikoina?",
-    "studyPlaceQuestion": "Mikä opiskelumuoto sopii sinulle parhaiten?",
-    "integratedQuestion": "Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.",
-    "independentQuestion": "Haluan työskennellä itsenäisesti tai autonomisesti.",
-    "flexibleQuestion": "Haluan osallistua kurssille, jonka aikataulu on joustava.",
-    "moocQuestion": "Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?",
-    "finnish": "suomi",
-    "swedish": "ruotsi",
-    "english": "englanti",
-    "yes": "Kyllä",
-    "no": "Ei",
-    "neutralChoice": "Ei valintaa",
-    "both": "Molemmat",
-    "written": "Kirjoitusviestintä",
-    "spoken": "Puheviestintä",
-    "summer": "Kesä",
-    "period": "periodi",
-    "mentoringQuestionYes": "Kaipaisin valmennusta ennen opintojen suoritusta",
-    "mentoringQuestionNo": "En koe tarvitsevani harjoitusta",
-    "graduationQuestionYes": "Kyllä, puolen vuoden sisällä.",
-    "graduationQuestionNo": "En ole valmistumassa puolen vuoden sisällä.",
-    "studyPlaceRemote": "Etätapaamisia sisältävä opiskelu.",
-    "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
-    "studyPlaceF2F": "Lähitapaamisia sisältävä opiskelu",
-    "primaryLanguageExplanation": "Opintojen suorittamiseen vaikuttaa koulusivistyskielesi, eli se kieli, jolla olet suorittanut suomalaisen peruskoulun ja/tai lukion äidinkielen oppimäärän.  ## Lue tarkemmat ohjeet Opiskelu-palvelun sivulta",
-    "replacementQuestion_fi_primary_written": "Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?",
-    "challengeQuestion_fi_primary_written": "Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?",
-    "challengeQuestion_fi_primary_spoken": "Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa."
+  'common': {},
+  'form': {
+    'primaryLanguageQuestion': 'Mikä on koulusivistyskielesi?',
+    'languageQuestion': 'Mistä kielestä haet kursseja?',
+    'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',
+    'previouslyDoneLangQuestion': 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.',
+    'studyPeriodQuestion': 'Mikä on haluamasi kurssin suoritusajankohta?',
+    'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).',
+    'mentoringQuestion': 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
+    'challengeQuestion': 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon',
+    'graduationQuestion': 'Valmistutko lähiaikoina?',
+    'studyPlaceQuestion': 'Mikä opiskelumuoto sopii sinulle parhaiten?',
+    'integratedQuestion': 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
+    'independentQuestion': 'Haluan työskennellä itsenäisesti tai autonomisesti.',
+    'flexibleQuestion': 'Haluan osallistua kurssille, jonka aikataulu on joustava.',
+    'moocQuestion': 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?',
+    'finnish': 'suomi',
+    'swedish': 'ruotsi',
+    'english': 'englanti',
+    'yes': 'Kyllä',
+    'no': 'Ei',
+    'neutralChoice': 'Ei valintaa',
+    'both': 'Molemmat',
+    'written': 'Kirjoitusviestintä',
+    'spoken': 'Puheviestintä',
+    'summer': 'Kesä',
+    'period': 'periodi',
+    'mentoringQuestionYes': 'Kaipaisin valmennusta ennen opintojen suoritusta',
+    'mentoringQuestionNo': 'En koe tarvitsevani harjoitusta',
+    'graduationQuestionYes': 'Kyllä, puolen vuoden sisällä.',
+    'graduationQuestionNo': 'En ole valmistumassa puolen vuoden sisällä.',
+    'studyPlaceRemote': 'Etätapaamisia sisältävä opiskelu.',
+    'studyPlaceCombined': 'Etäopiskelu ja lähiopetus',
+    'studyPlaceF2F': 'Lähitapaamisia sisältävä opiskelu',
+    'primaryLanguageExplanation': 'Opintojen suorittamiseen vaikuttaa koulusivistyskielesi, eli se kieli, jolla olet suorittanut suomalaisen peruskoulun ja/tai lukion äidinkielen oppimäärän.  ## Lue tarkemmat ohjeet Opiskelu-palvelun sivulta',
+    'replacementQuestion_fi_primary_written': 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
+    'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
+    'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.'
   },
-  "question": {
-    "extrainfo": "Lisätietoa",
-    "checkInstructionsCrediting": "Katso ohjeet hyväksilukemiseen",
-    "fromHere": "täältä",
-    "noExtrainfo": "Ei lisätietoa",
-    "pickStudy": "Valitse tiedekunta",
-    "skipped": "Kysymys ohitettu: ei vaikutusta",
-    "mandatory": "Pakollinen"
+  'question': {
+    'extrainfo': 'Lisätietoa',
+    'checkInstructionsCrediting': 'Katso ohjeet hyväksilukemiseen',
+    'fromHere': 'täältä',
+    'noExtrainfo': 'Ei lisätietoa',
+    'pickStudy': 'Valitse tiedekunta',
+    'skipped': 'Kysymys ohitettu: ei vaikutusta',
+    'mandatory': 'Pakollinen'
   },
-  "app": {
-    "logout": "Kirjaudu ulos",
-    "questionaire": "Kysely",
-    "recommendations": "Suositukset",
-    "send": "Lähetä",
-    "back": "Takaisin"
+  'app': {
+    'logout': 'Kirjaudu ulos',
+    'questionaire': 'Kysely',
+    'recommendations': 'Suositukset',
+    'send': 'Lähetä',
+    'back': 'Takaisin'
   },
-  "recommendations": {
-    "accurate": "Tarkimmat suositukset:",
-    "all": "Kaikki suositukset (tarkuus voi vaihdella):",
-    "pointbased": "Pistepohjaiset suositukset"
+  'recommendations': {
+    'accurate': 'Tarkimmat suositukset:',
+    'all': 'Kaikki suositukset (tarkuus voi vaihdella):',
+    'pointbased': 'Pistepohjaiset suositukset'
   },
-  "course": {
-    "show": "Näytä",
-    "credits": "op",
-    "reasons": "perusteet"
+  'course': {
+    'show': 'Näytä',
+    'credits': 'op',
+    'reasons': 'perusteet'
   }
-};
+}
