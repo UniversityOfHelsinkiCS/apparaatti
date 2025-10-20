@@ -49,7 +49,7 @@ export default {
     'extrainfo': 'Extra information',
     'checkInstructionsCrediting': 'See instructions for crediting',
     'fromHere': 'from here',
-    'noExtrainfo': 'No extra inforamtion',
+    'noExtrainfo': 'No extra information',
     'pickStudy': 'Select a faculty',
     'skipped': 'Question skipped: no effect',
     'mandatory': 'Mandatory'
