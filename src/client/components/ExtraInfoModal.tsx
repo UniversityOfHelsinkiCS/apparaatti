@@ -34,7 +34,7 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
           {question.explanation || t('question:noExtrainfo')}
         </Markdown>
 
-      <ActionButton onClick={handleClose} text={t('question:close')}></ActionButton>
+        <ActionButton onClick={handleClose} text={t('question:close')}></ActionButton>
       </Box>
     </Modal>
   )

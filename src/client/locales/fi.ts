@@ -56,7 +56,7 @@ export default {
     'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
     'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
-    'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.'
+    'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.',
   },
   'question': {
     'extrainfo': 'Lisätietoa',
@@ -65,7 +65,8 @@ export default {
     'noExtrainfo': 'Ei lisätietoa',
     'pickStudy': 'Valitse tiedekunta',
     'skipped': 'Kysymys ohitettu: ei vaikutusta',
-    'mandatory': 'Pakollinen'
+    'mandatory': 'Pakollinen',
+    'close': 'Sulje'
   },
   'app': {
     'logout': 'Kirjaudu ulos',
