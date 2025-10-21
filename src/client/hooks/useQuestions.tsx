@@ -118,6 +118,7 @@ const useQuestions = () => {
       mandatory: false,
       id: 'previusly-done-lang',
       type: 'previusly-done-lang',
+      explanation: t('form:previoslyDoneLangExplanation'),
       variants: [
         {
           name: 'default',

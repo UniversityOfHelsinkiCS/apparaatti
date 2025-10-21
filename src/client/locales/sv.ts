@@ -14,14 +14,19 @@ Alla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och ko
 - Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp
 `
 
+const previouslyDoneLangExplanationMarkdown = `
+De obligatoriska språk- och kommunikationsstudierna i examen kan ersättas med motsvarande studier som ingår i en tidigare inhemsk högskoleexamen och andra motsvarande tidigare prestationer.
+`
+
 export default {
   'common': {},
   'form': {
+    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
     'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'Vilket är ditt undervisningsspråk?',
     'languageQuestion': 'Vilket språk letar du efter kurser i?',
     'primaryLanguageSpecificationQuestion': 'Vilken primär språktyp skulle du vilja välja?',
-    'previouslyDoneLangQuestion': 'Jag har redan avslutat en språkkurs som en del av min examen i tidigare studier.',
+    'previouslyDoneLangQuestion': 'Jag har genomfört motsvarande studier eller andra motsvarande prestationer i en tidigare inhemsk högskoleexamen (avslutad eller oavslutad).',
     'studyPeriodQuestion': 'Vilket datum är din önskade kurs?',
     'replacementQuestion': 'Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid. (CEFR B1/B2)',
     'mentoringQuestion': 'Behöver du övning innan du slutför en kurs som ingår i din examen?',

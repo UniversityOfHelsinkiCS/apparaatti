@@ -14,14 +14,20 @@ All bachelor's degrees include at least 10 credits of compulsory language and co
 - Second national language (Swedish/Finnish) 3 cr
 - Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr
 `
+
+const previouslyDoneLangExplanationMarkdown = `
+The compulsory language and communication studies of the degree can be replaced by equivalent studies included in a previous domestic higher education degree and other equivalent previous achievements.
+`
+
 export default {
   'common': {},
   'form': {
+    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
     'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'What is your language of instruction?',
     'languageQuestion': 'What language are you looking for?',
     'primaryLanguageSpecificationQuestion': 'Which primary language type do you want to choose?',
-    'previouslyDoneLangQuestion': 'I have already completed a language course as part of my degree in previous studies',
+    'previouslyDoneLangQuestion': 'I have completed similar studies or other equivalent achievements in a previous domestic higher education degree (completed or incomplete).',
     'studyPeriodQuestion': 'What is the date of your desired course?',
     'replacementQuestion': 'I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)',
     'mentoringQuestion': 'Do you need practice before completing a course that is part of your degree?',

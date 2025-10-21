@@ -17,14 +17,19 @@ Kaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja
   - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op 
 `
 
+
+const previouslyDoneLangExplanationMarkdown= `
+Tutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. 
+`
 export default {
   'common': {},
   'form': {
+    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
     'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'Mikä on koulusivistyskielesi?',
     'languageQuestion': 'Mistä kielestä haet kursseja?',
     'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',
-    'previouslyDoneLangQuestion': 'Olen suorittanut kielen tutkintoon kuuluvan kurssin jo aiemmin edellisissä opinnoissa.',
+    'previouslyDoneLangQuestion': 'Minulla on aiempaan kotimaiseen korkeakoulututkintoon (valmis tai keskeneräinen) suoritettuja vastaavia opintoja tai muita vastaavia suorituksia.',
     'studyPeriodQuestion': 'Mikä on haluamasi kurssin suoritusajankohta?',
     'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).',
     'mentoringQuestion': 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
