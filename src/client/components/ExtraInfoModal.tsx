@@ -2,6 +2,7 @@ import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
 import Markdown from 'react-markdown'
+import ActionButton from './actionButton'
 
 const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open: boolean, handleClose: () => void}) => {
   const {t} = useTranslation()
@@ -10,7 +11,7 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '60vw',
     bgcolor: 'background.paper',
     border: '2px solid #545454',
     borderRadius: '10px',
@@ -32,6 +33,8 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
         <Markdown>
           {question.explanation || t('question:noExtrainfo')}
         </Markdown>
+
+      <ActionButton onClick={handleClose} text={t('question:close')}></ActionButton>
       </Box>
     </Modal>
   )
