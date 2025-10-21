@@ -79,7 +79,7 @@ const useQuestions = () => {
       effects: 'lang',
       id: 'lang-1',
       type: 'language',
-
+      explanation: t('form:searchedLanguageExplanation'),
       variants: [
         {
           name: 'default',

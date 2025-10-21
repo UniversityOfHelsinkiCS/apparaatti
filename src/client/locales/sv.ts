@@ -5,9 +5,19 @@ Läs mer detaljerade instruktioner på sidan Studietjänst
 [Vad är ditt utbildningsspråk?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)
 `
 
+
+const searchedLanguageExplanationMarkdown = `
+Alla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:
+
+- Modersmål (finska/svenska) 3 sp
+- Andra inhemska språket (svenska/finska) 3 sp
+- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp
+`
+
 export default {
   'common': {},
   'form': {
+    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'Vilket är ditt undervisningsspråk?',
     'languageQuestion': 'Vilket språk letar du efter kurser i?',
     'primaryLanguageSpecificationQuestion': 'Vilken primär språktyp skulle du vilja välja?',

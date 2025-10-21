@@ -7,9 +7,20 @@ const primaryLanguageExplanationMarkdown = `
 
 `
 
+const searchedLanguageExplanationMarkdown = `
+Kaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  
+
+  - äidinkieli (suomi/ruotsi) 3 op  
+
+  - Toinen kotimainen kieli (ruotsi/suomi) 3 op 
+
+  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op 
+`
+
 export default {
   'common': {},
   'form': {
+    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'Mikä on koulusivistyskielesi?',
     'languageQuestion': 'Mistä kielestä haet kursseja?',
     'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',

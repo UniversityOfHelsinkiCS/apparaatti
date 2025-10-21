@@ -5,9 +5,19 @@ Your language of education affects the completion of your studies.
 Read more detailed instructions on the Study Service page
 [What is your language of education?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)
 `
+
+
+const searchedLanguageExplanationMarkdown = `
+All bachelor's degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:
+
+- Mother tongue (Finnish/Swedish) 3 cr
+- Second national language (Swedish/Finnish) 3 cr
+- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr
+`
 export default {
   'common': {},
   'form': {
+    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
     'primaryLanguageQuestion': 'What is your language of instruction?',
     'languageQuestion': 'What language are you looking for?',
     'primaryLanguageSpecificationQuestion': 'Which primary language type do you want to choose?',
