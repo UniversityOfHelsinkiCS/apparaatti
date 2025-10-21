@@ -55,6 +55,7 @@ export default {
     'studyPlaceRemote': 'Studier som inkluderar distansmöten',
     'studyPlaceCombined': 'Distansundervisning och undervisning ansikte mot ansikte',
     'studyPlaceF2F': 'Studier som inkluderar möten på plats',
+    'studyPlaceNeutral': 'Studieformen spelar ingen roll',
     'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
     'challengeQuestion_fi_primary_written': 'Är det svårt för dig att delta i genomföranden som inkluderar närvaro eller gemensamma onlinemöten på grund av din livssituation eller ångest?',

@@ -56,6 +56,7 @@ export default {
     'studyPlaceRemote': 'Studies that include remote sessions',
     'studyPlaceCombined': 'Distance learning and face-to-face teaching',
     'studyPlaceF2F': 'Studies that include face-to-face sessions',
+    'studyPlaceNeutral': 'The form of study does not matter',
     'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?',
     'challengeQuestion_fi_primary_written': 'Is it difficult for you to participate in implementations that include attendance or joint online meetings due to your life situation or anxiety?',
