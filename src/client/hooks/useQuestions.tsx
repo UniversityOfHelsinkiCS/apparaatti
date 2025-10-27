@@ -272,7 +272,8 @@ const useQuestions = () => {
           question: studyPlaceQuestion,
           options: [
             {id: 'neutral', name: t('form:studyPlaceNeutral')},
-            { id: 'remote', name: t('form:studyPlaceRemote')},
+            {id: 'remote', name: t('form:studyPlaceRemote')},
+            {id: 'online', name: t('form:studyPlaceOnline')},
             { id: 'hybrid', name: t('form:studyPlaceCombined')},
             { id: 'onsite', name: t('form:studyPlaceF2F')},
           ],

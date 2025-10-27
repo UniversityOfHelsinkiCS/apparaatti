@@ -53,6 +53,7 @@ export default {
     'graduationQuestionYes': 'Ja, inom sex månader.',
     'graduationQuestionNo': 'Jag tar inte examen om sex månader.',
     'studyPlaceRemote': 'Studier som inkluderar distansmöten',
+    'studyPlaceOnline': 'Självständiga nätstudier',
     'studyPlaceCombined': 'Distansundervisning och undervisning ansikte mot ansikte',
     'studyPlaceF2F': 'Studier som inkluderar möten på plats',
     'studyPlaceNeutral': 'Studieformen spelar ingen roll',

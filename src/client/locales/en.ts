@@ -54,6 +54,7 @@ export default {
     'graduationQuestionYes': 'Yes, within half a year.',
     'graduationQuestionNo': 'I am not graduating within half a year.',
     'studyPlaceRemote': 'Studies that include remote sessions',
+    'studyPlaceOnline': 'Independent online study',
     'studyPlaceCombined': 'Distance learning and face-to-face teaching',
     'studyPlaceF2F': 'Studies that include face-to-face sessions',
     'studyPlaceNeutral': 'The form of study does not matter',

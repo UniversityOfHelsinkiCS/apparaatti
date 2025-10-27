@@ -56,6 +56,7 @@ export default {
     'graduationQuestionYes': 'Kyllä, puolen vuoden sisällä.',
     'graduationQuestionNo': 'En ole valmistumassa puolen vuoden sisällä.',
     'studyPlaceRemote': 'Etätapaamisia sisältävä opiskelu.',
+    'studyPlaceOnline': 'Itsenäinen verkko-opiskelu',
     'studyPlaceCombined': 'Etäopiskelu ja lähiopetus',
     'studyPlaceF2F': 'Lähitapaamisia sisältävä opiskelu',
     'studyPlaceNeutral': 'Opiskelumuodolla ei ole väliä',
