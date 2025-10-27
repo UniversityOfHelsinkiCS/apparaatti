@@ -1,7 +1,7 @@
 import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 
@@ -31,12 +31,14 @@ function studyPlaceCoordinate(studyPlace: string){
   const baseCoordinate = Math.pow(10, 12)
   
   switch(studyPlace){
-  case 'remote':
+  case 'onsite':
     return baseCoordinate * 1
   case 'hybrid':
     return baseCoordinate * 2
-  case 'onsite':
+  case 'remote':
     return baseCoordinate * 3
+  case 'online':
+    return baseCoordinate * 4
   default:
     return baseCoordinate * 2 // in between is a good default since it gives balanced results 
   
@@ -134,7 +136,6 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
   }
   return false
 } 
-
 function courseStudyPlaceCoordinate(course: CourseData){
   // console.log('calculating the study place value for, ', course.name.fi)
 
@@ -144,16 +145,27 @@ function courseStudyPlaceCoordinate(course: CourseData){
   // console.log(courseName)  
   // console.log(courseName?.includes('etäopetus') || courseName?.includes('verkko-opetus'))
 
-  if(courseName?.includes('etäopetus' ) || courseName?.includes('verkko-opetus')){
-    return baseCoordinate * 1  
-  }
-  if(courseName?.includes('monimuo')){
-    return baseCoordinate * 2
-  }
-  if(courseName?.includes('lähiopetus')){
-    return baseCoordinate * 3  
-  }
+  // if(courseName?.includes('etäopetus' ) || courseName?.includes('verkko-opetus')){
+  //   return baseCoordinate * 1  
+  // }
+  // if(courseName?.includes('monimuo')){
+  //   return baseCoordinate * 2
+  // }
+  // if(courseName?.includes('lähiopetus')){
+  //   return baseCoordinate * 3  
+  // }
 
+  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-contact')){
+    return  baseCoordinate * 1  
+  }
+  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-blended')){
+    return  baseCoordinate * 2  
+  }
+  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-distance')){
+    return  baseCoordinate * 3  
+  }
+  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-online')){  return  baseCoordinate * 4  
+  }
   return baseCoordinate * 2 // course will be something in between remote and onsite and should be based in between as a default if nothing works
 }
 
