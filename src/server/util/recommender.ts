@@ -187,6 +187,9 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
+  if( hasReplacementCodeUrn){
+    console.log("course is replacement course: ", course.name.fi)
+  }
   const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
   const hasMoocCodeUrn = courseHasCustomCodeUrn(course, 'opintotarjonta:mooc')  
 
@@ -427,7 +430,16 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
 //In this point based one a difference does not punish as much as it gets 'ignored'
 function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): CourseRecommendation[]{
-  const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
+  //we want to ignore all exams except those that are replacement
+  const noExams = courses.filter(c =>
+    {
+      const isExam = c.course.name.fi?.toLowerCase().includes('tentti')
+      const isReplacementCourse = c.coordinates.replacement > 0
+      if(isReplacementCourse || !isExam){
+        return true
+      }
+      return false
+   })
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
 
@@ -446,11 +458,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
-      filterOnFail: true,
+      filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
     },
     {
-      filterOnFail: true,
+      filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.lang === userCoordinates.lang}
     },
     {
@@ -462,8 +474,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
     },
     {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
+      filterOnFail: false,      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
     },
     {
       filterOnFail: false,
@@ -475,7 +486,19 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement}
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
+           const result = c.coordinates.replacement === userCoordinates.replacement
+           if(result){
+             console.log("!!!!!!!hit!!!!")
+           }
+           else{
+             console.log("no match")
+             console.log(c.coordinates.replacement)
+             console.log(userCoordinates.replacement)
+             console.log("----")
+           }
+           return result
+         }
     },
     {
       filterOnFail: false,
