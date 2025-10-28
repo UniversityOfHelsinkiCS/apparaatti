@@ -113,27 +113,33 @@ export const organisationCodeToUrn: Record<string, string> = {
  
 }
 
-async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string){
+async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
   const codes = [organisationCode]
   // console.log(codes)
   for(const code of codes){
     const urnHit = organisationCodeToUrn[code]
     if(urnHit){
-      return courseHasCustomCodeUrn(course, urnHit)
+      const hasCustomCodeUrn =  courseHasCustomCodeUrn(course, urnHit)
+      if(hasCustomCodeUrn){
+        return true
+      } 
     }
   }
+  console.log("GOT HERE")
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
-
   const orgCodes = organisations.map(o => o.code)
   if( organisationCode in orgCodes){
     return true
   }
+
   //there are courses that are not marked with customCodeUrn and do not have an organisationCode marked on them, in that case we fall back to hard coded lookup exel =)
-  const organisationSpesificCourseCodes =  readOrganisationRecommendationData()
-  const courseCodesInOrganisation = organisationSpesificCourseCodes.find(r => r.name === organisationCode)
-  if(courseCodesInOrganisation.includes(course.course.code)){
+  console.log("EVERYTHING HAS FAILED AND I MUST TRY CODES")
+  const courseCodeIsForOrganisation = courseHasAnyOfCodes(course, codesInOrganisation)
+  if(courseCodeIsForOrganisation){
     return true
   }
+
+  console.log("CODES FAILED")
   return false
 } 
 function courseStudyPlaceCoordinate(course: CourseData){
@@ -181,14 +187,27 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   
   const dimensions = Object.keys(userCoordinates)
   
-  const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode)
+  const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
+  if(!sameOrganisationAsUser){
+    console.log("CODE DEBUG")
+    console.log("no hit")
+    console.log(course.courseCodes)
+    console.log(organisationCode)
+    console.log(codes.userOrganisation)
+
+    const debugthing = courseHasAnyOfCodes(course, codes.userOrganisation)
+    console.log(debugthing)
+  }
+  else{
+    console.log("hit")
+  }
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
  
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
   if( hasReplacementCodeUrn){
-    console.log("course is replacement course: ", course.name.fi)
+    console.log('course is replacement course: ', course.name.fi)
   }
   const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
   const hasMoocCodeUrn = courseHasCustomCodeUrn(course, 'opintotarjonta:mooc')  
@@ -432,14 +451,14 @@ function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserC
 function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): CourseRecommendation[]{
   //we want to ignore all exams except those that are replacement
   const noExams = courses.filter(c =>
-    {
-      const isExam = c.course.name.fi?.toLowerCase().includes('tentti')
-      const isReplacementCourse = c.coordinates.replacement > 0
-      if(isReplacementCourse || !isExam){
-        return true
-      }
-      return false
-   })
+  {
+    const isExam = c.course.name.fi?.toLowerCase().includes('tentti')
+    const isReplacementCourse = c.coordinates.replacement > 0
+    if(isReplacementCourse || !isExam){
+      return true
+    }
+    return false
+  })
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
 
@@ -454,7 +473,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
  
   const comparisons: ComparisonType[] = [
     {
-      filterOnFail: false, 
+      filterOnFail: true, 
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
     },
     {
@@ -487,18 +506,9 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
-           const result = c.coordinates.replacement === userCoordinates.replacement
-           if(result){
-             console.log("!!!!!!!hit!!!!")
-           }
-           else{
-             console.log("no match")
-             console.log(c.coordinates.replacement)
-             console.log(userCoordinates.replacement)
-             console.log("----")
-           }
-           return result
-         }
+        const result = c.coordinates.replacement === userCoordinates.replacement
+        return result
+      }
     },
     {
       filterOnFail: false,

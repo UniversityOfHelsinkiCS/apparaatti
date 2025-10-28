@@ -30,10 +30,10 @@ export async function curcusWithUnitIdOf(courseUnitIds: string[]) {
   })
 }
 
-export async function organisationWithGroupIdOf(groupIds: any) {
+export async function organisationWithGroupIdOf(groupIds: string[]) {
   return await Organisation.findAll({
     where: {
-      id: [groupIds]
+      id: groupIds
     },
     raw: true,
   })
