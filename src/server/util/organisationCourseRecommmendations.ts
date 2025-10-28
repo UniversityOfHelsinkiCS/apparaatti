@@ -78,13 +78,13 @@ export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null){
 }
 
 export function courseHasAnyRealisationCodeUrn(course: CourseData, search: string[]){for (const cmpr of search){
-    const hit = course.courseUnitRealisationTypeUrn.includes(search)
-    if(hit){
-      console.log("FOUND IT")
-      return true
-    }
+  const hit = course.courseUnitRealisationTypeUrn.includes(search)
+  if(hit){
+    console.log('FOUND IT')
+    return true
   }
-  return false
+}
+return false
 }
 
 export function courseHasCustomCodeUrn(course: CourseData, codeUrn: string | null){
