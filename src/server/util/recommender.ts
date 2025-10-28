@@ -16,7 +16,6 @@ const getStudyYearFromPeriod = (id: string) => {
 async function recommendCourses(answerData: AnswerData) {
   try{
     const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-    console.log('usercoords done')
     const recommendations = await getRecommendations(userCoordinates, answerData)
 
     return recommendations
@@ -125,7 +124,6 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
       } 
     }
   }
-  console.log('GOT HERE')
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
   const orgCodes = organisations.map(o => o.code)
   if( organisationCode in orgCodes){
@@ -133,13 +131,11 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
   }
 
   //there are courses that are not marked with customCodeUrn and do not have an organisationCode marked on them, in that case we fall back to hard coded lookup exel =)
-  console.log('EVERYTHING HAS FAILED AND I MUST TRY CODES')
   const courseCodeIsForOrganisation = courseHasAnyOfCodes(course, codesInOrganisation)
   if(courseCodeIsForOrganisation){
     return true
   }
 
-  console.log('CODES FAILED')
   return false
 } 
 function courseStudyPlaceCoordinate(course: CourseData){
@@ -188,19 +184,6 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const dimensions = Object.keys(userCoordinates)
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
-  if(!sameOrganisationAsUser){
-    console.log('CODE DEBUG')
-    console.log('no hit')
-    console.log(course.courseCodes)
-    console.log(organisationCode)
-    console.log(codes.userOrganisation)
-
-    const debugthing = courseHasAnyOfCodes(course, codes.userOrganisation)
-    console.log(debugthing)
-  }
-  else{
-    console.log('hit')
-  }
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
  
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
@@ -462,9 +445,9 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
  
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
 
-  console.log('---DEBUG---')
-  console.log(pickedPeriods)
-  console.log('------')
+  // console.log('---DEBUG---')
+  // console.log(pickedPeriods)
+  // console.log('------')
 
   type ComparisonType = {
     filterOnFail: boolean,
