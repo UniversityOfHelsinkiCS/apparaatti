@@ -125,7 +125,7 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
       } 
     }
   }
-  console.log("GOT HERE")
+  console.log('GOT HERE')
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
   const orgCodes = organisations.map(o => o.code)
   if( organisationCode in orgCodes){
@@ -133,13 +133,13 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
   }
 
   //there are courses that are not marked with customCodeUrn and do not have an organisationCode marked on them, in that case we fall back to hard coded lookup exel =)
-  console.log("EVERYTHING HAS FAILED AND I MUST TRY CODES")
+  console.log('EVERYTHING HAS FAILED AND I MUST TRY CODES')
   const courseCodeIsForOrganisation = courseHasAnyOfCodes(course, codesInOrganisation)
   if(courseCodeIsForOrganisation){
     return true
   }
 
-  console.log("CODES FAILED")
+  console.log('CODES FAILED')
   return false
 } 
 function courseStudyPlaceCoordinate(course: CourseData){
@@ -189,8 +189,8 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
   if(!sameOrganisationAsUser){
-    console.log("CODE DEBUG")
-    console.log("no hit")
+    console.log('CODE DEBUG')
+    console.log('no hit')
     console.log(course.courseCodes)
     console.log(organisationCode)
     console.log(codes.userOrganisation)
@@ -199,7 +199,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     console.log(debugthing)
   }
   else{
-    console.log("hit")
+    console.log('hit')
   }
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
  
