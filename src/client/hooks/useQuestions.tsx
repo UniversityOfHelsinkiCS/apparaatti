@@ -193,7 +193,7 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
-       ],
+      ],
     },
     {
       number: '6',
