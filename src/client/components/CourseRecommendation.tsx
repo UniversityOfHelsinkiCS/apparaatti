@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useState } from 'react'
 import RecommendationReasonsModal from './RecommendationReasons'
+import useQuestions from '../hooks/useQuestions'
 
 const CourseRecommendation = ({
   course,
@@ -88,7 +89,7 @@ const CourseRecommendation = ({
 
             <Typography>{courseDateRange(course.course)}</Typography>
           </Stack>
-          {points ? <Typography>{t('form:points')}: {points} / 10</Typography> : <></>}
+          {points ? <Typography>{t('form:points')}: {points}</Typography> : <></>}
           <Button
             variant="contained"
             color="primary"
