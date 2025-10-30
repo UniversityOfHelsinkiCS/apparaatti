@@ -1,28 +1,8 @@
-const primaryLanguageExplanationMarkdown = `
-Ditt utbildningsspråk påverkar slutförandet av dina studier.
-
-Läs mer detaljerade instruktioner på sidan Studietjänst
-[Vad är ditt utbildningsspråk?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)
-`
-
-
-const searchedLanguageExplanationMarkdown = `
-Alla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:
-
-- Modersmål (finska/svenska) 3 sp
-- Andra inhemska språket (svenska/finska) 3 sp
-- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp
-`
-
-const previouslyDoneLangExplanationMarkdown = `
-De obligatoriska språk- och kommunikationsstudierna i examen kan ersättas med motsvarande studier som ingår i en tidigare inhemsk högskoleexamen och andra motsvarande tidigare prestationer.
-`
-
 export default {
   'common': {},
   'form': {
-    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
-    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
+    'previoslyDoneLangExplanation': '\nDe obligatoriska språk- och kommunikationsstudierna i examen kan ersättas med motsvarande studier som ingår i en tidigare inhemsk högskoleexamen och andra motsvarande tidigare prestationer.\n',
+    'searchedLanguageExplanation': '\nAlla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:\n\n- Modersmål (finska/svenska) 3 sp\n- Andra inhemska språket (svenska/finska) 3 sp\n- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp\n',
     'primaryLanguageQuestion': 'Vilket är ditt undervisningsspråk?',
     'languageQuestion': 'Vilket språk letar du efter kurser i?',
     'primaryLanguageSpecificationQuestion': 'Vilken primär språktyp skulle du vilja välja?',
@@ -57,11 +37,12 @@ export default {
     'studyPlaceCombined': 'Distansundervisning och undervisning ansikte mot ansikte',
     'studyPlaceF2F': 'Studier som inkluderar möten på plats',
     'studyPlaceNeutral': 'Studieformen spelar ingen roll',
-    'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
+    'primaryLanguageExplanation': '\nDitt utbildningsspråk påverkar slutförandet av dina studier.\n\nLäs mer detaljerade instruktioner på sidan Studietjänst\n[Vad är ditt utbildningsspråk?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)\n',
     'replacementQuestion_fi_primary_written': 'Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
     'replacementQuestion_fi_secondary_any': 'Är du tvåspråkig (finska – svenska) eller använder du finska mycket och flytande i dina studier och/eller i ditt övriga liv?',
     'challengeQuestion_fi_primary_written': 'Är det svårt för dig att delta i genomföranden som inkluderar närvaro eller gemensamma onlinemöten på grund av din livssituation eller ångest?',
     'challengeQuestion_fi_primary_spoken': 'Jag tycker att sociala situationer är skrämmande och jag blir väldigt nervös i olika interaktionssituationer.',
+    'points': 'accuracy'
   },
   'question': {
     'extrainfo': 'Ytterligare information',

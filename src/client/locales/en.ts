@@ -1,29 +1,8 @@
-
-const primaryLanguageExplanationMarkdown = `
-Your language of education affects the completion of your studies.
-
-Read more detailed instructions on the Study Service page
-[What is your language of education?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)
-`
-
-
-const searchedLanguageExplanationMarkdown = `
-All bachelor's degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:
-
-- Mother tongue (Finnish/Swedish) 3 cr
-- Second national language (Swedish/Finnish) 3 cr
-- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr
-`
-
-const previouslyDoneLangExplanationMarkdown = `
-The compulsory language and communication studies of the degree can be replaced by equivalent studies included in a previous domestic higher education degree and other equivalent previous achievements.
-`
-
 export default {
   'common': {},
   'form': {
-    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
-    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
+    'previoslyDoneLangExplanation': '\nThe compulsory language and communication studies of the degree can be replaced by equivalent studies included in a previous domestic higher education degree and other equivalent previous achievements.\n',
+    'searchedLanguageExplanation': '\nAll bachelor\'s degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n',
     'primaryLanguageQuestion': 'What is your language of instruction?',
     'languageQuestion': 'What language are you looking for?',
     'primaryLanguageSpecificationQuestion': 'Which primary language type do you want to choose?',
@@ -58,11 +37,12 @@ export default {
     'studyPlaceCombined': 'Distance learning and face-to-face teaching',
     'studyPlaceF2F': 'Studies that include face-to-face sessions',
     'studyPlaceNeutral': 'The form of study does not matter',
-    'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
+    'primaryLanguageExplanation': '\nYour language of education affects the completion of your studies.\n\nRead more detailed instructions on the Study Service page\n[What is your language of education?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni)\n',
     'replacementQuestion_fi_primary_written': 'Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?',
     'replacementQuestion_fi_secondary_any': 'Are you bilingual (Finnish - Swedish) or do you use Finnish a lot and fluently in your studies and/or in other areas of your life?',
     'challengeQuestion_fi_primary_written': 'Is it difficult for you to participate in implementations that include attendance or joint online meetings due to your life situation or anxiety?',
     'challengeQuestion_fi_primary_spoken': 'I find social situations scary and I get very nervous in different interaction situations.',
+    'points': 'accuracy'
   },
   'question': {
     'extrainfo': 'Extra information',

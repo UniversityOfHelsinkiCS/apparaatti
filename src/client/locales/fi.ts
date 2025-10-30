@@ -1,31 +1,8 @@
-
-const primaryLanguageExplanationMarkdown = `
- Opintojen suorittamiseen vaikuttaa koulusivistyskielesi.  
-
- Lue tarkemmat ohjeet Opiskelu-palvelun sivulta
- [Mikä on koulusivistyskielesi?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni) 
-
-`
-
-const searchedLanguageExplanationMarkdown = `
-Kaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  
-
-  - äidinkieli (suomi/ruotsi) 3 op  
-
-  - Toinen kotimainen kieli (ruotsi/suomi) 3 op 
-
-  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op 
-`
-
-
-const previouslyDoneLangExplanationMarkdown= `
-Tutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. 
-`
 export default {
   'common': {},
   'form': {
-    'previoslyDoneLangExplanation': previouslyDoneLangExplanationMarkdown,
-    'searchedLanguageExplanation': searchedLanguageExplanationMarkdown,
+    'previoslyDoneLangExplanation': '\nTutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. \n',
+    'searchedLanguageExplanation': '\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n',
     'primaryLanguageQuestion': 'Mikä on koulusivistyskielesi?',
     'languageQuestion': 'Mistä kielestä haet kursseja?',
     'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',
@@ -60,11 +37,12 @@ export default {
     'studyPlaceCombined': 'Etäopiskelu ja lähiopetus',
     'studyPlaceF2F': 'Lähitapaamisia sisältävä opiskelu',
     'studyPlaceNeutral': 'Opiskelumuodolla ei ole väliä',
-    'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
+    'primaryLanguageExplanation': '\n Opintojen suorittamiseen vaikuttaa koulusivistyskielesi.  \n\n Lue tarkemmat ohjeet Opiskelu-palvelun sivulta\n [Mikä on koulusivistyskielesi?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni) \n\n',
     'replacementQuestion_fi_primary_written': 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
     'replacementQuestion_fi_secondary_any': 'Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?',
     'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
     'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.',
+    'points': 'tarkkuus'
   },
   'question': {
     'extrainfo': 'Lisätietoa',
