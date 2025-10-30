@@ -73,7 +73,7 @@ const RecommendationReason = ({question, recommendation, userCoordinates}: {ques
       <Typography sx={{fontSize: '1.2rem'}}>{isMatch ? '100%' : '0%'}</Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         <Markdown>
-        {question.explanation ? question.explanation : t('question:noExtrainfo')}
+          {question.explanation ? question.explanation : t('question:noExtrainfo')}
         </Markdown>
       </Typography>
     </Box>
