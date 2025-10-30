@@ -59,6 +59,7 @@ export default {
     'studyPlaceNeutral': 'Studieformen spelar ingen roll',
     'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
+    'replacementQuestion_fi_secondary_any': 'Är du tvåspråkig (finska – svenska) eller använder du finska mycket och flytande i dina studier och/eller i ditt övriga liv?',
     'challengeQuestion_fi_primary_written': 'Är det svårt för dig att delta i genomföranden som inkluderar närvaro eller gemensamma onlinemöten på grund av din livssituation eller ångest?',
     'challengeQuestion_fi_primary_spoken': 'Jag tycker att sociala situationer är skrämmande och jag blir väldigt nervös i olika interaktionssituationer.',
   },

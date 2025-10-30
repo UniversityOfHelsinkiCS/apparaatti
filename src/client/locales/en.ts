@@ -60,6 +60,7 @@ export default {
     'studyPlaceNeutral': 'The form of study does not matter',
     'primaryLanguageExplanation': primaryLanguageExplanationMarkdown,
     'replacementQuestion_fi_primary_written': 'Have you written a laudatur or eximia in the mother tongue (Finnish) (or S2) matriculation examination, or are you otherwise a skilled and self-directed writer?',
+    'replacementQuestion_fi_secondary_any': 'Are you bilingual (Finnish - Swedish) or do you use Finnish a lot and fluently in your studies and/or in other areas of your life?',
     'challengeQuestion_fi_primary_written': 'Is it difficult for you to participate in implementations that include attendance or joint online meetings due to your life situation or anxiety?',
     'challengeQuestion_fi_primary_spoken': 'I find social situations scary and I get very nervous in different interaction situations.',
   },

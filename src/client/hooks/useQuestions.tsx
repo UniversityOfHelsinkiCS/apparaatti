@@ -184,7 +184,16 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
-      ],
+        {
+          name: 'fi_secondary_any',
+          question: t('form:replacementQuestion_fi_secondary_any'), // this should be 'Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?' in fi.ts , make sure en.ts and sv.ts are correctly translated based on it
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+       ],
     },
     {
       number: '6',
