@@ -306,7 +306,7 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
-         {
+        {
           name: 'en_secondary_any',
           question: integratedQuestion,
           options: [
@@ -324,7 +324,7 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
-       ],
+      ],
     },
     {
       number: '11',
