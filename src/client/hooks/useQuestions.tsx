@@ -186,7 +186,7 @@ const useQuestions = () => {
         },
         {
           name: 'fi_secondary_any',
-          question: t('form:replacementQuestion_fi_secondary_any'), // this should be 'Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?' in fi.ts , make sure en.ts and sv.ts are correctly translated based on it
+          question: t('form:replacementQuestion_fi_secondary_any'),
           options: [
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
@@ -299,6 +299,62 @@ const useQuestions = () => {
         {
           name: 'default',
           question: integratedQuestion,
+          skipped: true,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+         {
+          name: 'en_secondary_any',
+          question: integratedQuestion,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_secondary_any',
+          question: integratedQuestion,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+       ],
+    },
+    {
+      number: '11',
+      mandatory: false,
+      id: 'independent',
+      effects: 'independent',
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: independentQuestion,
+          skipped: true,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'en_secondary_any',
+          question: independentQuestion,
+          options: [
+            {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_secondary_any',
+          question: independentQuestion,
           options: [
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
@@ -307,24 +363,6 @@ const useQuestions = () => {
         },
       ],
     },
-    // {
-    //   number: '11',
-    //   mandatory: false,
-    //   id: 'independent',
-    //   effects: 'independent',
-    //   type: 'multi',
-    //   variants: [
-    //     {
-    //       name: 'default',
-    //       question: independentQuestion,
-    //       options: [
-    //         {id: 'neutral', name: neutralText},
-    //         { id: '0', name: noText },
-    //         { id: '1', name: yesText },
-    //       ],
-    //     },
-    //   ],
-    // },
     // {
     //   number: '12',
     //   mandatory: false,

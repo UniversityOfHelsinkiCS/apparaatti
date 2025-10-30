@@ -21,6 +21,7 @@ export type Question = {
 
 export type Variant = {
   name: string
+  skipped: boolean | undefined
   question: string
   options: Option[]
 }

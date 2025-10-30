@@ -34,7 +34,7 @@ export default {
     'challengeQuestion': 'For me, learning a language is particularly challenging and it makes me very nervous/scared.',
     'graduationQuestion': 'Are you graduating soon?',
     'studyPlaceQuestion': 'Which form of study suits you best?',
-    'integratedQuestion': 'I am interedted in a course that is integrated into the studies in my field.',
+    'integratedQuestion': 'I am interested in a course that is integrated into the studies in my field.',
     'independentQuestion': 'I want to work independently or autonomously.',
     'flexibleQuestion': 'I want to take a course with a flexible schedule',
     'moocQuestion': 'Do you want to search for MOOCs (Massive Open Online Courses)?',

@@ -46,7 +46,12 @@ const MultiChoiceForm = ({
   const variantLookUp: Map<{language: string, primaryLanguage: string, primaryLanguageSpecification: string}, string> = new Map([
     [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
     [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
-    [{language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
+    [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_written'],
+     [{language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
+     [{language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
+    [{language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
+   [{language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
+[{language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
   ])
 
   const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
@@ -78,16 +83,6 @@ const MultiChoiceForm = ({
     case 'studyphase':
       return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} setUserOrgCode={setUserOrgCode} />
     case 'multi':
-      if(question.id === 'integrated'){
-        if(additionalInfo.organisationsWithIntegrated.includes(userOrgCode)){
-          return (
-            <FormQuestion key={key} question={question} questionVariantId={variantToDisplayId}/>
-          )
-        }else{
-          return <SkippedQuestion key={key} question={question}/>
-        }
-
-      }
       //console.log("multi")
       return (
         <FormQuestion key={key} question={question} questionVariantId={variantToDisplayId} />

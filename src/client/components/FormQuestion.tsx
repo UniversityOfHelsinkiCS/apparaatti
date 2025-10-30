@@ -20,6 +20,11 @@ const FormQuestion = ({
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const variant = pickVariant(question, questionVariantId)
+  if(variant?.skipped){
+    return(
+      <></>
+    )
+  }
   return (
     <Box
       sx={{
