@@ -3,6 +3,7 @@ import { CourseRecommendation, UserCoordinates } from '../../common/types'
 import useQuestions from '../hooks/useQuestions'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
+import Markdown from 'react-markdown'
 
 
 
@@ -71,7 +72,9 @@ const RecommendationReason = ({question, recommendation, userCoordinates}: {ques
 
       <Typography sx={{fontSize: '1.2rem'}}>{isMatch ? '100%' : '0%'}</Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Markdown>
         {question.explanation ? question.explanation : t('question:noExtrainfo')}
+        </Markdown>
       </Typography>
     </Box>
   )
