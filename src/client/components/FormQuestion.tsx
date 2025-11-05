@@ -32,7 +32,7 @@ const FormQuestion = ({
       }}
     >
       <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question} question={question}/>
-      <ExtraInfoModal question={question} open={open} handleClose={handleClose}/>
+      <ExtraInfoModal currentVariant={questionVariantId} question={question} open={open} handleClose={handleClose}/>
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
           <FormControlLabel

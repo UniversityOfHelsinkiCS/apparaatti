@@ -176,6 +176,7 @@ const useQuestions = () => {
           ],
         },
         {
+          explanation: 'Suomi äidinkielenä oleva infolaatikko',
           name: 'fi_primary_written',
           question: t('form:replacementQuestion_fi_primary_written'),
           options: [

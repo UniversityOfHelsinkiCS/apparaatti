@@ -4,7 +4,7 @@ import { Question } from '../../common/types'
 import Markdown from 'react-markdown'
 import ActionButton from './actionButton'
 
-const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open: boolean, handleClose: () => void}) => {
+const ExtraInfoModal = ({question, open, handleClose, currentVariant}: {question: Question, open: boolean, handleClose: () => void, currentVariant?: string}) => {
   const {t} = useTranslation()
   const style = {
     position: 'absolute',
@@ -19,6 +19,18 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
     p: 4,
   }
 
+  const pickExplanation = () => {
+    if(currentVariant){
+      const explanationVariant = question.variants.find((v) => v.name === currentVariant)
+      if(explanationVariant?.explanation){
+        return explanationVariant.explanation
+      }
+    }
+
+    return question.explanation || t('question:noExtrainfo')
+  }
+  const explanationToShow = pickExplanation()
+
   return(
     <Modal
       open={open}
@@ -31,7 +43,7 @@ const ExtraInfoModal = ({question, open, handleClose}: {question: Question, open
           {t('question:extrainfo')}
         </Typography>
         <Markdown>
-          {question.explanation || t('question:noExtrainfo')}
+          {explanationToShow}
         </Markdown>
 
         <ActionButton onClick={handleClose} text={t('question:close')}></ActionButton>

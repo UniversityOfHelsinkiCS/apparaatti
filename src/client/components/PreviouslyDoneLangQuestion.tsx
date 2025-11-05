@@ -48,7 +48,7 @@ const PreviuslyDoneLangQuestion = ({
     }}>
       <QuestionTitle number={question.number} handleOpen={handleOpen} title={variant.question} question={question}/>
      
-      <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
+      <ExtraInfoModal currentVariant={languageId} question={question} open={open} handleClose={handleClose} />
       
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
         {
