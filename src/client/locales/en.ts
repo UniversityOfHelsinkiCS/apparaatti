@@ -1,8 +1,8 @@
 export default {
   'common': {},
   'form': {
-'mentoringQuestion_fi_secondary_any':'"Would you like to practice everyday conversations together with others and review basic grammar before attending the Finnish course that is part of the exam?',
- 'challengeQuestion_fi_secondary_any': 'Are you so anxious about using the Finnish language that you can\'t participate in a course where the language is practiced together with others?',
+    'mentoringQuestion_fi_secondary_any':'"Would you like to practice everyday conversations together with others and review basic grammar before attending the Finnish course that is part of the exam?',
+    'challengeQuestion_fi_secondary_any': 'Are you so anxious about using the Finnish language that you can\'t participate in a course where the language is practiced together with others?',
     'previoslyDoneLangExplanation': '\nThe compulsory language and communication studies of the degree can be replaced by equivalent studies included in a previous domestic higher education degree and other equivalent previous achievements.\n',
     'searchedLanguageExplanation': '\nAll bachelor\'s degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n',
     'primaryLanguageQuestion': 'What is your language of instruction?',

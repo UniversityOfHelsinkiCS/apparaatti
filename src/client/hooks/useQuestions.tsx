@@ -257,7 +257,7 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
-         {
+        {
           name: 'fi_secondary_any',
           question: t('form:challengeQuestion_fi_secondary_any'),
           options: [
