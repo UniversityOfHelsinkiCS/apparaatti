@@ -29,7 +29,7 @@ const PreviuslyDoneLangQuestion = ({
   const yesOption = variant.options.find((o) => o.id === '1')
   const noOption = variant.options.find((o) => o.id === '0')
 
-  if (!yesOption || !noOption || !neutralOption) {
+  if (!yesOption || !noOption) {
     return <p>Unknown error on question</p>
   }
 
@@ -51,13 +51,17 @@ const PreviuslyDoneLangQuestion = ({
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
       
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
-        <FormOption
+        {
+        neutralOption ? 
+ <FormOption
           id={neutralOption.id}
           value={neutralOption.id}
           label={neutralOption.name}
           dataCy={'previously-done-lang-option-neutral'}
-        />
-
+        /> :
+      <></>
+      }
+       
         <FormOption
           id={yesOption.id}
           value={yesOption.id}
