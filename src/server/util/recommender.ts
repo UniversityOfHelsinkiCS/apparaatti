@@ -202,7 +202,6 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : 1, // there is a offset value for this field to make sure that different organisation leads to a really high distance
-
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
@@ -476,7 +475,8 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
     },
     {
-      filterOnFail: false,      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
     },
     {
       filterOnFail: false,
