@@ -212,6 +212,15 @@ const useQuestions = () => {
             {id: '0', name: t('form:mentoringQuestionNo')}
           ],
         },
+        {
+          name: 'fi_secondary_any',
+          question: t('form:mentoringQuestion_fi_secondary_any'),
+          options: [
+            { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
       ],
     },
     {
@@ -242,6 +251,15 @@ const useQuestions = () => {
         {
           name: 'fi_primary_spoken',
           question: t('form:challengeQuestion_fi_primary_spoken'),
+          options: [
+            { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+         {
+          name: 'fi_secondary_any',
+          question: t('form:challengeQuestion_fi_secondary_any'),
           options: [
             { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
