@@ -52,15 +52,15 @@ const PreviuslyDoneLangQuestion = ({
       
       <RadioGroup name={question.id} value={selectedValue} onChange={handleRadioChange}>
         {
-        neutralOption ? 
- <FormOption
-          id={neutralOption.id}
-          value={neutralOption.id}
-          label={neutralOption.name}
-          dataCy={'previously-done-lang-option-neutral'}
-        /> :
-      <></>
-      }
+          neutralOption ? 
+            <FormOption
+              id={neutralOption.id}
+              value={neutralOption.id}
+              label={neutralOption.name}
+              dataCy={'previously-done-lang-option-neutral'}
+            /> :
+            <></>
+        }
        
         <FormOption
           id={yesOption.id}
