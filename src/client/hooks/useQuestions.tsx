@@ -3,8 +3,8 @@ import { Question } from '../../common/types'
 
 
 
-export const pickVariant = (question: Question, languageId: string) => {
-  const hit = question.variants.find((v)=> v.name === languageId)
+export const pickVariant = (question: Question, variantId: string) => {
+  const hit = question.variants.find((v)=> v.name === variantId)
   if(hit){
     return hit
   }
@@ -12,6 +12,8 @@ export const pickVariant = (question: Question, languageId: string) => {
   const fallback = question.variants.find((v) => v.name === 'default')
   return fallback
 }
+
+
 
 
 export const variantLookUp: Map<{language: string, primaryLanguage: string, primaryLanguageSpecification: string}, string> = new Map([
@@ -72,7 +74,7 @@ const useQuestions = () => {
   const flexibleQuestion = t('form:flexibleQuestion')
   const questions: Question[] = [
     {
-      number: '1',
+      number: '',
       mandatory: true,
       effects: 'org',
       id: 'study-field-select',
@@ -85,7 +87,7 @@ const useQuestions = () => {
       ] //there are no variants for this one
     },
     {
-      number: '2',
+      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'primary-language',
@@ -104,7 +106,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '3',
+      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'lang-1',
@@ -124,10 +126,11 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '3.1',
+      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'primary-language-specification',
+      isSubQuestionForQuestionId: 'lang-1',
       type: 'primary-language-specification',
 
       variants: [
@@ -143,7 +146,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '4',
+      number: '',
       effects: 'none',
       mandatory: false,
       id: 'previusly-done-lang',
@@ -190,7 +193,7 @@ const useQuestions = () => {
     //   ],
     // },
     {
-      number: '5',
+      number: '',
       mandatory: false,
       effects: 'none',
       id: 'replacement',
@@ -227,7 +230,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '6',
+      number: '',
       mandatory: false,
       id: 'mentoring',
       effects: 'mentoring',
@@ -255,7 +258,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '7',
+      number: '',
       mandatory: false,
       id: 'challenge',
       effects: 'challenge',
@@ -300,7 +303,7 @@ const useQuestions = () => {
       ],
     },  
     {
-      number: '8',
+      number: '',
       mandatory: false,
       id: 'graduation',
       type: 'multi',
@@ -319,7 +322,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '9',
+      number: '',
       mandatory: false,
       id: 'study-place',
       effects: 'studyPlace',
@@ -339,7 +342,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '10',
+      number: '',
       mandatory: false,
       id: 'integrated',
       effects: 'integrated',
@@ -376,7 +379,7 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '11',
+      number: '',
       mandatory: false,
       id: 'independent',
       effects: 'independent',

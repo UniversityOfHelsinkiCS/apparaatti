@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
-import useQuestions from '../hooks/useQuestions'
+import useQuestions, { pickVariant } from '../hooks/useQuestions'
 import { Question } from '../../common/types'
 
 
@@ -29,8 +29,47 @@ export const FormContextProvider = ({ children }: { children: ReactNode }) => {
   const [variantToDisplayId, setVariantToDisplayId] = useState('default')
   const allQuestions = useQuestions()
 
-  const questions = allQuestions //this will be mankeled to have dynamic number based on what questions are shown at the moment
+  const questionSkippedBasedOnVariant = (question: Question) => {
+    const currentVariant = pickVariant(question, variantToDisplayId)
+    if(currentVariant?.skipped === true ){
+      return true
+    }
+    return false
+  }
 
+  const calculateNumbers = (questionsList: Question[]) => {
+    
+
+    let number = 1
+    const questionsWithNumbers: Question[] = []
+    for(const question of questionsList){
+      if(!question.isSubQuestionForQuestionId){
+        question.number = number.toString()
+        questionsWithNumbers.push(question)
+        number++
+      }
+      else{
+        //one layer of subquestions is supported for now...
+        //this part causes all the child questions to appear after one another, ill call it a feature
+        // parent must exist before the children
+        const parent = questionsList.find((q) => q.id === question.isSubQuestionForQuestionId)
+        const allChildren = questionsList.filter((q) => q?.isSubQuestionForQuestionId === parent.id ) 
+        let childNumber = 1
+        for(const child of allChildren){
+          child.number = parent?.number + '.' + childNumber.toString()
+          questionsWithNumbers.push(child)
+          childNumber++
+        }
+      }
+    }
+    return questionsWithNumbers
+  }
+  const fixNumberingBasedOnSkippedQuestions = (questions: Question[]) => {
+    const questionsNotSkipped: Question[] = questions.filter((q) => !questionSkippedBasedOnVariant(q))
+    const questionsWithNumbers = calculateNumbers(questionsNotSkipped)
+    return questionsWithNumbers
+  }
+  const questions = fixNumberingBasedOnSkippedQuestions(allQuestions) 
 
   return (
     <FormContext.Provider value={{
