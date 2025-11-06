@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Question } from '../../common/types'
+import { Question, Variant } from '../../common/types'
 
 
 
@@ -26,6 +26,17 @@ export const variantLookUp: Map<{language: string, primaryLanguage: string, prim
   [{language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
   [{language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
 ])
+
+export const pickQuestionExplanation = (variantId: string | undefined, question: Question, t) => {
+  if(variantId){
+    const explanationVariant = question.variants.find((v) => v.name === variantId)
+    if(explanationVariant?.explanation){
+      return explanationVariant.explanation
+    }
+  }
+
+  return question.explanation || t('question:noExtrainfo')
+}
 
 const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
   //if shouldBe is an empty string it is intended as 'anything is allowed for this'

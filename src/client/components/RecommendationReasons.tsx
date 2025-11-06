@@ -1,6 +1,6 @@
 import { Box, Modal, Typography } from '@mui/material'
-import { CourseRecommendation, UserCoordinates } from '../../common/types'
-import useQuestions from '../hooks/useQuestions'
+import { CourseRecommendation, Question, UserCoordinates } from '../../common/types'
+import useQuestions, { pickQuestionExplanation, pickVariant } from '../hooks/useQuestions'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
@@ -23,7 +23,7 @@ const RecommendationReasonsModal = ({recommendation, open, handleClose, userCoor
     height: '100vh',
     overflowY: 'scroll'
   }
-  const {questions} = useFormContext()
+  const {variantToDisplayId, questions} = useFormContext()
   return(
     <Modal
 
@@ -34,18 +34,20 @@ const RecommendationReasonsModal = ({recommendation, open, handleClose, userCoor
     >
       <Box sx={style}>
         {questions.map((q) =>
-          <RecommendationReason userCoordinates={userCoordinates} key={q.id} question={q} recommendation={recommendation}></RecommendationReason>)}
+          <RecommendationReason variantToDisplayId={variantToDisplayId} userCoordinates={userCoordinates} key={q.id} question={q} recommendation={recommendation}></RecommendationReason>)}
       </Box>
     </Modal>
   )
 }
 
 
-const RecommendationReason = ({question, recommendation, userCoordinates}: {question: any, recommendation: CourseRecommendation, userCoordinates: UserCoordinates}) => {
+const RecommendationReason = ({variantToDisplayId, question, recommendation, userCoordinates}: {variantToDisplayId: string, question: Question, recommendation: CourseRecommendation, userCoordinates: UserCoordinates}) => {
   const {t} = useTranslation()
   const [isMatch, setMatch] = useState(false)
+  const variant = pickVariant(question, variantToDisplayId)
   const checkIsMatching = () => {
-    const coordKey = question.effects
+    const coordKey = question.effects 
+
     const course = recommendation
     const userValue = userCoordinates[coordKey]
     if(coordKey === 'date'){
@@ -67,14 +69,15 @@ const RecommendationReason = ({question, recommendation, userCoordinates}: {ques
     checkIsMatching()
   }, [])
     
+  const explanation = pickQuestionExplanation(variantToDisplayId, question, t)
   return(
     <Box sx={{padding: '1rem', margin: '0.5rem', borderColor: 'gray', borderWidth: '1px', borderStyle: 'solid'}}>
-      <Typography sx={{fontSize: '1.2rem'}}>{question.variants[0].question}</Typography>
+      <Typography sx={{fontSize: '1.2rem'}}>{variant.question}</Typography>
 
       <Typography sx={{fontSize: '1.2rem'}}>{isMatch ? '100%' : '0%'}</Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         <Markdown>
-          {question.explanation ? question.explanation : t('question:noExtrainfo')}
+          {explanation}
         </Markdown>
       </Typography>
     </Box>

@@ -11,7 +11,7 @@ export type Option = {
 
 export type Question = {
   id: string
-  effects?: string
+  effects: string
   isSubQuestionForQuestionId?: string
   number: string
   mandatory?: boolean

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
 import Markdown from 'react-markdown'
 import ActionButton from './actionButton'
+import { pickQuestionExplanation } from '../hooks/useQuestions'
 
 const ExtraInfoModal = ({question, open, handleClose, currentVariant}: {question: Question, open: boolean, handleClose: () => void, currentVariant?: string}) => {
   const {t} = useTranslation()
@@ -19,17 +20,8 @@ const ExtraInfoModal = ({question, open, handleClose, currentVariant}: {question
     p: 4,
   }
 
-  const pickExplanation = () => {
-    if(currentVariant){
-      const explanationVariant = question.variants.find((v) => v.name === currentVariant)
-      if(explanationVariant?.explanation){
-        return explanationVariant.explanation
-      }
-    }
-
-    return question.explanation || t('question:noExtrainfo')
-  }
-  const explanationToShow = pickExplanation()
+  
+  const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
 
   return(
     <Modal
