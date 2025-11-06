@@ -4,6 +4,7 @@ import useQuestions from '../hooks/useQuestions'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
+import { useFormContext } from '../contexts/formContext'
 
 
 
@@ -22,7 +23,7 @@ const RecommendationReasonsModal = ({recommendation, open, handleClose, userCoor
     height: '100vh',
     overflowY: 'scroll'
   }
-  const questions = useQuestions()
+  const {questions} = useFormContext()
   return(
     <Modal
 

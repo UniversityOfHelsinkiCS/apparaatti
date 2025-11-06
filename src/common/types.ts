@@ -11,20 +11,21 @@ export type Option = {
 
 export type Question = {
   id: string
+  effects?: string
   number: string
-  mandatory: boolean
-  value: string
+  mandatory?: boolean
+  value?: string
   type: string
-  explanation: string
+  explanation?: string
   variants: Variant[]
 }
 
 export type Variant = {
   name: string
-  skipped: boolean | undefined
-  explanation: string | undefined
+  skipped?: boolean | undefined
+  explanation?: string | undefined
   question: string
-  options: Option[]
+  options?: Option[]
 }
 
 export type Form = {

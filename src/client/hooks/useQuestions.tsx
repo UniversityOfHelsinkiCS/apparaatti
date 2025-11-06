@@ -70,7 +70,7 @@ const useQuestions = () => {
   const integratedQuestion = t('form:integratedQuestion')
   const independentQuestion = t('form:independentQuestion')
   const flexibleQuestion = t('form:flexibleQuestion')
-  const questions = [
+  const questions: Question[] = [
     {
       number: '1',
       mandatory: true,

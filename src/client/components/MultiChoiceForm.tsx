@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, FormControl, Typography } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
@@ -12,6 +12,7 @@ import useQuestions, { updateVariantToDisplayId } from '../hooks/useQuestions.ts
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import SkippedQuestion from './SkippedQuestion.tsx'
+import { useFormContext } from '../contexts/formContext.tsx'
 
 const MultiChoiceForm = ({
   onSubmit,
@@ -27,12 +28,23 @@ const MultiChoiceForm = ({
   supportedOrganisations: any
 }) => {
   const {t} = useTranslation()
-  const [primaryLanguage, setPrimaryLanguage] = useState('')
-  const [primaryLanguageSpecification, setPrimaryLanguageSpecification] = useState('')
-  const [language, setLanguage] = useState('')
-  const [variantToDisplayId, setVariantToDisplayId] = useState('default')
+  const {
+    
+    language,
+    setLanguage,
+
+    primaryLanguage,
+    setPrimaryLanguage,
+
+    primaryLanguageSpecification,
+    setPrimaryLanguageSpecification,
+
+    variantToDisplayId,
+    setVariantToDisplayId,
+
+    questions
+  } = useFormContext()
   const [userOrgCode, setUserOrgCode] = useState('')
-  const questions = useQuestions()
    
   const { data: organisationsWithIntegrated, isLoading: isIntegratedLoading } = useQuery({
     queryKey: ['integrated'],
