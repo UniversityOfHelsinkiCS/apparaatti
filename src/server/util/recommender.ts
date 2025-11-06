@@ -1,7 +1,7 @@
 import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 
@@ -82,6 +82,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
     graduation: commonCoordinateFromAnswerData(readAnswer(answerData, 'graduation'), Math.pow(10, 12), 0, null),
     mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
+    finmu: commonCoordinateFromAnswerData(readAnswer(answerData, 'finmu'), Math.pow(10,12), 0, null),
     integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), Math.pow(10, 12), 0, null),
     studyPlace:  studyPlaceCoordinate(readAnswer(answerData, 'study-place')),
     replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), Math.pow(10, 24), 0, null),
@@ -197,6 +198,8 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
 
   const isIndependent = isIndependentCourse(course)
   const isMentoringCourse =  courseHasAnyOfCodes(course, mentoringCourseCodes)
+  const isFinmuMentoringCourse = courseHasAnyOfCodes(course, finmuMentroingCourseCodes)
+
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
   
   const courseCoordinates = {
@@ -205,6 +208,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
+    finmu: isFinmuMentoringCourse ? Math.pow(10, 12) : 0, 
     integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
     studyPlace: courseStudyPlaceCoordinate(course),
     replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
@@ -473,6 +477,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
+    },
+    {
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.finmu === userCoordinates.finmu}
     },
     {
       filterOnFail: false,

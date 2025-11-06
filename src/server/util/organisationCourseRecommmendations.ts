@@ -25,6 +25,11 @@ export const mentoringCourseCodes =  [
 ]
 
 
+export const finmuMentroingCourseCodes = [
+  'KK-FINMU'
+]
+
+
 
 
 export const challegeCourseCodes: CourseMatchCase[]= [
