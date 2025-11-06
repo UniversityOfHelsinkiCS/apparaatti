@@ -1,7 +1,9 @@
 export default {
   'common': {},
   'form': {
-    'mentoringQuestion_fi_secondary_any':'Vill du öva på vardagliga samtal tillsammans med andra och repetera grundläggande grammatik innan du deltar i finskakursen som ingår i examen?',
+
+    'mentoringQuestion_fi_secondary_any': 'Vill du öva på vardagliga samtal tillsammans med andra och repetera grundläggande grammatik innan du deltar i finskakursen som ingår i examen?',
+    'finmuMentoringQuestion_fi_secondary_any':'Vill du öva på att tala och skriva på finska om aktuella ämnen och dina studier tillsammans med andra studenter?',
     'challengeQuestion_fi_secondary_any': 'Är du så nervös över att använda finska språket att du inte kan delta i en kurs där man övar språket tillsammans med andra?',
     'previoslyDoneLangExplanation': '\nDe obligatoriska språk- och kommunikationsstudierna i examen kan ersättas med motsvarande studier som ingår i en tidigare inhemsk högskoleexamen och andra motsvarande tidigare prestationer.\n',
     'searchedLanguageExplanation': '\nAlla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:\n\n- Modersmål (finska/svenska) 3 sp\n- Andra inhemska språket (svenska/finska) 3 sp\n- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp\n',

@@ -260,6 +260,35 @@ const useQuestions = () => {
     {
       number: '',
       mandatory: false,
+      id: 'finmu',
+      effects: 'finmu',
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          //this was originally part of mentoring but because mentoring directs to different courses it needed its own question
+          name: 'fi_secondary_any',
+          question: t('form:finmuMentoringQuestion_fi_secondary_any'),
+          options: [
+            // { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+      ]
+    },
+    {
+      number: '',
+      mandatory: false,
       id: 'challenge',
       effects: 'challenge',
       type: 'multi',

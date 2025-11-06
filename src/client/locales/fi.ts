@@ -1,7 +1,9 @@
 export default {
   'common': {},
   'form': {
-    'mentoringQuestion_fi_secondary_any':'Haluatko harjoitella arkipäivän asioista keskustelua yhdessä muiden kanssa ja kerrata peruskielioppia ennen tutkintoon kuuluvalle finskan kurssille osallistumista?',
+
+    'mentoringQuestion_fi_secondary_any': 'Haluatko harjoitella arkipäivän asioista keskustelua yhdessä muiden kanssa ja kerrata peruskielioppia ennen tutkintoon kuuluvalle finskan kurssille osallistumista?',
+    'finmuMentoringQuestion_fi_secondary_any':'Haluatko harjoitella ajankohtaisista asioista ja opinnoistasi suomeksi puhumista ja kirjoittamista yhdessä muiden opiskelijoiden kanssa?',
     'challengeQuestion_fi_secondary_any': 'Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?',
     'previoslyDoneLangExplanation': '\nTutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. \n',
     'searchedLanguageExplanation': '\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n',
