@@ -14,6 +14,36 @@ export const pickVariant = (question: Question, languageId: string) => {
 }
 
 
+export const variantLookUp: Map<{language: string, primaryLanguage: string, primaryLanguageSpecification: string}, string> = new Map([
+  [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
+  [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
+  [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_written'],
+  [{language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
+  [{language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
+  [{language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
+  [{language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
+  [{language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
+])
+
+const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
+  //if shouldBe is an empty string it is intended as 'anything is allowed for this'
+  if(shouldBe === ''){
+    return true
+  }
+  return cmpr === shouldBe
+}
+// variant display is the different wording of a question given different choices of language, primary language and primary language specification
+export const updateVariantToDisplayId = (language: string, primaryLanguage: string, primaryLanguageSpecification: string): string => {
+  for(const key of variantLookUp.keys()){
+    if(checkVarianLookUpParam(language, key.language) &&
+       checkVarianLookUpParam(primaryLanguage, key.primaryLanguage) &&
+       checkVarianLookUpParam(primaryLanguageSpecification, key.primaryLanguageSpecification)
+    ){
+      return variantLookUp.get(key) || 'default'
+    }
+  }
+  return 'default'
+}
 
 const useQuestions = () => {
 
