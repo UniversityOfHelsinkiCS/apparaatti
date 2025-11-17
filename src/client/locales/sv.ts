@@ -19,7 +19,7 @@ export default {
     'replacementQuestion': 'Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid.',
     'mentoringQuestion': 'Behöver du övning innan du slutför en kurs som ingår i din examen?',
     'challengeQuestion': 'För mig är det särskilt utmanande att lära sig ett språk och det gör mig väldigt nervös/rädd.',
-    'graduationQuestion': 'Tar du examen snart?',
+    'graduationQuestion': 'Tar du examen inom sex månader?',
     'studyPlaceQuestion': 'Vilken studieform passar dig bäst?',
     'integratedQuestion': 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.',
     'independentQuestion': 'Jag vill arbeta självständigt eller autonomt.',

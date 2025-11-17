@@ -18,7 +18,7 @@ export default {
     'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot',
     'mentoringQuestion': 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
     'challengeQuestion': 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon',
-    'graduationQuestion': 'Valmistutko lähiaikoina?',
+    'graduationQuestion': 'Valmistutko puolen vuoden sisällä?',
     'studyPlaceQuestion': 'Mikä opiskelumuoto sopii sinulle parhaiten?',
     'integratedQuestion': 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
     'independentQuestion': 'Haluan työskennellä itsenäisesti tai autonomisesti.',

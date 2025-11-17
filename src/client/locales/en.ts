@@ -19,7 +19,7 @@ export default {
     'replacementQuestion': 'I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time.',
     'mentoringQuestion': 'Do you need practice before completing a course that is part of your degree?',
     'challengeQuestion': 'For me, learning a language is particularly challenging and it makes me very nervous/scared.',
-    'graduationQuestion': 'Are you graduating soon?',
+    'graduationQuestion': 'Are you graduating within six months?',
     'studyPlaceQuestion': 'Which form of study suits you best?',
     'integratedQuestion': 'I am interested in a course that is integrated into the studies in my field.',
     'independentQuestion': 'I want to work independently or autonomously.',
