@@ -2,6 +2,9 @@ export default {
   'common': {},
   'form': {
 
+    'replacementQuestion_en_secondary_any': 'Jag anser att jag redan i mina tidigare studier/arbetsliv/fritid har skaffat mig kunskaper och färdigheter som motsvarar de studier som ingår i min examen (CEFR B2).',
+
+    'replacementQuestion_sv_secondary_any': 'Jag anser att jag redan i mina tidigare studier/arbetsliv/fritid har skaffat mig kunskaper och färdigheter som motsvarar de studier som ingår i min examen (CEFR B1).',
     'mentoringQuestion_fi_secondary_any': 'Vill du öva på vardagliga samtal tillsammans med andra och repetera grundläggande grammatik innan du deltar i finskakursen som ingår i examen?',
     'finmuMentoringQuestion_fi_secondary_any':'Vill du öva på att tala och skriva på finska om aktuella ämnen och dina studier tillsammans med andra studenter?',
     'challengeQuestion_fi_secondary_any': 'Är du så nervös över att använda finska språket att du inte kan delta i en kurs där man övar språket tillsammans med andra?',

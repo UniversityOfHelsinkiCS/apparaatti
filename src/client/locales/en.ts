@@ -2,6 +2,9 @@ export default {
   'common': {},
   'form': {
 
+    'replacementQuestion_en_secondary_any': 'I feel that I have already acquired the knowledge and skills corresponding to the studies included in my degree in my previous studies / work life / free time (CEFR B2).',
+
+    'replacementQuestion_sv_secondary_any': 'I feel that I have already acquired the knowledge and skills corresponding to the studies included in my degree in my previous studies / work life / free time (CEFR B1).',
     'mentoringQuestion_fi_secondary_any': 'Do you want to practice everyday conversations together with others and review basic grammar before attending the Finnish course that is part of the exam?',
     'finmuMentoringQuestion_fi_secondary_any':'Do you want to practice speaking and writing in Finnish about current topics and your studies together with other students?',
     'challengeQuestion_fi_secondary_any': 'Are you so anxious about using the Finnish language that you can\'t participate in a course where the language is practiced together with others?',

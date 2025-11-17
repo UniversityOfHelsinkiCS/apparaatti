@@ -238,6 +238,24 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
+        {
+          name: 'en_secondary_any',
+          question: t('form:replacementQuestion_en_secondary_any'),
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_secondary_any',
+          question: t('form:replacementQuestion_sv_secondary_any'),
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
       ],
     },
     {

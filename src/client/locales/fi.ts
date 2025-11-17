@@ -2,6 +2,9 @@ export default {
   'common': {},
   'form': {
 
+    'replacementQuestion_en_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B2).',
+
+    'replacementQuestion_sv_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1).',
     'mentoringQuestion_fi_secondary_any': 'Haluatko harjoitella arkipäivän asioista keskustelua yhdessä muiden kanssa ja kerrata peruskielioppia ennen tutkintoon kuuluvalle finskan kurssille osallistumista?',
     'finmuMentoringQuestion_fi_secondary_any':'Haluatko harjoitella ajankohtaisista asioista ja opinnoistasi suomeksi puhumista ja kirjoittamista yhdessä muiden opiskelijoiden kanssa?',
     'challengeQuestion_fi_secondary_any': 'Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?',
