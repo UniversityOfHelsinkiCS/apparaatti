@@ -22,6 +22,7 @@ export const variantLookUp: Map<{language: string, primaryLanguage: string, prim
   [{language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_written'],
   [{language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
   [{language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
+  [{language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'spoken' }, 'sv_primary_spoken'],
   [{language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
   [{language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
   [{language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
@@ -250,6 +251,36 @@ const useQuestions = () => {
         {
           name: 'sv_secondary_any',
           question: t('form:replacementQuestion_sv_secondary_any'),
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_primary_spoken',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_primary_written',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_primary_any',
+          question: '',
+          skipped: true,
           options: [
             // {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
