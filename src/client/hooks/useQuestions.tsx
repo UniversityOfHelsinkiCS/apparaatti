@@ -389,6 +389,36 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
+        {
+          name: 'sv_primary_spoken',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_primary_written',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
+        {
+          name: 'sv_primary_any',
+          question: '',
+          skipped: true,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
       ],
     },  
     {
