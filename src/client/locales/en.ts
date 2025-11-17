@@ -2,6 +2,7 @@ export default {
   'common': {},
   'form': {
 
+    'replacementQuestion_sv_primary_written': 'Have you written a laudatur or eximia in the mother tongue (Swedish) matriculation examination, or are you otherwise a skilled and self-directed writer?',
     'replacementQuestion_en_secondary_any': 'I feel that I have already acquired the knowledge and skills corresponding to the studies included in my degree in my previous studies / work life / free time (CEFR B2).',
 
     'replacementQuestion_sv_secondary_any': 'I feel that I have already acquired the knowledge and skills corresponding to the studies included in my degree in my previous studies / work life / free time (CEFR B1).',

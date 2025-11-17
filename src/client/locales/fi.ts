@@ -1,7 +1,7 @@
 export default {
   'common': {},
   'form': {
-
+    'replacementQuestion_sv_primary_written': 'Oletko kirjoittanut äidinkielen (ruotsi) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
     'replacementQuestion_en_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B2).',
 
     'replacementQuestion_sv_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1).',

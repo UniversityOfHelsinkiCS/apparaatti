@@ -2,6 +2,7 @@ export default {
   'common': {},
   'form': {
 
+    'replacementQuestion_sv_primary_written': 'Har du skrivit en laudatur eller eximia i modersmålets (svenska) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
     'replacementQuestion_en_secondary_any': 'Jag anser att jag redan i mina tidigare studier/arbetsliv/fritid har skaffat mig kunskaper och färdigheter som motsvarar de studier som ingår i min examen (CEFR B2).',
 
     'replacementQuestion_sv_secondary_any': 'Jag anser att jag redan i mina tidigare studier/arbetsliv/fritid har skaffat mig kunskaper och färdigheter som motsvarar de studier som ingår i min examen (CEFR B1).',
