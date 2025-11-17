@@ -15,7 +15,7 @@ export default {
     'primaryLanguageSpecificationQuestion': 'Vilken primär språktyp skulle du vilja välja?',
     'previouslyDoneLangQuestion': 'Jag har genomfört motsvarande studier eller andra motsvarande prestationer i en tidigare inhemsk högskoleexamen (avslutad eller oavslutad).',
     'studyPeriodQuestion': 'Vilket datum är din önskade kurs?',
-    'replacementQuestion': 'Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid. (CEFR B1/B2)',
+    'replacementQuestion': 'Jag anser att jag redan har förvärvat kunskaper och färdigheter motsvarande de som ingår i min examen i mina tidigare studier / arbetsliv / fritid.',
     'mentoringQuestion': 'Behöver du övning innan du slutför en kurs som ingår i din examen?',
     'challengeQuestion': 'För mig är det särskilt utmanande att lära sig ett språk och det gör mig väldigt nervös/rädd.',
     'graduationQuestion': 'Tar du examen snart?',

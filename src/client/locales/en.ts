@@ -15,7 +15,7 @@ export default {
     'primaryLanguageSpecificationQuestion': 'Which primary language type do you want to choose?',
     'previouslyDoneLangQuestion': 'I have completed similar studies or other equivalent achievements in a previous domestic higher education degree (completed or incomplete).',
     'studyPeriodQuestion': 'What is the date of your desired course?',
-    'replacementQuestion': 'I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time. (CEFR B1/B2)',
+    'replacementQuestion': 'I feel that I have already acquired knowledge and skills equivalent to those included in my degree in my previous studies / working life / leisure time.',
     'mentoringQuestion': 'Do you need practice before completing a course that is part of your degree?',
     'challengeQuestion': 'For me, learning a language is particularly challenging and it makes me very nervous/scared.',
     'graduationQuestion': 'Are you graduating soon?',

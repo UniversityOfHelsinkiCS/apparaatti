@@ -257,6 +257,34 @@ const useQuestions = () => {
             { id: '1', name: yesText },
           ],
         },
+      ],
+    },
+    {
+      number: '',
+      mandatory: false,
+      id: 'mentoring',
+      effects: 'mentoring',
+      type: 'multi',
+
+      variants: [
+        {
+          name: 'default',
+          question: mentoringQuestion,
+          options: [
+            // {id: 'neutral', name: neutralText},
+            {id: '1', name: t('form:mentoringQuestionYes')},
+            {id: '0', name: t('form:mentoringQuestionNo')}
+          ],
+        },
+        {
+          name: 'fi_secondary_any',
+          question: t('form:mentoringQuestion_fi_secondary_any'),
+          options: [
+            // { id: 'neutral', name: neutralText},
+            { id: '0', name: noText },
+            { id: '1', name: yesText },
+          ],
+        },
         {
           name: 'sv_primary_spoken',
           question: '',
@@ -283,34 +311,6 @@ const useQuestions = () => {
           skipped: true,
           options: [
             // {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
-        },
-      ],
-    },
-    {
-      number: '',
-      mandatory: false,
-      id: 'mentoring',
-      effects: 'mentoring',
-      type: 'multi',
-
-      variants: [
-        {
-          name: 'default',
-          question: mentoringQuestion,
-          options: [
-            // {id: 'neutral', name: neutralText},
-            {id: '1', name: t('form:mentoringQuestionYes')},
-            {id: '0', name: t('form:mentoringQuestionNo')}
-          ],
-        },
-        {
-          name: 'fi_secondary_any',
-          question: t('form:mentoringQuestion_fi_secondary_any'),
-          options: [
-            // { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],

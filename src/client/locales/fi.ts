@@ -15,7 +15,7 @@ export default {
     'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',
     'previouslyDoneLangQuestion': 'Minulla on aiempaan kotimaiseen korkeakoulututkintoon (valmis tai keskeneräinen) suoritettuja vastaavia opintoja tai muita vastaavia suorituksia.',
     'studyPeriodQuestion': 'Mikä on haluamasi kurssin suoritusajankohta?',
-    'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1/B2).',
+    'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot',
     'mentoringQuestion': 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
     'challengeQuestion': 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon',
     'graduationQuestion': 'Valmistutko lähiaikoina?',
