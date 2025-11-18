@@ -113,7 +113,7 @@ const useQuestions = () => {
           options: [
             { id: 'fi', name: finnishChoiceText },
             { id: 'sv', name: swedishChoiceText },
-            { id: 'en', name: englishChoiceText },
+            // { id: 'en', name: englishChoiceText }, commented out for now since the POC will not need to support this...
           ],
         },
       ],
