@@ -73,17 +73,12 @@ export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null){
   if(!codes){
     return false
   }
-  console.log('--any of codes--')
   for (const code of course.courseCodes){
 
-    console.log(code)
-    console.log(codes)
     if(codes.find(co => co === code)){
       return true
     }
   }
-
-  console.log('----')
   return false
 }
 

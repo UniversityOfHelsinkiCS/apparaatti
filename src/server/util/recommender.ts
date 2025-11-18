@@ -84,7 +84,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
     finmu: commonCoordinateFromAnswerData(readAnswer(answerData, 'finmu'), Math.pow(10,12), 0, null),
     integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), Math.pow(10, 12), 0, null),
-    studyPlace:  studyPlaceCoordinate(readAnswer(answerData, 'study-place')),
+    studyPlace:  0, // courses that have the correct studyPlace based on the answerData will get coord of 0.
     replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), Math.pow(10, 24), 0, null),
     challenge: commonCoordinateFromAnswerData(readAnswer(answerData, 'challenge'), Math.pow(10, 24), 0, null),
     independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), Math.pow(10, 24), 0, null),
@@ -139,37 +139,38 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
 
   return false
 } 
-function courseStudyPlaceCoordinate(course: CourseData){
-  // console.log('calculating the study place value for, ', course.name.fi)
 
 
-  const baseCoordinate = Math.pow(10, 12)
-  const courseName = course.name.fi?.toLowerCase()
-  // console.log(courseName)  
-  // console.log(courseName?.includes('etäopetus') || courseName?.includes('verkko-opetus'))
 
-  // if(courseName?.includes('etäopetus' ) || courseName?.includes('verkko-opetus')){
-  //   return baseCoordinate * 1  
-  // }
-  // if(courseName?.includes('monimuo')){
-  //   return baseCoordinate * 2
-  // }
-  // if(courseName?.includes('lähiopetus')){
-  //   return baseCoordinate * 3  
-  // }
+function readArrOrSingleValue(val: string | string[]){
+  const value = val ? val : []
+  if(Array.isArray(value)){
+    return value
+  }
+  else{
+    return [value]
+  }
+}
 
-  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-contact')){
-    return  baseCoordinate * 1  
+function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
+ 
+  const allowed: string[] = [
+    'teaching-participation-remote',
+    'teaching-participation-online',
+    'teaching-participation-blended',
+    'teaching-participation-contact',
+  ]    
+  const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
+  const lookups = userStudyPlaces.filter((p) => allowed.includes(p)).map((p) => p)
+
+  console.log('LOOKUPS')
+  console.log(lookups)
+
+  if(courseHasAnyRealisationCodeUrn(course, lookups)){
+    console.log('hit')
+    return 0 
   }
-  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-blended')){
-    return  baseCoordinate * 2  
-  }
-  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-distance')){
-    return  baseCoordinate * 3  
-  }
-  if(courseHasAnyRealisationCodeUrn(course, 'teaching-participation-online')){  return  baseCoordinate * 4  
-  }
-  return baseCoordinate * 2 // course will be something in between remote and onsite and should be based in between as a default if nothing works
+  return 100
 }
 
 function isIndependentCourse(course: CourseData){
@@ -179,7 +180,7 @@ function isIndependentCourse(course: CourseData){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-async function calculateCourseDistance(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string
+async function calculateCourseDistance(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string, answerData: AnswerData
 ): Promise<CourseRecommendation> {
   
   const dimensions = Object.keys(userCoordinates)
@@ -210,7 +211,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
     finmu: isFinmuMentoringCourse ? Math.pow(10, 12) : 0, 
     integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
-    studyPlace: courseStudyPlaceCoordinate(course),
+    studyPlace: courseStudyPlaceCoordinate(course, answerData),
     replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
     challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
     independent: isIndependent ? Math.pow(10, 24) : 0,
@@ -243,10 +244,11 @@ async function calculateUserDistances(
   availableCourses: CourseData[],
   courseCodes: courseCodes,
   courseLanguageType: string,
-  organisationCode:string
+  organisationCode:string,
+  answerData: AnswerData
 ): Promise<CourseRecommendation[]> {
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode)
+    return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode, answerData)
   })
   const distances = await Promise.all(distancePromises)
   return distances
@@ -446,6 +448,9 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     return false
   })
  
+
+  console.log('courses before filter')
+  console.log(courses.length)
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
 
   // console.log('---DEBUG---')
@@ -532,6 +537,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
   const sorted = filtered.sort((a, b) => b.points - a.points)
+
+
+  console.log('courses after filter')
+  console.log(filtered.length)
   return filtered
 }
 
@@ -542,14 +551,24 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
+  console.log('course data size')
+  console.log(courseData.length)
 
   const courseLanguageType = languageToStudy(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'))
-  const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode )
+  const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
+
+  console.log('distances length')
+  console.log(distances.length)
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
   const relevantRecommendations = relevantCourses(recommendations, userCoordinates, answerData)
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, answerData)
+
+  console.log('HAPPENS')
+  console.log(sortedCourses.length)
+  console.log(pointRecommendedCourses.length)
+
   const allRecommendations = {
     relevantRecommendations: relevantRecommendations,
     recommendations: recommendations,

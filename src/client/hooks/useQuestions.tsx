@@ -443,17 +443,17 @@ const useQuestions = () => {
       mandatory: false,
       id: 'study-place',
       effects: 'studyPlace',
-      type: 'multi',
+      type: 'study-place',
       variants: [
         {
           name: 'default',
           question: studyPlaceQuestion,
           options: [
             // {id: 'neutral', name: t('form:studyPlaceNeutral')},
-            {id: 'remote', name: t('form:studyPlaceRemote')},
-            {id: 'online', name: t('form:studyPlaceOnline')},
-            { id: 'hybrid', name: t('form:studyPlaceCombined')},
-            { id: 'onsite', name: t('form:studyPlaceF2F')},
+            {id: 'teaching-participation-remote', name: t('form:studyPlaceRemote')},
+            {id: 'teaching-participation-online', name: t('form:studyPlaceOnline')},
+            { id: 'teaching-participation-blended', name: t('form:studyPlaceCombined')},
+            { id: 'teaching-participation-contact', name: t('form:studyPlaceF2F')},
           ],
         },
       ],

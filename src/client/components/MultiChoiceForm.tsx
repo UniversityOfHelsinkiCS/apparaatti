@@ -11,8 +11,8 @@ import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification
 import useQuestions, { updateVariantToDisplayId } from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import SkippedQuestion from './SkippedQuestion.tsx'
 import { useFormContext } from '../contexts/formContext.tsx'
+import StudyPlaceQuestion from './studyMethodQuestion.tsx'
 
 const MultiChoiceForm = ({
   onSubmit,
@@ -79,6 +79,14 @@ const MultiChoiceForm = ({
         />
       )
 
+    case 'study-place':
+      return (
+        <StudyPlaceQuestion
+          key={key}
+          question={question}
+          questionVariantId={variantToDisplayId}
+        />
+      )
     //is the language course for speaking or writing?
     case 'primary-language-specification':
       return (
