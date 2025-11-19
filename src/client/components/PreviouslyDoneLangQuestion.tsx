@@ -10,6 +10,7 @@ import ExtraInfoModal from './ExtraInfoModal'
 
 import FormOption from './FormOption'
 import { pickVariant } from '../hooks/useQuestions'
+import Markdown from 'react-markdown'
 
 const PreviuslyDoneLangQuestion = ({
   question,
@@ -83,10 +84,9 @@ const PreviuslyDoneLangQuestion = ({
             <Typography>{t('question:extrainfo')}: </Typography>
           </AccordionSummary>
           <AccordionDetails data-cy="previously-done-lang-accordion-details">
-            <Typography data-cy="instructions-for-crediting">
-              {t('question:checkInstructionsCrediting')} <a href=' https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1'>{t('question:fromHere')}</a>
-            </Typography>
-           
+            <Markdown>
+              {t('question:checkInstructionsCrediting')}
+            </Markdown>
           </AccordionDetails>
         </Accordion>
       )}

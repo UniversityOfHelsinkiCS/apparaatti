@@ -54,7 +54,7 @@ export default {
   },
   'question': {
     'extrainfo': 'Ytterligare information',
-    'checkInstructionsCrediting': 'Se instruktioner för kreditering',
+    'checkInstructionsCrediting': 'Läs mer detaljerade anvisningar på Studieinfo-sidan [Tillgodoräknande av kommunikations- och språkstudier för examen och ansök om ersättande av studier i Sisu](https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1)',
     'fromHere': 'härifrån',
     'noExtrainfo': 'Ingen ytterligare information',
     'pickStudy': 'Välja en fakultet',

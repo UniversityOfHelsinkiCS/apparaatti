@@ -54,7 +54,7 @@ export default {
   },
   'question': {
     'extrainfo': 'Extra information',
-    'checkInstructionsCrediting': 'See instructions for crediting',
+    'checkInstructionsCrediting': 'Read more detailed instructions on the Study Service page [Recognition of communication and language studies for a degree and apply for substitution of studies in Sisu](https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1)',
     'fromHere': 'from here',
     'noExtrainfo': 'No extra information',
     'pickStudy': 'Select a faculty',

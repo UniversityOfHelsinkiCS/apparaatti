@@ -53,7 +53,7 @@ export default {
   },
   'question': {
     'extrainfo': 'Lisätietoa',
-    'checkInstructionsCrediting': 'Katso ohjeet hyväksilukemiseen',
+    'checkInstructionsCrediting': 'Lue tarkemmat ohjeet Opiskelu-palvelun sivulta [Tutkinnon viestinnän ja kieliosaamisen opintojen hyväksilukeminen ja hae opintojen korvaamista Sisussa](https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1)',
     'fromHere': 'täältä',
     'noExtrainfo': 'Ei lisätietoa',
     'pickStudy': 'Valitse tiedekunta',
