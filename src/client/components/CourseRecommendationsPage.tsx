@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
   const {t} = useTranslation()
-  const relevant: CourseRecommendationType[] = recommendations?.relevantRecommendations != null ? recommendations.relevantRecommendations : []
   const points: CourseRecommendationType[] = recommendations?.pointBasedRecommendations != null ? recommendations.pointBasedRecommendations : []
   const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
 

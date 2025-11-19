@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { FormEventHandler, useEffect, useState } from 'react'
 import { Box, FormControl, Typography } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
-import PeriodQuestion from './PeriodQuestion.tsx'
 import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
 import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
-import useQuestions, { updateVariantToDisplayId } from '../hooks/useQuestions.tsx'
+import { updateVariantToDisplayId } from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { useFormContext } from '../contexts/formContext.tsx'
@@ -46,21 +45,12 @@ const MultiChoiceForm = ({
   } = useFormContext()
   const [userOrgCode, setUserOrgCode] = useState('')
    
-  const { data: organisationsWithIntegrated, isLoading: isIntegratedLoading } = useQuery({
-    queryKey: ['integrated'],
-    queryFn: async () => {
-      const res = await fetch('/api/organisations/integrated')
-      return res.json()
-    },
-  })
-
-
   useEffect(() => {
     const newVariantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
     setVariantToDisplayId(newVariantId)
   }, [language, primaryLanguage, primaryLanguageSpecification])
 
-  const renderFormQuestion = (key, question, additionalInfo) => {
+  const renderFormQuestion = (key, question) => {
     switch (question.type) {
     case 'studyphase':
       return  <StudyPhaseQuestion key={key} question={question} supportedOrganisations={supportedOrganisations} user={user} studyData={studyData} setUserOrgCode={setUserOrgCode} />
@@ -108,10 +98,6 @@ const MultiChoiceForm = ({
           setLanguage={setLanguage}
         />
       )
-    case 'period-date':
-      return (
-        <PeriodQuestion key={key} question={question} />
-      )
     case 'previusly-done-lang':
       return (
         <PreviuslyDoneLangQuestion key={key} question={question} languageId={language}></PreviuslyDoneLangQuestion>
@@ -120,14 +106,12 @@ const MultiChoiceForm = ({
       return <p>Unknown question type</p>
     }
   }
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (ev) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
     ev.preventDefault()
     const formData = new FormData(ev.currentTarget)
     await onSubmit(formData)
   }
-  if(isIntegratedLoading){
-    return (<Typography>loading...</Typography>)
-  }
+ 
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -141,7 +125,7 @@ const MultiChoiceForm = ({
         }}
       >
         <FormControl component="fieldset">
-          {questions.map((q) => renderFormQuestion(q.id, q, {organisationsWithIntegrated}))}
+          {questions.map((q) => renderFormQuestion(q.id, q))}
         </FormControl>
         <ActionButton text={t('app:send')} dataCy="submit-form"/>
          

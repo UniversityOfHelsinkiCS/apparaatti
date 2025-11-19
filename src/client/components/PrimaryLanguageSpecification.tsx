@@ -7,8 +7,8 @@ import {
   Modal,
 } from '@mui/material'
 import { Question } from '../../common/types.ts'
-import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
+import { useState } from 'react'
 const PrimaryLanguageSpecificationQuestion  = ({
   question,
   language,
@@ -20,7 +20,7 @@ const PrimaryLanguageSpecificationQuestion  = ({
   primaryLanguage: string
   setPrimaryLanguageSpecification: (spec: string) => void 
 }) => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const checkShouldShow = () => {

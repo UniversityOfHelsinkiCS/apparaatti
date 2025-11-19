@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useState } from 'react'
 import RecommendationReasonsModal from './RecommendationReasons'
-import useQuestions from '../hooks/useQuestions'
 
 const CourseRecommendation = ({
   course,
@@ -15,7 +14,6 @@ const CourseRecommendation = ({
   userCoordinates: UserCoordinates
 }) => {
   const {t} = useTranslation()
-  if (!course) return null
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
@@ -62,6 +60,7 @@ const CourseRecommendation = ({
 
     return start + ' - ' + end
   }
+  if (!course) return null
   return (
     <Paper elevation={2} sx={{ padding: 2, margin: 1 }}>
       <Box>

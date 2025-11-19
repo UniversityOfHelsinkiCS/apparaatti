@@ -5,10 +5,10 @@ import {
   RadioGroup,
 } from '@mui/material'
 import { Question } from '../../common/types.tsx'
-import React from 'react'
 import QuestionTitle from './questionTitle.tsx'
 import ExtraInfoModal from './ExtraInfoModal.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
+import { useState } from 'react'
 const FormQuestion = ({
   question,
   questionVariantId,
@@ -16,11 +16,11 @@ const FormQuestion = ({
   question: Question
   questionVariantId: string
 }) => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const variant = pickVariant(question, questionVariantId)
-  if(variant?.skipped){
+  if(!variant || variant?.skipped){
     return(
       <></>
     )
