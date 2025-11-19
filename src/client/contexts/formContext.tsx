@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode } from 'react'
 import useQuestions, { pickVariant } from '../hooks/useQuestions'
 import { Question } from '../../common/types'
 
