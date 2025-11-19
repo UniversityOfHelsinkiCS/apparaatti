@@ -6,7 +6,7 @@ import LanguageQuestion from './LanguageQuestion.tsx'
 import PreviuslyDoneLangQuestion from './PreviouslyDoneLangQuestion.tsx'
 import ActionButton from './actionButton.tsx'
 import { User } from '../../common/types.ts'
-import PrimaryLanguageSpecificationQuestion from './PrimaryLanguageSpecification.tsx'
+import PrimaryLanguageSpecification from './PrimaryLanguageSpecification.tsx'
 import { updateVariantToDisplayId } from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
@@ -80,7 +80,7 @@ const MultiChoiceForm = ({
     //is the language course for speaking or writing?
     case 'primary-language-specification':
       return (
-        <PrimaryLanguageSpecificationQuestion
+        <PrimaryLanguageSpecification
           key={key}
           question={question}
           language={language}
