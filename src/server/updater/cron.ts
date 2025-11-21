@@ -9,8 +9,8 @@ const setupCron = async () => {
   if (!inProduction) {
     await runDev()
   } else if (UPDATER_CRON_ENABLED) {
-    await run()
-    cron.schedule('15 3,15 * * *', run) // Run updater every 12 hours
+    //await run()
+    //cron.schedule('15 3,15 * * *', run) // Run updater every 12 hours
   }
 }
 
