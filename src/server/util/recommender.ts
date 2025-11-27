@@ -472,7 +472,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.lang === userCoordinates.lang}
     },
     {
@@ -480,34 +480,34 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.finmu === userCoordinates.finmu}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.independent === userCoordinates.independent}
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
         const result = c.coordinates.replacement === userCoordinates.replacement
         return result
       }
     },
     {
-      filterOnFail: false,
+      filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible}
     },
     {
