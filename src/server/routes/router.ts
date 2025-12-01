@@ -11,6 +11,8 @@ import logger from '../util/logger.ts'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
+import type { adminFeedback, User } from '../../common/types.ts'
+import { isAdmin } from '../util/validations.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -89,7 +91,14 @@ router.get('/user', async (req, res) => {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
-  res.json(req.user)
+
+  const adminStatus = isAdmin(req.user)
+  const returnData: User = {
+    ...req.user,
+    isAdmin: adminStatus
+  }
+
+  res.json(returnData)
 })
 
 router.get('/user/studydata', async (req, res) => {
@@ -115,6 +124,23 @@ router.get('/organisations', async (req, res) => {
 })
 
 
+router.get('/admin/feedback', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+
+ if (!isAdmin(req.user)) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+  
+  const feedBack: adminFeedback = req.body
+
+  logger.info('ADMIN FEEDBACK', feedBack)
+  res.json({status: "success"})
+ 
+ })
 
 router.get('/fail', async (_req, res) => {
   res.json({

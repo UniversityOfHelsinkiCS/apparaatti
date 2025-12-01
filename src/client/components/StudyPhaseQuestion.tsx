@@ -16,8 +16,7 @@ const StudyPhaseQuestion = ({ question, studyData, user, supportedOrganisations,
   const handleClose = () => setOpen(false)
 
   const showAllOptions = (user: User) => {
-    const groups = user?.hyGroupCn
-    return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') || groups?.includes('grp-a90600-opintot')
+    return user?.isAdmin ? true : false
 
   }
   const getOrgansations = () => {

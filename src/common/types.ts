@@ -108,6 +108,7 @@ export type User = {
   hyGroupCn: string[] | null
   language: string | null
   studentNumber: string | null
+  isAdmin?: bool
  }
 
 export type CurCuRelation = {
@@ -131,3 +132,10 @@ export type AnswerData = {
   'primary-language': string;
   'primary-language-specification': string;
 };
+
+
+export type adminFeedback = {
+   answerData: AnswerData[]
+   pointBasedRecommendations: CourseRecommendations
+   feedBack: string  
+}
