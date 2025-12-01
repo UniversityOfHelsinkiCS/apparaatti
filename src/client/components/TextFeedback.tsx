@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations}) => {
-  const [feedback, setFeedBack] = useState("")
+  const [feedback, setFeedBack] = useState('')
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
@@ -23,7 +23,7 @@ const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations
       feedback: feedback
     }
     await fetch('api/admin/feedback', {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
       headers: {
         'Content-Type': 'application/json',
@@ -38,28 +38,28 @@ const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations
   }
   return (
     <Box sx={{
-       bgcolor: "grey.200",
-       p: 3
-      }}>
-        <Typography>Anna tekstikentässä kuvaus siitä miten tulos on vääränlainen ja millainen sen kuuluisi olla.</Typography>
-    <form onSubmit= {handleSubmit}>
-      <TextField
-        sx={{
-          bgcolor: "white"
-        }}
-        value={feedback}
-        onChange = {(e) => {setFeedBack(e.target.value)}}
-        multiline
-        minRows = {20}
-        label = "Palaute ylläpidolle"
-        variant = "outlined"
-        fullWidth
-        margin = "normal"
+      bgcolor: 'grey.200',
+      p: 3
+    }}>
+      <Typography>Anna tekstikentässä kuvaus siitä miten tulos on vääränlainen ja millainen sen kuuluisi olla.</Typography>
+      <form onSubmit= {handleSubmit}>
+        <TextField
+          sx={{
+            bgcolor: 'white'
+          }}
+          value={feedback}
+          onChange = {(e) => {setFeedBack(e.target.value)}}
+          multiline
+          minRows = {20}
+          label = "Palaute ylläpidolle"
+          variant = "outlined"
+          fullWidth
+          margin = "normal"
         ></TextField>
-      <Button variant="contained" color="primary" type="submit">lähetä</Button>
+        <Button variant="contained" color="primary" type="submit">lähetä</Button>
 
-    </form>
-  </Box>
+      </form>
+    </Box>
   )
 }
 
