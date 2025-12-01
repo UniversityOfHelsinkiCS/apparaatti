@@ -66,8 +66,9 @@ export type UserCoordinates = CourseCoordinates;
 export type CourseRecommendations = {
   relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
-  userCoordinates: UserCoordinates  
   pointBasedRecommendations: CourseRecommendation[]
+  userCoordinates: UserCoordinates  
+  answerData?: AnswerData
 }
 
 export type Period = {
@@ -135,7 +136,6 @@ export type AnswerData = {
 
 
 export type adminFeedback = {
-   answerData: AnswerData[]
-   pointBasedRecommendations: CourseRecommendations
+   recommendations: CourseRecommendations
    feedBack: string  
 }

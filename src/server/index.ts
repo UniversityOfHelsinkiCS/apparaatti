@@ -38,7 +38,7 @@ app.use(
 
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use(express.json({limit: '10mb'}))
 console.log(process.env.NODE_ENV, 'NODE_ENV')
 
 // in develoment, fake the user

@@ -71,9 +71,11 @@ router.post('/form/1/answer', async (req, res) => {
   //  await saveAnswer(answerData, user)
   
   const recommendations = await recommendCourses(answerData)
+
   const resultData = {user: req.user, answerData, recommendations}
   logger.info('User got answer from a form', resultData)
-  res.json(recommendations)
+
+  res.json({...recommendations, answerData})
 })
 
 router.get('/login', passport.authenticate('oidc'))
@@ -124,23 +126,24 @@ router.get('/organisations', async (req, res) => {
 })
 
 
-router.get('/admin/feedback', async (req, res) => {
+router.post('/admin/feedback', async (req, res) => {
   if (!req.user) {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
 
- if (!isAdmin(req.user)) {
+  if (!isAdmin(req.user)) {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
-  
-  const feedBack: adminFeedback = req.body
+  console.log(req.body)
+  const feedback: adminFeedback = req.body
+  console.log(feedback)
 
-  logger.info('ADMIN FEEDBACK', feedBack)
-  res.json({status: "success"})
+  logger.info('ADMIN FEEDBACK', feedback)
+  res.json({status: 'success'})
  
- })
+})
 
 router.get('/fail', async (_req, res) => {
   res.json({

@@ -1,10 +1,11 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, UserCoordinates } from '../../common/types'
+import type { CourseRecommendation as CourseRecommendationType, CourseRecommendations, User, UserCoordinates } from '../../common/types'
 import ActionButton from './actionButton'
 import CourseRecommendation from './CourseRecommendation'
 import { useTranslation } from 'react-i18next'
+import TextFeedback from './TextFeedback'
 
-const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
+const CourseRecommendationsPage = ({onClose, recommendations, display}: {user: User, onClose: () => void, recommendations: CourseRecommendations, display: boolean}) => {
   const {t} = useTranslation()
   const points: CourseRecommendationType[] = recommendations?.pointBasedRecommendations != null ? recommendations.pointBasedRecommendations : []
   const other: CourseRecommendationType[] = recommendations?.recommendations != null ? recommendations.recommendations : []
@@ -27,6 +28,7 @@ const CourseRecommendationsPage = ({onClose, recommendations, display}: {onClose
 
           <CourseListing  userCoordinates={recommendations.userCoordinates} titleText = {t('recommendations:all')} defaultExpanded={true}  courses={other}/>
         
+          <TextFeedback recommendations={recommendations}/>
         </Stack>
       
       </Stack>
