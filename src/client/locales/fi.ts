@@ -1,86 +1,86 @@
 export default {
-  "common": {
-    "userSearchNoOptions": "ei osumaa"
+  'common': {
+    'userSearchNoOptions': 'ei osumaa'
   },
-  "form": {
-    "replacementQuestion_sv_primary_written": "Oletko kirjoittanut äidinkielen (ruotsi) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?",
-    "replacementQuestion_en_secondary_any": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B2).",
-    "replacementQuestion_sv_secondary_any": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1).",
-    "mentoringQuestion_fi_secondary_any": "Haluatko harjoitella arkipäivän asioista keskustelua yhdessä muiden kanssa ja kerrata peruskielioppia ennen tutkintoon kuuluvalle finskan kurssille osallistumista?",
-    "finmuMentoringQuestion_fi_secondary_any": "Haluatko harjoitella ajankohtaisista asioista ja opinnoistasi suomeksi puhumista ja kirjoittamista yhdessä muiden opiskelijoiden kanssa?",
-    "challengeQuestion_fi_secondary_any": "Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?",
-    "previoslyDoneLangExplanation": "\nTutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. \n",
-    "searchedLanguageExplanation": "\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n",
-    "primaryLanguageQuestion": "Mikä on koulusivistyskielesi?",
-    "languageQuestion": "Mistä kielestä haet kursseja?",
-    "primaryLanguageSpecificationQuestion": "Kumman ensisijaisen kielen tyypin haluat valita?",
-    "previouslyDoneLangQuestion": "Minulla on aiempaan kotimaiseen korkeakoulututkintoon (valmis tai keskeneräinen) suoritettuja vastaavia opintoja tai muita vastaavia suorituksia.",
-    "studyPeriodQuestion": "Mikä on haluamasi kurssin suoritusajankohta?",
-    "replacementQuestion": "Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot",
-    "mentoringQuestion": "Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?",
-    "challengeQuestion": "Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon",
-    "graduationQuestion": "Valmistutko puolen vuoden sisällä?",
-    "studyPlaceQuestion": "Mikä opiskelumuoto sopii sinulle parhaiten?",
-    "integratedQuestion": "Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.",
-    "independentQuestion": "Haluan työskennellä itsenäisesti tai autonomisesti.",
-    "flexibleQuestion": "Haluan osallistua kurssille, jonka aikataulu on joustava.",
-    "moocQuestion": "Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?",
-    "finnish": "suomi",
-    "swedish": "ruotsi",
-    "english": "englanti",
-    "yes": "Kyllä",
-    "no": "Ei",
-    "neutralChoice": "Ei valintaa",
-    "both": "Molemmat",
-    "written": "Kirjoitusviestintä",
-    "spoken": "Puheviestintä",
-    "summer": "Kesä",
-    "period": "periodi",
-    "mentoringQuestionYes": "Kaipaisin valmennusta ennen opintojen suoritusta",
-    "mentoringQuestionNo": "En koe tarvitsevani harjoitusta",
-    "graduationQuestionYes": "Kyllä, puolen vuoden sisällä.",
-    "graduationQuestionNo": "En ole valmistumassa puolen vuoden sisällä.",
-    "studyPlaceRemote": "Etätapaamisia sisältävä opiskelu.",
-    "studyPlaceOnline": "Itsenäinen verkko-opiskelu",
-    "studyPlaceCombined": "Etäopiskelu ja lähiopetus",
-    "studyPlaceF2F": "Lähitapaamisia sisältävä opiskelu",
-    "studyPlaceNeutral": "Opiskelumuodolla ei ole väliä",
-    "primaryLanguageExplanation": "\n Opintojen suorittamiseen vaikuttaa koulusivistyskielesi.  \n\n Lue tarkemmat ohjeet Opiskelu-palvelun sivulta\n [Mikä on koulusivistyskielesi?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni) \n\n",
-    "replacementQuestion_fi_primary_written": "Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?",
-    "replacementQuestion_fi_secondary_any": "Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?",
-    "challengeQuestion_fi_primary_written": "Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?",
-    "challengeQuestion_fi_primary_spoken": "Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.",
-    "points": "tarkkuus"
+  'form': {
+    'replacementQuestion_sv_primary_written': 'Oletko kirjoittanut äidinkielen (ruotsi) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
+    'replacementQuestion_en_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B2).',
+    'replacementQuestion_sv_secondary_any': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot (CEFR B1).',
+    'mentoringQuestion_fi_secondary_any': 'Haluatko harjoitella arkipäivän asioista keskustelua yhdessä muiden kanssa ja kerrata peruskielioppia ennen tutkintoon kuuluvalle finskan kurssille osallistumista?',
+    'finmuMentoringQuestion_fi_secondary_any': 'Haluatko harjoitella ajankohtaisista asioista ja opinnoistasi suomeksi puhumista ja kirjoittamista yhdessä muiden opiskelijoiden kanssa?',
+    'challengeQuestion_fi_secondary_any': 'Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?',
+    'previoslyDoneLangExplanation': '\nTutkinnon pakolliset kieli- ja viestintäopinnot voidaan korvata aiempaan kotimaiseen korkeakoulututkintoon sisältyneillä vastaavilla opinnoilla sekä muilla vastaavilla aiemmilla suorituksilla. \n',
+    'searchedLanguageExplanation': '\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n',
+    'primaryLanguageQuestion': 'Mikä on koulusivistyskielesi?',
+    'languageQuestion': 'Mistä kielestä haet kursseja?',
+    'primaryLanguageSpecificationQuestion': 'Kumman ensisijaisen kielen tyypin haluat valita?',
+    'previouslyDoneLangQuestion': 'Minulla on aiempaan kotimaiseen korkeakoulututkintoon (valmis tai keskeneräinen) suoritettuja vastaavia opintoja tai muita vastaavia suorituksia.',
+    'studyPeriodQuestion': 'Mikä on haluamasi kurssin suoritusajankohta?',
+    'replacementQuestion': 'Koen, että olen jo aiemmissa opinnoissani / työelämässä / vapaa-ajalla hankkinut tutkintooni kuuluvia opintoja vastaavat tiedot ja taidot',
+    'mentoringQuestion': 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
+    'challengeQuestion': 'Minulle kielenoppiminen on erityisen haasteellista ja se jännittää/pelottaa minua paljon',
+    'graduationQuestion': 'Valmistutko puolen vuoden sisällä?',
+    'studyPlaceQuestion': 'Mikä opiskelumuoto sopii sinulle parhaiten?',
+    'integratedQuestion': 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
+    'independentQuestion': 'Haluan työskennellä itsenäisesti tai autonomisesti.',
+    'flexibleQuestion': 'Haluan osallistua kurssille, jonka aikataulu on joustava.',
+    'moocQuestion': 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?',
+    'finnish': 'suomi',
+    'swedish': 'ruotsi',
+    'english': 'englanti',
+    'yes': 'Kyllä',
+    'no': 'Ei',
+    'neutralChoice': 'Ei valintaa',
+    'both': 'Molemmat',
+    'written': 'Kirjoitusviestintä',
+    'spoken': 'Puheviestintä',
+    'summer': 'Kesä',
+    'period': 'periodi',
+    'mentoringQuestionYes': 'Kaipaisin valmennusta ennen opintojen suoritusta',
+    'mentoringQuestionNo': 'En koe tarvitsevani harjoitusta',
+    'graduationQuestionYes': 'Kyllä, puolen vuoden sisällä.',
+    'graduationQuestionNo': 'En ole valmistumassa puolen vuoden sisällä.',
+    'studyPlaceRemote': 'Etätapaamisia sisältävä opiskelu.',
+    'studyPlaceOnline': 'Itsenäinen verkko-opiskelu',
+    'studyPlaceCombined': 'Etäopiskelu ja lähiopetus',
+    'studyPlaceF2F': 'Lähitapaamisia sisältävä opiskelu',
+    'studyPlaceNeutral': 'Opiskelumuodolla ei ole väliä',
+    'primaryLanguageExplanation': '\n Opintojen suorittamiseen vaikuttaa koulusivistyskielesi.  \n\n Lue tarkemmat ohjeet Opiskelu-palvelun sivulta\n [Mikä on koulusivistyskielesi?](https://studies.helsinki.fi/ohjeet/artikkeli/mika-koulusivistyskieleni) \n\n',
+    'replacementQuestion_fi_primary_written': 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
+    'replacementQuestion_fi_secondary_any': 'Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?',
+    'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
+    'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.',
+    'points': 'tarkkuus'
   },
-  "question": {
-    "extrainfo": "Lisätietoa",
-    "checkInstructionsCrediting": "Lue tarkemmat ohjeet Opiskelu-palvelun sivulta [Tutkinnon viestinnän ja kieliosaamisen opintojen hyväksilukeminen ja hae opintojen korvaamista Sisussa](https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1)",
-    "fromHere": "täältä",
-    "noExtrainfo": "Ei lisätietoa",
-    "pickStudy": "Valitse tiedekunta",
-    "skipped": "Kysymys ohitettu: ei vaikutusta",
-    "mandatory": "Pakollinen",
-    "close": "Sulje"
+  'question': {
+    'extrainfo': 'Lisätietoa',
+    'checkInstructionsCrediting': 'Lue tarkemmat ohjeet Opiskelu-palvelun sivulta [Tutkinnon viestinnän ja kieliosaamisen opintojen hyväksilukeminen ja hae opintojen korvaamista Sisussa](https://studies.helsinki.fi/ohjeet/artikkeli/opintojen-ja-osaamisen-hyvaksilukeminen?check_logged_in=1)',
+    'fromHere': 'täältä',
+    'noExtrainfo': 'Ei lisätietoa',
+    'pickStudy': 'Valitse tiedekunta',
+    'skipped': 'Kysymys ohitettu: ei vaikutusta',
+    'mandatory': 'Pakollinen',
+    'close': 'Sulje'
   },
-  "app": {
-    "logout": "Kirjaudu ulos",
-    "questionaire": "Kysely",
-    "recommendations": "Suositukset",
-    "send": "Lähetä",
-    "back": "Takaisin"
+  'app': {
+    'logout': 'Kirjaudu ulos',
+    'questionaire': 'Kysely',
+    'recommendations': 'Suositukset',
+    'send': 'Lähetä',
+    'back': 'Takaisin'
   },
-  "recommendations": {
-    "accurate": "Tarkimmat suositukset:",
-    "all": "Kaikki suositukset (tarkuus voi vaihdella):",
-    "pointbased": "Pistepohjaiset suositukset"
+  'recommendations': {
+    'accurate': 'Tarkimmat suositukset:',
+    'all': 'Kaikki suositukset (tarkuus voi vaihdella):',
+    'pointbased': 'Pistepohjaiset suositukset'
   },
-  "course": {
-    "show": "Näytä",
-    "credits": "op",
-    "reasons": "perusteet"
+  'course': {
+    'show': 'Näytä',
+    'credits': 'op',
+    'reasons': 'perusteet'
   },
-  "loginAsPage": {
-    "title": "kayttajahaku",
-    "userHeader": "käyttäjä"
+  'loginAsPage': {
+    'title': 'kayttajahaku',
+    'userHeader': 'käyttäjä'
   }
-};
+}
