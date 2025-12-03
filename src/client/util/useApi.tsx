@@ -1,0 +1,42 @@
+import { useQuery } from '@tanstack/react-query'
+
+
+const generateSettings = (method: string, jsonBody?: any) => {
+
+    
+  const settings: Record<string, any> = {}
+  if (jsonBody) {
+    settings.headers = {
+      'Content-Type': 'application/json',
+    }
+    settings.body = JSON.stringify(jsonBody)
+  }
+
+  const loginAsUser= localStorage.getItem('loginAsUser')
+  const loginAsUserId = loginAsUser ? JSON.parse(loginAsUser).id : ''
+  if(loginAsUserId){
+    settings.headers = {
+      ...settings.headers,
+      'x-login-as': loginAsUserId
+    }
+  }
+
+  return settings
+}
+
+const useApi = (queryKey, endPoint, method, jsonBody) => {
+  const { data, isLoading} = useQuery({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const settings = generateSettings(method, jsonBody)
+      const res = await fetch(endPoint, settings)
+      return res.json()
+
+    },
+  })
+
+  return { data, isLoading }
+}
+
+
+export default useApi

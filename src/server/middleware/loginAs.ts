@@ -1,9 +1,10 @@
 
-import { User } from '../db/models'
-import { isAdmin } from '../util/validations'
+
+import type { User } from '../db/models'
+import { isAdmin } from '../util/validations.ts'
 
 const loginAsMiddleware = async (
-  req, next
+  req, _, next
 ) => {
   
   const loginAsId = req.headers['x-login-as']

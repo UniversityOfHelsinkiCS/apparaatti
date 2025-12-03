@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { LanguageContext } from './contexts/languageContext.tsx'
 import LanguageSelect from './components/LanguageSelect.tsx'
 import { useTranslation } from 'react-i18next'
+import useApi from './util/useApi.tsx'
 function App() {
   const {setDefaultLanguage} = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
@@ -14,14 +15,8 @@ function App() {
   const [courseRecommendations, setCourseRecommendations] = useState([])
   const [questionarePhase, setQuestionarePhase] = useState(0)
   const {t} = useTranslation()
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const res = await fetch('/api/user')
-      return res.json()
-    },
-  })
-
+  const { data: user, isLoading: isUserLoading } = useApi('user', '/api/user', 'GET', null)
+  
   useEffect(() => {
     if(!isUserLoading){
       setDefaultLanguage(user?.language) 
