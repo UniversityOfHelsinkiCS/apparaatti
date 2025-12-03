@@ -1,8 +1,6 @@
 import express from 'express'
 import { AnswerSchema } from '../../common/validators.ts'
-
 import passport from 'passport'
-import Form from '../db/models/form.ts'
 import recommendCourses, { getRealisationsWithCourseUnitCodes, organisationCodeToUrn } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
@@ -13,10 +11,12 @@ import { inDevelopment } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 import type { adminFeedback, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
+import loginAsMiddleware from '../middleware/loginAs.ts'
 
 const router = express.Router({mergeParams: true})
 
 router.use(express.json())
+router.use(loginAsMiddleware)
 
 if(inDevelopment){
   router.use('/debug', debugRouter)
