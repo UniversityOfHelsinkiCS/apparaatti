@@ -6,7 +6,7 @@ const loginAsMiddleware = async (
   req, next
 ) => {
   
-  const loginAsId = req.headers["x-login-as"]
+  const loginAsId = req.headers['x-login-as']
   if (typeof loginAsId === 'string' && isAdmin(req?.user)) {
   
     const loggedInAsUser = await User.findByPk(loginAsId)
