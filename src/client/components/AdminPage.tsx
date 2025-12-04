@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import LoginAs from './LoginAs.tsx'
 import useApi from '../util/useApi.tsx'
+import { Navigate, redirect } from 'react-router-dom'
 
 const AdminPage = () => {
 
@@ -9,6 +10,11 @@ const AdminPage = () => {
     return <div>Loading...</div>
   }
   
+  if(!user.isAdmin){
+    return(
+    <Navigate to={"/"} replace/>
+    )
+  }
   return (
     <Box>
       <p>this is the admin page</p>
