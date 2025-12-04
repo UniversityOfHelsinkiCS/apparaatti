@@ -36,7 +36,7 @@ export const getWhereClauseForTwoWordSearch = (search: string) => {
     [Op.or]: [
       // assume that the first word is the first name and the second word is the last name
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `%${firstName}%`,
         },
         lastName: {
@@ -47,14 +47,14 @@ export const getWhereClauseForTwoWordSearch = (search: string) => {
       // first name includes middle names as well. Thus this allows
       // for searching with first and middle names
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `%${search}%`,
         },
       },
       // sometimes, users might first type in last name and then first name
       // so we need to account for that as well
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `${lastName}%`,
         },
         lastName: {
@@ -78,12 +78,12 @@ export const getWhereClauseForManyWordSearch = (search: string) => {
   return {
     [Op.or]: [
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `${searchedWords}%`,
         },
       },
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `${firstNames1.join(' ')}%`,
         },
         lastName: {
@@ -91,7 +91,7 @@ export const getWhereClauseForManyWordSearch = (search: string) => {
         },
       },
       {
-        firstName: {
+        firstNames: {
           [Op.iLike]: `${firstNames2.join(' ')}%`,
         },
         lastName: {

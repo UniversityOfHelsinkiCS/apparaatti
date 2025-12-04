@@ -29,7 +29,7 @@ const LoginAs = () => {
   const [userSearch, setUserSearch] = useState('')
   
   const trimmedSearch = trimSearch(userSearch)  
-  const url = `/api/admin/users?search=${trimmedSearch ? trimmedSearch : ''}${'&onlyWithStudyRight=true'}`
+  const url = `/api/admin/users?search=${trimmedSearch ? trimmedSearch : ''}`
 
   const {data: users, isLoading: isUsersLoading, refetch} = useApi('users', url, 'GET',)
 

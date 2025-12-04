@@ -54,26 +54,6 @@ adminRouter.get('/users', async (req, res) => {
 
   let whereClauses: Record<string, any> = {}
 
-  if (onlyWithStudyRight) {
-    whereClauses = {
-      ...whereClauses,
-      hasStudyRight: {
-        [Op.is]: true,
-      },
-    }
-  }
-  if (onlyEmployees) {
-    whereClauses = {
-      ...whereClauses,
-      email: {
-        [Op.not]: null,
-      },
-      employeeNumber: {
-        [Op.not]: null,
-      },
-    }
-  }
-
   const searchedWords = trimmedSearch.split(' ')
 
   if (searchedWords.length === 2) {
