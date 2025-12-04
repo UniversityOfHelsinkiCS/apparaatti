@@ -36,18 +36,27 @@ const usersHandler = async (users: SisuUser[]) => {
   })
   const fieldsToUpdate = ['language', 'username', 'studentNumber', 'firstNames', 'lastName']
 
-  await safeBulkCreate({
-    entityName: 'User',
-    entities: parsedUsers,
-    bulkCreate: async (e, opt) => User.bulkCreate(e, opt),
-    fallbackCreate: async (e, opt) => User.upsert(e, opt),
-    bulkCreateOptions: {
-      updateOnDuplicate: fieldsToUpdate,
-    },
-    fallbackCreateOptions: {
-      fields: fieldsToUpdate,
-    },
-  })
+  try{
+    for(const u of parsedUsers){
+      User.upsert(u)
+    }
+    console.log('Users created/updated successfully')
+  }
+  catch(error){
+    console.error('Error creating users', error)
+  }
+  // await safeBulkCreate({
+  //   entityName: 'User',
+  //   entities: parsedUsers,
+  //   bulkCreate: async (e, opt) => User.bulkCreate(e, opt),
+  //   fallbackCreate: async (e, opt) => User.upsert(e, opt),
+  //   bulkCreateOptions: {
+  //     updateOnDuplicate: fieldsToUpdate,
+  //   },
+  //   fallbackCreateOptions: {
+  //     fields: fieldsToUpdate,
+  //   },
+  // })
 }
 
 export const fetchUsers = async () => {
