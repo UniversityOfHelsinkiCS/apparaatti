@@ -9,6 +9,7 @@ import {
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
 import User from '../db/models/user.ts'
+import logger from '../util/logger.ts'
 
 const USER_FETCH_LIMIT = 100
 
