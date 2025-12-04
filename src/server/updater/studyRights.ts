@@ -42,7 +42,7 @@ const studyRightsHandler = async (studyRights: any[]) => {
 //assumes that there is a table Users with studentNumber field
 export const fetchStudyRights = async () => {
   console.log('fetching study rights')
-  const speed = 10000
+  const speed = 1000
   await mangleData(
     'studyrights',
     speed,
