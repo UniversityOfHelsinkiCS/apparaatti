@@ -17,30 +17,13 @@ const runUpdater = async () => {
   //  await fetchEnrolments()
 }
 
-export const run = async () => {
+export const run = async (clear: boolean) => {
   console.log('running updater')
   try {
-    await clearOffsets()
+    if(clear){
+      await clearOffsets()
+    }
     await runUpdater()
-  } catch (error) {
-    console.log(error)
-    return
-  }
-
-  console.log('updater finished')
-  return
-}
-
-export const runDev = async () => {
-  console.log('running development updater')
-  try {
-    await clearOffsets()
-
-    await runUpdater()
-    // await fetchUsers()
-    // await fetchCoursesAndResponsibilities()
-    // await fetchStudyRights()
-    // await fetchOrganisations()
   } catch (error) {
     console.log(error)
     return
