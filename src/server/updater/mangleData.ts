@@ -59,7 +59,7 @@ export const mangleData = async <T = object>(
 
       //in case the server that we are requesting is down we want to sleep a little bit
       if(errorSleep){
-        console.log('server is sleeping due to errors... just in case')
+        logger.debug('server is sleeping due to errors... just in case')
         await sleep(1000)
         errorSleep = false
       }
@@ -120,4 +120,5 @@ export const mangleData = async <T = object>(
       4
     )}ms/item, total time ${(duration / 1000).toFixed(2)}s`
   )
+  await sleep(100)
 }
