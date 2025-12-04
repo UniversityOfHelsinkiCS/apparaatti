@@ -16,6 +16,7 @@ const checkTimeout = (start: number) => {
     throw new Error('Updater time limit exceeded!')
   return true
 }
+const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
 
 /**
  * mangle === mangel === mankeloida in Finnish. Usually means 'to do some heavy processing on data to transform it into another format'.
@@ -43,7 +44,7 @@ export const mangleData = async <T = object>(
   let count = 0
   let currentData = null
   let nextData = null
-
+  let errorSleep = false
   /**
    * Async loop:
    * 1. Wait for the data being fetched. Initially null so no wait
@@ -55,6 +56,14 @@ export const mangleData = async <T = object>(
 
   while (checkTimeout(start)) {
     try {
+
+      //in case the server that we are requesting is down we want to sleep a little bit
+      if(errorSleep){
+        console.log('server is sleeping due to errors... just in case')
+        await sleep(1000)
+        errorSleep = false
+      }
+
       try {
         currentData = await nextData
       } catch (e: any) {
@@ -80,6 +89,7 @@ export const mangleData = async <T = object>(
       } catch (e: any) {
         logError('Updaterloop handler error:', e)
         e.isLogged = true
+        errorSleep = true
         throw e
       }
 
