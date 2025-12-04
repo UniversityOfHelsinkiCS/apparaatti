@@ -10,7 +10,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     allowNull: true,
   })
  
- await queryInterface.addColumn('users','last_name', {
+  await queryInterface.addColumn('users','last_name', {
     type: DataTypes.STRING, 
     allowNull: true,
   })

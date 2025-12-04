@@ -36,7 +36,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-     hyGroupCn: {
+    hyGroupCn: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
