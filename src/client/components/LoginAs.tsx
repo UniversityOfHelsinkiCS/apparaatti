@@ -15,10 +15,10 @@ import { User } from '../../common/types'
 
 const trimSearch = (search: string) => {
  
-   const trimmedSearch = search.trim()
-    if (!trimmedSearch || trimmedSearch.length < 5) {
-      return []
-    }
+  const trimmedSearch = search.trim()
+  if (!trimmedSearch || trimmedSearch.length < 5) {
+    return []
+  }
 
 }
 const LoginAs = () => {
@@ -38,7 +38,7 @@ const LoginAs = () => {
   }
 
   useEffect(() => {
-    console.log("refetch called")
+    console.log('refetch called')
     refetch()
 
   }, [userSearch])

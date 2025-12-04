@@ -13,7 +13,7 @@ export const enforceIsUser = (req) => {
     throw new Error('Unauthorized')
     return
   }
- return req.user
+  return req.user
 }
 
 export const enforceIsAdmin = (user: User) => {
