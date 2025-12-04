@@ -19,7 +19,7 @@ const trimSearch = (search: string) => {
   if (!trimmedSearch || trimmedSearch.length < 5) {
     return []
   }
-
+  return trimmedSearch
 }
 const LoginAs = () => {
   const { t } = useTranslation()
@@ -28,8 +28,8 @@ const LoginAs = () => {
 
   const [userSearch, setUserSearch] = useState('')
   
-  
-  const url = `/api/admin/users?search=${userSearch} : ''}${'&onlyWithStudyRight=true'}`
+  const trimmedSearch = trimSearch(userSearch)  
+  const url = `/api/admin/users?search=${trimmedSearch ? trimmedSearch : ''}${'&onlyWithStudyRight=true'}`
 
   const {data: users, isLoading: isUsersLoading, refetch} = useApi('users', url, 'GET',)
 
