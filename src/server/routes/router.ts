@@ -12,6 +12,7 @@ import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecomm
 import type { adminFeedback, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
+import adminRouter from './admin.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -22,6 +23,7 @@ if(inDevelopment){
   router.use('/debug', debugRouter)
 }
 
+router.use('/admin', adminRouter)
 router.get('/organisations/supported', async(req, res) => {
   if(!req.user){
     res.status(404).json({ message: 'User not found' })
@@ -123,26 +125,6 @@ router.get('/organisations', async (req, res) => {
   res.json(organisations)
     
 
-})
-
-
-router.post('/admin/feedback', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-
-  if (!isAdmin(req.user)) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-  console.log(req.body)
-  const feedback: adminFeedback = req.body
-  console.log(feedback)
-
-  logger.info('ADMIN FEEDBACK', feedback)
-  res.json({status: 'success'})
- 
 })
 
 router.get('/fail', async (_req, res) => {

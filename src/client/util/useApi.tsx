@@ -25,7 +25,7 @@ const generateSettings = (method: string, jsonBody?: any) => {
 }
 
 const useApi = (queryKey, endPoint, method, jsonBody) => {
-  const { data, isLoading} = useQuery({
+  const { data, isLoading, refetch} = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       const settings = generateSettings(method, jsonBody)
@@ -35,7 +35,7 @@ const useApi = (queryKey, endPoint, method, jsonBody) => {
     },
   })
 
-  return { data, isLoading }
+  return { data, isLoading, refetch }
 }
 
 

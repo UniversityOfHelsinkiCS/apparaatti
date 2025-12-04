@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Autocomplete,
@@ -10,20 +10,38 @@ import {
 } from '@mui/material'
 import { loginAs } from '../util/loginAs'
 import useApi from '../util/useApi'
+import { User } from '../../common/types'
 
 
-const LoginAs: React.FC = () => {
+const trimSearch = (search: string) => {
+ 
+   const trimmedSearch = search.trim()
+    if (!trimmedSearch || trimmedSearch.length < 5) {
+      return []
+    }
+
+}
+const LoginAs = () => {
   const { t } = useTranslation()
 
   const [loginAsCandidate, setLoginAsCandidate] = useState<User | null>(null)
 
   const [userSearch, setUserSearch] = useState('')
   
-  const {data: users, isLoading: isUsersLoading} = useApi('users', '/api/admin/users', 'POST', {search: userSearch})
+  
+  const url = `/api/admin/users?search=${userSearch} : ''}${'&onlyWithStudyRight=true'}`
+
+  const {data: users, isLoading: isUsersLoading, refetch} = useApi('users', url, 'GET',)
 
   const handleLoginAs = () => {
     loginAs(loginAsCandidate)
   }
+
+  useEffect(() => {
+    console.log("refetch called")
+    refetch()
+
+  }, [userSearch])
 
   return (
     <>
