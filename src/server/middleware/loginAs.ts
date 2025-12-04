@@ -1,6 +1,6 @@
 
 
-import type { User } from '../db/models'
+import User from '../db/models/user.ts'
 import { isAdmin } from '../util/validations.ts'
 
 const loginAsMiddleware = async (
