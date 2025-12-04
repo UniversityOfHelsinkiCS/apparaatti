@@ -47,7 +47,6 @@ const createCusFromUpdater = async (
     })
     .flat()
     .map((courseUnit: any) => {
-      console.log(courseUnit)
       return {
         id: courseUnit.id,
         credits: courseUnit.credits,
