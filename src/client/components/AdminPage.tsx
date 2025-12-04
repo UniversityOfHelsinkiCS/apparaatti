@@ -12,7 +12,7 @@ const AdminPage = () => {
   
   if(!user.isAdmin){
     return(
-    <Navigate to={"/"} replace/>
+      <Navigate to={'/'} replace/>
     )
   }
   return (
