@@ -4,16 +4,11 @@ import ActionButton from './actionButton'
 import { CourseRecommendations, User } from '../../common/types'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import useApi from '../util/useApi'
 
 const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations}) => {
   const [feedback, setFeedBack] = useState('')
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const res = await fetch('/api/user')
-      return res.json()
-    },
-  })
+  const { data: user, isLoading: isUserLoading } = useApi('user','/api/user', 'GET', null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()

@@ -8,6 +8,7 @@ import { LanguageContext } from './contexts/languageContext.tsx'
 import LanguageSelect from './components/LanguageSelect.tsx'
 import { useTranslation } from 'react-i18next'
 import useApi from './util/useApi.tsx'
+import useApiMutation from './hooks/useApiMutation.tsx'
 function App() {
   const {setDefaultLanguage} = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
@@ -23,13 +24,7 @@ function App() {
     }
   }, [user, isUserLoading])
 
-  const { data: supportedOrganisations, isLoading: isSupportedOrganisationsLoading } = useQuery({
-    queryKey: ['supportedOrganisations'],
-    queryFn: async () => {
-      const res = await fetch('/api/organisations/supported')
-      return res.json()
-    },
-  })
+  const { data: supportedOrganisations, isLoading: isSupportedOrganisationsLoading } = useApi('supportedOrganisations', '/api/organisations/supported', 'GET', null)
   const userId = user?.id
   //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
   const stepStyle = {
@@ -51,52 +46,26 @@ function App() {
     },
   }
  
-  const { data: studyData, isLoading: isStudyDataLoading } = useQuery({
-    queryKey: ['studyData'],
-    queryFn: async () => {
-      const res = await fetch('/api/user/studydata')
-      return res.json()
-    },
-    enabled: !!userId
-  })
+  const { data: studyData, isLoading: isStudyDataLoading } = useApi('studyData', '/api/user/studydata', 'GET', null)
 
-  const submitAnswerMutation = useMutation({
-    mutationFn: async (formData: FormData) => {
-      
-      
-      const keys = Array.from(formData.keys())
-      const answerData = Object.fromEntries(
-        keys.map((key) => {
-          const value = formData.getAll(key)
-          return [key, value.length > 1 ? value : value[0]]
-        })
-      )
-
-
-     
-      console.log(answerData)
-      const res = await fetch('/api/form/1/answer', {
-        method: 'POST',
-        body: JSON.stringify(answerData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      console.log(res)
-      //if (res.status === 500) {
-      //  throw new Error("Internal server error")
-      //}
-      const recommendations = await res.json()
-      console.log(recommendations)
-      setCourseRecommendations(recommendations)
-      if (!res.ok) {
-        throw new Error('Network response was not ok')
-      }
-    },
-  })
-
+  const submitAnswerMutation = useApiMutation(async (res) => {
+    const recommendations = await res.json()
+    console.log(recommendations)
+    setCourseRecommendations(recommendations)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+  }, '/api/form/1/answer')
+ 
   const handleSubmit = async (formData: FormData) => {
-    submitAnswerMutation.mutateAsync(formData, {
+    const keys = Array.from(formData.keys())
+    const answerData = Object.fromEntries(
+      keys.map((key) => {
+        const value = formData.getAll(key)
+        return [key, value.length > 1 ? value : value[0]]
+      }))
+
+    submitAnswerMutation.mutateAsync(answerData, {
       onSuccess: () => {
         console.log('Form submitted successfully')
       },

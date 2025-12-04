@@ -1,15 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 
 
-const generateSettings = (method: string, jsonBody?: any) => {
+export const generateSettings = (method: string, jsonBody?: any) => {
 
     
   const settings: Record<string, any> = {}
+  settings.method = method
   if (jsonBody) {
     settings.headers = {
       'Content-Type': 'application/json',
     }
-    settings.body = JSON.stringify(jsonBody)
+    console.log('trying to stringify', jsonBody)
+    const plain = {...jsonBody}
+    settings.body = JSON.stringify(plain)
+    console.log(settings.body)
   }
 
   const loginAsUser= localStorage.getItem('loginAsUser')
