@@ -30,6 +30,8 @@ const usersHandler = async (users: SisuUser[]) => {
         ? user.eduPersonPrincipalName.split('@')[0]
         : user.id,
       studentNumber: user.studentNumber,
+      firstNames: user.firstNames,
+      lastName: user.lastName
     }
   })
   const fieldsToUpdate = ['language', 'username', 'studentNumber']

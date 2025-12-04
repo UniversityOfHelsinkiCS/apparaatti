@@ -8,6 +8,8 @@ import { sequelize } from '../connection.ts'
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string
   declare username: string
+  declare firstName: CreationOptional<string>
+  declare lastName: CreationOptional<string>
   declare hyGroupCn: CreationOptional<string[]>
   declare language?: CreationOptional<string>
   declare studentNumber: CreationOptional<string>
@@ -26,7 +28,15 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    hyGroupCn: {
+    firstNames: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+     hyGroupCn: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
     },
