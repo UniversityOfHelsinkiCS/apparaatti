@@ -34,7 +34,7 @@ const usersHandler = async (users: SisuUser[]) => {
       lastName: user.lastName
     }
   })
-  const fieldsToUpdate = ['language', 'username', 'studentNumber']
+  const fieldsToUpdate = ['language', 'username', 'studentNumber', 'firstNames', 'lastName']
 
   await safeBulkCreate({
     entityName: 'User',
