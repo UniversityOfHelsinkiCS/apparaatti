@@ -6,7 +6,6 @@ import { isAdmin } from '../util/validations.ts'
 const loginAsMiddleware = async (
   req, _, next
 ) => {
-  
   const loginAsId = req.headers['x-login-as']
   if (typeof loginAsId === 'string' && isAdmin(req?.user)) {
   
