@@ -127,7 +127,7 @@ const coursesHandler = async (courseRealizations: any[]) => {
 }
 
 // default 1000, set to 10 for example when debugging
-const SPEED = 10000
+const SPEED = 1000
 
 export const fetchCoursesAndResponsibilities = async () => {
   await mangleData('courses', SPEED, coursesHandler, new Date(2023, 0, 1))

@@ -5,9 +5,13 @@ import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
 
 const runUpdater = async () => {
+  console.log('organisations')
   await fetchOrganisations()
+  console.log('users')
   await fetchUsers()
+  console.log('courses and responsibilities')
   await fetchCoursesAndResponsibilities()
+  console.log('studyrights')
   await fetchStudyRights()
  
   //  await fetchEnrolments()
