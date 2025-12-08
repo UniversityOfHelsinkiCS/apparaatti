@@ -1,28 +1,28 @@
-import type { AnswerData, CourseRecommendation, UserCoordinates } from "../../common/types.ts"
-import { getRelevantPeriods, readAnswer } from "./recommender.ts"
+import type { AnswerData, CourseRecommendation, UserCoordinates } from '../../common/types.ts'
+import { getRelevantPeriods, readAnswer } from './recommender.ts'
 
 
 function getComparison(comparisons, field){
   
-   const defaultComparison = {
-      field: key,
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return c[field] === userCoordinates[field]} 
-    }
-    const comp = comparisons.find((c) => c.field === field)
+  const defaultComparison = {
+    field: key,
+    filterOnFail: false,
+    f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return c[field] === userCoordinates[field]} 
+  }
+  const comp = comparisons.find((c) => c.field === field)
   
-    //we skip if comp field is there to override the default comparison
-    //otherwise we use the field from default comp since it is missing from the override
-    const mergedComparison = {
-      field: key,
-      filterOnFail: comp[field] | defaultComparison[field], 
-      f: comp.f | defaultComparison.f
-    }
-    return mergedComparison
+  //we skip if comp field is there to override the default comparison
+  //otherwise we use the field from default comp since it is missing from the override
+  const mergedComparison = {
+    field: key,
+    filterOnFail: comp[field] | defaultComparison[field], 
+    f: comp.f | defaultComparison.f
+  }
+  return mergedComparison
 }
 
 function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: UserCoordinates, comparisons){
-  console.log("got here v2")
+  console.log('got here v2')
   let points = 0 
   for(const key in userCoordinates){
     const comp = getComparison(comparisons, key)
@@ -69,7 +69,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     f?: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
   }
  
-   const comparisons = [
+  const comparisons = [
     // {
     //   field: 'org',
     //   filterOnFail: true, 
@@ -91,12 +91,12 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   console.log('count before: ', noExams.length)
  
   const recommendationWithPoints = noExams.map((c) => {
-    let points = calculatePointsForCourse(c, userCoordinates, comparisons) 
+    const points = calculatePointsForCourse(c, userCoordinates, comparisons) 
     console.log(points)
     return {...c, points}
   })
 
-  console.log("we got here")
+  console.log('we got here')
   console.log(recommendationWithPoints.length)
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
