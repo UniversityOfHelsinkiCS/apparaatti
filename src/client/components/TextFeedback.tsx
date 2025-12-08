@@ -24,6 +24,8 @@ const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations
         'Content-Type': 'application/json',
       }
     })
+
+    window.alert("palaute annettu")
   }
 
   if(isUserLoading || !user?.isAdmin){
