@@ -3,21 +3,36 @@ import { getRelevantPeriods, readAnswer } from './recommender.ts'
 
 
 function getComparison(comparisons, field){
-  
+  console.log('hi from comparison')
   const defaultComparison = {
-    field: key,
+    field: field,
     filterOnFail: false,
-    f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return c[field] === userCoordinates[field]} 
+    f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {
+
+      console.log('default function used for')
+      console.log(field)
+      console.log(c.coordinates[field])
+      console.log(userCoordinates[field])
+      return c.coordinates[field] === userCoordinates[field]} 
   }
+  console.log('before comp find')
   const comp = comparisons.find((c) => c.field === field)
   
   //we skip if comp field is there to override the default comparison
   //otherwise we use the field from default comp since it is missing from the override
+  console.log('before merged comp')
+  const filterOnFailValue = comp?.filterOnFail ? comp.filterOnFail : defaultComparison.filterOnFail
+  console.log(filterOnFailValue)
+  const functionHandle = comp?.f ? comp.f : defaultComparison.f
+  console.log(functionHandle)
   const mergedComparison = {
-    field: key,
-    filterOnFail: comp[field] | defaultComparison[field], 
-    f: comp.f | defaultComparison.f
+    field: field,
+    filterOnFail: filterOnFailValue, 
+    f: functionHandle
   }
+
+  console.log('end of get comp')
+  console.log(mergedComparison)
   return mergedComparison
 }
 
@@ -26,18 +41,28 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
   let points = 0 
 
   for(const key in userCoordinates){
+    console.log('before get')
     const comp = getComparison(comparisons, key)
+    console.log('before comp func')
     const match = comp.f(c, userCoordinates, key) 
+    console.log('before match func')
     if(match){
+      console.log('success on key')
+      console.log(key)
       points++
     }
     else{
+
+      console.log('fail on key')
+      console.log(key)
       if(comp.filterOnFail === true){
+
         return -1
       }
     }
   }
 
+  console.log('end of calculate')
   return points
 }
 
@@ -73,23 +98,23 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   }
  
   const comparisons = [
-    // {
-    //   field: 'org',
-    //   filterOnFail: true, 
-    // },
-    // {
-    //   field: 'mooc',
-    //   filterOnFail: true,
-    // },
-    // {
-    //   field: 'mentoring',
-    //   filterOnFail: false,
-    // },
-    // // {
-    //   field: 'studyPlace',
-    //   filterOnFail: false,
-    //   f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
-    // },
+    {
+      field: 'org',
+      filterOnFail: true, 
+    },
+    {
+      field: 'mooc',
+      filterOnFail: false,
+    },
+    {
+      field: 'mentoring',
+      filterOnFail: false,
+    },
+    {
+      field: 'studyPlace',
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
+    },
   ]
   console.log('count before: ', noExams.length)
  
