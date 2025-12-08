@@ -401,37 +401,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
     languageSpesific: languageSpesific, 
   }
 }
-//applies a set of filters until the list of relevant courses is of certain lenght
-function relevantCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData){
-  const noExams = courses.filter(c => !c.course.name.fi?.toLowerCase().includes('tentti'))
- 
-  const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-  const comparisons = [
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods)},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.independent === userCoordinates.independent},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.replacement === userCoordinates.replacement},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible},
-    (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace},
-  ]
-  let final = noExams
-  for(const comp of comparisons){
-    const newFilter = final.filter((c) => comp(c, userCoordinates) === true)
-    console.log(newFilter.length)
-    if( newFilter.length < final.length && newFilter.length > 0){
 
-      console.log('found a better filtering!')
-      final = [...newFilter]
-
-    }
-  }
-  
-  return final
-}
 //returns a list of courses that are ordered/filtered based on a point based method
 //each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
@@ -562,7 +532,6 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
-  const relevantRecommendations = relevantCourses(recommendations, userCoordinates, answerData)
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, answerData)
 
   console.log('HAPPENS')
@@ -570,10 +539,9 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   console.log(pointRecommendedCourses.length)
 
   const allRecommendations = {
-    relevantRecommendations: relevantRecommendations,
+    pointBasedRecommendations: pointBasedRecommendations,
     recommendations: recommendations,
     userCoordinates: userCoordinates,
-    pointBasedRecommendations: pointBasedRecommendations
   }
   
   return allRecommendations

@@ -64,7 +64,6 @@ export type CourseCoordinates = {
 export type UserCoordinates = CourseCoordinates;
 
 export type CourseRecommendations = {
-  relevantRecommendations: CourseRecommendation[]
   recommendations: CourseRecommendation[]
   pointBasedRecommendations: CourseRecommendation[]
   userCoordinates: UserCoordinates  
