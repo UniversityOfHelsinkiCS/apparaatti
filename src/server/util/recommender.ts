@@ -4,6 +4,7 @@ import type { OrganisationRecommendation } from './organisationCourseRecommmenda
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
+import pointRecommendedCourses from './pointRecommendCourses.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const today = new Date()
@@ -56,7 +57,7 @@ function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue
   }
 }
 
-function readAnswer(answerData: AnswerData, key: string){
+export function readAnswer(answerData: AnswerData, key: string){
   const value = answerData[key]
   if(!value){
     return 'neutral'
@@ -163,8 +164,8 @@ function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
   const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
   const lookups = userStudyPlaces.filter((p) => allowed.includes(p)).map((p) => p)
 
-  console.log('LOOKUPS')
-  console.log(lookups)
+  // console.log('LOOKUPS')
+  // console.log(lookups)
 
   if(courseHasAnyRealisationCodeUrn(course, lookups)){
     console.log('hit')
@@ -218,7 +219,13 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0,
     mooc: hasMoocCodeUrn ? Math.pow(10, 24) : 0
   }
-  
+
+  //settings fields to null that the user does not care about
+  for(const key in answerData){
+    if(key === null){
+      delete courseCoordinates[key]
+    }
+  }  
   const offsetValue = sameOrganisationAsUser === true ? 0 : Math.pow(10, 12)
 
   const sum = dimensions.reduce((acc, key) => {
@@ -330,7 +337,7 @@ const getPeriodsWantedByUser = (periodsArg) => {
 }
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
-function getRelevantPeriods(periodsArg: string[] | string) {
+export function getRelevantPeriods(periodsArg: string[] | string) {
   const periods = getPeriodsWantedByUser(periodsArg)
 
   const pickedPeriods = periods.map((period: string) => {
@@ -402,117 +409,8 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
   }
 }
 
-//returns a list of courses that are ordered/filtered based on a point based method
-//each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
-//this is different from the distance based sorting where two opposing coordinates seem to counter each other.
-//In this point based one a difference does not punish as much as it gets 'ignored'
-function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): CourseRecommendation[]{
-  //we want to ignore all exams except those that are replacement
-  const noExams = courses.filter(c =>
-  {
-    const isExam = c.course.name.fi?.toLowerCase().includes('tentti')
-    const isReplacementCourse = c.coordinates.replacement > 0
-    if(isReplacementCourse || !isExam){
-      return true
-    }
-    return false
-  })
- 
-
-  console.log('courses before filter')
-  console.log(courses.length)
-  const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-
-  // console.log('---DEBUG---')
-  // console.log(pickedPeriods)
-  // console.log('------')
-
-  type ComparisonType = {
-    filterOnFail: boolean,
-    f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
-  }
- 
-  const comparisons: ComparisonType[] = [
-    {
-      filterOnFail: true, 
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.org === userCoordinates.org}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return correctCoursePeriod(c, pickedPeriods) === true}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.lang === userCoordinates.lang}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mooc === userCoordinates.mooc}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.mentoring === userCoordinates.mentoring}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.finmu === userCoordinates.finmu}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.integrated === userCoordinates.integrated}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.challenge === userCoordinates.challenge}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.independent === userCoordinates.independent}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
-        const result = c.coordinates.replacement === userCoordinates.replacement
-        return result
-      }
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.flexible === userCoordinates.flexible}
-    },
-    {
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {return c.coordinates.studyPlace === userCoordinates.studyPlace}
-    },
-  ]
-  console.log('count before: ', noExams.length)
- 
-  const recommendationWithPoints = noExams.map((c) => {
-    let points = 0 
-
-    for(const comp of comparisons){
-      const comparison = comp.f(c, userCoordinates)
-      if(comparison){
-        points++
-      }
-      else{
-        if(comp.filterOnFail === true){
-          return {...c, points: -1}
-        }
-      }
-    }
-
-    return {...c, points}
-  })
-
-  const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
-  const sorted = filtered.sort((a, b) => b.points - a.points)
 
 
-  console.log('courses after filter')
-  console.log(filtered.length)
-  return filtered
-}
 
 async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
   const organisationCode = readAnswer(answerData, 'study-field-select')
