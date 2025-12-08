@@ -25,7 +25,7 @@ const TextFeedback = ({recommendations}: {recommendations: CourseRecommendations
       }
     })
 
-    window.alert("palaute annettu")
+    window.alert('palaute annettu')
   }
 
   if(isUserLoading || !user?.isAdmin){
