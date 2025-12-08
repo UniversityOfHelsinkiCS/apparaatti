@@ -24,6 +24,7 @@ function getComparison(comparisons, field){
 function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: UserCoordinates, comparisons){
   console.log('got here v2')
   let points = 0 
+
   for(const key in userCoordinates){
     const comp = getComparison(comparisons, key)
     const match = comp.f(c, userCoordinates, key) 
@@ -36,6 +37,8 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
       }
     }
   }
+
+  return points
 }
 
 //returns a list of courses that are ordered/filtered based on a point based method
