@@ -10,6 +10,13 @@ const AdminPage = () => {
     return <div>Loading...</div>
   }
   
+  const loginAs = localStorage.getItem('loginAsUser')
+  if(loginAs){
+    if(window.confirm('leave loginas?')){
+      localStorage.removeItem('loginAsUser')
+    }
+  }
+
   if(!user.isAdmin){
     return(
       <Navigate to={'/'} replace/>
