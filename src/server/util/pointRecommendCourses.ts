@@ -13,6 +13,7 @@ function getComparison(comparisons, field){
       console.log(field)
       console.log(c.coordinates[field])
       console.log(userCoordinates[field])
+            
       return c.coordinates[field] === userCoordinates[field]} 
   }
   console.log('before comp find')
@@ -41,6 +42,11 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
   let points = 0 
 
   for(const key in userCoordinates){
+    
+    if(!userCoordinates[key]){
+      continue
+    }
+
     console.log('before get')
     const comp = getComparison(comparisons, key)
     console.log('before comp func')
@@ -104,11 +110,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'mooc',
-      filterOnFail: false,
+      filterOnFail: true,
     },
     {
       field: 'mentoring',
-      filterOnFail: false,
+      filterOnFail: true,
     },
     {
       field: 'studyPlace',
