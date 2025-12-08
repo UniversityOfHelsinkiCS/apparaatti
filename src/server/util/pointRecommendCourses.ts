@@ -117,6 +117,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true,
     },
     {
+      field: 'date',
+      filterOnFail: false,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
+    },
+    {
       field: 'studyPlace',
       filterOnFail: false,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
