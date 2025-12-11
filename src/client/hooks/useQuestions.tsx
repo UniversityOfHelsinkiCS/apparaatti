@@ -122,7 +122,7 @@ const useQuestions = () => {
       number: '',
       mandatory: true,
       effects: 'lang',
-      id: 'lang-1',
+      id: 'lang',
       type: 'language',
       explanation: t('form:searchedLanguageExplanation'),
       variants: [
@@ -143,7 +143,7 @@ const useQuestions = () => {
       mandatory: true,
       effects: 'lang',
       id: 'primary-language-specification',
-      isSubQuestionForQuestionId: 'lang-1',
+      isSubQuestionForQuestionId: 'lang',
       type: 'primary-language-specification',
 
       variants: [

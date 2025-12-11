@@ -128,7 +128,7 @@ export type AnswerData = {
   'flexible': string;
   'mooc': string;
   'study-field-select': string;
-  'lang-1': string;
+  'lang': string;
   'primary-language': string;
   'primary-language-specification': string;
 };

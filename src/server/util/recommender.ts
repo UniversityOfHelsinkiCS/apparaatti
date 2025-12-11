@@ -372,13 +372,17 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
 
 
 async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
+
+  const lang = readAnswer(answerData, 'lang')
+  const primaryLang = readAnswer(answerData, 'primary-language')
+  const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
   const organisationCode = readAnswer(answerData, 'study-field-select')
 
   const organisationRecommendations = readOrganisationRecommendationData()
-  const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
+  const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
-  const courseLanguageType = languageToStudy(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'))
+  const courseLanguageType = languageToStudy(lang, primaryLang)
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
