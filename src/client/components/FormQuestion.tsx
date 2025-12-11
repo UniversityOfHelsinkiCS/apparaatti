@@ -15,23 +15,23 @@ import { useState } from 'react'
 
 
 const switchStyle = {
-      ".MuiSwitch-thumb": {
-        backgroundColor: "grey"
+  '.MuiSwitch-thumb': {
+    backgroundColor: 'grey'
+  },
+  '.MuiSwitch-track': {
+    backgroundColor: 'black'
+  },
+  '& .MuiSwitch-switchBase': {
+    '&.Mui-checked': {
+      '+ .MuiSwitch-track': {
+        backgroundColor: 'lightblue'
       },
-      ".MuiSwitch-track": {
-        backgroundColor: "black"
-      },
-      "& .MuiSwitch-switchBase": {
-        "&.Mui-checked": {
-          "+ .MuiSwitch-track": {
-            backgroundColor: "lightblue"
-          },
-          ".MuiSwitch-thumb": {
-            backgroundColor: "blue"
-         }
+      '.MuiSwitch-thumb': {
+        backgroundColor: 'blue'
       }
     }
- }
+  }
+}
 
 const FormQuestion = ({
   question,

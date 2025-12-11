@@ -61,10 +61,10 @@ function App() {
   const handleSubmit = async (formData: FormData) => {
     const keys = Array.from(formData.keys())
     const answerData = Object.fromEntries(
-    keys.filter(k => !k.includes('strict-filter') ).map((key) => {
-      const value = formData.getAll(key)
-      return [key, value.length > 1 ? value : value[0]]
-    }))
+      keys.filter(k => !k.includes('strict-filter') ).map((key) => {
+        const value = formData.getAll(key)
+        return [key, value.length > 1 ? value : value[0]]
+      }))
 
     const strictFields = keys.filter(k => k.includes('strict-filter') ).map((key) => {
       const value = formData.getAll(key)
