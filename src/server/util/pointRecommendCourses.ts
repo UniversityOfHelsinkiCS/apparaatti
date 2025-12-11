@@ -3,37 +3,25 @@ import { getRelevantPeriods, readAnswer } from './recommender.ts'
 
 
 function getComparison(comparisons, field){
-  console.log('hi from comparison')
   const defaultComparison = {
     field: field,
     filterOnFail: false,
     f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {
-
-      console.log('default function used for')
-      console.log(field)
-      console.log(c.coordinates[field])
-      console.log(userCoordinates[field])
             
       return c.coordinates[field] === userCoordinates[field]} 
   }
-  console.log('before comp find')
   const comp = comparisons.find((c) => c.field === field)
   
   //we skip if comp field is there to override the default comparison
   //otherwise we use the field from default comp since it is missing from the override
-  console.log('before merged comp')
   const filterOnFailValue = comp?.filterOnFail ? comp.filterOnFail : defaultComparison.filterOnFail
-  console.log(filterOnFailValue)
   const functionHandle = comp?.f ? comp.f : defaultComparison.f
-  console.log(functionHandle)
   const mergedComparison = {
     field: field,
     filterOnFail: filterOnFailValue, 
     f: functionHandle
   }
 
-  console.log('end of get comp')
-  console.log(mergedComparison)
   return mergedComparison
 }
 
@@ -42,7 +30,7 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 
   for(const key in userCoordinates){
     
-    if(!userCoordinates[key]){
+    if(userCoordinates[key] === null){
       continue
     }
 

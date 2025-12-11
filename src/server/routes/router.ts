@@ -69,13 +69,10 @@ router.post('/form/answer', async (req, res) => {
     return
   }
   const submitInfo = {user: req.user, answerData}
-  logger.info('User submitted a form', submitInfo)
   
   const recommendations = await recommendCourses(answerData)
 
   const resultData = {user: req.user, answerData, recommendations}
-  logger.info('User got answer from a form', resultData)
-
   res.json({...recommendations, answerData})
 })
 

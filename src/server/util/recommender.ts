@@ -79,9 +79,10 @@ function calculateUserCoordinates(answerData: AnswerData) {
 
 async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
   const codes = [organisationCode]
-  // console.log(codes)
+  console.log(codes)
   for(const code of codes){
     const urnHit = organisationCodeToUrn[code]
+    console.log(urnHit)
     if(urnHit){
       const hasCustomCodeUrn =  courseHasCustomCodeUrn(course, urnHit)
       if(hasCustomCodeUrn){
