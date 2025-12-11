@@ -58,7 +58,6 @@ const FormQuestion = ({
       <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question} question={question}/>
       <ExtraInfoModal currentVariant={questionVariantId} question={question} open={open} handleClose={handleClose}/>
 
-      <Switch sx={switchStyle}/>
 
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
