@@ -38,7 +38,6 @@ function getComparison(comparisons, field){
 }
 
 function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: UserCoordinates, comparisons){
-  console.log('got here v2')
   let points = 0 
 
   for(const key in userCoordinates){
@@ -47,28 +46,18 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
       continue
     }
 
-    console.log('before get')
     const comp = getComparison(comparisons, key)
-    console.log('before comp func')
     const match = comp.f(c, userCoordinates, key) 
-    console.log('before match func')
+
     if(match){
-      console.log('success on key')
-      console.log(key)
       points++
     }
     else{
-
-      console.log('fail on key')
-      console.log(key)
       if(comp.filterOnFail === true){
-
         return -1
       }
     }
   }
-
-  console.log('end of calculate')
   return points
 }
 
@@ -89,13 +78,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   })
  
 
-  console.log('courses before filter')
-  console.log(courses.length)
   const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-
-  // console.log('---DEBUG---')
-  // console.log(pickedPeriods)
-  // console.log('------')
 
   type ComparisonType = {
     field?: string
@@ -127,23 +110,14 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
     },
   ]
-  console.log('count before: ', noExams.length)
  
   const recommendationWithPoints = noExams.map((c) => {
     const points = calculatePointsForCourse(c, userCoordinates, comparisons) 
-    console.log(points)
     return {...c, points}
   })
 
-  console.log('we got here')
-  console.log(recommendationWithPoints.length)
-
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
   const sorted = filtered.sort((a, b) => b.points - a.points)
-
-
-  console.log('courses after filter')
-  console.log(filtered.length)
   return sorted
 }
 

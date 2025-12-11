@@ -5,6 +5,7 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, co
 import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
+import { allowedStudyPlaces, organisationCodeToUrn } from './constants.ts'
 
 const getStudyYearFromPeriod = (id: string) => {
   const today = new Date()
@@ -26,25 +27,6 @@ async function recommendCourses(answerData: AnswerData) {
     return {}
   }
 }
-
-function studyPlaceCoordinate(studyPlace: string){
-  const baseCoordinate = Math.pow(10, 12)
-  
-  switch(studyPlace){
-  case 'onsite':
-    return baseCoordinate * 1
-  case 'hybrid':
-    return baseCoordinate * 2
-  case 'remote':
-    return baseCoordinate * 3
-  case 'online':
-    return baseCoordinate * 4
-  default:
-    return baseCoordinate * 2 // in between is a good default since it gives balanced results 
-  
-  }
-}
-
 
 function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){
   switch(value){
@@ -95,25 +77,6 @@ function calculateUserCoordinates(answerData: AnswerData) {
   return userCoordinates
 }
 
-export const organisationCodeToUrn: Record<string, string> = {
-  'H50': 'kkt-mat',
-  'H20': 'kkt-oik',
-  'H10': 'kkt-teo',
-  'H74': 'kkt-ssk',
-  'H70': 'kkt-val', //kkt-val -> valtiotieteel. might be confused with kks-val -> valmistuville, graduation,
-  'H90': 'kkt-ela',
-  'H60': 'kkt-kas', //kasvatustieteel.
-  'H57': 'kkt-bio',
-  'H80': 'kkt-mm', //maa metsa
-  '4141': 'kkt-sps', //soveltava spykologia
-  'H305': 'kkt-ham',
-  'H30': 'kkt-laa',
-  'H3456': 'kkt-log', //logopedia seems to have multiple entries in organisations with the same name
-  '414': 'kkt-psy',
-  'H55': 'kkt-far'
- 
-}
-
 async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
   const codes = [organisationCode]
   // console.log(codes)
@@ -154,15 +117,10 @@ function readArrOrSingleValue(val: string | string[]){
 }
 
 function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
- 
-  const allowed: string[] = [
-    'teaching-participation-remote',
-    'teaching-participation-online',
-    'teaching-participation-blended',
-    'teaching-participation-contact',
-  ]    
+    
   const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
-  const lookups = userStudyPlaces.filter((p) => allowed.includes(p)).map((p) => p)
+  const lookups = userStudyPlaces.filter((p) => allowedStudyPlaces.includes(p)).map((p) => p)
+
 
   // console.log('LOOKUPS')
   // console.log(lookups)
@@ -220,7 +178,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     mooc: hasMoocCodeUrn ? Math.pow(10, 24) : 0
   }
 
-  //settings fields to null that the user does not care about
+  //removing fields that the user does not care about
   for(const key in answerData){
     if(key === null){
       delete courseCoordinates[key]
@@ -419,22 +377,12 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const courseCodes = getCourseCodes(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'), readAnswer(answerData, 'primary-language-specification'), organisationRecommendations, organisationCode)
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
-  console.log('course data size')
-  console.log(courseData.length)
-
   const courseLanguageType = languageToStudy(readAnswer(answerData, 'lang-1'), readAnswer(answerData, 'primary-language'))
   const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
-
-  console.log('distances length')
-  console.log(distances.length)
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, answerData)
-
-  console.log('HAPPENS')
-  console.log(sortedCourses.length)
-  console.log(pointRecommendedCourses.length)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,

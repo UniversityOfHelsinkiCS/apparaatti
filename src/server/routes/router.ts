@@ -1,7 +1,7 @@
 import express from 'express'
 import { AnswerSchema } from '../../common/validators.ts'
 import passport from 'passport'
-import recommendCourses, { getRealisationsWithCourseUnitCodes, organisationCodeToUrn } from '../util/recommender.ts'
+import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
@@ -13,6 +13,7 @@ import type { adminFeedback, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
+import { organisationCodeToUrn } from '../util/constants.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -61,16 +62,14 @@ router.get('/organisations/integrated', async(req, res) => {
   res.json(organisationsWithIntegratedStudies)
 })
 
-router.post('/form/1/answer', async (req, res) => {
+router.post('/form/answer', async (req, res) => {
   const answerData = AnswerSchema.parse(req.body)
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  console.log(answerData)
   const submitInfo = {user: req.user, answerData}
   logger.info('User submitted a form', submitInfo)
-  //  await saveAnswer(answerData, user)
   
   const recommendations = await recommendCourses(answerData)
 

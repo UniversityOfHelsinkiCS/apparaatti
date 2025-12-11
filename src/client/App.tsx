@@ -55,7 +55,7 @@ function App() {
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
-  }, '/api/form/1/answer')
+  }, '/api/form/answer')
  
   const handleSubmit = async (formData: FormData) => {
     const keys = Array.from(formData.keys())
