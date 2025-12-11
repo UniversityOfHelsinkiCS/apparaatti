@@ -3,12 +3,36 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Switch,
+  switchClasses,
 } from '@mui/material'
 import { Question } from '../../common/types.tsx'
 import QuestionTitle from './questionTitle.tsx'
 import ExtraInfoModal from './ExtraInfoModal.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import { useState } from 'react'
+
+
+
+const switchStyle = {
+      ".MuiSwitch-thumb": {
+        backgroundColor: "grey"
+      },
+      ".MuiSwitch-track": {
+        backgroundColor: "black"
+      },
+      "& .MuiSwitch-switchBase": {
+        "&.Mui-checked": {
+          "+ .MuiSwitch-track": {
+            backgroundColor: "lightblue"
+          },
+          ".MuiSwitch-thumb": {
+            backgroundColor: "blue"
+         }
+      }
+    }
+ }
+
 const FormQuestion = ({
   question,
   questionVariantId,
@@ -33,6 +57,9 @@ const FormQuestion = ({
     >
       <QuestionTitle handleOpen={handleOpen} number={question.number} title={variant.question} question={question}/>
       <ExtraInfoModal currentVariant={questionVariantId} question={question} open={open} handleClose={handleClose}/>
+
+      <Switch sx={switchStyle}/>
+
       <RadioGroup name={question.id}>
         {variant.options.map((option) => (
           <FormControlLabel

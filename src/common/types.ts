@@ -116,6 +116,13 @@ export type CurCuRelation = {
   curId: string
 }
 
+export type FormSubmission = {
+  answerData: AnswerData, // choices of the form
+  strictFields: string[]  // list of fields of answerData that should be treated as 
+}
+
+
+
 export type AnswerData = {
   'study-period': string[] | string;
   'graduation': string;

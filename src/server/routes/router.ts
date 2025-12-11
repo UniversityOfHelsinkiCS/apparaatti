@@ -1,5 +1,5 @@
 import express from 'express'
-import { AnswerSchema } from '../../common/validators.ts'
+import { AnswerSchema, StringArraySchema } from '../../common/validators.ts'
 import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
@@ -9,7 +9,7 @@ import logger from '../util/logger.ts'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
-import type { adminFeedback, User } from '../../common/types.ts'
+import type { adminFeedback, FormSubmission, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
@@ -63,14 +63,18 @@ router.get('/organisations/integrated', async(req, res) => {
 })
 
 router.post('/form/answer', async (req, res) => {
-  const answerData = AnswerSchema.parse(req.body)
+
+  const submission:FormSubmission = req.body
+  const answerData = AnswerSchema.parse(submission.answerData)
+  const strictFields: string[] = StringArraySchema.parse(submission.strictFields) 
+
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
   const submitInfo = {user: req.user, answerData}
   
-  const recommendations = await recommendCourses(answerData)
+  const recommendations = await recommendCourses(answerData, strictFields)
 
   const resultData = {user: req.user, answerData, recommendations}
   res.json({...recommendations, answerData})

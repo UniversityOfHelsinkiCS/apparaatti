@@ -15,10 +15,10 @@ const getStudyYearFromPeriod = (id: string) => {
   return currentStudyYearStart.toString()
 }
 
-async function recommendCourses(answerData: AnswerData) {
+async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
   try{
     const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-    const recommendations = await getRecommendations(userCoordinates, answerData)
+    const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
 
     return recommendations
   }
@@ -371,7 +371,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
 
 
 
-async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData): Promise<CourseRecommendations> {
+async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData, strictFields: string[]): Promise<CourseRecommendations> {
 
   const lang = readAnswer(answerData, 'lang')
   const primaryLang = readAnswer(answerData, 'primary-language')

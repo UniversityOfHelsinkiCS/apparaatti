@@ -9,6 +9,7 @@ import LanguageSelect from './components/LanguageSelect.tsx'
 import { useTranslation } from 'react-i18next'
 import useApi from './util/useApi.tsx'
 import useApiMutation from './hooks/useApiMutation.tsx'
+import { AnswerData } from '../common/types.ts'
 function App() {
   const {setDefaultLanguage} = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
@@ -60,12 +61,22 @@ function App() {
   const handleSubmit = async (formData: FormData) => {
     const keys = Array.from(formData.keys())
     const answerData = Object.fromEntries(
-      keys.map((key) => {
-        const value = formData.getAll(key)
-        return [key, value.length > 1 ? value : value[0]]
-      }))
+    keys.filter(k => !k.includes('strict-filter') ).map((key) => {
+      const value = formData.getAll(key)
+      return [key, value.length > 1 ? value : value[0]]
+    }))
 
-    submitAnswerMutation.mutateAsync(answerData, {
+    const strictFields = keys.filter(k => k.includes('strict-filter') ).map((key) => {
+      const value = formData.getAll(key)
+      return [key, value.length > 1 ? value : value[0]]
+    })
+
+    const payload = {
+      answerData,
+      strictFields
+    }
+
+    submitAnswerMutation.mutateAsync(payload, {
       onSuccess: () => {
         console.log('Form submitted successfully')
       },
