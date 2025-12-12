@@ -13,11 +13,11 @@ const StudyPhaseFilter = ({
 }: {
   filter: Question
   studyData: any
-  user: User
+  user: User | null
   supportedOrganisations: any
   setUserOrgCode: (code: string) => void
 }) => {
-  const showAllOptions = (user: User) => {
+  const showAllOptions = (user: User | null) => {
     return user?.isAdmin ? true : false
   }
 

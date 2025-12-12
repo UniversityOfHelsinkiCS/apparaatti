@@ -19,7 +19,11 @@ const filterTitles: { [key: string]: string } = {
 }
 
 const SidebarContent = () => {
-  const { filters } = useFilterContext()
+  const { filters, isLoading } = useFilterContext()
+
+  if (isLoading) {
+    return <p>Loading filters...</p>
+  }
 
   return (
     <>

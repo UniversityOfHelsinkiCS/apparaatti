@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from 'react
 import useQuestions from '../hooks/useQuestions'
 import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
+import useApi from '../util/useApi'
 
 interface FilterContextType {
   language: string
@@ -22,6 +23,7 @@ interface FilterContextType {
   supportedOrganisations: any
   setUserOrgCode: (s: string) => void
   courseRecommendations: CourseRecommendations | null
+  isLoading: boolean
 
   // Filter values
   studyField: string
@@ -70,10 +72,29 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
 
-  // These are placeholders, in a real app you would fetch this data
-  const [user] = useState<User | null>(null)
-  const [studyData] = useState(null)
-  const [supportedOrganisations] = useState(null)
+  const { data: user, isLoading: userLoading } = useApi(
+    'user',
+    '/api/user',
+    'GET',
+    undefined
+  )
+  const { data: studyData, isLoading: studyDataLoading } = useApi(
+    'studyData',
+    '/api/user/studydata',
+    'GET',
+    undefined
+  )
+  const {
+    data: supportedOrganisations,
+    isLoading: supportedOrganisationsLoading,
+  } = useApi(
+    'supportedOrganisations',
+    '/api/organisations/supported',
+    'GET',
+    undefined
+  )
+
+  const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading
 
   const allFilters = useQuestions()
   const filters = allFilters
@@ -87,7 +108,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }, '/api/form/answer')
 
   const submitFilters = () => {
-    const answerData = {
+    const answerDataRaw = {
       'study-field-select': userOrgCode,
       'primary-language': primaryLanguage,
       lang: language,
@@ -102,6 +123,19 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       integrated,
       independent,
     }
+
+    // Filter out empty strings
+    const answerData = Object.fromEntries(
+      Object.entries(answerDataRaw).filter(([, value]) => {
+        if (typeof value === 'string') {
+          return value !== ''
+        }
+        if (Array.isArray(value)) {
+          return value.length > 0
+        }
+        return true
+      })
+    )
 
     const payload = {
       answerData,
@@ -150,6 +184,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         supportedOrganisations,
         setUserOrgCode,
         courseRecommendations,
+        isLoading,
 
         // Filter values
         studyField,

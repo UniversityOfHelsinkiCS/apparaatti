@@ -108,7 +108,7 @@ export type User = {
   hyGroupCn: string[] | null
   language: string | null
   studentNumber: string | null
-  isAdmin?: bool
+  isAdmin?: boolean
  }
 
 export type CurCuRelation = {
