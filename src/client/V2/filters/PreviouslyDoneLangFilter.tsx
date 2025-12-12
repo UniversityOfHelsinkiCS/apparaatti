@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import FormOption from '../../components/FormOption'
 import { pickVariant } from '../../hooks/useQuestions'
 import Markdown from 'react-markdown'
+import { useFilterContext } from '../filterContext'
 
 const PreviouslyDoneLangFilter = ({
   filter,
@@ -15,6 +16,7 @@ const PreviouslyDoneLangFilter = ({
   languageId: string;
 }) => {
   const { t } = useTranslation()
+  const { setPreviouslyDoneLang } = useFilterContext()
   const variant = pickVariant(filter, languageId)
   const neutralOption = variant.options.find((o) => o.id === 'neutral')
   const yesOption = variant.options.find((o) => o.id === '1')
@@ -28,8 +30,10 @@ const PreviouslyDoneLangFilter = ({
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value)
-    setAccordionOpen(event.target.value === yesOption.id) // Open accordion if "Yes" is selected
+    const { value } = event.target
+    setSelectedValue(value)
+    setPreviouslyDoneLang(value)
+    setAccordionOpen(value === yesOption.id) // Open accordion if "Yes" is selected
   }
 
   return (

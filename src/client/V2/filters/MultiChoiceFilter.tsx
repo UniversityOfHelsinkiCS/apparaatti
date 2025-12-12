@@ -5,6 +5,7 @@ import {
 } from '@mui/material'
 import { Question } from '../../../common/types.tsx'
 import { pickVariant } from '../../hooks/useQuestions.tsx'
+import { useFilterContext } from '../filterContext.tsx'
 
 const MultiChoiceFilter = ({
   filter,
@@ -13,13 +14,52 @@ const MultiChoiceFilter = ({
   filter: Question
   variantId: string
 }) => {
+  const {
+    setReplacement,
+    setMentoring,
+    setFinmu,
+    setChallenge,
+    setGraduation,
+    setIntegrated,
+    setIndependent,
+  } = useFilterContext()
+
   const variant = pickVariant(filter, variantId)
   if (!variant || variant?.skipped) {
     return null
   }
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    switch (filter.id) {
+      case 'replacement':
+        setReplacement(value)
+        break
+      case 'mentoring':
+        setMentoring(value)
+        break
+      case 'finmu':
+        setFinmu(value)
+        break
+      case 'challenge':
+        setChallenge(value)
+        break
+      case 'graduation':
+        setGraduation(value)
+        break
+      case 'integrated':
+        setIntegrated(value)
+        break
+      case 'independent':
+        setIndependent(value)
+        break
+      default:
+        break
+    }
+  }
+
   return (
-    <RadioGroup name={filter.id}>
+    <RadioGroup name={filter.id} onChange={handleChange}>
       {variant.options.map((option) => (
         <FormControlLabel
           key={option.id}

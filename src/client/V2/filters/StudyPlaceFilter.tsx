@@ -9,6 +9,7 @@ import {
 import { green } from '@mui/material/colors'
 import { Question } from '../../../common/types'
 import { pickVariant } from '../../hooks/useQuestions'
+import { useFilterContext } from '../filterContext'
 
 const StudyPlaceFilter = ({
   filter,
@@ -17,12 +18,15 @@ const StudyPlaceFilter = ({
   filter: Question
   variantId: string
 }) => {
+  const { setStudyPlace } = useFilterContext()
   const variant = pickVariant(filter, 'default')
   const [state, setState] = React.useState<Record<string, boolean>>({})
 
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newState = { ...state, [event.target.value]: event.target.checked }
     setState(newState)
+    const selectedPlaces = Object.keys(newState).filter((key) => newState[key])
+    setStudyPlace(selectedPlaces)
   }
 
   return (

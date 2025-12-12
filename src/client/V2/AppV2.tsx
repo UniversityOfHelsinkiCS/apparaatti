@@ -22,11 +22,12 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import { FilterContextProvider } from './filterContext'
 import SidebarContent from './sideBarContent'
+import CourseRecommendations from './CourseRecommendations'
 
 const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
 const OneThirdDrawerLayout = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true) // Keep the drawer open by default
 
   const toggleDrawer = () => setOpen((prev) => !prev)
 
@@ -99,23 +100,12 @@ const OneThirdDrawerLayout = () => {
       >
         <Toolbar />
         <Box sx={{ p: 2 }}>
-          <Typography variant="h5" sx={{ mb: 2 }}>
-            Recommended Courses
-          </Typography>
-          <Typography>
-            The recommended courses will be displayed here based on the selected filters.
-          </Typography>
+          <CourseRecommendations />
         </Box>
       </Box>
     </Box>
   )
 }
-
-
-
-
-
-
 
 const AppV2 = () => {
   return (
