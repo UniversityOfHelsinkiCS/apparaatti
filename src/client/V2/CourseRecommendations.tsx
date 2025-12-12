@@ -34,12 +34,6 @@ const CourseRecommendations = () => {
             defaultExpanded={true}
             courses={points}
           />
-          <CourseListingV2
-            userCoordinates={recommendations.userCoordinates}
-            titleText={t('recommendations:all')}
-            defaultExpanded={true}
-            courses={other}
-          />
         </Stack>
       </Stack>
     </Box>
