@@ -50,6 +50,10 @@ const CourseListingV2 = ({
     },
   }
 
+
+  if(!courses){
+    return (<></>)
+  }
   return (
     <Accordion defaultExpanded={defaultExpanded} sx={{ background: 'lightgray' }}>
       <AccordionSummary aria-controls="panel1-content" id="panel1-header">

@@ -32,29 +32,29 @@ const MultiChoiceFilter = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     switch (filter.id) {
-      case 'replacement':
-        setReplacement(value)
-        break
-      case 'mentoring':
-        setMentoring(value)
-        break
-      case 'finmu':
-        setFinmu(value)
-        break
-      case 'challenge':
-        setChallenge(value)
-        break
-      case 'graduation':
-        setGraduation(value)
-        break
-      case 'integrated':
-        setIntegrated(value)
-        break
-      case 'independent':
-        setIndependent(value)
-        break
-      default:
-        break
+    case 'replacement':
+      setReplacement(value)
+      break
+    case 'mentoring':
+      setMentoring(value)
+      break
+    case 'finmu':
+      setFinmu(value)
+      break
+    case 'challenge':
+      setChallenge(value)
+      break
+    case 'graduation':
+      setGraduation(value)
+      break
+    case 'integrated':
+      setIntegrated(value)
+      break
+    case 'independent':
+      setIndependent(value)
+      break
+    default:
+      break
     }
   }
 

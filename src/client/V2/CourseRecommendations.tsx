@@ -13,6 +13,9 @@ const CourseRecommendations = () => {
   const points = recommendations?.pointBasedRecommendations ?? []
   const other = recommendations?.recommendations ?? []
 
+  if(!recommendations || !points || !other){
+    return (<></>)
+  }
   return (
     <Box>
       <Stack>
