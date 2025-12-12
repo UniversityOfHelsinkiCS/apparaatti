@@ -95,6 +95,18 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true,
     },
     {
+      field: 'replacement',
+      filterOnFail: true,
+    },
+    {
+      field: 'graduation',
+      filterOnFail: true,
+    },
+    {
+      field: 'flexible',
+      filterOnFail: true,
+    },
+    {
       field: 'integrated',
       filterOnFail: true,
     },
