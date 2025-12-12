@@ -74,6 +74,11 @@ export default {
     'all': 'all recommendations (accuracy may vary):',
     'pointbased': 'Point-based recommendations'
   },
+  'v2': {
+    'periodFilter': {
+      'title': 'Period'
+    }
+  },
   'course': {
     'show': 'Show',
     'credits': 'cr',

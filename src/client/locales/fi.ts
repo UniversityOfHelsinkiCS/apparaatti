@@ -74,6 +74,11 @@ export default {
     'all': 'Kaikki suositukset (tarkuus voi vaihdella):',
     'pointbased': 'Pistepohjaiset suositukset'
   },
+  'v2': {
+    'periodFilter': {
+      'title': 'Periodi'
+    }
+  },
   'course': {
     'show': 'Näytä',
     'credits': 'op',

@@ -74,6 +74,11 @@ export default {
     'all': 'alla rekommendationer (noggrannheten kan variera):',
     'pointbased': 'Poängbaserade rekommendationer'
   },
+  'v2': {
+    'periodFilter': {
+      'title': 'Period'
+    }
+  },
   'course': {
     'show': 'Visa',
     'credits': 'kr',

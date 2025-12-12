@@ -1,6 +1,8 @@
 import { useFilterContext } from './filterContext'
 import FilterAccordion from './FilterAccordion'
 import FilterRenderer from './FilterRenderer'
+import PeriodFilter from './filters/PeriodFilter' // Import PeriodFilter
+import { useTranslation } from 'react-i18next' // Import useTranslation
 
 const filterTitles: { [key: string]: string } = {
   'study-field-select': 'Study Field',
@@ -20,6 +22,7 @@ const filterTitles: { [key: string]: string } = {
 
 const SidebarContent = () => {
   const { filters, isLoading } = useFilterContext()
+  const { t } = useTranslation() // Initialize useTranslation
 
   if (isLoading) {
     return <p>Loading filters...</p>
@@ -27,6 +30,9 @@ const SidebarContent = () => {
 
   return (
     <>
+      <FilterAccordion title={t('v2:periodFilter:title')}>
+        <PeriodFilter />
+      </FilterAccordion>
       {filters.map((filter) => (
         <FilterAccordion
           key={filter.id}
