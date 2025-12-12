@@ -42,6 +42,9 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
     }
     else{
       if(comp.filterOnFail === true){
+        console.log(`failed ${key}`)
+        console.log(userCoordinates[key])
+        console.log(c.coordinates[key])
         return -1
       }
     }
@@ -88,14 +91,21 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true,
     },
     {
+      field: 'challenge',
+      filterOnFail: true,
+    },
+    {
+      field: 'integrated',
+      filterOnFail: true,
+    },
+    {
       field: 'date',
       filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //date is handled later on the user side
     },
     {
       field: 'studyPlace',
-      filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //not implemented yet
+      filterOnFail: true,
     },
   ]
  

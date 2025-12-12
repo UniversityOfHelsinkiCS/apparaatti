@@ -57,6 +57,19 @@ function getDateFromUserInput(answerData: AnswerData){
   return new Date(parseDate(pickedPeriod.start_date)).getTime()
 }
 
+
+function readStudyPlaceCoordinate (answerData: AnswerData){
+  const value = readAnswer(answerData, 'study-place')
+  if(value === 'neutral'){
+    console.log('neutral')
+    return null
+  }
+  else{
+    console.log('hit on 0')
+    return 0
+  }
+}
+
 function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
@@ -67,7 +80,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
     finmu: commonCoordinateFromAnswerData(readAnswer(answerData, 'finmu'), Math.pow(10,12), 0, null),
     integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), Math.pow(10, 12), 0, null),
-    studyPlace:  0, // courses that have the correct studyPlace based on the answerData will get coord of 0.
+    studyPlace:  readStudyPlaceCoordinate(answerData), // courses that have the correct studyPlace based on the answerData will get coord of 0.
     replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), Math.pow(10, 24), 0, null),
     challenge: commonCoordinateFromAnswerData(readAnswer(answerData, 'challenge'), Math.pow(10, 24), 0, null),
     independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), Math.pow(10, 24), 0, null),
