@@ -6,27 +6,28 @@ pure mock code, built with only speed in mind,
 
 
 */
-import { Box, Typography } from "@mui/material"
+import { Box, Typography } from '@mui/material'
 
 
-import { useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
+import { useState } from 'react'
+import AppBar from '@mui/material/AppBar'
+import CssBaseline from '@mui/material/CssBaseline'
+import Divider from '@mui/material/Divider'
+import Drawer from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import MenuIcon from '@mui/icons-material/Menu'
+import Toolbar from '@mui/material/Toolbar'
+import SidebarContent from './sideBarContent'
 
-const drawerWidth = '33.333vw'; // 1/3 of the viewport width
+const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
 const OneThirdDrawerLayout = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const toggleDrawer = () => setOpen((prev) => !prev);
+  const toggleDrawer = () => setOpen((prev) => !prev)
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -80,14 +81,8 @@ const OneThirdDrawerLayout = () => {
           </Typography>
           <Divider />
         </Box>
-        <List dense>
-          {['Item A', 'Item B', 'Item C'].map((text) => (
-            <ListItem button key={text}>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+      <SidebarContent/>
+     </Drawer>
 
       {/* Main content */}
       <Box
@@ -112,7 +107,7 @@ const OneThirdDrawerLayout = () => {
         </Box>
       </Box>
     </Box>
-  );
+  )
 }
 
 
