@@ -81,8 +81,8 @@ const OneThirdDrawerLayout = () => {
           </Typography>
           <Divider />
         </Box>
-      <SidebarContent/>
-     </Drawer>
+        <SidebarContent/>
+      </Drawer>
 
       {/* Main content */}
       <Box

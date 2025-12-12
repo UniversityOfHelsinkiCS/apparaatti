@@ -1,5 +1,5 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, List, ListItem, ListItemText } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, List, ListItem, ListItemText } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const SidebarContent = ()=> {
   return (
@@ -39,7 +39,7 @@ const SidebarContent = ()=> {
 
       {/* Add more sections as needed */}
     </>
-  );
+  )
 }
 
 
