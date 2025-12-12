@@ -1,0 +1,133 @@
+
+/*
+
+
+pure mock code, built with only speed in mind,
+
+
+*/
+import { Box, Typography } from "@mui/material"
+
+
+import { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+
+const drawerWidth = '33.333vw'; // 1/3 of the viewport width
+
+const OneThirdDrawerLayout = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = () => setOpen((prev) => !prev);
+
+  return (
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+      <CssBaseline />
+
+      {/* AppBar that shifts with drawer */}
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          bgcolor: 'background.paper',
+          color: 'text.primary',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          transition: (theme) => theme.transitions.create(['margin-left', 'width'], {
+            duration: theme.transitions.duration.shorter,
+          }),
+          ml: open ? drawerWidth : 0,
+          width: open ? `calc(100vw - ${drawerWidth})` : '100vw',
+        }}
+      >
+        <Toolbar>
+          <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            1/3 Left Drawer, 2/3 Content
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Persistent left drawer */}
+      <Drawer
+        variant="persistent"
+        anchor="left"
+        open={open}
+        sx={{
+          zIndex: (theme) => theme.zIndex.appBar - 1,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            borderRight: '1px solid',
+            borderColor: 'divider',
+          },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ p: 2 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            Drawer
+          </Typography>
+          <Divider />
+        </Box>
+        <List dense>
+          {['Item A', 'Item B', 'Item C'].map((text) => (
+            <ListItem button key={text}>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+
+      {/* Main content */}
+      <Box
+        component="main"
+        sx={{
+          flexShrink: 0,
+          width: open ? `calc(100vw - ${drawerWidth})` : '100vw',
+          ml: open ? drawerWidth : 0,
+          transition: (theme) => theme.transitions.create(['margin-left', 'width'], {
+            duration: theme.transitions.duration.shorter,
+          }),
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ p: 2 }}>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Content area
+          </Typography>
+          <Typography>
+            When the drawer opens, it takes 1/3 of the viewport width. This area automatically resizes to fill the remaining 2/3.
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+
+
+
+
+
+
+const AppV2 = () => {
+  return (
+    <OneThirdDrawerLayout/>
+  )
+}
+
+
+
+
+export default AppV2
