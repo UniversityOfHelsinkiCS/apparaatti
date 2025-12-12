@@ -20,6 +20,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
+import { FilterContextProvider } from './filterContext'
 import SidebarContent from './sideBarContent'
 
 const drawerWidth = '33.333vw' // 1/3 of the viewport width
@@ -54,7 +55,7 @@ const OneThirdDrawerLayout = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            1/3 Left Drawer, 2/3 Content
+            Course Finder
           </Typography>
         </Toolbar>
       </AppBar>
@@ -77,7 +78,7 @@ const OneThirdDrawerLayout = () => {
         <Toolbar />
         <Box sx={{ p: 2 }}>
           <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            Drawer
+            Filters
           </Typography>
           <Divider />
         </Box>
@@ -99,10 +100,10 @@ const OneThirdDrawerLayout = () => {
         <Toolbar />
         <Box sx={{ p: 2 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
-            Content area
+            Recommended Courses
           </Typography>
           <Typography>
-            When the drawer opens, it takes 1/3 of the viewport width. This area automatically resizes to fill the remaining 2/3.
+            The recommended courses will be displayed here based on the selected filters.
           </Typography>
         </Box>
       </Box>
@@ -118,7 +119,9 @@ const OneThirdDrawerLayout = () => {
 
 const AppV2 = () => {
   return (
-    <OneThirdDrawerLayout/>
+    <FilterContextProvider>
+      <OneThirdDrawerLayout/>
+    </FilterContextProvider>
   )
 }
 
