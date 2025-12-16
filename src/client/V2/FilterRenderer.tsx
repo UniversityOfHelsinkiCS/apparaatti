@@ -1,11 +1,6 @@
-import MultiChoiceFilter from './filters/MultiChoiceFilter'
-import StudyPhaseFilter from './filters/StudyPhaseFilter'
-import LanguageFilter from './filters/LanguageFilter'
-import PreviouslyDoneLangFilter from './filters/PreviouslyDoneLangFilter'
-import PrimaryLanguageSpecificationFilter from './filters/PrimaryLanguageSpecificationFilter'
 import { useFilterContext } from './filterContext'
-import StudyPlaceFilter from './filters/StudyPlaceFilter'
 import { Question } from '../../common/types'
+import Filter from './filters/filter'
 
 const FilterRenderer = ({ filter }: { filter: Question }) => {
   const {
@@ -15,66 +10,107 @@ const FilterRenderer = ({ filter }: { filter: Question }) => {
     setPrimaryLanguage,
     primaryLanguageSpecification,
     setPrimaryLanguageSpecification,
-    variantToDisplayId,
-    user,
-    studyData,
-    supportedOrganisations,
-    setUserOrgCode,
+    studyField,
+    setStudyField,
+    previouslyDoneLang,
+    setPreviouslyDoneLang,
+    replacement,
+    setReplacement,
+    mentoring,
+    setMentoring,
+    finmu,
+    setFinmu,
+    challenge,
+    setChallenge,
+    graduation,
+    setGraduation,
+    integrated,
+    setIntegrated,
+    independent,
+    setIndependent,
+    studyPlace,
+    setStudyPlace,
+    mooc,
+    setMooc,
   } = useFilterContext()
 
-  switch (filter.type) {
-  case 'studyphase':
-    return (
-      <StudyPhaseFilter
-        filter={filter}
-        supportedOrganisations={supportedOrganisations}
-        user={user}
-        studyData={studyData}
-        setUserOrgCode={setUserOrgCode}
-      />
-    )
-  case 'multi':
-    return (
-      <MultiChoiceFilter filter={filter} variantId={variantToDisplayId} />
-    )
-  case 'primary-language':
-    return (
-      <LanguageFilter
-        filter={filter}
-        setLanguage={setPrimaryLanguage}
-      />
-    )
-  case 'study-place':
-    return (
-      <StudyPlaceFilter
-        filter={filter}
-        variantId={variantToDisplayId}
-      />
-    )
-  case 'primary-language-specification':
-    return (
-      <PrimaryLanguageSpecificationFilter
-        filter={filter}
-        language={language}
-        primaryLanguage={primaryLanguage}
-        setPrimaryLanguageSpecification={setPrimaryLanguageSpecification}
-      />
-    )
-  case 'language':
-    return (
-      <LanguageFilter
-        filter={filter}
-        setLanguage={setLanguage}
-      />
-    )
-  case 'previusly-done-lang':
-    return (
-      <PreviouslyDoneLangFilter filter={filter} languageId={language} />
-    )
-  default:
-    // Silently fail for unknown filter types, or show a minimal indicator
-    return null
+  let state: any
+  let setState: any
+  let displayType: 'multichoice' | 'singlechoice' | 'dropdownselect' = 'singlechoice'
+
+  switch (filter.id) {
+    case 'study-field-select':
+      state = studyField
+      setState = setStudyField
+      displayType = 'dropdownselect'
+      break
+    case 'primary-language':
+      state = primaryLanguage
+      setState = setPrimaryLanguage
+      break
+    case 'lang':
+      state = language
+      setState = setLanguage
+      break
+    case 'primary-language-specification':
+      state = primaryLanguageSpecification
+      setState = setPrimaryLanguageSpecification
+      break
+    case 'previusly-done-lang':
+      state = previouslyDoneLang
+      setState = setPreviouslyDoneLang
+      break
+    case 'replacement':
+      state = replacement
+      setState = setReplacement
+      break
+    case 'mentoring':
+      state = mentoring
+      setState = setMentoring
+      break
+    case 'finmu':
+      state = finmu
+      setState = setFinmu
+      break
+    case 'challenge':
+      state = challenge
+      setState = setChallenge
+      break
+    case 'graduation':
+      state = graduation
+      setState = setGraduation
+      break
+    case 'integrated':
+      state = integrated
+      setState = setIntegrated
+      break
+    case 'independent':
+      state = independent
+      setState = setIndependent
+      break
+    case 'study-place':
+      state = studyPlace
+      setState = setStudyPlace
+      displayType = 'multichoice'
+      break
+    case 'mooc':
+      state = mooc
+      setState = setMooc
+      break
+    default:
+      // Fallback for any unhandled filter types, assuming single choice
+      state = ''
+      setState = () => {}
+      break
   }
+
+  return (
+    <Filter
+      filter={{ ...filter, displayType }}
+      state={state}
+      setState={setState}
+    />
+  )
 }
 
-export default FilterRenderer
+export default Filter

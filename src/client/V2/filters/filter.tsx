@@ -52,34 +52,34 @@ const Filter = ({ filter, state, setState }: { filter: Question, state: any, set
 
       {(() => {
         switch (filter.displayType) {
-          case 'multichoice':
-            return (
-              <MultiChoiceFilterComponent
-                filter={filter}
-                state={state}
-                handleCheckboxChange={handleCheckboxChange}
-                options={variant.options || []}
-              />
-            )
-          case 'dropdownselect':
-            return (
-              <DropdownFilterComponent
-                filter={filter}
-                state={state}
-                handleChange={handleDropdownChange}
-                options={variant.options || []}
-              />
-            )
-          case 'singlechoice':
-          default:
-            return (
-              <SingleChoiceFilterComponent
-                filter={filter}
-                state={state}
-                handleRadioChange={handleRadioChange}
-                options={variant.options || []}
-              />
-            )
+        case 'multichoice':
+          return (
+            <MultiChoiceFilterComponent
+              filter={filter}
+              state={state}
+              handleCheckboxChange={handleCheckboxChange}
+              options={variant.options || []}
+            />
+          )
+        case 'dropdownselect':
+          return (
+            <DropdownFilterComponent
+              filter={filter}
+              state={state}
+              handleChange={handleDropdownChange}
+              options={variant.options || []}
+            />
+          )
+        case 'singlechoice':
+        default:
+          return (
+            <SingleChoiceFilterComponent
+              filter={filter}
+              state={state}
+              handleRadioChange={handleRadioChange}
+              options={variant.options || []}
+            />
+          )
         }
       })()}
     </Box>

@@ -75,7 +75,7 @@ const OneThirdDrawerLayout = () => {
         }}
       >
         <Toolbar />
-       <SidebarContent/>
+        <SidebarContent/>
       </Drawer>
 
       {/* Main content */}
