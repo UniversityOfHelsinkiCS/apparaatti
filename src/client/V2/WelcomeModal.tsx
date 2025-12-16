@@ -45,7 +45,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   )
 
   const checkShouldShowSpecification = () => {
-     return language === primaryLanguage
+    return language === primaryLanguage
   }
   const shouldShowSpecification = checkShouldShowSpecification()
 
