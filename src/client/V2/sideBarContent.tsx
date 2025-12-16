@@ -1,8 +1,10 @@
 import { useFilterContext } from './filterContext'
 import FilterAccordion from './FilterAccordion'
 import FilterRenderer from './FilterRenderer'
-import PeriodFilter from './filters/PeriodFilter' // Import PeriodFilter
-import { useTranslation } from 'react-i18next' // Import useTranslation
+import PeriodFilter from './filters/PeriodFilter'
+import { useTranslation } from 'react-i18next'
+import ActionButtonV2 from './components/ActionButtonV2'
+import { Box } from '@mui/material'
 
 const filterTitles: { [key: string]: string } = {
   'study-field-select': 'Study Field',
@@ -21,19 +23,35 @@ const filterTitles: { [key: string]: string } = {
 }
 
 const SidebarContent = () => {
-  const { filters, isLoading } = useFilterContext()
-  const { t } = useTranslation() // Initialize useTranslation
+  const { filters, isLoading, setModalOpen } = useFilterContext()
+  const { t } = useTranslation()
 
   if (isLoading) {
     return <p>Loading filters...</p>
   }
 
+  const filtersToShow = filters.filter(
+    (f) =>
+      ![
+        'study-field-select',
+        'primary-language',
+        'lang',
+        'primary-language-specification',
+      ].includes(f.id)
+  )
+
   return (
     <>
+      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+        <ActionButtonV2
+          onClick={() => setModalOpen(true)}
+          text={t('v2:retakeQuestions')}
+        />
+      </Box>
       <FilterAccordion title={t('v2:periodFilter:title')}>
         <PeriodFilter />
       </FilterAccordion>
-      {filters.map((filter) => (
+      {filtersToShow.map((filter) => (
         <FilterAccordion
           key={filter.id}
           title={filterTitles[filter.id] || filter.id}

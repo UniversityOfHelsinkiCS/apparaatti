@@ -77,7 +77,8 @@ export default {
   'v2': {
     'periodFilter': {
       'title': 'Period'
-    }
+    },
+    'retakeQuestions': 'Answer starting questions'
   },
   'course': {
     'show': 'Show',

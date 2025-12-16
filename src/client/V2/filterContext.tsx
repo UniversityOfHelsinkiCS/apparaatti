@@ -24,6 +24,8 @@ interface FilterContextType {
   setUserOrgCode: (s: string) => void
   courseRecommendations: CourseRecommendations | null
   isLoading: boolean
+  modalOpen: boolean
+  setModalOpen: (open: boolean) => void
 
   // Filter values
   studyField: string
@@ -61,6 +63,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [userOrgCode, setUserOrgCode] = useState('')
   const [courseRecommendations, setCourseRecommendations] =
     useState<CourseRecommendations | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedV2')
+    if (!hasVisited) {
+      setModalOpen(true)
+      sessionStorage.setItem('hasVisitedV2', 'true')
+    }
+  }, [])
 
   // Filter values
   const [studyField, setStudyField] = useState('')
@@ -188,6 +199,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setUserOrgCode,
         courseRecommendations,
         isLoading,
+        modalOpen,
+        setModalOpen,
 
         // Filter values
         studyField,

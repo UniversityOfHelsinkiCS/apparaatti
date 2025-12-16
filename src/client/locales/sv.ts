@@ -77,7 +77,8 @@ export default {
   'v2': {
     'periodFilter': {
       'title': 'Period'
-    }
+    },
+    'retakeQuestions': 'Svara på startfrågorna'
   },
   'course': {
     'show': 'Visa',

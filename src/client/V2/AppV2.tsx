@@ -7,20 +7,15 @@ pure mock code, built with only speed in mind,
 
 */
 import { Box, Typography } from '@mui/material'
-
-
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
 import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
-import { FilterContextProvider } from './filterContext'
+import { FilterContextProvider, useFilterContext } from './filterContext'
 import SidebarContent from './sideBarContent'
 import CourseRecommendations from './CourseRecommendations'
 import WelcomeModal from './WelcomeModal'
@@ -29,15 +24,7 @@ const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
 const OneThirdDrawerLayout = () => {
   const [open, setOpen] = useState(true) // Keep the drawer open by default
-  const [modalOpen, setModalOpen] = useState(false)
-
-  useEffect(() => {
-    const hasVisited = sessionStorage.getItem('hasVisitedV2')
-    if (!hasVisited) {
-      setModalOpen(true)
-      sessionStorage.setItem('hasVisitedV2', 'true')
-    }
-  }, [])
+  const { modalOpen, setModalOpen } = useFilterContext()
 
   const toggleDrawer = () => setOpen((prev) => !prev)
 

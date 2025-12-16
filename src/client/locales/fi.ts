@@ -77,7 +77,8 @@ export default {
   'v2': {
     'periodFilter': {
       'title': 'Periodi'
-    }
+    },
+    'retakeQuestions': 'Vastaa alkukysymyksiin'
   },
   'course': {
     'show': 'Näytä',
