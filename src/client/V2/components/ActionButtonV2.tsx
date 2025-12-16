@@ -18,7 +18,7 @@ const ActionButtonV2 = ({onClick = () => {}, text = '', dataCy}: actionButtonPro
       sx={{
         borderColor: '#90caf9',
         color: 'black',
-        width: '6rem',
+        width: 'auto',
         '&:hover': {
           backgroundColor: '#2196f3',
           color: 'white',

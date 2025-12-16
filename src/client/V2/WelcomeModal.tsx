@@ -64,11 +64,8 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
       sx={{ border: 'none' }}
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Welcome to Apparaatti!
-        </Typography>
         <Typography>
-          Please answer these questions to get better recommendations.
+          Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.
         </Typography>
 
         {studyPhaseQuestion && (
