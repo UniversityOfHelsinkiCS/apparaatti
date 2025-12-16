@@ -9,7 +9,7 @@ pure mock code, built with only speed in mind,
 import { Box, Typography } from '@mui/material'
 
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
 import Divider from '@mui/material/Divider'
@@ -23,17 +23,28 @@ import Toolbar from '@mui/material/Toolbar'
 import { FilterContextProvider } from './filterContext'
 import SidebarContent from './sideBarContent'
 import CourseRecommendations from './CourseRecommendations'
+import WelcomeModal from './WelcomeModal'
 
 const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
 const OneThirdDrawerLayout = () => {
   const [open, setOpen] = useState(true) // Keep the drawer open by default
+  const [modalOpen, setModalOpen] = useState(false)
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedV2')
+    if (!hasVisited) {
+      setModalOpen(true)
+      sessionStorage.setItem('hasVisitedV2', 'true')
+    }
+  }, [])
 
   const toggleDrawer = () => setOpen((prev) => !prev)
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <CssBaseline />
+      <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
 
       {/* AppBar that shifts with drawer */}
       <AppBar
