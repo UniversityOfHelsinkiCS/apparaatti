@@ -165,6 +165,7 @@ const useQuestions = () => {
       id: 'previusly-done-lang',
       type: 'previusly-done-lang',
       explanation: t('form:previoslyDoneLangExplanation'),
+      extraInfo:  t('question:checkInstructionsCrediting'),
       variants: [
         {
           name: 'default',

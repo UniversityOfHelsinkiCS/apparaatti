@@ -11,11 +11,14 @@ import DropdownFilterComponent from './DropdownFilterComponent'
 /*
  a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 
 */
-const Filter = ({ filter, state, setState }: { filter: Question, state: any, setState: any }) => {
+const Filter = ({ filter }: { filter: any }) => {
+  console.log(filter)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const state = filter.state
+  const setState = filter.setState
   const variant = pickVariant(filter, 'default')
 
   if (!variant || variant.skipped) {
@@ -47,9 +50,15 @@ const Filter = ({ filter, state, setState }: { filter: Question, state: any, set
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 number={filter.number} handleOpen={handleOpen} title={variant.question} question={filter} />
-      <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
-
+      {
+        filter?.showTitle ?
+          <>
+            <QuestionTitleV2 number={filter.number} handleOpen={handleOpen} title={variant.question} question={filter} />
+            <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
+          </>
+          :
+          <></>
+      }
       {(() => {
         switch (filter.displayType) {
         case 'multichoice':
@@ -78,6 +87,7 @@ const Filter = ({ filter, state, setState }: { filter: Question, state: any, set
               state={state}
               handleRadioChange={handleRadioChange}
               options={variant.options || []}
+              extrainfo={filter.extraInfo}
             />
           )
         }

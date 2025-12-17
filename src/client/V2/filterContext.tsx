@@ -50,6 +50,8 @@ interface FilterContextType {
   setIndependent: (s: string) => void
   selectedPeriods: string[]
   setSelectedPeriods: (s: string[]) => void
+  mooc: string
+  setMooc: (s: string) => void
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
@@ -84,6 +86,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [studyPlace, setStudyPlace] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
+  const [mooc, setMooc] = useState('')
   const [selectedPeriods, setSelectedPeriods] = useState<string[]>([])
 
   const { data: user, isLoading: userLoading } = useApi(
@@ -225,6 +228,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setIndependent,
         selectedPeriods,
         setSelectedPeriods,
+        mooc,
+        setMooc,
       }}
     >
       {children}

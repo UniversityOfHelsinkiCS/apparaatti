@@ -19,6 +19,7 @@ export type Question = {
   type: string
   explanation?: string
   variants: Variant[]
+  extraInfo?: string // Added extrainfo field
 }
 
 export type Variant = {
@@ -59,6 +60,7 @@ export type CourseCoordinates = {
   independent?: number | null;
   flexible?: number | null;
   mooc?: number | null;
+  finmu?: number | null;
 }
 
 export type UserCoordinates = CourseCoordinates;
