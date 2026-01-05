@@ -5,6 +5,7 @@ import {
 } from '@mui/material'
 import { useFilterContext } from '../filterContext.tsx'
 import { useTranslation } from 'react-i18next'
+import FilterAccordion from '../FilterAccordion.tsx'
 
 const PeriodFilter = () => {
   const { selectedPeriods, setSelectedPeriods } = useFilterContext()
@@ -31,32 +32,34 @@ const PeriodFilter = () => {
   }
 
   return (
-    <FormGroup>
-      {periodOptions.map((option) => (
-        <FormControlLabel
-          key={option.id}
-          control={
-            <Checkbox
-              value={option.id}
-              checked={selectedPeriods.includes(option.id)}
-              onChange={handleChange}
-              sx={{
-                '&.Mui-checked': {
-                  color: '#4caf50',
-                },
-              }}
-            />
-          }
-          label={option.name}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-              borderRadius: '4px',
-            },
-          }}
-        />
-      ))}
-    </FormGroup>
+    <FilterAccordion title={t('v2:periodFilter:title')}>
+      <FormGroup>
+        {periodOptions.map((option) => (
+          <FormControlLabel
+            key={option.id}
+            control={
+              <Checkbox
+                value={option.id}
+                checked={selectedPeriods.includes(option.id)}
+                onChange={handleChange}
+                sx={{
+                  '&.Mui-checked': {
+                    color: '#4caf50',
+                  },
+                }}
+              />
+            }
+            label={option.name}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#e0e0e0',
+                borderRadius: '4px',
+              },
+            }}
+          />
+        ))}
+      </FormGroup>
+    </FilterAccordion>
   )
 }
 

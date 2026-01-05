@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './components/ActionButtonV2'
 import { Box } from '@mui/material'
 
-const filterTitles: { [key: string]: string } = {
+export const filterTitles: { [key: string]: string } = {
   'study-field-select': 'Study Field',
   'primary-language': 'Primary Language',
   lang: 'Language of Study',
@@ -48,16 +48,9 @@ const SidebarContent = () => {
           text={t('v2:retakeQuestions')}
         />
       </Box>
-      <FilterAccordion title={t('v2:periodFilter:title')}>
         <PeriodFilter />
-      </FilterAccordion>
       {filtersToShow.map((filter) => (
-        <FilterAccordion
-          key={filter.id}
-          title={filterTitles[filter.id] || filter.id}
-        >
-          <FilterRenderer filter={filter} />
-        </FilterAccordion>
+         <FilterRenderer key={filter.id} filter={filter} />
       ))}
     </>
   )

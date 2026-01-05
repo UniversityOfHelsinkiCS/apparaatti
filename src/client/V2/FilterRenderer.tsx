@@ -1,5 +1,8 @@
+import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import FilterAccordion from './FilterAccordion'
 import { useFilterContext } from './filterContext'
 import Filter from './filters/filter'
+import { filterTitles } from './sideBarContent'
 
 const FilterRenderer = ({ filter }: { filter: any }) => {
   const filters = useFilterContext()
@@ -83,10 +86,20 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     return {...filter, displayType, state, setState}
   }
   const filterToRender = buildFilter(filter)
+
+  const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
+  const variant = pickVariant(filter, variantId)
+  if(!variant || variant.skipped){
+    return null
+  }
+
   return (
-    <Filter
-      filter={filterToRender}
-    />
+    <FilterAccordion
+      key={filter.id}
+      title={filterTitles[filter.id] || filter.id}
+    >
+      <Filter variant={variant} filter={filterToRender} />
+    </FilterAccordion>
   )
 }
 

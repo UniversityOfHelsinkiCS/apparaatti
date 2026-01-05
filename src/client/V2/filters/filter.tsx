@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Question } from '../../../common/types'
+import { Question, Variant } from '../../../common/types'
 import QuestionTitleV2 from '../components/QuestionTitleV2'
 import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
 import { pickVariant } from '../../hooks/useQuestions'
@@ -11,7 +11,7 @@ import DropdownFilterComponent from './DropdownFilterComponent'
 /*
  a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 
 */
-const Filter = ({ filter }: { filter: any }) => {
+const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
   console.log(filter)
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -19,7 +19,6 @@ const Filter = ({ filter }: { filter: any }) => {
 
   const state = filter.state
   const setState = filter.setState
-  const variant = pickVariant(filter, 'default')
 
   if (!variant || variant.skipped) {
     return null
@@ -43,7 +42,7 @@ const Filter = ({ filter }: { filter: any }) => {
   const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setState(event.target.value)
   }
-
+  const showAsQuestion = true
   return (
     <Box
       sx={{
@@ -51,7 +50,7 @@ const Filter = ({ filter }: { filter: any }) => {
       }}
     >
       {
-        filter?.showTitle ?
+        showAsQuestion ?
           <>
             <QuestionTitleV2 number={filter.number} handleOpen={handleOpen} title={variant.question} question={filter} />
             <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
