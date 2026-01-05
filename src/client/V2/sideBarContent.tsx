@@ -48,9 +48,9 @@ const SidebarContent = () => {
           text={t('v2:retakeQuestions')}
         />
       </Box>
-        <PeriodFilter />
+      <PeriodFilter />
       {filtersToShow.map((filter) => (
-         <FilterRenderer key={filter.id} filter={filter} />
+        <FilterRenderer key={filter.id} filter={filter} />
       ))}
     </>
   )
