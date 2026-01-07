@@ -109,6 +109,7 @@ export const mangleData = async <T = object>(
     } catch (e: any) {
       if (!e.isLogged) {
         logError('Unknown updaterloop error:', e)
+        await sleep(1000) 
       }
     }
   }
