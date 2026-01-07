@@ -44,7 +44,6 @@ export const mangleData = async <T = object>(
   let count = 0
   let currentData = null
   let nextData = null
-  let errorSleep = false
   /**
    * Async loop:
    * 1. Wait for the data being fetched. Initially null so no wait
@@ -57,28 +56,28 @@ export const mangleData = async <T = object>(
   while (checkTimeout(start)) {
     try {
 
-      //in case the server that we are requesting is down we want to sleep a little bit
-      if(errorSleep){
-        logger.debug('server is sleeping due to errors... just in case')
-        await sleep(1000)
-        errorSleep = false
-      }
-
-      try {
-        currentData = await nextData
-      } catch (e: any) {
-        logError('Updaterloop fetch error:', e)
-        e.isLogged = true
-        throw e
-      }
+       try {
+          currentData = await nextData
+        } catch (e: any) {
+          logError('Updaterloop fetch error:', e)
+          e.isLogged = true
+          throw e
+        }
 
       if (currentData?.length === 0) break
 
       const requestTime = (Date.now() - requestStart).toFixed(0)
       requestStart = Date.now()
 
-      nextData = fetchData<T[]>(url, { limit, offset, since })
-
+      try{
+        nextData = fetchData<T[]>(url, { limit, offset, since })
+      }
+      catch(e){
+        console.log("fetch failed")
+        console.log(e)
+        await sleep(1000) //the fail might be server stall so lets give it some time
+        continue 
+      }
       if (!currentData) continue // first iteration
 
       const processingStart = Date.now()
