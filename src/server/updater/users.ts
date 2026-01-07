@@ -43,18 +43,6 @@ const usersHandler = async (users: SisuUser[]) => {
   catch(error){
     console.error('Error creating users', error)
   }
-  // await safeBulkCreate({
-  //   entityName: 'User',
-  //   entities: parsedUsers,
-  //   bulkCreate: async (e, opt) => User.bulkCreate(e, opt),
-  //   fallbackCreate: async (e, opt) => User.upsert(e, opt),
-  //   bulkCreateOptions: {
-  //     updateOnDuplicate: fieldsToUpdate,
-  //   },
-  //   fallbackCreateOptions: {
-  //     fields: fieldsToUpdate,
-  //   },
-  // })
 }
 
 export const fetchUsers = async () => {
