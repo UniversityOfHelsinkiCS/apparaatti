@@ -1,10 +1,9 @@
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
-export const dateIsInPeriod = (date: Date, period, debug=false) => {
+export const dateIsInPeriod = (date: Date, period, _debug=false) => {
   const compare = dateAtMidnight(date)
   const start = dateAtMidnight(parseDate(period.start_date))
   const end = dateAtMidnight(parseDate(period.end_date))
-  const comparison = date >= start && date <= end
   return compare >= start && compare <= end
 }
 

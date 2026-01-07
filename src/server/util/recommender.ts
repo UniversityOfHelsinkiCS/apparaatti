@@ -1,13 +1,13 @@
-import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, PointsCourseRecommendation, UserCoordinates } from '../../common/types.ts'
+import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import {challegeCourseCodes, codesInOrganisations, courseHasAnyCustomCodeUrn, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { allowedStudyPlaces, organisationCodeToUrn } from './constants.ts'
 
-const getStudyYearFromPeriod = (id: string) => {
+const getStudyYearFromPeriod = (_id: string) => {
   const today = new Date()
   const currentPeriod = dateObjToPeriod(today)[0]
   const currentPeriodDate = parseDate(currentPeriod['start_date'])
@@ -22,7 +22,7 @@ async function recommendCourses(answerData: AnswerData, strictFields: string[]) 
 
     return recommendations
   }
-  catch(e)
+  catch
   {
     return {}
   }
@@ -321,26 +321,6 @@ export function getRelevantPeriods(periodsArg: string[] | string) {
   return pickedPeriods
 }
 
-//Returns true if the course starts or ends within any of the picked periods
-function correctCoursePeriod(course: CourseRecommendation, pickedPeriods: { start_date: string; end_date: string; }[]): boolean
-{
-  const courseStart = new Date(course.course.startDate)
-  const courseEnd = new Date(course.course.endDate)
-  for (const period of pickedPeriods) {
-    const periodStart = new Date(parseDate(period.start_date))
-    const periodEnd = new Date(parseDate(period.end_date))
-
-    if (courseStart >= periodStart && courseStart <= periodEnd) {
-      return true
-    }
-   
-    if (courseEnd >= periodStart && courseEnd <= periodEnd) {
-      return true
-    }
-    
-  }
-  return false
-} 
 type courseCodes = {
   all: string[],
   userOrganisation: string[],
@@ -384,7 +364,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
 
 
 
-async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData, strictFields: string[]): Promise<CourseRecommendations> {
+async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData, _strictFields: string[]): Promise<CourseRecommendations> {
 
   const lang = readAnswer(answerData, 'lang')
   const primaryLang = readAnswer(answerData, 'primary-language')

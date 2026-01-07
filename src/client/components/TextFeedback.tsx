@@ -1,8 +1,6 @@
 import { Box, Button, Typography } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import ActionButton from './actionButton'
-import { CourseRecommendations, User } from '../../common/types'
-import { useQuery } from '@tanstack/react-query'
+import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import useApi from '../util/useApi'
 

@@ -1,14 +1,12 @@
 import { Box, Stack } from '@mui/material'
-import { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
-import { useTranslation } from 'react-i18next'
+import { CourseRecommendation } from '../../common/types'
 import CourseRecommendationV2 from './CourseRecommendationV2' // Import CourseRecommendationV2
 import { useFilterContext } from './filterContext'
 
 const CourseRecommendations = () => {
-  const { t } = useTranslation()
   const { courseRecommendations, selectedPeriods } = useFilterContext()
 
-  const recommendations = courseRecommendations as CourseRecommendationsType
+  const recommendations = courseRecommendations as CourseRecommendation
 
   const points = recommendations?.pointBasedRecommendations ?? []
 

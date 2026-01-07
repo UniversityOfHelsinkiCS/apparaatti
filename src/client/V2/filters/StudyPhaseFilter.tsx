@@ -1,7 +1,6 @@
 import { Box, MenuItem, Select } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Question, User } from '../../../common/types'
-import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../../util/i18n'
 
 const StudyPhaseFilter = ({
@@ -39,7 +38,6 @@ const StudyPhaseFilter = ({
   }
 
   const [selectedValue, setSelectedValue] = useState(startValue())
-  const { t } = useTranslation()
 
   const handleChange = (e) => {
     e.preventDefault()

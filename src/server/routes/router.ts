@@ -5,11 +5,10 @@ import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/re
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
-import logger from '../util/logger.ts'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
-import type { adminFeedback, FormSubmission, User } from '../../common/types.ts'
+import type { FormSubmission, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
@@ -72,11 +71,9 @@ router.post('/form/answer', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const submitInfo = {user: req.user, answerData}
   
   const recommendations = await recommendCourses(answerData, strictFields)
 
-  const resultData = {user: req.user, answerData, recommendations}
   res.json({...recommendations, answerData})
 })
 

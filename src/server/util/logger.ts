@@ -1,8 +1,7 @@
-import os from 'os'
 import LokiTransport from 'winston-loki'
 import winston from 'winston'
 
-import { IMPORTER_URL, inProduction, LOKI_HOST } from './config.ts'
+import { inProduction, LOKI_HOST } from './config.ts'
 
 const { combine, timestamp, printf, splat } = winston.format
 

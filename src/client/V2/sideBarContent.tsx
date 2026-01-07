@@ -1,5 +1,4 @@
 import { useFilterContext } from './filterContext'
-import FilterAccordion from './FilterAccordion'
 import FilterRenderer from './FilterRenderer.tsx'
 import PeriodFilter from './filters/PeriodFilter'
 import { useTranslation } from 'react-i18next'

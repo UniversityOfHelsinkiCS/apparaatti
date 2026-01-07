@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Question, Variant } from '../../common/types'
+import { Question } from '../../common/types'
 
 
 
@@ -68,15 +68,11 @@ const useQuestions = () => {
   const englishChoiceText = t('form:english')//{fi: 'englanti', sv: 'engelska', en: 'english'}
   const yesText = t('form:yes')//{fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
   const noText = t('form:no')//{fi: 'Ei', sv: 'Nej', en: 'No'}
-  const neutralText = t('form:neutralChoice') //{fi: 'Ei valintaa', sv: 'Inget val', en: 'No choice'}
-  const summerText = t('form:summer')
-  const periodText = t('form:period')
 
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')
   const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
   const previouslyDoneLangQuestion = t('form:previouslyDoneLangQuestion')
-  const studyPeriodQuestion = t('form:studyPeriodQuestion')
   const replacementQuestion = t('form:replacementQuestion')
   const mentoringQuestion = t('form:mentoringQuestion')
   const challengeQuestion = t('form:challengeQuestion')
@@ -84,7 +80,6 @@ const useQuestions = () => {
   const studyPlaceQuestion = t('form:studyPlaceQuestion')
   const integratedQuestion = t('form:integratedQuestion')
   const independentQuestion = t('form:independentQuestion')
-  const flexibleQuestion = t('form:flexibleQuestion')
   const questions: Question[] = [
     {
       number: '',

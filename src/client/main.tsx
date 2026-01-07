@@ -8,7 +8,7 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { LanguageContextProvider } from './contexts/languageContext.tsx'
 import initializeI18n from './util/i18n.ts'
 import { FormContextProvider } from './contexts/formContext.tsx'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AdminPage from './components/AdminPage.tsx'
 import AppV2 from './V2/AppV2.tsx'
 const queryClient = new QueryClient()

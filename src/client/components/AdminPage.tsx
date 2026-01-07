@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import LoginAs from './LoginAs.tsx'
 import useApi from '../util/useApi.tsx'
-import { Navigate, redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 const AdminPage = () => {
 

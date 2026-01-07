@@ -13,10 +13,8 @@ import { useFilterContext } from '../filterContext'
 
 const StudyPlaceFilter = ({
   filter,
-  variantId,
 }: {
   filter: Question
-  variantId: string
 }) => {
   const { setStudyPlace } = useFilterContext()
   const variant = pickVariant(filter, 'default')

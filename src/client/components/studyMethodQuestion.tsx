@@ -8,13 +8,13 @@ import {
   FormControl,
 } from '@mui/material'
 import { green } from '@mui/material/colors'
-import { Question, Variant } from '../../common/types'
+import { Question } from '../../common/types'
 import QuestionTitle from './questionTitle'
 
 import ExtraInfoModal from './ExtraInfoModal'
 import { pickVariant } from '../hooks/useQuestions'
 
-const StudyPlaceQuestion = ({ question, questionVariantId  }: { question: Question, questionVariantId: string }) => {
+const StudyPlaceQuestion = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
  
   const variant = pickVariant(question, 'default')

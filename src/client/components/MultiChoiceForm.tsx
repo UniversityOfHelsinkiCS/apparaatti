@@ -1,5 +1,5 @@
 import { FormEventHandler, useEffect, useState } from 'react'
-import { Box, FormControl, Typography } from '@mui/material'
+import { Box, FormControl } from '@mui/material'
 import FormQuestion from './FormQuestion.tsx'
 import StudyPhaseQuestion from './StudyPhaseQuestion.tsx'
 import LanguageQuestion from './LanguageQuestion.tsx'
@@ -9,7 +9,6 @@ import { User } from '../../common/types.ts'
 import PrimaryLanguageSpecification from './PrimaryLanguageSpecification.tsx'
 import { updateVariantToDisplayId } from '../hooks/useQuestions.tsx'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
 import { useFormContext } from '../contexts/formContext.tsx'
 import StudyPlaceQuestion from './studyMethodQuestion.tsx'
 
@@ -43,7 +42,7 @@ const MultiChoiceForm = ({
 
     questions
   } = useFormContext()
-  const [userOrgCode, setUserOrgCode] = useState('')
+  const [, setUserOrgCode] = useState('')
    
   useEffect(() => {
     const newVariantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)

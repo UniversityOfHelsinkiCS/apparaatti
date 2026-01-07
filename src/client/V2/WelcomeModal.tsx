@@ -1,5 +1,5 @@
 import { Modal, Box, Typography } from '@mui/material'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useFilterContext } from './filterContext'
 import PrimaryLanguageSpecificationV2 from './components/PrimaryLanguageSpecificationV2'
 import { Question } from '../../common/types'
@@ -7,7 +7,6 @@ import RadioQuestionV2 from './components/RadioQuestionV2'
 import StudyPhaseQuestionV2 from './components/StudyPhaseQuestionV2'
 import ActionButtonV2 from './components/ActionButtonV2'
 import { useTranslation } from 'react-i18next'
-import useApi from '../util/useApi'
 
 type Props = {
   open: boolean

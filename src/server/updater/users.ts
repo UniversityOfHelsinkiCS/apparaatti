@@ -1,6 +1,5 @@
 import User from '../db/models/user.ts'
 import { mangleData } from './mangleData.ts'
-import { safeBulkCreate } from './util.ts'
 
 const parsePreferredLanguageUrnToLanguage = (urn: string) => {
   const fallBackLanguage = 'en'
@@ -34,7 +33,6 @@ const usersHandler = async (users: SisuUser[]) => {
       lastName: user.lastName
     }
   })
-  const fieldsToUpdate = ['language', 'username', 'studentNumber', 'firstNames', 'lastName']
 
   try{
     for(const u of parsedUsers){
@@ -60,5 +58,5 @@ const usersHandler = async (users: SisuUser[]) => {
 }
 
 export const fetchUsers = async () => {
-  await mangleData('persons', 1000, usersHandler)
+  await mangleData('persons', 10000, usersHandler)
 }

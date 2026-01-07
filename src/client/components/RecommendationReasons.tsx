@@ -1,6 +1,6 @@
 import { Box, Modal, Typography } from '@mui/material'
 import { CourseRecommendation, Question, UserCoordinates } from '../../common/types'
-import useQuestions, { pickQuestionExplanation, pickVariant } from '../hooks/useQuestions'
+import { pickQuestionExplanation, pickVariant } from '../hooks/useQuestions'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'

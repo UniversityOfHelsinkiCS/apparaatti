@@ -1,5 +1,4 @@
 import MultiChoiceForm from './components/MultiChoiceForm.tsx'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { AppBar, Toolbar, Typography, Button, Box, Stepper, Step, StepButton, SwipeableDrawer, Stack, } from '@mui/material'
 import {  useContext, useEffect, useRef, useState } from 'react'
 import CourseRecommendationsPage from './components/CourseRecommendationsPage.tsx'
@@ -9,7 +8,6 @@ import LanguageSelect from './components/LanguageSelect.tsx'
 import { useTranslation } from 'react-i18next'
 import useApi from './util/useApi.tsx'
 import useApiMutation from './hooks/useApiMutation.tsx'
-import { AnswerData } from '../common/types.ts'
 function App() {
   const {setDefaultLanguage} = useContext(LanguageContext)
   const topOfPage = useRef<HTMLAnchorElement | null>(null)
@@ -26,7 +24,6 @@ function App() {
   }, [user, isUserLoading])
 
   const { data: supportedOrganisations, isLoading: isSupportedOrganisationsLoading } = useApi('supportedOrganisations', '/api/organisations/supported', 'GET', null)
-  const userId = user?.id
   //https://stackoverflow.com/questions/40326565/how-do-you-change-the-stepper-color-on-react-material-ui
   const stepStyle = {
     '& .MuiStepLabel-root .Mui-completed': {

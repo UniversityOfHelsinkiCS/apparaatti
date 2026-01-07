@@ -1,5 +1,4 @@
 
-import { Op } from 'sequelize'
 import express from 'express'
 import type { User  as UserType } from '../../common/types.ts'
 import {
@@ -39,7 +38,7 @@ adminRouter.get('/users', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const { search, onlyEmployees, onlyWithStudyRight } = req.query as UserSearchQuery
+  const { search } = req.query as UserSearchQuery
   if (!search) {
     res.status(400).send('Search string must be provided as a query parameter')
     return

@@ -1,8 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
 import recommendCourses from '../server/util/recommender'
-import { CourseRecommendations } from '../common/types'
-import { authenticate } from 'passport'
-import { sequelize } from '../server/db/connection'
 
 vi.mock('../server/db/connection', () => {
   const SequelizeMock = vi.fn().mockImplementation(() => ({
@@ -24,7 +21,7 @@ describe('recommender tests', () => {
   })
 
   it('recommender returns an empty answer with a invalid input', async() => {
-    const result: CourseRecommendations = await recommendCourses({})
+    await recommendCourses({})
   })
 
 })

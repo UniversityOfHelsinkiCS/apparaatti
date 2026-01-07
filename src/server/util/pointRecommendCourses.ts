@@ -1,5 +1,6 @@
 import type { AnswerData, CourseRecommendation, UserCoordinates } from '../../common/types.ts'
-import { getRelevantPeriods, readAnswer } from './recommender.ts'
+
+
 
 
 function getComparison(comparisons, field){
@@ -56,7 +57,7 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 //each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
 //In this point based one a difference does not punish as much as it gets 'ignored'
-function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, answerData: AnswerData): CourseRecommendation[]{
+function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, _answerData: AnswerData): CourseRecommendation[]{
   //we want to ignore all exams except those that are replacement
   const noExams = courses.filter(c =>
   {
@@ -67,15 +68,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     }
     return false
   })
- 
-
-  const pickedPeriods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-
-  type ComparisonType = {
-    field?: string
-    filterOnFail: boolean,
-    f?: (c: CourseRecommendation, userCoordinates: UserCoordinates) => boolean
-  }
  
   const comparisons = [
     {
@@ -113,7 +105,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'date',
       filterOnFail: false,
-      f: (c: CourseRecommendation, userCoordinates: UserCoordinates, field: string) => {return true} //date is handled later on the user side
+      f: (_c: CourseRecommendation, _userCoordinates: UserCoordinates, _field: string) => {return true} //date is handled later on the user side
     },
     {
       field: 'studyPlace',

@@ -82,13 +82,14 @@ export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null){
   return false
 }
 
-export function courseHasAnyRealisationCodeUrn(course: CourseData, search: string[]){for (const cmpr of search){
-  const hit = course.courseUnitRealisationTypeUrn.includes(search)
-  if(hit){
-    return true
+export function courseHasAnyRealisationCodeUrn(course: CourseData, search: string[]) {
+  for (const cmpr of search) {
+    const hit = course.courseUnitRealisationTypeUrn.includes(cmpr)
+    if (hit) {
+      return true
+    }
   }
-}
-return false
+  return false
 }
 
 export function courseHasCustomCodeUrn(course: CourseData, codeUrn: string | null){
