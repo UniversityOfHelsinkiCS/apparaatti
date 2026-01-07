@@ -36,7 +36,7 @@ const usersHandler = async (users: SisuUser[]) => {
 
   try{
     for(const u of parsedUsers){
-      User.upsert(u)
+      await User.upsert(u)
     }
     console.log('Users created/updated successfully')
   }
