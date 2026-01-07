@@ -6,7 +6,7 @@ pure mock code, built with only speed in mind,
 
 
 */
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -19,6 +19,7 @@ import { FilterContextProvider, useFilterContext } from './filterContext'
 import SidebarContent from './sideBarContent'
 import CourseRecommendations from './CourseRecommendations'
 import WelcomeModal from './WelcomeModal'
+import useApi from '../util/useApi'
 
 const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
@@ -28,12 +29,23 @@ const OneThirdDrawerLayout = () => {
 
   const toggleDrawer = () => setOpen((prev) => !prev)
 
+  const { data: user, isLoading: isUserLoading } = useApi('user', '/api/user', 'GET', null)
+
+  if(isUserLoading || user?.message === 'Unauthorized'){
+    // window.location.assign('/api/login')
+    return (
+      <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
+        <Typography variant='h2' sx={{marginLeft: 'auto', marginRight: 'auto'}}>Apparaatti</Typography> 
+        <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>Please log in: <a href="/api/login">here</a></Typography>
+        
+      </Stack>
+    )
+  }
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
 
-      {/* AppBar that shifts with drawer */}
       <AppBar
         position="fixed"
         elevation={0}
@@ -59,7 +71,6 @@ const OneThirdDrawerLayout = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Persistent left drawer */}
       <Drawer
         variant="persistent"
         anchor="left"
@@ -78,7 +89,6 @@ const OneThirdDrawerLayout = () => {
         <SidebarContent/>
       </Drawer>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
