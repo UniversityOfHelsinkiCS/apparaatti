@@ -91,6 +91,7 @@ export interface SisuCourseWithRealization {
   flowState: string
   courseUnits: SisuCourseUnit[]
   name: Locales
+  nameSpecifier: JSON
   customCodeUrns: JSON
   activityPeriod: ActivityPeriod
   responsibilityInfos: SisuResponsibilityInfo[]

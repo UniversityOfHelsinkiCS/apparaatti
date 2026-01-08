@@ -13,6 +13,7 @@ const createCursFromUpdater = async (
 ) => {
   const curs: CourseRealization[] = realisations.map((realisation) => {
     const { id, name, activityPeriod, customCodeUrns, courseUnitRealisationTypeUrn } = realisation
+    console.log(realisation.nameSpecifier)
     const startDate = new Date(activityPeriod.startDate)
     const endDate = new Date(activityPeriod.endDate)
     return {
