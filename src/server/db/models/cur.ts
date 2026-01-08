@@ -9,6 +9,7 @@ import type { LocalizedString } from '../../../common/types.ts'
 class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
   declare id: string
   declare name: LocalizedString
+  declare nameSpecifier: LocalizedString
   declare startDate: Date
   declare endDate: Date
   declare courseUnitRealisationTypeUrn: string
@@ -27,6 +28,10 @@ Cur.init(
     name: {
       type: DataTypes.JSONB,
       allowNull: false,
+    },
+    nameSpecifier: {
+      type: DataTypes.JSONB,
+      allowNull: true,
     },
     startDate: {
       type: DataTypes.DATE,

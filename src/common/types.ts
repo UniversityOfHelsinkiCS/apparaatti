@@ -96,6 +96,7 @@ export type CourseData = {
 export type CourseRealization = {
   id: string
   name: LocalizedString
+  nameSpecifier?: LocalizedString
   startDate: Date
   endDate: Date
   customCodeUrns: Record<string, string[]>
