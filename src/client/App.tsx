@@ -130,13 +130,13 @@ function App() {
               <Button sx={{marginLeft: '3rem'}} color={'inherit'} href="/api/logout">
                 {t('app:logout')}
               </Button>
-                         </Typography>
+            </Typography>
           </Stack>
           <LanguageSelect/>
           <Button sx={{}} color={'inherit'} href="/v2">
             UI v2
           </Button>
-       </Box>
+        </Box>
       </SwipeableDrawer>
 
       <Box
