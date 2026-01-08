@@ -11,14 +11,14 @@ const runUpdater = async () => {
 
   if(phase < 1){
     console.log('organisations')
-    await fetchOrganisations()
+    // await fetchOrganisations()
     await redis.set(phaseKey, phase + 1)
   }
 
 
   if(phase < 2){
     console.log('users')
-    await fetchUsers()
+    // await fetchUsers()
     await redis.set(phaseKey, phase + 1)
   }
 
@@ -31,7 +31,7 @@ const runUpdater = async () => {
 
   if(phase < 4){
     console.log('studyrights')
-    await fetchStudyRights()
+    // await fetchStudyRights()
     await redis.set(phaseKey, phase + 1)
   }
  
