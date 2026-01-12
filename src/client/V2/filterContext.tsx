@@ -112,6 +112,11 @@ export const filterConfigMap = (filters: any) => new Map([
   ['mooc', {
     state: filters.mooc,
     setState: filters.setMooc
+  }],
+  ['selected-periods', {
+    state: filters.selectedPeriods,
+    setState: filters.setSelectedPeriods,
+    displayType: 'multichoice'
   }]
 ])
 
