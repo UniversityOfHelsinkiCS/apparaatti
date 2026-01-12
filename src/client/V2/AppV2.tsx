@@ -19,6 +19,7 @@ import SidebarContent from './sideBarContent'
 import CourseRecommendations from './CourseRecommendations'
 import WelcomeModal from './WelcomeModal'
 import useApi from '../util/useApi'
+import CurrentFilterDisplay from './currentFilterDisplay'
 
 const drawerWidth = '33.333vw' // 1/3 of the viewport width
 
@@ -99,7 +100,8 @@ const OneThirdDrawerLayout = () => {
           }),
         }}
       >
-        <Toolbar />
+      <Toolbar />
+      <CurrentFilterDisplay/>
         <Box sx={{ p: 2 }}>
           <CourseRecommendations />
         </Box>

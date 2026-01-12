@@ -54,6 +54,67 @@ interface FilterContextType {
   setMooc: (s: string) => void
 }
 
+export const filterConfigMap = (filters: any) => new Map([
+  ['study-field-select', {
+    state: filters.studyField,
+    setState: filters.setStudyField,
+    displayType: 'dropdownselect'
+  }],
+  ['primary-language', {
+    state: filters.primaryLanguage,
+    setState: filters.setPrimaryLanguage
+  }],
+  ['lang', {
+    state: filters.language,
+    setState: filters.setLanguage
+  }],
+  ['primary-language-specification', {
+    state: filters.primaryLanguageSpecification,
+    setState: filters.setPrimaryLanguageSpecification
+  }],
+  ['previusly-done-lang', {
+    state: filters.previouslyDoneLang,
+    setState: filters.setPreviouslyDoneLang
+  }],
+  ['replacement', {
+    state: filters.replacement,
+    setState: filters.setReplacement
+  }],
+  ['mentoring', {
+    state: filters.mentoring,
+    setState: filters.setMentoring
+  }],
+  ['finmu', {
+    state: filters.finmu,
+    setState: filters.setFinmu
+  }],
+  ['challenge', {
+    state: filters.challenge,
+    setState: filters.setChallenge
+  }],
+  ['graduation', {
+    state: filters.graduation,
+    setState: filters.setGraduation
+  }],
+  ['integrated', {
+    state: filters.integrated,
+    setState: filters.setIntegrated
+  }],
+  ['independent', {
+    state: filters.independent,
+    setState: filters.setIndependent
+  }],
+  ['study-place', {
+    state: filters.studyPlace,
+    setState: filters.setStudyPlace,
+    displayType: 'multichoice'
+  }],
+  ['mooc', {
+    state: filters.mooc,
+    setState: filters.setMooc
+  }]
+]);
+
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 
 export const FilterContextProvider = ({ children }: { children: ReactNode }) => {
