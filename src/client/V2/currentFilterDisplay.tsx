@@ -25,14 +25,14 @@ const CurrentFilterDisplay = () => {
     >
       <Typography><strong>Suodattimet: </strong></Typography>
       <Stack direction="row" spacing={3}>
-     {
-      filtersThatAreActive.map((f) => {return (
-        <Typography key={f} variant="body1">
-          <strong>{f}</strong>
-        </Typography>
-      )})
-    }
-       <Button
+        {
+          filtersThatAreActive.map((f) => {return (
+            <Typography key={f} variant="body1">
+              <strong>{f}</strong>
+            </Typography>
+          )})
+        }
+        <Button
           variant="text"
           sx={{ alignSelf: 'start', textTransform: 'none', color: 'primary.main' }}
         >
