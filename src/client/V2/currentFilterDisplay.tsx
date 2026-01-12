@@ -1,5 +1,5 @@
-import { Box, Typography, Button, Stack } from '@mui/material';
-import { useFilterContext } from './filterContext';
+import { Box, Typography, Button, Stack } from '@mui/material'
+import { filterConfigMap, useFilterContext } from './filterContext'
 
 
 
@@ -8,7 +8,13 @@ import { useFilterContext } from './filterContext';
 
 
 const CurrentFilterDisplay = () => {
-  const filterContext = useFilterContext();
+  const filterContext = useFilterContext()
+  const filtersConfig = filterConfigMap(filterContext)
+  const filtersThatAreActive = Array.from(filtersConfig.keys()).filter((key) => {return filtersConfig.get(key)?.state != ''}) 
+  
+  
+  console.log("active filters")
+  console.log(filtersThatAreActive)
 
   return (
     <Box
@@ -17,14 +23,15 @@ const CurrentFilterDisplay = () => {
       p={2}
       sx={{ maxWidth: '99%', margin: '2', backgroundColor: '#fff' }}
     >
-    <Typography><strong>Suodattimet: </strong></Typography>
+      <Typography><strong>Suodattimet: </strong></Typography>
       <Stack direction="row" spacing={3}>
         <Typography variant="body1">
           <strong>Lukuvuosi:</strong> 
         </Typography>
-          <Typography variant="body1">
-            <strong>Suoritustapa:</strong> {}
-          </Typography>
+        <Typography variant="body1">
+
+          <strong>Suoritustapa:</strong> {}
+        </Typography>
         <Button
           variant="text"
           sx={{ alignSelf: 'start', textTransform: 'none', color: 'primary.main' }}
@@ -33,7 +40,7 @@ const CurrentFilterDisplay = () => {
         </Button>
       </Stack>
     </Box>
-  );
-};
+  )
+}
 
-export default CurrentFilterDisplay;
+export default CurrentFilterDisplay

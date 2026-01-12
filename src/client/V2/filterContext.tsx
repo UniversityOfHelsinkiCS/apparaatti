@@ -113,7 +113,7 @@ export const filterConfigMap = (filters: any) => new Map([
     state: filters.mooc,
     setState: filters.setMooc
   }]
-]);
+])
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 

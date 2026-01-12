@@ -11,11 +11,11 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
   
     console.log('build filter CALLED')
 
-    const config = filterConfigMap(filters).get(filter.id);
+    const config = filterConfigMap(filters).get(filter.id)
 
-    const state = config ? config.state : '';
-    const setState = config ? config.setState : () => {};
-    const displayType = config && config.displayType ? config.displayType : 'singlechoice';
+    const state = config ? config.state : ''
+    const setState = config ? config.setState : () => {}
+    const displayType = config && config.displayType ? config.displayType : 'singlechoice'
 
     return {...filter, displayType, state, setState}
   }

@@ -100,8 +100,8 @@ const OneThirdDrawerLayout = () => {
           }),
         }}
       >
-      <Toolbar />
-      <CurrentFilterDisplay/>
+        <Toolbar />
+        <CurrentFilterDisplay/>
         <Box sx={{ p: 2 }}>
           <CourseRecommendations />
         </Box>
