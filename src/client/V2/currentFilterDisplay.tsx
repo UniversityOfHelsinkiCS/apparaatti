@@ -13,7 +13,7 @@ const CurrentFilterDisplay = () => {
   const filtersThatAreActive = Array.from(filtersConfig.keys()).filter((key) => {return filtersConfig.get(key)?.state != ''}) 
   
   
-  console.log("active filters")
+  console.log('active filters')
   console.log(filtersThatAreActive)
 
   return (
