@@ -56,64 +56,79 @@ interface FilterContextType {
 
 export const filterConfigMap = (filters: any) => new Map([
   ['study-field-select', {
+    shortName: 'opintosuunta',
     state: filters.studyField,
     setState: filters.setStudyField,
     displayType: 'dropdownselect'
   }],
   ['primary-language', {
+    shortName: 'koulukieli',
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage
   }],
   ['lang', {
+    shortName: 'kurssi',
     state: filters.language,
     setState: filters.setLanguage
   }],
   ['primary-language-specification', {
+    shortName: 'viestintä',
     state: filters.primaryLanguageSpecification,
     setState: filters.setPrimaryLanguageSpecification
   }],
   ['previusly-done-lang', {
+    shortName: '',
     state: filters.previouslyDoneLang,
     setState: filters.setPreviouslyDoneLang
   }],
   ['replacement', {
+    shortName: 'korvaava',
     state: filters.replacement,
     setState: filters.setReplacement
   }],
   ['mentoring', {
+    shortName: 'valmentava',
     state: filters.mentoring,
     setState: filters.setMentoring
   }],
   ['finmu', {
+    shortName: 'finmu',
     state: filters.finmu,
     setState: filters.setFinmu
   }],
   ['challenge', {
+    shortName: 'edistynyt',
     state: filters.challenge,
     setState: filters.setChallenge
   }],
   ['graduation', {
+    shortName: 'valmistuville',
     state: filters.graduation,
     setState: filters.setGraduation
   }],
   ['integrated', {
+    shortName: 'integroitu',
     state: filters.integrated,
     setState: filters.setIntegrated
   }],
   ['independent', {
+    shortName: 'itsenäinen',
     state: filters.independent,
     setState: filters.setIndependent
   }],
   ['study-place', {
+    shortName: 'opetusmuoto',
     state: filters.studyPlace,
     setState: filters.setStudyPlace,
     displayType: 'multichoice'
   }],
   ['mooc', {
+    shortName: 'MOOC',
     state: filters.mooc,
     setState: filters.setMooc
   }],
   ['selected-periods', {
+    shortName: 'periodi',
     state: filters.selectedPeriods,
     setState: filters.setSelectedPeriods,
     displayType: 'multichoice'
