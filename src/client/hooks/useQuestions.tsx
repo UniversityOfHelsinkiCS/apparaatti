@@ -69,6 +69,7 @@ const useQuestions = () => {
   const yesText = t('form:yes')//{fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
   const noText = t('form:no')//{fi: 'Ei', sv: 'Nej', en: 'No'}
 
+  const neutralText = t('form:neutralChoice')
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')
   const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
@@ -166,7 +167,7 @@ const useQuestions = () => {
           name: 'default',
           question: previouslyDoneLangQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -212,7 +213,7 @@ const useQuestions = () => {
           name: 'default',
           question: replacementQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -222,7 +223,7 @@ const useQuestions = () => {
           name: 'fi_primary_written',
           question: t('form:replacementQuestion_fi_primary_written'),
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -231,7 +232,7 @@ const useQuestions = () => {
           name: 'fi_secondary_any',
           question: t('form:replacementQuestion_fi_secondary_any'),
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -240,7 +241,7 @@ const useQuestions = () => {
           name: 'en_secondary_any',
           question: t('form:replacementQuestion_en_secondary_any'),
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -249,7 +250,7 @@ const useQuestions = () => {
           name: 'sv_secondary_any',
           question: t('form:replacementQuestion_sv_secondary_any'),
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -257,7 +258,7 @@ const useQuestions = () => {
         {
           name: 'sv_primary_written',
           question: t('form:replacementQuestion_sv_primary_written'),        options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -276,7 +277,7 @@ const useQuestions = () => {
           name: 'default',
           question: mentoringQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             {id: '1', name: t('form:mentoringQuestionYes')},
             {id: '0', name: t('form:mentoringQuestionNo')}
           ],
@@ -285,7 +286,7 @@ const useQuestions = () => {
           name: 'fi_secondary_any',
           question: t('form:mentoringQuestion_fi_secondary_any'),
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -295,7 +296,7 @@ const useQuestions = () => {
           question: '',
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -304,7 +305,7 @@ const useQuestions = () => {
           name: 'sv_primary_written',
           question: mentoringQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -323,7 +324,7 @@ const useQuestions = () => {
           question: '',
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -333,7 +334,7 @@ const useQuestions = () => {
           name: 'fi_secondary_any',
           question: t('form:finmuMentoringQuestion_fi_secondary_any'),
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -351,7 +352,7 @@ const useQuestions = () => {
           name: 'default',
           question: challengeQuestion,
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -360,7 +361,7 @@ const useQuestions = () => {
           name: 'fi_primary_written',
           question: t('form:challengeQuestion_fi_primary_written'),
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -369,7 +370,7 @@ const useQuestions = () => {
           name: 'fi_primary_spoken',
           question: t('form:challengeQuestion_fi_primary_spoken'),
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -378,7 +379,7 @@ const useQuestions = () => {
           name: 'fi_secondary_any',
           question: t('form:challengeQuestion_fi_secondary_any'),
           options: [
-            // { id: 'neutral', name: neutralText},
+            { id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -388,7 +389,7 @@ const useQuestions = () => {
           question: '',
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -398,7 +399,7 @@ const useQuestions = () => {
           question: '',
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -408,7 +409,7 @@ const useQuestions = () => {
           question: '',
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -427,7 +428,7 @@ const useQuestions = () => {
           name: 'default',
           question: graduationQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '1', name: t('form:graduationQuestionYes')},
             { id: '0', name: t('form:graduationQuestionNo')},
           ],
@@ -445,7 +446,7 @@ const useQuestions = () => {
           name: 'default',
           question: studyPlaceQuestion,
           options: [
-            // {id: 'neutral', name: t('form:studyPlaceNeutral')},
+            {id: 'neutral', name: t('form:studyPlaceNeutral')},
             {id: 'teaching-participation-remote', name: t('form:studyPlaceRemote')},
             {id: 'teaching-participation-online', name: t('form:studyPlaceOnline')},
             { id: 'teaching-participation-blended', name: t('form:studyPlaceCombined')},
@@ -466,7 +467,7 @@ const useQuestions = () => {
           question: integratedQuestion,
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -475,7 +476,7 @@ const useQuestions = () => {
           name: 'en_secondary_any',
           question: integratedQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -484,7 +485,7 @@ const useQuestions = () => {
           name: 'sv_secondary_any',
           question: integratedQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -503,7 +504,7 @@ const useQuestions = () => {
           question: independentQuestion,
           skipped: true,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -512,7 +513,7 @@ const useQuestions = () => {
           name: 'en_secondary_any',
           question: independentQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
@@ -521,7 +522,7 @@ const useQuestions = () => {
           name: 'sv_secondary_any',
           question: independentQuestion,
           options: [
-            // {id: 'neutral', name: neutralText},
+            {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
           ],
