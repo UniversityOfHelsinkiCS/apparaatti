@@ -446,7 +446,7 @@ const useQuestions = () => {
           name: 'default',
           question: studyPlaceQuestion,
           options: [
-            {id: 'neutral', name: t('form:studyPlaceNeutral')},
+            // {id: 'neutral', name: t('form:studyPlaceNeutral')},
             {id: 'teaching-participation-remote', name: t('form:studyPlaceRemote')},
             {id: 'teaching-participation-online', name: t('form:studyPlaceOnline')},
             { id: 'teaching-participation-blended', name: t('form:studyPlaceCombined')},
