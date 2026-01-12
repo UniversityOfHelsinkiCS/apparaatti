@@ -8,13 +8,13 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const filterContext = useFilterContext()
   const cfg = filterConfigMap(filterContext).get(filterId)
   const filterData = filterContext.filters.find((f) => f.id === filterId)
-  console.log("active filter card")
+  console.log('active filter card')
   console.log(filterData)
-   return (
-  <Typography variant="body1">
-    <strong>{cfg?.shortName} : {cfg.state}</strong>
+  return (
+    <Typography variant="body1">
+      <strong>{cfg?.shortName} : {cfg.state}</strong>
 
-  </Typography>
+    </Typography>
   
   )
 }
