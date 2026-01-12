@@ -2,6 +2,21 @@ import { Box, Typography, Button, Stack } from '@mui/material'
 import { filterConfigMap, useFilterContext } from './filterContext'
 
 
+const FilterValueRenderer = ({cfg}: {cfg: any}) => {
+
+  const isArray = Array.isArray(cfg.state)
+  if(!isArray)
+  {
+    return(
+      <Typography>{cfg.state}</Typography>
+    )
+  }
+  else{
+    return (
+      cfg.state.map((s: any) => <Typography key={s}>{s}</Typography>)
+    )
+  }
+}
 
 
 const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
@@ -11,11 +26,14 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   console.log('active filter card')
   console.log(filterData)
   return (
-    <Typography variant="body1">
-      <strong>{cfg?.shortName} : {cfg.state}</strong>
-
-    </Typography>
-  
+    <Stack direction="row">
+      <Typography variant="body1">
+        <strong>{cfg?.shortName}: </strong>
+      </Typography>
+      <Stack direction="row" spacing={2}>
+        <FilterValueRenderer cfg={cfg}/>
+      </Stack>
+    </Stack>
   )
 }
 
