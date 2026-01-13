@@ -1,6 +1,5 @@
 import { useFilterContext } from './filterContext'
 import FilterRenderer from './FilterRenderer.tsx'
-import PeriodFilter from './filters/PeriodFilter'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './components/ActionButtonV2'
 import { Box } from '@mui/material'
@@ -17,6 +16,7 @@ export const filterTitles: { [key: string]: string } = {
   challenge: 'Extra Challenge',
   graduation: 'Close to Graduation',
   'study-place': 'Study Method',
+  'study-period': 'Study Period',
   integrated: 'Integrated Studies',
   independent: 'Independent Study',
 }
@@ -47,7 +47,6 @@ const SidebarContent = () => {
           text={t('v2:retakeQuestions')}
         />
       </Box>
-      <PeriodFilter />
       {filtersToShow.map((filter) => (
         <FilterRenderer key={filter.id} filter={filter} />
       ))}

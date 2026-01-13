@@ -4,15 +4,15 @@ import CourseRecommendationV2 from './CourseRecommendationV2' // Import CourseRe
 import { useFilterContext } from './filterContext'
 
 const CourseRecommendations = () => {
-  const { courseRecommendations, selectedPeriods } = useFilterContext()
+  const { courseRecommendations, studyPeriod } = useFilterContext()
 
   const recommendations = courseRecommendations as CourseRecommendation
 
   const points = recommendations?.pointBasedRecommendations ?? []
 
   const filteredCourses =
-    selectedPeriods.length > 0
-      ? points.filter((c) => c.course.period?.name && selectedPeriods.includes(c.course.period.name))
+    studyPeriod.length > 0
+      ? points.filter((c) => c.course.period?.name && studyPeriod.includes(c.course.period.name))
       : points
 
   if(!recommendations || !points){

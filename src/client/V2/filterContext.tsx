@@ -44,12 +44,12 @@ interface FilterContextType {
   setGraduation: (s: string) => void
   studyPlace: string[]
   setStudyPlace: (s: string[]) => void
+  studyPeriod: string[]
+  setStudyPeriod: (s: string[]) => void
   integrated: string
   setIntegrated: (s: string) => void
   independent: string
   setIndependent: (s: string) => void
-  selectedPeriods: string[]
-  setSelectedPeriods: (s: string[]) => void
   mooc: string
   setMooc: (s: string) => void
 }
@@ -122,17 +122,17 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyPlace,
     displayType: 'multichoice'
   }],
+  ['study-period', {
+    shortName: 'periodi',
+    state: filters.studyPeriod,
+    setState: filters.setStudyPeriod,
+    displayType: 'multichoice'
+  }],
   ['mooc', {
     shortName: 'MOOC',
     state: filters.mooc,
     setState: filters.setMooc
   }],
-  ['selected-periods', {
-    shortName: 'periodi',
-    state: filters.selectedPeriods,
-    setState: filters.setSelectedPeriods,
-    displayType: 'multichoice'
-  }]
 ])
 
 
@@ -181,10 +181,10 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [challenge, setChallenge] = useState('')
   const [graduation, setGraduation] = useState('')
   const [studyPlace, setStudyPlace] = useState<string[]>([])
+  const [studyPeriod, setStudyPeriod] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
   const [mooc, setMooc] = useState('')
-  const [selectedPeriods, setSelectedPeriods] = useState<string[]>([])
 
   const { data: user, isLoading: userLoading } = useApi(
     'user',
@@ -234,8 +234,10 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       challenge,
       graduation,
       'study-place': studyPlace,
+      'study-period': studyPeriod,
       integrated,
       independent,
+      mooc,
     }
 
     // Filter out empty strings
@@ -250,6 +252,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         return true
       })
     )
+
+    console.log('answerData', answerData)
 
     const payload = {
       answerData,
@@ -273,8 +277,10 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     challenge,
     graduation,
     studyPlace,
+    studyPeriod,
     integrated,
     independent,
+    mooc,
   ])
 
   return (
@@ -319,12 +325,12 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setGraduation,
         studyPlace,
         setStudyPlace,
+        studyPeriod,
+        setStudyPeriod,
         integrated,
         setIntegrated,
         independent,
         setIndependent,
-        selectedPeriods,
-        setSelectedPeriods,
         mooc,
         setMooc,
       }}
