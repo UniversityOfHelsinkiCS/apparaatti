@@ -2,7 +2,6 @@ import { FormControl, MenuItem, Select } from '@mui/material'
 import { Question, Option } from '../../../common/types'
 import React from 'react'
 import { translateLocalizedString } from '../../util/i18n'
-import SuperToggle from '../components/SuperToggle'
 
 interface DropdownFilterComponentProps {
   filter: Question
@@ -19,7 +18,6 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
 }) => {
   return (
     <FormControl sx={{ minWidth: 200, marginBottom: 2, paddingTop: 1 }}>
-      <SuperToggle filterId={filter.id} />
       <Select
         sx={{
           padding: '1px',

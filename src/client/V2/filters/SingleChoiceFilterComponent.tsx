@@ -4,7 +4,6 @@ import { Question, Option } from '../../../common/types'
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
-import SuperToggle from '../components/SuperToggle'
 
 interface SingleChoiceFilterComponentProps {
   filter: Question
@@ -32,7 +31,6 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
 
   return (
     <>
-      <SuperToggle filterId={filter.id} />
       <RadioGroup name={filter.id} value={state} onChange={onRadioChange}>
         {options.map((option) => (
           <FormControlLabel

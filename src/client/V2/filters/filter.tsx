@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Variant } from '../../../common/types'
 import QuestionTitleV2 from '../components/QuestionTitleV2'
 import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
@@ -6,18 +6,33 @@ import { Box } from '@mui/material'
 import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
 import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 import DropdownFilterComponent from './DropdownFilterComponent'
+import SuperToggle from '../components/SuperToggle'
+import { useFilterContext } from '../filterContext'
 
 /*
  a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 
 */
 const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
-  console.log(filter)
+  const { strictFilters, setStrictFilters } = useFilterContext()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   const state = filter.state
   const setState = filter.setState
+
+  useEffect(() => {
+    if (filter.superToggle === false && !strictFilters.includes(filter.id)) {
+      setStrictFilters((prevStrictFilters) => [...prevStrictFilters, filter.id])
+    }
+    return () => {
+      if (filter.superToggle === false && strictFilters.includes(filter.id)) {
+        setStrictFilters((prevStrictFilters) =>
+          prevStrictFilters.filter((id) => id !== filter.id)
+        )
+      }
+    }
+  }, [filter.id, filter.superToggle, setStrictFilters, strictFilters])
 
   if (!variant || variant.skipped) {
     return null
@@ -48,6 +63,7 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
         paddingTop: 1,
       }}
     >
+      {filter.superToggle !== false && <SuperToggle filterId={filter.id} />}
       {
         showAsQuestion ?
           <>

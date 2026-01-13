@@ -2,7 +2,6 @@ import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 import { green } from '@mui/material/colors'
 import { Question, Option } from '../../../common/types'
 import React from 'react'
-import SuperToggle from '../components/SuperToggle'
 
 interface MultiChoiceFilterComponentProps {
   filter: Question
@@ -19,7 +18,6 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
 }) => {
   return (
     <FormGroup>
-      <SuperToggle filterId={filter.id} />
       {options.map((option) => (
         <FormControlLabel
           checked={state.includes(option.id)}

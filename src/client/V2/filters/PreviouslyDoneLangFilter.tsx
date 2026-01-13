@@ -7,7 +7,6 @@ import FormOption from '../../components/FormOption'
 import { pickVariant } from '../../hooks/useQuestions'
 import Markdown from 'react-markdown'
 import { useFilterContext } from '../filterContext'
-import SuperToggle from '../components/SuperToggle'
 
 const PreviouslyDoneLangFilter = ({
   filter,
@@ -39,7 +38,6 @@ const PreviouslyDoneLangFilter = ({
 
   return (
     <Box>
-      <SuperToggle filterId={filter.id} />
       <RadioGroup name={filter.id} value={selectedValue} onChange={handleRadioChange}>
         {neutralOption ? (
           <FormOption

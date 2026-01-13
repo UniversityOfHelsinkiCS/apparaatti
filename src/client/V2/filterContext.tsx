@@ -61,7 +61,8 @@ export const filterConfigMap = (filters: any) => new Map([
     shortName: 'opintosuunta',
     state: filters.studyField,
     setState: filters.setStudyField,
-    displayType: 'dropdownselect'
+    displayType: 'dropdownselect',
+    superToggle: false // Corresponds to 'org' which is always true
   }],
   ['primary-language', {
     shortName: 'koulukieli',
@@ -86,54 +87,64 @@ export const filterConfigMap = (filters: any) => new Map([
   ['replacement', {
     shortName: 'korvaava',
     state: filters.replacement,
-    setState: filters.setReplacement
+    setState: filters.setReplacement,
+    superToggle: true
   }],
   ['mentoring', {
     shortName: 'valmentava',
     state: filters.mentoring,
-    setState: filters.setMentoring
+    setState: filters.setMentoring,
+    superToggle: true
   }],
   ['finmu', {
     shortName: 'finmu',
     state: filters.finmu,
-    setState: filters.setFinmu
+    setState: filters.setFinmu,
+    superToggle: true
   }],
   ['challenge', {
     shortName: 'edistynyt',
     state: filters.challenge,
-    setState: filters.setChallenge
+    setState: filters.setChallenge,
+    superToggle: true
   }],
   ['graduation', {
     shortName: 'valmistuville',
     state: filters.graduation,
-    setState: filters.setGraduation
+    setState: filters.setGraduation,
+    superToggle: true
   }],
   ['integrated', {
     shortName: 'integroitu',
     state: filters.integrated,
-    setState: filters.setIntegrated
+    setState: filters.setIntegrated,
+    superToggle: true
   }],
   ['independent', {
     shortName: 'itsenäinen',
     state: filters.independent,
-    setState: filters.setIndependent
+    setState: filters.setIndependent,
+    superToggle: true
   }],
   ['study-place', {
     shortName: 'opetusmuoto',
     state: filters.studyPlace,
     setState: filters.setStudyPlace,
-    displayType: 'multichoice'
+    displayType: 'multichoice',
+    superToggle: true
   }],
   ['study-period', {
     shortName: 'periodi',
     state: filters.studyPeriod,
     setState: filters.setStudyPeriod,
-    displayType: 'multichoice'
+    displayType: 'multichoice',
+    superToggle: false // Corresponds to 'date' which is always false
   }],
   ['mooc', {
     shortName: 'MOOC',
     state: filters.mooc,
-    setState: filters.setMooc
+    setState: filters.setMooc,
+    superToggle: true
   }],
 ])
 

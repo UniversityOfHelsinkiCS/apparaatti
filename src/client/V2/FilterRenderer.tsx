@@ -16,8 +16,9 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     const state = config ? config.state : ''
     const setState = config ? config.setState : () => {}
     const displayType = config && config.displayType ? config.displayType : 'singlechoice'
+    const superToggle = config && config.superToggle !== undefined ? config.superToggle : true
 
-    return {...filter, displayType, state, setState}
+    return {...filter, displayType, state, setState, superToggle}
   }
   const filterToRender = buildFilter(filter)
 
