@@ -17,8 +17,9 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     const setState = config ? config.setState : () => {}
     const displayType = config && config.displayType ? config.displayType : 'singlechoice'
     const superToggle = config && config.superToggle !== undefined ? config.superToggle : true
+    const shortName = config ? config.shortName : ''
 
-    return {...filter, displayType, state, setState, superToggle}
+    return {...filter, displayType, state, setState, superToggle, shortName}
   }
   const filterToRender = buildFilter(filter)
 
@@ -31,7 +32,7 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
   return (
     <FilterAccordion
       key={filter.id}
-      title={filterTitles[filter.id] || filter.id}
+      title={filterToRender.shortName || filterTitles[filter.id] || filter.id}
     >
       <Filter variant={variant} filter={filterToRender} />
     </FilterAccordion>

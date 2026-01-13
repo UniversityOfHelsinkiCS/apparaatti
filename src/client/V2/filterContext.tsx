@@ -58,7 +58,7 @@ interface FilterContextType {
 
 export const filterConfigMap = (filters: any) => new Map([
   ['study-field-select', {
-    shortName: 'opintosuunta',
+    shortName: 'Opinto-oikeus',
     state: filters.studyField,
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
@@ -66,77 +66,77 @@ export const filterConfigMap = (filters: any) => new Map([
     hideInCurrentFiltersDisplay: true
   }],
   ['primary-language', {
-    shortName: 'koulukieli',
+    shortName: 'Koulukieli',
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
     hideInCurrentFiltersDisplay: true
   }],
   ['lang', {
-    shortName: 'kurssi',
+    shortName: 'Kurssi',
     state: filters.language,
     setState: filters.setLanguage
   }],
   ['primary-language-specification', {
-    shortName: 'viestintä',
+    shortName: 'Viestintä',
     state: filters.primaryLanguageSpecification,
     setState: filters.setPrimaryLanguageSpecification
   }],
   ['previusly-done-lang', {
-    shortName: '',
+    shortName: 'Aikaisemmat opinnot',
     state: filters.previouslyDoneLang,
     setState: filters.setPreviouslyDoneLang
   }],
   ['replacement', {
-    shortName: 'korvaava',
+    shortName: 'Korvaava',
     state: filters.replacement,
     setState: filters.setReplacement,
     superToggle: true
   }],
   ['mentoring', {
-    shortName: 'valmentava',
+    shortName: 'Valmentava',
     state: filters.mentoring,
     setState: filters.setMentoring,
     superToggle: true
   }],
   ['finmu', {
-    shortName: 'finmu',
+    shortName: 'Finmu',
     state: filters.finmu,
     setState: filters.setFinmu,
     superToggle: true
   }],
   ['challenge', {
-    shortName: 'edistynyt',
+    shortName: 'Edistynyt',
     state: filters.challenge,
     setState: filters.setChallenge,
     superToggle: true
   }],
   ['graduation', {
-    shortName: 'valmistuville',
+    shortName: 'Valmistuville',
     state: filters.graduation,
     setState: filters.setGraduation,
     superToggle: true
   }],
   ['integrated', {
-    shortName: 'integroitu',
+    shortName: 'Integroitu',
     state: filters.integrated,
     setState: filters.setIntegrated,
     superToggle: true
   }],
   ['independent', {
-    shortName: 'itsenäinen',
+    shortName: 'Itsenäinen',
     state: filters.independent,
     setState: filters.setIndependent,
     superToggle: true
   }],
   ['study-place', {
-    shortName: 'opetusmuoto',
+    shortName: 'Opetusmuoto',
     state: filters.studyPlace,
     setState: filters.setStudyPlace,
     displayType: 'multichoice',
     superToggle: true
   }],
   ['study-period', {
-    shortName: 'periodi',
+    shortName: 'Periodi',
     state: filters.studyPeriod,
     setState: filters.setStudyPeriod,
     displayType: 'multichoice',
