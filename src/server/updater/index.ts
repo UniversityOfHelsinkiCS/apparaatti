@@ -42,7 +42,7 @@ export const run = async (clear: boolean) => {
       await clearOffsets()
     }
     await runUpdater()
-  } catch (error) {
+  } catch (_error) {
     return
   }
   return

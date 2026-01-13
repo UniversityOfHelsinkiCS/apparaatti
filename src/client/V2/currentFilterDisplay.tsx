@@ -1,6 +1,7 @@
-import { Box, Typography, Button, Stack } from '@mui/material'
+import { Box, Typography, Button, Stack, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import { filterConfigMap, getFilterVariant, useFilterContext } from './filterContext'
-import { getOptionDisplayTexts, pickVariant, updateVariantToDisplayId, variantLookUp } from '../hooks/useQuestions'
+import { getOptionDisplayTexts } from '../hooks/useQuestions'
 import { Variant } from '../../common/types'
 
 
@@ -19,17 +20,29 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const cfg = filterConfigMap(filterContext).get(filterId)
   const hide = cfg?.hideInCurrentFiltersDisplay != undefined ? cfg.hideInCurrentFiltersDisplay : false
   const variant = getFilterVariant(filterContext, filterId)
+
+  const handleClearFilter = () => {
+    if (Array.isArray(cfg.state)) {
+      cfg.setState([])
+    } else {
+      cfg.setState('')
+    }
+  }
+
   if(hide){
     return (<></>)
   }
   return (
-    <Stack direction="row">
+    <Stack direction="row" alignItems="center" spacing={1}>
       <Typography variant="body1">
         <strong>{cfg?.shortName}: </strong>
       </Typography>
       <Stack direction="row" spacing={2}>
         <FilterValueRenderer cfg={cfg} variant={variant}/>
       </Stack>
+      <IconButton size="small" onClick={handleClearFilter}>
+        <CloseIcon fontSize="small" />
+      </IconButton>
     </Stack>
   )
 }
@@ -42,6 +55,19 @@ const CurrentFilterDisplay = () => {
    
   console.log('active filters')
   console.log(filtersThatAreActive)
+
+  const handleClearAllFilters = () => {
+    Array.from(filtersConfig.keys()).forEach((filterId) => {
+      const cfg = filtersConfig.get(filterId)
+      if (cfg && cfg.state !== '' && !(Array.isArray(cfg.state) && cfg.state.length === 0)) {
+        if (Array.isArray(cfg.state)) {
+          cfg.setState([])
+        } else {
+          cfg.setState('')
+        }
+      }
+    })
+  }
 
   return (
     <Box
@@ -58,6 +84,7 @@ const CurrentFilterDisplay = () => {
         <Button
           variant="text"
           sx={{ alignSelf: 'start', textTransform: 'none', color: 'primary.main' }}
+          onClick={handleClearAllFilters}
         >
           Tyhjennä suodattimet
         </Button>

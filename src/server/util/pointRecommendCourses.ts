@@ -1,4 +1,4 @@
-import type { AnswerData, CourseRecommendation, UserCoordinates } from '../../common/types.ts'
+import type { CourseRecommendation, UserCoordinates } from '../../common/types.ts'
 
 
 
@@ -109,9 +109,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: strictFields.includes('study-place'),
     },
   ]
-  console.log('settings')
-  console.log(strictFields)
-  console.log(comparisons)
  
   const recommendationWithPoints = noExams.map((c) => {
     const points = calculatePointsForCourse(c, userCoordinates, comparisons) 

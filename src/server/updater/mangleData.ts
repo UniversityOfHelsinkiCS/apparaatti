@@ -71,7 +71,7 @@ export const mangleData = async <T = object>(
       try{
         nextData = fetchData<T[]>(url, { limit, offset, since })
       }
-      catch(e){
+      catch(_e){
         await sleep(1000) //the fail might be server stall so lets give it some time
         continue 
       }

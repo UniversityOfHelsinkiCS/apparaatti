@@ -2,7 +2,6 @@ import StudyRight from '../db/models/studyRight.ts'
 import { mangleData } from './mangleData.ts'
 
 const studyRightsHandler = async (studyRights: any[]) => {
-  let count = 0
   for(const studyRight of studyRights ){
     await StudyRight.upsert({
       id: studyRight.id,
@@ -33,7 +32,6 @@ const studyRightsHandler = async (studyRights: any[]) => {
       createdAt: studyRight.createdAt,
       updatedAt: studyRight.updatedAt,
     })
-    count++
   }
 }
 
