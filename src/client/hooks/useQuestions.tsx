@@ -216,7 +216,7 @@ const useQuestions = () => {
           name: 'default',
           question: studyPeriodQuestion,
           options: [
-            {id: 'neutral', name: neutralText},
+            // {id: 'neutral', name: neutralText},
             {
               id: 'intensive_3_previous',
               value: 'intensive_3',
