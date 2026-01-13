@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
-import useQuestions from '../hooks/useQuestions'
+import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
@@ -134,6 +134,22 @@ export const filterConfigMap = (filters: any) => new Map([
     displayType: 'multichoice'
   }]
 ])
+
+
+export const getFilterVariant = (filterContext, filterId) => {
+  const question = filterContext.filters.find((q: any) => q.id === filterId)
+  const variantId = updateVariantToDisplayId(filterContext.language, filterContext.primaryLanguage, filterContext.primaryLanguageSpecification)
+
+  const variant = question != undefined ? pickVariant(question, variantId) : null
+  if(variant){
+    return variant
+  }
+  else{
+    return null
+  }
+}
+
+
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 

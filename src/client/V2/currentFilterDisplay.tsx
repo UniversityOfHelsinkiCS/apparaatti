@@ -1,37 +1,30 @@
 import { Box, Typography, Button, Stack } from '@mui/material'
-import { filterConfigMap, useFilterContext } from './filterContext'
+import { filterConfigMap, getFilterVariant, useFilterContext } from './filterContext'
+import { getOptionDisplayTexts, pickVariant, updateVariantToDisplayId, variantLookUp } from '../hooks/useQuestions'
+import { Variant } from '../../common/types'
 
 
-const FilterValueRenderer = ({cfg}: {cfg: any}) => {
+const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}) => {
 
-  const isArray = Array.isArray(cfg.state)
-  if(!isArray)
-  {
-    return(
-      <Typography>{cfg.state}</Typography>
-    )
-  }
-  else{
-    return (
-      cfg.state.map((s: any) => <Typography key={s}>{s}</Typography>)
-    )
-  }
+  const valueTexts = getOptionDisplayTexts(variant, cfg.state)
+  return (
+    valueTexts.map((s: any) => <Typography key={s}>{s}</Typography>)
+  )
+  
 }
 
 
 const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const filterContext = useFilterContext()
   const cfg = filterConfigMap(filterContext).get(filterId)
-  const filterData = filterContext.filters.find((f) => f.id === filterId)
-  console.log('active filter card')
-  console.log(filterData)
+  const variant = getFilterVariant(filterContext, filterId)
   return (
     <Stack direction="row">
       <Typography variant="body1">
         <strong>{cfg?.shortName}: </strong>
       </Typography>
       <Stack direction="row" spacing={2}>
-        <FilterValueRenderer cfg={cfg}/>
+        <FilterValueRenderer cfg={cfg} variant={variant}/>
       </Stack>
     </Stack>
   )

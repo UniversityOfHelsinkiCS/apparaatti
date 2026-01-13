@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Question } from '../../common/types'
+import { Question, Variant } from '../../common/types'
 
 
 
@@ -46,6 +46,32 @@ const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
     return true
   }
   return cmpr === shouldBe
+}
+export const getOptionDisplayTexts = (variant: Variant | null, valueId: string | string[]): string[] => {
+
+  const values = Array.isArray(valueId) == true ? valueId : [valueId]
+  const options = variant?.options
+  if(!variant || !options){
+    console.log('no variant')
+    return values
+  }
+
+  const texts = []
+  for(const value of values){
+    
+    const option = options.find((o) => o.id === value)
+    if(option)
+    {
+      texts.push(option.name)
+    }
+  }
+
+  if(texts.length == 0){
+    return values
+  }
+
+  console.log('got the display texts')
+  return texts
 }
 // variant display is the different wording of a question given different choices of language, primary language and primary language specification
 export const updateVariantToDisplayId = (language: string, primaryLanguage: string, primaryLanguageSpecification: string): string => {
