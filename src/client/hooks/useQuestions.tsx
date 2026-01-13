@@ -107,6 +107,9 @@ const useQuestions = () => {
   const studyPlaceQuestion = t('form:studyPlaceQuestion')
   const integratedQuestion = t('form:integratedQuestion')
   const independentQuestion = t('form:independentQuestion')
+  const studyPeriodQuestion = t('form:studyPeriodQuestion')
+  const summerText = t('form:summer')
+  const periodText = t('form:period')
   const questions: Question[] = [
     {
       number: '',
@@ -200,34 +203,34 @@ const useQuestions = () => {
         },
       ],
     },
-    // {
-    //   
-    //   number: '5',
-    //   mandatory: false,
-    //   effects: 'date',
-    //   id: 'study-period',
-    //   type: 'period-date',
-    //   // explanation: 'Mistä periodista haluat kursseja?',
-    //   variants: [
-    //     {
-    //       name: 'default',
-    //       question: studyPeriodQuestion,
-    //       options: [
-    //         {id: 'neutral', name: neutralText},
-    //         {
-    //           id: 'intensive_3_previous',
-    //           value: 'intensive_3',
-    //           name: summerText + ' 25',
-    //         },
-    //         { id: 'period_1', name:'1. ' + periodText},
-    //         { id: 'period_2', name:'2. ' + periodText },
-    //         { id: 'period_3', name:'3. ' + periodText },
-    //         { id: 'period_4', name:'4. ' + periodText },
-    //         { id: 'intensive_3', name: summerText + ' 26'},
-    //       ],
-    //     },
-    //   ],
-    // },
+    {
+      
+      number: '5',
+      mandatory: false,
+      effects: 'date',
+      id: 'study-period',
+      type: 'period-date',
+      // explanation: 'Mistä periodista haluat kursseja?',
+      variants: [
+        {
+          name: 'default',
+          question: studyPeriodQuestion,
+          options: [
+            {id: 'neutral', name: neutralText},
+            {
+              id: 'intensive_3_previous',
+              value: 'intensive_3',
+              name: summerText + ' 25',
+            },
+            { id: 'period_1', name:'1. ' + periodText},
+            { id: 'period_2', name:'2. ' + periodText },
+            { id: 'period_3', name:'3. ' + periodText },
+            { id: 'period_4', name:'4. ' + periodText },
+            { id: 'intensive_3', name: summerText + ' 26'},
+          ],
+        },
+      ],
+    },
     {
       number: '',
       mandatory: false,

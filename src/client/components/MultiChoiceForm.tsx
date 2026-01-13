@@ -102,7 +102,7 @@ const MultiChoiceForm = ({
         <PreviuslyDoneLangQuestion key={key} question={question} languageId={language}></PreviuslyDoneLangQuestion>
       )
     default:
-      return <p>Unknown question type</p>
+      return <></>
     }
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (ev) => {
