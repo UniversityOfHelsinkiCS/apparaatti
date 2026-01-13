@@ -17,7 +17,11 @@ const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}
 const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const filterContext = useFilterContext()
   const cfg = filterConfigMap(filterContext).get(filterId)
+  const hide = cfg?.hideInCurrentFiltersDisplay != undefined ? cfg.hideInCurrentFiltersDisplay : false
   const variant = getFilterVariant(filterContext, filterId)
+  if(hide){
+    return (<></>)
+  }
   return (
     <Stack direction="row">
       <Typography variant="body1">

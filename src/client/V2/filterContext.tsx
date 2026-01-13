@@ -62,12 +62,14 @@ export const filterConfigMap = (filters: any) => new Map([
     state: filters.studyField,
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
-    superToggle: false // Corresponds to 'org' which is always true
+    superToggle: false, 
+    hideInCurrentFiltersDisplay: true
   }],
   ['primary-language', {
     shortName: 'koulukieli',
     state: filters.primaryLanguage,
-    setState: filters.setPrimaryLanguage
+    setState: filters.setPrimaryLanguage,
+    hideInCurrentFiltersDisplay: true
   }],
   ['lang', {
     shortName: 'kurssi',
