@@ -77,7 +77,7 @@ const CurrentFilterDisplay = () => {
       sx={{ maxWidth: '99%', margin: '2', backgroundColor: '#fff' }}
     >
       <Typography><strong>Suodattimet: </strong></Typography>
-      <Stack direction="row" spacing={3}>
+      <Stack direction="row" spacing={3} sx={{ overflowX: 'auto', flexWrap: 'nowrap' }}>
         {
           filtersThatAreActive.map((f) => <ActiveFilterCard key={f} filterId={f}/>)
         }
