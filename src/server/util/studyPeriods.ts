@@ -22,19 +22,15 @@ const correctedPeriod = (period: string) => {
 
 export const getStudyPeriod = (startYear: string, period: string) => {
   const newPeriod = correctedPeriod(period)
-  // console.log('---')
 
   const studyYear = studyPeriods.years.find((y) => y.start_year === startYear)
   if (!studyYear) {
     return null
   }
-  // console.log('y', studyYear)
   const studyPeriod = studyYear.periods.find((p) => p.name === newPeriod)
   if (!studyPeriod) {
     return null
   }
-  // console.log(studyPeriod)
-  // console.log('---')
   return studyPeriod
 }
 
@@ -66,7 +62,6 @@ export const dateObjToPeriod = (dateObj: Date, debug=false) => {
 export const closestPeriod = (name: string = '') => {
   const date = new Date()
   const studyYears = studyPeriods.years
-  // console.log('years', studyYears)
 
   const periods = studyYears
     .map((y) => y.periods)
@@ -78,7 +73,6 @@ export const closestPeriod = (name: string = '') => {
         return true
       }
     })
-  // console.log('study periods: ', periods)
 
   const distances = periods
     .map((p) => {

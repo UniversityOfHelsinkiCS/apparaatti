@@ -33,7 +33,6 @@ export const mangleData = async <T = object>(
   handler: (data: T[]) => Promise<void>,
   since: Date = null
 ) => {
-  console.log('Updater started with base url of ', IMPORTER_URL)
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const offsetKey = `${url}-offset`
   const start = Date.now()
@@ -73,8 +72,6 @@ export const mangleData = async <T = object>(
         nextData = fetchData<T[]>(url, { limit, offset, since })
       }
       catch(e){
-        console.log('fetch failed')
-        console.log(e)
         await sleep(1000) //the fail might be server stall so lets give it some time
         continue 
       }
@@ -88,7 +85,6 @@ export const mangleData = async <T = object>(
       } catch (e: any) {
         logError('Updaterloop handler error:', e)
         e.isLogged = true
-        errorSleep = true
         throw e
       }
 

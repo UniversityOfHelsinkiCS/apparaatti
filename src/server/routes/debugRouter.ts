@@ -48,7 +48,6 @@ debugRouter.get('/cur', async (req: any, res: any) => {
     : {}
 
   const curs = await Cur.findAll({ where: nameQuery, raw: true })
-  console.log('code urn is: ', codeurn)
   if(codeurn){
     const urnFilteredCourses = curs.filter((cur: any) => {
       return urnInCustomCodeUrns(cur.customCodeUrns, codeurn as string)

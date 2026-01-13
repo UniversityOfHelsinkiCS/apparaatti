@@ -10,7 +10,6 @@ const mockUser = {
 }
 
 const mockUserMiddleware = (req, _, next) => {
-  console.log('Mock user middleware in use')
 
   if (req.path.includes('/login')) return next()
 

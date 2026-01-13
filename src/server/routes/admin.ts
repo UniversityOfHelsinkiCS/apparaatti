@@ -25,9 +25,7 @@ adminRouter.post('/feedback', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  console.log(req.body)
   const feedback: adminFeedback = req.body
-  console.log(feedback)
 
   logger.info('ADMIN FEEDBACK', feedback)
   res.json({status: 'success'})

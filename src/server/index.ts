@@ -21,7 +21,6 @@ import mockUserMiddleware from './middleware/mock_user.ts'
 
 redis
   .on('ready', () => {
-    console.log('connected to redis')
   })
   .connect()
   .catch(console.error)
@@ -39,7 +38,6 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(express.json({limit: '10mb'}))
-console.log(process.env.NODE_ENV, 'NODE_ENV')
 
 // in develoment, fake the user
 if (inDevelopment) {
@@ -80,8 +78,6 @@ app.listen(process.env.PORT, async () => {
 
   if (UPDATER_CRON_ENABLED) {
     await setupCron()
-    console.log('Cron jobs started')
   }
 
-  console.log(`Server running on port ${process.env.PORT}`)
 })

@@ -3,8 +3,6 @@ import { redis } from '../util/redis.ts'
 import type { PartialRecord } from './types.ts'
 
 const logError = (message: string, error: Error) => {
-  console.log(message)
-  console.log(error)
 }
 
 type AllowedBulkCreateOptionField =
@@ -34,21 +32,12 @@ export const safeBulkCreate = async ({
     return result
   } catch (bulkCreateError: any) {
     const result = []
-    logError(
-      `[UPDATER] ${entityName}.bulkCreate failed, reason: `,
-      bulkCreateError
-    )
     for (const entity of entities) {
       try {
         const res = await fallbackCreate(entity, fallbackCreateOptions)
         result.push(res)
       } catch (fallbackCreateError: any) {
-        logError(
-          `[UPDATER] Fallback could not create ${entityName} (${JSON.stringify(
-            entity
-          )}), reason:`,
-          fallbackCreateError
-        )
+        console.log('error on fallback create')
       }
     }
     return result

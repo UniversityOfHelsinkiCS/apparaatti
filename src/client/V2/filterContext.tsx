@@ -52,6 +52,8 @@ interface FilterContextType {
   setIndependent: (s: string) => void
   mooc: string
   setMooc: (s: string) => void
+  strictFilters: string[]
+  setStrictFilters: (s: string[]) => void
 }
 
 export const filterConfigMap = (filters: any) => new Map([
@@ -185,6 +187,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
   const [mooc, setMooc] = useState('')
+  const [strictFilters, setStrictFilters] = useState<string[]>([])
 
   const { data: user, isLoading: userLoading } = useApi(
     'user',
@@ -257,7 +260,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
     const payload = {
       answerData,
-      strictFields: [], // V2 does not have strict fields for now
+      strictFields: strictFilters,
     }
 
     submitAnswerMutation.mutateAsync(payload)
@@ -281,6 +284,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     integrated,
     independent,
     mooc,
+    strictFilters,
   ])
 
   return (
@@ -333,6 +337,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setIndependent,
         mooc,
         setMooc,
+        strictFilters,
+        setStrictFilters,
       }}
     >
       {children}

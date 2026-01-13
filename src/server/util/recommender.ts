@@ -61,11 +61,9 @@ function getDateFromUserInput(answerData: AnswerData){
 function readStudyPlaceCoordinate (answerData: AnswerData){
   const value = readAnswer(answerData, 'study-place')
   if(value === 'neutral'){
-    console.log('neutral')
     return null
   }
   else{
-    console.log('hit on 0')
     return 0
   }
 }
@@ -92,10 +90,8 @@ function calculateUserCoordinates(answerData: AnswerData) {
 
 async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
   const codes = [organisationCode]
-  console.log(codes)
   for(const code of codes){
     const urnHit = organisationCodeToUrn[code]
-    console.log(urnHit)
     if(urnHit){
       const hasCustomCodeUrn =  courseHasCustomCodeUrn(course, urnHit)
       if(hasCustomCodeUrn){
@@ -136,11 +132,7 @@ function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
   const lookups = userStudyPlaces.filter((p) => allowedStudyPlaces.includes(p)).map((p) => p)
 
 
-  // console.log('LOOKUPS')
-  // console.log(lookups)
-
   if(courseHasAnyRealisationCodeUrn(course, lookups)){
-    console.log('hit')
     return 0 
   }
   return 100
@@ -164,9 +156,6 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
   const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int') 
   const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
-  if( hasReplacementCodeUrn){
-    console.log('course is replacement course: ', course.name.fi)
-  }
   const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
   const hasMoocCodeUrn = courseHasCustomCodeUrn(course, 'opintotarjonta:mooc')  
 
@@ -285,9 +274,6 @@ const getPeriodForCourse = (cur) => {
 
   const studyPeriod = studyPeriods[0]
   if(!studyPeriod){
-    console.log('no period found!')
-    console.log(cur)
-    console.log(studyPeriods)
     dateObjToPeriod(cur.startDate, true)
     return null
   }
@@ -346,14 +332,11 @@ type courseCodes = {
  * languageSpesific: course codes that are in the same organisation AND are correct given the language choices of the user
  */
 function getCourseCodes(langCode: string, primaryLanguage: string, primaryLanguageSpecification: string, organisationRecommendations: OrganisationRecommendation[], userOrganisationCode: string): courseCodes{
-  const codeTimer = Date.now()
   const allCodes = codesInOrganisations(organisationRecommendations)
   const userOrganisations = getUserOrganisationRecommendations(userOrganisationCode, organisationRecommendations)
   const organisationCodes = codesInOrganisations(userOrganisations)
   const languageSpesific = languageSpesificCodes(userOrganisations, langCode, primaryLanguage, primaryLanguageSpecification)  
 
-  const codeTimerE = Date.now()
-  console.log('code time: ', codeTimerE - codeTimer)
   return {
     all: allCodes, 
     userOrganisation: organisationCodes, 
@@ -364,7 +347,7 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
 
 
 
-async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData, _strictFields: string[]): Promise<CourseRecommendations> {
+async function getRecommendations(userCoordinates: UserCoordinates, answerData: AnswerData, strictFields: string[]): Promise<CourseRecommendations> {
 
   const lang = readAnswer(answerData, 'lang')
   const primaryLang = readAnswer(answerData, 'primary-language')
@@ -380,7 +363,7 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
-  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, answerData)
+  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,

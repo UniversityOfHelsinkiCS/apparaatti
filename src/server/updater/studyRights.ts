@@ -2,7 +2,6 @@ import StudyRight from '../db/models/studyRight.ts'
 import { mangleData } from './mangleData.ts'
 
 const studyRightsHandler = async (studyRights: any[]) => {
-  console.log('starting to save studyrights')
   let count = 0
   for(const studyRight of studyRights ){
     await StudyRight.upsert({
@@ -36,12 +35,10 @@ const studyRightsHandler = async (studyRights: any[]) => {
     })
     count++
   }
-  console.log('finished batch of: ', count) 
 }
 
 //assumes that there is a table Users with studentNumber field
 export const fetchStudyRights = async () => {
-  console.log('fetching study rights')
   const speed = 10000
   await mangleData(
     'studyrights',
@@ -49,5 +46,4 @@ export const fetchStudyRights = async () => {
     studyRightsHandler,
     new Date(2023, 0, 1)
   )
-  console.log('done... all study rights fetched')
 }

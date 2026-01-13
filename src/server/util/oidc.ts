@@ -52,7 +52,6 @@ const verifyLogin = async (
   done: (err: any, user?: unknown) => void
 ) => {
 
-  console.log('it got gere!')
   const user: User = {
     id: userinfo.hyPersonSisuId as string,
     username: userinfo.uid as string,

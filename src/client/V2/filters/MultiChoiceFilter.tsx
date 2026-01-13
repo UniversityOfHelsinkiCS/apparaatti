@@ -6,6 +6,7 @@ import {
 import { Question } from '../../../common/types.tsx'
 import { pickVariant } from '../../hooks/useQuestions.tsx'
 import { useFilterContext } from '../filterContext.tsx'
+import SuperToggle from '../components/SuperToggle'
 
 const MultiChoiceFilter = ({
   filter,
@@ -59,31 +60,34 @@ const MultiChoiceFilter = ({
   }
 
   return (
-    <RadioGroup name={filter.id} onChange={handleChange}>
-      {variant.options.map((option) => (
-        <FormControlLabel
-          key={option.id}
-          value={option.id}
-          data-cy={`${filter.id}-option-${option.id}`}
-          control={
-            <Radio
-              sx={{
-                '&.Mui-checked': {
-                  color: '#4caf50',
-                },
-              }}
-            />
-          }
-          label={option.name}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-              borderRadius: '4px',
-            },
-          }}
-        />
-      ))}
-    </RadioGroup>
+    <>
+      <SuperToggle filterId={filter.id} />
+      <RadioGroup name={filter.id} onChange={handleChange}>
+        {variant.options.map((option) => (
+          <FormControlLabel
+            key={option.id}
+            value={option.id}
+            data-cy={`${filter.id}-option-${option.id}`}
+            control={
+              <Radio
+                sx={{
+                  '&.Mui-checked': {
+                    color: '#4caf50',
+                  },
+                }}
+              />
+            }
+            label={option.name}
+            sx={{
+              '&:hover': {
+                backgroundColor: '#e0e0e0',
+                borderRadius: '4px',
+              },
+            }}
+          />
+        ))}
+      </RadioGroup>
+    </>
   )
 }
 

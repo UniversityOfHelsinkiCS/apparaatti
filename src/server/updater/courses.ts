@@ -31,8 +31,6 @@ const createCursFromUpdater = async (
     for (const cur of curs){
       Cur.upsert(cur)
     }
-
-    console.log('Curs created successfully')
   } catch (error) {
     console.error('Error creating curs:', error)
   }
@@ -62,7 +60,6 @@ const createCusFromUpdater = async (
     for (const cur of cus){
       Cu.upsert(cur)
     }
-    console.log('Cus created successfully')
   } catch (error) {
     console.error('Error creating cus:', error)
   }
@@ -103,7 +100,6 @@ const createCurCusFromUpdater = async (
     }
     )
     CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
-    console.log('kurkut created successfully')
   } catch (error) {
     console.error('Error creating kurkkuja:', error)
   }
@@ -117,10 +113,6 @@ const coursesHandler = async (courseRealizations: any[]) => {
       course.flowState !== 'ARCHIVED'
   )
 
-  console.log(
-    `Found ${filteredCourseRealizations.length} valid course realizations`
-  )
-  // console.log(filteredCourseRealizations)
   await createCursFromUpdater(filteredCourseRealizations)
   await createCusFromUpdater(filteredCourseRealizations)
   await createCurCusFromUpdater(filteredCourseRealizations)

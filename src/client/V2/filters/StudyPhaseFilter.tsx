@@ -2,6 +2,7 @@ import { Box, MenuItem, Select } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Question, User } from '../../../common/types'
 import { translateLocalizedString } from '../../util/i18n'
+import SuperToggle from '../components/SuperToggle'
 
 const StudyPhaseFilter = ({
   filter,
@@ -54,6 +55,7 @@ const StudyPhaseFilter = ({
 
   return (
     <Box sx={{ minWidth: 200 }}>
+      <SuperToggle filterId={filter.id} />
       <Select
         sx={{
           padding: '1px',

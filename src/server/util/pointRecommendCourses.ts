@@ -43,9 +43,6 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
     }
     else{
       if(comp.filterOnFail === true){
-        console.log(`failed ${key}`)
-        console.log(userCoordinates[key])
-        console.log(c.coordinates[key])
         return -1
       }
     }
@@ -57,7 +54,7 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 //each dimension is compared with a comparision and if it returns true the course gets a certain amount of points. If not the course does not get the points.
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
 //In this point based one a difference does not punish as much as it gets 'ignored'
-function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, _answerData: AnswerData): CourseRecommendation[]{
+function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, strictFields: any): CourseRecommendation[]{
   //we want to ignore all exams except those that are replacement
   const noExams = courses.filter(c =>
   {
@@ -68,50 +65,53 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     }
     return false
   })
- 
+
   const comparisons = [
     {
       field: 'org',
-      filterOnFail: true, 
+      filterOnFail: true, //always true
     },
     {
       field: 'mooc',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('mooc'),
     },
     {
       field: 'mentoring',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('mentoring'),
     },
     {
       field: 'challenge',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('challenge'),
     },
     {
       field: 'replacement',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('replacement'),
     },
     {
       field: 'graduation',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('graduation'),
     },
     {
       field: 'flexible',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('flexible'),
     },
     {
       field: 'integrated',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('integrated'),
     },
     {
       field: 'date',
-      filterOnFail: false,
+      filterOnFail: false, //always false
       f: (_c: CourseRecommendation, _userCoordinates: UserCoordinates, _field: string) => {return true} //date is handled later on the user side
     },
     {
       field: 'studyPlace',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('study-place'),
     },
   ]
+  console.log('settings')
+  console.log(strictFields)
+  console.log(comparisons)
  
   const recommendationWithPoints = noExams.map((c) => {
     const points = calculatePointsForCourse(c, userCoordinates, comparisons) 

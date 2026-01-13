@@ -10,17 +10,14 @@ const studyRightsForUser = async (user: any) => {
     raw: true,
   })
   if (studyRights.length === 0) {
-    console.log('no study rights found for user: ', user.id)
     return []
   }
-  //console.log('study rights: ', studyRights)
   return studyRights
 }
 
 export const getStudyData = async (user: any) => {
   const studyRights = (await studyRightsForUser(user)) as any[]
   if (studyRights.length === 0) {
-    console.log('No study rights found for user:', user.id)
     return { studyPhaseName: { fi: 'Opintoa ei löytynyt' } }
   }
 

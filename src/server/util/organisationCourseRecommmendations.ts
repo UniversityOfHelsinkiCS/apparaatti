@@ -199,7 +199,6 @@ function codesFromLanguagesWithCorrectSpecification(organisationData: Organisati
   case 'writtenAndSpoken':
     return codesFromLanguagesContaining(organisationData, searchStringWrittenAndSpoken)
   default:
-    console.log('ERROR: recommender could not find codes')
     return []
   }
 }
@@ -296,6 +295,5 @@ export function readOrganisationRecommendationData(): OrganisationRecommendation
       codeAndLanguages.push({name: code, languages: entry.languages})
     }
   }
-  // console.log(codeAndLanguages)
   return codeAndLanguages
 }

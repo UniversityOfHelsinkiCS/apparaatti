@@ -11,6 +11,8 @@ import { Question } from '../../../common/types'
 import { pickVariant } from '../../hooks/useQuestions'
 import { useFilterContext } from '../filterContext'
 
+import SuperToggle from '../components/SuperToggle'
+
 const StudyPeriodFilter = ({
   filter,
 }: {
@@ -29,6 +31,7 @@ const StudyPeriodFilter = ({
 
   return (
     <Box>
+      <SuperToggle filterId={filter.id} />
       <FormControl sx={{ m: 0, display: 'flex' }} component="fieldset" variant="standard">
         <FormGroup>
           {variant.options.map((option) => (

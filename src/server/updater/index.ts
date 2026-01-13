@@ -4,33 +4,30 @@ import fetchOrganisations from './organisations.ts'
 import { fetchStudyRights } from './studyRights.ts'
 import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
+import { fetchEnrolments } from './enrolments.ts'
 
 const runUpdater = async () => {
   const phaseKey = 'apparaatti-updater-phase-offset'
   const phase = Number(await redis.get(phaseKey))
 
   if(phase < 1){
-    console.log('organisations')
     await fetchOrganisations()
     await redis.set(phaseKey, phase + 1)
   }
 
 
   if(phase < 2){
-    console.log('users')
     await fetchUsers()
     await redis.set(phaseKey, phase + 1)
   }
 
   if(phase < 3){
-    console.log('courses and responsibilities')
     await fetchCoursesAndResponsibilities()
     await redis.set(phaseKey, phase + 1)
   }
 
 
   if(phase < 4){
-    console.log('studyrights')
     await fetchStudyRights()
     await redis.set(phaseKey, phase + 1)
   }
@@ -40,17 +37,13 @@ const runUpdater = async () => {
 }
 
 export const run = async (clear: boolean) => {
-  console.log('running updater')
   try {
     if(clear){
       await clearOffsets()
     }
     await runUpdater()
   } catch (error) {
-    console.log(error)
     return
   }
-
-  console.log('updater finished')
   return
 }
