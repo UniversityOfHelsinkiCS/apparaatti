@@ -17,7 +17,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
   options,
 }) => {
   return (
-    <FormControl sx={{ minWidth: 200, marginBottom: 2, paddingTop: 1 }}>
+    <FormControl sx={{ marginBottom: 2, paddingTop: 1 }}>
       <Select
         sx={{
           padding: '1px',

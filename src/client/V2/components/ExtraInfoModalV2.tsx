@@ -12,7 +12,7 @@ const ExtraInfoModalV2 = ({question, open, handleClose, currentVariant}: {questi
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '60vw',
+    width: { xs: '90vw', sm: '70vw', md: '60vw' },
     bgcolor: 'background.paper',
     border: '2px solid #545454',
     borderRadius: '10px',

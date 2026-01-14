@@ -16,7 +16,7 @@ type Props = {
 const style = {
   marginLeft: 'auto',
   marginRight: 'auto',
-  width: '33vw',
+  width: {xs: '100vw', sm: '33vw'},
   height: '100vh',
   bgcolor: 'background.paper',
   boxShadow: 24,

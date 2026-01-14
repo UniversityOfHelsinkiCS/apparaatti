@@ -62,9 +62,8 @@ const CourseRecommendationV2 = ({
           {translateLocalizedString(course.course.name)}
         </Typography>
         <Stack direction={'column'}>
-          <Stack direction={'row'}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
             <Typography
-              sx={{ marginRight: 'auto' }}
               variant="body2"
               color="textSecondary"
               gutterBottom
@@ -72,7 +71,6 @@ const CourseRecommendationV2 = ({
               {creditString()} {t('course:credits')}
             </Typography>
             <Typography
-              sx={{ marginRight: 'auto' }}
               variant="body2"
               color="textSecondary"
               gutterBottom
