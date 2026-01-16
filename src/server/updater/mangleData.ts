@@ -53,6 +53,7 @@ export const mangleData = async <T = object>(
    */
 
   while (checkTimeout(start)) {
+    await sleep(100) //making updater intentionally slower in order to let importer work 
     try {
 
       try {
