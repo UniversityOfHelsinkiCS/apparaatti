@@ -110,12 +110,71 @@ export const mangleData = async <T = object>(
       }
     }
   }
+}
 
+
+export const mangleData2 = (
+  url: string,
+  limit: number,
+  handler: (data: T[]) => Promise<void>,
+  since: Date = null) => {
+  
+  logger.info(`[UPDATER] Starting to update items with url ${url}`)
+  const offsetKey = `${url}-offset`
+  const start = Date.now()
+  const requestStart = null
+  const loopStart = Date.now()
+
+  const offset = Number(await redis.get(offsetKey))
+  const count = 0
+  const currentData = null
+  const nextData = null
+
+  while (checkTimeout(start)) {
+    await sleep(100) 
+    await mankeloi(limit, offset, since)
+  }
+}
+
+const mankeloi =  async (limit, offset, since) => {
+  
+
+  const requestTime = (Date.now() - requestStart).toFixed(0)
+  requestStart = Date.now()
+
+  const currentData = await fetchData<T[]>(url, { limit, offset, since })
+  if (!currentData) return null // failed to fetch
+
+  const processingStart = Date.now()
+
+  try {
+    await handler(currentData)
+    await redis.set(offsetKey, offset)
+  } catch (e: any) {
+    logError('Updaterloop handler error:', e)
+    e.isLogged = true
+    return null
+  }
+
+  const processingTime = (Date.now() - processingStart).toFixed(0)
+  const totalTime = (Date.now() - loopStart).toFixed(0)
+  loopStart = Date.now()
+  logger.debug('[UPDATERLOOP]', {
+    url,
+    offset,
+    items: currentData.length,
+    requestTime,
+    processingTime,
+    totalTime,
+  })
+
+  count += currentData.length
+  offset += limit
+  
   const duration = Date.now() - start
   logger.info(
     `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
       4
     )}ms/item, total time ${(duration / 1000).toFixed(2)}s`
   )
-  await sleep(100)
 }

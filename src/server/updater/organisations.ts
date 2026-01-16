@@ -1,5 +1,5 @@
 import Organisation from '../db/models/organisation.ts'
-import { mangleData } from './mangleData.ts'
+import { mangleData, mangleData2 } from './mangleData.ts'
 import { safeBulkCreate } from './util.ts'
 
 const organisationsHandler = async (organisations: any) => {
@@ -29,7 +29,7 @@ const organisationsHandler = async (organisations: any) => {
 }
 
 const fetchOrganisations = async () => {
-  await mangleData('organisations', 3000, organisationsHandler)
+  await mangleData2('organisations', 3000, organisationsHandler)
 }
 
 export default fetchOrganisations
