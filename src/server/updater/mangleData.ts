@@ -147,6 +147,7 @@ const mankeloi =  async (limit, offset, since) => {
   const currentData = await fetchData<T[]>(url, { limit, offset, since })
   if (!currentData) return null // failed to fetch
 
+  console.log('got the data')
   const processingStart = Date.now()
 
   try {
@@ -158,6 +159,7 @@ const mankeloi =  async (limit, offset, since) => {
     return null
   }
 
+  console.log('saved the data')
   const processingTime = (Date.now() - processingStart).toFixed(0)
   const totalTime = (Date.now() - loopStart).toFixed(0)
   loopStart = Date.now()
