@@ -113,10 +113,10 @@ export const mangleData = async <T = object>(
 }
 
 
-export const mangleData2 =  async (
+export const mangleData2 = async(
   url: string,
   limit: number,
-  handler: (data: T[]) => Promise<void>,
+  handler: any,
   since: Date = null) => {
   
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
@@ -125,7 +125,7 @@ export const mangleData2 =  async (
   const requestStart = null
   const loopStart = Date.now()
 
-  const offset = Number(await redis.get(offsetKey))
+  let offset = Number(await redis.get(offsetKey))
   const count = 0
   let iterations = 0
   const maxIterations = 10
@@ -147,6 +147,7 @@ const mankeloi =  async (limit, offset, since, count) => {
   const requestTime = (Date.now() - requestStart).toFixed(0)
   requestStart = Date.now()
 
+  logger.info('[UPDATER] getting data')
   const currentData = await fetchData<T[]>(url, { limit, offset, since })
   if (!currentData) return null // failed to fetch
 
