@@ -33,7 +33,7 @@ const runUpdater = async () => {
   }
  
   await redis.set(phaseKey, 0)
-  await fetchEnrolments()
+  // await fetchEnrolments()
 }
 
 export const run = async (clear: boolean) => {
