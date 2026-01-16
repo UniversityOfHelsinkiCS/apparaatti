@@ -113,7 +113,7 @@ export const mangleData = async <T = object>(
 }
 
 
-export const mangleData2 = (
+export const mangleData2 =  async (
   url: string,
   limit: number,
   handler: (data: T[]) => Promise<void>,
