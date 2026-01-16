@@ -132,11 +132,13 @@ export const mangleData2 =  async (
 
   while (iterations < maxIterations) {
     // await sleep(100) 
+    console.log('starting mankeli')
     await mankeloi(limit, offset, since, count)
     console.log('one round of mankeli done')
     console.log(offset)
     iterations += 1
   }
+  console.log('mankeloi is done')
 }
 
 const mankeloi =  async (limit, offset, since, count) => {
