@@ -127,18 +127,19 @@ export const mangleData2 =  async (
 
   const offset = Number(await redis.get(offsetKey))
   const count = 0
-  const currentData = null
-  const nextData = null
+  let iterations = 0
+  const maxIterations = 10
 
-  while (checkTimeout(start)) {
+  while (iterations < maxIterations) {
     // await sleep(100) 
-    await mankeloi(limit, offset, since)
+    await mankeloi(limit, offset, since, count)
     console.log('one round of mankeli done')
     console.log(offset)
+    iterations += 1
   }
 }
 
-const mankeloi =  async (limit, offset, since) => {
+const mankeloi =  async (limit, offset, since, count) => {
   
 
   const requestTime = (Date.now() - requestStart).toFixed(0)
@@ -147,6 +148,7 @@ const mankeloi =  async (limit, offset, since) => {
   const currentData = await fetchData<T[]>(url, { limit, offset, since })
   if (!currentData) return null // failed to fetch
 
+  logger.info('[UPDATER] got data')
   console.log('got the data')
   const processingStart = Date.now()
 
@@ -159,6 +161,7 @@ const mankeloi =  async (limit, offset, since) => {
     return null
   }
 
+  logger.info('[UPDATER] saved data')
   console.log('saved the data')
   const processingTime = (Date.now() - processingStart).toFixed(0)
   const totalTime = (Date.now() - loopStart).toFixed(0)
