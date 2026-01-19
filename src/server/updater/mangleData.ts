@@ -125,7 +125,7 @@ export const mangleData2 = async(
   const requestStart = null
   const loopStart = Date.now()
 
-  let offset = Number(await redis.get(offsetKey))
+  const offset = Number(await redis.get(offsetKey))
   const count = 0
   let iterations = 0
   const maxIterations = 10
