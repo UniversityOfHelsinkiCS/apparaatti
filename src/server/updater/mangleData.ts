@@ -133,7 +133,15 @@ export const mangleData2 = async(
   while (iterations < maxIterations) {
     // await sleep(100) 
     console.log('starting mankeli')
-    await mankeloi(limit, offset, since, count)
+    const result = await mankeloi(limit, offset, since, count)
+    if(result){
+      
+      console.log('updater fetch on this iteration succeeded')
+    }
+    else{
+      
+      console.log('FAIL updater fetch on this iteration failed')
+    }
     console.log('one round of mankeli done')
     console.log(offset)
     iterations += 1
@@ -149,7 +157,11 @@ const mankeloi =  async (limit, offset, since, count) => {
 
   logger.info('[UPDATER] getting data')
   const currentData = await fetchData<T[]>(url, { limit, offset, since })
-  if (!currentData) return null // failed to fetch
+  if (!currentData){
+    logger.info('[UPDATER] updater failed to get data')
+    return false
+  } 
+
 
   logger.info('[UPDATER] got data')
   console.log('got the data')
@@ -161,7 +173,7 @@ const mankeloi =  async (limit, offset, since, count) => {
   } catch (e: any) {
     logError('Updaterloop handler error:', e)
     e.isLogged = true
-    return null
+    return false
   }
 
   logger.info('[UPDATER] saved data')
@@ -187,4 +199,5 @@ const mankeloi =  async (limit, offset, since, count) => {
       4
     )}ms/item, total time ${(duration / 1000).toFixed(2)}s`
   )
+  return true
 }

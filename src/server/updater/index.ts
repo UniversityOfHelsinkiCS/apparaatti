@@ -7,33 +7,17 @@ import { clearOffsets } from './util.ts'
 import { fetchEnrolments } from './enrolments.ts'
 
 const runUpdater = async () => {
-  const phaseKey = 'apparaatti-updater-phase-offset'
-  const phase = Number(await redis.get(phaseKey))
 
-  if(phase < 1){
-    await fetchOrganisations()
-    await redis.set(phaseKey, phase + 1)
-  }
+  await fetchOrganisations()
 
 
-  if(phase < 2){
-    await fetchUsers()
-    await redis.set(phaseKey, phase + 1)
-  }
+  await fetchUsers()
 
-  if(phase < 3){
-    await fetchCoursesAndResponsibilities()
-    await redis.set(phaseKey, phase + 1)
-  }
+  await fetchCoursesAndResponsibilities()
 
 
-  if(phase < 4){
-    await fetchStudyRights()
-    await redis.set(phaseKey, phase + 1)
-  }
+  await fetchStudyRights()
  
-  await redis.set(phaseKey, 0)
-  // await fetchEnrolments()
 }
 
 export const run = async (clear: boolean) => {
