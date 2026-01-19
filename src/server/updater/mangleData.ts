@@ -131,16 +131,15 @@ export const mangleData2 = async(
   let iterations = 0
 
   while (iterations < maxIterations) {
-    console.log('starting mankeli')
-
+    await sleep(200) //the importer is slower than the updater, so slow the updater to one request every 200ms  
     const requestTime = (Date.now() - requestStart).toFixed(0)
     requestStart = Date.now()
 
     logger.info('[UPDATER] getting data')
     const currentData = await fetchData<T[]>(url, { limit, offset, since })
     if (!currentData){
-      logger.info('[UPDATER] updater failed to get data')
-      continue
+      logger.info('[UPDATER] updater failed to get any more data')
+      break
     } 
 
 
