@@ -27,6 +27,7 @@ export const run = async (clear: boolean) => {
     }
     await runUpdater()
   } catch (_error) {
+    console.log(_error)
     return
   }
   return

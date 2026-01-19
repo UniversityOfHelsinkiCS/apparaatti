@@ -131,17 +131,56 @@ export const mangleData2 = async(
   const maxIterations = 10
 
   while (iterations < maxIterations) {
-    // await sleep(100) 
     console.log('starting mankeli')
-    const result = await mankeloi(limit, offset, since, count)
-    if(result){
-      
-      console.log('updater fetch on this iteration succeeded')
+
+    const requestTime = (Date.now() - requestStart).toFixed(0)
+    requestStart = Date.now()
+
+    logger.info('[UPDATER] getting data')
+    const currentData = await fetchData<T[]>(url, { limit, offset, since })
+    if (!currentData){
+      logger.info('[UPDATER] updater failed to get data')
+      continue
+    } 
+
+
+    logger.info('[UPDATER] got data')
+    console.log('got the data')
+    const processingStart = Date.now()
+
+    try {
+      await handler(currentData)
+      await redis.set(offsetKey, offset)
+    } catch (e: any) {
+      logError('Updaterloop handler error:', e)
+      e.isLogged = true
+      continue
     }
-    else{
-      
-      console.log('FAIL updater fetch on this iteration failed')
-    }
+
+    logger.info('[UPDATER] saved data')
+    console.log('saved the data')
+    const processingTime = (Date.now() - processingStart).toFixed(0)
+    const totalTime = (Date.now() - loopStart).toFixed(0)
+    loopStart = Date.now()
+    logger.debug('[UPDATERLOOP]', {
+      url,
+      offset,
+      items: currentData.length,
+      requestTime,
+      processingTime,
+      totalTime,
+    })
+
+    count += currentData.length
+    offset += limit
+  
+    const duration = Date.now() - start
+    logger.info(
+      `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
+        4
+      )}ms/item, total time ${(duration / 1000).toFixed(2)}s`
+    )
+
     console.log('one round of mankeli done')
     console.log(offset)
     iterations += 1
@@ -151,53 +190,4 @@ export const mangleData2 = async(
 
 const mankeloi =  async (limit, offset, since, count) => {
   
-
-  const requestTime = (Date.now() - requestStart).toFixed(0)
-  requestStart = Date.now()
-
-  logger.info('[UPDATER] getting data')
-  const currentData = await fetchData<T[]>(url, { limit, offset, since })
-  if (!currentData){
-    logger.info('[UPDATER] updater failed to get data')
-    return false
-  } 
-
-
-  logger.info('[UPDATER] got data')
-  console.log('got the data')
-  const processingStart = Date.now()
-
-  try {
-    await handler(currentData)
-    await redis.set(offsetKey, offset)
-  } catch (e: any) {
-    logError('Updaterloop handler error:', e)
-    e.isLogged = true
-    return false
-  }
-
-  logger.info('[UPDATER] saved data')
-  console.log('saved the data')
-  const processingTime = (Date.now() - processingStart).toFixed(0)
-  const totalTime = (Date.now() - loopStart).toFixed(0)
-  loopStart = Date.now()
-  logger.debug('[UPDATERLOOP]', {
-    url,
-    offset,
-    items: currentData.length,
-    requestTime,
-    processingTime,
-    totalTime,
-  })
-
-  count += currentData.length
-  offset += limit
-  
-  const duration = Date.now() - start
-  logger.info(
-    `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
-      4
-    )}ms/item, total time ${(duration / 1000).toFixed(2)}s`
-  )
-  return true
 }
