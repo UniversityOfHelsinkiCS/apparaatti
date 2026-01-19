@@ -1,5 +1,5 @@
 import logger from '../util/logger.ts'
-import { fetchData } from './importerClient.ts'
+import { fetchData, importerClient } from './importerClient.ts'
 import * as redis from '../util/redis.ts'
 import { IMPORTER_URL } from '../util/config.ts'
 
@@ -18,7 +18,7 @@ const checkTimeout = (start: number) => {
 }
 //assumes that the endpoint is at the normal url + /count
 const fetchMaxRecordCount = async (url) => {
-  const count = await fetch(url + '/count')
+  const count = await importerClient.get(`apparaatti/${url}/count`)
   return count
 }
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
