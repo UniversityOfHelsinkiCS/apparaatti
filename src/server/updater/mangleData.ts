@@ -129,7 +129,7 @@ export const mangleData2 = async(
   console.log('expecting max entiries of: ')
   console.log(maxRecords)
 
-  const maxIterations = (maxRecords / limit) + 1
+  const maxIterations = Math.ceil((maxRecords / limit)) + 1
   console.log(`max iterations is ${maxIterations}`)
 
   if(maxIterations > 500){
@@ -146,7 +146,7 @@ export const mangleData2 = async(
   let iterations = 0
 
   while (iterations < maxIterations) {
-    await sleep(200) //the importer is slower than the updater, so slow the updater to one request every 200ms  
+    await sleep(1000)//one second for debug //the importer is slower than the updater, so slow the updater to one request every 200ms  
     const requestTime = (Date.now() - requestStart).toFixed(0)
     requestStart = Date.now()
 
@@ -165,7 +165,7 @@ export const mangleData2 = async(
 
 
     logger.info('[UPDATER] got data')
-    console.log('got the data')
+    console.log(`entering saving data ${url} ${offset} `)
     const processingStart = Date.now()
 
     try {
