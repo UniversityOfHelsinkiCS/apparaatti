@@ -18,9 +18,8 @@ const checkTimeout = (start: number) => {
 }
 //assumes that the endpoint is at the normal url + /count
 const fetchMaxRecordCount = async (url) => {
-  const result = await fetchData(`${url}/count`, {})
-  const count = await result.json()
-  return count
+  const data = await fetchData(`${url}/count`, {})
+  return data
 }
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
 
