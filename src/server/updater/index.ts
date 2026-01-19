@@ -8,15 +8,20 @@ import { fetchEnrolments } from './enrolments.ts'
 
 const runUpdater = async () => {
 
-  await fetchOrganisations()
+  try{
+    await fetchOrganisations()
+
+    await fetchUsers()
+
+    await fetchCoursesAndResponsibilities()
 
 
-  await fetchUsers()
+    await fetchStudyRights()
 
-  await fetchCoursesAndResponsibilities()
-
-
-  await fetchStudyRights()
+  }catch(e){
+    console.log('error on updater exiting!')
+    console.log(e)
+  }
  
 }
 

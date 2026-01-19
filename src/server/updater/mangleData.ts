@@ -150,12 +150,18 @@ export const mangleData2 = async(
     const requestTime = (Date.now() - requestStart).toFixed(0)
     requestStart = Date.now()
 
-    logger.info('[UPDATER] getting data')
-    const currentData = await fetchData<T[]>(url, { limit, offset, since })
-    if (!currentData){
-      logger.info('[UPDATER] updater failed to get any more data')
+    try{
+      logger.info('[UPDATER] getting data')
+      const currentData = await fetchData<T[]>(url, { limit, offset, since })
+      if (!currentData){
+        logger.info('[UPDATER] updater failed to get any more data')
+        break
+      } 
+    }catch(e){
+      console.log(e)
+      console.log(`FATAL error on updater ${e}, offset ${offset}`)
       break
-    } 
+    }
 
 
     logger.info('[UPDATER] got data')
@@ -202,6 +208,3 @@ export const mangleData2 = async(
   console.log('mankeloi is done')
 }
 
-const mankeloi =  async (limit, offset, since, count) => {
-  
-}
