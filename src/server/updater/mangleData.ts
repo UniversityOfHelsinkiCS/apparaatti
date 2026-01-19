@@ -18,7 +18,8 @@ const checkTimeout = (start: number) => {
 }
 //assumes that the endpoint is at the normal url + /count
 const fetchMaxRecordCount = async (url) => {
-  const count = await importerClient.get(`apparaatti/${url}/count`)
+  const result = await fetchData(`${url}/count`, {})
+  const count = await result.json()
   return count
 }
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
