@@ -1,5 +1,5 @@
 import User from '../db/models/user.ts'
-import { mangleData } from './mangleData.ts'
+import { mangleData, mangleData2 } from './mangleData.ts'
 
 const parsePreferredLanguageUrnToLanguage = (urn: string) => {
   const fallBackLanguage = 'en'
