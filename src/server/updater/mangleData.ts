@@ -120,15 +120,15 @@ export const mangleData2 = async(
   since: Date = null) => {
   
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
+  const maxIterations = 10
   const offsetKey = `${url}-offset`
   const start = Date.now()
-  let requestStart = null
-  const loopStart = Date.now()
 
+  let requestStart = null
+  let loopStart = Date.now()
   let offset = Number(await redis.get(offsetKey))
   let count = 0
   let iterations = 0
-  const maxIterations = 10
 
   while (iterations < maxIterations) {
     console.log('starting mankeli')
