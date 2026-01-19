@@ -153,16 +153,16 @@ export const mangleData2 = async(
     try{
       logger.info('[UPDATER] getting data')
       const currentData = await fetchData<T[]>(url, { limit, offset, since })
-      if (!currentData){
-        logger.info('[UPDATER] updater failed to get any more data')
-        break
-      } 
     }catch(e){
       console.log(e)
       console.log(`FATAL error on updater ${e}, offset ${offset}`)
       break
     }
 
+    if (!currentData){
+      logger.info('[UPDATER] updater failed to get any more data')
+      break
+    } 
 
     logger.info('[UPDATER] got data')
     console.log(`entering saving data ${url} ${offset} `)
@@ -172,9 +172,10 @@ export const mangleData2 = async(
       await handler(currentData)
       await redis.set(offsetKey, offset)
     } catch (e: any) {
+      console.log(`FATAL error on updater handler ${e}, offset ${offset}`)
       logError('Updaterloop handler error:', e)
       e.isLogged = true
-      continue
+      break
     }
 
     logger.info('[UPDATER] saved data')
