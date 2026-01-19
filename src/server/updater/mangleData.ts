@@ -156,9 +156,10 @@ export const mangleData2 = async(
     const requestTime = (Date.now() - requestStart).toFixed(0)
     requestStart = Date.now()
 
+    let currentData = null
     try{
       logger.info('[UPDATER] getting data')
-      const currentData = await fetchData<T[]>(url, { limit, offset, since })
+      currentData = await fetchData<T[]>(url, { limit, offset, since })
     }catch(e){
       console.log(e)
       console.log(`FATAL error on updater ${e}, offset ${offset}`)
