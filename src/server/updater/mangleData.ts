@@ -129,7 +129,13 @@ export const mangleData2 = async(
   console.log('expecting max entiries of: ')
   console.log(maxRecords)
 
-  const maxIterations = 10
+  const maxIterations = (maxRecords / limit) + 1
+  console.log(`max iterations is ${maxIterations}`)
+
+  if(maxIterations > 500){
+    console.log(`WARNING attempting to do a large amount of requests to ${url} consider to adjust limit`)
+  }
+
   const offsetKey = `${url}-offset`
   const start = Date.now()
 
