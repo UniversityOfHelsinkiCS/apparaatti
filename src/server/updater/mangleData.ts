@@ -16,6 +16,11 @@ const checkTimeout = (start: number) => {
     throw new Error('Updater time limit exceeded!')
   return true
 }
+//assumes that the endpoint is at the normal url + /count
+const fetchMaxRecordCount = async (url) => {
+  const count = await fetch(url + '/count')
+  return count
+}
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
 
 /**
@@ -120,6 +125,10 @@ export const mangleData2 = async(
   since: Date = null) => {
   
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
+  const maxRecords = await fetchMaxRecordCount(url)
+  console.log('expecting max entiries of: ')
+  console.log(maxRecords)
+
   const maxIterations = 10
   const offsetKey = `${url}-offset`
   const start = Date.now()
