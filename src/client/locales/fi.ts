@@ -88,5 +88,24 @@ export default {
   'loginAsPage': {
     'title': 'kayttajahaku',
     'userHeader': 'käyttäjä'
+  },
+  'recommendationReasons': {
+    'title': 'Suosituksen perusteet',
+    'description': 'Tässä syyt, miksi tämä kurssi suositeltiin valintojesi perusteella:',
+  },
+  'filter': {
+    'period': 'periodi',
+    'organisation': 'Organisaatio',
+    'language': 'Kieli',
+    'graduation': 'Valmistuminen puolen vuoden sisällä',
+    'mentoring': 'Tarvitsetko harjoitusta ennen kurssia',
+    'integrated': 'Kiinnostunut integroidusta kurssista',
+    'studyPlace': 'Opiskelupaikka',
+    'replacement': 'Aiemmin hankittu osaaminen',
+    'challenge': 'Kielen oppiminen haastavaa',
+    'independent': 'Haluan työskennellä itsenäisesti',
+    'flexible': 'Haluan joustavan aikataulun',
+    'mooc': 'Etsi MOOC-kursseja',
+    'finmu': 'FinMU liittyvä',
   }
 }

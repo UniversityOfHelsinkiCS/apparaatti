@@ -88,5 +88,24 @@ export default {
   'loginAsPage': {
     'title': 'user search',
     'userHeader': 'user'
+  },
+  'recommendationReasons': {
+    'title': 'Recommendation Reasons',
+    'description': 'Here\'s why this course was recommended based on your selections:',
+  },
+  'filter': {
+    'period': 'Period',
+    'organisation': 'Organisation',
+    'language': 'Language',
+    'graduation': 'Graduation within six months',
+    'mentoring': 'Need practice before course',
+    'integrated': 'Interested in integrated course',
+    'studyPlace': 'Study Place',
+    'replacement': 'Acquired knowledge previously',
+    'challenge': 'Language learning challenging',
+    'independent': 'Want to work independently',
+    'flexible': 'Want flexible schedule',
+    'mooc': 'Search for MOOCs',
+    'finmu': 'FinMU related',
   }
 }

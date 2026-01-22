@@ -84,5 +84,24 @@ export default {
     'show': 'Visa',
     'credits': 'kr',
     'reasons': 'grundläggande'
+  },
+  'recommendationReasons': {
+    'title': 'Rekommendationsskäl',
+    'description': 'Här är varför denna kurs rekommenderades baserat på dina val:',
+  },
+  'filter': {
+    'period': 'Studieperiod',
+    'organisation': 'Organisation',
+    'language': 'Språk',
+    'graduation': 'Examen inom sex månader',
+    'mentoring': 'Behöver övning innan kurs',
+    'integrated': 'Intresserad av integrerad kurs',
+    'studyPlace': 'Studieplats',
+    'replacement': 'Tidigare förvärvad kunskap',
+    'challenge': 'Språkinlärning utmanande',
+    'independent': 'Vill arbeta självständigt',
+    'flexible': 'Vill ha flexibelt schema',
+    'mooc': 'Sök MOOC-kurser',
+    'finmu': 'FinMU relaterad',
   }
 }
