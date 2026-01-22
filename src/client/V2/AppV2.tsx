@@ -1,4 +1,3 @@
-
 /*
 
 
@@ -6,7 +5,7 @@ pure mock code, built with only speed in mind,
 
 
 */
-import { Box, Stack, Typography, useTheme, useMediaQuery } from '@mui/material'
+import { Box, Stack, Typography, useTheme, useMediaQuery, Button } from '@mui/material'
 import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -20,6 +19,8 @@ import CourseRecommendations from './CourseRecommendations'
 import WelcomeModal from './WelcomeModal'
 import useApi from '../util/useApi'
 import CurrentFilterDisplay from './currentFilterDisplay'
+import TextFeedbackV2 from './components/TextFeedbackV2'
+import { CourseRecommendation } from '../../common/types'
 
 const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
 const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
@@ -28,7 +29,8 @@ const OneThirdDrawerLayout = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile) // Closed by default on mobile, open on desktop
-  const { modalOpen, setModalOpen } = useFilterContext()
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
+  const { modalOpen, setModalOpen, courseRecommendations, studyPeriod } = useFilterContext()
 
   useEffect(() => {
     setOpen(!isMobile) // Adjust drawer open state when screen size changes
@@ -51,10 +53,30 @@ const OneThirdDrawerLayout = () => {
 
   const currentDrawerWidth = isMobile ? mobileDrawerWidth : desktopDrawerWidth
 
+  const filteredPointBasedRecommendations = courseRecommendations?.pointBasedRecommendations
+    ? (courseRecommendations.pointBasedRecommendations as CourseRecommendation[]).filter((c) =>
+      c.course.period?.name && studyPeriod.includes(c.course.period.name)
+    )
+    : []
+
+  const feedbackRecommendations = courseRecommendations
+    ? {
+      ...courseRecommendations,
+      pointBasedRecommendations: filteredPointBasedRecommendations,
+    }
+    : null
+
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      {user?.isAdmin && feedbackRecommendations && (
+        <TextFeedbackV2
+          open={feedbackModalOpen}
+          onClose={() => setFeedbackModalOpen(false)}
+          recommendations={feedbackRecommendations}
+        />
+      )}
 
       <AppBar
         position="fixed"
@@ -75,9 +97,14 @@ const OneThirdDrawerLayout = () => {
           <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
             Course Finder
           </Typography>
+          {user?.isAdmin && (
+            <Button color="inherit" onClick={() => setFeedbackModalOpen(true)}>
+              Send Feedback
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 
@@ -131,8 +158,6 @@ const AppV2 = () => {
     </FilterContextProvider>
   )
 }
-
-
 
 
 export default AppV2
