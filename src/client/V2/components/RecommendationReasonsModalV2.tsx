@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Typography, Stack, Modal, IconButton } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
@@ -13,12 +12,12 @@ interface RecommendationReasonsModalV2Props {
   userCoordinates: UserCoordinates
 }
 
-const RecommendationReasonsModalV2: React.FC<RecommendationReasonsModalV2Props> = ({
+const RecommendationReasonsModalV2 = ({
   open,
   onClose,
   courseCoordinates,
   userCoordinates,
-}) => {
+}: RecommendationReasonsModalV2Props) => {
   const { t } = useTranslation()
 
   const coordinateToFilterMap: { [key: string]: string } = {
@@ -45,6 +44,10 @@ const RecommendationReasonsModalV2: React.FC<RecommendationReasonsModalV2Props> 
       return null // User didn't answer or chose "I don't care"
     }
 
+    
+    if(key === 'date'){
+      return true
+    }
     // For now, a simple equality check. This might need more complex logic
     // depending on how coordinates are compared in the recommender.
     return userValue === courseValue
