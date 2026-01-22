@@ -1,10 +1,4 @@
-/*
 
-
-pure mock code, built with only speed in mind,
-
-
-*/
 import { Box, Stack, Typography, useTheme, useMediaQuery, Button } from '@mui/material'
 import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
@@ -28,12 +22,11 @@ const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
 const OneThirdDrawerLayout = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const [open, setOpen] = useState(!isMobile) // Closed by default on mobile, open on desktop
+  const [open, setOpen] = useState(!isMobile) 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
-  const { modalOpen, setModalOpen, courseRecommendations, studyPeriod } = useFilterContext()
-
+  const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext() 
   useEffect(() => {
-    setOpen(!isMobile) // Adjust drawer open state when screen size changes
+    setOpen(!isMobile) 
   }, [isMobile])
 
   const toggleDrawer = () => setOpen((prev) => !prev)
@@ -41,7 +34,7 @@ const OneThirdDrawerLayout = () => {
   const { data: user, isLoading: isUserLoading } = useApi('user', '/api/user', 'GET', null)
 
   if(isUserLoading || user?.message === 'Unauthorized'){
-    // window.location.assign('/api/login')
+    
     return (
       <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
         <Typography variant='h2' sx={{marginLeft: 'auto', marginRight: 'auto'}}>Apparaatti</Typography> 
@@ -53,28 +46,16 @@ const OneThirdDrawerLayout = () => {
 
   const currentDrawerWidth = isMobile ? mobileDrawerWidth : desktopDrawerWidth
 
-  const filteredPointBasedRecommendations = courseRecommendations?.pointBasedRecommendations
-    ? (courseRecommendations.pointBasedRecommendations as CourseRecommendation[]).filter((c) =>
-      c.course.period?.name && studyPeriod.includes(c.course.period.name)
-    )
-    : []
-
-  const feedbackRecommendations = courseRecommendations
-    ? {
-      ...courseRecommendations,
-      pointBasedRecommendations: filteredPointBasedRecommendations,
-    }
-    : null
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
-      {user?.isAdmin && feedbackRecommendations && (
+      {user?.isAdmin && finalRecommendedCourses && ( 
         <TextFeedbackV2
           open={feedbackModalOpen}
           onClose={() => setFeedbackModalOpen(false)}
-          recommendations={feedbackRecommendations}
+          recommendations={finalRecommendedCourses} 
         />
       )}
 
@@ -114,7 +95,7 @@ const OneThirdDrawerLayout = () => {
         open={open}
         onClose={toggleDrawer}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true, 
         }}
         sx={{
           zIndex: (theme) => theme.zIndex.appBar - 1,

@@ -27,8 +27,9 @@ interface FilterContextType {
   isLoading: boolean
   modalOpen: boolean
   setModalOpen: (open: boolean) => void
+  finalRecommendedCourses: CourseRecommendations | null
 
-  // Filter values
+
   studyField: string
   setStudyField: (s: string) => void
   previouslyDoneLang: string
@@ -143,7 +144,7 @@ export const filterConfigMap = (filters: any) => new Map([
     state: filters.studyPeriod,
     setState: filters.setStudyPeriod,
     displayType: 'multichoice',
-    superToggle: false // Corresponds to 'date' which is always false
+    superToggle: false
   }],
   ['mooc', {
     shortName: 'MOOC',
@@ -180,6 +181,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [userOrgCode, setUserOrgCode] = useState('')
   const [courseRecommendations, setCourseRecommendations] =
     useState<CourseRecommendations | null>(null)
+  const [finalRecommendedCourses, setFinalRecommendedCourses] =
+    useState<CourseRecommendations | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
@@ -190,7 +193,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }, [])
 
-  // Filter values
+
   const [studyField, setStudyField] = useState('')
   const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
   const [replacement, setReplacement] = useState('')
@@ -240,6 +243,23 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }, '/api/form/answer')
 
+  useEffect(() => {
+    if (courseRecommendations) {
+      const points = courseRecommendations.pointBasedRecommendations || []
+      const filteredPointBasedRecommendations =
+        studyPeriod.length > 0
+          ? points.filter((c) => c.course.period?.name && studyPeriod.includes(c.course.period.name))
+          : points
+
+      setFinalRecommendedCourses({
+        ...courseRecommendations,
+        pointBasedRecommendations: filteredPointBasedRecommendations,
+      })
+    } else {
+      setFinalRecommendedCourses(null)
+    }
+  }, [courseRecommendations, studyPeriod])
+
   const submitFilters = () => {
     const answerDataRaw = {
       'study-field-select': userOrgCode,
@@ -259,7 +279,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       mooc,
     }
 
-    // Filter out empty strings
     const answerData = Object.fromEntries(
       Object.entries(answerDataRaw).filter(([, value]) => {
         if (typeof value === 'string') {
@@ -327,8 +346,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         isLoading,
         modalOpen,
         setModalOpen,
+        finalRecommendedCourses,
 
-        // Filter values
+      
         studyField,
         setStudyField,
         previouslyDoneLang,

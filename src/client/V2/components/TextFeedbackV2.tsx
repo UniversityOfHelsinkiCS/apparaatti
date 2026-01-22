@@ -39,7 +39,7 @@ const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props)
     })
 
     window.alert('palaute annettu')
-    onClose() // Close modal after submission
+    onClose()
   }
 
   return (

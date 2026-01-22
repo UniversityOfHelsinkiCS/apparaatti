@@ -1,19 +1,14 @@
 import { Box, Stack } from '@mui/material'
 import { CourseRecommendation } from '../../common/types'
-import CourseRecommendationV2 from './CourseRecommendationV2' // Import CourseRecommendationV2
+import CourseRecommendationV2 from './CourseRecommendationV2'
 import { useFilterContext } from './filterContext'
 
 const CourseRecommendations = () => {
-  const { courseRecommendations, studyPeriod } = useFilterContext()
+  const { finalRecommendedCourses } = useFilterContext()
 
-  const recommendations = courseRecommendations as CourseRecommendation
+  const recommendations = finalRecommendedCourses
 
   const points = recommendations?.pointBasedRecommendations ?? []
-
-  const filteredCourses =
-    studyPeriod.length > 0
-      ? points.filter((c) => c.course.period?.name && studyPeriod.includes(c.course.period.name))
-      : points
 
   if(!recommendations || !points){
     return (<></>)
@@ -30,7 +25,7 @@ const CourseRecommendations = () => {
             paddingBottom: 10,
           }}
         >
-          {filteredCourses.map((course) => (
+          {points.map((course) => (
             <CourseRecommendationV2
               key={course.course.id}
               course={course}
