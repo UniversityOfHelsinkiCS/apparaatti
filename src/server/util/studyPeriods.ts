@@ -23,11 +23,9 @@ const correctedPeriod = (period: string) => {
 export const getStudyPeriod = (startYear: string, period: string) => {
   const newPeriod = correctedPeriod(period)
 
-  const studyYear = studyPeriods.years.find((y) => y.start_year === startYear)
-  if (!studyYear) {
-    return null
-  }
-  const studyPeriod = studyYear.periods.find((p) => p.name === newPeriod)
+  const studyPeriod = studyPeriods.periods.find(
+    (p) => p.start_year === startYear && p.name === newPeriod,
+  )
   if (!studyPeriod) {
     return null
   }
@@ -45,14 +43,12 @@ export const dateToPeriod = (date: string) => {
   return hits
 }
 
-export const dateObjToPeriod = (dateObj: Date, debug=false) => {
+export const dateObjToPeriod = (dateObj: Date, debug = false) => {
   const hits = []
-  studyPeriods.years.forEach((year) => {
-    year.periods.forEach((period) => {
-      if (dateIsInPeriod(dateObj, period, debug)) {
-        hits.push(period)
-      }
-    })
+  studyPeriods.periods.forEach((period) => {
+    if (dateIsInPeriod(dateObj, period, debug)) {
+      hits.push(period)
+    }
   })
 
   return hits
@@ -61,11 +57,8 @@ export const dateObjToPeriod = (dateObj: Date, debug=false) => {
 //returns closest period in the future given the string
 export const closestPeriod = (name: string = '') => {
   const date = new Date()
-  const studyYears = studyPeriods.years
 
-  const periods = studyYears
-    .map((y) => y.periods)
-    .flat()
+  const periods = studyPeriods.periods
     .filter((p) => {
       if (name.length > 0) {
         return p.name.localeCompare(name) === 0
@@ -88,7 +81,8 @@ export const closestPeriod = (name: string = '') => {
   return period
 }
 
-const studyPeriods = {
+
+const studyPeriodsData = {
   years: [
     {
       start_year: '2024',
@@ -579,6 +573,18 @@ const studyPeriods = {
       ],
     },
   ],
+}
+
+const allPeriods = studyPeriodsData.years.flatMap((year) =>
+  year.periods.map((period) => ({
+    ...period,
+    start_year: year.start_year,
+    end_year: year.end_year,
+  })),
+)
+
+const studyPeriods = {
+  periods: allPeriods,
 }
 
 export default studyPeriods
