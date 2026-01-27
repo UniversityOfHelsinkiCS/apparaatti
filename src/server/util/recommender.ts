@@ -8,10 +8,10 @@ import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { allowedStudyPlaces, organisationCodeToUrn } from './constants.ts'
 
 async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
-    const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-    const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
+  const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
+  const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
 
-    return recommendations
+  return recommendations
 }
 
 function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){

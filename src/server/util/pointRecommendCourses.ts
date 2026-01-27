@@ -112,10 +112,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
         if (!userCoordinates.studyYear || userCoordinates.studyYear === 'neutral') return true
-        console.log("users wants courses from studyyear starting from ")
+        console.log('users wants courses from studyyear starting from ')
         console.log(userCoordinates.studyYear)
 
-        console.log("vs")
+        console.log('vs')
         console.log(c.course.period?.startYear)
         return userCoordinates.studyYear == c.course.period?.startYear
       }
@@ -128,10 +128,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
         const coursePeriods = dateObjToPeriod(new Date(c.course.startDate))
         
-        console.log("course period is ")
+        console.log('course period is ')
         console.log(coursePeriods)
 
-        console.log("users period is")
+        console.log('users period is')
         console.log(userCoordinates.studyPeriod)
         return coursePeriods.some(coursePeriod => 
           userCoordinates.studyPeriod.includes(coursePeriod.name)
