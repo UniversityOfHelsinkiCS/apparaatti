@@ -2,30 +2,16 @@ import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendation
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
-import { dateObjToPeriod, getStudyPeriod, parseDate } from './studyPeriods.ts'
+import { dateObjToPeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { allowedStudyPlaces, organisationCodeToUrn } from './constants.ts'
 
-const getStudyYearFromPeriod = (_id: string) => {
-  const today = new Date()
-  const currentPeriod = dateObjToPeriod(today)[0]
-  const currentPeriodDate = parseDate(currentPeriod['start_date'])
-  const currentStudyYearStart = currentPeriodDate.getFullYear()
-  return currentStudyYearStart.toString()
-}
-
 async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
-  try{
     const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
     const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
 
     return recommendations
-  }
-  catch
-  {
-    return {}
-  }
 }
 
 function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){
@@ -84,6 +70,8 @@ function calculateUserCoordinates(answerData: AnswerData) {
     independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), Math.pow(10, 24), 0, null),
     flexible: commonCoordinateFromAnswerData(readAnswer(answerData, 'flexible'), Math.pow(10, 24), 0, null),
     mooc: commonCoordinateFromAnswerData(readAnswer(answerData, 'mooc'), Math.pow(10, 24), 0, null),
+    studyYear: readAnswer(answerData, 'study-year'),
+    studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
   }
   return userCoordinates
 }
@@ -281,7 +269,9 @@ const getPeriodForCourse = (cur) => {
   const period: Period = {
     name: studyPeriod.name,
     startDate: parseDate(studyPeriod.start_date),
-    endDate: parseDate(studyPeriod.end_date)
+    endDate: parseDate(studyPeriod.end_date),
+    startYear: studyPeriod.start_year,
+    endYear: studyPeriod.end_year
   }
   return period
 }
@@ -293,6 +283,15 @@ const getPeriodsWantedByUser = (periodsArg) => {
   }
   return periods
 }
+
+const getStudyYearFromPeriod = (_id: string) => {
+  const today = new Date()
+  const currentPeriod = dateObjToPeriod(today)[0]
+  const currentPeriodDate = parseDate(currentPeriod['start_date'])
+  const currentStudyYearStart = currentPeriodDate.getFullYear()
+  return currentStudyYearStart.toString()
+}
+
 //Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
 //For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
 export function getRelevantPeriods(periodsArg: string[] | string) {
@@ -363,6 +362,8 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
   const recommendations = sortedCourses
+  console.log('recommendations len')
+  console.log(recommendations.length)
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
 
   const allRecommendations = {

@@ -47,7 +47,7 @@ export type CourseRecommendation = {
 } 
 
 
-export type CourseCoordinates = {
+export type UserCoordinates = {
   date: number;
   org: number;
   lang: number;
@@ -61,6 +61,8 @@ export type CourseCoordinates = {
   flexible?: number | null;
   mooc?: number | null;
   finmu?: number | null;
+  studyYear?: string | null;
+  studyPeriod?: string[] | null;
 }
 
 export type UserCoordinates = CourseCoordinates;
@@ -76,6 +78,8 @@ export type Period = {
   name: string
   startDate: Date
   endDate: Date
+  startYear: string,
+  endYear: string
 }
 
 //this is a combination of a course realisation and course unit
@@ -127,6 +131,7 @@ export type FormSubmission = {
 
 
 export type AnswerData = {
+  'study-year': string;
   'study-period': string[] | string;
   'graduation': string;
   'mentoring': string;

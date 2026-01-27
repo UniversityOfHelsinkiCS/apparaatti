@@ -46,6 +46,8 @@ interface FilterContextType {
   setGraduation: (s: string) => void
   studyPlace: string[]
   setStudyPlace: (s: string[]) => void
+  studyYear: string
+  setStudyYear: (s: string) => void
   studyPeriod: string[]
   setStudyPeriod: (s: string[]) => void
   integrated: string
@@ -139,6 +141,13 @@ export const filterConfigMap = (filters: any) => new Map([
     displayType: 'multichoice',
     superToggle: true
   }],
+  ['study-year', {
+    shortName: 'Lukuvuosi',
+    state: filters.studyYear,
+    setState: filters.setStudyYear,
+    displayType: 'singlechoice',
+    superToggle: false
+  }],
   ['study-period', {
     shortName: 'Periodi',
     state: filters.studyPeriod,
@@ -202,6 +211,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [challenge, setChallenge] = useState('')
   const [graduation, setGraduation] = useState('')
   const [studyPlace, setStudyPlace] = useState<string[]>([])
+  const [studyYear, setStudyYear] = useState('')
   const [studyPeriod, setStudyPeriod] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
@@ -244,21 +254,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }, '/api/form/answer')
 
   useEffect(() => {
-    if (courseRecommendations) {
-      const points = courseRecommendations.pointBasedRecommendations || []
-      const filteredPointBasedRecommendations =
-        studyPeriod.length > 0
-          ? points.filter((c) => c.course.period?.name && studyPeriod.includes(c.course.period.name))
-          : points
-
-      setFinalRecommendedCourses({
-        ...courseRecommendations,
-        pointBasedRecommendations: filteredPointBasedRecommendations,
-      })
-    } else {
-      setFinalRecommendedCourses(null)
-    }
-  }, [courseRecommendations, studyPeriod])
+    setFinalRecommendedCourses(courseRecommendations)
+  }, [courseRecommendations])
 
   const submitFilters = () => {
     const answerDataRaw = {
@@ -274,6 +271,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       graduation,
       'study-place': studyPlace,
       'study-period': studyPeriod,
+      'study-year': studyYear,
       integrated,
       independent,
       mooc,
@@ -315,6 +313,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     challenge,
     graduation,
     studyPlace,
+    studyYear,
     studyPeriod,
     integrated,
     independent,
@@ -365,6 +364,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setGraduation,
         studyPlace,
         setStudyPlace,
+        studyYear,
+        setStudyYear,
         studyPeriod,
         setStudyPeriod,
         integrated,

@@ -1,6 +1,5 @@
 import type { CourseRecommendation, UserCoordinates } from '../../common/types.ts'
-
-
+import { getStudyYear, dateObjToPeriod } from './studyPeriods.ts'
 
 
 function getComparison(comparisons, field){
@@ -107,6 +106,37 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'studyPlace',
       filterOnFail: strictFields.includes('study-place'),
+    },
+    {
+      field: 'studyYear',
+      filterOnFail: true,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
+        if (!userCoordinates.studyYear || userCoordinates.studyYear === 'neutral') return true
+        console.log("users wants courses from studyyear starting from ")
+        console.log(userCoordinates.studyYear)
+
+        console.log("vs")
+        console.log(c.course.period?.startYear)
+        return userCoordinates.studyYear == c.course.period?.startYear
+      }
+    },
+    {
+      field: 'studyPeriod',
+      filterOnFail: true,
+      f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
+        if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.length === 0) return true
+
+        const coursePeriods = dateObjToPeriod(new Date(c.course.startDate))
+        
+        console.log("course period is ")
+        console.log(coursePeriods)
+
+        console.log("users period is")
+        console.log(userCoordinates.studyPeriod)
+        return coursePeriods.some(coursePeriod => 
+          userCoordinates.studyPeriod.includes(coursePeriod.name)
+        )
+      }
     },
   ]
  

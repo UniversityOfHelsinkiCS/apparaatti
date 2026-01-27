@@ -575,6 +575,20 @@ const studyPeriodsData = {
   ],
 }
 
+export const getStudyYear = (dateObj: Date) => {
+  const yearData = studyPeriodsData.years.find((year) => {
+    const firstPeriod = year.periods[0]
+    const lastPeriod = year.periods[year.periods.length - 1]
+
+    const yearStartDate = parseDate(firstPeriod.start_date)
+    const yearEndDate = parseDate(lastPeriod.end_date)
+
+    return dateObj >= yearStartDate && dateObj <= yearEndDate
+  })
+
+  return yearData ? yearData.start_year : null
+}
+
 const allPeriods = studyPeriodsData.years.flatMap((year) =>
   year.periods.map((period) => ({
     ...period,
