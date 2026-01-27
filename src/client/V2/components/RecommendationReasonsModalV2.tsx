@@ -93,6 +93,10 @@ const RecommendationReasonsModalV2 = ({
             const filterName = t(coordinateToFilterMap[key])
             const isMatch = matchStatus
 
+            if (!isMatch) {
+              return null
+            }
+
             return (
               <Stack key={key} direction="row" alignItems="center" spacing={1}>
                 {isMatch ? (
