@@ -108,7 +108,6 @@ const useQuestions = () => {
   const integratedQuestion = t('form:integratedQuestion')
   const independentQuestion = t('form:independentQuestion')
   const studyPeriodQuestion = t('form:studyPeriodQuestion')
-  const summerText = t('form:summer')
   const periodText = t('form:period')
   const questions: Question[] = [
     {
@@ -237,13 +236,13 @@ const useQuestions = () => {
             {
               id: 'intensive_3_previous',
               value: 'intensive_3',
-              name: summerText + ' 25',
+              name: t('form:intensivePeriod1'),
             },
             { id: 'period_1', name:'1. ' + periodText},
             { id: 'period_2', name:'2. ' + periodText },
             { id: 'period_3', name:'3. ' + periodText },
             { id: 'period_4', name:'4. ' + periodText },
-            { id: 'intensive_3', name: summerText + ' 26'},
+            { id: 'intensive_3', name: t('form:intensivePeriod2')},
           ],
         },
       ],

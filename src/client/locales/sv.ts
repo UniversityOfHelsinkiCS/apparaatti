@@ -35,6 +35,8 @@ export default {
     'written': 'Skriftlig kommunikation',
     'spoken': 'Röstkommunikation',
     'summer': 'Sommar',
+    'intensivePeriod1': 'Intensivperiod 1',
+    'intensivePeriod2': 'Intensivperiod 2',
     'period': 'period',
     'mentoringQuestionYes': 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.',
     'mentoringQuestionNo': 'Jag känner inte att jag behöver motion.',

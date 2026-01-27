@@ -107,11 +107,7 @@ const createCurCusFromUpdater = async (
 
 const coursesHandler = async (courseRealizations: any[]) => {
   const filteredCourseRealizations = courseRealizations.filter(
-    (course) =>
-      course.courseUnits.length &&
-      course.flowState !== 'CANCELLED' &&
-      course.flowState !== 'ARCHIVED'
-  )
+    (course) => course.courseUnits.length  )
 
   await createCursFromUpdater(filteredCourseRealizations)
   await createCusFromUpdater(filteredCourseRealizations)

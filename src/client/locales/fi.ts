@@ -35,6 +35,8 @@ export default {
     'written': 'Kirjoitusviestintä',
     'spoken': 'Puheviestintä',
     'summer': 'Kesä',
+    'intensivePeriod1': 'Intensiivijakso 1',
+    'intensivePeriod2': 'Intensiivijakso 2',
     'period': 'periodi',
     'mentoringQuestionYes': 'Kaipaisin valmennusta ennen opintojen suoritusta',
     'mentoringQuestionNo': 'En koe tarvitsevani harjoitusta',

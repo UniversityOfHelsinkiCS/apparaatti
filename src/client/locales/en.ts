@@ -35,6 +35,8 @@ export default {
     'written': 'Written communication',
     'spoken': 'Verbal communication',
     'summer': 'Summer',
+    'intensivePeriod1': 'Intensive Period 1',
+    'intensivePeriod2': 'Intensive Period 2',
     'period': 'period',
     'mentoringQuestionYes': 'I would like to have a litle bit of training before starting my studies',
     'mentoringQuestionNo': 'I dont think that i need training',
