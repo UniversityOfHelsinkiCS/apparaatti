@@ -187,6 +187,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [primaryLanguageSpecification, setPrimaryLanguageSpecification] =
     useState('')
   const [language, setLanguage] = useState('')
+  const [studyField, setStudyField] = useState('')
   const [variantToDisplayId, setVariantToDisplayId] = useState('default')
   const [userOrgCode, setUserOrgCode] = useState('')
   const [courseRecommendations, setCourseRecommendations] =
@@ -195,16 +196,25 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     useState<CourseRecommendations | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  const checkWelcomeQuestionsAnswered = () => {
+    const shouldShowSpecification = language === primaryLanguage
+    return (
+      studyField !== '' &&
+      primaryLanguage !== '' &&
+      language !== '' &&
+      (shouldShowSpecification ? primaryLanguageSpecification !== '' : true)
+    )
+  }
+
   useEffect(() => {
     const hasVisited = sessionStorage.getItem('hasVisitedV2')
-    if (!hasVisited) {
+    if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
       setModalOpen(true)
       sessionStorage.setItem('hasVisitedV2', 'true')
     }
-  }, [])
+  }, [studyField, primaryLanguage, language, primaryLanguageSpecification])
 
 
-  const [studyField, setStudyField] = useState('')
   const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
   const [replacement, setReplacement] = useState('')
   const [mentoring, setMentoring] = useState('')
