@@ -119,7 +119,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       field: 'studyPeriod',
       filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
-        if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.length === 0) return true
+        if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.includes('neutral')) return true
 
         const coursePeriods = dateObjToPeriod(new Date(c.course.startDate))
         

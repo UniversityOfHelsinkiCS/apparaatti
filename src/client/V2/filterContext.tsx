@@ -146,7 +146,8 @@ export const filterConfigMap = (filters: any) => new Map([
     state: filters.studyYear,
     setState: filters.setStudyYear,
     displayType: 'singlechoice',
-    superToggle: false
+    superToggle: false,
+    hideInCurrentFiltersDisplay: true
   }],
   ['study-period', {
     shortName: 'Periodi',
@@ -211,7 +212,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [challenge, setChallenge] = useState('')
   const [graduation, setGraduation] = useState('')
   const [studyPlace, setStudyPlace] = useState<string[]>([])
-  const [studyYear, setStudyYear] = useState('')
+  const [studyYear, setStudyYear] = useState('2025')
   const [studyPeriod, setStudyPeriod] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
@@ -270,7 +271,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       challenge,
       graduation,
       'study-place': studyPlace,
-      'study-period': studyPeriod,
+      'study-period': studyPeriod.length > 0 ? studyPeriod : ['neutral'],
       'study-year': studyYear,
       integrated,
       independent,

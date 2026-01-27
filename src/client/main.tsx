@@ -38,8 +38,8 @@ createRoot(document.getElementById('root')!).render(
           <FormContextProvider>
             <Router>
               <Routes>
-                <Route path="/" element={<App />}/>
-                <Route path="/v2" element={<AppV2/>}/>
+                <Route path="/" element={<AppV2 />}/>
+                <Route path="/v2" element={<App/>}/>
                 <Route path="/admin" element={<AdminPage/>}/>
               </Routes>
             </Router>
