@@ -75,13 +75,13 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
     superToggle: false, 
-    hideInCurrentFiltersDisplay: true
+    hideInCurrentFiltersDisplay: false
   }],
   ['primary-language', {
     shortName: 'Koulukieli',
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
-    hideInCurrentFiltersDisplay: true
+    hideInCurrentFiltersDisplay: false
   }],
   ['lang', {
     shortName: 'Kurssi',
@@ -155,7 +155,8 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyYear,
     displayType: 'singlechoice',
     superToggle: false,
-    hideInCurrentFiltersDisplay: true
+    hideInCurrentFiltersDisplay: true,
+    hideInFilterSideBar: true
   }],
   ['study-period', {
     shortName: 'Periodi',

@@ -1,3 +1,4 @@
+import { skipToken } from '@tanstack/react-query'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
 import { useFilterContext, filterConfigMap } from './filterContext'
@@ -19,13 +20,14 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     const superToggle = config && config.superToggle !== undefined ? config.superToggle : true
     const shortName = config ? config.shortName : ''
 
-    return {...filter, displayType, state, setState, superToggle, shortName}
+    const skipInSideBar = config ? config.hideInFilterSideBar : false
+    return {...filter, displayType, state, setState, superToggle, shortName, skipInSideBar}
   }
   const filterToRender = buildFilter(filter)
 
   const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
   const variant = pickVariant(filter, variantId)
-  if(!variant || variant.skipped){
+  if(!variant || variant.skipped || filterToRender.skipInSideBar){
     return null
   }
 
