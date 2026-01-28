@@ -83,7 +83,7 @@ const OneThirdDrawerLayout = () => {
           </Typography>
           {user?.isAdmin && (
             <Button color="inherit" onClick={() => setFeedbackModalOpen(true)}>
-              Send Feedback
+              ADMIN
             </Button>
           )}
         </Toolbar>

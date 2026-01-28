@@ -5,6 +5,7 @@ import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import RecommendationReasonsModalV2 from './components/RecommendationReasonsModalV2'
+import { useFilterContext } from './filterContext'
 
 const CourseRecommendationV2 = ({
   course,
@@ -17,9 +18,12 @@ const CourseRecommendationV2 = ({
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  const {uiVariant} = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
+
+  const reasonsVariant = uiVariant.find(u => u.name === 'recommendation-reasons-style')?.value
 
   const creditString:() => string = () => {
     if(!course.course.credits){
@@ -68,9 +72,12 @@ const CourseRecommendationV2 = ({
       <Box>
         <Typography variant="h6" component="h2" gutterBottom>
           {translateLocalizedString(course.course.name)}
-          <IconButton onClick={handleOpen} size="small" sx={{ marginLeft: 1 }}>
-            <HelpOutlineIcon fontSize="small" />
-          </IconButton>
+          {reasonsVariant == 'question-icon' ?
+            <IconButton onClick={handleOpen} size="small" sx={{ marginLeft: 1 }}>
+              <HelpOutlineIcon fontSize="small" />
+            </IconButton>
+            :
+            <></>}
         </Typography>
         <RecommendationReasonsModalV2
           open={open}

@@ -27,7 +27,7 @@ const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props)
 
   const {uiVariant, setUiVariant} = useFilterContext()
 
-  const periodYearVariant = uiVariant.find((v) => v.name == 'period-year-variant')?.value
+  const periodYearVariant = uiVariant.find((v) => v.name == 'recommendation-reasons-style')?.value
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const payload = {
@@ -59,18 +59,21 @@ const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props)
     >
       <Box sx={style}>
 
+        <Typography>Kurssin suosittelun perustelun tyyli</Typography>
         <FormControl fullWidth>
-          <InputLabel id="my-select-label">Periodin ja Lukuvuoden esitysmuoto</InputLabel>
+          <InputLabel id="my-select-label">valitse</InputLabel>
 
-          <Select labelId="my-select-label" value={periodYearVariant} label="Choose" onChange={(e) => {setUI('period-year-variant', e.target.value)}}>
-            <MenuItem value={'year-visible'}>
-         Lukuvuosi näytetty
+          <Select labelId="my-select-label" value={periodYearVariant} label="Choose" onChange={(e) => {setUI('recommendation-reasons-style', e.target.value)}}>
+            <MenuItem value={'question-icon'}>
+               Kysymysikoni
             </MenuItem>
-            <MenuItem value={'year-hidden'}>
-           Lukuvuosi piilossa
+            <MenuItem value={'none'}>
+              ei perusteluita
             </MenuItem>
           </Select>
         </FormControl>
+
+        <Button onClick={onClose} variant="contained" color="primary" sx={{ mr: 1 }}>Valmis</Button>
 
         <Typography id="feedback-modal-title" variant="h6" component="h2">
 
