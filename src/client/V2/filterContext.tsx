@@ -5,7 +5,15 @@ import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import SuperToggle from './components/SuperToggle'
 
+interface UIVariantType{
+  name: string,
+  value: string
+}
+
 interface FilterContextType {
+  uiVariant: UIVariantType[]
+  setUiVariant: (u: UIVariantType[]) => void
+
   language: string
   setLanguage: (s: string) => void
 
@@ -229,6 +237,11 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [mooc, setMooc] = useState('')
   const [strictFilters, setStrictFilters] = useState<string[]>([])
 
+
+  const [uiVariant, setUiVariant] = useState([
+    {name: 'period-year-variant', value: 'period-year-visible'}]
+  ) 
+
   const { data: user, isLoading: userLoading } = useApi(
     'user',
     '/api/user',
@@ -335,6 +348,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   return (
     <FilterContext.Provider
       value={{
+        uiVariant,
+        setUiVariant,
+        
         language,
         setLanguage,
 

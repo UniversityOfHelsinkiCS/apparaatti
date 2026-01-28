@@ -1,7 +1,8 @@
-import { Box, Button, Typography, Modal } from '@mui/material'
+import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../../common/types'
 import { useState } from 'react'
+import { useFilterContext } from '../filterContext'
 
 const style = {
   position: 'absolute',
@@ -24,6 +25,9 @@ type TextFeedbackV2Props = {
 const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
   const [feedback, setFeedBack] = useState('')
 
+  const {uiVariant, setUiVariant} = useFilterContext()
+
+  const periodYearVariant = uiVariant.find((v) => v.name == 'period-year-variant')?.value
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const payload = {
@@ -42,6 +46,10 @@ const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props)
     onClose()
   }
 
+  const setUI = (name, value) => {
+    const newState = uiVariant.map((u) => u.name === name ? {...u, value: value } : u)
+    setUiVariant(newState)
+  }
   return (
     <Modal
       open={open}
@@ -50,7 +58,22 @@ const TextFeedbackV2 = ({ open, onClose, recommendations }: TextFeedbackV2Props)
       aria-describedby="feedback-modal-description"
     >
       <Box sx={style}>
+
+        <FormControl fullWidth>
+          <InputLabel id="my-select-label">Periodin ja Lukuvuoden esitysmuoto</InputLabel>
+
+          <Select labelId="my-select-label" value={periodYearVariant} label="Choose" onChange={(e) => {setUI('period-year-variant', e.target.value)}}>
+            <MenuItem value={'year-visible'}>
+         Lukuvuosi näytetty
+            </MenuItem>
+            <MenuItem value={'year-hidden'}>
+           Lukuvuosi piilossa
+            </MenuItem>
+          </Select>
+        </FormControl>
+
         <Typography id="feedback-modal-title" variant="h6" component="h2">
+
           Anna palautetta
         </Typography>
         <Typography id="feedback-modal-description" sx={{ mt: 2 }}>
