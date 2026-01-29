@@ -87,14 +87,28 @@ const CourseRecommendationV2 = ({
                 }
                 placement="right"
                 arrow
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      backgroundColor: 'white',
+                      color: 'black', 
+                      boxShadow: theme.shadows[1], 
+                    },
+                  },
+                  arrow: {
+                    sx: {
+                      color: 'white', 
+                    },
+                  },
+                }}
               >
                 <IconButton onClick={handleOpen} size="small" sx={{ marginLeft: 1 }}>
-                  <HelpOutlineIcon fontSize="small" />
+                  <HelpOutlineIcon fontSize="medium" />
                 </IconButton>
               </Tooltip>
             ) : ( // Otherwise, just render the IconButton (either hover-info on small screen, or not hover-info)
               <IconButton onClick={handleOpen} size="small" sx={{ marginLeft: 1 }}>
-                <HelpOutlineIcon fontSize="small" />
+                <HelpOutlineIcon fontSize="medium" />
               </IconButton>
             )
           )}
