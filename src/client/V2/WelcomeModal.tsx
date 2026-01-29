@@ -1,5 +1,5 @@
 import { Modal, Box, Typography } from '@mui/material'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useFilterContext } from './filterContext'
 import PrimaryLanguageSpecificationV2 from './components/PrimaryLanguageSpecificationV2'
 import { Question } from '../../common/types'
@@ -55,6 +55,12 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
     language &&
     (shouldShowSpecification ? primaryLanguageSpecification : true)
 
+  useEffect(() => {
+    if (allQuestionsAnswered) {
+      onClose()
+    }
+  }, [allQuestionsAnswered, onClose])
+
   return (
     <Modal
       open={open}
@@ -89,12 +95,6 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
           <PrimaryLanguageSpecificationV2
             question={primaryLanguageSpecificationQuestion as Question}
           />
-        )}
-
-        {allQuestionsAnswered && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-            <ActionButtonV2 onClick={onClose} text={t('question:close')} />
-          </Box>
         )}
       </Box>
     </Modal>
