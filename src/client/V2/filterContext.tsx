@@ -75,7 +75,7 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
     superToggle: false, 
-    hideInCurrentFiltersDisplay: false
+    hideInCurrentFiltersDisplay: true
   }],
   ['primary-language', {
     shortName: 'Koulukieli',
