@@ -96,7 +96,8 @@ const OneThirdDrawerLayout = () => {
         open={open}
         onClose={toggleDrawer}
         ModalProps={{
-          keepMounted: true, 
+          keepMounted: isMobile ? false : true,
+          disablePortal: isMobile ? true : false, 
         }}
         sx={{
           zIndex: (theme) => theme.zIndex.appBar - 1,

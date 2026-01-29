@@ -1,5 +1,5 @@
 import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
-import { Box, Button, Paper, Stack, Typography, IconButton, Tooltip } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +21,8 @@ const CourseRecommendationV2 = ({
 
   const {t} = useTranslation()
   const {uiVariant} = useFilterContext()
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
@@ -75,7 +77,7 @@ const CourseRecommendationV2 = ({
         <Typography variant="h6" component="h2" gutterBottom>
           {translateLocalizedString(course.course.name)}
           {reasonsVariant !== 'none' && (
-            reasonsVariant === 'hover-info' ? (
+            reasonsVariant === 'hover-info' && !isSmallScreen ? ( // Only show tooltip if hover-info and not small screen
               <Tooltip
                 title={
                   <RecommendationReasonsPopoverContent
@@ -90,7 +92,7 @@ const CourseRecommendationV2 = ({
                   <HelpOutlineIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-            ) : (
+            ) : ( // Otherwise, just render the IconButton (either hover-info on small screen, or not hover-info)
               <IconButton onClick={handleOpen} size="small" sx={{ marginLeft: 1 }}>
                 <HelpOutlineIcon fontSize="small" />
               </IconButton>
