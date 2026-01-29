@@ -6,16 +6,19 @@ import { useFilterContext } from '../filterContext'
 
 const style = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
+  top: { xs: 0, md: '50%' },
+  left: { xs: 0, md: '50%' },
+  transform: { xs: 'none', md: 'translate(-50%, -50%)' },
+  width: { xs: '100%', md: '50%' },
+  height: { xs: '100%', md: 'auto' },
+  minHeight: { md: '80vh' },
   bgcolor: 'background.paper',
   color: 'black',
-  border: '2px solid #000',
-  boxShadow: 24,
+  border: { xs: 'none', md: '2px solid #000' },
+  boxShadow: { xs: 0, md: 24 },
   p: 4,
-} as const
+  overflowY: 'auto',
+}
 
 type TextFeedbackV2Props = {
   open: boolean;
@@ -34,7 +37,7 @@ const Settings = ({onClose}: {onClose: () => void}) => {
   return(
     
     <>
-      <Typography>Kurssin suosittelun perustelun tyyli</Typography>
+      <Typography variant="h6" component="h2" sx={{ mb: 2 }}>Kurssin suosittelun perustelun tyyli</Typography>
       <FormControl fullWidth>
         <InputLabel id="my-select-label">valitse</InputLabel>
 
@@ -117,9 +120,9 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
     >
       <Box sx={style}>
 
-        <Tabs value={tab} onChange={handleChange} centered>
-          <Tab sx={{color: 'black'}} label="Palaute" />
-          <Tab sx = {{color: 'black'}} label="Asetukset" />
+        <Tabs value={tab} onChange={handleChange} centered sx={{ '& .Mui-Tabs-indicator': { display: 'none' } }}>
+          <Tab sx={{backgroundColor: 'white', color: 'black', '&.Mui-selected': {color: 'black'}, border: '1px solid black'}} label="Palaute" />
+          <Tab sx={{backgroundColor: 'white', color: 'black', '&.Mui-selected': {color: 'black'}, border: '1px solid black', borderLeft: 'none'}} label="Asetukset" />
         </Tabs>
 
         {tab === 0 ?
