@@ -15,6 +15,7 @@ import useApi from '../util/useApi'
 import CurrentFilterDisplay from './currentFilterDisplay'
 import TextFeedbackV2 from './components/TextFeedbackV2'
 import { CourseRecommendation } from '../../common/types'
+import AdminModal from './components/AdminModal'
 
 const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
 const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
@@ -23,7 +24,7 @@ const OneThirdDrawerLayout = () => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile) 
-  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
+  const [adminModalOpen, setAdminModalOpen] = useState(false)
   const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext() 
   useEffect(() => {
     setOpen(!isMobile) 
@@ -52,9 +53,9 @@ const OneThirdDrawerLayout = () => {
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
       {user?.isAdmin && finalRecommendedCourses && ( 
-        <TextFeedbackV2
-          open={feedbackModalOpen}
-          onClose={() => setFeedbackModalOpen(false)}
+        <AdminModal
+          open={adminModalOpen}
+          onClose={() => setAdminModalOpen(false)}
           recommendations={finalRecommendedCourses} 
         />
       )}
@@ -82,7 +83,7 @@ const OneThirdDrawerLayout = () => {
             Course Finder
           </Typography>
           {user?.isAdmin && (
-            <Button color="inherit" onClick={() => setFeedbackModalOpen(true)}>
+            <Button color="inherit" onClick={() => setAdminModalOpen(true)}>
               ADMIN
             </Button>
           )}
