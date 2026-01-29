@@ -48,6 +48,9 @@ const Settings = ({onClose}: {onClose: () => void}) => {
           <MenuItem value={'none'}>
               ei perusteluita
           </MenuItem>
+          <MenuItem value={'hover-info'}>
+              Hover Info
+          </MenuItem>
         </Select>
       </FormControl>
 
