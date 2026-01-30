@@ -7,6 +7,7 @@ export type LocalizedString = Partial<{
 export type Option = {
   id: string
   name: string
+  valueOverride?: string //if this field exists on a option it will be used as the value to send to the backend
 }
 
 export type Question = {

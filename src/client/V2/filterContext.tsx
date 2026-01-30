@@ -282,6 +282,21 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setFinalRecommendedCourses(courseRecommendations)
   }, [courseRecommendations])
 
+  const getTrueFilterValue = (filterOptionId: string, questionId: string) => {
+    const filter = allFilters.find(f => f.id === questionId)
+    const variant = filter?.variants.find(v => v.name === variantToDisplayId)
+    const option = variant?.options.find(o => o.id === filterOptionId)
+    if(option?.valueOverride){
+      console.log("returning overriden value")
+      console.log(variant)
+      console.log(option)
+      return option.valueOverride
+    }
+    else{
+      return filterOptionId
+    }
+    
+  }
   const submitFilters = () => {
     const answerDataRaw = {
       'study-field-select': userOrgCode,
@@ -289,7 +304,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       lang: language,
       'primary-language-specification': primaryLanguageSpecification,
       'previusly-done-lang': previouslyDoneLang,
-      replacement,
+      'replacement': getTrueFilterValue(replacement, 'replacement'),
       mentoring,
       finmu,
       challenge,
