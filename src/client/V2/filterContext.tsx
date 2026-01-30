@@ -287,7 +287,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     const variant = filter?.variants.find(v => v.name === variantToDisplayId)
     const option = variant?.options.find(o => o.id === filterOptionId)
     if(option?.valueOverride){
-      console.log("returning overriden value")
+      console.log('returning overriden value')
       console.log(variant)
       console.log(option)
       return option.valueOverride
