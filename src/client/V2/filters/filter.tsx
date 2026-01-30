@@ -22,6 +22,17 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
   const state = filter.state
   const setState = filter.setState
 
+  // update strictFilters based on option.setStrict
+  const updateStrictForOption = (optionId: string) => {
+    const opt = (variant.options || []).find((o) => o.id === optionId)
+    if (!opt || opt.setStrict === undefined) return
+    if (opt.setStrict === true) {
+      setStrictFilters((prev) => (prev.includes(filter.id) ? prev : [...prev, filter.id]))
+    } else if (opt.setStrict === false) {
+      setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
+    }
+  }
+
   useEffect(() => {
     if (filter.superToggle === false && !strictFilters.includes(filter.id)) {
       setStrictFilters((prevStrictFilters) => [...prevStrictFilters, filter.id])
@@ -40,7 +51,9 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
   }
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState(event.target.value)
+    const optionId = event.target.value
+    setState(optionId)
+    updateStrictForOption(optionId)
   }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,13 +62,25 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
 
     if (isChecked) {
       setState([...state, optionId])
+      updateStrictForOption(optionId)
     } else {
       setState(state.filter((id: string) => id !== optionId))
+      // If an unchecked option has setStrict === true, ensure we remove strict for this filter
+      const opt = (variant.options || []).find((o) => o.id === optionId)
+      if (opt && opt.setStrict === true) {
+        setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
+      }
+      // If an unchecked option has setStrict === false, we already ensure filter not in strict list
+      if (opt && opt.setStrict === false) {
+        setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
+      }
     }
   }
 
   const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setState(event.target.value)
+    const optionId = event.target.value
+    setState(optionId)
+    updateStrictForOption(optionId)
   }
   const showAsQuestion = true
   return (

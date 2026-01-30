@@ -8,7 +8,9 @@ export type Option = {
   id: string
   name: string
   valueOverride?: string //if this field exists on a option it will be used as the value to send to the backend
+  setStrict?: boolean //if true, this option will set the strict mode for the question, if false it will not force the strict mode to be true
 }
+
 
 export type Question = {
   id: string

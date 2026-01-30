@@ -262,7 +262,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
         {
@@ -273,7 +273,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
         {
@@ -283,7 +283,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
         {
@@ -293,7 +293,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
         {
@@ -303,7 +303,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
         {
@@ -312,7 +312,7 @@ const useQuestions = () => {
             {id: 'neutral', name: neutralText},
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
           ],
         },
       ],

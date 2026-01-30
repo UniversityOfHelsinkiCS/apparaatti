@@ -3,7 +3,6 @@ import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/us
 import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
-import SuperToggle from './components/SuperToggle'
 
 interface UIVariantType{
   name: string,
