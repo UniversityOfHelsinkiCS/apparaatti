@@ -284,7 +284,14 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const getTrueFilterValue = (filterOptionId: string, questionId: string) => {
     const filter = allFilters.find(f => f.id === questionId)
+    if(!filter || !filter.variants){
+      return filterOptionId
+    }
+
     const variant = filter?.variants.find(v => v.name === variantToDisplayId)
+    if(!variant || !variant.options){
+      return filterOptionId
+    }
     const option = variant?.options.find(o => o.id === filterOptionId)
     if(option?.valueOverride){
       console.log('returning overriden value')
@@ -299,22 +306,22 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }
   const submitFilters = () => {
     const answerDataRaw = {
-      'study-field-select': userOrgCode,
-      'primary-language': primaryLanguage,
-      lang: language,
-      'primary-language-specification': primaryLanguageSpecification,
-      'previusly-done-lang': previouslyDoneLang,
+      'study-field-select': getTrueFilterValue(userOrgCode, 'study-field-select'),
+      'primary-language': getTrueFilterValue(primaryLanguage, 'primary-language'),
+      lang: getTrueFilterValue(language, 'lang'),
+      'primary-language-specification': getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification'),
+      'previusly-done-lang': getTrueFilterValue(previouslyDoneLang, 'previusly-done-lang'),
       'replacement': getTrueFilterValue(replacement, 'replacement'),
-      mentoring,
-      finmu,
-      challenge,
-      graduation,
+      mentoring: getTrueFilterValue(mentoring, 'mentoring'),
+      finmu: getTrueFilterValue(finmu, 'finmu'),
+      challenge: getTrueFilterValue(challenge, 'challenge'),
+      graduation: getTrueFilterValue(graduation, 'graduation'),
       'study-place': studyPlace,
       'study-period': studyPeriod.length > 0 ? studyPeriod : ['neutral'],
-      'study-year': studyYear,
-      integrated,
-      independent,
-      mooc,
+      'study-year': getTrueFilterValue(studyYear, 'study-year'),
+      integrated: getTrueFilterValue(integrated, 'integrated'),
+      independent: getTrueFilterValue(independent, 'independent'),
+      mooc: getTrueFilterValue(mooc, 'mooc'),
     }
 
     const answerData = Object.fromEntries(
