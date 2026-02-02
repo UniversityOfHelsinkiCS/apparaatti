@@ -103,43 +103,43 @@ export const filterConfigMap = (filters: any) => new Map([
     shortName: 'Korvaava',
     state: filters.replacement,
     setState: filters.setReplacement,
-    superToggle: true
+    superToggle: false
   }],
   ['mentoring', {
     shortName: 'Valmentava',
     state: filters.mentoring,
     setState: filters.setMentoring,
-    superToggle: true
+    superToggle: false
   }],
   ['finmu', {
     shortName: 'Finmu',
     state: filters.finmu,
     setState: filters.setFinmu,
-    superToggle: true
+    superToggle: false
   }],
   ['challenge', {
     shortName: 'Edistynyt',
     state: filters.challenge,
     setState: filters.setChallenge,
-    superToggle: true
+    superToggle: false
   }],
   ['graduation', {
     shortName: 'Valmistuville',
     state: filters.graduation,
     setState: filters.setGraduation,
-    superToggle: true
+    superToggle: false
   }],
   ['integrated', {
     shortName: 'Integroitu',
     state: filters.integrated,
     setState: filters.setIntegrated,
-    superToggle: true
+    superToggle: false
   }],
   ['independent', {
     shortName: 'Itsenäinen',
     state: filters.independent,
     setState: filters.setIndependent,
-    superToggle: true
+    superToggle: false
   }],
   ['study-place', {
     shortName: 'Opetusmuoto',
