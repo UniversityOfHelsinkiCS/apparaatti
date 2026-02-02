@@ -52,7 +52,8 @@ export default {
     'replacementQuestion_fi_secondary_any': 'Oletko kaksikielinen (suomi – ruotsi) tai käytätkö suomea paljon ja sujuvasti opinnoissasi ja/tai muussa elämässäsi?',
     'challengeQuestion_fi_primary_written': 'Onko sinun elämäntilanteesi tai jännittämisen vuoksi vaikea osallistua läsnäoloa tai yhteisiä verkkotapaamisia sisältäville toteutuksille?',
     'challengeQuestion_fi_primary_spoken': 'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.',
-    'points': 'tarkkuus'
+    'points': 'tarkkuus',
+    'strictFilter': 'Tiukka suodatus'
   },
   'question': {
     'extrainfo': 'Lisätietoa',

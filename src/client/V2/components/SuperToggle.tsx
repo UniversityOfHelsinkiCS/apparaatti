@@ -1,8 +1,10 @@
 import React from 'react'
 import { FormControlLabel, Switch } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useFilterContext } from '../filterContext'
 
 const SuperToggle = ({ filterId }: { filterId: string }) => {
+  const { t } = useTranslation()
   const { strictFilters, setStrictFilters } = useFilterContext()
 
   const isStrict = strictFilters.includes(filterId)
@@ -18,7 +20,7 @@ const SuperToggle = ({ filterId }: { filterId: string }) => {
   return (
     <FormControlLabel
       control={<Switch checked={isStrict} onChange={handleToggle} />}
-      label="Super"
+      label={t('form:strictFilter')}
     />
   )
 }
