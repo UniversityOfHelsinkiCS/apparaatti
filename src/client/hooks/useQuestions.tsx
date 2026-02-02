@@ -196,9 +196,10 @@ const useQuestions = () => {
           question: previouslyDoneLangQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
-
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ],
@@ -260,9 +261,10 @@ const useQuestions = () => {
           question: replacementQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -271,9 +273,10 @@ const useQuestions = () => {
           question: t('form:replacementQuestion_fi_primary_written'),
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -330,8 +333,10 @@ const useQuestions = () => {
           question: mentoringQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
+            {id: '0', name: t('form:mentoringQuestionNo')},
             {id: '1', name: t('form:mentoringQuestionYes')},
-            {id: '0', name: t('form:mentoringQuestionNo')}
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -339,8 +344,10 @@ const useQuestions = () => {
           question: t('form:mentoringQuestion_fi_secondary_any'),
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -358,8 +365,10 @@ const useQuestions = () => {
           question: mentoringQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ],
@@ -387,8 +396,10 @@ const useQuestions = () => {
           question: t('form:finmuMentoringQuestion_fi_secondary_any'),
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ]
@@ -405,8 +416,10 @@ const useQuestions = () => {
           question: challengeQuestion,
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -414,8 +427,10 @@ const useQuestions = () => {
           question: t('form:challengeQuestion_fi_primary_written'),
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -423,8 +438,10 @@ const useQuestions = () => {
           question: t('form:challengeQuestion_fi_primary_spoken'),
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -432,8 +449,10 @@ const useQuestions = () => {
           question: t('form:challengeQuestion_fi_secondary_any'),
           options: [
             { id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -481,8 +500,10 @@ const useQuestions = () => {
           question: graduationQuestion,
           options: [
             {id: 'neutral', name: neutralText},
-            { id: '1', name: t('form:graduationQuestionYes')},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: t('form:graduationQuestionNo')},
+            { id: '1', name: t('form:graduationQuestionYes')},
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ],
@@ -529,8 +550,10 @@ const useQuestions = () => {
           question: integratedQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -538,8 +561,10 @@ const useQuestions = () => {
           question: integratedQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ],
@@ -566,8 +591,10 @@ const useQuestions = () => {
           question: independentQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
         {
@@ -575,8 +602,10 @@ const useQuestions = () => {
           question: independentQuestion,
           options: [
             {id: 'neutral', name: neutralText},
+            { id: '3', setStrict: true, valueOverride: '0', name: 'Ei (ehdottomasti)' },
             { id: '0', name: noText },
             { id: '1', name: yesText },
+            { id: '2', setStrict: true, valueOverride: '1', name: 'Kyllä (ehdottomasti)' },
           ],
         },
       ],
