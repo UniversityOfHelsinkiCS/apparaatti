@@ -214,7 +214,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: previouslyDoneLangQuestion,
-          options: generateGeneralYesNoOptions(),
+          options: generateGeneralYesNoOptions(false),
         },
       ],
     },
