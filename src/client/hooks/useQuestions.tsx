@@ -98,6 +98,24 @@ const useQuestions = () => {
   const noDefinitelyText = t('form:noDefinitely')//{fi: 'Ei (ehdottomasti)', sv: 'Nej (definitivt)', en: 'No (definitely)'}
 
   const neutralText = t('form:neutralChoice')
+
+  const generateGeneralYesNoOptions = (includeDefinitely: boolean = true, customYesText?: string, customNoText?: string) => {
+    if (includeDefinitely) {
+      return [
+        {id: 'neutral', setStrict: false, name: neutralText},
+        { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
+        { id: '0', setStrict: false, name: customNoText || noText },
+        { id: '1', setStrict: false, name: customYesText || yesText },
+        { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
+      ]
+    } else {
+      return [
+        {id: 'neutral', name: neutralText},
+        { id: '0', name: customNoText || noText },
+        { id: '1', name: customYesText || yesText },
+      ]
+    }
+  }
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')
   const primaryLanguageSpecificationQuestion = t('form:primaryLanguageSpecificationQuestion')
@@ -196,13 +214,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: previouslyDoneLangQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -261,64 +273,33 @@ const useQuestions = () => {
         {
           name: 'default',
           question: replacementQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           explanation: 'Suomi äidinkielenä oleva infolaatikko',
           name: 'fi_primary_written',
           question: t('form:replacementQuestion_fi_primary_written'),
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'fi_secondary_any',
           question: t('form:replacementQuestion_fi_secondary_any'),
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'en_secondary_any',
           question: t('form:replacementQuestion_en_secondary_any'),
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_secondary_any',
           question: t('form:replacementQuestion_sv_secondary_any'),
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_written',
-          question: t('form:replacementQuestion_sv_primary_written'),        options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: 'yesText debug' },
-          ],
+          question: t('form:replacementQuestion_sv_primary_written'),  
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -333,45 +314,23 @@ const useQuestions = () => {
         {
           name: 'default',
           question: mentoringQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            {id: '0', setStrict: false, name: t('form:mentoringQuestionNo')},
-            {id: '1', setStrict: false, name: t('form:mentoringQuestionYes')},
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(true, t('form:mentoringQuestionYes'), t('form:mentoringQuestionNo')),
         },
         {
           name: 'fi_secondary_any',
           question: t('form:mentoringQuestion_fi_secondary_any'),
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_spoken',
           question: '',
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           name: 'sv_primary_written',
           question: mentoringQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -386,23 +345,13 @@ const useQuestions = () => {
           name: 'default',
           question: '',
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           //this was originally part of mentoring but because mentoring directs to different courses it needed its own question
           name: 'fi_secondary_any',
           question: t('form:finmuMentoringQuestion_fi_secondary_any'),
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
       ]
     },
@@ -416,76 +365,40 @@ const useQuestions = () => {
         {
           name: 'default',
           question: challengeQuestion,
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'fi_primary_written',
           question: t('form:challengeQuestion_fi_primary_written'),
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'fi_primary_spoken',
           question: t('form:challengeQuestion_fi_primary_spoken'),
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'fi_secondary_any',
           question: t('form:challengeQuestion_fi_secondary_any'),
-          options: [
-            { id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_spoken',
           question: '',
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           name: 'sv_primary_written',
           question: '',
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           name: 'sv_primary_any',
           question: '',
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
       ],
     },  
@@ -500,13 +413,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: graduationQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: t('form:graduationQuestionNo')},
-            { id: '1', setStrict: false, name: t('form:graduationQuestionYes')},
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(true, t('form:graduationQuestionYes'), t('form:graduationQuestionNo')),
         },
       ],
     },
@@ -541,33 +448,17 @@ const useQuestions = () => {
           name: 'default',
           question: integratedQuestion,
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           name: 'en_secondary_any',
           question: integratedQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_secondary_any',
           question: integratedQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -582,33 +473,17 @@ const useQuestions = () => {
           name: 'default',
           question: independentQuestion,
           skipped: true,
-          options: [
-            {id: 'neutral', name: neutralText},
-            { id: '0', name: noText },
-            { id: '1', name: yesText },
-          ],
+          options: generateGeneralYesNoOptions(false),
         },
         {
           name: 'en_secondary_any',
           question: independentQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_secondary_any',
           question: independentQuestion,
-          options: [
-            {id: 'neutral', setStrict: false, name: neutralText},
-            { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-            { id: '0', setStrict: false, name: noText },
-            { id: '1', setStrict: false, name: yesText },
-            { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-          ],
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
