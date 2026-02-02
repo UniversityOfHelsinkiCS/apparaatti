@@ -24,31 +24,13 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
 
   const updateStrictForOption = (optionId: string) => {
     const opt = (variant.options || []).find((o) => o.id === optionId)
-    if (!opt) return
-
-    //if setstrict missing, assume false
-    if(opt?.setStrict === undefined){
-      setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
-    }
+    if (!opt || opt?.setStrict === undefined) return
     else if (opt.setStrict === true) {
       setStrictFilters((prev) => (prev.includes(filter.id) ? prev : [...prev, filter.id]))
     } else if (opt.setStrict === false) {
       setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
     } 
   }
-
-  useEffect(() => {
-    if (filter.superToggle === false && !strictFilters.includes(filter.id)) {
-      setStrictFilters((prevStrictFilters) => [...prevStrictFilters, filter.id])
-    }
-    return () => {
-      if (filter.superToggle === false && strictFilters.includes(filter.id)) {
-        setStrictFilters((prevStrictFilters) =>
-          prevStrictFilters.filter((id) => id !== filter.id)
-        )
-      }
-    }
-  }, [filter.id, filter.superToggle, setStrictFilters, strictFilters])
 
   if (!variant || variant.skipped) {
     return null
