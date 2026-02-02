@@ -30,6 +30,8 @@ export default {
     'english': 'englanti',
     'yes': 'Kyllä',
     'no': 'Ei',
+    'yesDefinitely': 'Kyllä (ehdottomasti)',
+    'noDefinitely': 'Ei (ehdottomasti)',
     'neutralChoice': 'Ei valintaa',
     'both': 'Molemmat',
     'written': 'Kirjoitusviestintä',

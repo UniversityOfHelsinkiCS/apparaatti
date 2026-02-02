@@ -30,6 +30,8 @@ export default {
     'english': 'english',
     'yes': 'Yes',
     'no': 'No',
+    'yesDefinitely': 'Yes (definitely)',
+    'noDefinitely': 'No (definitely)',
     'neutralChoice': 'No choice',
     'both': 'Both',
     'written': 'Written communication',

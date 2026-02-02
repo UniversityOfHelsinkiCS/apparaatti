@@ -22,15 +22,19 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
   const state = filter.state
   const setState = filter.setState
 
-  // update strictFilters based on option.setStrict
   const updateStrictForOption = (optionId: string) => {
     const opt = (variant.options || []).find((o) => o.id === optionId)
-    if (!opt || opt.setStrict === undefined) return
-    if (opt.setStrict === true) {
+    if (!opt) return
+
+    //if setstrict missing, assume false
+    if(opt?.setStrict === undefined){
+      setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
+    }
+    else if (opt.setStrict === true) {
       setStrictFilters((prev) => (prev.includes(filter.id) ? prev : [...prev, filter.id]))
     } else if (opt.setStrict === false) {
       setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
-    }
+    } 
   }
 
   useEffect(() => {

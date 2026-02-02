@@ -30,6 +30,8 @@ export default {
     'english': 'engelska',
     'yes': 'Ja',
     'no': 'Nej',
+    'yesDefinitely': 'Ja (definitivt)',
+    'noDefinitely': 'Nej (definitivt)',
     'neutralChoice': 'Inget val',
     'both': 'Både',
     'written': 'Skriftlig kommunikation',
