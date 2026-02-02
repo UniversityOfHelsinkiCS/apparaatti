@@ -1,11 +1,10 @@
-import { Modal, Box, Typography } from '@mui/material'
-import { FC, useEffect } from 'react'
+import { Modal, Box, Typography, Button } from '@mui/material'
+import { FC, useEffect, useRef } from 'react'
 import { useFilterContext } from './filterContext'
 import PrimaryLanguageSpecificationV2 from './components/PrimaryLanguageSpecificationV2'
 import { Question } from '../../common/types'
 import RadioQuestionV2 from './components/RadioQuestionV2'
 import StudyPhaseQuestionV2 from './components/StudyPhaseQuestionV2'
-import ActionButtonV2 from './components/ActionButtonV2'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -36,6 +35,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
     primaryLanguageSpecification,
   } = useFilterContext()
   const { t } = useTranslation()
+  const hasAutoClosedRef = useRef(false)
 
   const languageQuestion = filters.find((q) => q.id === 'lang')
   const primaryLanguageQuestion = filters.find((q) => q.id === 'primary-language')
@@ -56,10 +56,12 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
     (shouldShowSpecification ? primaryLanguageSpecification : true)
 
   useEffect(() => {
-    if (allQuestionsAnswered) {
+    // Only auto-close once when questions are first completed
+    if (allQuestionsAnswered && !hasAutoClosedRef.current && open) {
       onClose()
+      hasAutoClosedRef.current = true
     }
-  }, [allQuestionsAnswered, onClose])
+  }, [allQuestionsAnswered, onClose, open])
 
   return (
     <Modal
@@ -70,8 +72,8 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
       sx={{ border: 'none' }}
     >
       <Box sx={style}>
-        <Typography>
-          Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.
+        <Typography sx={{ mb: 3 }}>
+          {t('v2:welcomeText')}
         </Typography>
 
         {studyPhaseQuestion && (
@@ -96,6 +98,21 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
             question={primaryLanguageSpecificationQuestion as Question}
           />
         )}
+        
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+          <Button
+            variant="contained"
+            onClick={onClose}
+            disabled={!allQuestionsAnswered}
+            sx={{
+              textTransform: 'none',
+              px: 4,
+              py: 1,
+            }}
+          >
+            {t('v2:done')}
+          </Button>
+        </Box>
       </Box>
     </Modal>
   )

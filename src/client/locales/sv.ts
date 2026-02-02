@@ -83,7 +83,9 @@ export default {
     'periodFilter': {
       'title': 'Period'
     },
-    'retakeQuestions': 'Svara på startfrågorna'
+    'retakeQuestions': 'Svara på startfrågorna',
+    'done': 'Klar',
+    'welcomeText': 'Svara först på några inledande frågor. Du kan ändra dessa senare.'
   },
   'course': {
     'show': 'Visa',

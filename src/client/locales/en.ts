@@ -83,7 +83,9 @@ export default {
     'periodFilter': {
       'title': 'Period'
     },
-    'retakeQuestions': 'Answer starting questions'
+    'retakeQuestions': 'Answer starting questions',
+    'done': 'Done',
+    'welcomeText': 'First, answer a few initial questions. You can modify these later.'
   },
   'course': {
     'show': 'Show',

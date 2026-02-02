@@ -83,7 +83,9 @@ export default {
     'periodFilter': {
       'title': 'Periodi'
     },
-    'retakeQuestions': 'Vastaa alkukysymyksiin'
+    'retakeQuestions': 'Vastaa alkukysymyksiin',
+    'done': 'Valmis',
+    'welcomeText': 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.'
   },
   'course': {
     'show': 'Näytä',
