@@ -32,7 +32,7 @@ export default {
     'no': 'Nej',
     'yesDefinitely': 'Ja (definitivt)',
     'noDefinitely': 'Nej (definitivt)',
-    'neutralChoice': 'Inget val',
+    'neutralChoice': 'Jag bryr mig inte',
     'both': 'Både',
     'written': 'Skriftlig kommunikation',
     'spoken': 'Röstkommunikation',

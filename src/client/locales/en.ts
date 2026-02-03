@@ -32,7 +32,7 @@ export default {
     'no': 'No',
     'yesDefinitely': 'Yes (definitely)',
     'noDefinitely': 'No (definitely)',
-    'neutralChoice': 'No choice',
+    'neutralChoice': 'I don\'t care',
     'both': 'Both',
     'written': 'Written communication',
     'spoken': 'Verbal communication',

@@ -32,7 +32,7 @@ export default {
     'no': 'Ei',
     'yesDefinitely': 'Kyllä (ehdottomasti)',
     'noDefinitely': 'Ei (ehdottomasti)',
-    'neutralChoice': 'Ei valintaa',
+    'neutralChoice': 'En välitä',
     'both': 'Molemmat',
     'written': 'Kirjoitusviestintä',
     'spoken': 'Puheviestintä',
