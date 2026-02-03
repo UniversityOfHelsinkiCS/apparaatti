@@ -32,6 +32,7 @@ export const REDIS_PASSWORD = process.env.REDIS_PASSWORD || ''
 //used by updater
 export const API_TOKEN = process.env.API_TOKEN || 'dontuse1234'
 export const UPDATER_CRON_ENABLED = process.env.UPDATER_CRON_ENABLED || false
+export const UPDATER_TOKEN = process.env.UPDATER_TOKEN || ''
 
 export const JAMI_URL = inProduction
   ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/jami/'

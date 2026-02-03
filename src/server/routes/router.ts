@@ -6,13 +6,14 @@ import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
 import { Op } from 'sequelize'
 import debugRouter from './debugRouter.ts'
-import { inDevelopment } from '../util/config.ts'
+import { inDevelopment, UPDATER_CRON_ENABLED } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
+import { run as runUpdater } from '../updater/index.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -24,6 +25,18 @@ if(inDevelopment){
 }
 
 router.use('/admin', adminRouter)
+
+if (UPDATER_CRON_ENABLED) {
+  router.post('/updater/run', async (_req, res) => {
+    try {
+      await runUpdater(true)
+      res.json({ message: 'Updater run completed successfully' })
+    } catch (error) {
+      res.status(500).json({ message: 'Updater run failed', error: String(error) })
+    }
+  })
+}
+
 router.get('/organisations/supported', async(req, res) => {
   if(!req.user){
     res.status(404).json({ message: 'User not found' })
