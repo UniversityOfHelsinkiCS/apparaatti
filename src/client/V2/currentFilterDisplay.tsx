@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Stack, IconButton } from '@mui/material'
+import { Box, Typography, Button, Stack, IconButton, Chip } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { filterConfigMap, getFilterVariant, useFilterContext } from './filterContext'
 import { getOptionDisplayTexts } from '../hooks/useQuestions'
@@ -6,7 +6,33 @@ import { Variant } from '../../common/types'
 
 
 const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}) => {
-
+  const isArray = Array.isArray(cfg.state)
+  
+  if (isArray && cfg.state.length > 0) {
+    return (
+      <>
+        {cfg.state.map((valueId: string) => {
+          const option = variant?.options?.find((o) => o.id === valueId)
+          const displayText = option?.name || valueId
+          
+          return (
+            <Chip
+              key={valueId}
+              label={displayText}
+              size="small"
+              onDelete={() => {
+                // Remove this specific value from the array
+                const newState = cfg.state.filter((id: string) => id !== valueId)
+                cfg.setState(newState)
+              }}
+              sx={{ margin: '2px' }}
+            />
+          )
+        })}
+      </>
+    )
+  }
+  
   const valueTexts = getOptionDisplayTexts(variant, cfg.state)
   return (
     valueTexts.map((s: any) => <Typography key={s}>{s}</Typography>)
@@ -22,6 +48,7 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const variant = getFilterVariant(filterContext, filterId)
 
   const handleClearFilter = () => {
+    if (!cfg) return
     if (Array.isArray(cfg.state)) {
       cfg.setState([])
     } else {
@@ -29,20 +56,25 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
     }
   }
 
-  if(hide){
+  if(hide || !cfg){
     return (<></>)
   }
+  
+  const hasMultipleValues = Array.isArray(cfg.state) && cfg.state.length > 1
+  
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
       <Typography variant="body1">
         <strong>{cfg?.shortName}: </strong>
       </Typography>
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={1} flexWrap="wrap">
         <FilterValueRenderer cfg={cfg} variant={variant}/>
       </Stack>
-      <IconButton size="small" onClick={handleClearFilter}>
-        <CloseIcon fontSize="small" />
-      </IconButton>
+      {(hasMultipleValues || !Array.isArray(cfg.state)) && (
+        <IconButton size="small" onClick={handleClearFilter} title="Clear all">
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      )}
     </Stack>
   )
 }
