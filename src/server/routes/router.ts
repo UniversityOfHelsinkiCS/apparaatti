@@ -32,7 +32,7 @@ if (UPDATER_CRON_ENABLED) {
       await runUpdater(true)
       res.json({ message: 'Updater run completed successfully' })
     } catch (error) {
-      res.status(500).json({ message: 'Updater run failed', error: String(error) })
+      res.status(500).json({ message: 'Updater run failed'})
     }
   })
 }
