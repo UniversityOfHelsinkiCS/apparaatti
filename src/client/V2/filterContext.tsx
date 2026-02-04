@@ -74,30 +74,35 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
     superToggle: false, 
-    hideInCurrentFiltersDisplay: true
+    hideInCurrentFiltersDisplay: true,
+    hideInRecommendationReasons: true
   }],
   ['primary-language', {
     shortName: 'Koulukieli',
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
-    hideInCurrentFiltersDisplay: false
+    hideInCurrentFiltersDisplay: false,
+    hideInRecommendationReasons: true
   }],
   ['lang', {
     shortName: 'Kurssi',
     state: filters.language,
-    setState: filters.setLanguage
+    setState: filters.setLanguage,
+    hideInRecommendationReasons: true
   }],
   ['primary-language-specification', {
     shortName: 'Viestintä',
     state: filters.primaryLanguageSpecification,
-    setState: filters.setPrimaryLanguageSpecification
+    setState: filters.setPrimaryLanguageSpecification,
+    hideInRecommendationReasons: true
   }],
   ['previusly-done-lang', {
     shortName: 'Aikaisemmat opinnot',
     state: filters.previouslyDoneLang,
     setState: filters.setPreviouslyDoneLang,
     superToggle: false,
-    hideInCurrentFiltersDisplay: true
+    hideInCurrentFiltersDisplay: true,
+    hideInRecommendationReasons: true
   }],
   ['replacement', {
     shortName: 'Korvaava',

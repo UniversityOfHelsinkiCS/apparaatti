@@ -3,7 +3,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { useTranslation } from 'react-i18next'
 import { UserCoordinates } from '../../../common/types'
-import { useFilterContext } from '../filterContext'
+import { filterConfigMap, useFilterContext } from '../filterContext'
 
 interface RecommendationReasonsPopoverContentProps {
   courseCoordinates: UserCoordinates
@@ -15,9 +15,11 @@ const RecommendationReasonsPopoverContent = ({
   userCoordinates,
 }: RecommendationReasonsPopoverContentProps) => {
   const { t } = useTranslation()
-  const { uiVariant } = useFilterContext()
+  const filterContext = useFilterContext()
+  const { uiVariant } = filterContext
   
   const hideIncorrect = uiVariant.find(u => u.name === 'recommendation-reasons-incorrect-hidden')?.value === 'true'
+  const filterConfig = filterConfigMap(filterContext)
 
   const coordinateToFilterMap: { [key: string]: string } = {
     date: 'filter:period',
@@ -33,6 +35,23 @@ const RecommendationReasonsPopoverContent = ({
     flexible: 'filter:flexible',
     mooc: 'filter:mooc',
     finmu: 'filter:finmu',
+  }
+
+  // Map coordinate keys to filter IDs for checking hideInRecommendationReasons
+  const coordinateToFilterId: { [key: string]: string } = {
+    date: 'study-period',
+    org: 'study-field-select',
+    lang: 'lang',
+    graduation: 'graduation',
+    mentoring: 'mentoring',
+    integrated: 'integrated',
+    studyPlace: 'study-place',
+    replacement: 'replacement',
+    challenge: 'challenge',
+    independent: 'independent',
+    flexible: 'flexible',
+    mooc: 'mooc',
+    finmu: 'finmu',
   }
 
   const getMatchStatus = (key: keyof UserCoordinates) => {
@@ -66,6 +85,15 @@ const RecommendationReasonsPopoverContent = ({
         {Object.keys(coordinateToFilterMap).map((key) => {
           const matchStatus = getMatchStatus(key as keyof UserCoordinates)
           if (matchStatus === null) {
+            return null
+          }
+
+          // Check if this filter should be hidden in recommendation reasons
+          const filterId = coordinateToFilterId[key]
+          const filterCfg = filterId ? filterConfig.get(filterId) : null
+          const hideInReasons = filterCfg?.hideInRecommendationReasons ?? false
+          
+          if (hideInReasons) {
             return null
           }
 
