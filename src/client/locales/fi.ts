@@ -114,5 +114,23 @@ export default {
     'flexible': 'Haluan joustavan aikataulun',
     'mooc': 'Etsi MOOC-kursseja',
     'finmu': 'FinMU liittyvä',
+  },
+  'filterShortName': {
+    'Opinto-oikeus': 'Opinto-oikeus',
+    'Koulukieli': 'Koulukieli',
+    'Kurssi': 'Kurssi',
+    'Viestintä': 'Viestintä',
+    'Aikaisemmat opinnot': 'Aikaisemmat opinnot',
+    'Korvaava': 'Korvaava',
+    'Valmentava': 'Valmentava',
+    'Finmu': 'Finmu',
+    'Edistynyt': 'Edistynyt',
+    'Valmistuville': 'Valmistuville',
+    'Integroitu': 'Integroitu',
+    'Itsenäinen': 'Itsenäinen',
+    'Opetusmuoto': 'Opetusmuoto',
+    'Lukuvuosi': 'Lukuvuosi',
+    'Periodi': 'Periodi',
+    'MOOC': 'MOOC',
   }
 }

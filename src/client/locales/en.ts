@@ -114,5 +114,23 @@ export default {
     'flexible': 'Want flexible schedule',
     'mooc': 'Search for MOOCs',
     'finmu': 'FinMU related',
+  },
+  'filterShortName': {
+    'Opinto-oikeus': 'Study Right',
+    'Koulukieli': 'School Language',
+    'Kurssi': 'Course',
+    'Viestintä': 'Communication',
+    'Aikaisemmat opinnot': 'Previous Studies',
+    'Korvaava': 'Replacement',
+    'Valmentava': 'Preparatory',
+    'Finmu': 'Finmu',
+    'Edistynyt': 'Advanced',
+    'Valmistuville': 'For Graduating',
+    'Integroitu': 'Integrated',
+    'Itsenäinen': 'Independent',
+    'Opetusmuoto': 'Teaching Method',
+    'Lukuvuosi': 'Academic Year',
+    'Periodi': 'Period',
+    'MOOC': 'MOOC',
   }
 }

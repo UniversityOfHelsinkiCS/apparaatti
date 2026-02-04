@@ -110,5 +110,23 @@ export default {
     'flexible': 'Vill ha flexibelt schema',
     'mooc': 'Sök MOOC-kurser',
     'finmu': 'FinMU relaterad',
+  },
+  'filterShortName': {
+    'Opinto-oikeus': 'Studierätt',
+    'Koulukieli': 'Skolspråk',
+    'Kurssi': 'Kurs',
+    'Viestintä': 'Kommunikation',
+    'Aikaisemmat opinnot': 'Tidigare studier',
+    'Korvaava': 'Ersättande',
+    'Valmentava': 'Förberedande',
+    'Finmu': 'Finmu',
+    'Edistynyt': 'Avancerad',
+    'Valmistuville': 'För examinerande',
+    'Integroitu': 'Integrerad',
+    'Itsenäinen': 'Självständig',
+    'Opetusmuoto': 'Undervisningsform',
+    'Lukuvuosi': 'Läsår',
+    'Periodi': 'Period',
+    'MOOC': 'MOOC',
   }
 }

@@ -177,6 +177,36 @@ export const filterConfigMap = (filters: any) => new Map([
   }],
 ])
 
+// Map coordinate keys to filter IDs for recommendation reasons
+export const coordinateKeyToFilterId: { [key: string]: string } = {
+  date: 'study-period',
+  org: 'study-field-select',
+  lang: 'lang',
+  graduation: 'graduation',
+  mentoring: 'mentoring',
+  integrated: 'integrated',
+  studyPlace: 'study-place',
+  replacement: 'replacement',
+  challenge: 'challenge',
+  independent: 'independent',
+  flexible: 'flexible',
+  mooc: 'mooc',
+  finmu: 'finmu',
+}
+
+// Get translated short name for a coordinate key
+export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any, t: (key: string) => string): string => {
+  const filterId = coordinateKeyToFilterId[coordinateKey]
+  if (!filterId) return coordinateKey
+  
+  const filterConfig = filterConfigMap(filterContext)
+  const filterCfg = filterConfig.get(filterId)
+  
+  if (!filterCfg?.shortName) return coordinateKey
+  
+  return t(`filterShortName:${filterCfg.shortName}`)
+}
+
 
 export const getFilterVariant = (filterContext, filterId) => {
   const question = filterContext.filters.find((q: any) => q.id === filterId)
