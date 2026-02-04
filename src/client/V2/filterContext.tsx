@@ -239,8 +239,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [uiVariant, setUiVariant] = useState([
-    {name: 'recommendation-reasons-style', value: 'question-icon'}]
-  ) 
+    {name: 'recommendation-reasons-style', value: 'question-icon'},
+    {name: 'recommendation-reasons-incorrect-hidden', value: 'false'}
+  ]) 
 
   const { data: user, isLoading: userLoading } = useApi(
     'user',

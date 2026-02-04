@@ -1,4 +1,4 @@
-import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from '@mui/material'
+import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuItem, Tabs, Tab, FormControlLabel, Switch } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../../common/types'
 import { useState } from 'react'
@@ -29,6 +29,8 @@ const Settings = ({onClose}: {onClose: () => void}) => {
   const {uiVariant, setUiVariant} = useFilterContext()
 
   const periodYearVariant = uiVariant.find((v) => v.name == 'recommendation-reasons-style')?.value
+  const incorrectHidden = uiVariant.find((v) => v.name == 'recommendation-reasons-incorrect-hidden')?.value === 'true'
+  
   const setUI = (name, value) => {
     const newState = uiVariant.map((u) => u.name === name ? {...u, value: value } : u)
     setUiVariant(newState)
@@ -54,11 +56,22 @@ const Settings = ({onClose}: {onClose: () => void}) => {
         </Select>
       </FormControl>
 
-      <Button onClick={onClose} variant="contained" color="primary" sx={{ mr: 1 }}>Valmis</Button>
+      <Typography variant="h6" component="h2" sx={{ mb: 2, mt: 3 }}>Väärien suodattimien näyttäminen</Typography>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={incorrectHidden}
+            onChange={(e) => setUI('recommendation-reasons-incorrect-hidden', e.target.checked ? 'true' : 'false')}
+          />
+        }
+        label="Piilota väärät suodattimet (näytä vain vihreät)"
+      />
 
-    </>
+      <Box sx={{ mt: 3 }}>
+        <Button onClick={onClose} variant="contained" color="primary" sx={{ mr: 1 }}>Valmis</Button>
+      </Box>
 
-  )
+    </>  )
 }
 
 

@@ -2,10 +2,11 @@ import { Box, Typography, Stack } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { useTranslation } from 'react-i18next'
-import { CourseCoordinates, UserCoordinates } from '../../../common/types'
+import { UserCoordinates } from '../../../common/types'
+import { useFilterContext } from '../filterContext'
 
 interface RecommendationReasonsPopoverContentProps {
-  courseCoordinates: CourseCoordinates
+  courseCoordinates: UserCoordinates
   userCoordinates: UserCoordinates
 }
 
@@ -14,6 +15,9 @@ const RecommendationReasonsPopoverContent = ({
   userCoordinates,
 }: RecommendationReasonsPopoverContentProps) => {
   const { t } = useTranslation()
+  const { uiVariant } = useFilterContext()
+  
+  const hideIncorrect = uiVariant.find(u => u.name === 'recommendation-reasons-incorrect-hidden')?.value === 'true'
 
   const coordinateToFilterMap: { [key: string]: string } = {
     date: 'filter:period',
@@ -31,7 +35,7 @@ const RecommendationReasonsPopoverContent = ({
     finmu: 'filter:finmu',
   }
 
-  const getMatchStatus = (key: keyof CourseCoordinates) => {
+  const getMatchStatus = (key: keyof UserCoordinates) => {
     const userValue = userCoordinates[key]
     const courseValue = courseCoordinates[key]
 
@@ -60,7 +64,7 @@ const RecommendationReasonsPopoverContent = ({
 
       <Stack spacing={1}>
         {Object.keys(coordinateToFilterMap).map((key) => {
-          const matchStatus = getMatchStatus(key as keyof CourseCoordinates)
+          const matchStatus = getMatchStatus(key as keyof UserCoordinates)
           if (matchStatus === null) {
             return null
           }
@@ -68,7 +72,7 @@ const RecommendationReasonsPopoverContent = ({
           const filterName = t(coordinateToFilterMap[key])
           const isMatch = matchStatus
 
-          if (!isMatch) {
+          if (!isMatch && hideIncorrect) {
             return null
           }
 

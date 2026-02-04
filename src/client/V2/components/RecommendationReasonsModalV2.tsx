@@ -3,12 +3,13 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
-import { CourseCoordinates, UserCoordinates } from '../../../common/types'
+import { UserCoordinates } from '../../../common/types'
+import { useFilterContext } from '../filterContext'
 
 interface RecommendationReasonsModalV2Props {
   open: boolean
   onClose: () => void
-  courseCoordinates: CourseCoordinates
+  courseCoordinates: UserCoordinates
   userCoordinates: UserCoordinates
 }
 
@@ -19,6 +20,9 @@ const RecommendationReasonsModalV2 = ({
   userCoordinates,
 }: RecommendationReasonsModalV2Props) => {
   const { t } = useTranslation()
+  const { uiVariant } = useFilterContext()
+  
+  const hideIncorrect = uiVariant.find(u => u.name === 'recommendation-reasons-incorrect-hidden')?.value === 'true'
 
   const coordinateToFilterMap: { [key: string]: string } = {
     date: 'filter:period',
@@ -36,7 +40,7 @@ const RecommendationReasonsModalV2 = ({
     finmu: 'filter:finmu',
   }
 
-  const getMatchStatus = (key: keyof CourseCoordinates) => {
+  const getMatchStatus = (key: keyof UserCoordinates) => {
     const userValue = userCoordinates[key]
     const courseValue = courseCoordinates[key]
 
@@ -85,7 +89,7 @@ const RecommendationReasonsModalV2 = ({
 
         <Stack spacing={1}>
           {Object.keys(coordinateToFilterMap).map((key) => {
-            const matchStatus = getMatchStatus(key as keyof CourseCoordinates)
+            const matchStatus = getMatchStatus(key as keyof UserCoordinates)
             if (matchStatus === null) {
               return null
             }
@@ -93,7 +97,7 @@ const RecommendationReasonsModalV2 = ({
             const filterName = t(coordinateToFilterMap[key])
             const isMatch = matchStatus
 
-            if (!isMatch) {
+            if (!isMatch && hideIncorrect) {
               return null
             }
 
