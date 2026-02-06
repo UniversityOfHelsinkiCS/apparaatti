@@ -162,10 +162,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       }
     }
 
-    //if course is not a generic course and is mandatory (RUKFARM, ENLAAK)
+    //if course is not a generic course and is mandatory (RUKFARM, ENLAAK) and is not a challenge course (ERI or kks-kor)
     //then they should get a little extra points. 
     const notGenericCourse = !c.course.courseCodes.find((c) => c.includes('KAIKKI'))
-    if(notGenericCourse && mandatory){
+    const notChallengeCourse = c.coordinates.challenge === 0 ? true : false
+    if(notGenericCourse && mandatory && notChallengeCourse){
       bonusPoints += 1
     }
 
