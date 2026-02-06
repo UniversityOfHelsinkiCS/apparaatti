@@ -38,7 +38,7 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 
     const comp = getComparison(comparisons, key)
     const match = comp.f(c, userCoordinates, key) 
-    const addedPoints = comp?.rewardPoints != undefined ? comp.rewardPoints : 1
+    const addedPoints = comp?.rewardPoints != undefined ? comp.rewardPoints : 2 //here we give more points than in exceptions in order to make the users picks weigh more 
 
     if(match){
       points += addedPoints
@@ -75,7 +75,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'spesificOrg',
-      filterOnFail: false, //always true
+      filterOnFail: false, //always false
       rewardPoints: 10, 
     },
     {
@@ -140,8 +140,37 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   ]
  
   const recommendationWithPoints = noExams.map((c) => {
-    const points = calculatePointsForCourse(c, userCoordinates, comparisons) 
-    return {...c, points}
+    const points = calculatePointsForCourse(c, userCoordinates, comparisons)
+
+
+    //this code is bad and wont scale for more exceptions...
+    /*
+
+    the goal of these bonus points is to show courses that are spesifically for the user even when the sisu custom tags are missing by rewarding certain types of courses.
+
+
+    */
+
+    let bonusPoints = 0
+
+    const mandatory = c.coordinates.mentoring === 0 ? true : false//it is believed that if course is not a mentoring course it is a mandatory course.  
+    const calculateBonusForMandatory = userCoordinates?.mentoring === undefined | null 
+    if (calculateBonusForMandatory){
+      //lets add some extra points when the course is mandatory course
+      if(mandatory){
+        bonusPoints += 1
+      }
+    }
+
+    //if course is not a generic course and is mandatory (RUKFARM, ENLAAK)
+    //then they should get a little extra points. 
+    const notGenericCourse = !c.course.courseCodes.find((c) => c.includes('KAIKKI'))
+    if(notGenericCourse && mandatory){
+      bonusPoints += 1
+    }
+
+  
+    return {...c, points: points + bonusPoints}
   })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)

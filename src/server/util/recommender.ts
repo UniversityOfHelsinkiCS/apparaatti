@@ -113,6 +113,7 @@ function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string
       } 
     }
   }
+
   return false
 }
 

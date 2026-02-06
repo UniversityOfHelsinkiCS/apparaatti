@@ -6,7 +6,7 @@
 echo "Triggering updater manually..."
 
 # Trigger the updater via the API endpoint
-curl -X POST http://localhost:3000/api/updater/run \
+curl -X POST http://localhost:8001/api/updater/run \
   -H "Content-Type: application/json"
 
 echo ""
