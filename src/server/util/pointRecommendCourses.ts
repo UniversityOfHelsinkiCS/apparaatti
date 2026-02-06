@@ -16,10 +16,12 @@ function getComparison(comparisons, field){
   //otherwise we use the field from default comp since it is missing from the override
   const filterOnFailValue = comp?.filterOnFail ? comp.filterOnFail : defaultComparison.filterOnFail
   const functionHandle = comp?.f ? comp.f : defaultComparison.f
+  const rewardPoints = comp?.rewardPoints
   const mergedComparison = {
     field: field,
     filterOnFail: filterOnFailValue, 
-    f: functionHandle
+    f: functionHandle,
+    rewardPoints
   }
 
   return mergedComparison
@@ -36,9 +38,10 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 
     const comp = getComparison(comparisons, key)
     const match = comp.f(c, userCoordinates, key) 
+    const addedPoints = comp?.rewardPoints != undefined ? comp.rewardPoints : 1
 
     if(match){
-      points++
+      points += addedPoints
     }
     else{
       if(comp.filterOnFail === true){
@@ -69,6 +72,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'org',
       filterOnFail: true, //always true
+    },
+    {
+      field: 'spesificOrg',
+      filterOnFail: false, //always true
+      rewardPoints: 10, 
     },
     {
       field: 'mooc',
@@ -122,12 +130,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
         if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.includes('neutral')) return true
 
         const coursePeriods = dateObjToPeriod(new Date(c.course.startDate))
-        
-        console.log('course period is ')
-        console.log(coursePeriods)
-
-        console.log('users period is')
-        console.log(userCoordinates.studyPeriod)
         const match = coursePeriods.some(coursePeriod => 
           userCoordinates.studyPeriod.includes(coursePeriod.name)
         )

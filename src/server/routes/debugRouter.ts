@@ -18,6 +18,7 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   }
 
   const realisations = await Cur.findAll({})
+  const realisationsWithCodeUrn = realisations.filter(c => urnInCustomCodeUrns(c.customCodeUrns, 'far'))
   const realisationCodeUrns = realisations.map((r: any) => r.customCodeUrns)
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
     .flatMap((u: any) => Object.values(u))
@@ -27,7 +28,7 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   const realisationTypeUrns = realisations.map((r: any) => r.courseUnitRealisationTypeUrn)
   const uniqueTypeUrns = uniqueVals(realisationTypeUrns)
 
-  res.json({uniqueCodeUrns, uniqueTypeUrns})
+  res.json({uniqueCodeUrns, uniqueTypeUrns, realisationsWithCodeUrn})
 })
 
 debugRouter.get('/cur', async (req: any, res: any) => {

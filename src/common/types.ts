@@ -53,6 +53,7 @@ export type CourseRecommendation = {
 export type UserCoordinates = {
   date: number;
   org: number;
+  spesificOrg: number;
   lang: number;
   graduation?: number | null;
   mentoring?: number | null;

@@ -59,6 +59,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
     date: getDateFromUserInput(answerData),
     org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
+    spesificOrg: 0, //there are generic courses for everybody, and then there are spesific courses for the organisation of the user. When a course is not generic course and is for the user then this coordinate is the same
     lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
     graduation: commonCoordinateFromAnswerData(readAnswer(answerData, 'graduation'), Math.pow(10, 12), 0, null),
     mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
@@ -76,17 +77,13 @@ function calculateUserCoordinates(answerData: AnswerData) {
   return userCoordinates
 }
 
+//generic courses have many cases where they are considered to be for the users organisation
 async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
-  const codes = [organisationCode]
-  for(const code of codes){
-    const urnHit = organisationCodeToUrn[code]
-    if(urnHit){
-      const hasCustomCodeUrn =  courseHasCustomCodeUrn(course, urnHit)
-      if(hasCustomCodeUrn){
-        return true
-      } 
-    }
+  const isSpesificForUserOrg = courseIsSpesificForUserOrg(course, organisationCode)
+  if(isSpesificForUserOrg){
+    return isSpesificForUserOrg
   }
+
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
   const orgCodes = organisations.map(o => o.code)
   if( organisationCode in orgCodes){
@@ -103,6 +100,19 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
 } 
 
 
+function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string){
+  const codes = [organisationCode]
+  for(const code of codes){
+    const urnHit = organisationCodeToUrn[code]
+    if(urnHit){
+      const hasCustomCodeUrn = courseHasCustomCodeUrn(course, urnHit)
+      if(hasCustomCodeUrn){
+        return true
+      } 
+    }
+  }
+  return false
+}
 
 function readArrOrSingleValue(val: string | string[]){
   const value = val ? val : []
@@ -139,6 +149,9 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const dimensions = Object.keys(userCoordinates)
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
+
+  const courseIsSpesific = courseIsSpesificForUserOrg(course, organisationCode)
+
   const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
  
   const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val') 
@@ -156,6 +169,7 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   const courseCoordinates = {
     date: course.startDate.getTime(),  
     org: sameOrganisationAsUser === true ? 0 : 1, // there is a offset value for this field to make sure that different organisation leads to a really high distance
+    spesificOrg: courseIsSpesific === true ? 0 : 1,
     lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
     graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
     mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
