@@ -9,7 +9,7 @@ const setupCron = async () => {
     // await run(true)
   } else if (UPDATER_CRON_ENABLED) {
     // await run(true)
-    cron.schedule('0 3 * * 0', run(true)) // Run updater once a week on Sunday at 3:00 AM
+    cron.schedule('0 3 * * 0', () => run(true)) // Run updater once a week on Sunday at 3:00 AM
   }
 }
 

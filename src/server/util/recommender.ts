@@ -107,6 +107,8 @@ function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string
     if(urnHit){
       const hasCustomCodeUrn = courseHasCustomCodeUrn(course, urnHit)
       if(hasCustomCodeUrn){
+        console.log('is spesific course!')
+        console.log(course)
         return true
       } 
     }

@@ -19,11 +19,13 @@ import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
 
-redis
-  .on('ready', () => {
-  })
-  .connect()
-  .catch(console.error)
+redis.on('ready', () => {
+  console.log('Redis connected')
+})
+
+redis.on('error', (err) => {
+  console.error('Redis connection error:', err)
+})
 
 const app = express()
 app.use(
