@@ -10,10 +10,8 @@ export const generateSettings = (method: string, jsonBody?: any) => {
     settings.headers = {
       'Content-Type': 'application/json',
     }
-    console.log('trying to stringify', jsonBody)
     const plain = {...jsonBody}
     settings.body = JSON.stringify(plain)
-    console.log(settings.body)
   }
 
   const loginAsUser= localStorage.getItem('loginAsUser')

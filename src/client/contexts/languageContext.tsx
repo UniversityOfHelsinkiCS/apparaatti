@@ -28,7 +28,6 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
   const supportedLangs: string[] = ['fi', 'sv', 'en']
   useEffect(() => {
     const localLang = readStorage('lang')
-    console.log(localLang)
     if(localLang){
       i18n.changeLanguage(localLang)
     }
@@ -39,13 +38,8 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
   //Sets language to the wanted value if it is supported and there is no language set yet
   const setDefaultLanguage = (lang: string) => {
     const localLang = readStorage('lang')
-    console.log('local lang', localLang)
     if(!localLang){
-      console.log('language is not set once, setting it..')
       setAppLanguage(lang)
-    }
-    else{
-      console.log('language is already set once')
     }
   }  
 
@@ -54,9 +48,6 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
     if(supportedLangs.includes(lang)){
       localStorage.setItem('lang', lang)
       i18n.changeLanguage(lang)
-    }
-    else{ 
-      console.log('language not supported', lang)
     }
   }
 

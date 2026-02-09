@@ -8,9 +8,7 @@ const useApiMutation = (mutationFn, endpoint) => {
   const mutation = useMutation({
     mutationFn: async (data) => {
      
-      console.log('data is ', data)
       const settings = generateSettings('POST', data)
-      console.log('settings', settings)
       const res = await fetch(endpoint, settings)
       await mutationFn(res)
     },

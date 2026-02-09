@@ -85,9 +85,6 @@ const CurrentFilterDisplay = () => {
   const filtersConfig = filterConfigMap(filterContext)
   const filtersThatAreActive = Array.from(filtersConfig.keys()).filter((key) => {return filtersConfig.get(key)?.state != ''}) 
    
-  console.log('active filters')
-  console.log(filtersThatAreActive)
-
   const handleClearAllFilters = () => {
     Array.from(filtersConfig.keys()).forEach((filterId) => {
       const cfg = filtersConfig.get(filterId)

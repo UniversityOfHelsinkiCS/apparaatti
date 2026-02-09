@@ -321,26 +321,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       return filterOptionId
     }
 
-    console.log("variant to display is:")
-    console.log(variantToDisplayId)
     const variant = pickVariant(filter, variantToDisplayId)  
     if(!variant || !variant.options){
-      console.log("no variant")
-      console.log(questionId)
-      console.log(variant)
       return filterOptionId
     }
     const option = variant?.options.find(o => o.id === filterOptionId)
     if(option?.valueOverride != undefined){
-      console.log('returning overriden value')
-      console.log(variant)
-      console.log(option)
       return option.valueOverride
     }
     else{
-      console.log('returning default value')
-      console.log(variant)
-      console.log(option)
       return filterOptionId
     }
     
@@ -376,8 +365,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         return true
       })
     )
-
-    console.log('answerData', answerData)
 
     const payload = {
       answerData,

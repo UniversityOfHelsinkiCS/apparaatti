@@ -38,7 +38,6 @@ const LoginAs = () => {
   }
 
   useEffect(() => {
-    console.log('refetch called')
     refetch()
 
   }, [userSearch])
