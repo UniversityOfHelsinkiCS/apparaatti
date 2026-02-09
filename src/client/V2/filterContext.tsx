@@ -23,7 +23,6 @@ interface FilterContextType {
   setPrimaryLanguageSpecification: (s: string) => void
 
   variantToDisplayId: string
-  setVariantToDisplayId: (s: string) => void
 
   filters: Question[]
   user: User | null
@@ -231,13 +230,14 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     useState('')
   const [language, setLanguage] = useState('')
   const [studyField, setStudyField] = useState('')
-  const [variantToDisplayId, setVariantToDisplayId] = useState('default')
   const [userOrgCode, setUserOrgCode] = useState('')
   const [courseRecommendations, setCourseRecommendations] =
     useState<CourseRecommendations | null>(null)
   const [finalRecommendedCourses, setFinalRecommendedCourses] =
     useState<CourseRecommendations | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+
+  const variantToDisplayId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
   const checkWelcomeQuestionsAnswered = () => {
     const shouldShowSpecification = language === primaryLanguage
@@ -323,18 +323,23 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       return filterOptionId
     }
 
+    console.log("variant to display is:")
+    console.log(variantToDisplayId)
     const variant = filter?.variants.find(v => v.name === variantToDisplayId)
     if(!variant || !variant.options){
       return filterOptionId
     }
     const option = variant?.options.find(o => o.id === filterOptionId)
-    if(option?.valueOverride){
+    if(option?.valueOverride != undefined){
       console.log('returning overriden value')
       console.log(variant)
       console.log(option)
       return option.valueOverride
     }
     else{
+      console.log('returning default value')
+      console.log(variant)
+      console.log(option)
       return filterOptionId
     }
     
@@ -347,16 +352,16 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'primary-language-specification': getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification'),
       'previusly-done-lang': getTrueFilterValue(previouslyDoneLang, 'previusly-done-lang'),
       'replacement': getTrueFilterValue(replacement, 'replacement'),
-      mentoring: getTrueFilterValue(mentoring, 'mentoring'),
-      finmu: getTrueFilterValue(finmu, 'finmu'),
-      challenge: getTrueFilterValue(challenge, 'challenge'),
-      graduation: getTrueFilterValue(graduation, 'graduation'),
+      'mentoring': getTrueFilterValue(mentoring, 'mentoring'),
+      'finmu': getTrueFilterValue(finmu, 'finmu'),
+      'challenge': getTrueFilterValue(challenge, 'challenge'),
+      'graduation': getTrueFilterValue(graduation, 'graduation'),
       'study-place': studyPlace,
       'study-period': studyPeriod.length > 0 ? studyPeriod : ['neutral'],
       'study-year': getTrueFilterValue(studyYear, 'study-year'),
-      integrated: getTrueFilterValue(integrated, 'integrated'),
-      independent: getTrueFilterValue(independent, 'independent'),
-      mooc: getTrueFilterValue(mooc, 'mooc'),
+      'integrated': getTrueFilterValue(integrated, 'integrated'),
+      'independent': getTrueFilterValue(independent, 'independent'),
+      'mooc': getTrueFilterValue(mooc, 'mooc'),
     }
 
     const answerData = Object.fromEntries(
@@ -409,6 +414,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         uiVariant,
         setUiVariant,
         
+        variantToDisplayId,
         language,
         setLanguage,
 
@@ -417,9 +423,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
         primaryLanguageSpecification,
         setPrimaryLanguageSpecification,
-
-        variantToDisplayId,
-        setVariantToDisplayId,
 
         filters,
         user,

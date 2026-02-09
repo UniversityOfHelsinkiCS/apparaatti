@@ -447,7 +447,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: integratedQuestion,
-          skipped: true,
+          skipped: false,
           options: generateGeneralYesNoOptions(false),
         },
         {

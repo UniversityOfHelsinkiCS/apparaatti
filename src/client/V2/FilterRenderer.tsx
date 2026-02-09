@@ -27,10 +27,14 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
 
   const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
   const variant = pickVariant(filter, variantId)
+  console.log("filter info:")
+  console.log(filter)
+  console.log(variant)
   if(!variant || variant.skipped || filterToRender.skipInSideBar){
     return null
   }
 
+  console.log("not skipped")
   return (
     <FilterAccordion
       key={filter.id}
