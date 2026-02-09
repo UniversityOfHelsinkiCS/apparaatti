@@ -220,8 +220,6 @@ export const getFilterVariant = (filterContext, filterId) => {
   }
 }
 
-
-
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 
 export const FilterContextProvider = ({ children }: { children: ReactNode }) => {
@@ -325,8 +323,11 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
     console.log("variant to display is:")
     console.log(variantToDisplayId)
-    const variant = filter?.variants.find(v => v.name === variantToDisplayId)
+    const variant = pickVariant(filter, variantToDisplayId)  
     if(!variant || !variant.options){
+      console.log("no variant")
+      console.log(questionId)
+      console.log(variant)
       return filterOptionId
     }
     const option = variant?.options.find(o => o.id === filterOptionId)
