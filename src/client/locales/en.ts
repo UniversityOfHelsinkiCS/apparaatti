@@ -85,7 +85,12 @@ export default {
     },
     'retakeQuestions': 'Answer starting questions',
     'done': 'Done',
-    'welcomeText': 'First, answer a few initial questions. You can modify these later.'
+    'welcomeText': 'First, answer a few initial questions. You can modify these later.',
+    'noRecommendations': {
+      'title': 'No courses found',
+      'description': 'Try changing your selections to see courses.',
+      'resetButton': 'Reset'
+    }
   },
   'course': {
     'show': 'Show',

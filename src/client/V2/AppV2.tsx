@@ -16,6 +16,7 @@ import CurrentFilterDisplay from './currentFilterDisplay'
 import TextFeedbackV2 from './components/TextFeedbackV2'
 import { CourseRecommendation } from '../../common/types'
 import AdminModal from './components/AdminModal'
+import LanguageSelector from './components/LanguageSelector'
 
 const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
 const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
@@ -82,8 +83,9 @@ const OneThirdDrawerLayout = () => {
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
             Course Finder
           </Typography>
+          <LanguageSelector />
           {user?.isAdmin && (
-            <Button color="inherit" onClick={() => setAdminModalOpen(true)}>
+            <Button color="inherit" onClick={() => setAdminModalOpen(true)} sx={{ ml: 2 }}>
               ADMIN
             </Button>
           )}

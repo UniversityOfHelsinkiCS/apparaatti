@@ -85,7 +85,12 @@ export default {
     },
     'retakeQuestions': 'Vastaa alkukysymyksiin',
     'done': 'Valmis',
-    'welcomeText': 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.'
+    'welcomeText': 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',
+    'noRecommendations': {
+      'title': 'Kursseja ei löytynyt',
+      'description': 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
+      'resetButton': 'Nollaa'
+    }
   },
   'course': {
     'show': 'Näytä',

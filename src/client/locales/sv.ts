@@ -85,7 +85,12 @@ export default {
     },
     'retakeQuestions': 'Svara på startfrågorna',
     'done': 'Klar',
-    'welcomeText': 'Svara först på några inledande frågor. Du kan ändra dessa senare.'
+    'welcomeText': 'Svara först på några inledande frågor. Du kan ändra dessa senare.',
+    'noRecommendations': {
+      'title': 'Inga kurser hittades',
+      'description': 'Försök ändra dina val för att se kurser.',
+      'resetButton': 'Återställ'
+    }
   },
   'course': {
     'show': 'Visa',
