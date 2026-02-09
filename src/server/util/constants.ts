@@ -20,13 +20,31 @@ export const organisationCodeToUrn: Record<string, string> = {
  
 }
 
-
 export const allowedStudyPlaces: string[] = [
   'teaching-participation-remote',
   'teaching-participation-online',
   'teaching-participation-blended',
   'teaching-participation-contact',
-] 
+]
+
+
+
+
+//constants used in the recommender
+export const correctValue = 1
+export const incorrectValue = 0
+export const notAnsweredValue = null
+
+//these are used in point based recommending make sure that pointsForCorrectFilter is > bonuspoint in order for the user filters to work
+export const pointForCorrectFilter = 2
+export const bonusPoint = 1
+export const strictFailurePoint = -1 // if a filter is strict then the points for the course are set to -1 and later filtered out 
+
+//used in cases where we want to make a filter extra effective
+export const extraRewardPoints = 5
+
+
+
 
 
 

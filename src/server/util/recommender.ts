@@ -5,7 +5,7 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHa
 import { dateObjToPeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { allowedStudyPlaces, organisationCodeToUrn } from './constants.ts'
+import { allowedStudyPlaces, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
 
 async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
@@ -47,10 +47,10 @@ function getDateFromUserInput(answerData: AnswerData){
 function readStudyPlaceCoordinate (answerData: AnswerData){
   const value = readAnswer(answerData, 'study-place')
   if(value === 'neutral'){
-    return null
+    return notAnsweredValue
   }
   else{
-    return 0
+    return correctValue
   }
 }
 
@@ -58,19 +58,19 @@ function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
     //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
     date: getDateFromUserInput(answerData),
-    org: 0, // courses that have the same organisation will get the coordinate of 0 as well and the ones that are not get a big number, thus leading to better ordering of courses 
-    spesificOrg: 0, //there are generic courses for everybody, and then there are spesific courses for the organisation of the user. When a course is not generic course and is for the user then this coordinate is the same
-    lang: 0, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
-    graduation: commonCoordinateFromAnswerData(readAnswer(answerData, 'graduation'), Math.pow(10, 12), 0, null),
-    mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), Math.pow(10, 12), 0, null),
-    finmu: commonCoordinateFromAnswerData(readAnswer(answerData, 'finmu'), Math.pow(10,12), 0, null),
-    integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), Math.pow(10, 12), 0, null),
-    studyPlace:  readStudyPlaceCoordinate(answerData), // courses that have the correct studyPlace based on the answerData will get coord of 0.
-    replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), Math.pow(10, 24), 0, null),
-    challenge: commonCoordinateFromAnswerData(readAnswer(answerData, 'challenge'), Math.pow(10, 24), 0, null),
-    independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), Math.pow(10, 24), 0, null),
-    flexible: commonCoordinateFromAnswerData(readAnswer(answerData, 'flexible'), Math.pow(10, 24), 0, null),
-    mooc: commonCoordinateFromAnswerData(readAnswer(answerData, 'mooc'), Math.pow(10, 24), 0, null),
+    org: correctValue, // courses that have the same organisation will get the coordinate of 1 as well and the ones that are not get a big number, thus leading to better ordering of courses 
+    spesificOrg: correctValue, //there are generic courses for everybody, and then there are spesific courses for the organisation of the user. When a course is not generic course and is for the user then this coordinate is the same
+    lang: correctValue, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
+    graduation: commonCoordinateFromAnswerData(readAnswer(answerData, 'graduation'), correctValue, incorrectValue, notAnsweredValue),
+    mentoring: commonCoordinateFromAnswerData(readAnswer(answerData, 'mentoring'), correctValue, incorrectValue, notAnsweredValue),
+    finmu: commonCoordinateFromAnswerData(readAnswer(answerData, 'finmu'), correctValue, incorrectValue, notAnsweredValue),
+    integrated: commonCoordinateFromAnswerData(readAnswer(answerData, 'integrated'), correctValue, incorrectValue, notAnsweredValue),
+    studyPlace:  readStudyPlaceCoordinate(answerData), // courses that have the correct studyPlace based on the answerData will get coord of 1.
+    replacement: commonCoordinateFromAnswerData(readAnswer(answerData, 'replacement'), correctValue, incorrectValue, notAnsweredValue),
+    challenge: commonCoordinateFromAnswerData(readAnswer(answerData, 'challenge'), correctValue, incorrectValue, notAnsweredValue),
+    independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), correctValue, incorrectValue, notAnsweredValue),
+    flexible: commonCoordinateFromAnswerData(readAnswer(answerData, 'flexible'), correctValue, incorrectValue, notAnsweredValue),
+    mooc: commonCoordinateFromAnswerData(readAnswer(answerData, 'mooc'), correctValue, incorrectValue, notAnsweredValue),
     studyYear: readAnswer(answerData, 'study-year'),
     studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
   }
@@ -134,9 +134,9 @@ function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
 
 
   if(courseHasAnyRealisationCodeUrn(course, lookups)){
-    return 0 
+    return correctValue 
   }
-  return 100
+  return incorrectValue
 }
 
 function isIndependentCourse(course: CourseData){
@@ -171,19 +171,19 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
   
   const courseCoordinates = {
     date: course.startDate.getTime(),  
-    org: sameOrganisationAsUser === true ? 0 : 1, // there is a offset value for this field to make sure that different organisation leads to a really high distance
-    spesificOrg: courseIsSpesific === true ? 0 : 1,
-    lang: correctLang === true ? 0 : Math.pow(10, 24), // if the course is different language than the users pick we want to have it very far away. 
-    graduation: hasGraduationCodeUrn ? Math.pow(10, 12) : 0,
-    mentoring: isMentoringCourse ? Math.pow(10, 12) : 0,
-    finmu: isFinmuMentoringCourse ? Math.pow(10, 12) : 0, 
-    integrated: hasIntegratedCodeUrn ? Math.pow(10, 12) : 0,
+    org: sameOrganisationAsUser === true ? correctValue : incorrectValue, // there is a offset value for this field to make sure that different organisation leads to a really high distance
+    spesificOrg: courseIsSpesific === true ? correctValue : incorrectValue,
+    lang: correctLang === true ? correctValue : incorrectValue, // if the course is different language than the users pick we want to have it very far away. 
+    graduation: hasGraduationCodeUrn ? correctValue : incorrectValue,
+    mentoring: isMentoringCourse ? correctValue : incorrectValue,
+    finmu: isFinmuMentoringCourse ? correctValue : incorrectValue, 
+    integrated: hasIntegratedCodeUrn ? correctValue : incorrectValue,
     studyPlace: courseStudyPlaceCoordinate(course, answerData),
-    replacement:  hasReplacementCodeUrn ? Math.pow(10, 24) : 0,
-    challenge: isChallengeCourse ? Math.pow(10, 24) : 0,
-    independent: isIndependent ? Math.pow(10, 24) : 0,
-    flexible: hasFlexibleCodeUrn ? Math.pow(10, 24) : 0,
-    mooc: hasMoocCodeUrn ? Math.pow(10, 24) : 0
+    replacement:  hasReplacementCodeUrn ? correctValue : incorrectValue,
+    challenge: isChallengeCourse ? correctValue : incorrectValue,
+    independent: isIndependent ? correctValue : incorrectValue,
+    flexible: hasFlexibleCodeUrn ? correctValue : incorrectValue,
+    mooc: hasMoocCodeUrn ? correctValue : incorrectValue
   }
 
   //removing fields that the user does not care about

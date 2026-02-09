@@ -1,4 +1,5 @@
 import type { CourseRecommendation, UserCoordinates } from '../../common/types.ts'
+import { bonusPoint, extraRewardPoints, pointForCorrectFilter, strictFailurePoint } from './constants.ts'
 import { getStudyYear, dateObjToPeriod } from './studyPeriods.ts'
 
 
@@ -38,14 +39,14 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 
     const comp = getComparison(comparisons, key)
     const match = comp.f(c, userCoordinates, key) 
-    const addedPoints = comp?.rewardPoints != undefined ? comp.rewardPoints : 2 //here we give more points than in exceptions in order to make the users picks weigh more 
+    const addedPoints = comp?.rewardPoints != undefined ? comp.rewardPoints : pointForCorrectFilter //here we give more points than in exceptions in order to make the users picks weigh more 
 
     if(match){
       points += addedPoints
     }
     else{
       if(comp.filterOnFail === true){
-        return -1
+        return strictFailurePoint
       }
     }
   }
@@ -92,7 +93,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'replacement',
       filterOnFail: strictFields.includes('replacement'),
-      rewardPoints: 5 //due to the exceptions this filter needs some extra boost to get pushed up 
+      rewardPoints: extraRewardPoints //due to the exceptions this filter needs some extra boost to get pushed up 
     },
     {
       field: 'graduation',
@@ -158,7 +159,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     if (calculateBonusForMandatory){
       //lets add some extra points when the course is mandatory course
       if(mandatory){
-        bonusPoints += 1
+        bonusPoints += bonusPoint
       }
     }
 
@@ -167,7 +168,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     const notGenericCourse = !c.course.courseCodes.find((c) => c.includes('KAIKKI'))
     const notChallengeCourse = c.coordinates.challenge === 0 ? true : false
     if(notGenericCourse && mandatory && notChallengeCourse){
-      bonusPoints += 1
+      bonusPoints += bonusPoint
     }
 
   
