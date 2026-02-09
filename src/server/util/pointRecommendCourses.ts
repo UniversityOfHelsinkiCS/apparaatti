@@ -172,7 +172,8 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     }
 
   
-    return {...c, points: points + bonusPoints}
+
+    return points >= 0 ? {...c, points: points + bonusPoints} : {...c, points}
   })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
