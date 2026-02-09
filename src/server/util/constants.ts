@@ -1,6 +1,7 @@
 
 
 export const organisationCodeToUrn: Record<string, string> = {
+  'H40' : 'kkt-hum',
   'H50': 'kkt-mat',
   'H20': 'kkt-oik',
   'H10': 'kkt-teo',

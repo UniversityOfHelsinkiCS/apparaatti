@@ -235,6 +235,7 @@ export function languageSpesificCodes(organisationData: OrganisationRecommendati
 
 
 export const organisationCodeToName: Record<string, string> = {
+  'H40' : 'Humanistinen',
   'H50': 'Matemaattis-luonnontieteellinen',
   'H20': 'Oikeustieteellinen',
   'H10': 'Teologinen',
