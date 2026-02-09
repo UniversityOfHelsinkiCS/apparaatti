@@ -46,6 +46,7 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const cfg = filterConfigMap(filterContext).get(filterId)
   const hide = cfg?.hideInCurrentFiltersDisplay != undefined ? cfg.hideInCurrentFiltersDisplay : false
   const variant = getFilterVariant(filterContext, filterId)
+  const question = filterContext.filters.find((q: any) => q.id === filterId)
 
   const handleClearFilter = () => {
     if (!cfg) return
@@ -65,7 +66,7 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
       <Typography variant="body1">
-        <strong>{cfg?.shortName}: </strong>
+        <strong>{question?.shortName || filterId}: </strong>
       </Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap">
         <FilterValueRenderer cfg={cfg} variant={variant}/>

@@ -20,6 +20,7 @@ export type Question = {
   mandatory?: boolean
   value?: string
   type: string
+  shortName?: string
   explanation?: string
   variants: Variant[]
   extraInfo?: string // Added extrainfo field

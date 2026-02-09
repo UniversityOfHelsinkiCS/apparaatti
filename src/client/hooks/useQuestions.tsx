@@ -133,6 +133,7 @@ const useQuestions = () => {
       mandatory: true,
       effects: 'org',
       id: 'study-field-select',
+      shortName: t('filterShortName:Opinto-oikeus'),
       type: 'studyphase',
       variants: [
         {
@@ -146,6 +147,7 @@ const useQuestions = () => {
       mandatory: true,
       effects: 'lang',
       id: 'primary-language',
+      shortName: t('filterShortName:Koulukieli'),
       type: 'primary-language',
       explanation: t('form:primaryLanguageExplanation'),
       variants: [
@@ -165,6 +167,7 @@ const useQuestions = () => {
       mandatory: true,
       effects: 'lang',
       id: 'lang',
+      shortName: t('filterShortName:Kurssi'),
       type: 'language',
       explanation: t('form:searchedLanguageExplanation'),
       variants: [
@@ -185,6 +188,7 @@ const useQuestions = () => {
       mandatory: true,
       effects: 'lang',
       id: 'primary-language-specification',
+      shortName: t('filterShortName:Viestintä'),
       isSubQuestionForQuestionId: 'lang',
       type: 'primary-language-specification',
 
@@ -205,6 +209,7 @@ const useQuestions = () => {
       effects: 'none',
       mandatory: false,
       id: 'previusly-done-lang',
+      shortName: t('filterShortName:Aikaisemmat opinnot'),
       type: 'previusly-done-lang',
       explanation: t('form:previoslyDoneLangExplanation'),
       extraInfo:  t('question:checkInstructionsCrediting'),
@@ -221,6 +226,7 @@ const useQuestions = () => {
       mandatory: false,
       effects: 'date',
       id: 'study-year',
+      shortName: t('filterShortName:Lukuvuosi'),
       type: 'period-date',
       variants: [
         {
@@ -239,6 +245,7 @@ const useQuestions = () => {
       mandatory: false,
       effects: 'date',
       id: 'study-period',
+      shortName: t('filterShortName:Periodi'),
       type: 'period-date',
       // explanation: 'Mistä periodista haluat kursseja?',
       variants: [
@@ -266,6 +273,7 @@ const useQuestions = () => {
       mandatory: false,
       effects: 'none',
       id: 'replacement',
+      shortName: t('filterShortName:Korvaava'),
       type: 'multi',
       variants: [
         {
@@ -305,6 +313,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'mentoring',
+      shortName: t('filterShortName:Valmentava'),
       effects: 'mentoring',
       type: 'multi',
 
@@ -336,6 +345,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'finmu',
+      shortName: t('filterShortName:Finmu'),
       effects: 'finmu',
       type: 'multi',
       variants: [
@@ -357,6 +367,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'challenge',
+      shortName: t('filterShortName:Edistynyt'),
       effects: 'challenge',
       type: 'multi',
       variants: [
@@ -404,6 +415,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'graduation',
+      shortName: t('filterShortName:Valmistuville'),
       type: 'multi',
 
       effects: 'graduation',
@@ -419,6 +431,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'study-place',
+      shortName: t('filterShortName:Opetusmuoto'),
       effects: 'studyPlace',
       type: 'study-place',
       variants: [
@@ -439,6 +452,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'integrated',
+      shortName: t('filterShortName:Integroitu'),
       effects: 'integrated',
       type: 'multi',
       variants: [
@@ -464,6 +478,7 @@ const useQuestions = () => {
       number: '',
       mandatory: false,
       id: 'independent',
+      shortName: t('filterShortName:Itsenäinen'),
       effects: 'independent',
       type: 'multi',
       variants: [

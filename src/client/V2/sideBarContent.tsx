@@ -4,29 +4,12 @@ import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './components/ActionButtonV2'
 import { Box } from '@mui/material'
 
-export const filterTitles: { [key: string]: string } = {
-  'study-field-select': 'Study Field',
-  'primary-language': 'Primary Language',
-  lang: 'Language of Study',
-  'primary-language-specification': 'Language Skills',
-  'previusly-done-lang': 'Previous Language Studies',
-  replacement: 'Replacement Courses',
-  mentoring: 'Mentoring',
-  finmu: 'Finmu',
-  challenge: 'Extra Challenge',
-  graduation: 'Close to Graduation',
-  'study-place': 'Study Method',
-  'study-period': 'Study Period',
-  integrated: 'Integrated Studies',
-  independent: 'Independent Study',
-}
-
 const SidebarContent = () => {
   const { filters, isLoading, setModalOpen } = useFilterContext()
   const { t } = useTranslation()
 
   if (isLoading) {
-    return <p>Loading filters...</p>
+    return <p>{t('v2:loadingFilters')}</p>
   }
 
   const filtersToShow = filters.filter(

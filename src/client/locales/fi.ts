@@ -90,7 +90,12 @@ export default {
       'title': 'Kursseja ei löytynyt',
       'description': 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
       'resetButton': 'Nollaa'
-    }
+    },
+    'appTitle': 'Kurssihakukone',
+    'adminButton': 'ADMIN',
+    'loginPrompt': 'Ole hyvä ja kirjaudu sisään:',
+    'loginLink': 'täältä',
+    'loadingFilters': 'Ladataan suodattimia...'
   },
   'course': {
     'show': 'Näytä',

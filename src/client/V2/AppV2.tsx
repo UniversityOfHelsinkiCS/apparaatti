@@ -17,6 +17,7 @@ import TextFeedbackV2 from './components/TextFeedbackV2'
 import { CourseRecommendation } from '../../common/types'
 import AdminModal from './components/AdminModal'
 import LanguageSelector from './components/LanguageSelector'
+import { useTranslation } from 'react-i18next'
 
 const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
 const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
@@ -26,7 +27,8 @@ const OneThirdDrawerLayout = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile) 
   const [adminModalOpen, setAdminModalOpen] = useState(false)
-  const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext() 
+  const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext()
+  const { t } = useTranslation()
   useEffect(() => {
     setOpen(!isMobile) 
   }, [isMobile])
@@ -40,7 +42,9 @@ const OneThirdDrawerLayout = () => {
     return (
       <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
         <Typography variant='h2' sx={{marginLeft: 'auto', marginRight: 'auto'}}>Apparaatti</Typography> 
-        <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>Please log in: <a href="/api/login">here</a></Typography>
+        <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
+          {t('v2:loginPrompt')} <a href="/api/login">{t('v2:loginLink')}</a>
+        </Typography>
         
       </Stack>
     )
@@ -81,12 +85,12 @@ const OneThirdDrawerLayout = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-            Course Finder
+            {t('v2:appTitle')}
           </Typography>
           <LanguageSelector />
           {user?.isAdmin && (
             <Button color="inherit" onClick={() => setAdminModalOpen(true)} sx={{ ml: 2 }}>
-              ADMIN
+              {t('v2:adminButton')}
             </Button>
           )}
         </Toolbar>

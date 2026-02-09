@@ -90,7 +90,12 @@ export default {
       'title': 'No courses found',
       'description': 'Try changing your selections to see courses.',
       'resetButton': 'Reset'
-    }
+    },
+    'appTitle': 'Course Finder',
+    'adminButton': 'ADMIN',
+    'loginPrompt': 'Please log in:',
+    'loginLink': 'here',
+    'loadingFilters': 'Loading filters...'
   },
   'course': {
     'show': 'Show',

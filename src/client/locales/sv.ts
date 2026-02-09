@@ -90,7 +90,12 @@ export default {
       'title': 'Inga kurser hittades',
       'description': 'Försök ändra dina val för att se kurser.',
       'resetButton': 'Återställ'
-    }
+    },
+    'appTitle': 'Kurssökare',
+    'adminButton': 'ADMIN',
+    'loginPrompt': 'Vänligen logga in:',
+    'loginLink': 'här',
+    'loadingFilters': 'Laddar filter...'
   },
   'course': {
     'show': 'Visa',

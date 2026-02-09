@@ -68,7 +68,6 @@ interface FilterContextType {
 
 export const filterConfigMap = (filters: any) => new Map([
   ['study-field-select', {
-    shortName: 'Opinto-oikeus',
     state: filters.studyField,
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
@@ -77,26 +76,22 @@ export const filterConfigMap = (filters: any) => new Map([
     hideInRecommendationReasons: true
   }],
   ['primary-language', {
-    shortName: 'Koulukieli',
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: true
   }],
   ['lang', {
-    shortName: 'Kurssi',
     state: filters.language,
     setState: filters.setLanguage,
     hideInRecommendationReasons: true
   }],
   ['primary-language-specification', {
-    shortName: 'Viestintä',
     state: filters.primaryLanguageSpecification,
     setState: filters.setPrimaryLanguageSpecification,
     hideInRecommendationReasons: true
   }],
   ['previusly-done-lang', {
-    shortName: 'Aikaisemmat opinnot',
     state: filters.previouslyDoneLang,
     setState: filters.setPreviouslyDoneLang,
     superToggle: false,
@@ -104,56 +99,47 @@ export const filterConfigMap = (filters: any) => new Map([
     hideInRecommendationReasons: true
   }],
   ['replacement', {
-    shortName: 'Korvaava',
     state: filters.replacement,
     setState: filters.setReplacement,
     superToggle: false
   }],
   ['mentoring', {
-    shortName: 'Valmentava',
     state: filters.mentoring,
     setState: filters.setMentoring,
     superToggle: false
   }],
   ['finmu', {
-    shortName: 'Finmu',
     state: filters.finmu,
     setState: filters.setFinmu,
     superToggle: false
   }],
   ['challenge', {
-    shortName: 'Edistynyt',
     state: filters.challenge,
     setState: filters.setChallenge,
     superToggle: false
   }],
   ['graduation', {
-    shortName: 'Valmistuville',
     state: filters.graduation,
     setState: filters.setGraduation,
     superToggle: false
   }],
   ['integrated', {
-    shortName: 'Integroitu',
     state: filters.integrated,
     setState: filters.setIntegrated,
     superToggle: false
   }],
   ['independent', {
-    shortName: 'Itsenäinen',
     state: filters.independent,
     setState: filters.setIndependent,
     superToggle: false
   }],
   ['study-place', {
-    shortName: 'Opetusmuoto',
     state: filters.studyPlace,
     setState: filters.setStudyPlace,
     displayType: 'multichoice',
     superToggle: true
   }],
   ['study-year', {
-    shortName: 'Lukuvuosi',
     state: filters.studyYear,
     setState: filters.setStudyYear,
     displayType: 'singlechoice',
@@ -162,14 +148,12 @@ export const filterConfigMap = (filters: any) => new Map([
     hideInFilterSideBar: true
   }],
   ['study-period', {
-    shortName: 'Periodi',
     state: filters.studyPeriod,
     setState: filters.setStudyPeriod,
     displayType: 'multichoice',
     superToggle: false
   }],
   ['mooc', {
-    shortName: 'MOOC',
     state: filters.mooc,
     setState: filters.setMooc,
     superToggle: true
@@ -198,12 +182,11 @@ export const getCoordinateDisplayName = (coordinateKey: string, filterContext: a
   const filterId = coordinateKeyToFilterId[coordinateKey]
   if (!filterId) return coordinateKey
   
-  const filterConfig = filterConfigMap(filterContext)
-  const filterCfg = filterConfig.get(filterId)
+  const question = filterContext.filters.find((q: any) => q.id === filterId)
   
-  if (!filterCfg?.shortName) return coordinateKey
+  if (!question?.shortName) return coordinateKey
   
-  return t(`filterShortName:${filterCfg.shortName}`)
+  return question.shortName
 }
 
 
