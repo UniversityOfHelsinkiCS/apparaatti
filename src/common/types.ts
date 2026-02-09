@@ -44,7 +44,7 @@ export type Dimension = (typeof DIMENSIONS)[number]
 
 export type CourseRecommendation = {
   course: CourseData
-  distance: number
+  distance: number //<--- to be depricated
   coordinates: CourseCoordinates
   points?: number
 } 
@@ -72,7 +72,7 @@ export type UserCoordinates = {
 export type UserCoordinates = CourseCoordinates;
 
 export type CourseRecommendations = {
-  recommendations: CourseRecommendation[]
+  recommendations: CourseRecommendation[] //<-- to be depricated!
   pointBasedRecommendations: CourseRecommendation[]
   userCoordinates: UserCoordinates  
   answerData?: AnswerData

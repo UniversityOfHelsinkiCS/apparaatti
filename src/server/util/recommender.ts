@@ -146,10 +146,10 @@ function isIndependentCourse(course: CourseData){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-async function calculateCourseDistance(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string, answerData: AnswerData
+async function calculateCourseCoordinates(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string, answerData: AnswerData
 ): Promise<CourseRecommendation> {
   
-  const dimensions = Object.keys(userCoordinates)
+  
   
   const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
 
@@ -186,33 +186,15 @@ async function calculateCourseDistance(course: CourseData, userCoordinates: User
     mooc: hasMoocCodeUrn ? correctValue : incorrectValue
   }
 
-  //removing fields that the user does not care about
-  for(const key in answerData){
-    if(key === null){
-      delete courseCoordinates[key]
-    }
-  }  
-  const offsetValue = sameOrganisationAsUser === true ? 0 : Math.pow(10, 12)
+  
 
-  const sum = dimensions.reduce((acc, key) => {
-    const userValue = userCoordinates[key]
-    
-    //If the user value is null it means that that dimension is to be ignored in the recommendation,
-    //because the user has not chosen to use that dimension as a recommendation paramenter.
-    if(!userValue){
-      return acc
-    }
-    const courseValue = courseCoordinates[key as keyof typeof dimensions]
-    return acc + Math.pow(userValue - courseValue, 2) 
-  }, 0.0)
-
-  const distance = Math.sqrt(sum) + offsetValue
-
-  return { course: course, distance: distance, coordinates: courseCoordinates }
+  //distance will get depricated soon
+  return { course: course, distance: 0, coordinates: courseCoordinates }
 }
 
-//returns a list of [{course, distance}]
-async function calculateUserDistances(
+//returns a list of courseRecommendation
+// the coordinates field can then be used in recommending the course (currently using point based)
+async function calculateAllCourseCoordinates(
   userCoordinates: UserCoordinates,
   availableCourses: CourseData[],
   courseCodes: courseCodes,
@@ -221,7 +203,7 @@ async function calculateUserDistances(
   answerData: AnswerData
 ): Promise<CourseRecommendation[]> {
   const distancePromises = availableCourses.map((course) => {
-    return calculateCourseDistance(course, userCoordinates, courseCodes, courseLanguageType, organisationCode, answerData)
+    return calculateCourseCoordinates(course, userCoordinates, courseCodes, courseLanguageType, organisationCode, answerData)
   })
   const distances = await Promise.all(distancePromises)
   return distances
@@ -375,17 +357,14 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
   const courseLanguageType = languageToStudy(lang, primaryLang)
-  const distances = await calculateUserDistances(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
+  const recommendations = await calculateAllCourseCoordinates(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
-  const sortedCourses = distances.sort((a, b) => a.distance - b.distance)
-  const recommendations = sortedCourses
-  console.log('recommendations len')
-  console.log(recommendations.length)
+ 
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,
-    recommendations: recommendations,
+    recommendations: [], //this will get depricated
     userCoordinates: userCoordinates,
   }
   
