@@ -76,7 +76,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'spesificOrg',
       filterOnFail: false, //always false
-      rewardPoints: 10, 
     },
     {
       field: 'mooc',
@@ -93,6 +92,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     {
       field: 'replacement',
       filterOnFail: strictFields.includes('replacement'),
+      rewardPoints: 5 //due to the exceptions this filter needs some extra boost to get pushed up 
     },
     {
       field: 'graduation',
