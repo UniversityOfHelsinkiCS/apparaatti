@@ -209,7 +209,7 @@ const useQuestions = () => {
       effects: 'none',
       mandatory: false,
       id: 'previusly-done-lang',
-      shortName: t('filterShortName:Aikaisemmat opinnot'),
+      shortName: t('filterShortName:Aikaisemmatopinnot'),
       type: 'previusly-done-lang',
       explanation: t('form:previoslyDoneLangExplanation'),
       extraInfo:  t('question:checkInstructionsCrediting'),
@@ -536,6 +536,22 @@ const useQuestions = () => {
     //     },
     //   ],
     // },  
+    {
+      number: '',
+      mandatory: false,
+      id: 'collaboration',
+      shortName: t('filterShortName:Yhteistyo'),
+      effects: 'collaboration',
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: t('form:collaborationQuestion'),
+          skipped: false,
+          options: generateGeneralYesNoOptions(true),
+        },
+      ],
+    },
   ]
   return(questions)
   

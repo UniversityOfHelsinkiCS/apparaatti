@@ -62,6 +62,8 @@ interface FilterContextType {
   setIndependent: (s: string) => void
   mooc: string
   setMooc: (s: string) => void
+  collaboration: string
+  setCollaboration: (s: string) => void
   strictFilters: string[]
   setStrictFilters: (s: string[]) => void
 }
@@ -158,6 +160,11 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setMooc,
     superToggle: true
   }],
+  ['collaboration', {
+    state: filters.collaboration,
+    setState: filters.setCollaboration,
+    superToggle: true
+  }],
 ])
 
 // Map coordinate keys to filter IDs for recommendation reasons
@@ -175,6 +182,7 @@ export const coordinateKeyToFilterId: { [key: string]: string } = {
   flexible: 'flexible',
   mooc: 'mooc',
   finmu: 'finmu',
+  collaboration: 'collaboration',
 }
 
 // Get translated short name for a coordinate key
@@ -251,6 +259,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
   const [mooc, setMooc] = useState('')
+  const [collaboration, setCollaboration] = useState('')
   const [strictFilters, setStrictFilters] = useState<string[]>([])
 
 
@@ -335,6 +344,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'integrated': getTrueFilterValue(integrated, 'integrated'),
       'independent': getTrueFilterValue(independent, 'independent'),
       'mooc': getTrueFilterValue(mooc, 'mooc'),
+      'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
     }
 
     const answerData = Object.fromEntries(
@@ -376,6 +386,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     integrated,
     independent,
     mooc,
+    collaboration,
     strictFilters,
   ])
 
@@ -433,6 +444,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setIndependent,
         mooc,
         setMooc,
+        collaboration,
+        setCollaboration,
         strictFilters,
         setStrictFilters,
       }}

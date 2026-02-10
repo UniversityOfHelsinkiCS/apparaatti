@@ -25,6 +25,7 @@ export default {
     'independentQuestion': 'Jag vill arbeta självständigt eller autonomt.',
     'flexibleQuestion': 'Jag vill ta en kurs med ett flexibelt schema.',
     'moocQuestion': 'Vill du söka efter MOOCs (Massive Open Online Courses)?',
+    'collaborationQuestion': 'Visa samarbetspartnerkurser',
     'finnish': 'finska',
     'swedish': 'svenska',
     'english': 'engelska',
@@ -126,7 +127,7 @@ export default {
     'Koulukieli': 'Skolspråk',
     'Kurssi': 'Kurs',
     'Viestintä': 'Kommunikation',
-    'Aikaisemmat opinnot': 'Tidigare studier',
+    'Aikaisemmatopinnot': 'Tidigare studier',
     'Korvaava': 'Ersättande',
     'Valmentava': 'Förberedande',
     'Finmu': 'Finmu',
@@ -138,5 +139,6 @@ export default {
     'Lukuvuosi': 'Läsår',
     'Periodi': 'Period',
     'MOOC': 'MOOC',
+    'Yhteistyo': 'Samarbete',
   }
 }
