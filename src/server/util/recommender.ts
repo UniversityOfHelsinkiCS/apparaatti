@@ -5,7 +5,7 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHa
 import { dateObjToPeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { allowedStudyPlaces, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
+import { allowedStudyPlaces, collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
 
 async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
@@ -71,6 +71,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     independent: commonCoordinateFromAnswerData(readAnswer(answerData, 'independent'), correctValue, incorrectValue, notAnsweredValue),
     flexible: commonCoordinateFromAnswerData(readAnswer(answerData, 'flexible'), correctValue, incorrectValue, notAnsweredValue),
     mooc: commonCoordinateFromAnswerData(readAnswer(answerData, 'mooc'), correctValue, incorrectValue, notAnsweredValue),
+    collaboration: commonCoordinateFromAnswerData(readAnswer(answerData, 'collaboration'), correctValue, incorrectValue, incorrectValue),
     studyYear: readAnswer(answerData, 'study-year'),
     studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
   }
@@ -146,6 +147,43 @@ function isIndependentCourse(course: CourseData){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
+function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: string } | undefined, patterns: string[]): boolean {
+  const nameFi = localizedName?.fi?.toLowerCase() || ''
+  const nameEn = localizedName?.en?.toLowerCase() || ''
+  const nameSv = localizedName?.sv?.toLowerCase() || ''
+  
+  for (const pattern of patterns) {
+    const lowerPattern = pattern.toLowerCase()
+    if (nameFi.includes(lowerPattern) || 
+        nameEn.includes(lowerPattern) || 
+        nameSv.includes(lowerPattern)) {
+      return true
+    }
+  }
+  
+  return false
+}
+
+async function courseIsCollaboration(course: CourseData): Promise<boolean> {
+  // Check if course name contains any collaboration indicators
+  if (localeNameIncludesAny(course.name, collaborationOrganisationCourseNameIncludes)) {
+    return true
+  }
+  
+  // Get organisations for the course
+  const organisations = await organisationWithGroupIdOf(course.groupIds)
+  
+  // Check if any organisation name matches collaboration organisation names
+  for (const org of organisations) {
+    const orgName = org.name as any
+    if (localeNameIncludesAny(orgName, collaborationOrganisationNames)) {
+      return true
+    }
+  }
+  
+  return false
+}
+
 async function calculateCourseCoordinates(course: CourseData, userCoordinates: UserCoordinates, codes: courseCodes,  courseLanguageType: string, organisationCode:string, answerData: AnswerData
 ): Promise<CourseRecommendation> {
   
@@ -168,6 +206,7 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
   const isFinmuMentoringCourse = courseHasAnyOfCodes(course, finmuMentroingCourseCodes)
 
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
+  const isCollaboration = await courseIsCollaboration(course)
   
   const courseCoordinates = {
     date: course.startDate.getTime(),  
@@ -183,7 +222,8 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
     challenge: isChallengeCourse ? correctValue : incorrectValue,
     independent: isIndependent ? correctValue : incorrectValue,
     flexible: hasFlexibleCodeUrn ? correctValue : incorrectValue,
-    mooc: hasMoocCodeUrn ? correctValue : incorrectValue
+    mooc: hasMoocCodeUrn ? correctValue : incorrectValue,
+    collaboration: isCollaboration ? correctValue : incorrectValue
   }
 
   

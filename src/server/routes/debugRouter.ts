@@ -6,6 +6,7 @@ import Cur from '../db/models/cur.ts'
 import Cu from '../db/models/cu.ts'
 import CurCu from '../db/models/curCu.ts'
 import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
+import { organisationWithGroupIdOf } from '../util/dbActions.ts'
 
 const debugRouter = express.Router({mergeParams: true})
 
@@ -28,7 +29,24 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   const realisationTypeUrns = realisations.map((r: any) => r.courseUnitRealisationTypeUrn)
   const uniqueTypeUrns = uniqueVals(realisationTypeUrns)
 
-  res.json({uniqueCodeUrns, uniqueTypeUrns, realisationsWithCodeUrn})
+  // Get all course unit realisations and their associated course units
+  const allCurCus = await CurCu.findAll({ raw: true })
+  const courseUnitIds = uniqueVals(allCurCus.map((cc: any) => cc.cuId))
+  const courseUnits = await Cu.findAll({ 
+    where: { id: courseUnitIds },
+    raw: true 
+  })
+
+  // Extract unique organisation group IDs
+  const groupIds = courseUnits
+    .map((cu: any) => cu.groupId)
+    .filter((gid: string | null) => gid !== null)
+  const uniqueGroupIds = uniqueVals(groupIds)
+
+  // Fetch organisation details for unique group IDs
+  const uniqueOrganisations = await organisationWithGroupIdOf(uniqueGroupIds)
+
+  res.json({uniqueCodeUrns, uniqueTypeUrns, realisationsWithCodeUrn, uniqueOrganisations})
 })
 
 debugRouter.get('/cur', async (req: any, res: any) => {

@@ -51,7 +51,7 @@ export type CourseRecommendation = {
 } 
 
 
-export type UserCoordinates = {
+export type CourseCoordinates = {
   date: number;
   org: number;
   spesificOrg: number;
@@ -66,6 +66,7 @@ export type UserCoordinates = {
   flexible?: number | null;
   mooc?: number | null;
   finmu?: number | null;
+  collaboration?: number | null;
   studyYear?: string | null;
   studyPeriod?: string[] | null;
 }

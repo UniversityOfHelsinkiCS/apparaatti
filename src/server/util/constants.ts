@@ -27,8 +27,16 @@ export const allowedStudyPlaces: string[] = [
   'teaching-participation-contact',
 ]
 
+// Organisation names that indicate collaboration courses
+export const collaborationOrganisationNames: string[] = [
+  'Vaasa'
+]
 
 
+export const collaborationOrganisationCourseNameIncludes: string[] = [
+  'työväen akatemia',
+  'laajasalon opisto'
+]
 
 //constants used in the recommender
 export const correctValue = 1

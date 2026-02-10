@@ -75,6 +75,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true, //always true
     },
     {
+      field: 'collaboration',
+      filterOnFail: true, //always true
+    },
+    {
       field: 'spesificOrg',
       filterOnFail: false, //always false
     },
