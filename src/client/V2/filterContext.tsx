@@ -158,12 +158,12 @@ export const filterConfigMap = (filters: any) => new Map([
   ['mooc', {
     state: filters.mooc,
     setState: filters.setMooc,
-    superToggle: true
+    superToggle: false
   }],
   ['collaboration', {
     state: filters.collaboration,
     setState: filters.setCollaboration,
-    superToggle: true
+    superToggle: false
   }],
 ])
 
@@ -260,7 +260,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [independent, setIndependent] = useState('')
   const [mooc, setMooc] = useState('')
   const [collaboration, setCollaboration] = useState('')
-  const [strictFilters, setStrictFilters] = useState<string[]>([])
+  const [strictFilters, setStrictFilters] = useState<string[]>(['collaboration'])
 
 
   const [uiVariant, setUiVariant] = useState([

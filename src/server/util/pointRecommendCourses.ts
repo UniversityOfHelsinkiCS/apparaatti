@@ -76,7 +76,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'collaboration',
-      filterOnFail: true, //always true
+      filterOnFail: strictFields.includes('collaboration'), 
     },
     {
       field: 'spesificOrg',
