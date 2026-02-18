@@ -7,7 +7,7 @@
     "start": "docker compose up",
     "prod": "NODE_ENV=production node --no-warnings --experimental-strip-types src/server/index.ts",
     "dev": "NODE_ENV=development concurrently \"nodemon --verbose --ignore '*cypress*' --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
-    "e2e": "docker run --rm --network host   -v $PWD:/e2e   -w /e2e   cypress/included:12.17.4   npx cypress run --config baseUrl=http://localhost:3000",
+    "e2e": "sh ./scripts/run-cypress.sh",
     "tsc": "tsc --noEmit",
     "test": "vitest",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
