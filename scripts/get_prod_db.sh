@@ -31,12 +31,12 @@ fi
 echo "Creating backups folder"
 mkdir -p ${BACKUPS}
 
-# --- Norppa Selection ---
+# --- Selection ---
 echo "Listing available Apparaatti backups in S3 bucket..."
 backup_files=$(s3cmd -c "$S3_CONF" ls "s3://psyduck/${FOLDER_NAME}/" | awk '{print $4}' | grep '\.sql\.gz$')
 
 if [ -z "$backup_files" ]; then
-  echo "No Norppa backup files found in S3 bucket!"
+  echo "No backup files found in S3 bucket!"
   exit 1
 fi
 

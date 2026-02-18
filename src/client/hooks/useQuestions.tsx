@@ -271,6 +271,21 @@ const useQuestions = () => {
     {
       number: '',
       mandatory: false,
+      effects: 'multiPeriod',
+      id: 'multi-period',
+      shortName: t('filterShortName:Kurssinpituus'),
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: t('form:multiPeriodQuestion'),
+          options: generateGeneralYesNoOptions(),
+        },
+      ],
+    },
+    {
+      number: '',
+      mandatory: false,
       effects: 'none',
       id: 'replacement',
       shortName: t('filterShortName:Korvaava'),

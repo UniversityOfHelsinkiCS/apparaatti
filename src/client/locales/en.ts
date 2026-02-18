@@ -26,6 +26,7 @@ export default {
     'flexibleQuestion': 'I want to take a course with a flexible schedule',
     'moocQuestion': 'Do you want to search for MOOCs (Massive Open Online Courses)?',
     'collaborationQuestion': 'Show collaboration partner courses',
+    'multiPeriodQuestion': 'Search for courses that span multiple periods',
     'finnish': 'finnish',
     'swedish': 'swedish',
     'english': 'english',
@@ -125,6 +126,7 @@ export default {
     'flexible': 'Want flexible schedule',
     'mooc': 'Search for MOOCs',
     'finmu': 'FinMU related',
+    'multiPeriod': 'Course duration',
   },
   'filterShortName': {
     'Opinto-oikeus': 'Study Right',
@@ -144,5 +146,6 @@ export default {
     'Periodi': 'Period',
     'MOOC': 'MOOC',
     'Yhteistyo': 'Collaboration',
+    'Kurssinpituus': 'Course Duration',
   }
 }

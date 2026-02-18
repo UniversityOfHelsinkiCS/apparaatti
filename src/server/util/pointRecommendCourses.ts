@@ -125,7 +125,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
         if (!userCoordinates.studyYear || userCoordinates.studyYear === 'neutral') return true
-        return userCoordinates.studyYear == c.course.period?.startYear
+
+        if (!c.course.period || c.course.period.length === 0) return false
+        
+        return c.course.period.some(p => userCoordinates.studyYear === p.startYear)
       }
     },
     {
@@ -141,6 +144,10 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
         return match
       }
+    },
+    {
+      field: 'multiPeriod',
+      filterOnFail: strictFields.includes('multi-period'),
     },
   ]
  

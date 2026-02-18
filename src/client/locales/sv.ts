@@ -25,8 +25,7 @@ export default {
     'independentQuestion': 'Jag vill arbeta självständigt eller autonomt.',
     'flexibleQuestion': 'Jag vill ta en kurs med ett flexibelt schema.',
     'moocQuestion': 'Vill du söka efter MOOCs (Massive Open Online Courses)?',
-    'collaborationQuestion': 'Visa samarbetspartnerkurser',
-    'finnish': 'finska',
+    'collaborationQuestion': 'Visa samarbetspartnerkurser',    'multiPeriodQuestion': 'Sök kurser som sträcker sig över flera perioder',    'finnish': 'finska',
     'swedish': 'svenska',
     'english': 'engelska',
     'yes': 'Ja',
@@ -121,6 +120,7 @@ export default {
     'flexible': 'Vill ha flexibelt schema',
     'mooc': 'Sök MOOC-kurser',
     'finmu': 'FinMU relaterad',
+    'multiPeriod': 'Kurslängd',
   },
   'filterShortName': {
     'Opinto-oikeus': 'Studierätt',
@@ -140,5 +140,6 @@ export default {
     'Periodi': 'Period',
     'MOOC': 'MOOC',
     'Yhteistyo': 'Samarbete',
+    'Kurssinpituus': 'Kurslängd',
   }
 }

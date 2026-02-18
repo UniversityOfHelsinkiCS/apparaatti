@@ -64,6 +64,8 @@ interface FilterContextType {
   setMooc: (s: string) => void
   collaboration: string
   setCollaboration: (s: string) => void
+  multiPeriod: string
+  setMultiPeriod: (s: string) => void
   strictFilters: string[]
   setStrictFilters: (s: string[]) => void
 }
@@ -165,6 +167,11 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setCollaboration,
     superToggle: false
   }],
+  ['multi-period', {
+    state: filters.multiPeriod,
+    setState: filters.setMultiPeriod,
+    superToggle: false
+  }],
 ])
 
 // Map coordinate keys to filter IDs for recommendation reasons
@@ -183,6 +190,7 @@ export const coordinateKeyToFilterId: { [key: string]: string } = {
   mooc: 'mooc',
   finmu: 'finmu',
   collaboration: 'collaboration',
+  multiPeriod: 'multi-period',
 }
 
 // Get translated short name for a coordinate key
@@ -260,6 +268,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [independent, setIndependent] = useState('')
   const [mooc, setMooc] = useState('')
   const [collaboration, setCollaboration] = useState('')
+  const [multiPeriod, setMultiPeriod] = useState('')
   const [strictFilters, setStrictFilters] = useState<string[]>(['collaboration'])
 
 
@@ -345,6 +354,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'independent': getTrueFilterValue(independent, 'independent'),
       'mooc': getTrueFilterValue(mooc, 'mooc'),
       'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
+      'multi-period': getTrueFilterValue(multiPeriod, 'multi-period'),
     }
 
     const answerData = Object.fromEntries(
@@ -387,6 +397,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     independent,
     mooc,
     collaboration,
+    multiPeriod,
     strictFilters,
   ])
 
@@ -446,6 +457,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setMooc,
         collaboration,
         setCollaboration,
+        multiPeriod,
+        setMultiPeriod,
         strictFilters,
         setStrictFilters,
       }}

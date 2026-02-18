@@ -3,6 +3,7 @@ import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
+import studyPeriods from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { allowedStudyPlaces, collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
@@ -74,6 +75,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     collaboration: commonCoordinateFromAnswerData(readAnswer(answerData, 'collaboration'), correctValue, incorrectValue, incorrectValue),
     studyYear: readAnswer(answerData, 'study-year'),
     studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
+    multiPeriod: commonCoordinateFromAnswerData(readAnswer(answerData, 'multi-period'), correctValue, incorrectValue, null),
   }
   return userCoordinates
 }
@@ -207,6 +209,7 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
 
   const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
   const isCollaboration = await courseIsCollaboration(course)
+  const isMultiPeriod = courseSpansMultiplePeriods(course)
   
   const courseCoordinates = {
     date: course.startDate.getTime(),  
@@ -223,7 +226,8 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
     independent: isIndependent ? correctValue : incorrectValue,
     flexible: hasFlexibleCodeUrn ? correctValue : incorrectValue,
     mooc: hasMoocCodeUrn ? correctValue : incorrectValue,
-    collaboration: isCollaboration ? correctValue : incorrectValue
+    collaboration: isCollaboration ? correctValue : incorrectValue,
+    multiPeriod: isMultiPeriod ? correctValue : incorrectValue
   }
 
   
@@ -295,24 +299,33 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
   return courseRealisationsWithCodes
 }
 
-const getPeriodForCourse = (cur) => {
-    
-  const studyPeriods = dateObjToPeriod(cur.startDate) 
-
-  const studyPeriod = studyPeriods[0]
-  if(!studyPeriod){
-    dateObjToPeriod(cur.startDate, true)
+const getPeriodForCourse = (cur): Period[] | null => {
+  const courseStart = cur.startDate
+  const courseEnd = cur.endDate
+  
+  const overlappingPeriods = studyPeriods.periods.filter(periodData => {
+    const periodStart = parseDate(periodData.start_date)
+    const periodEnd = parseDate(periodData.end_date)
+    return periodStart <= courseEnd && periodEnd >= courseStart
+  })
+  
+  if (overlappingPeriods.length === 0) {
     return null
   }
+  
+  const periods: Period[] = overlappingPeriods.map(periodData => ({
+    name: periodData.name,
+    startDate: parseDate(periodData.start_date),
+    endDate: parseDate(periodData.end_date),
+    startYear: periodData.start_year,
+    endYear: periodData.end_year
+  }))
+  
+  return periods
+}
 
-  const period: Period = {
-    name: studyPeriod.name,
-    startDate: parseDate(studyPeriod.start_date),
-    endDate: parseDate(studyPeriod.end_date),
-    startYear: studyPeriod.start_year,
-    endYear: studyPeriod.end_year
-  }
-  return period
+function courseSpansMultiplePeriods(course: CourseData): boolean {
+  return (course.period?.length ?? 0) > 1
 }
 
 const getPeriodsWantedByUser = (periodsArg) => {

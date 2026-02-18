@@ -69,6 +69,7 @@ export type CourseCoordinates = {
   collaboration?: number | null;
   studyYear?: string | null;
   studyPeriod?: string[] | null;
+  multiPeriod?: number | null;
 }
 
 export type UserCoordinates = CourseCoordinates;
@@ -94,7 +95,7 @@ export type CourseData = {
   name: LocalizedString
   startDate: Date
   endDate: Date
-  period: null | Period
+  period: Period[] | null
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
   courseCodes: string[]
@@ -152,6 +153,7 @@ export type AnswerData = {
   'lang': string;
   'primary-language': string;
   'primary-language-specification': string;
+  'multi-period': string;
 };
 
 

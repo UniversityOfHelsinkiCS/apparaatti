@@ -26,6 +26,7 @@ export default {
     'flexibleQuestion': 'Haluan osallistua kurssille, jonka aikataulu on joustava.',
     'moocQuestion': 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?',
     'collaborationQuestion': 'Näytä yhteistyökumppanien kursseja',
+    'multiPeriodQuestion': 'Hae kursseja jotka kestävät usean periodin ajan',
     'finnish': 'suomi',
     'swedish': 'ruotsi',
     'english': 'englanti',
@@ -125,6 +126,7 @@ export default {
     'flexible': 'Haluan joustavan aikataulun',
     'mooc': 'Etsi MOOC-kursseja',
     'finmu': 'FinMU liittyvä',
+    'multiPeriod': 'Kurssin pituus',
   },
   'filterShortName': {
     'Opinto-oikeus': 'Opinto-oikeus',
@@ -144,5 +146,6 @@ export default {
     'Periodi': 'Periodi',
     'MOOC': 'MOOC',
     'Yhteistyo': 'Yhteistyö',
+    'Kurssinpituus': 'Kurssin pituus',
   }
 }
