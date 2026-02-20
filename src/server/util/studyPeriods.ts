@@ -1,3 +1,5 @@
+import type { Period } from '../../common/types.ts'
+
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
 export const dateIsInPeriod = (date: Date, period, _debug=false) => {
@@ -52,6 +54,28 @@ export const dateObjToPeriod = (dateObj: Date, debug = false) => {
   })
 
   return hits
+}
+
+export const getCoursePeriod = (course: { startDate: Date; endDate: Date }): Period[] | null => {
+  const overlappingPeriods = studyPeriods.periods.filter((periodData) => {
+    const periodStart = parseDate(periodData.start_date)
+    const periodEnd = parseDate(periodData.end_date)
+    return periodStart <= course.endDate && periodEnd >= course.startDate
+  })
+
+  if (overlappingPeriods.length === 0) {
+    return null
+  }
+
+  const periods: Period[] = overlappingPeriods.map((periodData) => ({
+    name: periodData.name,
+    startDate: parseDate(periodData.start_date),
+    endDate: parseDate(periodData.end_date),
+    startYear: periodData.start_year,
+    endYear: periodData.end_year,
+  }))
+
+  return periods
 }
 
 //returns closest period in the future given the string
