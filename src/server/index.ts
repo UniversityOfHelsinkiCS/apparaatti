@@ -12,12 +12,14 @@ import {
   SESSION_SECRET,
   UPDATER_CRON_ENABLED,
   inDevelopment,
+  IN_E2E,
 } from './util/config.ts'
 import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
+import { seedDatabase } from './db/seed.ts'
 
 redis.on('ready', () => {
   console.log('Redis connected')
@@ -41,8 +43,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(express.json({limit: '10mb'}))
 
-// in develoment, fake the user
-if (inDevelopment) {
+// in development and E2E, fake the user
+if (inDevelopment || IN_E2E) {
   app.use(mockUserMiddleware)
   app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -72,7 +74,9 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
 
-
+  if (IN_E2E) {
+    await seedDatabase()
+  }
 
   if (UPDATER_CRON_ENABLED === false) {
     await setupAuthentication()

@@ -1,5 +1,7 @@
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
+import { getCurrentDate } from './testUtils.ts'
+
 export const dateIsInPeriod = (date: Date, period, _debug=false) => {
   const compare = dateAtMidnight(date)
   const start = dateAtMidnight(parseDate(period.start_date))
@@ -56,7 +58,7 @@ export const dateObjToPeriod = (dateObj: Date, debug = false) => {
 
 //returns closest period in the future given the string
 export const closestPeriod = (name: string = '') => {
-  const date = new Date()
+  const date = getCurrentDate()
 
   const periods = studyPeriods.periods
     .filter((p) => {

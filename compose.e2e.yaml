@@ -1,0 +1,50 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: dev.Containerfile
+    image: apparaatti_dev
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+      - PORT=8000
+      - IN_E2E=true
+      - TEST_CURRENT_DATE=2026-02-20
+      - NODE_ENV=test
+    volumes:
+      - ./:/opt/app-root/src
+    ports:
+      - 3000:3000
+      - 8000:8000
+    container_name: apparaatti_e2e
+    networks:
+      - localhost-network
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: docker.io/postgres:15.8-alpine
+    environment:
+      - PGDATA=/data
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - pg_data_e2e:/data
+    container_name: apparaatti_e2e_db
+    networks:
+        - localhost-network
+    
+  redis:
+    image: redis:7-alpine
+    container_name: apparaatti_e2e_redis
+    networks:
+        - localhost-network
+
+networks:
+  localhost-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+volumes:
+  pg_data_e2e:
