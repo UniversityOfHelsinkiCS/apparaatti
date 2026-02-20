@@ -2,20 +2,22 @@ import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendation
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
-import { dateObjToPeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
-import studyPeriods from './studyPeriods.ts'
+import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { allowedStudyPlaces, collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
 
-async function recommendCourses(answerData: AnswerData, strictFields: string[]) {
+async function recommendCourses(
+  answerData: AnswerData,
+  strictFields: string[] = []
+) {
   const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
   const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
 
   return recommendations
 }
 
-function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){
+export function commonCoordinateFromAnswerData(value: string, yesValue: number, noValue: number, neutralValue: number | null){
   switch(value){
   case '1':
     return yesValue
@@ -34,7 +36,7 @@ export function readAnswer(answerData: AnswerData, key: string){
   return value
 }
 
-function readAsStringArr(variable: string[] | string): string[]{
+export function readAsStringArr(variable: string[] | string): string[]{
   return Array.isArray(variable) ? variable : [variable]
 }
 
@@ -45,7 +47,7 @@ function getDateFromUserInput(answerData: AnswerData){
 }
 
 
-function readStudyPlaceCoordinate (answerData: AnswerData){
+export function readStudyPlaceCoordinate (answerData: AnswerData){
   const value = readAnswer(answerData, 'study-place')
   if(value === 'neutral'){
     return notAnsweredValue
@@ -81,7 +83,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
 }
 
 //generic courses have many cases where they are considered to be for the users organisation
-async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
+export async function courseInSameOrganisationAsUser(course: CourseData, organisationCode: string, codesInOrganisation: string[]){
   const isSpesificForUserOrg = courseIsSpesificForUserOrg(course, organisationCode)
   if(isSpesificForUserOrg){
     return isSpesificForUserOrg
@@ -89,7 +91,7 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
 
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
   const orgCodes = organisations.map(o => o.code)
-  if( organisationCode in orgCodes){
+  if(orgCodes.includes(organisationCode)){
     return true
   }
 
@@ -103,15 +105,13 @@ async function courseInSameOrganisationAsUser(course: CourseData, organisationCo
 } 
 
 
-function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string){
+export function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string){
   const codes = [organisationCode]
   for(const code of codes){
     const urnHit = organisationCodeToUrn[code]
     if(urnHit){
       const hasCustomCodeUrn = courseHasCustomCodeUrn(course, urnHit)
       if(hasCustomCodeUrn){
-        console.log('is spesific course!')
-        console.log(course)
         return true
       } 
     }
@@ -120,7 +120,7 @@ function courseIsSpesificForUserOrg(course: CourseData, organisationCode: string
   return false
 }
 
-function readArrOrSingleValue(val: string | string[]){
+export function readArrOrSingleValue(val: string | string[]){
   const value = val ? val : []
   if(Array.isArray(value)){
     return value
@@ -130,7 +130,7 @@ function readArrOrSingleValue(val: string | string[]){
   }
 }
 
-function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
+export function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
     
   const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
   const lookups = userStudyPlaces.filter((p) => allowedStudyPlaces.includes(p)).map((p) => p)
@@ -142,14 +142,14 @@ function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
   return incorrectValue
 }
 
-function isIndependentCourse(course: CourseData){
+export function isIndependentCourse(course: CourseData){
   const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
   const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
 
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
-function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: string } | undefined, patterns: string[]): boolean {
+export function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: string } | undefined, patterns: string[]): boolean {
   const nameFi = localizedName?.fi?.toLowerCase() || ''
   const nameEn = localizedName?.en?.toLowerCase() || ''
   const nameSv = localizedName?.sv?.toLowerCase() || ''
@@ -166,7 +166,7 @@ function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: s
   return false
 }
 
-async function courseIsCollaboration(course: CourseData): Promise<boolean> {
+export async function courseIsCollaboration(course: CourseData): Promise<boolean> {
   // Check if course name contains any collaboration indicators
   if (localeNameIncludesAny(course.name, collaborationOrganisationCourseNameIncludes)) {
     return true
@@ -282,7 +282,7 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
     (cur) => {
       return {
         ...cur,
-        period: getPeriodForCourse(cur),
+        period: getCoursePeriod(cur),
         courseCodes: uniqueVals(courseUnitsWithCodes
           .filter((cu) => cur.unitIds.includes(cu.id))
           .map((cu) => cu.courseCode)),
@@ -299,32 +299,7 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
   return courseRealisationsWithCodes
 }
 
-const getPeriodForCourse = (cur): Period[] | null => {
-  const courseStart = cur.startDate
-  const courseEnd = cur.endDate
-  
-  const overlappingPeriods = studyPeriods.periods.filter(periodData => {
-    const periodStart = parseDate(periodData.start_date)
-    const periodEnd = parseDate(periodData.end_date)
-    return periodStart <= courseEnd && periodEnd >= courseStart
-  })
-  
-  if (overlappingPeriods.length === 0) {
-    return null
-  }
-  
-  const periods: Period[] = overlappingPeriods.map(periodData => ({
-    name: periodData.name,
-    startDate: parseDate(periodData.start_date),
-    endDate: parseDate(periodData.end_date),
-    startYear: periodData.start_year,
-    endYear: periodData.end_year
-  }))
-  
-  return periods
-}
-
-function courseSpansMultiplePeriods(course: CourseData): boolean {
+export function courseSpansMultiplePeriods(course: CourseData): boolean {
   return (course.period?.length ?? 0) > 1
 }
 

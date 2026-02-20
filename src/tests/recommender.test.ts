@@ -1,17 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
 import recommendCourses from '../server/util/recommender'
 
-vi.mock('../server/db/connection', () => {
-  const SequelizeMock = vi.fn().mockImplementation(() => ({
-    authenticate: vi.fn().mockResolvedValue(true),
-    sync: vi.fn().mockResolvedValue(true),
-    close: vi.fn().mockResolvedValue(true),
-  }))
-
-  return {
-    sequelize: new SequelizeMock()
-  }
-})
+vi.mock('../server/util/dbActions.ts', () => ({
+  cuWithCourseCodeOf: vi.fn().mockResolvedValue([]),
+  curWithIdOf: vi.fn().mockResolvedValue([]),
+  curcusWithUnitIdOf: vi.fn().mockResolvedValue([]),
+  organisationWithGroupIdOf: vi.fn().mockResolvedValue([]),
+}))
 
 
 describe('recommender tests', () => {
