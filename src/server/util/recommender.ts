@@ -91,7 +91,7 @@ export async function courseInSameOrganisationAsUser(course: CourseData, organis
 
   const organisations  = await organisationWithGroupIdOf(course.groupIds)
   const orgCodes = organisations.map(o => o.code)
-  if( organisationCode in orgCodes){
+  if(orgCodes.includes(organisationCode)){
     return true
   }
 
