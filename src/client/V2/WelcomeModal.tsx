@@ -99,7 +99,14 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
           />
         )}
         
-        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            mt: 3,
+            display: 'flex',
+            justifyContent: 'center',
+            pb: '10vh',
+          }}
+        >
           <Button
             variant="contained"
             onClick={onClose}
