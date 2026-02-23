@@ -137,7 +137,7 @@ export default {
     'Korvaava': 'Korvaava',
     'Valmentava': 'Valmentava',
     'Finmu': 'Finmu',
-    'Edistynyt': 'Edistynyt',
+    'Edistynyt': 'Mukautettu',
     'Valmistuville': 'Valmistuville',
     'Integroitu': 'Integroitu',
     'Itsenäinen': 'Itsenäinen',

@@ -131,7 +131,7 @@ export default {
     'Korvaava': 'Ersättande',
     'Valmentava': 'Förberedande',
     'Finmu': 'Finmu',
-    'Edistynyt': 'Avancerad',
+    'Edistynyt': 'Anpassad',
     'Valmistuville': 'För examinerande',
     'Integroitu': 'Integrerad',
     'Itsenäinen': 'Självständig',
