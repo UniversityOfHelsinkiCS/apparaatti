@@ -149,7 +149,7 @@ export const filterConfigMap = (filters: any) => new Map([
     displayType: 'singlechoice',
     superToggle: false,
     hideInCurrentFiltersDisplay: true,
-    hideInFilterSideBar: true
+    hideInFilterSideBar: false
   }],
   ['study-period', {
     state: filters.studyPeriod,
