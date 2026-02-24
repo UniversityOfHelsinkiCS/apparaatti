@@ -36,7 +36,7 @@ export const connectToDatabase = async (attempt = 0): Promise<void | null> => {
     await testConnection()
     logger.info('Connected to database')
   } catch (err: any) {
-    console.log("trying to connect to db")
+    console.log('trying to connect to db')
     console.log(err)
     await sleep(5000)
 
