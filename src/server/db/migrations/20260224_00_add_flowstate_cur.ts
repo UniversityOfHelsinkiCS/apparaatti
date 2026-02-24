@@ -5,7 +5,7 @@ import { type Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.addColumn('curs','flow_state', {
-    type: string,
+    type: DataTypes.STRING,
     allowNull: true
   })
  

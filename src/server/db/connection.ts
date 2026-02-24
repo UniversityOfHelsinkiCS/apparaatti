@@ -36,17 +36,8 @@ export const connectToDatabase = async (attempt = 0): Promise<void | null> => {
     await testConnection()
     logger.info('Connected to database')
   } catch (err: any) {
-    if (attempt === 3) {
-      logger.error(`Connection to database failed after ${attempt} attempts`, {
-        error: err.stack,
-      })
-
-      return process.exit(1)
-    }
-    logger.info(
-      `Connection to database failed! Attempt ${attempt} of ${3}`
-    )
-    logger.error('Database error: ', err)
+    console.log("trying to connect to db")
+    console.log(err)
     await sleep(5000)
 
     return connectToDatabase(attempt + 1)
