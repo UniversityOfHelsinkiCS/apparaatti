@@ -14,6 +14,7 @@ class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
   declare endDate: Date
   declare courseUnitRealisationTypeUrn: string
   declare customCodeUrns: Record<string, string[]> 
+  declare flowState: CreationOptional<string>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 }
@@ -45,6 +46,10 @@ Cur.init(
       type: DataTypes.JSONB
     }, 
     courseUnitRealisationTypeUrn: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    flowState: {
       type: DataTypes.STRING,
       allowNull: true
     },

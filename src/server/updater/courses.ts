@@ -12,7 +12,7 @@ const createCursFromUpdater = async (
   realisations: SisuCourseWithRealization[]
 ) => {
   const curs: CourseRealization[] = realisations.map((realisation) => {
-    const { id, name, nameSpecifier, activityPeriod, customCodeUrns, courseUnitRealisationTypeUrn } = realisation
+    const { id, name, nameSpecifier, activityPeriod, customCodeUrns, courseUnitRealisationTypeUrn, flowState } = realisation
     const startDate = new Date(activityPeriod.startDate)
     const endDate = new Date(activityPeriod.endDate)
     return {
@@ -21,6 +21,7 @@ const createCursFromUpdater = async (
       customCodeUrns, 
       courseUnitRealisationTypeUrn,
       nameSpecifier,
+      flowState,
       startDate,
       endDate,
     }

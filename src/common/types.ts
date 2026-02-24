@@ -112,6 +112,7 @@ export type CourseRealization = {
   endDate: Date
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
+  flowState: string
 
 }
 
