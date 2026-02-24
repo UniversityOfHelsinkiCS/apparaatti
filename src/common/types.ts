@@ -102,6 +102,7 @@ export type CourseData = {
   groupIds: string[]
   unitIds: string[]
   credits: Record<string, number>[]
+  flowState: string | null
 }
 
 export type CourseRealization = {
