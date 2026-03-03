@@ -137,7 +137,7 @@ export default {
     'Korvaava': 'Replacement',
     'Valmentava': 'Preparatory',
     'Finmu': 'Finmu',
-    'Edistynyt': 'Custom',
+    'Edistynyt': 'Advanced',
     'Valmistuville': 'For Graduating',
     'Integroitu': 'Integrated',
     'Itsenäinen': 'Independent',

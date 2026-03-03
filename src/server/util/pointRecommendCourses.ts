@@ -124,6 +124,12 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       field: 'studyYear',
       filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
+
+        if(c.course.name.fi.includes('far') && c.course.name.fi.includes('periodi I')){
+          
+          console.log(c.course.name.fi)
+        }
+        return true
         if (!userCoordinates.studyYear || userCoordinates.studyYear === 'neutral') return true
 
         if (!c.course.period || c.course.period.length === 0) return false
@@ -135,6 +141,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       field: 'studyPeriod',
       filterOnFail: true,
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
+
+        if(c.course.name.fi.includes('far') && c.course.name.fi.includes('periodi I')){
+          
+          console.log(c.course.name.fi)
+        }
         if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.includes('neutral')) return true
 
         const coursePeriods = dateObjToPeriod(new Date(c.course.startDate))

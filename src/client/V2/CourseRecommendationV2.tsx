@@ -26,6 +26,7 @@ const CourseRecommendationV2 = ({
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
+  const courseIsOpen = course.course.flowState === 'Open'
 
   const reasonsVariant = uiVariant.find(u => u.name === 'recommendation-reasons-style')?.value
 
@@ -150,6 +151,7 @@ const CourseRecommendationV2 = ({
         >
           {t('course:show')}
         </Button>
+        {courseIsOpen ? <Typography>Kurssille voi ilmoittautua </Typography> : <Typography>Kurssin ilmoittautuminen on kiinni</Typography>}
       </Box>
     </Paper>
   )

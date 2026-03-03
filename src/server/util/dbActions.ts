@@ -14,9 +14,9 @@ export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
 
 export async function curWithIdOf(wantedIds: string[]) {
   return await Cur.findAll({
-    where: {
-      id: wantedIds,
-    },
+    // where: {
+    //   id: wantedIds,
+    // },
     raw: true,
   })
 }

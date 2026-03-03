@@ -267,6 +267,7 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
   )
   const courseRealizations = await curWithIdOf(wantedIds)
   
+  
   const courseRealisationsWithCourseUnits =
     courseRealizations.map((cur) => {
       return {
@@ -277,7 +278,8 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
       }
     })
 
-
+ 
+ 
   const courseRealisationsWithCodes: CourseData[] = courseRealisationsWithCourseUnits.map(
     (cur) => {
       return {
@@ -296,6 +298,8 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
     }
   )
  
+
+  
   return courseRealisationsWithCodes
 }
 
@@ -383,11 +387,15 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const organisationRecommendations = readOrganisationRecommendationData()
   const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
 
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.all) 
+  for(const r of courseData){
+    if(r.name.fi.includes('fa')){
+      console.log(r.name.fi)
+    }
+  } 
   const courseLanguageType = languageToStudy(lang, primaryLang)
   const recommendations = await calculateAllCourseCoordinates(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
- 
   const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
 
   const allRecommendations = {
