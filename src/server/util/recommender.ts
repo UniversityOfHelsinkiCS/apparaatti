@@ -150,6 +150,10 @@ export function isIndependentCourse(course: CourseData){
   return hasIndependentCodeUrn || hasIndependentInName
 }
 
+export function isExam(course: CourseData){
+  return course.name.fi?.toLowerCase().includes('tentti') ?? false
+}
+
 export function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: string } | undefined, patterns: string[]): boolean {
   const nameFi = localizedName?.fi?.toLowerCase() || ''
   const nameEn = localizedName?.en?.toLowerCase() || ''
@@ -229,7 +233,7 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
     mooc: hasMoocCodeUrn ? correctValue : incorrectValue,
     collaboration: isCollaboration ? correctValue : incorrectValue,
     multiPeriod: isMultiPeriod ? correctValue : incorrectValue,
-    exam: course.name.fi?.toLowerCase().includes('tentti') ? correctValue : incorrectValue,
+    exam: isExam(course) ? correctValue : incorrectValue,
   }
 
   
