@@ -27,7 +27,7 @@ export default {
     'moocQuestion': 'Do you want to search for MOOCs (Massive Open Online Courses)?',
     'collaborationQuestion': 'Show collaboration partner courses',
     'multiPeriodQuestion': 'Search for courses that span multiple periods',
-    'examQuestion': 'Do you want to see courses with an exam as the completion method?',
+    'examQuestion': 'Show exams',
     'finnish': 'finnish',
     'swedish': 'swedish',
     'english': 'english',
