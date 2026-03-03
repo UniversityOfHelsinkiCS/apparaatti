@@ -27,6 +27,7 @@ export default {
     'moocQuestion': 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?',
     'collaborationQuestion': 'Näytä yhteistyökumppanien kursseja',
     'multiPeriodQuestion': 'Hae kursseja jotka kestävät usean periodin ajan',
+    'examQuestion': 'Haluatko nähdä kursseilla tentti suoritustapana?',
     'finnish': 'suomi',
     'swedish': 'ruotsi',
     'english': 'englanti',
@@ -147,5 +148,6 @@ export default {
     'MOOC': 'MOOC',
     'Yhteistyo': 'Yhteistyö',
     'Kurssinpituus': 'Kurssin pituus',
+    'Exam': 'Tentti',
   }
 }

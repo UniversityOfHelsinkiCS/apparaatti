@@ -58,16 +58,6 @@ function calculatePointsForCourse (c: CourseRecommendation, userCoordinates: Use
 //this is different from the distance based sorting where two opposing coordinates seem to counter each other.
 //In this point based one a difference does not punish as much as it gets 'ignored'
 function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinates: UserCoordinates, strictFields: any): CourseRecommendation[]{
-  //we want to ignore all exams except those that are replacement
-  const noExams = courses.filter(c =>
-  {
-    const isExam = c.course.name.fi?.toLowerCase().includes('tentti')
-    const isReplacementCourse = c.coordinates.replacement > 0
-    if(isReplacementCourse || !isExam){
-      return true
-    }
-    return false
-  })
 
   const comparisons = [
     {
@@ -149,9 +139,13 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       field: 'multiPeriod',
       filterOnFail: strictFields.includes('multi-period'),
     },
+    {
+      field: 'exam',
+      filterOnFail: strictFields.includes('exam'),
+    },
   ]
  
-  const recommendationWithPoints = noExams.map((c) => {
+  const recommendationWithPoints = courses.map((c) => {
     const points = calculatePointsForCourse(c, userCoordinates, comparisons)
 
 

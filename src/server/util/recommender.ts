@@ -78,6 +78,7 @@ function calculateUserCoordinates(answerData: AnswerData) {
     studyYear: readAnswer(answerData, 'study-year'),
     studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
     multiPeriod: commonCoordinateFromAnswerData(readAnswer(answerData, 'multi-period'), correctValue, incorrectValue, null),
+    exam: commonCoordinateFromAnswerData(readAnswer(answerData, 'exam'), correctValue, incorrectValue, null),
   }
   return userCoordinates
 }
@@ -227,7 +228,8 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
     flexible: hasFlexibleCodeUrn ? correctValue : incorrectValue,
     mooc: hasMoocCodeUrn ? correctValue : incorrectValue,
     collaboration: isCollaboration ? correctValue : incorrectValue,
-    multiPeriod: isMultiPeriod ? correctValue : incorrectValue
+    multiPeriod: isMultiPeriod ? correctValue : incorrectValue,
+    exam: course.name.fi?.toLowerCase().includes('tentti') ? correctValue : incorrectValue,
   }
 
   

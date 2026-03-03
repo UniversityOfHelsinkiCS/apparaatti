@@ -68,6 +68,8 @@ interface FilterContextType {
   setMultiPeriod: (s: string) => void
   strictFilters: string[]
   setStrictFilters: (s: string[]) => void
+  exam: string
+  setExam: (s: string) => void
 }
 
 export const filterConfigMap = (filters: any) => new Map([
@@ -172,6 +174,11 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setMultiPeriod,
     superToggle: false
   }],
+  ['exam', {
+    state: filters.exam,
+    setState: filters.setExam,
+    superToggle: false
+  }],
 ])
 
 // Map coordinate keys to filter IDs for recommendation reasons
@@ -269,7 +276,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [mooc, setMooc] = useState('')
   const [collaboration, setCollaboration] = useState('')
   const [multiPeriod, setMultiPeriod] = useState('')
-  const [strictFilters, setStrictFilters] = useState<string[]>(['collaboration'])
+  const [exam, setExam] = useState('0')
+  const [strictFilters, setStrictFilters] = useState<string[]>(['collaboration', 'exam'])
 
 
   const [uiVariant, setUiVariant] = useState([
@@ -355,6 +363,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'mooc': getTrueFilterValue(mooc, 'mooc'),
       'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
       'multi-period': getTrueFilterValue(multiPeriod, 'multi-period'),
+      'exam': getTrueFilterValue(exam, 'exam'),
     }
 
     const answerData = Object.fromEntries(
@@ -398,6 +407,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     mooc,
     collaboration,
     multiPeriod,
+    exam,
     strictFilters,
   ])
 
@@ -459,6 +469,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setCollaboration,
         multiPeriod,
         setMultiPeriod,
+        exam,
+        setExam,
         strictFilters,
         setStrictFilters,
       }}

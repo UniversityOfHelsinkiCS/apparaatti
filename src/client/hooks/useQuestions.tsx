@@ -563,6 +563,22 @@ const useQuestions = () => {
         },
       ],
     },
+    {
+      number: '',
+      mandatory: false,
+      id: 'exam',
+      shortName: t('filterShortName:Exam'),
+      effects: 'none',
+      type: 'multi',
+      variants: [
+        {
+          name: 'default',
+          question: t('form:examQuestion'),
+          skipped: false,
+          options: generateGeneralYesNoOptions(true),
+        },
+      ],
+    },
   ]
   return(questions)
   
