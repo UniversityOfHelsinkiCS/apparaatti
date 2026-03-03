@@ -83,25 +83,46 @@ const createRecommendation = (
 })
 
 describe('pointRecommendCourses', () => {
-  it('filters out exam courses unless replacement is positive', () => {
-    const user = createUserCoordinates()
+  it('filters out exam courses when exam is a strict field and user coordinate is no', () => {
+    const user = createUserCoordinates({ exam: 0 })
 
     const examCourse = createRecommendation('exam-filtered', {
       course: { name: { fi: 'Lopputentti' } },
-      coordinates: { replacement: 0 },
+      coordinates: { exam: 1 },
     })
-    const replacementExamCourse = createRecommendation('exam-allowed', {
-      course: { name: { fi: 'Korvaava tentti' } },
-      coordinates: { replacement: 1 },
+    const nonExamCourse = createRecommendation('non-exam-allowed', {
+      course: { name: { fi: 'Regular course' } },
+      coordinates: { exam: 0 },
     })
 
     const result = pointRecommendedCourses(
-      [examCourse, replacementExamCourse],
+      [examCourse, nonExamCourse],
+      user,
+      ['exam']
+    )
+
+    expect(result.map((course) => course.course.id)).toEqual(['non-exam-allowed'])
+  })
+
+  it('keeps exam courses when exam is not a strict field', () => {
+    const user = createUserCoordinates({ exam: 0 })
+
+    const examCourse = createRecommendation('exam-course', {
+      course: { name: { fi: 'Lopputentti' } },
+      coordinates: { exam: 1 },
+    })
+    const nonExamCourse = createRecommendation('non-exam-course', {
+      course: { name: { fi: 'Regular course' } },
+      coordinates: { exam: 0 },
+    })
+
+    const result = pointRecommendedCourses(
+      [examCourse, nonExamCourse],
       user,
       []
     )
 
-    expect(result.map((course) => course.course.id)).toEqual(['exam-allowed'])
+    expect(result).toHaveLength(2)
   })
 
   it('filters on strict fields and keeps non-strict mismatches', () => {
