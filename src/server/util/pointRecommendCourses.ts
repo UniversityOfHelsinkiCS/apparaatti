@@ -159,7 +159,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
     let bonusPoints = 0
 
-    const isChallengeCourseOrEri = c.coordinates.challenge === 1 || c.course.courseCodes.find((c) => c.includes("ERI"))
+    const isChallengeCourseOrEri = c.coordinates.challenge === 1 || c.course.courseCodes.find((c) => c.includes('ERI'))
 
     const mandatory = c.coordinates.mentoring === 0 ? true : false//it is believed that if course is not a mentoring course it is a mandatory course.  
     const calculateBonusForMandatory = userCoordinates?.mentoring === undefined | null 
