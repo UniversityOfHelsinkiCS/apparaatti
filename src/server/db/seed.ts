@@ -43,119 +43,103 @@ async function seedUsers() {
   logger.info('Users seeded')
 }
 
+// ── Shared types ─────────────────────────────────────────────────────────────
+
+type LocalizedName = { fi: string; en: string; sv: string }
+type Credits = { min: number; max: number }
+
+// ── URN helpers ───────────────────────────────────────────────────────────────
+
+const URN = 'urn:code:custom:hy-university-root-id'
+
+const apparaattiUrns = (...tags: string[]) => ({
+  [`${URN}:kk-apparaatti`]: tags.map((t) => `${URN}:kk-apparaatti:${t}`),
+})
+
+const langUrns = (...langs: string[]) => ({
+  [`${URN}:opetuskielet`]: langs.map((l) => `${URN}:opetuskielet:${l}`),
+})
+
+const helsinkiUrns = (...cats: string[]) => ({
+  [`${URN}:helsinki_fi`]: cats.map((c) => `${URN}:helsinki_fi:${c}`),
+})
+
+const opinfiUrns = (...cats: string[]) => ({
+  [`${URN}:opinfi-luokittelu`]: cats.map((c) => `${URN}:opinfi-luokittelu:${c}`),
+})
+
+// ── Object factories ──────────────────────────────────────────────────────────
+
+const PARENT = {
+  main:     'hy-org-2024-03-27-5',
+  root:     'hy-university-root-id',
+  svenska:  'hy-org-2024-03-27-1',
+  medpsych: 'hy-org-1000000865',
+}
+
+function makeOrg(id: string, code: string, name: LocalizedName, parentId: string) {
+  return { id, code, name, parentId }
+}
+
+function makeCourse(
+  id: string,
+  courseCode: string,
+  name: LocalizedName,
+  groupId: string,
+  credits: Credits,
+  customCodeUrns: Record<string, string[]>
+) {
+  return { id: `hy-cu-e2e-${id}`, courseCode, name, groupId, credits, customCodeUrns }
+}
+
+function makeRealization(id: string, name: LocalizedName, nameSpecifier: LocalizedName, startDate: Date, endDate: Date, typeUrn: string, customCodeUrns: Record<string, string[]>) {
+  return { id, name, nameSpecifier, startDate, endDate, courseUnitRealisationTypeUrn: typeUrn, customCodeUrns }
+}
+
+function makeCurCu(curId: string, cuId: string) {
+  return { curId, cuId }
+}
+
+// ── Org shorthands ────────────────────────────────────────────────────────────
+
+const ORG = {
+  science:  'hy-org-1000000911', // H50
+  bio:      'hy-org-46074265',   // H57
+  social:   'hy-org-1000000940', // H70
+  psych:    'hy-org-1001800687', // 414
+  law:      'hy-org-1000000821', // H20
+  medicine: 'hy-org-1000000836', // H30
+  language: 'hy-org-1000003401', // H930
+}
+
 /**
  * Seeds organisations matching production data structure
  */
 async function seedOrganisations() {
   logger.info('Seeding organisations...')
-  
+
   const organisations = [
-    {
-      id: 'hy-org-1000000580',
-      name: { fi: 'Teologinen tiedekunta', en: 'Faculty of Theology', sv: 'Teologiska fakulteten' },
-      code: 'H10',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000821',
-      name: { fi: 'Oikeustieteellinen tiedekunta', en: 'Faculty of Law', sv: 'Juridiska fakulteten' },
-      code: 'H20',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000836',
-      name: { fi: 'Lääketieteellinen tiedekunta', en: 'Faculty of Medicine', sv: 'Medicinska fakulteten' },
-      code: 'H30',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000842',
-      name: { fi: 'Humanistinen tiedekunta', en: 'Faculty of Humanities', sv: 'Humanistiska fakulteten' },
-      code: 'H40',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000911',
-      name: { fi: 'Matemaattis-luonnontieteellinen tiedekunta', en: 'Faculty of Science', sv: 'Matematisk-naturvetenskapliga fakulteten' },
-      code: 'H50',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-41547372',
-      name: { fi: 'Farmasian tiedekunta', en: 'Faculty of Pharmacy', sv: 'Farmaceutiska fakulteten' },
-      code: 'H55',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-46074265',
-      name: { fi: 'Bio- ja ympäristötieteellinen tiedekunta', en: 'Faculty of Biological and Environmental Sciences', sv: 'Bio- och miljövetenskapliga fakulteten' },
-      code: 'H57',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000939',
-      name: { fi: 'Kasvatustieteellinen tiedekunta', en: 'Faculty of Educational Sciences', sv: 'Pedagogiska fakulteten' },
-      code: 'H60',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000940',
-      name: { fi: 'Valtiotieteellinen tiedekunta', en: 'Faculty of Social Sciences', sv: 'Statsvetenskapliga fakulteten' },
-      code: 'H70',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000957',
-      name: { fi: 'Svenska social- och kommunalhögskolan', en: 'Swedish School of Social Science', sv: 'Svenska social- och kommunalhögskolan' },
-      code: 'H74',
-      parentId: 'hy-org-2024-03-27-1',
-    },
-    {
-      id: 'hy-org-1000000941',
-      name: { fi: 'Maatalous-metsätieteellinen tiedekunta', en: 'Faculty of Agriculture and Forestry', sv: 'Agrikultur-forstvetenskapliga fakulteten' },
-      code: 'H80',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1001813360',
-      name: { fi: 'Eläinlääketieteellinen tiedekunta', en: 'Faculty of Veterinary Medicine', sv: 'Veterinärmedicinska fakulteten' },
-      code: 'H90',
-      parentId: 'hy-org-2024-03-27-5',
-    },
-    {
-      id: 'hy-org-1000000855',
-      name: { fi: 'Hammaslääketieteen laitos', en: 'Institute of Dentistry', sv: 'Institutionen för odontologi' },
-      code: 'H305',
-      parentId: 'hy-university-root-id',
-    },
-    {
-      id: 'hy-org-1001800687',
-      name: { fi: 'Psykologian laitos', en: 'Department of Psychology', sv: 'Psykologiska institutionen' },
-      code: '414',
-      parentId: 'hy-university-root-id',
-    },
-    {
-      id: 'hy-org-1001800688',
-      name: { fi: 'Soveltava psykologia', en: 'Division of Applied Psychology', sv: 'Avdelningen för tillämpad psykologi' },
-      code: '4141',
-      parentId: 'hy-university-root-id',
-    },
-    {
-      id: 'hy-org-115968345',
-      name: { fi: 'Psykologian ja logopedian osasto', en: 'Department of Psychology and Logopedics', sv: 'Avdelningen för psykologi och logopedi' },
-      code: 'H3456',
-      parentId: 'hy-org-1000000865',
-    },
-    {
-      id: 'hy-org-1000003401',
-      name: { fi: 'Kielikeskus', en: 'Language Centre', sv: 'Språkcentrum' },
-      code: 'H930',
-      parentId: 'hy-university-root-id',
-    },
+    makeOrg('hy-org-1000000580', 'H10',   { fi: 'Teologinen tiedekunta',                        en: 'Faculty of Theology',                           sv: 'Teologiska fakulteten'                              }, PARENT.main),
+    makeOrg('hy-org-1000000821', 'H20',   { fi: 'Oikeustieteellinen tiedekunta',                en: 'Faculty of Law',                                sv: 'Juridiska fakulteten'                               }, PARENT.main),
+    makeOrg('hy-org-1000000836', 'H30',   { fi: 'Lääketieteellinen tiedekunta',                 en: 'Faculty of Medicine',                           sv: 'Medicinska fakulteten'                              }, PARENT.main),
+    makeOrg('hy-org-1000000842', 'H40',   { fi: 'Humanistinen tiedekunta',                      en: 'Faculty of Humanities',                         sv: 'Humanistiska fakulteten'                            }, PARENT.main),
+    makeOrg('hy-org-1000000911', 'H50',   { fi: 'Matemaattis-luonnontieteellinen tiedekunta',   en: 'Faculty of Science',                            sv: 'Matematisk-naturvetenskapliga fakulteten'           }, PARENT.main),
+    makeOrg('hy-org-41547372',   'H55',   { fi: 'Farmasian tiedekunta',                         en: 'Faculty of Pharmacy',                           sv: 'Farmaceutiska fakulteten'                           }, PARENT.main),
+    makeOrg('hy-org-46074265',   'H57',   { fi: 'Bio- ja ympäristötieteellinen tiedekunta',     en: 'Faculty of Biological and Environmental Sciences', sv: 'Bio- och miljövetenskapliga fakulteten'           }, PARENT.main),
+    makeOrg('hy-org-1000000939', 'H60',   { fi: 'Kasvatustieteellinen tiedekunta',              en: 'Faculty of Educational Sciences',               sv: 'Pedagogiska fakulteten'                             }, PARENT.main),
+    makeOrg('hy-org-1000000940', 'H70',   { fi: 'Valtiotieteellinen tiedekunta',                en: 'Faculty of Social Sciences',                    sv: 'Statsvetenskapliga fakulteten'                      }, PARENT.main),
+    makeOrg('hy-org-1000000957', 'H74',   { fi: 'Svenska social- och kommunalhögskolan',        en: 'Swedish School of Social Science',              sv: 'Svenska social- och kommunalhögskolan'              }, PARENT.svenska),
+    makeOrg('hy-org-1000000941', 'H80',   { fi: 'Maatalous-metsätieteellinen tiedekunta',       en: 'Faculty of Agriculture and Forestry',           sv: 'Agrikultur-forstvetenskapliga fakulteten'           }, PARENT.main),
+    makeOrg('hy-org-1001813360', 'H90',   { fi: 'Eläinlääketieteellinen tiedekunta',            en: 'Faculty of Veterinary Medicine',                sv: 'Veterinärmedicinska fakulteten'                     }, PARENT.main),
+    makeOrg('hy-org-1000000855', 'H305',  { fi: 'Hammaslääketieteen laitos',                    en: 'Institute of Dentistry',                        sv: 'Institutionen för odontologi'                       }, PARENT.root),
+    makeOrg('hy-org-1001800687', '414',   { fi: 'Psykologian laitos',                           en: 'Department of Psychology',                      sv: 'Psykologiska institutionen'                         }, PARENT.root),
+    makeOrg('hy-org-1001800688', '4141',  { fi: 'Soveltava psykologia',                         en: 'Division of Applied Psychology',                sv: 'Avdelningen för tillämpad psykologi'                }, PARENT.root),
+    makeOrg('hy-org-115968345',  'H3456', { fi: 'Psykologian ja logopedian osasto',             en: 'Department of Psychology and Logopedics',       sv: 'Avdelningen för psykologi och logopedi'             }, PARENT.medpsych),
+    makeOrg('hy-org-1000003401', 'H930',  { fi: 'Kielikeskus',                                  en: 'Language Centre',                               sv: 'Språkcentrum'                                       }, PARENT.root),
   ]
-  
+
   await Organisation.bulkCreate(organisations as any)
-  
+
   logger.info(`Seeded ${organisations.length} organisations`)
 }
 
@@ -164,351 +148,116 @@ async function seedOrganisations() {
  */
 async function seedCourses() {
   logger.info('Seeding courses...')
-  
+
   const courses = [
-    // Computer Science courses (H50 - Science)
-    {
-      id: 'hy-cu-e2e-tkt10001',
-      name: { fi: 'Ohjelmoinnin perusteet', en: 'Introduction to Programming', sv: 'Grunderna i programmering' },
-      courseCode: 'TKT10001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-tkt10002',
-      name: { fi: 'Tietorakenteet ja algoritmit', en: 'Data Structures and Algorithms', sv: 'Datastrukturer och algoritmer' },
-      courseCode: 'TKT10002',
-      credits: { min: 10, max: 10 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-tkt10003',
-      name: { fi: 'Web-ohjelmointi', en: 'Web Development', sv: 'Webbutveckling' },
-      courseCode: 'TKT10003',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opinfi-luokittelu': ['urn:code:custom:hy-university-root-id:opinfi-luokittelu:opinfi-luokittelu-online'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    
-    // Mathematics courses (H50 - Science)
-    {
-      id: 'hy-cu-e2e-mat11001',
-      name: { fi: 'Analyysi I', en: 'Calculus I', sv: 'Analys I' },
-      courseCode: 'MAT11001',
-      credits: { min: 10, max: 10 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-mat11002',
-      name: { fi: 'Lineaarialgebra', en: 'Linear Algebra', sv: 'Linjär algebra' },
-      courseCode: 'MAT11002',
-      credits: { min: 10, max: 10 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    
-    // Language courses (Kielikeskus - H930)
-    // These four courses cover all four tiers of the point-based sort ordering:
+    // Computer Science (H50 - Science)
+    makeCourse('tkt10001', 'TKT10001', { fi: 'Ohjelmoinnin perusteet',        en: 'Introduction to Programming',    sv: 'Grunderna i programmering'      }, ORG.science,  { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'),     ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('tkt10002', 'TKT10002', { fi: 'Tietorakenteet ja algoritmit',   en: 'Data Structures and Algorithms', sv: 'Datastrukturer och algoritmer'   }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('en'),     ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('tkt10003', 'TKT10003', { fi: 'Web-ohjelmointi',                en: 'Web Development',                sv: 'Webbutveckling'                  }, ORG.science,  { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-mat'), ...opinfiUrns('opinfi-luokittelu-online'), ...helsinkiUrns('luonnontieteet') }),
+
+    // Mathematics (H50 - Science)
+    makeCourse('mat11001', 'MAT11001', { fi: 'Analyysi I',                     en: 'Calculus I',                     sv: 'Analys I'                        }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'),     ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('mat11002', 'MAT11002', { fi: 'Lineaarialgebra',                 en: 'Linear Algebra',                 sv: 'Linjär algebra'                  }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'),     ...helsinkiUrns('luonnontieteet') }),
+
+    // Language courses (H930 - Kielikeskus)
+    // The four courses below cover all four tiers of the point-based sort order:
     // 1. Specific  (KK-RUMALU)   – no trailing digits, non-KAIKKI → highest bonus
     // 2. KAIKKI    (KK-ENKAIKKI) – code contains "KAIKKI"         → second bonus
     // 3. Numbered  (KK-ENG201)   – code ends in digits             → third bonus
     // 4. ERI       (KK-ENERI)    – challenge course (kks-kor URN)  → lowest bonus
-    {
-      id: 'hy-cu-e2e-kk-rumalu',
-      name: { fi: 'Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1)', en: 'Oral and Written Skills in the Second National Language, Swedish (CEFR B1)', sv: 'Muntlig och skriftlig färdighet i det andra inhemska språket, svenska (CEFR B1)' },
-      courseCode: 'KK-RUMALU',
-      credits: { min: 2, max: 2 },
-      groupId: 'hy-org-1000003401',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:sv'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-kk-enkaikki',
-      name: { fi: 'Englanti kaikille', en: 'English for Everyone', sv: 'Engelska för alla' },
-      courseCode: 'KK-ENKAIKKI',
-      credits: { min: 3, max: 3 },
-      groupId: 'hy-org-1000003401',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-kk-eng201',
-      name: { fi: 'Akateeminen englanti', en: 'Academic English', sv: 'Akademisk engelska' },
-      courseCode: 'KK-ENG201',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000003401',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-kk-eneri',
-      name: { fi: 'Englanti erityistarpeisiin', en: 'English for Special Purposes', sv: 'Engelska för särskilda ändamål' },
-      courseCode: 'KK-ENERI',
-      credits: { min: 3, max: 3 },
-      groupId: 'hy-org-1000003401',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kks-kor'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-kk-ruo205',
-      name: { fi: 'Repetera svenska - Ruotsin perusrakenteiden ja sanaston kertausta (CEFR A2)', en: 'Repetera svenska - Remedial course in Swedish (CEFR A2)', sv: 'Repetera svenska (CEFR A2)' },
-      courseCode: 'KK-RUO205',
-      credits: { min: 2, max: 2 },
-      groupId: 'hy-org-1000003401',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi', 'urn:code:custom:hy-university-root-id:opetuskielet:sv'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
-      },
-    },
-    
-    // Physics (H50 - Science)
-    {
-      id: 'hy-cu-e2e-fys1001',
-      name: { fi: 'Fysiikka I', en: 'Physics I', sv: 'Fysik I' },
-      courseCode: 'FYS1001',
-      credits: { min: 10, max: 10 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    
-    // Chemistry (H50 - Science)
-    {
-      id: 'hy-cu-e2e-kem1001',
-      name: { fi: 'Kemian perusteet', en: 'Chemistry Basics', sv: 'Grunderna i kemi' },
-      courseCode: 'KEM1001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    
-    // Biology (H57 - Bio and Environmental)
-    {
-      id: 'hy-cu-e2e-bio1001',
-      name: { fi: 'Biologian perusteet', en: 'Biology Fundamentals', sv: 'Biologins grunder' },
-      courseCode: 'BIO1001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-46074265',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-bio'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    
-    // Social Sciences (H70)
-    {
-      id: 'hy-cu-e2e-tal1001',
-      name: { fi: 'Taloustieteen johdanto', en: 'Introduction to Economics', sv: 'Introduktion till ekonomi' },
-      courseCode: 'TAL1001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000940',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-val'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:yhteiskunta'],
-      },
-    },
-    
-    // Psychology (414)
-    {
-      id: 'hy-cu-e2e-psy1001',
-      name: { fi: 'Psykologia 101', en: 'Psychology 101', sv: 'Psykologi 101' },
-      courseCode: 'PSY1001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1001800687',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-hum'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-      },
-    },
-    
-    // Law (H20)
-    {
-      id: 'hy-cu-e2e-oik1001',
-      name: { fi: 'Oikeustieteen perusteet', en: 'Introduction to Law', sv: 'Introduktion till juridik' },
-      courseCode: 'OIK1001',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000821',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-oik'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-      },
-    },
-    
-    // Medicine (H30)
-    {
-      id: 'hy-cu-e2e-laa1001',
-      name: { fi: 'Lääketieteen perusteet', en: 'Introduction to Medicine', sv: 'Introduktion till medicin' },
-      courseCode: 'LAA1001',
-      credits: { min: 10, max: 10 },
-      groupId: 'hy-org-1000000836',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-laa'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-      },
-    },
-    
-    // Special course types for testing different attributes
-    {
-      id: 'hy-cu-e2e-mat-grad',
-      name: { fi: 'Matematiikka valmistuville', en: 'Mathematics for Graduating Students', sv: 'Matematik för examinander' },
-      courseCode: 'MAT-GRAD',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat', 'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-val'],
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
-    {
-      id: 'hy-cu-e2e-tkt-mooc',
-      name: { fi: 'Ohjelmointi MOOC', en: 'Programming MOOC', sv: 'Programmering MOOC' },
-      courseCode: 'TKT-MOOC',
-      credits: { min: 5, max: 5 },
-      groupId: 'hy-org-1000000911',
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kkt-mat'],
-        'urn:code:custom:hy-university-root-id:opinfi-luokittelu': ['urn:code:custom:hy-university-root-id:opinfi-luokittelu:opinfi-luokittelu-online'],
-        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:luonnontieteet'],
-      },
-    },
+    makeCourse('kk-rumalu',   'KK-RUMALU',   { fi: 'Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1)', en: 'Oral and Written Skills in the Second National Language, Swedish (CEFR B1)', sv: 'Muntlig och skriftlig färdighet i det andra inhemska språket, svenska (CEFR B1)' }, ORG.language, { min: 2, max: 2 }, { ...langUrns('sv'),      ...helsinkiUrns('kielet') }),
+    makeCourse('kk-enkaikki', 'KK-ENKAIKKI', { fi: 'Englanti kaikille',         en: 'English for Everyone',           sv: 'Engelska för alla'               }, ORG.language, { min: 3, max: 3 }, { ...langUrns('en'),      ...helsinkiUrns('kielet') }),
+    makeCourse('kk-eng201',   'KK-ENG201',   { fi: 'Akateeminen englanti',       en: 'Academic English',               sv: 'Akademisk engelska'              }, ORG.language, { min: 5, max: 5 }, { ...langUrns('en'),      ...helsinkiUrns('kielet') }),
+    makeCourse('kk-eneri',    'KK-ENERI',    { fi: 'Englanti erityistarpeisiin', en: 'English for Special Purposes',   sv: 'Engelska för särskilda ändamål'  }, ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns('kks-kor'), ...langUrns('en'), ...helsinkiUrns('kielet') }),
+    makeCourse('kk-ruo205',   'KK-RUO205',   { fi: 'Repetera svenska - Ruotsin perusrakenteiden ja sanaston kertausta (CEFR A2)', en: 'Repetera svenska - Remedial course in Swedish (CEFR A2)', sv: 'Repetera svenska (CEFR A2)' }, ORG.language, { min: 2, max: 2 }, { ...langUrns('fi', 'sv'), ...helsinkiUrns('kielet') }),
+
+    // Other faculties
+    makeCourse('fys1001', 'FYS1001', { fi: 'Fysiikka I',              en: 'Physics I',                  sv: 'Fysik I'                   }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'), ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('kem1001', 'KEM1001', { fi: 'Kemian perusteet',         en: 'Chemistry Basics',           sv: 'Grunderna i kemi'          }, ORG.science,  { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'), ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('bio1001', 'BIO1001', { fi: 'Biologian perusteet',      en: 'Biology Fundamentals',       sv: 'Biologins grunder'         }, ORG.bio,      { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-bio'), ...langUrns('fi'), ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('tal1001', 'TAL1001', { fi: 'Taloustieteen johdanto',   en: 'Introduction to Economics',  sv: 'Introduktion till ekonomi' }, ORG.social,   { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-val'), ...langUrns('fi'), ...helsinkiUrns('yhteiskunta')   }),
+    makeCourse('psy1001', 'PSY1001', { fi: 'Psykologia 101',           en: 'Psychology 101',             sv: 'Psykologi 101'             }, ORG.psych,    { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-hum'), ...langUrns('fi') }),
+    makeCourse('oik1001', 'OIK1001', { fi: 'Oikeustieteen perusteet',  en: 'Introduction to Law',        sv: 'Introduktion till juridik' }, ORG.law,      { min: 5,  max: 5  }, { ...apparaattiUrns('kkt-oik'), ...langUrns('fi') }),
+    makeCourse('laa1001', 'LAA1001', { fi: 'Lääketieteen perusteet',   en: 'Introduction to Medicine',   sv: 'Introduktion till medicin' }, ORG.medicine, { min: 10, max: 10 }, { ...apparaattiUrns('kkt-laa'), ...langUrns('fi') }),
+
+    // Special attribute courses
+    makeCourse('mat-grad', 'MAT-GRAD', { fi: 'Matematiikka valmistuville', en: 'Mathematics for Graduating Students', sv: 'Matematik för examinander' }, ORG.science, { min: 5, max: 5 }, { ...apparaattiUrns('kkt-mat', 'kks-val'), ...langUrns('fi'), ...helsinkiUrns('luonnontieteet') }),
+    makeCourse('tkt-mooc', 'TKT-MOOC', { fi: 'Ohjelmointi MOOC',          en: 'Programming MOOC',                   sv: 'Programmering MOOC'        }, ORG.science, { min: 5, max: 5 }, { ...apparaattiUrns('kkt-mat'), ...opinfiUrns('opinfi-luokittelu-online'), ...helsinkiUrns('luonnontieteet') }),
   ]
-  
+
   await Cu.bulkCreate(courses as any)
-  
+
   logger.info(`Seeded ${courses.length} courses`)
   return courses
 }
+
+// ── Realization constants ─────────────────────────────────────────────────────
+
+const typeUrns = [
+  'urn:code:course-unit-realisation-type:teaching-participation-lectures',
+  'urn:code:course-unit-realisation-type:teaching-participation-online',
+  'urn:code:course-unit-realisation-type:teaching-participation-blended',
+  'urn:code:course-unit-realisation-type:teaching-participation-contact',
+  'urn:code:course-unit-realisation-type:teaching-participation-distance',
+  'urn:code:course-unit-realisation-type:exam-exam',
+]
+
+const nameSpecifiers: LocalizedName[] = [
+  { fi: 'Lähiopetus',      en: 'Contact teaching', sv: 'Kontaktundervisning'   },
+  { fi: 'Verkko-opetus',   en: 'Online teaching',  sv: 'Nätundervisning'       },
+  { fi: 'Monimuoto-opetus',en: 'Blended teaching', sv: 'Flerformsundervisning' },
+  { fi: 'Etäopetus',       en: 'Distance teaching',sv: 'Distansundervisning'   },
+  { fi: 'Tentti',          en: 'Exam',             sv: 'Tentamen'              },
+]
+
+// Semesters: Fall 2025, Spring 2026, Fall 2026, Spring 2027, Fall 2027
+const semesters = [
+  { name: 'Fall 2025',   startDate: new Date('2025-09-01'), endDate: new Date('2025-12-20') },
+  { name: 'Spring 2026', startDate: new Date('2026-01-12'), endDate: new Date('2026-05-31') },
+  { name: 'Fall 2026',   startDate: new Date('2026-09-01'), endDate: new Date('2026-12-20') },
+  { name: 'Spring 2027', startDate: new Date('2027-01-11'), endDate: new Date('2027-05-31') },
+  { name: 'Fall 2027',   startDate: new Date('2027-09-01'), endDate: new Date('2027-12-20') },
+]
 
 /**
  * Seeds course realizations (Cur) for years 2025-2027
  */
 async function seedCourseRealizations(courses: any[]) {
   logger.info('Seeding course realizations...')
-  
+
   const realizations: any[] = []
-  
-  // Type URNs to cycle through for variety
-  const typeUrns = [
-    'urn:code:course-unit-realisation-type:teaching-participation-lectures',
-    'urn:code:course-unit-realisation-type:teaching-participation-online',
-    'urn:code:course-unit-realisation-type:teaching-participation-blended',
-    'urn:code:course-unit-realisation-type:teaching-participation-contact',
-    'urn:code:course-unit-realisation-type:teaching-participation-distance',
-    'urn:code:course-unit-realisation-type:exam-exam',
-  ]
-  
-  const nameSpecifiers = [
-    { fi: 'Lähiopetus', en: 'Contact teaching', sv: 'Kontaktundervisning' },
-    { fi: 'Verkko-opetus', en: 'Online teaching', sv: 'Nätundervisning' },
-    { fi: 'Monimuoto-opetus', en: 'Blended teaching', sv: 'Flerformsundervisning' },
-    { fi: 'Etäopetus', en: 'Distance teaching', sv: 'Distansundervisning' },
-    { fi: 'Tentti', en: 'Exam', sv: 'Tentamen' },
-  ]
-  
-  // Semesters: Fall 2025, Spring 2026, Fall 2026, Spring 2027, Fall 2027
-  const semesters = [
-    { name: 'Fall 2025', startDate: new Date('2025-09-01'), endDate: new Date('2025-12-20') },
-    { name: 'Spring 2026', startDate: new Date('2026-01-12'), endDate: new Date('2026-05-31') },
-    { name: 'Fall 2026', startDate: new Date('2026-09-01'), endDate: new Date('2026-12-20') },
-    { name: 'Spring 2027', startDate: new Date('2027-01-11'), endDate: new Date('2027-05-31') },
-    { name: 'Fall 2027', startDate: new Date('2027-09-01'), endDate: new Date('2027-12-20') },
-  ]
-  
-  // Create 2-3 realizations for each course
+
   courses.forEach((course, courseIndex) => {
     // Popular courses (languages, CS basics) get 3 realizations, others get 2
     const numRealizations = courseIndex < 8 ? 3 : 2
-    
+
     for (let i = 0; i < numRealizations; i++) {
       const semester = semesters[i]
-      const typeUrn = typeUrns[i % typeUrns.length]
-      const specifierIndex = i % nameSpecifiers.length
-      
-      // Add special kk-apparaatti codes for some realizations
-      let realizationUrns = { ...course.customCodeUrns }
-      
-      // Add graduating student code to some spring courses
-      if (semester.name.includes('Spring') && i === 1 && course.groupId === 'hy-org-1000000911') {
-        realizationUrns = {
-          ...realizationUrns,
-          'urn:code:custom:hy-university-root-id:kk-apparaatti': [
-            ...(realizationUrns['urn:code:custom:hy-university-root-id:kk-apparaatti'] || []),
-            'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-val',
-          ],
-        }
+      let urns = { ...course.customCodeUrns }
+
+      // Add graduating-student tag to some spring science courses
+      if (semester.name.includes('Spring') && i === 1 && course.groupId === ORG.science) {
+        urns = { ...urns, [`${URN}:kk-apparaatti`]: [...(urns[`${URN}:kk-apparaatti`] || []), `${URN}:kk-apparaatti:kks-val`] }
       }
-      
-      // Add integrated course code to some language courses
+      // Add integrated tag to the third realization of language courses
       if (course.courseCode.startsWith('KK-') && i === 2) {
-        realizationUrns = {
-          ...realizationUrns,
-          'urn:code:custom:hy-university-root-id:kk-apparaatti': [
-            ...(realizationUrns['urn:code:custom:hy-university-root-id:kk-apparaatti'] || []),
-            'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-int',
-          ],
-        }
+        urns = { ...urns, [`${URN}:kk-apparaatti`]: [...(urns[`${URN}:kk-apparaatti`] || []), `${URN}:kk-apparaatti:kks-int`] }
       }
-      
-      realizations.push({
-        id: `${course.id}-cur-${i + 1}`,
-        name: {
-          fi: `${course.name.fi}`,
-          en: `${course.name.en}`,
-          sv: `${course.name.sv}`,
-        },
-        nameSpecifier: nameSpecifiers[specifierIndex],
-        startDate: semester.startDate,
-        endDate: semester.endDate,
-        courseUnitRealisationTypeUrn: typeUrn,
-        customCodeUrns: realizationUrns,
-      })
+
+      realizations.push(makeRealization(
+        `${course.id}-cur-${i + 1}`,
+        course.name,
+        nameSpecifiers[i % nameSpecifiers.length],
+        semester.startDate,
+        semester.endDate,
+        typeUrns[i % typeUrns.length],
+        urns,
+      ))
     }
   })
-  
+
   await Cur.bulkCreate(realizations)
-  
+
   logger.info(`Seeded ${realizations.length} course realizations`)
   return realizations
 }
@@ -518,23 +267,14 @@ async function seedCourseRealizations(courses: any[]) {
  */
 async function seedCurCuRelations(realizations: any[]) {
   logger.info('Seeding CurCu relations...')
-  
-  const relations: any[] = []
-  
-  // Link each realization to its course unit
-  realizations.forEach((realization) => {
-    // Extract the course ID from the realization ID
-    // Format: hy-cu-e2e-xxx-cur-1 -> hy-cu-e2e-xxx
-    const cuId = realization.id.substring(0, realization.id.lastIndexOf('-cur-'))
-    
-    relations.push({
-      curId: realization.id,
-      cuId: cuId,
-    })
-  })
-  
+
+  // Derive CU id by stripping the trailing '-cur-N' suffix
+  const relations = realizations.map((r) =>
+    makeCurCu(r.id, r.id.substring(0, r.id.lastIndexOf('-cur-')))
+  )
+
   await CurCu.bulkCreate(relations)
-  
+
   logger.info(`Seeded ${relations.length} CurCu relations`)
 }
 
