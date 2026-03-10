@@ -231,6 +231,11 @@ async function seedCourses() {
     },
     
     // Language courses (Kielikeskus - H930)
+    // These four courses cover all four tiers of the point-based sort ordering:
+    // 1. Specific  (KK-RUMALU)   – no trailing digits, non-KAIKKI → highest bonus
+    // 2. KAIKKI    (KK-ENKAIKKI) – code contains "KAIKKI"         → second bonus
+    // 3. Numbered  (KK-ENG201)   – code ends in digits             → third bonus
+    // 4. ERI       (KK-ENERI)    – challenge course (kks-kor URN)  → lowest bonus
     {
       id: 'hy-cu-e2e-kk-rumalu',
       name: { fi: 'Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1)', en: 'Oral and Written Skills in the Second National Language, Swedish (CEFR B1)', sv: 'Muntlig och skriftlig färdighet i det andra inhemska språket, svenska (CEFR B1)' },
@@ -243,13 +248,13 @@ async function seedCourses() {
       },
     },
     {
-      id: 'hy-cu-e2e-kk-ruo205',
-      name: { fi: 'Repetera svenska - Ruotsin perusrakenteiden ja sanaston kertausta (CEFR A2)', en: 'Repetera svenska - Remedial course in Swedish (CEFR A2)', sv: 'Repetera svenska (CEFR A2)' },
-      courseCode: 'KK-RUO205',
-      credits: { min: 2, max: 2 },
+      id: 'hy-cu-e2e-kk-enkaikki',
+      name: { fi: 'Englanti kaikille', en: 'English for Everyone', sv: 'Engelska för alla' },
+      courseCode: 'KK-ENKAIKKI',
+      credits: { min: 3, max: 3 },
       groupId: 'hy-org-1000003401',
       customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi', 'urn:code:custom:hy-university-root-id:opetuskielet:sv'],
+        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
         'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
       },
     },
@@ -261,6 +266,29 @@ async function seedCourses() {
       groupId: 'hy-org-1000003401',
       customCodeUrns: {
         'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
+        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
+      },
+    },
+    {
+      id: 'hy-cu-e2e-kk-eneri',
+      name: { fi: 'Englanti erityistarpeisiin', en: 'English for Special Purposes', sv: 'Engelska för särskilda ändamål' },
+      courseCode: 'KK-ENERI',
+      credits: { min: 3, max: 3 },
+      groupId: 'hy-org-1000003401',
+      customCodeUrns: {
+        'urn:code:custom:hy-university-root-id:kk-apparaatti': ['urn:code:custom:hy-university-root-id:kk-apparaatti:kks-kor'],
+        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:en'],
+        'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
+      },
+    },
+    {
+      id: 'hy-cu-e2e-kk-ruo205',
+      name: { fi: 'Repetera svenska - Ruotsin perusrakenteiden ja sanaston kertausta (CEFR A2)', en: 'Repetera svenska - Remedial course in Swedish (CEFR A2)', sv: 'Repetera svenska (CEFR A2)' },
+      courseCode: 'KK-RUO205',
+      credits: { min: 2, max: 2 },
+      groupId: 'hy-org-1000003401',
+      customCodeUrns: {
+        'urn:code:custom:hy-university-root-id:opetuskielet': ['urn:code:custom:hy-university-root-id:opetuskielet:fi', 'urn:code:custom:hy-university-root-id:opetuskielet:sv'],
         'urn:code:custom:hy-university-root-id:helsinki_fi': ['urn:code:custom:hy-university-root-id:helsinki_fi:kielet'],
       },
     },
