@@ -174,7 +174,35 @@ describe('pointRecommendCourses', () => {
 
     expect(nonGenericPoints).toBeDefined()
     expect(genericPoints).toBeDefined()
-    expect(nonGenericPoints).toBe((genericPoints as number) + 1)
+    expect(genericPoints).toBe((nonGenericPoints as number) + 1)
+  })
+
+  it('ranks courses: specific > KAIKKI > numbered > ERI', () => {
+    const user = createUserCoordinates()
+
+    const specific = createRecommendation('specific', {
+      course: { courseCodes: ['RUFARM'] },
+      coordinates: { mentoring: 0, challenge: 0 },
+    })
+    const kaikki = createRecommendation('kaikki', {
+      course: { courseCodes: ['RUKAIKKI'] },
+      coordinates: { mentoring: 0, challenge: 0 },
+    })
+    const numbered = createRecommendation('numbered', {
+      course: { courseCodes: ['RU123'] }, 
+      coordinates: { mentoring: 0, challenge: 0 },
+    })
+    const eri = createRecommendation('eri', {
+      course: { courseCodes: ['RUERI'] },
+      coordinates: { mentoring: 0, challenge: 1 },
+    })
+
+    const result = pointRecommendedCourses([numbered, eri, kaikki, specific], user, [])
+    const ids = result.map((c) => c.course.id)
+
+    expect(ids.indexOf('specific')).toBeLessThan(ids.indexOf('kaikki'))
+    expect(ids.indexOf('kaikki')).toBeLessThan(ids.indexOf('numbered'))
+    expect(ids.indexOf('numbered')).toBeLessThan(ids.indexOf('eri'))
   })
 
   it('enforces studyYear comparison and allows neutral year', () => {

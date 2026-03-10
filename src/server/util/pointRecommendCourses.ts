@@ -168,12 +168,22 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       }
     }
 
-    //if course is not a generic course and is mandatory (RUKFARM, ENLAAK) and is not a challenge course (ERI or kks-kor)
-    //then they should get a little extra points. 
-    const notGenericCourse = !c.course.courseCodes.find((c) => c.includes('KAIKKI'))
+    // Ordering: specific (RUFARM) > KAIKKI > numbered (ENG-123) > ERI (challenge)
+    const isGenericCourse = !!c.course.courseCodes.find((c) => c.includes('KAIKKI'))
+    const notGenericCourse = !isGenericCourse
     const notChallengeCourse = c.coordinates.challenge === 0 ? true : false
+    const isNumberedCourse = c.course.courseCodes.some((code) => /\d+$/.test(code))
+
     if(notGenericCourse && mandatory && notChallengeCourse){
-      bonusPoints += bonusPoint
+      bonusPoints += bonusPoint // non-generic non-challenge: +1
+      if(!isNumberedCourse){
+        bonusPoints += bonusPoint * 2 // specific courses (RUKFARM etc): extra +2
+      }
+    }
+
+    // KAIKKI (generic) courses rank between specific and numbered courses
+    if(isGenericCourse && mandatory && notChallengeCourse){
+      bonusPoints += bonusPoint * 2
     }
 
   
