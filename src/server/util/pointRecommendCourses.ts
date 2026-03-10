@@ -149,46 +149,21 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     const points = calculatePointsForCourse(c, userCoordinates, comparisons)
 
 
-    //this code is bad and wont scale for more exceptions...
-    /*
-
-    the goal of these bonus points is to show courses that are spesifically for the user even when the sisu custom tags are missing by rewarding certain types of courses.
-
-
-    */
+    // Bonus point tiers (when no other filters active):
+    //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
+    //   2. generic / KAIKKI                                       → 3×
+    //   3. numbered (ENG-201, RUO-205…)                          → 2×
+    //   4. ERI / challenge                                        → 0× (unless user wants challenge)
+    const isEriOrChallenge  = c.coordinates.challenge === 1 || c.course.courseCodes.some(code => code.includes('ERI'))
+    const isGeneric         = c.course.courseCodes.some(code => code.includes('KAIKKI'))
+    const isNumbered        = c.course.courseCodes.some(code => /\d+$/.test(code))
+    const isMandatory        = c.coordinates.mentoring === 0
 
     let bonusPoints = 0
-
-    const isChallengeCourseOrEri = c.coordinates.challenge === 1 || c.course.courseCodes.find((c) => c.includes('ERI'))
-
-    const mandatory = c.coordinates.mentoring === 0 ? true : false//it is believed that if course is not a mentoring course it is a mandatory course.  
-    const calculateBonusForMandatory = userCoordinates?.mentoring === undefined | null 
-    if (calculateBonusForMandatory && !isChallengeCourseOrEri){
-      //lets add some extra points when the course is mandatory course
-      if(mandatory){
-        bonusPoints += bonusPoint
-      }
-    }
-
-    // Ordering: specific (RUFARM) > KAIKKI > numbered (ENG-123) > ERI (challenge)
-    const isGenericCourse = !!c.course.courseCodes.find((c) => c.includes('KAIKKI'))
-    const isNumberedCourse = c.course.courseCodes.some((code) => /\d+$/.test(code))
-
-    if(!isGenericCourse && mandatory && !isChallengeCourseOrEri){
-      bonusPoints += bonusPoint // non-generic non-challenge: +1
-      if(!isNumberedCourse){
-        bonusPoints += bonusPoint * 2 // specific courses (RUKFARM etc): extra +2
-      }
-    }
-
-    // KAIKKI (generic) courses rank between specific and numbered courses
-    if(isGenericCourse && mandatory && !isChallengeCourseOrEri){
-      bonusPoints += bonusPoint * 2
-    }
-  
-    const pickedChallenge = userCoordinates?.challenge === undefined | null
-    if(!pickedChallenge && isChallengeCourseOrEri){
-      bonusPoints = 0
+    if (!isEriOrChallenge) {
+      if (isMandatory && !isGeneric && !isNumbered)  bonusPoints = bonusPoint * 4  // tier 1: faculty-specific
+      else if (isGeneric)                            bonusPoints = bonusPoint * 3  // tier 2: KAIKKI
+      else if (isMandatory)                          bonusPoints = bonusPoint * 2  // tier 3: numbered
     }
 
     return points >= 0 ? {...c, points: points + bonusPoints} : {...c, points}
