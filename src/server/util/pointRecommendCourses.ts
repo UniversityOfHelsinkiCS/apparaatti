@@ -185,8 +185,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     if(isGenericCourse && mandatory && !isChallengeCourseOrEri){
       bonusPoints += bonusPoint * 2
     }
-
   
+    const pickedChallenge = userCoordinates?.challenge === undefined | null
+    if(!pickedChallenge && isChallengeCourseOrEri){
+      bonusPoints = 0
+    }
 
     return points >= 0 ? {...c, points: points + bonusPoints} : {...c, points}
   })
