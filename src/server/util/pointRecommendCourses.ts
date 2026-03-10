@@ -159,9 +159,11 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
     let bonusPoints = 0
 
+    const isChallengeCourseOrEri = c.coordinates.challenge === 1 || c.course.courseCodes.find((c) => c.includes("ERI"))
+
     const mandatory = c.coordinates.mentoring === 0 ? true : false//it is believed that if course is not a mentoring course it is a mandatory course.  
     const calculateBonusForMandatory = userCoordinates?.mentoring === undefined | null 
-    if (calculateBonusForMandatory){
+    if (calculateBonusForMandatory && !isChallengeCourseOrEri){
       //lets add some extra points when the course is mandatory course
       if(mandatory){
         bonusPoints += bonusPoint
@@ -170,11 +172,9 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
     // Ordering: specific (RUFARM) > KAIKKI > numbered (ENG-123) > ERI (challenge)
     const isGenericCourse = !!c.course.courseCodes.find((c) => c.includes('KAIKKI'))
-    const notGenericCourse = !isGenericCourse
-    const notChallengeCourse = c.coordinates.challenge === 0 ? true : false
     const isNumberedCourse = c.course.courseCodes.some((code) => /\d+$/.test(code))
 
-    if(notGenericCourse && mandatory && notChallengeCourse){
+    if(!isGenericCourse && mandatory && !isChallengeCourseOrEri){
       bonusPoints += bonusPoint // non-generic non-challenge: +1
       if(!isNumberedCourse){
         bonusPoints += bonusPoint * 2 // specific courses (RUKFARM etc): extra +2
@@ -182,7 +182,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     }
 
     // KAIKKI (generic) courses rank between specific and numbered courses
-    if(isGenericCourse && mandatory && notChallengeCourse){
+    if(isGenericCourse && mandatory && !isChallengeCourseOrEri){
       bonusPoints += bonusPoint * 2
     }
 
