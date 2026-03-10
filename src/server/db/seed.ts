@@ -160,7 +160,7 @@ async function seedCourses() {
     makeCourse('mat11002', 'MAT11002', { fi: 'Lineaarialgebra',                 en: 'Linear Algebra',                 sv: 'Linjär algebra'                  }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'),     ...helsinkiUrns('luonnontieteet') }),
 
     // Language courses (H930 - Kielikeskus)
-    // The four courses below cover all four tiers of the point-based sort order:
+    // English 4-tier sort order (en-secondary users):
     // 1. Specific  (KK-RUMALU)   – no trailing digits, non-KAIKKI → highest bonus
     // 2. KAIKKI    (KK-ENKAIKKI) – code contains "KAIKKI"         → second bonus
     // 3. Numbered  (KK-ENG201)   – code ends in digits             → third bonus
@@ -169,7 +169,15 @@ async function seedCourses() {
     makeCourse('kk-enkaikki', 'KK-ENKAIKKI', { fi: 'Englanti kaikille',         en: 'English for Everyone',           sv: 'Engelska för alla'               }, ORG.language, { min: 3, max: 3 }, { ...langUrns('en'),      ...helsinkiUrns('kielet') }),
     makeCourse('kk-eng201',   'KK-ENG201',   { fi: 'Akateeminen englanti',       en: 'Academic English',               sv: 'Akademisk engelska'              }, ORG.language, { min: 5, max: 5 }, { ...langUrns('en'),      ...helsinkiUrns('kielet') }),
     makeCourse('kk-eneri',    'KK-ENERI',    { fi: 'Englanti erityistarpeisiin', en: 'English for Special Purposes',   sv: 'Engelska för särskilda ändamål'  }, ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns('kks-kor'), ...langUrns('en'), ...helsinkiUrns('kielet') }),
+
+    // Swedish 4-tier sort order for matlu (sv-secondary users, KK-RUMALU already serves tier 1):
+    // 1. Specific  (KK-RUMALU)   – already above
+    // 2. KAIKKI    (KK-RUKAIKKI) – code contains "KAIKKI"         → second bonus
+    // 3. Numbered  (KK-RUO205)   – code ends in digits             → third bonus
+    // 4. ERI       (KK-RUERI)    – challenge course (sv-secondary code match) → lowest bonus
+    makeCourse('kk-rukaikki', 'KK-RUKAIKKI', { fi: 'Ruotsi kaikille',            en: 'Swedish for Everyone',           sv: 'Svenska för alla'                }, ORG.language, { min: 3, max: 3 }, { ...langUrns('sv'),      ...helsinkiUrns('kielet') }),
     makeCourse('kk-ruo205',   'KK-RUO205',   { fi: 'Repetera svenska - Ruotsin perusrakenteiden ja sanaston kertausta (CEFR A2)', en: 'Repetera svenska - Remedial course in Swedish (CEFR A2)', sv: 'Repetera svenska (CEFR A2)' }, ORG.language, { min: 2, max: 2 }, { ...langUrns('fi', 'sv'), ...helsinkiUrns('kielet') }),
+    makeCourse('kk-rueri',    'KK-RUERI',    { fi: 'Ruotsi erityistarpeisiin',    en: 'Swedish for Special Purposes',   sv: 'Svenska för särskilda ändamål'   }, ORG.language, { min: 3, max: 3 }, { ...langUrns('sv'),      ...helsinkiUrns('kielet') }),
 
     // Other faculties
     makeCourse('fys1001', 'FYS1001', { fi: 'Fysiikka I',              en: 'Physics I',                  sv: 'Fysik I'                   }, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns('kkt-mat'), ...langUrns('fi'), ...helsinkiUrns('luonnontieteet') }),
