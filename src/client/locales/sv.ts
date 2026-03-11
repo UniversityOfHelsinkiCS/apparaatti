@@ -100,7 +100,7 @@ export default {
   },
   'course': {
     'show': 'Visa',
-    'credits': 'kr',
+    'credits': 'sp',
     'reasons': 'grundläggande'
   },
   'recommendationReasons': {
