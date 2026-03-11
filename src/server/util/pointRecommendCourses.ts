@@ -156,7 +156,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     //   4. ERI / challenge                                        → 0× (unless user wants challenge)
     const isEriOrChallenge  = c.coordinates.challenge === 1 || c.course.courseCodes.some(code => code.includes('ERI'))
     const isGeneric = c.course.courseCodes.some(code => code.includes('KAIKKI'))
-    const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
+    // const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
 
     //those courses that are not mentoring courses are mandatory courses
     //courses that are mentoring courses (value of 1) are usually numbered courses
@@ -164,7 +164,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 
     let bonusPoints = 0
     if (!isEriOrChallenge) {
-      if (isMandatory && !isGeneric && !isNumbered)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
+      if (isMandatory && !isGeneric)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
       else if (isGeneric)  bonusPoints = bonusPoint * 4  // tier 2: KAIKKI
       else if (!isMandatory) bonusPoints = bonusPoint * 3  // tier 3: numbered
     }
