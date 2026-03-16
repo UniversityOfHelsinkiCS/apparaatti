@@ -394,7 +394,8 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const recommendations = await calculateAllCourseCoordinates(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
  
-  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
+  const strictFieldsWithLang = courseLanguageType === 'fi-primary' ? [...strictFields, 'spesificOrg'] : strictFields
+  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFieldsWithLang)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,
