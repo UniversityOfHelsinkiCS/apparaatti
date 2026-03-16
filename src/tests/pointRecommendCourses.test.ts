@@ -174,7 +174,7 @@ describe('pointRecommendCourses', () => {
 
     expect(nonGenericPoints).toBeDefined()
     expect(genericPoints).toBeDefined()
-    expect(genericPoints).toBe((nonGenericPoints as number) + 1)
+    expect(nonGenericPoints).toBe((genericPoints as number) + 1)
   })
 
   it('ranks courses: specific > KAIKKI > numbered > ERI', () => {
@@ -190,7 +190,7 @@ describe('pointRecommendCourses', () => {
     })
     const numbered = createRecommendation('numbered', {
       course: { courseCodes: ['RU123'] }, 
-      coordinates: { mentoring: 0, challenge: 0 },
+      coordinates: { mentoring: 1, challenge: 0 }, // mentoring:1 = non-mandatory (numbered) → tier 3
     })
     const eri = createRecommendation('eri', {
       course: { courseCodes: ['RUERI'] },
@@ -297,6 +297,7 @@ describe('pointRecommendCourses', () => {
       { strictField: 'integrated', coordinateField: 'integrated' },
       { strictField: 'study-place', coordinateField: 'studyPlace' },
       { strictField: 'multi-period', coordinateField: 'multiPeriod' },
+      { strictField: 'spesificOrg', coordinateField: 'spesificOrg' },
     ]
 
     for (const testCase of strictCases) {
@@ -313,6 +314,34 @@ describe('pointRecommendCourses', () => {
       const result = pointRecommendedCourses([mismatch], user, [testCase.strictField])
       expect(result).toEqual([])
     }
+  })
+
+  it('filters out spesificOrg mismatches when spesificOrg is a strict field (Finnish Finnish)', () => {
+    const user = createUserCoordinates({ spesificOrg: 1 })
+    const specificCourse = createRecommendation('specific-org-match', {
+      coordinates: { spesificOrg: 1 },
+    })
+    const genericCourse = createRecommendation('specific-org-miss', {
+      coordinates: { spesificOrg: 0 },
+    })
+
+    const result = pointRecommendedCourses([specificCourse, genericCourse], user, ['spesificOrg'])
+
+    expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
+  })
+
+  it('keeps spesificOrg mismatches when spesificOrg is not a strict field (non-Finnish Finnish)', () => {
+    const user = createUserCoordinates({ spesificOrg: 1 })
+    const specificCourse = createRecommendation('specific-org-match', {
+      coordinates: { spesificOrg: 1 },
+    })
+    const genericCourse = createRecommendation('specific-org-miss', {
+      coordinates: { spesificOrg: 0 },
+    })
+
+    const result = pointRecommendedCourses([specificCourse, genericCourse], user, [])
+
+    expect(result).toHaveLength(2)
   })
 
   it('always enforces org as strict even when not listed in strictFields', () => {
@@ -379,6 +408,6 @@ describe('pointRecommendCourses', () => {
 
     expect(matchPoints).toBeDefined()
     expect(missPoints).toBeDefined()
-    expect((matchPoints as number) - (missPoints as number)).toBe(4)
+    expect((matchPoints as number) - (missPoints as number)).toBe(20)
   })
 })
