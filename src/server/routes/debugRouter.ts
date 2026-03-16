@@ -108,6 +108,40 @@ debugRouter.get('/cu', async (req: any, res: any) => {
   res.json(cus)
 })
 
+debugRouter.get('/strict', async (req: any, res: any) => {
+  if (!req.user) {
+    res.status(404).json({ message: 'User not found' })
+    return
+  }
+
+  const realisations = await Cur.findAll({ raw: true })
+
+  const grouped: Record<string, any[]> = {}
+
+  for (const cur of realisations) {
+    const customCodeUrns = (cur as any).customCodeUrns as Record<string, string[]> | null
+    if (!customCodeUrns) continue
+
+    const kktUrns: string[] = []
+    for (const key of Object.keys(customCodeUrns)) {
+      if (key.includes('kk-apparaatti')) {
+        for (const val of customCodeUrns[key]) {
+          if (val.includes('kkt-')) {
+            kktUrns.push(val)
+          }
+        }
+      }
+    }
+
+    for (const urn of kktUrns) {
+      if (!grouped[urn]) grouped[urn] = []
+      grouped[urn].push(cur)
+    }
+  }
+
+  res.json(grouped)
+})
+
 debugRouter.get('/curcu', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
