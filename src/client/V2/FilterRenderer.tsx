@@ -32,6 +32,7 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     <FilterAccordion
       key={filter.id}
       title={filterToRender.shortName}
+      filterId={filter.id}
     >
       <Filter variant={variant} filter={filterToRender} />
     </FilterAccordion>
