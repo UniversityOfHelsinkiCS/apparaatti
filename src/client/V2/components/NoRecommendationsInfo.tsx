@@ -1,10 +1,12 @@
 import { Box, Typography, Paper, Button } from '@mui/material'
 import { useFilterContext } from '../filterContext'
 import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
 
 const NoRecommendationsInfo = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const {
+    studyField,
     setPreviouslyDoneLang,
     setReplacement,
     setMentoring,
@@ -35,6 +37,9 @@ const NoRecommendationsInfo = () => {
     setStrictFilters([])
   }
 
+  const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
+  const additionalInfo = i18n.exists(additionalInfoKey) ? t(additionalInfoKey) : null
+
   return (
     <Paper
       elevation={2}
@@ -52,6 +57,11 @@ const NoRecommendationsInfo = () => {
         <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
           {t('v2:noRecommendations.description')}
         </Typography>
+        {additionalInfo && (
+          <Box sx={{ mb: 3, textAlign: 'left' }}>
+            <Markdown>{additionalInfo}</Markdown>
+          </Box>
+        )}
         <Button
           variant="outlined"
           onClick={handleReset}
