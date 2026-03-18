@@ -4,6 +4,8 @@ import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 
+export const defaultStrictFilters: string[] = ['collaboration', 'exam']
+
 interface UIVariantType{
   name: string,
   value: string
@@ -70,6 +72,7 @@ interface FilterContextType {
   setStrictFilters: (s: string[]) => void
   exam: string
   setExam: (s: string) => void
+  resetFilters: () => void
 }
 
 export const filterConfigMap = (filters: any) => new Map([
@@ -277,7 +280,22 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [collaboration, setCollaboration] = useState('')
   const [multiPeriod, setMultiPeriod] = useState('')
   const [exam, setExam] = useState('0')
-  const [strictFilters, setStrictFilters] = useState<string[]>(['collaboration', 'exam'])
+  const [strictFilters, setStrictFilters] = useState<string[]>(defaultStrictFilters)
+
+  const resetFilters = () => {
+    setPreviouslyDoneLang('')
+    setReplacement('')
+    setMentoring('')
+    setFinmu('')
+    setChallenge('')
+    setGraduation('')
+    setStudyPlace([])
+    setStudyPeriod([])
+    setIntegrated('')
+    setIndependent('')
+    setMooc('')
+    setStrictFilters(defaultStrictFilters)
+  }
 
 
   const [uiVariant, setUiVariant] = useState([
@@ -473,6 +491,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setExam,
         strictFilters,
         setStrictFilters,
+        resetFilters,
       }}
     >
       {children}

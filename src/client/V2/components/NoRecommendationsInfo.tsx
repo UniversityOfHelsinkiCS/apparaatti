@@ -7,35 +7,8 @@ const NoRecommendationsInfo = () => {
   const { t, i18n } = useTranslation()
   const {
     studyField,
-    setPreviouslyDoneLang,
-    setReplacement,
-    setMentoring,
-    setFinmu,
-    setChallenge,
-    setGraduation,
-    setStudyPlace,
-    setStudyPeriod,
-    setIntegrated,
-    setIndependent,
-    setMooc,
-    setStrictFilters,
+    resetFilters,
   } = useFilterContext()
-
-  const handleReset = () => {
-    // Reset all non-mandatory filters to their default values
-    setPreviouslyDoneLang('')
-    setReplacement('')
-    setMentoring('')
-    setFinmu('')
-    setChallenge('')
-    setGraduation('')
-    setStudyPlace([])
-    setStudyPeriod([])
-    setIntegrated('')
-    setIndependent('')
-    setMooc('')
-    setStrictFilters([])
-  }
 
   const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
   const additionalInfo = i18n.exists(additionalInfoKey) ? t(additionalInfoKey) : null
@@ -64,7 +37,7 @@ const NoRecommendationsInfo = () => {
         )}
         <Button
           variant="outlined"
-          onClick={handleReset}
+          onClick={resetFilters}
           sx={{
             borderColor: '#90caf9',
             color: 'black',
