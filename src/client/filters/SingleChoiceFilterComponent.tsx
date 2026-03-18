@@ -1,6 +1,6 @@
 import { FormControlLabel, Radio, RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Question, Option } from '../../../common/types'
+import { Question, Option } from '../../common/types'
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'

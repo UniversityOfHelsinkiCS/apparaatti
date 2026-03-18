@@ -1,5 +1,5 @@
 import { skipToken } from '@tanstack/react-query'
-import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { pickVariant, updateVariantToDisplayId } from './hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
 import { useFilterContext, filterConfigMap } from './filterContext'
 import Filter from './filters/filter'

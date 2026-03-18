@@ -2,7 +2,7 @@ import { Box, Typography, Stack } from '@mui/material'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { useTranslation } from 'react-i18next'
-import { UserCoordinates } from '../../../common/types'
+import { UserCoordinates } from '../../common/types'
 import { filterConfigMap, useFilterContext, coordinateKeyToFilterId, getCoordinateDisplayName } from '../filterContext'
 
 interface RecommendationReasonsPopoverContentProps {

@@ -4,12 +4,12 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import { Question } from '../../../common/types.ts'
+import { Question } from '../../common/types.ts'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
 import { useState } from 'react'
 import { useFilterContext } from '../filterContext.tsx'
 import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'
-import { pickVariant } from '../../hooks/useQuestions.tsx'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 
 const PrimaryLanguageSpecificationV2 = ({
   question,

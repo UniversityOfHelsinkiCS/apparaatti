@@ -7,10 +7,10 @@ import {
   FormControl,
 } from '@mui/material'
 import { green } from '@mui/material/colors'
-import { Question } from '../../../common/types'
+import { Question } from '../../common/types'
 import QuestionTitleV2 from './QuestionTitleV2'
 import ExtraInfoModalV2 from './ExtraInfoModalV2'
-import { pickVariant } from '../../hooks/useQuestions'
+import { pickVariant } from '../hooks/useQuestions'
 import { useFilterContext } from '../filterContext'
 
 const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {

@@ -1,6 +1,6 @@
 import { IconButton, Stack, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
-import { Question } from '../../../common/types'
+import { Question } from '../../common/types'
 import { useTranslation } from 'react-i18next'
 
 const MandatoryStatus = ({question}: {question: Question}) => {

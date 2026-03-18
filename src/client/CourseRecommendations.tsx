@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import { CourseRecommendation } from '../../common/types'
+import { CourseRecommendation } from '../common/types'
 import CourseRecommendationV2 from './CourseRecommendationV2'
 import { useFilterContext } from './filterContext'
 import NoRecommendationsInfo from './components/NoRecommendationsInfo'

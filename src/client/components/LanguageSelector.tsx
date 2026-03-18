@@ -1,6 +1,6 @@
 import { Select, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useContext } from 'react'
-import { LanguageContext } from '../../contexts/languageContext'
+import { LanguageContext } from '../contexts/languageContext'
 
 const LanguageSelector = () => {
   const { language, setAppLanguage } = useContext(LanguageContext)

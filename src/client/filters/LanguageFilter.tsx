@@ -3,8 +3,8 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import { Question } from '../../../common/types.ts'
-import { pickVariant } from '../../hooks/useQuestions.tsx'
+import { Question } from '../../common/types.ts'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 
 const LanguageFilter = ({
   filter,

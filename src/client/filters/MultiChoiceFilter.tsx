@@ -3,8 +3,8 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import { Question } from '../../../common/types.tsx'
-import { pickVariant } from '../../hooks/useQuestions.tsx'
+import { Question } from '../../common/types.tsx'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 import { useFilterContext } from '../filterContext.tsx'
 
 const MultiChoiceFilter = ({

@@ -1,7 +1,7 @@
 import { FormControl, MenuItem, Select } from '@mui/material'
-import { Question, Option } from '../../../common/types'
+import { Question, Option } from '../../common/types'
 import React from 'react'
-import { translateLocalizedString } from '../../util/i18n'
+import { translateLocalizedString } from '../util/i18n'
 
 interface DropdownFilterComponentProps {
   filter: Question

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Variant } from '../../../common/types'
+import { Variant } from '../../common/types'
 import QuestionTitleV2 from '../components/QuestionTitleV2'
 import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
 import { Box } from '@mui/material'

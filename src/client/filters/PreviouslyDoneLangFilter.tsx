@@ -1,10 +1,10 @@
 import { Box, RadioGroup, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
-import { Question } from '../../../common/types'
+import { Question } from '../../common/types'
 import { useTranslation } from 'react-i18next'
-import FormOption from '../../components/FormOption'
-import { pickVariant } from '../../hooks/useQuestions'
+import FormOption from '../components/FormOption'
+import { pickVariant } from '../hooks/useQuestions'
 import Markdown from 'react-markdown'
 import { useFilterContext } from '../filterContext'
 

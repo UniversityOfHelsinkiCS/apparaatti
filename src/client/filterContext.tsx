@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
-import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import { CourseRecommendations, Question, User } from '../../common/types'
-import useApiMutation from '../hooks/useApiMutation'
-import useApi from '../util/useApi'
+import useQuestions, { pickVariant, updateVariantToDisplayId } from './hooks/useQuestions'
+import { CourseRecommendations, Question, User } from '../common/types'
+import useApiMutation from './hooks/useApiMutation'
+import useApi from './util/useApi'
 
 export const defaultStrictFilters: string[] = ['collaboration', 'exam']
 

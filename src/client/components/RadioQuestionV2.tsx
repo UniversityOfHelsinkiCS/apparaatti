@@ -4,8 +4,8 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material'
-import { Question } from '../../../common/types.ts'
-import { pickVariant } from '../../hooks/useQuestions.tsx'
+import { Question } from '../../common/types.ts'
+import { pickVariant } from '../hooks/useQuestions.tsx'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
 import { useState } from 'react'
 import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'

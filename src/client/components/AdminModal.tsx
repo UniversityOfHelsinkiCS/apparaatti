@@ -1,6 +1,6 @@
 import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuItem, Tabs, Tab, FormControlLabel, Switch } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import { CourseRecommendations } from '../../../common/types'
+import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import { useFilterContext } from '../filterContext'
 
