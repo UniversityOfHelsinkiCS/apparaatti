@@ -57,7 +57,6 @@ const createRecommendation = (
     credits: [],
     ...(overrides.course || {}),
   },
-  distance: overrides.distance ?? 0,
   coordinates: {
     date: 0,
     org: 1,

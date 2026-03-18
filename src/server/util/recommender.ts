@@ -238,8 +238,7 @@ async function calculateCourseCoordinates(course: CourseData, userCoordinates: U
 
   
 
-  //distance will get depricated soon
-  return { course: course, distance: 0, coordinates: courseCoordinates }
+  return { course: course, coordinates: courseCoordinates }
 }
 
 //returns a list of courseRecommendation
@@ -399,7 +398,6 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,
-    recommendations: [], //this will get depricated
     userCoordinates: userCoordinates,
   }
   
