@@ -2,7 +2,7 @@ import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuIt
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 const style = {
   position: 'absolute',

@@ -1,8 +1,8 @@
 import { skipToken } from '@tanstack/react-query'
-import { pickVariant, updateVariantToDisplayId } from './hooks/useQuestions'
+import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
-import { useFilterContext, filterConfigMap } from './filterContext'
-import Filter from './filters/filter'
+import { useFilterContext, filterConfigMap } from '../contexts/filterContext'
+import Filter from '../filters/filter'
 
 const FilterRenderer = ({ filter }: { filter: any }) => {
   const filters = useFilterContext()

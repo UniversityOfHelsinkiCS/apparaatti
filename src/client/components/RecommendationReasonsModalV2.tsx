@@ -4,7 +4,7 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
 import { UserCoordinates } from '../../common/types'
-import { filterConfigMap, useFilterContext, coordinateKeyToFilterId, getCoordinateDisplayName } from '../filterContext'
+import { filterConfigMap, useFilterContext, coordinateKeyToFilterId, getCoordinateDisplayName } from '../contexts/filterContext'
 
 interface RecommendationReasonsModalV2Props {
   open: boolean

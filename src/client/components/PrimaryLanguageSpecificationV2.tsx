@@ -7,7 +7,7 @@ import {
 import { Question } from '../../common/types.ts'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
 import { useState } from 'react'
-import { useFilterContext } from '../filterContext.tsx'
+import { useFilterContext } from '../contexts/filterContext'
 import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 

@@ -1,7 +1,7 @@
-import { useFilterContext } from './filterContext'
-import FilterRenderer from './FilterRenderer.tsx'
+import { useFilterContext } from '../contexts/filterContext'
+import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
-import ActionButtonV2 from './components/ActionButtonV2'
+import ActionButtonV2 from './ActionButtonV2'
 import { Box } from '@mui/material'
 
 const SidebarContent = () => {

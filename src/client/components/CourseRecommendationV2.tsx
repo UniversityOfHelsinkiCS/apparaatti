@@ -1,12 +1,12 @@
-import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../common/types'
+import type { CourseRecommendation as CourseRecommendationType, UserCoordinates } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import { translateLocalizedString } from './util/i18n'
+import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
-import RecommendationReasonsModalV2 from './components/RecommendationReasonsModalV2'
-import RecommendationReasonsPopoverContent from './components/RecommendationReasonsPopoverContent'
-import { useFilterContext } from './filterContext'
+import RecommendationReasonsModalV2 from './RecommendationReasonsModalV2'
+import RecommendationReasonsPopoverContent from './RecommendationReasonsPopoverContent'
+import { useFilterContext } from '../contexts/filterContext'
 
 const CourseRecommendationV2 = ({
   course,

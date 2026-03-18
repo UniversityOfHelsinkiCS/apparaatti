@@ -5,7 +5,7 @@ import {
 } from '@mui/material'
 import { Question } from '../../common/types.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
-import { useFilterContext } from '../filterContext.tsx'
+import { useFilterContext } from '../contexts/filterContext'
 
 const MultiChoiceFilter = ({
   filter,

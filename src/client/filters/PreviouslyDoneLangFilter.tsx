@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import FormOption from '../components/FormOption'
 import { pickVariant } from '../hooks/useQuestions'
 import Markdown from 'react-markdown'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 const PreviouslyDoneLangFilter = ({
   filter,

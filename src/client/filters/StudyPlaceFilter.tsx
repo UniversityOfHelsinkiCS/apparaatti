@@ -9,7 +9,7 @@ import {
 import { green } from '@mui/material/colors'
 import { Question } from '../../common/types'
 import { pickVariant } from '../hooks/useQuestions'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 const StudyPlaceFilter = ({
   filter,

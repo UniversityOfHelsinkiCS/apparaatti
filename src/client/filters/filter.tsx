@@ -7,7 +7,7 @@ import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
 import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 import DropdownFilterComponent from './DropdownFilterComponent'
 import SuperToggle from '../components/SuperToggle'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 /*
  a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 

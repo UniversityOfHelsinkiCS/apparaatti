@@ -1,8 +1,8 @@
 import { Box, Typography, Button, Stack, IconButton, Chip } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { filterConfigMap, getFilterVariant, useFilterContext } from './filterContext'
-import { getOptionDisplayTexts } from './hooks/useQuestions'
-import { Variant } from '../common/types'
+import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import { getOptionDisplayTexts } from '../hooks/useQuestions'
+import { Variant } from '../../common/types'
 
 
 const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}) => {

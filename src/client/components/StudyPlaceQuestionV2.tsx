@@ -11,7 +11,7 @@ import { Question } from '../../common/types'
 import QuestionTitleV2 from './QuestionTitleV2'
 import ExtraInfoModalV2 from './ExtraInfoModalV2'
 import { pickVariant } from '../hooks/useQuestions'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)

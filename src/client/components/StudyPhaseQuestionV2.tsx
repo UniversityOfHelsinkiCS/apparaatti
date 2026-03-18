@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../util/i18n'
 import QuestionTitleV2 from './QuestionTitleV2'
 import ExtraInfoModalV2 from './ExtraInfoModalV2'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 
 const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
   const { user, studyData, supportedOrganisations, setUserOrgCode, studyField, setStudyField } = useFilterContext()

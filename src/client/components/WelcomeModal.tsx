@@ -1,10 +1,10 @@
 import { Modal, Box, Typography, Button } from '@mui/material'
 import { FC, useEffect, useRef } from 'react'
-import { useFilterContext } from './filterContext'
-import PrimaryLanguageSpecificationV2 from './components/PrimaryLanguageSpecificationV2'
-import { Question } from '../common/types'
-import RadioQuestionV2 from './components/RadioQuestionV2'
-import StudyPhaseQuestionV2 from './components/StudyPhaseQuestionV2'
+import { useFilterContext } from '../contexts/filterContext'
+import PrimaryLanguageSpecificationV2 from './PrimaryLanguageSpecificationV2'
+import { Question } from '../../common/types'
+import RadioQuestionV2 from './RadioQuestionV2'
+import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
 import { useTranslation } from 'react-i18next'
 
 type Props = {

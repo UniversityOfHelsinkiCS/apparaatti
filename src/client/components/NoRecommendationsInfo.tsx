@@ -1,5 +1,5 @@
 import { Box, Typography, Paper, Button } from '@mui/material'
-import { useFilterContext } from '../filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 

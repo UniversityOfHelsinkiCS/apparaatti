@@ -1,7 +1,7 @@
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Chip, Stack, Box } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { ReactNode } from 'react'
-import { useFilterContext, filterConfigMap, getFilterVariant } from './filterContext'
+import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
 
 interface ActiveFilterChipsProps {
   filterId: string
