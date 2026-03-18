@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { mangleData } from './mangleData.ts'
 
 export const fetchEnrolments = async () => {
