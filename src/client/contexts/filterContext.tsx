@@ -87,7 +87,7 @@ export const filterConfigMap = (filters: any) => new Map([
   ['primary-language', {
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
-    hideInCurrentFiltersDisplay: false,
+    hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true
   }],
   ['lang', {
