@@ -35,6 +35,7 @@ export default {
     'noDefinitely': 'Nej (definitivt)',
     'neutralChoice': 'Jag bryr mig inte',
     'both': 'Både',
+    'language-both': 'Skriftlig och muntlig kommunikation',
     'written': 'Skriftlig kommunikation',
     'spoken': 'Röstkommunikation',
     'summer': 'Sommar',

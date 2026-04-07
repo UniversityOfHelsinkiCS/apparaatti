@@ -37,6 +37,7 @@ export default {
     'noDefinitely': 'No (definitely)',
     'neutralChoice': 'I don\'t care',
     'both': 'Both',
+    'language-both': 'Written and verbal communication',
     'written': 'Written communication',
     'spoken': 'Verbal communication',
     'summer': 'Summer',

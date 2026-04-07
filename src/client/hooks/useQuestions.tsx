@@ -197,7 +197,7 @@ const useQuestions = () => {
           name: 'default',
           question: primaryLanguageSpecificationQuestion,
           options: [
-            { id: 'writtenAndSpoken', name: t('form:both') /*{ fi: 'Molemmat', sv: 'Både', en: 'Both' }*/ },
+            { id: 'writtenAndSpoken', name: t('form:language-both') /*{ fi: 'Kirjoitus- ja puheviestintä', sv: 'Skriftlig och muntlig kommunikation', en: 'Written and verbal communication' }*/ },
             { id: 'written', name: t('form:written')/*{ fi: 'Kirjoitusviestintä', sv: 'skriftlig kommunikation', en: 'Written communication' }*/ },
             { id: 'spoken', name: t('form:spoken') /*{ fi: 'Puheviestintä', sv: 'Röstkommunikation', en: 'Verbal communication' }*/ },
           ],

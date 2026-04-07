@@ -37,6 +37,7 @@ export default {
     'noDefinitely': 'Ei (ehdottomasti)',
     'neutralChoice': 'En välitä',
     'both': 'Molemmat',
+    'language-both': 'Kirjoitus- ja puheviestintä',
     'written': 'Kirjoitusviestintä',
     'spoken': 'Puheviestintä',
     'summer': 'Kesä',
