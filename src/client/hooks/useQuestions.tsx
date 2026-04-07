@@ -97,22 +97,12 @@ const useQuestions = () => {
 
   const neutralText = t('form:neutralChoice')
 
-  const generateGeneralYesNoOptions = (includeDefinitely: boolean = true, customYesText?: string, customNoText?: string) => {
-    if (includeDefinitely) {
-      return [
-        {id: 'neutral', setStrict: false, name: neutralText},
-        { id: '3', setStrict: true, valueOverride: '0', name: noDefinitelyText },
-        { id: '0', setStrict: false, name: customNoText || noText },
-        { id: '1', setStrict: false, name: customYesText || yesText },
-        { id: '2', setStrict: true, valueOverride: '1', name: yesDefinitelyText },
-      ]
-    } else {
-      return [
-        {id: 'neutral', name: neutralText},
-        { id: '0', name: customNoText || noText },
-        { id: '1', name: customYesText || yesText },
-      ]
-    }
+  const generateGeneralYesNoOptions = (_includeDefinitely: boolean = true, customYesText?: string, customNoText?: string) => {
+    return [
+      {id: 'neutral', name: neutralText},
+      { id: '0', name: customNoText || noText },
+      { id: '1', name: customYesText || yesText },
+    ]
   }
   const primaryLanguageQuestion = t('form:primaryLanguageQuestion')
   const languageQuestion = t('form:languageQuestion')

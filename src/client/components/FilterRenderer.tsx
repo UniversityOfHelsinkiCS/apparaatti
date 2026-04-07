@@ -14,7 +14,7 @@ const FilterRenderer = ({ filter }: { filter: any }) => {
     const state = config ? config.state : ''
     const setState = config ? config.setState : () => {}
     const displayType = config && config.displayType ? config.displayType : 'singlechoice'
-    const superToggle = config && config.superToggle !== undefined ? config.superToggle : true
+    const superToggle = config && config.superToggle !== undefined ? config.superToggle : false
     const shortName = filter.shortName || filter.id
 
     const skipInSideBar = config ? config.hideInFilterSideBar : false
