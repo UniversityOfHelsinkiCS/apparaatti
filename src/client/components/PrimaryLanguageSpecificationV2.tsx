@@ -53,7 +53,7 @@ const PrimaryLanguageSpecificationV2 = ({
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 number={question.number} handleOpen={handleOpen} title={variant.question} question={question}/>
+      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question}/>
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose}/>
 
       <RadioGroup

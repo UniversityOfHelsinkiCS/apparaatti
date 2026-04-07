@@ -116,7 +116,6 @@ const useQuestions = () => {
   const periodText = t('form:period')
   const questions: Question[] = [
     {
-      number: '',
       mandatory: true,
       effects: 'org',
       id: 'study-field-select',
@@ -130,7 +129,6 @@ const useQuestions = () => {
       ] //there are no variants for this one
     },
     {
-      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'primary-language',
@@ -150,7 +148,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'lang',
@@ -171,7 +168,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: true,
       effects: 'lang',
       id: 'primary-language-specification',
@@ -192,7 +188,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       effects: 'none',
       mandatory: false,
       id: 'previusly-done-lang',
@@ -209,7 +204,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       effects: 'date',
       id: 'study-year',
@@ -228,7 +222,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       effects: 'date',
       id: 'study-period',
@@ -256,7 +249,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       effects: 'multiPeriod',
       id: 'multi-period',
@@ -271,7 +263,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       effects: 'none',
       id: 'replacement',
@@ -312,7 +303,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'mentoring',
       shortName: t('filterShortName:Valmentava'),
@@ -344,7 +334,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'finmu',
       shortName: t('filterShortName:Finmu'),
@@ -366,7 +355,6 @@ const useQuestions = () => {
       ]
     },
     {
-      number: '',
       mandatory: false,
       id: 'challenge',
       shortName: t('filterShortName:Edistynyt'),
@@ -414,7 +402,6 @@ const useQuestions = () => {
       ],
     },  
     {
-      number: '',
       mandatory: false,
       id: 'graduation',
       shortName: t('filterShortName:Valmistuville'),
@@ -430,7 +417,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'study-place',
       shortName: t('filterShortName:Opetusmuoto'),
@@ -451,7 +437,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'integrated',
       shortName: t('filterShortName:Integroitu'),
@@ -477,7 +462,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'independent',
       shortName: t('filterShortName:Itsenäinen'),
@@ -521,7 +505,6 @@ const useQuestions = () => {
     //   ],
     // },
     {
-      number: '',
       mandatory: false,
       id: 'mooc',
       effects: 'mooc',
@@ -535,7 +518,6 @@ const useQuestions = () => {
       ],
     },  
     {
-      number: '',
       mandatory: false,
       id: 'collaboration',
       shortName: t('filterShortName:Yhteistyo'),
@@ -551,7 +533,6 @@ const useQuestions = () => {
       ],
     },
     {
-      number: '',
       mandatory: false,
       id: 'exam',
       shortName: t('filterShortName:Exam'),
