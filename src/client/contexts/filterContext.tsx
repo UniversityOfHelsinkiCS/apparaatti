@@ -4,7 +4,11 @@ import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 
-export const defaultStrictFilters: string[] = ['collaboration', 'exam']
+export const defaultStrictFilters: string[] = [
+  'replacement', 'mentoring', 'finmu', 'challenge', 'graduation',
+  'integrated', 'independent', 'study-place', 'mooc', 'collaboration',
+  'multi-period', 'exam', 'spesificOrg', 'flexible',
+]
 
 interface UIVariantType{
   name: string,
@@ -146,7 +150,7 @@ export const filterConfigMap = (filters: any) => new Map([
     state: filters.studyPlace,
     setState: filters.setStudyPlace,
     displayType: 'multichoice',
-    superToggle: true
+    superToggle: false
   }],
   ['study-year', {
     state: filters.studyYear,

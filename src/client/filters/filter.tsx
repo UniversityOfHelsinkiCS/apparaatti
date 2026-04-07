@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Variant } from '../../common/types'
 import QuestionTitleV2 from '../components/QuestionTitleV2'
 import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
@@ -6,30 +6,17 @@ import { Box } from '@mui/material'
 import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
 import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 import DropdownFilterComponent from './DropdownFilterComponent'
-import SuperToggle from '../components/SuperToggle'
-import { useFilterContext } from '../contexts/filterContext'
 
 /*
  a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 
 */
 const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
-  const { strictFilters, setStrictFilters } = useFilterContext()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   const state = filter.state
   const setState = filter.setState
-
-  const updateStrictForOption = (optionId: string) => {
-    const opt = (variant.options || []).find((o) => o.id === optionId)
-    if (!opt || opt?.setStrict === undefined) return
-    else if (opt.setStrict === true) {
-      setStrictFilters((prev) => (prev.includes(filter.id) ? prev : [...prev, filter.id]))
-    } else if (opt.setStrict === false) {
-      setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
-    } 
-  }
 
   if (!variant || variant.skipped) {
     return null
@@ -38,7 +25,6 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const optionId = event.target.value
     setState(optionId)
-    updateStrictForOption(optionId)
   }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,25 +33,14 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
 
     if (isChecked) {
       setState([...state, optionId])
-      updateStrictForOption(optionId)
     } else {
       setState(state.filter((id: string) => id !== optionId))
-      // If an unchecked option has setStrict === true, ensure we remove strict for this filter
-      const opt = (variant.options || []).find((o) => o.id === optionId)
-      if (opt && opt.setStrict === true) {
-        setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
-      }
-      // If an unchecked option has setStrict === false, we already ensure filter not in strict list
-      if (opt && opt.setStrict === false) {
-        setStrictFilters((prev) => prev.filter((id) => id !== filter.id))
-      }
     }
   }
 
   const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const optionId = event.target.value
     setState(optionId)
-    updateStrictForOption(optionId)
   }
   const showAsQuestion = true
   return (
@@ -74,7 +49,6 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
         paddingTop: 1,
       }}
     >
-      {filter.superToggle !== false && <SuperToggle filterId={filter.id} />}
       {
         showAsQuestion ?
           <>
