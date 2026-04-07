@@ -13,15 +13,14 @@ const MandatoryStatus = ({question}: {question: Question}) => {
   )
 }
 
-const QuestionTitleV2 = ({handleOpen, title, number, question}: {handleOpen: () => void, title: string | undefined, number: string, question: Question}) => {
+const QuestionTitleV2 = ({handleOpen, title, question}: {handleOpen: () => void, title: string | undefined, question: Question}) => {
   return (
-    <Stack sx={{marginTop: '1rem'}} data-cy={`question-title-${number}`}>
+    <Stack sx={{marginTop: '1rem'}} data-cy={`question-title-${question.id}`}>
       <Stack direction='row'>
-        <Typography sx={{marginRight: '1rem'}}>{number}. </Typography>
         <MandatoryStatus question={question} />
       </Stack>
       <Stack direction='row' sx={{display: 'flex', borderTop: '2px solid gray'}}>
-        <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${number}`}>
+        <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
           <IconButton onClick={handleOpen} aria-label='more info' sx={{paddingLeft: 0}}>
             <InfoIcon></InfoIcon> 
           </IconButton>

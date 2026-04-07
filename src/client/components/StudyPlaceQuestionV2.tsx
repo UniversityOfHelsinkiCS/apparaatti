@@ -43,7 +43,7 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 number={question.number} handleOpen={handleOpen} title={variant.question} question={question}/>
+      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question}/>
       <FormControl sx={{m: 0, display: 'flex'}} component="fieldset" variant="standard">
         <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose}/>
         <FormGroup>

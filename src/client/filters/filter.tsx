@@ -78,7 +78,7 @@ const Filter = ({ variant, filter }: { variant: Variant, filter: any }) => {
       {
         showAsQuestion ?
           <>
-            <QuestionTitleV2 number={filter.number} handleOpen={handleOpen} title={variant.question} question={filter} />
+            <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={filter} />
             <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
           </>
           :
