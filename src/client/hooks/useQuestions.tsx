@@ -92,12 +92,9 @@ const useQuestions = () => {
   const englishChoiceText = t('form:english')//{fi: 'englanti', sv: 'engelska', en: 'english'}
   const yesText = t('form:yes')//{fi: 'Kyllä', sv: 'Ja', en: 'Yes'}
   const noText = t('form:no')//{fi: 'Ei', sv: 'Nej', en: 'No'}
-  const yesDefinitelyText = t('form:yesDefinitely')//{fi: 'Kyllä (ehdottomasti)', sv: 'Ja (definitivt)', en: 'Yes (definitely)'}
-  const noDefinitelyText = t('form:noDefinitely')//{fi: 'Ei (ehdottomasti)', sv: 'Nej (definitivt)', en: 'No (definitely)'}
-
   const neutralText = t('form:neutralChoice')
 
-  const generateGeneralYesNoOptions = (_includeDefinitely: boolean = true, customYesText?: string, customNoText?: string) => {
+  const generateGeneralYesNoOptions = (customYesText?: string, customNoText?: string) => {
     return [
       {id: 'neutral', name: neutralText},
       { id: '0', name: customNoText || noText },
@@ -207,7 +204,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: previouslyDoneLangQuestion,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -326,7 +323,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: mentoringQuestion,
-          options: generateGeneralYesNoOptions(true, t('form:mentoringQuestionYes'), t('form:mentoringQuestionNo')),
+          options: generateGeneralYesNoOptions(t('form:mentoringQuestionYes'), t('form:mentoringQuestionNo')),
         },
         {
           name: 'fi_secondary_any',
@@ -337,7 +334,7 @@ const useQuestions = () => {
           name: 'sv_primary_spoken',
           question: '',
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_written',
@@ -358,7 +355,7 @@ const useQuestions = () => {
           name: 'default',
           question: '',
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           //this was originally part of mentoring but because mentoring directs to different courses it needed its own question
@@ -400,19 +397,19 @@ const useQuestions = () => {
           name: 'sv_primary_spoken',
           question: '',
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_written',
           question: '',
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'sv_primary_any',
           question: '',
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },  
@@ -428,7 +425,7 @@ const useQuestions = () => {
         {
           name: 'default',
           question: graduationQuestion,
-          options: generateGeneralYesNoOptions(true, t('form:graduationQuestionYes'), t('form:graduationQuestionNo')),
+          options: generateGeneralYesNoOptions(t('form:graduationQuestionYes'), t('form:graduationQuestionNo')),
         },
       ],
     },
@@ -465,7 +462,7 @@ const useQuestions = () => {
           name: 'default',
           question: integratedQuestion,
           skipped: false,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'en_secondary_any',
@@ -491,7 +488,7 @@ const useQuestions = () => {
           name: 'default',
           question: independentQuestion,
           skipped: true,
-          options: generateGeneralYesNoOptions(false),
+          options: generateGeneralYesNoOptions(),
         },
         {
           name: 'en_secondary_any',
@@ -549,7 +546,7 @@ const useQuestions = () => {
           name: 'default',
           question: t('form:collaborationQuestion'),
           skipped: false,
-          options: generateGeneralYesNoOptions(true),
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
@@ -565,7 +562,7 @@ const useQuestions = () => {
           name: 'default',
           question: t('form:examQuestion'),
           skipped: false,
-          options: generateGeneralYesNoOptions(true),
+          options: generateGeneralYesNoOptions(),
         },
       ],
     },
