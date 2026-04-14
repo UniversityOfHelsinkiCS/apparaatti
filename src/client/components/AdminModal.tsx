@@ -154,12 +154,14 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
         <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
           <Button
             variant="outlined"
+            sx={{ color: 'black', borderColor: 'black' }}
             onClick={() => { onClose(); navigate('/admin') }}
           >
             Filter config
           </Button>
           <Button
             variant="outlined"
+            sx={{ color: 'black', borderColor: 'black' }}
             onClick={() => { onClose(); navigate('/admin/login-as') }}
           >
             Login as
