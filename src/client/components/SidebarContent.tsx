@@ -1,26 +1,20 @@
-import { useFilterContext } from '../contexts/filterContext'
+import { filterConfigMap, useFilterContext } from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './ActionButtonV2'
 import { Box } from '@mui/material'
 
 const SidebarContent = () => {
-  const { filters, isLoading, setModalOpen } = useFilterContext()
+  const filterContext = useFilterContext()
+  const { filters, isLoading, setModalOpen } = filterContext
   const { t } = useTranslation()
 
   if (isLoading) {
     return <p>{t('v2:loadingFilters')}</p>
   }
 
-  const filtersToShow = filters.filter(
-    (f) =>
-      ![
-        'study-field-select',
-        'primary-language',
-        'lang',
-        'primary-language-specification',
-      ].includes(f.id)
-  )
+  const configMap = filterConfigMap(filterContext)
+  const filtersToShow = filters.filter((f) => !configMap.get(f.id)?.showInWelcomeModal)
 
   return (
     <>

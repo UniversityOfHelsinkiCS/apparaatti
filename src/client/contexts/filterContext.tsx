@@ -85,23 +85,27 @@ export const filterConfigMap = (filters: any) => new Map([
     setState: filters.setStudyField,
     displayType: 'dropdownselect',
     superToggle: false, 
+    showInWelcomeModal: true,
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true
   }],
   ['primary-language', {
     state: filters.primaryLanguage,
     setState: filters.setPrimaryLanguage,
+    showInWelcomeModal: true,
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true
   }],
   ['lang', {
     state: filters.language,
     setState: filters.setLanguage,
+    showInWelcomeModal: true,
     hideInRecommendationReasons: true
   }],
   ['primary-language-specification', {
     state: filters.primaryLanguageSpecification,
     setState: filters.setPrimaryLanguageSpecification,
+    showInWelcomeModal: true,
     hideInRecommendationReasons: true
   }],
   ['previusly-done-lang', {
@@ -114,11 +118,13 @@ export const filterConfigMap = (filters: any) => new Map([
   ['replacement', {
     state: filters.replacement,
     setState: filters.setReplacement,
+    showInWelcomeModal: true,
     superToggle: false
   }],
   ['mentoring', {
     state: filters.mentoring,
     setState: filters.setMentoring,
+    showInWelcomeModal: true,
     superToggle: false
   }],
   ['finmu', {
@@ -188,6 +194,35 @@ export const filterConfigMap = (filters: any) => new Map([
   }],
 ])
 
+export const isFilterStateAnswered = (state: unknown): boolean => {
+  if (Array.isArray(state)) {
+    return state.length > 0
+  }
+
+  if (typeof state === 'string') {
+    return state !== ''
+  }
+
+  return Boolean(state)
+}
+
+export const shouldRenderWelcomeFilter = (
+  filterId: string,
+  variant: { skipped?: boolean } | null,
+  language: string,
+  primaryLanguage: string
+): boolean => {
+  if (!variant || variant.skipped) {
+    return false
+  }
+
+  if (filterId === 'primary-language-specification') {
+    return language !== '' && language !== 'en' && language === primaryLanguage
+  }
+
+  return true
+}
+
 // Map coordinate keys to filter IDs for recommendation reasons
 export const coordinateKeyToFilterId: { [key: string]: string } = {
   date: 'study-period',
@@ -250,25 +285,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const variantToDisplayId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
-  const checkWelcomeQuestionsAnswered = () => {
-    const shouldShowSpecification = language === primaryLanguage
-    return (
-      studyField !== '' &&
-      primaryLanguage !== '' &&
-      language !== '' &&
-      (shouldShowSpecification ? primaryLanguageSpecification !== '' : true)
-    )
-  }
-
-  useEffect(() => {
-    const hasVisited = sessionStorage.getItem('hasVisitedV2')
-    if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
-      setModalOpen(true)
-      sessionStorage.setItem('hasVisitedV2', 'true')
-    }
-  }, [studyField, primaryLanguage, language, primaryLanguageSpecification])
-
-
   const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
   const [replacement, setReplacement] = useState('')
   const [mentoring, setMentoring] = useState('')
@@ -285,6 +301,60 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [multiPeriod, setMultiPeriod] = useState('')
   const [exam, setExam] = useState('0')
   const [strictFilters, setStrictFilters] = useState<string[]>(defaultStrictFilters)
+  const allFilters = useQuestions()
+  const filters = allFilters
+
+  const checkWelcomeQuestionsAnswered = () => {
+    const welcomeConfigMap = filterConfigMap({
+      studyField,
+      setStudyField,
+      primaryLanguage,
+      setPrimaryLanguage,
+      language,
+      setLanguage,
+      primaryLanguageSpecification,
+      setPrimaryLanguageSpecification,
+      replacement,
+      setReplacement,
+      mentoring,
+      setMentoring,
+    })
+
+    const welcomeQuestions = allFilters.filter((q) => welcomeConfigMap.get(q.id)?.showInWelcomeModal)
+    return welcomeQuestions.every((question) => {
+      const config = welcomeConfigMap.get(question.id)
+      if (!config) {
+        return true
+      }
+
+      if (!question.mandatory) {
+        return true
+      }
+
+      const variant = pickVariant(question, variantToDisplayId)
+      if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
+        return true
+      }
+
+      return isFilterStateAnswered(config.state)
+    })
+  }
+
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('hasVisitedV2')
+    if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
+      setModalOpen(true)
+      sessionStorage.setItem('hasVisitedV2', 'true')
+    }
+  }, [
+    studyField,
+    primaryLanguage,
+    language,
+    primaryLanguageSpecification,
+    replacement,
+    mentoring,
+    variantToDisplayId,
+  ])
 
   const resetFilters = () => {
     setPreviouslyDoneLang('')
@@ -330,9 +400,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   )
 
   const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading
-
-  const allFilters = useQuestions()
-  const filters = allFilters
 
   const submitAnswerMutation = useApiMutation(async (res) => {
     const recommendations = await res.json()
