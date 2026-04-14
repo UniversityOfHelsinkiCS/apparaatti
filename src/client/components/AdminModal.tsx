@@ -2,6 +2,7 @@ import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuIt
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useFilterContext } from '../contexts/filterContext'
 
 const style = {
@@ -127,6 +128,7 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
   const [tab, setTab] = useState(0)
   const handleChange = (_, newValue) => { setTab(newValue) }
+  const navigate = useNavigate()
   return (
     <Modal
       open={open}
@@ -148,6 +150,21 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
         {tab === 1 ?
           <Settings onClose={onClose} />
           : <></> }
+
+        <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
+          <Button
+            variant="outlined"
+            onClick={() => { onClose(); navigate('/admin') }}
+          >
+            Filter config
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => { onClose(); navigate('/admin/login-as') }}
+          >
+            Login as
+          </Button>
+        </Box>
       </Box>
     </Modal>
   )
