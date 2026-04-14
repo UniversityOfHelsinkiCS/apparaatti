@@ -30,7 +30,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
 
   for (const [filterId, coordinateKey] of Object.entries(COORDINATE_KEYS)) {
     await queryInterface.sequelize.query(
-      `UPDATE filters SET coordinate_key = :coordinateKey WHERE id = :filterId`,
+      'UPDATE filters SET coordinate_key = :coordinateKey WHERE id = :filterId',
       { replacements: { coordinateKey, filterId } }
     )
   }
