@@ -52,9 +52,9 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   const buildFilter = (filter: Question, config: any) => {
     const state = config.state
     const setState = config.setState
-    const displayType = config && config.displayType ? config.displayType : 'singlechoice'
-    const superToggle = config && config.superToggle !== undefined ? config.superToggle : false
-    const shortName = filter.shortName || filter.id
+    const displayType = filter.displayType ?? 'singlechoice'
+    const superToggle = filter.superToggle ?? false
+    const shortName = filter.shortName ?? filter.id
 
     return { ...filter, displayType, state, setState, superToggle, shortName }
   }
@@ -62,11 +62,11 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   const welcomeFilters = filters
     .map((question) => {
       const config = configMap.get(question.id)
-      if (!config?.showInWelcomeModal) {
+      if (!question.showInWelcomeModal) {
         return null
       }
 
-      const variant = pickVariant(question, variantId)
+      const variant = pickVariant(question, variantId) ?? null
       if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
         return null
       }

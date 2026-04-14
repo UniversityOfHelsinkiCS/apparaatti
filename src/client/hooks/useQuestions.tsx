@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Question, Variant, FilterConfig } from '../../common/types'
 import useApi from '../util/useApi'
@@ -88,9 +89,10 @@ const useQuestions = (): { filters: Question[]; isLoading: boolean } => {
 
   const { data, isLoading } = useApi('filter-config', '/api/filter-config', 'GET', undefined)
 
-  const filters: Question[] = data
-    ? (data as FilterConfig[]).map((cfg) => toQuestion(cfg, lang))
-    : []
+  const filters = useMemo<Question[]>(
+    () => (data ? (data as FilterConfig[]).map((cfg) => toQuestion(cfg, lang)) : []),
+    [data, lang]
+  )
 
   return { filters, isLoading }
 }

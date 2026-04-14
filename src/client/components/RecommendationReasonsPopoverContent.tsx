@@ -3,7 +3,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import { useTranslation } from 'react-i18next'
 import { UserCoordinates } from '../../common/types'
-import { filterConfigMap, useFilterContext, coordinateKeyToFilterId, getCoordinateDisplayName } from '../contexts/filterContext'
+import { useFilterContext, getCoordinateDisplayName } from '../contexts/filterContext'
 
 interface RecommendationReasonsPopoverContentProps {
   courseCoordinates: UserCoordinates
@@ -19,7 +19,6 @@ const RecommendationReasonsPopoverContent = ({
   const { uiVariant } = filterContext
   
   const hideIncorrect = uiVariant.find(u => u.name === 'recommendation-reasons-incorrect-hidden')?.value === 'true'
-  const filterConfig = filterConfigMap(filterContext)
 
   const getMatchStatus = (key: keyof UserCoordinates) => {
     const userValue = userCoordinates[key]
@@ -47,21 +46,18 @@ const RecommendationReasonsPopoverContent = ({
       </Typography>
 
       <Stack spacing={1}>
-        {Object.keys(coordinateKeyToFilterId).map((key) => {
+        {filterContext.filters.filter(f => f.coordinateKey).map((filter) => {
+          const key = filter.coordinateKey as string
           const matchStatus = getMatchStatus(key as keyof UserCoordinates)
           if (matchStatus === null) {
             return null
           }
 
-          const filterId = coordinateKeyToFilterId[key]
-          const filterCfg = filterId ? filterConfig.get(filterId) : null
-          const hideInReasons = filterCfg?.hideInRecommendationReasons ?? false
-          
-          if (hideInReasons) {
+          if (filter.hideInRecommendationReasons) {
             return null
           }
 
-          const filterName = getCoordinateDisplayName(key, filterContext, t)
+          const filterName = getCoordinateDisplayName(key, filterContext)
           const isMatch = matchStatus
 
           if (!isMatch && hideIncorrect) {

@@ -4,12 +4,6 @@ import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 
-export const defaultStrictFilters: string[] = [
-  'replacement', 'mentoring', 'finmu', 'challenge', 'graduation',
-  'integrated', 'independent', 'study-place', 'mooc', 'collaboration',
-  'multi-period', 'exam', 'spesificOrg', 'flexible',
-]
-
 interface UIVariantType{
   name: string,
   value: string
@@ -76,122 +70,32 @@ interface FilterContextType {
   setStrictFilters: (s: string[]) => void
   exam: string
   setExam: (s: string) => void
+  flexible: string
+  setFlexible: (s: string) => void
   resetFilters: () => void
 }
 
 export const filterConfigMap = (filters: any) => new Map([
-  ['study-field-select', {
-    state: filters.studyField,
-    setState: filters.setStudyField,
-    displayType: 'dropdownselect',
-    superToggle: false, 
-    showInWelcomeModal: true,
-    hideInCurrentFiltersDisplay: true,
-    hideInRecommendationReasons: true
-  }],
-  ['primary-language', {
-    state: filters.primaryLanguage,
-    setState: filters.setPrimaryLanguage,
-    showInWelcomeModal: true,
-    hideInCurrentFiltersDisplay: true,
-    hideInRecommendationReasons: true
-  }],
-  ['lang', {
-    state: filters.language,
-    setState: filters.setLanguage,
-    showInWelcomeModal: true,
-    hideInRecommendationReasons: true
-  }],
-  ['primary-language-specification', {
-    state: filters.primaryLanguageSpecification,
-    setState: filters.setPrimaryLanguageSpecification,
-    showInWelcomeModal: true,
-    hideInRecommendationReasons: true
-  }],
-  ['previusly-done-lang', {
-    state: filters.previouslyDoneLang,
-    setState: filters.setPreviouslyDoneLang,
-    superToggle: false,
-    hideInCurrentFiltersDisplay: true,
-    hideInRecommendationReasons: true
-  }],
-  ['replacement', {
-    state: filters.replacement,
-    setState: filters.setReplacement,
-    showInWelcomeModal: true,
-    superToggle: false
-  }],
-  ['mentoring', {
-    state: filters.mentoring,
-    setState: filters.setMentoring,
-    showInWelcomeModal: true,
-    superToggle: false
-  }],
-  ['finmu', {
-    state: filters.finmu,
-    setState: filters.setFinmu,
-    superToggle: false
-  }],
-  ['challenge', {
-    state: filters.challenge,
-    setState: filters.setChallenge,
-    superToggle: false
-  }],
-  ['graduation', {
-    state: filters.graduation,
-    setState: filters.setGraduation,
-    superToggle: false
-  }],
-  ['integrated', {
-    state: filters.integrated,
-    setState: filters.setIntegrated,
-    superToggle: false
-  }],
-  ['independent', {
-    state: filters.independent,
-    setState: filters.setIndependent,
-    superToggle: false
-  }],
-  ['study-place', {
-    state: filters.studyPlace,
-    setState: filters.setStudyPlace,
-    displayType: 'multichoice',
-    superToggle: false
-  }],
-  ['study-year', {
-    state: filters.studyYear,
-    setState: filters.setStudyYear,
-    displayType: 'singlechoice',
-    superToggle: false,
-    hideInCurrentFiltersDisplay: true,
-    hideInFilterSideBar: false
-  }],
-  ['study-period', {
-    state: filters.studyPeriod,
-    setState: filters.setStudyPeriod,
-    displayType: 'multichoice',
-    superToggle: false
-  }],
-  ['mooc', {
-    state: filters.mooc,
-    setState: filters.setMooc,
-    superToggle: false
-  }],
-  ['collaboration', {
-    state: filters.collaboration,
-    setState: filters.setCollaboration,
-    superToggle: false
-  }],
-  ['multi-period', {
-    state: filters.multiPeriod,
-    setState: filters.setMultiPeriod,
-    superToggle: false
-  }],
-  ['exam', {
-    state: filters.exam,
-    setState: filters.setExam,
-    superToggle: false
-  }],
+  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField }],
+  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage }],
+  ['lang', { state: filters.language, setState: filters.setLanguage }],
+  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification }],
+  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
+  ['replacement', { state: filters.replacement, setState: filters.setReplacement }],
+  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring }],
+  ['finmu', { state: filters.finmu, setState: filters.setFinmu }],
+  ['challenge', { state: filters.challenge, setState: filters.setChallenge }],
+  ['graduation', { state: filters.graduation, setState: filters.setGraduation }],
+  ['integrated', { state: filters.integrated, setState: filters.setIntegrated }],
+  ['independent', { state: filters.independent, setState: filters.setIndependent }],
+  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace }],
+  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear }],
+  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod }],
+  ['mooc', { state: filters.mooc, setState: filters.setMooc }],
+  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration }],
+  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
+  ['exam', { state: filters.exam, setState: filters.setExam }],
+  ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
 ])
 
 export const isFilterStateAnswered = (state: unknown): boolean => {
@@ -223,37 +127,13 @@ export const shouldRenderWelcomeFilter = (
   return true
 }
 
-export const coordinateKeyToFilterId: { [key: string]: string } = {
-  date: 'study-period',
-  org: 'study-field-select',
-  lang: 'lang',
-  graduation: 'graduation',
-  mentoring: 'mentoring',
-  integrated: 'integrated',
-  studyPlace: 'study-place',
-  replacement: 'replacement',
-  challenge: 'challenge',
-  independent: 'independent',
-  flexible: 'flexible',
-  mooc: 'mooc',
-  finmu: 'finmu',
-  collaboration: 'collaboration',
-  multiPeriod: 'multi-period',
-}
-
-export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any, t: (key: string) => string): string => {
-  const filterId = coordinateKeyToFilterId[coordinateKey]
-  if (!filterId) return coordinateKey
-  
-  const question = filterContext.filters.find((q: any) => q.id === filterId)
-  
-  if (!question?.shortName) return coordinateKey
-  
-  return question.shortName
+export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any): string => {
+  const question = filterContext.filters.find((q: any) => q.coordinateKey === coordinateKey)
+  return question?.shortName ?? coordinateKey
 }
 
 
-export const getFilterVariant = (filterContext, filterId) => {
+export const getFilterVariant = (filterContext: FilterContextType, filterId: string) => {
   const question = filterContext.filters.find((q: any) => q.id === filterId)
   const variantId = updateVariantToDisplayId(filterContext.language, filterContext.primaryLanguage, filterContext.primaryLanguageSpecification)
 
@@ -298,40 +178,36 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [collaboration, setCollaboration] = useState('')
   const [multiPeriod, setMultiPeriod] = useState('')
   const [exam, setExam] = useState('0')
-  const [strictFilters, setStrictFilters] = useState<string[]>(defaultStrictFilters)
+  const [flexible, setFlexible] = useState('')
+  const [strictFilters, setStrictFilters] = useState<string[]>([])
+  const [strictFiltersInitialized, setStrictFiltersInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
 
+  useEffect(() => {
+    if (!filtersLoading && filters.length > 0 && !strictFiltersInitialized) {
+      setStrictFilters(filters.filter((f) => f.isStrictByDefault).map((f) => f.id))
+      setStrictFiltersInitialized(true)
+    }
+  }, [filters, filtersLoading, strictFiltersInitialized])
+
   const checkWelcomeQuestionsAnswered = () => {
-    const welcomeConfigMap = filterConfigMap({
-      studyField,
-      setStudyField,
-      primaryLanguage,
-      setPrimaryLanguage,
-      language,
-      setLanguage,
-      primaryLanguageSpecification,
-      setPrimaryLanguageSpecification,
-      replacement,
-      setReplacement,
-      mentoring,
-      setMentoring,
+    const configMap = filterConfigMap({
+      studyField, setStudyField,
+      primaryLanguage, setPrimaryLanguage,
+      language, setLanguage,
+      primaryLanguageSpecification, setPrimaryLanguageSpecification,
+      replacement, setReplacement,
+      mentoring, setMentoring,
     })
 
-    const welcomeQuestions = filters.filter((q) => welcomeConfigMap.get(q.id)?.showInWelcomeModal)
+    const welcomeQuestions = filters.filter((q) => q.showInWelcomeModal)
     return welcomeQuestions.every((question) => {
-      const config = welcomeConfigMap.get(question.id)
-      if (!config) {
-        return true
-      }
+      const config = configMap.get(question.id)
+      if (!config) return true
+      if (!question.mandatory) return true
 
-      if (!question.mandatory) {
-        return true
-      }
-
-      const variant = pickVariant(question, variantToDisplayId)
-      if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
-        return true
-      }
+      const variant = pickVariant(question, variantToDisplayId) ?? null
+      if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) return true
 
       return isFilterStateAnswered(config.state)
     })
@@ -365,7 +241,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setIntegrated('')
     setIndependent('')
     setMooc('')
-    setStrictFilters(defaultStrictFilters)
+    setFlexible('')
+    setStrictFilters(filters.filter((f) => f.isStrictByDefault).map((f) => f.id))
   }
 
 
@@ -398,7 +275,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading
 
-  const submitAnswerMutation = useApiMutation(async (res) => {
+  const submitAnswerMutation = useApiMutation(async (res: Response) => {
     const recommendations = await res.json()
     setCourseRecommendations(recommendations)
     if (!res.ok) {
@@ -450,6 +327,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
       'multi-period': getTrueFilterValue(multiPeriod, 'multi-period'),
       'exam': getTrueFilterValue(exam, 'exam'),
+      'flexible': getTrueFilterValue(flexible, 'flexible'),
     }
 
     const answerData = Object.fromEntries(
@@ -469,7 +347,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       strictFields: strictFilters,
     }
 
-    submitAnswerMutation.mutateAsync(payload)
+    submitAnswerMutation.mutateAsync(payload, undefined)
   }
 
   useEffect(() => {
@@ -494,6 +372,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     collaboration,
     multiPeriod,
     exam,
+    flexible,
     strictFilters,
   ])
 
@@ -557,6 +436,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setMultiPeriod,
         exam,
         setExam,
+        flexible,
+        setFlexible,
         strictFilters,
         setStrictFilters,
         resetFilters,

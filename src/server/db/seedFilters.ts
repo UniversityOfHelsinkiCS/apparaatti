@@ -8,12 +8,12 @@
  */
 
 import Filter from './models/filter.ts'
-import type { FilterConfig, FilterVariant } from '../../common/types.ts'
+import type { FilterConfig } from '../../common/types.ts'
 import logger from '../util/logger.ts'
 
 // ── Shared localized option sets ────────────────────────────────────────────
 
-const neutral = { fi: 'En välitä', sv: 'Jag bryr mig inte', en: "I don't care" }
+const neutral = { fi: 'En välitä', sv: 'Jag bryr mig inte', en: 'I don\'t care' }
 const yes = { fi: 'Kyllä', sv: 'Ja', en: 'Yes' }
 const no = { fi: 'Ei', sv: 'Nej', en: 'No' }
 const finnish = { fi: 'suomi', sv: 'finska', en: 'finnish' }
@@ -45,6 +45,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
     isStrictByDefault: false,
+    coordinateKey: 'org',
     enabled: true,
     variants: [
       {
@@ -93,7 +94,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     explanation: {
       fi: '\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n',
       sv: '\nAlla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:\n\n- Modersmål (finska/svenska) 3 sp\n- Andra inhemska språket (svenska/finska) 3 sp\n- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp\n',
-      en: "\nAll bachelor's degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n",
+      en: '\nAll bachelor\'s degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n',
     },
     displayOrder: 2,
     superToggle: false,
@@ -102,6 +103,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
     isStrictByDefault: false,
+    coordinateKey: 'lang',
     enabled: true,
     variants: [
       {
@@ -219,6 +221,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: false,
+    coordinateKey: 'date',
     enabled: true,
     variants: [
       {
@@ -248,6 +251,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'multiPeriod',
     enabled: true,
     variants: [
       {
@@ -270,6 +274,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'replacement',
     enabled: true,
     variants: [
       {
@@ -342,6 +347,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'mentoring',
     enabled: true,
     variants: [
       {
@@ -349,7 +355,7 @@ const FILTER_SEEDS: FilterSeed[] = [
         question: { fi: 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?', sv: 'Behöver du övning innan du slutför en kurs som ingår i din examen?', en: 'Do you need practice before completing a course that is part of your degree?' },
         options: [
           { id: 'neutral', name: neutral },
-          { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta', sv: 'Jag känner inte att jag behöver motion.', en: "I dont think that i need training" } },
+          { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta', sv: 'Jag känner inte att jag behöver motion.', en: 'I dont think that i need training' } },
           { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta', sv: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.', en: 'I would like to have a litle bit of training before starting my studies' } },
         ],
       },
@@ -388,6 +394,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'finmu',
     enabled: true,
     variants: [
       {
@@ -420,6 +427,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'challenge',
     enabled: true,
     variants: [
       {
@@ -454,7 +462,7 @@ const FILTER_SEEDS: FilterSeed[] = [
         question: {
           fi: 'Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?',
           sv: 'Är du så nervös över att använda finska språket att du inte kan delta i en kurs där man övar språket tillsammans med andra?',
-          en: "Are you so anxious about using the Finnish language that you can't participate in a course where the language is practiced together with others?",
+          en: 'Are you so anxious about using the Finnish language that you can\'t participate in a course where the language is practiced together with others?',
         },
         options: yesNoOptions,
       },
@@ -491,6 +499,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'graduation',
     enabled: true,
     variants: [
       {
@@ -518,6 +527,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'studyPlace',
     enabled: true,
     variants: [
       {
@@ -545,6 +555,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'integrated',
     enabled: true,
     variants: [
       {
@@ -578,6 +589,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'independent',
     enabled: true,
     variants: [
       {
@@ -611,6 +623,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'mooc',
     enabled: true,
     variants: [
       {
@@ -633,6 +646,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
     isStrictByDefault: true,
+    coordinateKey: 'collaboration',
     enabled: true,
     variants: [
       {
@@ -661,6 +675,30 @@ const FILTER_SEEDS: FilterSeed[] = [
       {
         name: 'default',
         question: { fi: 'Näytä tentit', sv: 'Visa tentamen', en: 'Show exams' },
+        skipped: false,
+        options: yesNoOptions,
+      },
+    ],
+  },
+  {
+    id: 'flexible',
+    effects: 'flexible',
+    mandatory: false,
+    type: 'singlechoice',
+    shortName: { fi: 'Joustava', sv: 'Flexibel', en: 'Flexible' },
+    displayOrder: 19,
+    superToggle: false,
+    showInWelcomeModal: false,
+    hideInCurrentFiltersDisplay: false,
+    hideInRecommendationReasons: false,
+    hideInFilterSidebar: false,
+    isStrictByDefault: true,
+    coordinateKey: 'flexible',
+    enabled: true,
+    variants: [
+      {
+        name: 'default',
+        question: { fi: 'Joustavat kurssit', sv: 'Flexibla kurser', en: 'Flexible courses' },
         skipped: false,
         options: yesNoOptions,
       },

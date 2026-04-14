@@ -43,6 +43,7 @@ export type FilterConfig = {
   hideInRecommendationReasons: boolean
   hideInFilterSidebar: boolean
   showInWelcomeModal: boolean
+  coordinateKey?: string | null
   isStrictByDefault: boolean
   enabled: boolean
   variants: FilterVariant[]
@@ -67,6 +68,14 @@ export type Question = {
   explanation?: string
   variants: Variant[]
   extraInfo?: string
+  displayType?: string | null
+  superToggle?: boolean
+  showInWelcomeModal?: boolean
+  hideInCurrentFiltersDisplay?: boolean
+  hideInRecommendationReasons?: boolean
+  hideInFilterSidebar?: boolean
+  coordinateKey?: string | null
+  isStrictByDefault?: boolean
 }
 
 export type Variant = {

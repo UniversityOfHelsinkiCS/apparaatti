@@ -1,4 +1,4 @@
-import { filterConfigMap, useFilterContext } from '../contexts/filterContext'
+import { useFilterContext } from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './ActionButtonV2'
@@ -13,8 +13,7 @@ const SidebarContent = () => {
     return <p>{t('v2:loadingFilters')}</p>
   }
 
-  const configMap = filterConfigMap(filterContext)
-  const filtersToShow = filters.filter((f) => !configMap.get(f.id)?.showInWelcomeModal)
+  const filtersToShow = filters.filter((f) => !f.showInWelcomeModal)
 
   return (
     <>

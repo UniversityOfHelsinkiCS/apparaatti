@@ -24,6 +24,7 @@ Filter.init(
     hideInRecommendationReasons: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     hideInFilterSidebar: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     showInWelcomeModal: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+    coordinateKey: { type: DataTypes.STRING, allowNull: true },
     isStrictByDefault: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     variants: { type: DataTypes.JSONB, allowNull: false },
