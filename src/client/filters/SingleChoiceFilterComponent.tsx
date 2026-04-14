@@ -10,7 +10,7 @@ interface SingleChoiceFilterComponentProps {
   state: string
   handleRadioChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   options: Option[]
-  extrainfo?: string // Added extrainfo prop
+  extrainfo?: string
 }
 
 const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = ({

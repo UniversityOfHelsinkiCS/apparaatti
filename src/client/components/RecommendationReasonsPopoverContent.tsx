@@ -26,15 +26,13 @@ const RecommendationReasonsPopoverContent = ({
     const courseValue = courseCoordinates[key]
 
     if (userValue === null || userValue === undefined) {
-      return null // User didn't answer or chose "I don't care"
+      return null
     }
 
     
     if(key === 'date'){
       return true
     }
-    // For now, a simple equality check. This might need more complex logic
-    // depending on how coordinates are compared in the recommender.
     return userValue === courseValue
   }
 
@@ -55,7 +53,6 @@ const RecommendationReasonsPopoverContent = ({
             return null
           }
 
-          // Check if this filter should be hidden in recommendation reasons
           const filterId = coordinateKeyToFilterId[key]
           const filterCfg = filterId ? filterConfig.get(filterId) : null
           const hideInReasons = filterCfg?.hideInRecommendationReasons ?? false
@@ -64,7 +61,6 @@ const RecommendationReasonsPopoverContent = ({
             return null
           }
 
-          // Get translated display name from filterContext
           const filterName = getCoordinateDisplayName(key, filterContext, t)
           const isMatch = matchStatus
 

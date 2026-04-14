@@ -111,7 +111,6 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   }
 
   useEffect(() => {
-    // Only auto-close once when questions are first completed
     if (mandatoryQuestionsAnswered && !hasAutoClosedRef.current && open) {
       onClose()
       hasAutoClosedRef.current = true

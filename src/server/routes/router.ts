@@ -4,6 +4,7 @@ import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import Organisation from '../db/models/organisation.ts'
+import Filter from '../db/models/filter.ts'
 import { Op } from 'sequelize'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment, UPDATER_CRON_ENABLED } from '../util/config.ts'
@@ -36,6 +37,19 @@ if (UPDATER_CRON_ENABLED) {
     }
   })
 }
+
+router.get('/filter-config', async (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+  const filters = await Filter.findAll({
+    where: { enabled: true },
+    order: [['display_order', 'ASC']],
+    raw: true,
+  })
+  res.json(filters)
+})
 
 router.get('/organisations/supported', async(req, res) => {
   if(!req.user){

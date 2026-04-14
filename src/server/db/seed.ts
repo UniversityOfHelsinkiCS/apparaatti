@@ -335,6 +335,8 @@ async function seedCurCuRelations(realizations: any[]) {
   logger.info(`Seeded ${relations.length} CurCu relations`)
 }
 
+import { seedFilters } from './seedFilters.ts'
+
 export async function seedDatabase() {
   try {
     logger.info(LOG.seedingStarted)
@@ -345,6 +347,7 @@ export async function seedDatabase() {
     const courses = await seedCourses()
     const realizations = await seedCourseRealizations(courses)
     await seedCurCuRelations(realizations)
+    await seedFilters()
     
     logger.info(LOG.seedingCompleted)
   } catch (error: any) {

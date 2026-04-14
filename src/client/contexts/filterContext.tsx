@@ -223,7 +223,6 @@ export const shouldRenderWelcomeFilter = (
   return true
 }
 
-// Map coordinate keys to filter IDs for recommendation reasons
 export const coordinateKeyToFilterId: { [key: string]: string } = {
   date: 'study-period',
   org: 'study-field-select',
@@ -242,7 +241,6 @@ export const coordinateKeyToFilterId: { [key: string]: string } = {
   multiPeriod: 'multi-period',
 }
 
-// Get translated short name for a coordinate key
 export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any, t: (key: string) => string): string => {
   const filterId = coordinateKeyToFilterId[coordinateKey]
   if (!filterId) return coordinateKey
@@ -301,8 +299,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [multiPeriod, setMultiPeriod] = useState('')
   const [exam, setExam] = useState('0')
   const [strictFilters, setStrictFilters] = useState<string[]>(defaultStrictFilters)
-  const allFilters = useQuestions()
-  const filters = allFilters
+  const { filters, isLoading: filtersLoading } = useQuestions()
 
   const checkWelcomeQuestionsAnswered = () => {
     const welcomeConfigMap = filterConfigMap({
@@ -320,7 +317,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       setMentoring,
     })
 
-    const welcomeQuestions = allFilters.filter((q) => welcomeConfigMap.get(q.id)?.showInWelcomeModal)
+    const welcomeQuestions = filters.filter((q) => welcomeConfigMap.get(q.id)?.showInWelcomeModal)
     return welcomeQuestions.every((question) => {
       const config = welcomeConfigMap.get(question.id)
       if (!config) {
@@ -399,7 +396,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     undefined
   )
 
-  const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading
+  const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading
 
   const submitAnswerMutation = useApiMutation(async (res) => {
     const recommendations = await res.json()
@@ -414,7 +411,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }, [courseRecommendations])
 
   const getTrueFilterValue = (filterOptionId: string, questionId: string) => {
-    const filter = allFilters.find(f => f.id === questionId)
+    const filter = filters.find(f => f.id === questionId)
     if(!filter || !filter.variants){
       return filterOptionId
     }

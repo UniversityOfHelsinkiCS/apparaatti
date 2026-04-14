@@ -9,6 +9,7 @@ import {
 import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
 import User from '../db/models/user.ts'
 import logger from '../util/logger.ts'
+import filterConfigRouter from './filterConfigRouter.ts'
 
 const USER_FETCH_LIMIT = 100
 
@@ -19,7 +20,6 @@ interface UserSearchQuery {
   onlyWithStudyRight?: boolean
   onlyEmployees?: boolean
 }
-
 
 adminRouter.post('/feedback', async (req, res) => {
   const user = enforceIsUser(req)
@@ -45,7 +45,6 @@ adminRouter.get('/users', async (req, res) => {
     res.status(400).send('Search string must be at least 5 characters long')
     return
   }
-
 
   const trimmedSearch = search.trim()
 
@@ -78,5 +77,7 @@ adminRouter.get('/users', async (req, res) => {
   })
   res.send(users)
 })
+
+adminRouter.use('/filter-config', filterConfigRouter)
 
 export default adminRouter

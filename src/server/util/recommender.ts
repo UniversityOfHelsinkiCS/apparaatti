@@ -172,15 +172,12 @@ export function localeNameIncludesAny(localizedName: { fi?: string; en?: string;
 }
 
 export async function courseIsCollaboration(course: CourseData): Promise<boolean> {
-  // Check if course name contains any collaboration indicators
   if (localeNameIncludesAny(course.name, collaborationOrganisationCourseNameIncludes)) {
     return true
   }
   
-  // Get organisations for the course
   const organisations = await organisationWithGroupIdOf(course.groupIds)
   
-  // Check if any organisation name matches collaboration organisation names
   for (const org of organisations) {
     const orgName = org.name as any
     if (localeNameIncludesAny(orgName, collaborationOrganisationNames)) {
