@@ -5,7 +5,7 @@ set -e
 if curl -fsS http://localhost:3000/api/ping >/dev/null 2>&1; then
 	echo "E2E environment already running, using existing setup..."
 	echo "Running Cypress tests..."
-	npx cypress run --spec cypress/e2e/ping.cy.ts
+	npx cypress run --spec "cypress/e2e/**/*.cy.ts"
 	exit 0
 fi
 
@@ -31,4 +31,4 @@ until curl -fsS http://localhost:3000/api/ping >/dev/null 2>&1; do
 done
 
 echo "Running Cypress tests..."
-npx cypress run --spec cypress/e2e/ping.cy.ts
+npx cypress run --spec "cypress/e2e/**/*.cy.ts"
