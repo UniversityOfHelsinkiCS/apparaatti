@@ -1,12 +1,21 @@
 import { Box } from '@mui/material'
 import FilterConfigEditor from './admin/FilterConfigEditor.tsx'
-import useApi from '../util/useApi.tsx'
 import { Navigate } from 'react-router-dom'
+import useRequiredUser from '../util/useRequiredUser.ts'
+import { RedirectToLogin } from '../util/redirectToLogin.ts'
 
 const AdminPage = () => {
+  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
-  const { data: user, isLoading: isUserLoading } = useApi('user', '/api/user', 'GET', null)
+  if (isUnauthorized) {
+    return <RedirectToLogin />
+  }
+
   if (isUserLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!user) {
     return <div>Loading...</div>
   }
 

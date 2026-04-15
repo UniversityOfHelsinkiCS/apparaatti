@@ -11,18 +11,22 @@ import { FilterContextProvider, useFilterContext } from './contexts/filterContex
 import SidebarContent from './components/SidebarContent'
 import CourseRecommendations from './components/CourseRecommendations'
 import WelcomeModal from './components/WelcomeModal'
-import useApi from './util/useApi'
 import CurrentFilterDisplay from './components/CurrentFilterDisplay'
-import TextFeedbackV2 from './components/TextFeedbackV2'
-import { CourseRecommendation } from '../common/types'
+import type { User } from '../common/types'
 import AdminModal from './components/AdminModal'
 import LanguageSelector from './components/LanguageSelector'
 import { useTranslation } from 'react-i18next'
+import useRequiredUser from './util/useRequiredUser'
+import { RedirectToLogin } from './util/redirectToLogin'
 
 const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
 const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
 
-const OneThirdDrawerLayout = () => {
+type OneThirdDrawerLayoutProps = {
+  user: User
+}
+
+const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile) 
@@ -34,21 +38,6 @@ const OneThirdDrawerLayout = () => {
   }, [isMobile])
 
   const toggleDrawer = () => setOpen((prev) => !prev)
-
-  const { data: user, isLoading: isUserLoading } = useApi('user', '/api/user', 'GET', null)
-
-  if(isUserLoading || user?.message === 'Unauthorized'){
-    
-    return (
-      <Stack direction='column' sx={{width: '100vw', height: '100vh'}}>
-        <Typography variant='h2' sx={{marginLeft: 'auto', marginRight: 'auto'}}>Apparaatti</Typography> 
-        <Typography sx={{marginLeft: 'auto', marginRight: 'auto'}}>
-          {t('v2:loginPrompt')} <a href="/api/login">{t('v2:loginLink')}</a>
-        </Typography>
-        
-      </Stack>
-    )
-  }
 
   const currentDrawerWidth = isMobile ? mobileDrawerWidth : desktopDrawerWidth
 
@@ -141,9 +130,23 @@ const OneThirdDrawerLayout = () => {
 }
 
 const AppV2 = () => {
+  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+
+  if (isUnauthorized) {
+    return <RedirectToLogin />
+  }
+
+  if (isUserLoading || !user) {
+    return (
+      <Stack direction='column' sx={{ width: '100vw', height: '100vh' }}>
+        <Typography variant='h2' sx={{ marginLeft: 'auto', marginRight: 'auto' }}>Apparaatti</Typography>
+      </Stack>
+    )
+  }
+
   return (
     <FilterContextProvider>
-      <OneThirdDrawerLayout/>
+      <OneThirdDrawerLayout user={user}/>
     </FilterContextProvider>
   )
 }
