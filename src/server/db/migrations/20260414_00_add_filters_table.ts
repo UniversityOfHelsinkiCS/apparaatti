@@ -1,15 +1,48 @@
 import { DataTypes } from 'sequelize'
 import type { Migration } from '../connection.ts'
+import { seedFilters } from '../seedFilters.ts'
+
+const STRICT_DEFAULT_IDS = [
+  'study-field-select',
+  'primary-language',
+  'lang',
+  'primary-language-specification',
+  'previusly-done-lang',
+  'study-year',
+  'study-period',
+]
+
+const SPECIFIC_ORG_FILTER = {
+  id: 'spesificOrg',
+  mandatory: false,
+  shortName: { fi: 'Oma organisaatio', sv: 'Egen organisation', en: 'Own organisation' },
+  displayOrder: 6,
+  superToggle: false,
+  hideInCurrentFiltersDisplay: true,
+  hideInRecommendationReasons: true,
+  hideInFilterSidebar: true,
+  showInWelcomeModal: false,
+  coordinateKey: 'spesificOrg',
+  isStrictByDefault: true,
+  enabled: true,
+  variants: [
+    {
+      name: 'default',
+      skipped: true,
+      question: {
+        fi: 'Rajaa oman organisaation kurssit',
+        sv: 'Begränsa till kurser i den egna organisationen',
+        en: 'Restrict to courses in the user\'s own organisation',
+      },
+    },
+  ],
+}
 
 export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.createTable('filters', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
-      allowNull: false,
-    },
-    effects: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     mandatory: {
@@ -67,6 +100,10 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       defaultValue: false,
     },
+    coordinate_key: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     is_strict_by_default: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -102,6 +139,38 @@ export const up: Migration = async ({ context: queryInterface }) => {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL',
   })
+
+  await seedFilters()
+
+  await queryInterface.bulkUpdate(
+    'filters',
+    { is_strict_by_default: true },
+    { id: STRICT_DEFAULT_IDS }
+  )
+
+  await queryInterface.bulkInsert('filters', [
+    {
+      id: SPECIFIC_ORG_FILTER.id,
+      mandatory: SPECIFIC_ORG_FILTER.mandatory,
+      short_name: SPECIFIC_ORG_FILTER.shortName,
+      explanation: null,
+      extra_info: null,
+      parent_filter_id: null,
+      display_order: SPECIFIC_ORG_FILTER.displayOrder,
+      display_type: null,
+      super_toggle: SPECIFIC_ORG_FILTER.superToggle,
+      hide_in_current_filters_display: SPECIFIC_ORG_FILTER.hideInCurrentFiltersDisplay,
+      hide_in_recommendation_reasons: SPECIFIC_ORG_FILTER.hideInRecommendationReasons,
+      hide_in_filter_sidebar: SPECIFIC_ORG_FILTER.hideInFilterSidebar,
+      show_in_welcome_modal: SPECIFIC_ORG_FILTER.showInWelcomeModal,
+      coordinate_key: SPECIFIC_ORG_FILTER.coordinateKey,
+      is_strict_by_default: SPECIFIC_ORG_FILTER.isStrictByDefault,
+      enabled: SPECIFIC_ORG_FILTER.enabled,
+      variants: SPECIFIC_ORG_FILTER.variants,
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+  ])
 }
 
 export const down: Migration = async ({ context: queryInterface }) => {
