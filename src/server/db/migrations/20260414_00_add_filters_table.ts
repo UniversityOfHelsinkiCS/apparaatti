@@ -32,12 +32,6 @@ export const up: Migration = async ({ context: queryInterface }) => {
     parent_filter_id: {
       type: DataTypes.STRING,
       allowNull: true,
-      references: {
-        model: 'filters',
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'SET NULL',
     },
     display_order: {
       type: DataTypes.INTEGER,
@@ -95,6 +89,18 @@ export const up: Migration = async ({ context: queryInterface }) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+  })
+
+  await queryInterface.addConstraint('filters', {
+    fields: ['parent_filter_id'],
+    type: 'foreign key',
+    name: 'filters_parent_filter_id_fkey',
+    references: {
+      table: 'filters',
+      field: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   })
 }
 
