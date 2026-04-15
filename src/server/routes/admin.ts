@@ -7,7 +7,7 @@ import {
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import User from '../db/models/user.ts'
+import { usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 
@@ -70,11 +70,7 @@ adminRouter.get('/users', async (req, res) => {
     }
   }
 
-  const users = await User.findAll({
-    where: whereClauses,
-    limit: USER_FETCH_LIMIT,
-    raw: true
-  })
+  const users = await usersWithWhere(whereClauses, USER_FETCH_LIMIT)
   res.send(users as UserType[])
 })
 

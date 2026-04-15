@@ -1,15 +1,14 @@
 
-
-import User from '../db/models/user.ts'
+import { userWithId } from '../util/dbActions.ts'
 import { isSuperuser } from '../util/validations.ts'
 
 const loginAsMiddleware = async (
-  req, _, next
+  req: any, _: any, next: any
 ) => {
   const loginAsId = req.headers['x-login-as']
   if (typeof loginAsId === 'string' && isSuperuser(req?.user)) {
   
-    const loggedInAsUser = await User.findByPk(loginAsId)
+    const loggedInAsUser = await userWithId(loginAsId)
   
     if (loggedInAsUser) {
       req.user = loggedInAsUser.toJSON()

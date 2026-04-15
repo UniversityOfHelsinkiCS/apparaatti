@@ -310,10 +310,8 @@ describe('pointRecommendCourses', () => {
       { strictField: 'graduation', coordinateField: 'graduation' },
       { strictField: 'flexible', coordinateField: 'flexible' },
       { strictField: 'integrated', coordinateField: 'integrated' },
-      { strictField: 'study-field-select', coordinateField: 'org' },
       { strictField: 'study-place', coordinateField: 'studyPlace' },
       { strictField: 'multi-period', coordinateField: 'multiPeriod' },
-      { strictField: 'spesificOrg', coordinateField: 'spesificOrg' },
     ]
 
     for (const testCase of strictCases) {
@@ -346,7 +344,7 @@ describe('pointRecommendCourses', () => {
     expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
   })
 
-  it('keeps spesificOrg mismatches when spesificOrg is not a strict field (non-Finnish Finnish)', () => {
+  it('always enforces spesificOrg as strict even when not listed in strictFields', () => {
     const user = createUserCoordinates({ spesificOrg: 1 })
     const specificCourse = createRecommendation('specific-org-match', {
       coordinates: { spesificOrg: 1 },
@@ -357,10 +355,10 @@ describe('pointRecommendCourses', () => {
 
     const result = pointRecommendedCourses([specificCourse, genericCourse], user, [])
 
-    expect(result).toHaveLength(2)
+    expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
   })
 
-  it('keeps org mismatches when study-field-select is not a strict field', () => {
+  it('always enforces org as strict even when not listed in strictFields', () => {
     const user = createUserCoordinates({ org: 1 })
     const mismatch = createRecommendation('org-mismatch', {
       coordinates: { org: 0 },
@@ -368,7 +366,7 @@ describe('pointRecommendCourses', () => {
 
     const result = pointRecommendedCourses([mismatch], user, [])
 
-    expect(result).toHaveLength(1)
+    expect(result).toEqual([])
   })
 
   it('treats date comparison as always matching', () => {

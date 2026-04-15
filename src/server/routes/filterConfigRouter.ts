@@ -1,7 +1,14 @@
 import express from 'express'
 import { z } from 'zod'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import Filter from '../db/models/filter.ts'
+import {
+  createFilterConfig,
+  disableFilterConfigById,
+  filterConfigWithId,
+  orderedFilterConfigs,
+  reorderFilterConfigs,
+  updateFilterConfigById,
+} from '../util/dbActions.ts'
 import { FilterCreateSchema, FilterUpdateSchema } from '../../common/validators.ts'
 
 const filterConfigRouter = express.Router()
@@ -9,10 +16,7 @@ const filterConfigRouter = express.Router()
 filterConfigRouter.get('/', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
-  const filters = await Filter.findAll({
-    order: [['display_order', 'ASC']],
-    raw: true,
-  })
+  const filters = await orderedFilterConfigs()
   res.json(filters)
 })
 
@@ -20,7 +24,7 @@ filterConfigRouter.put('/:id', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const filter = await Filter.findByPk(req.params.id)
+  const filter = await filterConfigWithId(req.params.id)
   if (!filter) {
     res.status(404).json({ message: 'Filter not found' })
     return
@@ -32,13 +36,13 @@ filterConfigRouter.put('/:id', async (req, res) => {
     return
   }
 
-  const currentVariants = (filter.get('variants') as unknown as unknown[]) ?? []
+  const currentVariants = ((filter as any).variants as unknown[]) ?? []
   if (parsed.data.variants.length > currentVariants.length) {
     enforceIsSuperuser(user)
   }
 
-  await filter.update(parsed.data)
-  res.json(filter)
+  const updatedFilter = await updateFilterConfigById(req.params.id, parsed.data)
+  res.json(updatedFilter)
 })
 
 filterConfigRouter.post('/', async (req, res) => {
@@ -51,27 +55,27 @@ filterConfigRouter.post('/', async (req, res) => {
     return
   }
 
-  const existing = await Filter.findByPk(parsed.data.id)
+  const existing = await filterConfigWithId(parsed.data.id)
   if (existing) {
     res.status(409).json({ message: 'A filter with this id already exists' })
     return
   }
 
-  const filter = await Filter.create(parsed.data)
+  const filter = await createFilterConfig(parsed.data)
   res.status(201).json(filter)
 })
 
 filterConfigRouter.delete('/:id', async (req, res) => {
   const user = enforceIsUser(req)
-  enforceIsAdmin(user)
+  enforceIsSuperuser(user)
 
-  const filter = await Filter.findByPk(req.params.id)
+  const filter = await filterConfigWithId(req.params.id)
   if (!filter) {
     res.status(404).json({ message: 'Filter not found' })
     return
   }
 
-  await filter.update({ enabled: false })
+  await disableFilterConfigById(req.params.id)
   res.json({ message: 'Filter disabled' })
 })
 
@@ -90,11 +94,7 @@ filterConfigRouter.patch('/reorder', async (req, res) => {
     return
   }
 
-  await Promise.all(
-    parsed.data.map(({ id, displayOrder }) =>
-      Filter.update({ displayOrder }, { where: { id } })
-    )
-  )
+  await reorderFilterConfigs(parsed.data)
   res.json({ message: 'Order updated' })
 })
 

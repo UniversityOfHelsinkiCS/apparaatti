@@ -1,14 +1,7 @@
-import Organisation from '../db/models/organisation.ts'
-import StudyRight from '../db/models/studyRight.ts'
+import { organisationsWithIds, studyRightsForPersonId } from './dbActions.ts'
 
 const studyRightsForUser = async (user: any) => {
-  const studyRights = await StudyRight.findAll({
-    where: {
-      personId: user.id,
-    },
-    order: [['modificationOrdinal', 'DESC']],
-    raw: true,
-  })
+  const studyRights = await studyRightsForPersonId(user.id)
   if (studyRights.length === 0) {
     return []
   }
@@ -54,13 +47,7 @@ export const getStudyData = async (user: any) => {
     }
   }
 
-  const organisations = await Organisation.findAll({
-    attributes: ['id', 'name', 'code'],
-    where: {
-      id: organisationIds,
-    },
-    raw: true,
-  })
+  const organisations = await organisationsWithIds(organisationIds)
 
 
   return {

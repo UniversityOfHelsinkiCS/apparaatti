@@ -112,7 +112,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'studyYear',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('study-year'),
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
         if (!userCoordinates.studyYear || userCoordinates.studyYear === 'neutral') return true
 
@@ -123,7 +123,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'studyPeriod',
-      filterOnFail: true,
+      filterOnFail: strictFields.includes('study-period'),
       f: (c: CourseRecommendation, userCoordinates: UserCoordinates) => {
         if (!userCoordinates.studyPeriod || userCoordinates.studyPeriod.includes('neutral')) return true
 

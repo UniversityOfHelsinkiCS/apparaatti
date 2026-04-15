@@ -1,9 +1,5 @@
 import type { User } from '../../common/types.ts'
 
-type RequestWithUser = {
-  user?: User
-}
-
 export const isSuperuser = (user: User) => {
   const groups = user?.hyGroupCn
   if(!groups){
@@ -20,12 +16,11 @@ export const isAdmin = (user: User) => {
   return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') || groups?.includes('grp-a90600-opintot')
 }
 
-export const enforceIsUser = (req: RequestWithUser) => {
+export const enforceIsUser = (req: any): User => {
   if (!req.user) {
     throw new Error('Unauthorized')
-    return
   }
-  return req.user
+  return req.user as User
 }
 
 export const enforceIsAdmin = (user: User) => {

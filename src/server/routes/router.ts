@@ -1,11 +1,9 @@
 import express from 'express'
 import { AnswerSchema, StringArraySchema } from '../../common/validators.ts'
+import type { AnswerData } from '../../common/types.ts'
 import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
-import Organisation from '../db/models/organisation.ts'
-import Filter from '../db/models/filter.ts'
-import { Op } from 'sequelize'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment, UPDATER_CRON_ENABLED } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
@@ -15,6 +13,7 @@ import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
 import { run as runUpdater } from '../updater/index.ts'
+import { allOrganisations, enabledOrderedFilterConfigs, organisationsWithSupportedCodes } from '../util/dbActions.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -43,11 +42,7 @@ router.get('/filter-config', async (req, res) => {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
-  const filters = await Filter.findAll({
-    where: { enabled: true },
-    order: [['display_order', 'ASC']],
-    raw: true,
-  })
+  const filters = await enabledOrderedFilterConfigs()
   res.json(filters)
 })
 
@@ -57,12 +52,7 @@ router.get('/organisations/supported', async(req, res) => {
     return
   }
   const organisationCodes:string[]= Object.keys(organisationCodeToUrn)
-  const organisations:Organisation[] = await Organisation.findAll({
-    where: {
-      code: {[Op.in]: organisationCodes}
-    },
-    raw: true
-  })
+  const organisations = await organisationsWithSupportedCodes(organisationCodes)
   res.json(organisations)
   
 })
@@ -91,7 +81,7 @@ router.get('/organisations/integrated', async(req, res) => {
 router.post('/form/answer', async (req, res) => {
 
   const submission:FormSubmission = req.body
-  const answerData = AnswerSchema.parse(submission.answerData)
+  const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
   const strictFields: string[] = StringArraySchema.parse(submission.strictFields) 
 
   if (!req.user) {
@@ -99,7 +89,7 @@ router.post('/form/answer', async (req, res) => {
     return
   }
   
-  const recommendations = await recommendCourses(answerData, strictFields)
+  const recommendations = await recommendCourses(answerData as AnswerData, strictFields)
 
   res.json({...recommendations, answerData})
 })
@@ -109,7 +99,7 @@ router.get('/login', passport.authenticate('oidc'))
 router.get(
   '/login/callback',
   passport.authenticate('oidc', { failureRedirect: '/' }),
-  async (req, res) => {
+  async (_req, res) => {
     res.redirect('/')
   }
 )
@@ -120,10 +110,12 @@ router.get('/user', async (req, res) => {
     return
   }
 
-  const adminStatus = isAdmin(req.user)
-  const superuserStatus = isSuperuser(req.user)
+  const user = req.user as User
+
+  const adminStatus = isAdmin(user)
+  const superuserStatus = isSuperuser(user)
   const returnData: User = {
-    ...req.user,
+    ...user,
     isAdmin: adminStatus,
     isSuperuser: superuserStatus
   }
@@ -136,7 +128,7 @@ router.get('/user/studydata', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const studydata = await getStudyData(req.user)
+  const studydata = await getStudyData(req.user as User)
 
   res.json(studydata)
 })
@@ -147,7 +139,7 @@ router.get('/organisations', async (req, res) => {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  const organisations = await Organisation.findAll({})
+  const organisations = await allOrganisations()
   res.json(organisations)
     
 
