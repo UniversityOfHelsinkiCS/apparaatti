@@ -12,7 +12,6 @@ Filter.init(
     },
     effects: { type: DataTypes.STRING, allowNull: false },
     mandatory: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-    type: { type: DataTypes.STRING, allowNull: false },
     shortName: { type: DataTypes.JSONB, allowNull: false },
     explanation: { type: DataTypes.JSONB, allowNull: true },
     extraInfo: { type: DataTypes.JSONB, allowNull: true },

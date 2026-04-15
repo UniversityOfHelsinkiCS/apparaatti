@@ -31,7 +31,6 @@ export type FilterConfig = {
   id: string
   effects: string
   mandatory: boolean
-  type: string
   shortName: LocalizedText
   explanation?: LocalizedText
   extraInfo?: LocalizedText
@@ -63,7 +62,6 @@ export type Question = {
   isSubQuestionForQuestionId?: string
   mandatory?: boolean
   value?: string
-  type: string
   shortName?: string
   explanation?: string
   variants: Variant[]

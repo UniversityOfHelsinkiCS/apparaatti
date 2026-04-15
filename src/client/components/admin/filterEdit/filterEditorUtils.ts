@@ -1,16 +1,5 @@
 import type { FilterConfig } from '../../../../common/types.ts'
 
-export const FILTER_TYPES = [
-  'multi',
-  'language',
-  'primary-language',
-  'primary-language-specification',
-  'previusly-done-lang',
-  'study-place',
-  'studyphase',
-  'period-date',
-]
-
 export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlechoice']
 
 export const SWITCH_SX = {
@@ -24,7 +13,6 @@ export const blankFilter = (): FilterConfig => ({
   id: '',
   effects: '',
   mandatory: false,
-  type: 'multi',
   shortName: blankLocalized(),
   explanation: blankLocalized(),
   extraInfo: blankLocalized(),

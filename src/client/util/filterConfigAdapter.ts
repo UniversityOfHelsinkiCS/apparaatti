@@ -7,7 +7,6 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   id: cfg.id,
   effects: cfg.effects,
   mandatory: cfg.mandatory,
-  type: cfg.type,
   shortName: localize(cfg.shortName, lang),
   explanation: cfg.explanation ? localize(cfg.explanation, lang) : undefined,
   extraInfo: cfg.extraInfo ? localize(cfg.extraInfo, lang) : undefined,

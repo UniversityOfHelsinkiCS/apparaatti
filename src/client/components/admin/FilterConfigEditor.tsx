@@ -70,7 +70,6 @@ const FilterConfigEditor = () => {
             <TableCell>Order</TableCell>
             <TableCell>ID</TableCell>
             <TableCell>Short Name (fi)</TableCell>
-            <TableCell>Type</TableCell>
             <TableCell>Enabled</TableCell>
             <TableCell>Edit</TableCell>
           </TableRow>
@@ -97,7 +96,6 @@ const FilterConfigEditor = () => {
               </TableCell>
               <TableCell>{filter.id}</TableCell>
               <TableCell>{filter.shortName.fi}</TableCell>
-              <TableCell>{filter.type}</TableCell>
               <TableCell>
                 <Switch
                   checked={filter.enabled}

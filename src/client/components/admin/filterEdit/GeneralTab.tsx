@@ -1,6 +1,6 @@
 import { Box, FormControlLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material'
 import type { FilterConfig } from '../../../../common/types.ts'
-import { FILTER_TYPES, DISPLAY_TYPES, SWITCH_SX } from './filterEditorUtils.ts'
+import { DISPLAY_TYPES, SWITCH_SX } from './filterEditorUtils.ts'
 import LocalizedField from './LocalizedField.tsx'
 
 interface Props {
@@ -41,22 +41,6 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         value={draft.effects}
         onChange={(e) => patch({ effects: e.target.value })}
       />
-      <Box>
-        <Typography variant="caption" color="text.secondary">
-          Type
-        </Typography>
-        <Select
-          fullWidth
-          value={draft.type}
-          onChange={(e) => patch({ type: e.target.value as string })}
-        >
-          {FILTER_TYPES.map((t) => (
-            <MenuItem key={t} value={t}>
-              {t}
-            </MenuItem>
-          ))}
-        </Select>
-      </Box>
       <Box>
         <Typography variant="caption" color="text.secondary">
           Display type

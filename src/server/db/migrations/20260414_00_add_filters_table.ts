@@ -17,10 +17,6 @@ export const up: Migration = async ({ context: queryInterface }) => {
       allowNull: false,
       defaultValue: false,
     },
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     short_name: {
       type: DataTypes.JSONB,
       allowNull: false,
