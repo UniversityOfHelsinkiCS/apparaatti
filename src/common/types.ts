@@ -4,25 +4,74 @@ export type LocalizedString = Partial<{
   en: string
 }>
 
+// Fully-specified localized string used for filter config stored in the DB
+export type LocalizedText = {
+  fi: string
+  sv: string
+  en: string
+}
+
+export type FilterOption = {
+  id: string
+  name: LocalizedText
+  valueOverride?: string | null
+  setStrict?: boolean | null
+}
+
+
+export type FilterVariant = {
+  name: string
+  skipped?: boolean
+  question: LocalizedText
+  explanation?: LocalizedText
+  options?: FilterOption[]
+}
+
+export type FilterConfig = {
+  id: string
+  mandatory: boolean
+  shortName: LocalizedText
+  explanation?: LocalizedText
+  extraInfo?: LocalizedText
+  parentFilterId?: string | null
+  displayOrder: number
+  displayType?: string | null
+  superToggle: boolean
+  hideInCurrentFiltersDisplay: boolean
+  hideInRecommendationReasons: boolean
+  hideInFilterSidebar: boolean
+  showInWelcomeModal: boolean
+  coordinateKey?: string | null
+  isStrictByDefault: boolean
+  enabled: boolean
+  variants: FilterVariant[]
+}
+
 export type Option = {
   id: string
   name: string
-  valueOverride?: string //if this field exists on a option it will be used as the value to send to the backend
-  setStrict?: boolean //if true, this option will set the strict mode for the question, if false it will not force the strict mode to be true
+  valueOverride?: string
+  setStrict?: boolean
 }
 
 
 export type Question = {
   id: string
-  effects: string
   isSubQuestionForQuestionId?: string
   mandatory?: boolean
   value?: string
-  type: string
   shortName?: string
   explanation?: string
   variants: Variant[]
-  extraInfo?: string // Added extrainfo field
+  extraInfo?: string
+  displayType?: string | null
+  superToggle?: boolean
+  showInWelcomeModal?: boolean
+  hideInCurrentFiltersDisplay?: boolean
+  hideInRecommendationReasons?: boolean
+  hideInFilterSidebar?: boolean
+  coordinateKey?: string | null
+  isStrictByDefault?: boolean
 }
 
 export type Variant = {
@@ -52,7 +101,7 @@ export type CourseRecommendation = {
 export type CourseCoordinates = {
   date: number;
   org: number;
-  spesificOrg: number;
+  spesificOrg: number | null;
   lang: number;
   graduation?: number | null;
   mentoring?: number | null;
@@ -123,6 +172,7 @@ export type User = {
   language: string | null
   studentNumber: string | null
   isAdmin?: boolean
+  isSuperuser?: boolean
  }
 
 export type CurCuRelation = {

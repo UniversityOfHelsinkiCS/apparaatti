@@ -44,7 +44,7 @@ const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}
 const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
   const filterContext = useFilterContext()
   const cfg = filterConfigMap(filterContext).get(filterId)
-  const hide = cfg?.hideInCurrentFiltersDisplay != undefined ? cfg.hideInCurrentFiltersDisplay : false
+  const hide = filterContext.filters.find((q: any) => q.id === filterId)?.hideInCurrentFiltersDisplay ?? false
   const variant = getFilterVariant(filterContext, filterId)
   const question = filterContext.filters.find((q: any) => q.id === filterId)
 

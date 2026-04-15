@@ -2,11 +2,8 @@ import express from 'express'
 import { Op } from 'sequelize'
 
 import { uniqueVals } from '../util/misc.ts'
-import Cur from '../db/models/cur.ts'
-import Cu from '../db/models/cu.ts'
-import CurCu from '../db/models/curCu.ts'
 import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
-import { organisationWithGroupIdOf } from '../util/dbActions.ts'
+import { allCurs, allCursRaw, allCurCus, allCurCusRaw, cusWithIds, cusWithWhere, cursWithWhereRaw, organisationWithGroupIdOf } from '../util/dbActions.ts'
 
 const debugRouter = express.Router({mergeParams: true})
 
@@ -18,7 +15,7 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
     return
   }
 
-  const realisations = await Cur.findAll({})
+  const realisations = await allCurs()
   const realisationsWithCodeUrn = realisations.filter(c => urnInCustomCodeUrns(c.customCodeUrns, 'far'))
   const realisationCodeUrns = realisations.map((r: any) => r.customCodeUrns)
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
@@ -30,12 +27,9 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   const uniqueTypeUrns = uniqueVals(realisationTypeUrns)
 
   // Get all course unit realisations and their associated course units
-  const allCurCus = await CurCu.findAll({ raw: true })
+  const allCurCus = await allCurCusRaw()
   const courseUnitIds = uniqueVals(allCurCus.map((cc: any) => cc.cuId))
-  const courseUnits = await Cu.findAll({ 
-    where: { id: courseUnitIds },
-    raw: true 
-  })
+  const courseUnits = await cusWithIds(courseUnitIds)
 
   // Extract unique organisation group IDs
   const groupIds = courseUnits
@@ -66,7 +60,7 @@ debugRouter.get('/cur', async (req: any, res: any) => {
     }
     : {}
 
-  const curs = await Cur.findAll({ where: nameQuery, raw: true })
+  const curs = await cursWithWhereRaw(nameQuery)
   if(codeurn){
     const urnFilteredCourses = curs.filter((cur: any) => {
       return urnInCustomCodeUrns(cur.customCodeUrns, codeurn as string)
@@ -104,7 +98,7 @@ debugRouter.get('/cu', async (req: any, res: any) => {
     ...nameQuery,
     ...codeQuery,
   }
-  const cus = await Cu.findAll({ where: whereQuery })
+  const cus = await cusWithWhere(whereQuery)
   res.json(cus)
 })
 
@@ -114,7 +108,7 @@ debugRouter.get('/strict', async (req: any, res: any) => {
     return
   }
 
-  const realisations = await Cur.findAll({ raw: true })
+  const realisations = await allCursRaw()
 
   const grouped: Record<string, any[]> = {}
 
@@ -148,7 +142,7 @@ debugRouter.get('/curcu', async (req: any, res: any) => {
     return
   }
 
-  const curcur = await CurCu.findAll()
+  const curcur = await allCurCus()
   res.json(curcur)
 })
 

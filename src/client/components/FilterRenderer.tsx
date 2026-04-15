@@ -1,30 +1,25 @@
-import { skipToken } from '@tanstack/react-query'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
 import { useFilterContext, filterConfigMap } from '../contexts/filterContext'
 import Filter from '../filters/filter'
+import { Question } from '../../common/types'
 
-const FilterRenderer = ({ filter }: { filter: any }) => {
+const FilterRenderer = ({ filter }: { filter: Question }) => {
   const filters = useFilterContext()
 
-  const buildFilter = (filter) => {
-  
-    const config = filterConfigMap(filters).get(filter.id)
+  const config = filterConfigMap(filters).get(filter.id)
+  const state = config ? config.state : ''
+  const setState = config ? config.setState : () => {}
+  const displayType = filter.displayType ?? 'singlechoice'
+  const superToggle = filter.superToggle ?? false
+  const shortName = filter.shortName ?? filter.id
+  const skipInSideBar = filter.hideInFilterSidebar ?? false
 
-    const state = config ? config.state : ''
-    const setState = config ? config.setState : () => {}
-    const displayType = config && config.displayType ? config.displayType : 'singlechoice'
-    const superToggle = config && config.superToggle !== undefined ? config.superToggle : false
-    const shortName = filter.shortName || filter.id
-
-    const skipInSideBar = config ? config.hideInFilterSideBar : false
-    return {...filter, displayType, state, setState, superToggle, shortName, skipInSideBar}
-  }
-  const filterToRender = buildFilter(filter)
+  const filterToRender = { ...filter, displayType, state, setState, superToggle, shortName }
 
   const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
   const variant = pickVariant(filter, variantId)
-  if(!variant || variant.skipped || filterToRender.skipInSideBar){
+  if (!variant || variant.skipped || skipInSideBar) {
     return null
   }
 

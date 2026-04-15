@@ -4,7 +4,7 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
 import { UserCoordinates } from '../../common/types'
-import { filterConfigMap, useFilterContext, coordinateKeyToFilterId, getCoordinateDisplayName } from '../contexts/filterContext'
+import { useFilterContext, getCoordinateDisplayName } from '../contexts/filterContext'
 
 interface RecommendationReasonsModalV2Props {
   open: boolean
@@ -24,22 +24,19 @@ const RecommendationReasonsModalV2 = ({
   const { uiVariant } = filterContext
   
   const hideIncorrect = uiVariant.find(u => u.name === 'recommendation-reasons-incorrect-hidden')?.value === 'true'
-  const filterConfig = filterConfigMap(filterContext)
 
   const getMatchStatus = (key: keyof UserCoordinates) => {
     const userValue = userCoordinates[key]
     const courseValue = courseCoordinates[key]
 
     if (userValue === null || userValue === undefined) {
-      return null // User didn't answer or chose "I don't care"
+      return null
     }
 
     
     if(key === 'date'){
       return true
     }
-    // For now, a simple equality check. This might need more complex logic
-    // depending on how coordinates are compared in the recommender.
     return userValue === courseValue
   }
 
@@ -74,23 +71,18 @@ const RecommendationReasonsModalV2 = ({
         </Typography>
 
         <Stack spacing={1}>
-          {Object.keys(coordinateKeyToFilterId).map((key) => {
+          {filterContext.filters.filter(f => f.coordinateKey).map((filter) => {
+            const key = filter.coordinateKey as string
             const matchStatus = getMatchStatus(key as keyof UserCoordinates)
             if (matchStatus === null) {
               return null
             }
 
-            // Check if this filter should be hidden in recommendation reasons
-            const filterId = coordinateKeyToFilterId[key]
-            const filterCfg = filterId ? filterConfig.get(filterId) : null
-            const hideInReasons = filterCfg?.hideInRecommendationReasons ?? false
-            
-            if (hideInReasons) {
+            if (filter.hideInRecommendationReasons) {
               return null
             }
 
-            // Get translated display name from filterContext
-            const filterName = getCoordinateDisplayName(key, filterContext, t)
+            const filterName = getCoordinateDisplayName(key, filterContext)
             const isMatch = matchStatus
 
             if (!isMatch && hideIncorrect) {

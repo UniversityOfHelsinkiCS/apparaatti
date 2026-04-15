@@ -20,6 +20,7 @@ import { redis } from './util/redis.ts'
 import setupCron from './updater/cron.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
 import { seedDatabase } from './db/seed.ts'
+import { seedFilters } from './db/seedFilters.ts'
 
 redis.on('ready', () => {
   console.log('Redis connected')
@@ -73,6 +74,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()
+  await seedFilters()
 
   if (IN_E2E) {
     await seedDatabase()
