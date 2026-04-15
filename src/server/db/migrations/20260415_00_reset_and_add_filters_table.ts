@@ -38,7 +38,26 @@ const SPECIFIC_ORG_FILTER = {
   ],
 }
 
+const tableName = (table: unknown) => {
+  if (typeof table === 'string') {
+    return table
+  }
+
+  if (table && typeof table === 'object' && 'tableName' in table && typeof table.tableName === 'string') {
+    return table.tableName
+  }
+
+  return null
+}
+
 export const up: Migration = async ({ context: queryInterface }) => {
+  const existingTables = await queryInterface.showAllTables()
+  const filtersTableExists = existingTables.some((table) => tableName(table) === 'filters')
+
+  if (filtersTableExists) {
+    await queryInterface.dropTable('filters')
+  }
+
   await queryInterface.createTable('filters', {
     id: {
       type: DataTypes.STRING,
@@ -152,7 +171,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
     {
       id: SPECIFIC_ORG_FILTER.id,
       mandatory: SPECIFIC_ORG_FILTER.mandatory,
-      short_name: SPECIFIC_ORG_FILTER.shortName,
+      short_name: JSON.stringify(SPECIFIC_ORG_FILTER.shortName),
       explanation: null,
       extra_info: null,
       parent_filter_id: null,
@@ -166,7 +185,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
       coordinate_key: SPECIFIC_ORG_FILTER.coordinateKey,
       is_strict_by_default: SPECIFIC_ORG_FILTER.isStrictByDefault,
       enabled: SPECIFIC_ORG_FILTER.enabled,
-      variants: SPECIFIC_ORG_FILTER.variants,
+      variants: JSON.stringify(SPECIFIC_ORG_FILTER.variants),
       created_at: new Date(),
       updated_at: new Date(),
     },
