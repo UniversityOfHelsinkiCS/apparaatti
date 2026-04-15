@@ -70,7 +70,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'spesificOrg',
-      filterOnFail: strictFields.includes('spesificOrg'), //true for fi-primary (Finnish Finnish)
+      filterOnFail: true, //always true
     },
     {
       field: 'mooc',

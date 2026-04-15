@@ -389,9 +389,8 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   const courseLanguageType = languageToStudy(lang, primaryLang)
   const recommendations = await calculateAllCourseCoordinates(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
- 
-  const strictFieldsWithLang = (courseLanguageType === 'fi-primary' || courseLanguageType === 'sv-primary') ? [...strictFields, 'spesificOrg'] : strictFields
-  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFieldsWithLang)
+
+  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,

@@ -204,7 +204,7 @@ describe('pointRecommendCourses', () => {
     expect(ids.indexOf('numbered')).toBeLessThan(ids.indexOf('eri'))
   })
 
-  it('enforces studyYear comparison and allows neutral year', () => {
+  it('enforces studyYear comparison when configured strict and allows neutral year', () => {
     const matchingYear = createRecommendation('year-match', {
       course: {
         period: [
@@ -236,10 +236,18 @@ describe('pointRecommendCourses', () => {
     const strictResult = pointRecommendedCourses(
       [matchingYear, nonMatchingYear],
       strictUser,
-      []
+      ['study-year']
     )
 
     expect(strictResult.map((course) => course.course.id)).toEqual(['year-match'])
+
+    const nonStrictResult = pointRecommendedCourses(
+      [matchingYear, nonMatchingYear],
+      strictUser,
+      []
+    )
+
+    expect(nonStrictResult).toHaveLength(2)
 
     const neutralUser = createUserCoordinates({ studyYear: 'neutral' })
     const neutralResult = pointRecommendedCourses([nonMatchingYear], neutralUser, [])
@@ -247,7 +255,7 @@ describe('pointRecommendCourses', () => {
     expect(neutralResult).toHaveLength(1)
   })
 
-  it('enforces studyPeriod comparison and allows neutral period', () => {
+  it('enforces studyPeriod comparison when configured strict and allows neutral period', () => {
     const periodMatch = createRecommendation('period-match', {
       course: { startDate: new Date(2025, 8, 10) },
     })
@@ -259,10 +267,18 @@ describe('pointRecommendCourses', () => {
     const strictResult = pointRecommendedCourses(
       [periodMatch, periodMiss],
       strictUser,
-      []
+      ['study-period']
     )
 
     expect(strictResult.map((course) => course.course.id)).toEqual(['period-match'])
+
+    const nonStrictResult = pointRecommendedCourses(
+      [periodMatch, periodMiss],
+      strictUser,
+      []
+    )
+
+    expect(nonStrictResult).toHaveLength(2)
 
     const neutralUser = createUserCoordinates({ studyPeriod: ['neutral'] })
     const neutralResult = pointRecommendedCourses([periodMiss], neutralUser, [])
@@ -294,6 +310,7 @@ describe('pointRecommendCourses', () => {
       { strictField: 'graduation', coordinateField: 'graduation' },
       { strictField: 'flexible', coordinateField: 'flexible' },
       { strictField: 'integrated', coordinateField: 'integrated' },
+      { strictField: 'study-field-select', coordinateField: 'org' },
       { strictField: 'study-place', coordinateField: 'studyPlace' },
       { strictField: 'multi-period', coordinateField: 'multiPeriod' },
       { strictField: 'spesificOrg', coordinateField: 'spesificOrg' },
@@ -343,7 +360,7 @@ describe('pointRecommendCourses', () => {
     expect(result).toHaveLength(2)
   })
 
-  it('always enforces org as strict even when not listed in strictFields', () => {
+  it('keeps org mismatches when study-field-select is not a strict field', () => {
     const user = createUserCoordinates({ org: 1 })
     const mismatch = createRecommendation('org-mismatch', {
       coordinates: { org: 0 },
@@ -351,7 +368,7 @@ describe('pointRecommendCourses', () => {
 
     const result = pointRecommendedCourses([mismatch], user, [])
 
-    expect(result).toEqual([])
+    expect(result).toHaveLength(1)
   })
 
   it('treats date comparison as always matching', () => {

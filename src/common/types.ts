@@ -101,7 +101,7 @@ export type CourseRecommendation = {
 export type CourseCoordinates = {
   date: number;
   org: number;
-  spesificOrg: number;
+  spesificOrg: number | null;
   lang: number;
   graduation?: number | null;
   mentoring?: number | null;

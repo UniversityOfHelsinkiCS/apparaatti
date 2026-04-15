@@ -237,11 +237,11 @@ async function seedCourses() {
     makeCourse('kk-rumalu',   'KK-RUMALU',   COURSE_NAME.kkRumalu,   ORG.language, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat, TAG.kktHum, TAG.kktVal), ...langUrns(LANG.sv),      ...helsinkiUrns(HKI.kielet) }),
     makeCourse('kk-enkaikki', 'KK-ENKAIKKI', COURSE_NAME.kkEnkaikki, ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kktMat, TAG.kktHum, TAG.kktVal), ...langUrns(LANG.en),      ...helsinkiUrns(HKI.kielet) }),
     makeCourse('kk-eng201',   'KK-ENG201',   COURSE_NAME.kkEng201,   ORG.language, { min: 5, max: 5 }, { ...apparaattiUrns(TAG.kktMat, TAG.kktHum, TAG.kktVal), ...langUrns(LANG.en),      ...helsinkiUrns(HKI.kielet) }),
-    makeCourse('kk-eneri',    'KK-ENERI',    COURSE_NAME.kkEneri,    ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kksKor), ...langUrns(LANG.en),           ...helsinkiUrns(HKI.kielet) }),
+    makeCourse('kk-eneri',    'KK-ENERI',    COURSE_NAME.kkEneri,    ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kktMat, TAG.kksKor), ...langUrns(LANG.en),           ...helsinkiUrns(HKI.kielet) }),
 
     makeCourse('kk-rukaikki', 'KK-RUKAIKKI', COURSE_NAME.kkRukaikki, ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kktMat, TAG.kktHum, TAG.kktVal), ...langUrns(LANG.sv),      ...helsinkiUrns(HKI.kielet) }),
     makeCourse('kk-ruo205',   'KK-RUO205',   COURSE_NAME.kkRuo205,   ORG.language, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat, TAG.kktHum, TAG.kktVal), ...langUrns(LANG.fi, LANG.sv), ...helsinkiUrns(HKI.kielet) }),
-    makeCourse('kk-rueri',    'KK-RUERI',    COURSE_NAME.kkRueri,    ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kksKor), ...langUrns(LANG.sv),           ...helsinkiUrns(HKI.kielet) }),
+    makeCourse('kk-rueri',    'KK-RUERI',    COURSE_NAME.kkRueri,    ORG.language, { min: 3, max: 3 }, { ...apparaattiUrns(TAG.kktMat, TAG.kksKor), ...langUrns(LANG.sv),           ...helsinkiUrns(HKI.kielet) }),
 
     makeCourse('fys1001', 'FYS1001', COURSE_NAME.fys1001, ORG.science,  { min: 10, max: 10 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
     makeCourse('kem1001', 'KEM1001', COURSE_NAME.kem1001, ORG.science,  { min: 5,  max: 5  }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
