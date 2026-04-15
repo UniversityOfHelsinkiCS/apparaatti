@@ -10,7 +10,6 @@ Filter.init(
       primaryKey: true,
       allowNull: false,
     },
-    effects: { type: DataTypes.STRING, allowNull: false },
     mandatory: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     shortName: { type: DataTypes.JSONB, allowNull: false },
     explanation: { type: DataTypes.JSONB, allowNull: true },

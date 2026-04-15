@@ -36,11 +36,6 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         disabled={!isCreate}
         helperText={isCreate ? 'Lowercase alphanumeric + hyphens' : ''}
       />
-      <TextField
-        label="Effects"
-        value={draft.effects}
-        onChange={(e) => patch({ effects: e.target.value })}
-      />
       <Box>
         <Typography variant="caption" color="text.secondary">
           Display type

@@ -26,7 +26,6 @@ const FilterVariantSchema = z.object({
 })
 
 export const FilterUpdateSchema = z.object({
-  effects: z.string(),
   mandatory: z.boolean(),
   shortName: LocalizedTextSchema,
   explanation: LocalizedTextSchema.nullable().optional(),

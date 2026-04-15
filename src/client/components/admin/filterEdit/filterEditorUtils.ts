@@ -11,7 +11,6 @@ export const blankLocalized = () => ({ fi: '', sv: '', en: '' })
 
 export const blankFilter = (): FilterConfig => ({
   id: '',
-  effects: '',
   mandatory: false,
   shortName: blankLocalized(),
   explanation: blankLocalized(),

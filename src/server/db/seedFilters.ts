@@ -33,7 +33,6 @@ type FilterSeed = Omit<FilterConfig, 'enabled'> & { enabled: boolean }
 const FILTER_SEEDS: FilterSeed[] = [
   {
     id: 'study-field-select',
-    effects: 'org',
     mandatory: true,
     shortName: { fi: 'Opinto-oikeus', sv: 'Studierätt', en: 'Study Right' },
     displayOrder: 0,
@@ -56,7 +55,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'primary-language',
-    effects: 'lang',
     mandatory: true,
     shortName: { fi: 'Koulukieli', sv: 'Skolspråk', en: 'School Language' },
     explanation: {
@@ -85,7 +83,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'lang',
-    effects: 'lang',
     mandatory: true,
     shortName: { fi: 'Kurssi', sv: 'Kurs', en: 'Course' },
     explanation: {
@@ -116,7 +113,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'primary-language-specification',
-    effects: 'lang',
     mandatory: true,
     shortName: { fi: 'Viestintä', sv: 'Kommunikation', en: 'Communication' },
     parentFilterId: 'lang',
@@ -142,7 +138,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'previusly-done-lang',
-    effects: 'none',
     mandatory: false,
     shortName: { fi: 'Aikaisemmat opinnot', sv: 'Tidigare studier', en: 'Previous Studies' },
     explanation: {
@@ -177,7 +172,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'study-year',
-    effects: 'date',
     mandatory: false,
     shortName: { fi: 'Lukuvuosi', sv: 'Läsår', en: 'Academic Year' },
     displayOrder: 5,
@@ -203,7 +197,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'study-period',
-    effects: 'date',
     mandatory: false,
     shortName: { fi: 'Periodi', sv: 'Period', en: 'Period' },
     displayOrder: 6,
@@ -233,7 +226,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'multi-period',
-    effects: 'multiPeriod',
     mandatory: false,
     shortName: { fi: 'Kurssin pituus', sv: 'Kurslängd', en: 'Course Duration' },
     displayOrder: 7,
@@ -255,7 +247,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'replacement',
-    effects: 'none',
     mandatory: false,
     shortName: { fi: 'Korvaava', sv: 'Ersättande', en: 'Replacement' },
     displayOrder: 8,
@@ -327,7 +318,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'mentoring',
-    effects: 'mentoring',
     mandatory: false,
     shortName: { fi: 'Valmentava', sv: 'Förberedande', en: 'Preparatory' },
     displayOrder: 9,
@@ -373,7 +363,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'finmu',
-    effects: 'finmu',
     mandatory: false,
     shortName: { fi: 'Finmu', sv: 'Finmu', en: 'Finmu' },
     displayOrder: 10,
@@ -405,7 +394,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'challenge',
-    effects: 'challenge',
     mandatory: false,
     shortName: { fi: 'Mukautettu', sv: 'Anpassad', en: 'Custom' },
     displayOrder: 11,
@@ -476,7 +464,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'graduation',
-    effects: 'graduation',
     mandatory: false,
     shortName: { fi: 'Valmistuville', sv: 'För examinerande', en: 'For Graduating' },
     displayOrder: 12,
@@ -502,7 +489,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'study-place',
-    effects: 'studyPlace',
     mandatory: false,
     shortName: { fi: 'Opetusmuoto', sv: 'Undervisningsform', en: 'Teaching Method' },
     displayOrder: 13,
@@ -530,7 +516,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'integrated',
-    effects: 'integrated',
     mandatory: false,
     shortName: { fi: 'Integroitu', sv: 'Integrerad', en: 'Integrated' },
     displayOrder: 14,
@@ -563,7 +548,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'independent',
-    effects: 'independent',
     mandatory: false,
     shortName: { fi: 'Itsenäinen', sv: 'Självständig', en: 'Independent' },
     displayOrder: 15,
@@ -596,7 +580,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'mooc',
-    effects: 'mooc',
     mandatory: false,
     shortName: { fi: 'MOOC', sv: 'MOOC', en: 'MOOC' },
     displayOrder: 16,
@@ -618,7 +601,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'collaboration',
-    effects: 'collaboration',
     mandatory: false,
     shortName: { fi: 'Yhteistyö', sv: 'Samarbete', en: 'Collaboration' },
     displayOrder: 17,
@@ -641,7 +623,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'exam',
-    effects: 'none',
     mandatory: false,
     shortName: { fi: 'Tentti', sv: 'Tentamen', en: 'Exam' },
     displayOrder: 18,
@@ -663,7 +644,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
   {
     id: 'flexible',
-    effects: 'flexible',
     mandatory: false,
     shortName: { fi: 'Joustava', sv: 'Flexibel', en: 'Flexible' },
     displayOrder: 19,

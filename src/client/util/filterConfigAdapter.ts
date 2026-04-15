@@ -5,7 +5,6 @@ const localize = (text: LocalizedText, lang: string): string =>
 
 export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   id: cfg.id,
-  effects: cfg.effects,
   mandatory: cfg.mandatory,
   shortName: localize(cfg.shortName, lang),
   explanation: cfg.explanation ? localize(cfg.explanation, lang) : undefined,
