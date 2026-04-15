@@ -372,6 +372,10 @@ function getCourseCodes(langCode: string, primaryLanguage: string, primaryLangua
   }
 }
 
+function shouldUseStrictSpecificOrg(lang: string, primaryLanguage: string) {
+  return lang === primaryLanguage && (lang === 'fi' || lang === 'sv')
+}
+
 
 
 
@@ -384,13 +388,16 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
   const organisationRecommendations = readOrganisationRecommendationData()
   const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
+  const strictFieldsWithLang = shouldUseStrictSpecificOrg(lang, primaryLang)
+    ? uniqueVals([...strictFields, 'spesificOrg'])
+    : strictFields
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
   const courseLanguageType = languageToStudy(lang, primaryLang)
   const recommendations = await calculateAllCourseCoordinates(userCoordinates, courseData, courseCodes, courseLanguageType, organisationCode, answerData )
 
 
-  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFields)
+  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFieldsWithLang)
 
   const allRecommendations = {
     pointBasedRecommendations: pointBasedRecommendations,
