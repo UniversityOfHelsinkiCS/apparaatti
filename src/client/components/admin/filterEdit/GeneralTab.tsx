@@ -1,6 +1,7 @@
 import { Box, FormControlLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material'
 import type { FilterConfig } from '../../../../common/types.ts'
 import { FILTER_TYPES, DISPLAY_TYPES, SWITCH_SX } from './filterEditorUtils.ts'
+import LocalizedField from './LocalizedField.tsx'
 
 interface Props {
   draft: FilterConfig
@@ -101,47 +102,29 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
       </Box>
 
       <Typography variant="subtitle2">Short name</Typography>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        {(['fi', 'sv', 'en'] as const).map((lang) => (
-          <TextField
-            key={lang}
-            label={lang.toUpperCase()}
-            value={draft.shortName[lang]}
-            onChange={(e) => patchShortName(lang, e.target.value)}
-            sx={{ flex: 1 }}
-          />
-        ))}
-      </Box>
+      <LocalizedField
+        values={draft.shortName}
+        onChange={patchShortName}
+        textFieldLabel="Short name"
+      />
 
       <Typography variant="subtitle2">Explanation (optional)</Typography>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        {(['fi', 'sv', 'en'] as const).map((lang) => (
-          <TextField
-            key={lang}
-            label={lang.toUpperCase()}
-            multiline
-            minRows={2}
-            value={explanationVal?.[lang] ?? ''}
-            onChange={(e) => patchExplanation(lang, e.target.value)}
-            sx={{ flex: 1 }}
-          />
-        ))}
-      </Box>
+      <LocalizedField
+        values={explanationVal ?? { fi: '', sv: '', en: '' }}
+        onChange={patchExplanation}
+        textFieldLabel="Explanation"
+        multiline
+        minRows={2}
+      />
 
       <Typography variant="subtitle2">Extra info (optional)</Typography>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        {(['fi', 'sv', 'en'] as const).map((lang) => (
-          <TextField
-            key={lang}
-            label={lang.toUpperCase()}
-            multiline
-            minRows={2}
-            value={extraInfoVal?.[lang] ?? ''}
-            onChange={(e) => patchExtraInfo(lang, e.target.value)}
-            sx={{ flex: 1 }}
-          />
-        ))}
-      </Box>
+      <LocalizedField
+        values={extraInfoVal ?? { fi: '', sv: '', en: '' }}
+        onChange={patchExtraInfo}
+        textFieldLabel="Extra info"
+        multiline
+        minRows={2}
+      />
     </Box>
   )
 }

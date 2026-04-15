@@ -1,6 +1,7 @@
 import { Box, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import type { FilterOption } from '../../../../common/types.ts'
+import LocalizedField from './LocalizedField.tsx'
 
 interface Props {
   option: FilterOption
@@ -58,18 +59,12 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: Props) => (
         <DeleteIcon />
       </IconButton>
     </Box>
-    <Box sx={{ display: 'flex', gap: 1 }}>
-      {(['fi', 'sv', 'en'] as const).map((lang) => (
-        <TextField
-          key={lang}
-          label={`Name (${lang})`}
-          size="small"
-          value={option.name[lang]}
-          onChange={(e) => onUpdateName(lang, e.target.value)}
-          sx={{ flex: 1 }}
-        />
-      ))}
-    </Box>
+    <LocalizedField
+      values={option.name}
+      onChange={onUpdateName}
+      textFieldLabel="Name"
+      size="small"
+    />
   </Box>
 )
 

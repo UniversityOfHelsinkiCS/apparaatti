@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add'
 import type { FilterOption, FilterVariant } from '../../../../common/types.ts'
 import { SWITCH_SX } from './filterEditorUtils.ts'
 import OptionRow from './OptionRow.tsx'
+import LocalizedField from './LocalizedField.tsx'
 
 interface Props {
   variant: FilterVariant
@@ -46,34 +47,22 @@ const VariantEditor = ({
     />
 
     <Typography variant="subtitle2">Question text</Typography>
-    <Box sx={{ display: 'flex', gap: 1 }}>
-      {(['fi', 'sv', 'en'] as const).map((lang) => (
-        <TextField
-          key={lang}
-          label={lang.toUpperCase()}
-          multiline
-          minRows={2}
-          value={variant.question[lang]}
-          onChange={(e) => onPatchQuestion(lang, e.target.value)}
-          sx={{ flex: 1 }}
-        />
-      ))}
-    </Box>
+    <LocalizedField
+      values={variant.question}
+      onChange={onPatchQuestion}
+      textFieldLabel="Question text"
+      multiline
+      minRows={2}
+    />
 
     <Typography variant="subtitle2">Explanation override (optional)</Typography>
-    <Box sx={{ display: 'flex', gap: 1 }}>
-      {(['fi', 'sv', 'en'] as const).map((lang) => (
-        <TextField
-          key={lang}
-          label={lang.toUpperCase()}
-          multiline
-          minRows={2}
-          value={variant.explanation?.[lang] ?? ''}
-          onChange={(e) => onPatchExplanation(lang, e.target.value)}
-          sx={{ flex: 1 }}
-        />
-      ))}
-    </Box>
+    <LocalizedField
+      values={variant.explanation ?? { fi: '', sv: '', en: '' }}
+      onChange={onPatchExplanation}
+      textFieldLabel="Explanation override"
+      multiline
+      minRows={2}
+    />
 
     <Divider />
     <Typography variant="subtitle2">
