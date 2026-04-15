@@ -26,7 +26,6 @@ const VariantEditor = ({
   onUpdateOptionName,
   onAddOption,
   onRemoveOption,
-}: Props) => (
 }: VariantEditorProps) => (
   <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 2, overflow: 'auto' }}>
     <TextField
