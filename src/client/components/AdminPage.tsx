@@ -16,7 +16,7 @@ const AdminPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <FilterConfigEditor />
+      <FilterConfigEditor isSuperuser={user.isSuperuser === true} />
     </Box>
   )
 }

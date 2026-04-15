@@ -172,6 +172,7 @@ export type User = {
   language: string | null
   studentNumber: string | null
   isAdmin?: boolean
+  isSuperuser?: boolean
  }
 
 export type CurCuRelation = {

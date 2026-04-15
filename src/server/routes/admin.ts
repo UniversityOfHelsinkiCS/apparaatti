@@ -1,12 +1,12 @@
 
 import express from 'express'
-import type { User  as UserType } from '../../common/types.ts'
+import type { User  as UserType, adminFeedback } from '../../common/types.ts'
 import {
   getWhereClauseForManyWordSearch,
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
-import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
+import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
 import User from '../db/models/user.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
@@ -34,7 +34,7 @@ adminRouter.post('/feedback', async (req, res) => {
 
 adminRouter.get('/users', async (req, res) => {
   const user = enforceIsUser(req)
-  enforceIsAdmin(user)
+  enforceIsSuperuser(user)
 
   const { search } = req.query as UserSearchQuery
   if (!search) {
@@ -70,12 +70,12 @@ adminRouter.get('/users', async (req, res) => {
     }
   }
 
-  const users: UserType[] = await User.findAll({
+  const users = await User.findAll({
     where: whereClauses,
     limit: USER_FETCH_LIMIT,
     raw: true
   })
-  res.send(users)
+  res.send(users as UserType[])
 })
 
 adminRouter.use('/filter-config', filterConfigRouter)

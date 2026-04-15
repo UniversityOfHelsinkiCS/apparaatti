@@ -5,7 +5,7 @@ import { SWITCH_SX } from './filterEditorUtils.ts'
 import OptionRow from './OptionRow.tsx'
 import LocalizedField from './LocalizedField.tsx'
 
-interface Props {
+interface VariantEditorProps {
   variant: FilterVariant
   variantIdx: number
   onPatchVariant: (fields: Partial<FilterVariant>) => void
@@ -27,6 +27,7 @@ const VariantEditor = ({
   onAddOption,
   onRemoveOption,
 }: Props) => (
+}: VariantEditorProps) => (
   <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 2, overflow: 'auto' }}>
     <TextField
       label="Variant name"

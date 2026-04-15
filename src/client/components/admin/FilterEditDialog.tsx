@@ -16,13 +16,14 @@ import { useFilterDraft } from './filterEdit/useFilterDraft.ts'
 import GeneralTab from './filterEdit/GeneralTab.tsx'
 import VariantsTab from './filterEdit/VariantsTab.tsx'
 
-interface Props {
+interface FilterEditDialogProps {
   filter: FilterConfig | null
+  isSuperuser: boolean
   onClose: () => void
   onSaved: () => void
 }
 
-const FilterEditDialog = ({ filter, onClose, onSaved }: Props) => {
+const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditDialogProps) => {
   const isCreate = filter === null
   const {
     draft,
@@ -102,6 +103,7 @@ const FilterEditDialog = ({ filter, onClose, onSaved }: Props) => {
         {tab === 1 && (
           <VariantsTab
             variants={draft.variants}
+            canAddVariant={isSuperuser}
             onPatchVariant={patchVariant}
             onPatchVariantQuestion={patchVariantQuestion}
             onPatchVariantExplanation={patchVariantExplanation}

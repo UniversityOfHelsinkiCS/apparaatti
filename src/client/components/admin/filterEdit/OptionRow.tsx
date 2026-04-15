@@ -3,14 +3,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import type { FilterOption } from '../../../../common/types.ts'
 import LocalizedField from './LocalizedField.tsx'
 
-interface Props {
+interface OptionRowProps {
   option: FilterOption
   onUpdate: (fields: Partial<FilterOption>) => void
   onUpdateName: (lang: 'fi' | 'sv' | 'en', val: string) => void
   onRemove: () => void
 }
 
-const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: Props) => (
+const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps) => (
   <Box
     sx={{
       p: 1.5,

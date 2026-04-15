@@ -3,7 +3,7 @@ import { Box, MenuItem, Select, TextField, Typography } from '@mui/material'
 
 type Lang = 'fi' | 'sv' | 'en'
 
-interface Props {
+interface LocalizedFieldProps {
   values: { fi?: string; sv?: string; en?: string }
   onChange: (lang: Lang, value: string) => void
   textFieldLabel: string
@@ -25,7 +25,7 @@ const LocalizedField = ({
   multiline = false,
   minRows,
   size = 'medium',
-}: Props) => {
+}: LocalizedFieldProps) => {
   const [selectedLang, setSelectedLang] = useState<Lang>('fi')
   const selectId = useId()
   const inputMinHeight = multiline ? 120 : size === 'small' ? 44 : 52

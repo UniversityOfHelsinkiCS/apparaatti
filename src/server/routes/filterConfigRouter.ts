@@ -1,6 +1,6 @@
 import express from 'express'
 import { z } from 'zod'
-import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
+import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
 import Filter from '../db/models/filter.ts'
 import { FilterCreateSchema, FilterUpdateSchema } from '../../common/validators.ts'
 
@@ -32,13 +32,18 @@ filterConfigRouter.put('/:id', async (req, res) => {
     return
   }
 
+  const currentVariants = (filter.get('variants') as unknown as unknown[]) ?? []
+  if (parsed.data.variants.length > currentVariants.length) {
+    enforceIsSuperuser(user)
+  }
+
   await filter.update(parsed.data)
   res.json(filter)
 })
 
 filterConfigRouter.post('/', async (req, res) => {
   const user = enforceIsUser(req)
-  enforceIsAdmin(user)
+  enforceIsSuperuser(user)
 
   const parsed = FilterCreateSchema.safeParse(req.body)
   if (!parsed.success) {

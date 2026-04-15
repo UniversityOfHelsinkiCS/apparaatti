@@ -3,7 +3,7 @@ import type { FilterConfig } from '../../../../common/types.ts'
 import { DISPLAY_TYPES, SWITCH_SX } from './filterEditorUtils.ts'
 import LocalizedField from './LocalizedField.tsx'
 
-interface Props {
+interface GeneralTabProps {
   draft: FilterConfig
   isCreate: boolean
   patch: (fields: Partial<FilterConfig>) => void
@@ -23,7 +23,7 @@ const BOOL_FIELDS = [
   ['enabled', 'Enabled'],
 ] as const
 
-const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, patchExtraInfo }: Props) => {
+const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, patchExtraInfo }: GeneralTabProps) => {
   const explanationVal = draft.explanation as { fi: string; sv: string; en: string } | undefined
   const extraInfoVal = draft.extraInfo as { fi: string; sv: string; en: string } | undefined
 

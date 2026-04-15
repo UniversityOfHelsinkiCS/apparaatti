@@ -17,6 +17,10 @@ import useApi from '../../util/useApi.tsx'
 import type { FilterConfig } from '../../../common/types.ts'
 import FilterEditDialog from './FilterEditDialog.tsx'
 
+interface FilterConfigEditorProps {
+  isSuperuser: boolean
+}
+
 const adminFetch = (method: string, path: string, body?: unknown) =>
   fetch(path, {
     method,
@@ -24,7 +28,7 @@ const adminFetch = (method: string, path: string, body?: unknown) =>
     body: body !== undefined ? JSON.stringify(body) : undefined,
   })
 
-const FilterConfigEditor = () => {
+const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   const { data: filters, isLoading, refetch } = useApi(
     'admin-filter-config',
     '/api/admin/filter-config',
@@ -140,13 +144,16 @@ const FilterConfigEditor = () => {
         </TableBody>
       </Table>
       <Box sx={{ mt: 2 }}>
-        <Button variant="contained" color="secondary" onClick={() => setEditTarget('new')}>
-          + Add filter
-        </Button>
+        {isSuperuser && (
+          <Button variant="contained" color="secondary" onClick={() => setEditTarget('new')}>
+            + Add filter
+          </Button>
+        )}
       </Box>
       {editTarget !== null && (
         <FilterEditDialog
           filter={editTarget === 'new' ? null : editTarget}
+          isSuperuser={isSuperuser}
           onClose={() => setEditTarget(null)}
           onSaved={() => {
             setEditTarget(null)

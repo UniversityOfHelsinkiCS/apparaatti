@@ -16,7 +16,7 @@ const LoginAsPage = () => {
     }
   }
 
-  if (!user.isAdmin) {
+  if (!user.isSuperuser) {
     return <Navigate to={'/'} replace />
   }
 

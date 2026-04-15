@@ -1,13 +1,13 @@
 
 
 import User from '../db/models/user.ts'
-import { isAdmin } from '../util/validations.ts'
+import { isSuperuser } from '../util/validations.ts'
 
 const loginAsMiddleware = async (
   req, _, next
 ) => {
   const loginAsId = req.headers['x-login-as']
-  if (typeof loginAsId === 'string' && isAdmin(req?.user)) {
+  if (typeof loginAsId === 'string' && isSuperuser(req?.user)) {
   
     const loggedInAsUser = await User.findByPk(loginAsId)
   

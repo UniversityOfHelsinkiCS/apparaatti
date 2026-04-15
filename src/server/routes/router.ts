@@ -10,7 +10,7 @@ import debugRouter from './debugRouter.ts'
 import { inDevelopment, UPDATER_CRON_ENABLED } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
-import { isAdmin } from '../util/validations.ts'
+import { isAdmin, isSuperuser } from '../util/validations.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
@@ -121,9 +121,11 @@ router.get('/user', async (req, res) => {
   }
 
   const adminStatus = isAdmin(req.user)
+  const superuserStatus = isSuperuser(req.user)
   const returnData: User = {
     ...req.user,
-    isAdmin: adminStatus
+    isAdmin: adminStatus,
+    isSuperuser: superuserStatus
   }
 
   res.json(returnData)

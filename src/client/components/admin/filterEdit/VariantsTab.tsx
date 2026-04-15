@@ -5,8 +5,9 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
 import VariantEditor from './VariantEditor.tsx'
 
-interface Props {
+interface VariantsTabProps {
   variants: FilterConfig['variants']
+  canAddVariant: boolean
   onPatchVariant: (vIdx: number, fields: Partial<FilterVariant>) => void
   onPatchVariantQuestion: (vIdx: number, lang: 'fi' | 'sv' | 'en', val: string) => void
   onPatchVariantExplanation: (vIdx: number, lang: 'fi' | 'sv' | 'en', val: string) => void
@@ -20,6 +21,7 @@ interface Props {
 
 const VariantsTab = ({
   variants,
+  canAddVariant,
   onPatchVariant,
   onPatchVariantQuestion,
   onPatchVariantExplanation,
@@ -29,7 +31,7 @@ const VariantsTab = ({
   onRemoveOption,
   onAddVariant,
   onRemoveVariant,
-}: Props) => {
+}: VariantsTabProps) => {
   const [selectedIdx, setSelectedIdx] = useState(0)
   const safeIdx = Math.min(selectedIdx, variants.length - 1)
   const selectedVariant = variants[safeIdx]
@@ -81,17 +83,19 @@ const VariantsTab = ({
             </ListItemButton>
           ))}
         </List>
-        <Button
-          startIcon={<AddIcon />}
-          size="small"
-          onClick={() => {
-            onAddVariant()
-            setSelectedIdx(variants.length)
-          }}
-          sx={{ color: 'black', mt: 1 }}
-        >
-          Add variant
-        </Button>
+        {canAddVariant && (
+          <Button
+            startIcon={<AddIcon />}
+            size="small"
+            onClick={() => {
+              onAddVariant()
+              setSelectedIdx(variants.length)
+            }}
+            sx={{ color: 'black', mt: 1 }}
+          >
+            Add variant
+          </Button>
+        )}
       </Box>
 
       {/* Right: selected variant editor */}
