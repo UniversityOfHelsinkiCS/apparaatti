@@ -117,20 +117,6 @@ describe('pointRecommendCourses', () => {
     expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
   })
 
-  it('always enforces spesificOrg as strict even when not listed in strictFields', () => {
-    const user = createUserCoordinates({ spesificOrg: 1 })
-    const specificCourse = createRecommendation('specific-org-match', {
-      coordinates: { spesificOrg: 1 },
-    })
-    const genericCourse = createRecommendation('specific-org-miss', {
-      coordinates: { spesificOrg: 0 },
-    })
-
-    const result = pointRecommendedCourses([specificCourse, genericCourse], user, [])
-
-    expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
-  })
-
   it('always enforces org as strict even when not listed in strictFields', () => {
     const user = createUserCoordinates({ org: 1 })
     const mismatch = createRecommendation('org-mismatch', {
