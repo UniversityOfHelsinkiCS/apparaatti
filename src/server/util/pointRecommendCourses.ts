@@ -70,7 +70,7 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
     },
     {
       field: 'spesificOrg',
-      filterOnFail: strictFields.includes('spesificOrg'),
+      filterOnFail: true,
     },
     {
       field: 'mooc',
