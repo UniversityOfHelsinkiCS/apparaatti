@@ -506,10 +506,11 @@ const FILTER_SEEDS: FilterSeed[] = [
         name: 'default',
         question: { fi: 'Mikä opiskelumuoto sopii sinulle parhaiten?', sv: 'Vilken studieform passar dig bäst?', en: 'Which form of study suits you best?' },
         options: [
-          { id: 'teaching-participation-remote', name: { fi: 'Etätapaamisia sisältävä opiskelu.', sv: 'Studier som inkluderar distansmöten', en: 'Studies that include remote sessions' } },
-          { id: 'teaching-participation-online', name: { fi: 'Itsenäinen verkko-opiskelu', sv: 'Självständiga nätstudier', en: 'Independent online study' } },
-          { id: 'teaching-participation-blended', name: { fi: 'Etäopiskelu ja lähiopetus', sv: 'Distansundervisning och undervisning ansikte mot ansikte', en: 'Distance learning and face-to-face teaching' } },
-          { id: 'teaching-participation-contact', name: { fi: 'Lähitapaamisia sisältävä opiskelu', sv: 'Studier som inkluderar möten på plats', en: 'Studies that include face-to-face sessions' } },
+          { id: 'online', name: { fi: 'Etäopetus', sv: 'Distans- eller nätstudier', en: 'Online or remote study' } },
+          { id: 'independent', name: { fi: 'Itsenäinen opiskelu', sv: 'Självständiga studier', en: 'Independent study' } },
+          { id: 'contact', name: { fi: 'Lähiopetus', sv: 'Närundervisning', en: 'Face-to-face teaching' } },
+          { id: 'blended', name: { fi: 'Monimuoto-opetus', sv: 'Blended learning', en: 'Blended learning' } },
+          { id: 'exam', name: { fi: 'Tentti', sv: 'Tentamen', en: 'Exam' } },
         ],
       },
     ],
@@ -666,7 +667,6 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
 ]
 
-// ── Seeding function ─────────────────────────────────────────────────────────
 
 export async function seedFilters() {
   logger.info('Seeding filters...')

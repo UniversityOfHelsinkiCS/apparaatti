@@ -135,15 +135,15 @@ export function courseStudyPlaceCoordinate(course: CourseData, answerData: Answe
     
   const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
   const hasStudyPlaceSelection = userStudyPlaces.length > 0 && !userStudyPlaces.includes('neutral')
-  const tenttiSelected = userStudyPlaces.includes('tentti')
+  const examSelected = userStudyPlaces.includes('exam')
   const independentSelected = userStudyPlaces.includes('independent')
 
-  // Tentti courses are only valid when user has selected tentti under study-place.
+  // Exam courses are only valid when user has selected exam under study-place.
   if (isExam(course)) {
-    return tenttiSelected ? correctValue : incorrectValue
+    return examSelected ? correctValue : incorrectValue
   }
 
-  // With no study-place selection, show all non-tentti courses.
+  // With no study-place selection, show all non-exam courses.
   if (!hasStudyPlaceSelection) {
     return correctValue
   }
