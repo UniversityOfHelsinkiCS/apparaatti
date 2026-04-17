@@ -305,7 +305,7 @@ const fixedStudyPlaceRealizations: Record<string, { typeUrn: string; nameSpecifi
   },
   'h50-fi-studyplace-blended': {
     typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-blended',
-    nameSpecifier: { fi: 'Monimuoto-opetus', en: 'Blended teaching', sv: 'Flerformsundervisning' },
+    nameSpecifier: { fi: 'Kurssitoteutus', en: 'Course realisation', sv: 'Kursgenomförande' },
   },
   'h50-fi-studyplace-independent': {
     typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
@@ -313,7 +313,7 @@ const fixedStudyPlaceRealizations: Record<string, { typeUrn: string; nameSpecifi
   },
   'h50-fi-studyplace-exam': {
     typeUrn: 'urn:code:course-unit-realisation-type:exam-exam',
-    nameSpecifier: { fi: 'Tentti', en: 'Exam', sv: 'Tentamen' },
+    nameSpecifier: { fi: 'Kurssitoteutus', en: 'Course realisation', sv: 'Kursgenomförande' },
   },
   'h50-sv-studyplace-online': {
     typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
@@ -325,7 +325,7 @@ const fixedStudyPlaceRealizations: Record<string, { typeUrn: string; nameSpecifi
   },
   'h50-sv-studyplace-blended': {
     typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-blended',
-    nameSpecifier: { fi: 'Monimuoto-opetus', en: 'Blended teaching', sv: 'Flerformsundervisning' },
+    nameSpecifier: { fi: 'Kurssitoteutus', en: 'Course realisation', sv: 'Kursgenomförande' },
   },
   'h50-sv-studyplace-independent': {
     typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
@@ -333,7 +333,7 @@ const fixedStudyPlaceRealizations: Record<string, { typeUrn: string; nameSpecifi
   },
   'h50-sv-studyplace-exam': {
     typeUrn: 'urn:code:course-unit-realisation-type:exam-exam',
-    nameSpecifier: { fi: 'Tentti', en: 'Exam', sv: 'Tentamen' },
+    nameSpecifier: { fi: 'Kurssitoteutus', en: 'Course realisation', sv: 'Kursgenomförande' },
   },
 }
 
