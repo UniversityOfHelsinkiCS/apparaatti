@@ -226,12 +226,18 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   useEffect(() => {
+    if (filtersLoading) {
+      return
+    }
+
     const hasVisited = sessionStorage.getItem('hasVisitedV2')
     if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
       setModalOpen(true)
       sessionStorage.setItem('hasVisitedV2', 'true')
     }
   }, [
+    filtersLoading,
+    filters,
     studyField,
     primaryLanguage,
     language,

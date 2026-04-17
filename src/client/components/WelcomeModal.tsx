@@ -131,11 +131,16 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   }
 
   useEffect(() => {
-    if (allWelcomeQuestionsAnswered && !hasAutoClosedRef.current && open) {
+    if (
+      open &&
+      welcomeFilters.length > 0 &&
+      allWelcomeQuestionsAnswered &&
+      !hasAutoClosedRef.current
+    ) {
       onClose()
       hasAutoClosedRef.current = true
     }
-  }, [allWelcomeQuestionsAnswered, onClose, open])
+  }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
 
   return (
     <Modal
