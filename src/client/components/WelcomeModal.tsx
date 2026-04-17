@@ -75,13 +75,33 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
     })
     .filter((entry): entry is { question: Question; config: any; variant: any } => entry !== null)
 
+  const allWelcomeQuestionsAnswered = welcomeFilters.every((entry) => {
+    if (!entry.config) {
+      return true
+    }
+
+    return isFilterStateAnswered(entry.config.state)
+  })
+
   const mandatoryQuestionsAnswered = welcomeFilters.every((entry) => {
+    if (!entry.config) {
+      return true
+    }
+
     if (!entry.question.mandatory) {
       return true
     }
 
     return isFilterStateAnswered(entry.config.state)
   })
+
+  const handleCloseIfMandatoryAnswered = () => {
+    if (!mandatoryQuestionsAnswered) {
+      return
+    }
+
+    onClose()
+  }
 
   const renderWelcomeFilter = (entry: { question: Question; config: any; variant: any }) => {
     if (entry.question.id === 'study-field-select') {
@@ -111,16 +131,16 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   }
 
   useEffect(() => {
-    if (mandatoryQuestionsAnswered && !hasAutoClosedRef.current && open) {
+    if (allWelcomeQuestionsAnswered && !hasAutoClosedRef.current && open) {
       onClose()
       hasAutoClosedRef.current = true
     }
-  }, [mandatoryQuestionsAnswered, onClose, open])
+  }, [allWelcomeQuestionsAnswered, onClose, open])
 
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={handleCloseIfMandatoryAnswered}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       sx={{ border: 'none' }}
@@ -146,7 +166,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
         >
           <Button
             variant="contained"
-            onClick={onClose}
+            onClick={handleCloseIfMandatoryAnswered}
             disabled={!mandatoryQuestionsAnswered}
             sx={{
               textTransform: 'none',

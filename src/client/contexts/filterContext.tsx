@@ -161,6 +161,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     useState<CourseRecommendations | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  const shouldUsePrimaryLanguageSpecification =
+    language !== '' && language !== 'en' && language === primaryLanguage
+
   const variantToDisplayId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
   const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
@@ -189,6 +192,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       setStrictFiltersInitialized(true)
     }
   }, [filters, filtersLoading, strictFiltersInitialized])
+
+  useEffect(() => {
+    if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
+      setPrimaryLanguageSpecification('')
+    }
+  }, [
+    shouldUsePrimaryLanguageSpecification,
+    primaryLanguageSpecification,
+  ])
 
   const checkWelcomeQuestionsAnswered = () => {
     const configMap = filterConfigMap({
@@ -311,7 +323,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'study-field-select': getTrueFilterValue(userOrgCode, 'study-field-select'),
       'primary-language': getTrueFilterValue(primaryLanguage, 'primary-language'),
       lang: getTrueFilterValue(language, 'lang'),
-      'primary-language-specification': getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification'),
+      'primary-language-specification': shouldUsePrimaryLanguageSpecification
+        ? getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification')
+        : '',
       'previusly-done-lang': getTrueFilterValue(previouslyDoneLang, 'previusly-done-lang'),
       'replacement': getTrueFilterValue(replacement, 'replacement'),
       'mentoring': getTrueFilterValue(mentoring, 'mentoring'),
