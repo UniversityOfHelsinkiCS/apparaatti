@@ -10,6 +10,7 @@ import {
   updateFilterConfigById,
 } from '../util/dbActions.ts'
 import { FilterCreateSchema, FilterUpdateSchema } from '../../common/validators.ts'
+import { seedFilterWithId } from '../db/seedFilters.ts'
 
 const filterConfigRouter = express.Router()
 
@@ -96,6 +97,34 @@ filterConfigRouter.patch('/reorder', async (req, res) => {
 
   await reorderFilterConfigs(parsed.data)
   res.json({ message: 'Order updated' })
+})
+
+filterConfigRouter.post('/:id/restore', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const seed = seedFilterWithId(req.params.id)
+  if (!seed) {
+    res.status(404).json({ message: 'Seed default for filter not found' })
+    return
+  }
+
+  const existingFilter = await filterConfigWithId(req.params.id)
+  if (!existingFilter) {
+    res.status(404).json({ message: 'Filter not found' })
+    return
+  }
+
+  const restoredFilter = await updateFilterConfigById(req.params.id, {
+    ...seed,
+    explanation: seed.explanation ?? null,
+    extraInfo: seed.extraInfo ?? null,
+    parentFilterId: seed.parentFilterId ?? null,
+    displayType: seed.displayType ?? null,
+    coordinateKey: seed.coordinateKey ?? null,
+  })
+
+  res.json(restoredFilter)
 })
 
 export default filterConfigRouter

@@ -114,6 +114,7 @@ const TAG = {
   kksVal: 'kks-val',
   kksKor: 'kks-kor',
   kksInt: 'kks-int',
+  kksAlm: 'kks-alm',
 }
 
 const LANG = { fi: 'fi', en: 'en', sv: 'sv' }
@@ -221,6 +222,16 @@ const COURSE_NAME: Record<string, LocalizedName> = {
   laa1001:    { fi: 'Lääketieteen perusteet',           en: 'Introduction to Medicine',       sv: 'Introduktion till medicin'       },
   matGrad:    { fi: 'Matematiikka valmistuville',       en: 'Mathematics for Graduating Students', sv: 'Matematik för examinander'  },
   tktMooc:    { fi: 'Ohjelmointi MOOC',                 en: 'Programming MOOC',               sv: 'Programmering MOOC'              },
+  h50FiOnline:      { fi: 'Matemaattis-luonnontieteellinen verkkokurssi (fi)', en: 'Science online course (fi)', sv: 'Matematisk-naturvetenskaplig nätkurs (fi)' },
+  h50FiContact:     { fi: 'Matemaattis-luonnontieteellinen lähiopetuskurssi (fi)', en: 'Science contact course (fi)', sv: 'Matematisk-naturvetenskaplig närkurs (fi)' },
+  h50FiBlended:     { fi: 'Matemaattis-luonnontieteellinen monimuotokurssi (fi)', en: 'Science blended course (fi)', sv: 'Matematisk-naturvetenskaplig blendedkurs (fi)' },
+  h50FiIndependent: { fi: 'Matemaattis-luonnontieteellinen itsenäinen opiskelu (fi)', en: 'Science independent study (fi)', sv: 'Matematisk-naturvetenskaplig självständig kurs (fi)' },
+  h50FiExam:        { fi: 'Matemaattis-luonnontieteellinen tentti (fi)', en: 'Science exam (fi)', sv: 'Matematisk-naturvetenskaplig tentamen (fi)' },
+  h50SvOnline:      { fi: 'Matemaattis-luonnontieteellinen verkkokurssi (sv)', en: 'Science online course (sv)', sv: 'Matematisk-naturvetenskaplig nätkurs (sv)' },
+  h50SvContact:     { fi: 'Matemaattis-luonnontieteellinen lähiopetuskurssi (sv)', en: 'Science contact course (sv)', sv: 'Matematisk-naturvetenskaplig närkurs (sv)' },
+  h50SvBlended:     { fi: 'Matemaattis-luonnontieteellinen monimuotokurssi (sv)', en: 'Science blended course (sv)', sv: 'Matematisk-naturvetenskaplig blendedkurs (sv)' },
+  h50SvIndependent: { fi: 'Matemaattis-luonnontieteellinen itsenäinen opiskelu (sv)', en: 'Science independent study (sv)', sv: 'Matematisk-naturvetenskaplig självständig kurs (sv)' },
+  h50SvExam:        { fi: 'Matemaattis-luonnontieteellinen tentti (sv)', en: 'Science exam (sv)', sv: 'Matematisk-naturvetenskaplig tentamen (sv)' },
 }
 
 async function seedCourses() {
@@ -253,6 +264,19 @@ async function seedCourses() {
 
     makeCourse('mat-grad', 'MAT-GRAD', COURSE_NAME.matGrad, ORG.science, { min: 5, max: 5 }, { ...apparaattiUrns(TAG.kktMat, TAG.kksVal), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
     makeCourse('tkt-mooc', 'TKT-MOOC', COURSE_NAME.tktMooc, ORG.science, { min: 5, max: 5 }, { ...apparaattiUrns(TAG.kktMat),            ...opinfiUrns(OPINFI.online), ...helsinkiUrns(HKI.luonnontieteet) }),
+
+    // E2E coverage: ensure H50 has FI and SV courses for every study-place option.
+    makeCourse('h50-fi-studyplace-online',      'KK-AIAKVU1OP', COURSE_NAME.h50FiOnline,      ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-fi-studyplace-contact',     'KK-AIAKVU1OP', COURSE_NAME.h50FiContact,     ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-fi-studyplace-blended',     'KK-AIAKVU1OP', COURSE_NAME.h50FiBlended,     ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-fi-studyplace-independent', 'KK-AIAKVU1OP', COURSE_NAME.h50FiIndependent, ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat, TAG.kksAlm), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-fi-studyplace-exam',        'KK-AIAKVU1OP', COURSE_NAME.h50FiExam,        ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.fi), ...helsinkiUrns(HKI.luonnontieteet) }),
+
+    makeCourse('h50-sv-studyplace-online',      'KK-RUMALU', COURSE_NAME.h50SvOnline,      ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.sv), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-sv-studyplace-contact',     'KK-RUMALU', COURSE_NAME.h50SvContact,     ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.sv), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-sv-studyplace-blended',     'KK-RUMALU', COURSE_NAME.h50SvBlended,     ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.sv), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-sv-studyplace-independent', 'KK-RUMALU', COURSE_NAME.h50SvIndependent, ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat, TAG.kksAlm), ...langUrns(LANG.sv), ...helsinkiUrns(HKI.luonnontieteet) }),
+    makeCourse('h50-sv-studyplace-exam',        'KK-RUMALU', COURSE_NAME.h50SvExam,        ORG.science, { min: 2, max: 2 }, { ...apparaattiUrns(TAG.kktMat), ...langUrns(LANG.sv), ...helsinkiUrns(HKI.luonnontieteet) }),
   ]
 
   await Cu.bulkCreate(courses as any)
@@ -269,6 +293,49 @@ const typeUrns = [
   'urn:code:course-unit-realisation-type:teaching-participation-distance',
   'urn:code:course-unit-realisation-type:exam-exam',
 ]
+
+const fixedStudyPlaceRealizations: Record<string, { typeUrn: string; nameSpecifier: LocalizedName }> = {
+  'h50-fi-studyplace-online': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
+    nameSpecifier: { fi: 'Verkko-opetus', en: 'Online teaching', sv: 'Nätundervisning' },
+  },
+  'h50-fi-studyplace-contact': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-contact',
+    nameSpecifier: { fi: 'Lähiopetus', en: 'Contact teaching', sv: 'Kontaktundervisning' },
+  },
+  'h50-fi-studyplace-blended': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-blended',
+    nameSpecifier: { fi: 'Monimuoto-opetus', en: 'Blended teaching', sv: 'Flerformsundervisning' },
+  },
+  'h50-fi-studyplace-independent': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
+    nameSpecifier: { fi: 'Itsenäinen opiskelu', en: 'Independent study', sv: 'Självständiga studier' },
+  },
+  'h50-fi-studyplace-exam': {
+    typeUrn: 'urn:code:course-unit-realisation-type:exam-exam',
+    nameSpecifier: { fi: 'Tentti', en: 'Exam', sv: 'Tentamen' },
+  },
+  'h50-sv-studyplace-online': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
+    nameSpecifier: { fi: 'Verkko-opetus', en: 'Online teaching', sv: 'Nätundervisning' },
+  },
+  'h50-sv-studyplace-contact': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-contact',
+    nameSpecifier: { fi: 'Lähiopetus', en: 'Contact teaching', sv: 'Kontaktundervisning' },
+  },
+  'h50-sv-studyplace-blended': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-blended',
+    nameSpecifier: { fi: 'Monimuoto-opetus', en: 'Blended teaching', sv: 'Flerformsundervisning' },
+  },
+  'h50-sv-studyplace-independent': {
+    typeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
+    nameSpecifier: { fi: 'Itsenäinen opiskelu', en: 'Independent study', sv: 'Självständiga studier' },
+  },
+  'h50-sv-studyplace-exam': {
+    typeUrn: 'urn:code:course-unit-realisation-type:exam-exam',
+    nameSpecifier: { fi: 'Tentti', en: 'Exam', sv: 'Tentamen' },
+  },
+}
 
 const nameSpecifiers: LocalizedName[] = [
   { fi: 'Lähiopetus',      en: 'Contact teaching', sv: 'Kontaktundervisning'   },
@@ -292,6 +359,23 @@ async function seedCourseRealizations(courses: any[]) {
   const realizations: any[] = []
 
   courses.forEach((course, courseIndex) => {
+    const fixedStudyPlaceRealization = fixedStudyPlaceRealizations[course.id]
+    if (fixedStudyPlaceRealization) {
+      const semester = semesters[0]
+      realizations.push(
+        makeRealization(
+          `${course.id}${CUR_INFIX}1`,
+          course.name,
+          fixedStudyPlaceRealization.nameSpecifier,
+          semester.startDate,
+          semester.endDate,
+          fixedStudyPlaceRealization.typeUrn,
+          { ...course.customCodeUrns }
+        )
+      )
+      return
+    }
+
     const numRealizations = courseIndex < 8 ? 3 : 2
 
     for (let i = 0; i < numRealizations; i++) {

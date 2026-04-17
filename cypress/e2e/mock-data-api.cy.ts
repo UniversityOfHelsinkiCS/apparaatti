@@ -1,5 +1,30 @@
 /// <reference types="cypress" />
 
+const studyPlaceOptions = ['online', 'contact', 'blended', 'independent', 'exam'] as const
+
+const assertH50StudyPlaceCoverage = (lang: 'fi' | 'sv') => {
+  cy.wrap(studyPlaceOptions).each((studyPlace) => {
+    cy.request('POST', '/api/form/answer', {
+      answerData: {
+        'study-field-select': 'H50',
+        'primary-language': 'fi',
+        'lang': lang,
+        'primary-language-specification': 'writtenAndSpoken',
+        'study-place': [studyPlace],
+        'study-period': 'neutral',
+        'study-year': '2025',
+      },
+      strictFields: ['study-place'],
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(
+        response.body.pointBasedRecommendations.length,
+        `expected recommendations for lang=${lang}, studyPlace=${studyPlace}`
+      ).to.be.greaterThan(0)
+    })
+  })
+}
+
 describe('API basic checks with seeded mock data', () => {
   it('returns pong from /api/ping', () => {
     cy.request('/api/ping').then((response) => {
@@ -95,6 +120,14 @@ describe('API basic checks with seeded mock data', () => {
     cy.get('a[href*="studies.helsinki.fi/kurssit/toteutus/"]', { timeout: 15000 })
       .its('length')
       .should('be.greaterThan', 0)
+  })
+
+  it('has strict study-place coverage for H50 in Finnish', () => {
+    assertH50StudyPlaceCoverage('fi')
+  })
+
+  it('has strict study-place coverage for H50 in Swedish', () => {
+    assertH50StudyPlaceCoverage('sv')
   })
 
   it('returns login failed response from /api/fail', () => {
