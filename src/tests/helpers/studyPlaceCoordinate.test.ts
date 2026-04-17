@@ -64,205 +64,188 @@ describe('readStudyPlaceCoordinate', () => {
 })
 
 describe('courseStudyPlaceCoordinate', () => {
-  it('returns correctValue for non-tentti course when no study-place is selected', () => {
+  const assertCourseStudyPlaceCoordinate = ({
+    courseName = 'Regular course',
+    courseUrn,
+    studyPlace,
+    expected,
+  }: {
+    courseName?: string
+    courseUrn: string
+    studyPlace: unknown
+    expected: number
+  }) => {
     const course = createMinimalCourse({
-      name: { fi: 'Regular course' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-blended',
+      name: { fi: courseName },
+      courseUnitRealisationTypeUrn: courseUrn,
     })
-    const data = createAnswerData({ 'study-place': '' as any })
+    const data = createAnswerData({ 'study-place': studyPlace as AnswerData['study-place'] })
 
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
+    expect(courseStudyPlaceCoordinate(course, data)).toBe(expected)
+  }
+
+  it.each([
+    {
+      title: 'non-exam course when no study-place is selected',
+      courseName: 'Regular course',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-blended',
+      studyPlace: '',
+      expected: correctValue,
+    },
+    {
+      title: 'exam course when no study-place is selected',
+      courseName: 'Lopputentti',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: '',
+      expected: incorrectValue,
+    },
+    {
+      title: 'non-exam course when answer is neutral',
+      courseName: 'Regular course',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: 'neutral',
+      expected: correctValue,
+    },
+  ])('handles $title', ({ courseName, courseUrn, studyPlace, expected }) => {
+    assertCourseStudyPlaceCoordinate({ courseName, courseUrn, studyPlace, expected })
   })
 
-  it('returns incorrectValue for tentti course when no study-place is selected', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': '' as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
+  it.each([
+    {
+      title: 'matching contact URN',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: 'teaching-participation-contact',
+      expected: correctValue,
+    },
+    {
+      title: 'matching blended URN',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-blended',
+      studyPlace: 'teaching-participation-blended',
+      expected: correctValue,
+    },
+    {
+      title: 'online alias with remote URN',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-remote',
+      studyPlace: 'online',
+      expected: correctValue,
+    },
+    {
+      title: 'online alias with online URN',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-online',
+      studyPlace: 'online',
+      expected: correctValue,
+    },
+    {
+      title: 'non-matching URN',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: 'teaching-participation-remote',
+      expected: incorrectValue,
+    },
+    {
+      title: 'unrecognized study-place value',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: 'invalid-place',
+      expected: incorrectValue,
+    },
+    {
+      title: 'empty course URN',
+      courseUrn: '',
+      studyPlace: 'teaching-participation-contact',
+      expected: incorrectValue,
+    },
+  ])('returns expected value for $title', ({ courseUrn, studyPlace, expected }) => {
+    assertCourseStudyPlaceCoordinate({ courseUrn, studyPlace, expected })
   })
 
-  it('returns correctValue when course has matching study-place URN', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
+  it.each([
+    {
+      title: 'exam not selected',
+      studyPlace: ['online'],
+      expected: incorrectValue,
+    },
+    {
+      title: 'exam selected as single array value',
+      studyPlace: ['exam'],
+      expected: correctValue,
+    },
+    {
+      title: 'exam selected as scalar value',
+      studyPlace: 'exam',
+      expected: correctValue,
+    },
+    {
+      title: 'exam selected among multiple selections',
+      studyPlace: ['online', 'exam'],
+      expected: correctValue,
+    },
+  ])('handles exam course when $title', ({ studyPlace, expected }) => {
+    assertCourseStudyPlaceCoordinate({
+      courseName: 'Lopputentti',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace,
+      expected,
     })
-    const data = createAnswerData({ 'study-place': 'teaching-participation-contact' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
   })
 
-  it('returns correctValue when course has matching study-place of blended type', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-blended',
+  it.each([
+    {
+      title: 'independent is not selected but another selected option matches',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-online',
+      studyPlace: ['online'],
+      expected: correctValue,
+    },
+    {
+      title: 'independent is selected',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-online',
+      studyPlace: ['independent'],
+      expected: correctValue,
+    },
+    {
+      title: 'independent is among multiple selections',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      studyPlace: ['online', 'independent'],
+      expected: correctValue,
+    },
+  ])('handles independent course when $title', ({ courseUrn, studyPlace, expected }) => {
+    assertCourseStudyPlaceCoordinate({
+      courseName: 'Itsenäinen opiskelu',
+      courseUrn,
+      studyPlace,
+      expected,
     })
-    const data = createAnswerData({ 'study-place': 'teaching-participation-blended' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
   })
 
-  it('returns correctValue for online alias when course has remote URN', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-remote',
+  it.each([
+    {
+      title: 'blended course',
+      courseName: 'Regular blended course',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-blended',
+      expected: incorrectValue,
+    },
+    {
+      title: 'contact course',
+      courseName: 'Regular contact course',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      expected: correctValue,
+    },
+    {
+      title: 'online course',
+      courseName: 'Regular online course',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-online',
+      expected: correctValue,
+    },
+    {
+      title: 'exam course',
+      courseName: 'Lopputentti',
+      courseUrn: 'urn:code:realisation-type:teaching-participation-contact',
+      expected: correctValue,
+    },
+  ])('handles mixed selections online + exam + contact for $title', ({ courseName, courseUrn, expected }) => {
+    assertCourseStudyPlaceCoordinate({
+      courseName,
+      courseUrn,
+      studyPlace: ['online', 'exam', 'contact'],
+      expected,
     })
-    const data = createAnswerData({ 'study-place': 'online' as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for online alias when course has online URN', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-online',
-    })
-    const data = createAnswerData({ 'study-place': 'online' as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns incorrectValue when course URN does not match any allowed study-place answer', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': 'teaching-participation-remote' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
-  })
-
-  it('returns correctValue when study-place answer is neutral (not answered) for non-tentti course', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': 'neutral' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns incorrectValue when study-place answer is unrecognized value', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': 'invalid-place' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
-  })
-
-  it('returns incorrectValue for tentti course when tentti is not selected', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['online'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
-  })
-
-  it('returns correctValue for tentti course when tentti is selected', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['tentti'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for tentti course when tentti is selected as scalar value', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': 'tentti' as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for tentti course when tentti is among multiple selections', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'tentti'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for independent course when independent is not selected but another selected option matches', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Itsenäinen opiskelu' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-online',
-    })
-    const data = createAnswerData({ 'study-place': ['online'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for independent course when independent is selected', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Itsenäinen opiskelu' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-online',
-    })
-    const data = createAnswerData({ 'study-place': ['independent'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for independent course when independent is among multiple selections', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Itsenäinen opiskelu' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'independent'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns incorrectValue for blended course when selected options are online + tentti + contact', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Regular blended course' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-blended',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'tentti', 'contact'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
-  })
-
-  it('returns correctValue for contact course when selected options are online + tentti + contact', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Regular contact course' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'tentti', 'contact'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for online course when selected options are online + tentti + contact', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Regular online course' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-online',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'tentti', 'contact'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns correctValue for tentti course when selected options are online + tentti + contact', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'Lopputentti' },
-      courseUnitRealisationTypeUrn: 'urn:code:realisation-type:teaching-participation-contact',
-    })
-    const data = createAnswerData({ 'study-place': ['online', 'tentti', 'contact'] as any })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(correctValue)
-  })
-
-  it('returns incorrectValue when course has empty URN', () => {
-    const course = createMinimalCourse({
-      courseUnitRealisationTypeUrn: '',
-    })
-    const data = createAnswerData({ 'study-place': 'teaching-participation-contact' })
-
-    expect(courseStudyPlaceCoordinate(course, data)).toBe(incorrectValue)
   })
 })
