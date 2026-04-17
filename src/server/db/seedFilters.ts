@@ -667,6 +667,11 @@ const FILTER_SEEDS: FilterSeed[] = [
   },
 ]
 
+export function seedFilterWithId(id: string): FilterSeed | null {
+  const seed = FILTER_SEEDS.find((filter) => filter.id === id)
+  return seed ? structuredClone(seed) : null
+}
+
 
 export async function seedFilters() {
   logger.info('Seeding filters...')

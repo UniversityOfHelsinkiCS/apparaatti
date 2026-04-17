@@ -71,6 +71,24 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
     refetch()
   }
 
+  const handleRestoreDefaults = async (filterId: string) => {
+    const shouldRestore = window.confirm(
+      'Restore this filter to seeded defaults? This will overwrite current settings.'
+    )
+    if (!shouldRestore) {
+      return
+    }
+
+    const response = await adminFetch('POST', `/api/admin/filter-config/${filterId}/restore`)
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null)
+      window.alert(errorData?.message ?? 'Failed to restore filter defaults')
+      return
+    }
+
+    refetch()
+  }
+
   return (
     <Box>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -84,7 +102,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
             <TableCell>Short Name (fi)</TableCell>
             <TableCell>Strict by default</TableCell>
             <TableCell>Enabled</TableCell>
-            <TableCell>Edit</TableCell>
+            <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -130,14 +148,24 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
                 />
               </TableCell>
               <TableCell>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={() => setEditTarget(filter)}
-                  sx={{ color: 'black', borderColor: 'black' }}
-                >
-                  Edit
-                </Button>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setEditTarget(filter)}
+                    sx={{ color: 'black', borderColor: 'black' }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => handleRestoreDefaults(filter.id)}
+                    sx={{ color: 'black', borderColor: 'black' }}
+                  >
+                    Restore
+                  </Button>
+                </Box>
               </TableCell>
             </TableRow>
           ))}
