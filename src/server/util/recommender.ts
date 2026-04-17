@@ -5,7 +5,7 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHa
 import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { allowedStudyPlaces, collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
+import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn, resolveStudyPlaceLookups } from './constants.ts'
 
 async function recommendCourses(
   answerData: AnswerData,
@@ -134,7 +134,29 @@ export function readArrOrSingleValue(val: string | string[]){
 export function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
     
   const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
-  const lookups = userStudyPlaces.filter((p) => allowedStudyPlaces.includes(p)).map((p) => p)
+  const hasStudyPlaceSelection = userStudyPlaces.length > 0 && !userStudyPlaces.includes('neutral')
+  const tenttiSelected = userStudyPlaces.includes('tentti')
+  const independentSelected = userStudyPlaces.includes('independent')
+
+  // Tentti courses are only valid when user has selected tentti under study-place.
+  if (isExam(course)) {
+    return tenttiSelected ? correctValue : incorrectValue
+  }
+
+  // With no study-place selection, show all non-tentti courses.
+  if (!hasStudyPlaceSelection) {
+    return correctValue
+  }
+
+  // Selecting independent should always allow independent courses.
+  // If independent is not selected, independent courses are still allowed to match via other study-place selections.
+  if (isIndependentCourse(course)) {
+    if (independentSelected) {
+      return correctValue
+    }
+  }
+
+  const lookups = resolveStudyPlaceLookups(userStudyPlaces)
 
 
   if(courseHasAnyRealisationCodeUrn(course, lookups)){

@@ -20,12 +20,33 @@ export const organisationCodeToUrn: Record<string, string> = {
  
 }
 
+//these are values that are stored with courses in sisu
 export const allowedStudyPlaces: string[] = [
   'teaching-participation-remote',
   'teaching-participation-online',
   'teaching-participation-blended',
   'teaching-participation-contact',
 ]
+
+// Frontend option aliases that map to canonical Sisu study-place IDs.
+export const studyPlaceAliasToCanonicalIds: Record<string, string[]> = {
+  online: ['teaching-participation-remote', 'teaching-participation-online'],
+  remote: ['teaching-participation-remote'],
+  contact: ['teaching-participation-contact'],
+  blended: ['teaching-participation-blended'],
+}
+
+export function resolveStudyPlaceLookups(studyPlaceSelections: string[]): string[] {
+  const lookups = studyPlaceSelections.flatMap((selection) => {
+    if (allowedStudyPlaces.includes(selection)) {
+      return [selection]
+    }
+
+    return studyPlaceAliasToCanonicalIds[selection] ?? []
+  })
+
+  return [...new Set(lookups)]
+}
 
 // Organisation names that indicate collaboration courses
 export const collaborationOrganisationNames: string[] = [
