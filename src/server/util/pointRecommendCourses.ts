@@ -139,10 +139,6 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
       field: 'multiPeriod',
       filterOnFail: strictFields.includes('multi-period'),
     },
-    {
-      field: 'exam',
-      filterOnFail: strictFields.includes('exam'),
-    },
   ]
  
   const recommendationWithPoints = courses.map((c) => {

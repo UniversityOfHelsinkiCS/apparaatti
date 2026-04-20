@@ -101,7 +101,6 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-          exam: 0
         }
       }
 
@@ -124,7 +123,6 @@ describe('recommender tests', () => {
         studyYear: 'neutral',
         studyPeriod: ['neutral'], // User hasn't answered - should not filter
         multiPeriod: null,
-        exam: null
       }
 
       // Even with 'study-period' in strict fields, courses should not be filtered
@@ -159,7 +157,6 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-          exam: 0
         }
       }
 
@@ -182,7 +179,6 @@ describe('recommender tests', () => {
         studyYear: '2024',
         studyPeriod: ['period_3'], // User wants period_3, course is period_1
         multiPeriod: null,
-        exam: null
       }
 
       const strictFields = ['study-period']
@@ -215,7 +211,6 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-          exam: 0
         }
       }
 
@@ -238,7 +233,6 @@ describe('recommender tests', () => {
         studyYear: '2024',
         studyPeriod: ['period_1'], // User wants period_1, course is period_1
         multiPeriod: null,
-        exam: null
       }
 
       const strictFields = ['study-period']

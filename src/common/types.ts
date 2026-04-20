@@ -117,7 +117,6 @@ export type CourseCoordinates = {
   studyYear?: string | null;
   studyPeriod?: string[] | null;
   multiPeriod?: number | null;
-  exam?: number | null;
 }
 
 export type UserCoordinates = CourseCoordinates;
@@ -204,7 +203,6 @@ export type AnswerData = {
   'primary-language': string;
   'primary-language-specification': string;
   'multi-period': string;
-  'exam': string;
 };
 
 
