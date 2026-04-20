@@ -28,9 +28,9 @@ export function commonCoordinateFromAnswerData(value: string, yesValue: number, 
   }
 }
 
-export function readAnswer(answerData: AnswerData, key: string){
+export function readAnswer(answerData: AnswerData, key: string): string | string[]{
   const value = answerData[key]
-  if(!value){
+  if(!value || (Array.isArray(value) && value.length === 0)){
     return 'neutral'
   }
   return value
