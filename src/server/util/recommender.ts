@@ -48,13 +48,9 @@ function getDateFromUserInput(answerData: AnswerData){
 
 
 export function readStudyPlaceCoordinate (answerData: AnswerData){
-  const value = readAnswer(answerData, 'study-place')
-  if(value === 'neutral'){
-    return notAnsweredValue
-  }
-  else{
-    return correctValue
-  }
+  //reason for this is that by default we want to filter out exam courses,
+  //this makes it look like the user has always answered to this question
+  return correctValue
 }
 
 function calculateUserCoordinates(answerData: AnswerData) {

@@ -623,27 +623,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     ],
   },
   {
-    id: 'exam',
-    mandatory: false,
-    shortName: { fi: 'Tentti', sv: 'Tentamen', en: 'Exam' },
-    displayOrder: 18,
-    superToggle: false,
-    showInWelcomeModal: false,
-    hideInCurrentFiltersDisplay: false,
-    hideInRecommendationReasons: false,
-    hideInFilterSidebar: false,
-    isStrictByDefault: true,
-    enabled: true,
-    variants: [
-      {
-        name: 'default',
-        question: { fi: 'Näytä tentit', sv: 'Visa tentamen', en: 'Show exams' },
-        skipped: false,
-        options: yesNoOptions,
-      },
-    ],
-  },
-  {
     id: 'flexible',
     mandatory: false,
     shortName: { fi: 'Joustava', sv: 'Flexibel', en: 'Flexible' },

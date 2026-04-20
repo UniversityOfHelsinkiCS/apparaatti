@@ -26,7 +26,7 @@ export default {
     'flexibleQuestion': 'Jag vill ta en kurs med ett flexibelt schema.',
     'moocQuestion': 'Vill du söka efter MOOCs (Massive Open Online Courses)?',
     'collaborationQuestion': 'Visa samarbetspartnerkurser',    'multiPeriodQuestion': 'Sök kurser som sträcker sig över flera perioder',
-    'examQuestion': 'Visa tentamen',    'finnish': 'finska',
+    'finnish': 'finska',
     'swedish': 'svenska',
     'english': 'engelska',
     'yes': 'Ja',

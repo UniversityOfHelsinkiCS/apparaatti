@@ -243,4 +243,130 @@ describe('recommender tests', () => {
     })
   })
 
+  describe('exam course filtering', () => {
+    const mockExamCourse: CourseData = {
+      id: 'exam-1',
+      name: { fi: 'Suomen kielen tentti', en: 'Finnish language exam', sv: 'Finska språket tentamen' },
+      startDate: new Date('2024-09-01'),
+      endDate: new Date('2024-12-15'),
+      period: [{
+        name: 'period_1',
+        startDate: new Date('2024-09-01'),
+        endDate: new Date('2024-10-31'),
+        startYear: '2024',
+        endYear: '2024'
+      }],
+      customCodeUrns: {},
+      courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation',
+      courseCodes: ['FIN-EXAM-101'],
+      groupIds: ['group-1'],
+      unitIds: ['unit-1'],
+      credits: [{ fi: 0, en: 0, sv: 0 }],
+      flowState: 'PUBLISHED'
+    }
+
+    it('filters out exam courses when user has not selected exam in study-place', () => {
+      const examRecommendation: CourseRecommendation = {
+        course: mockExamCourse,
+        coordinates: {
+          date: new Date('2024-09-01').getTime(),
+          org: 1,
+          spesificOrg: 1,
+          lang: 1,
+          graduation: 0,
+          mentoring: 0,
+          integrated: 0,
+          studyPlace: 0, // Exam course gets 0 when exam not selected
+          replacement: 0,
+          challenge: 0,
+          independent: 0,
+          flexible: 0,
+          mooc: 0,
+          finmu: 0,
+          collaboration: 0,
+          multiPeriod: 0,
+        }
+      }
+
+      const userCoordinates: UserCoordinates = {
+        date: new Date('2024-09-01').getTime(),
+        org: 1,
+        spesificOrg: 1,
+        lang: 1,
+        graduation: 0,
+        mentoring: 0,
+        integrated: 0,
+        studyPlace: 1, // User coordinate is always 1 now
+        replacement: 0,
+        challenge: 0,
+        independent: 0,
+        flexible: 0,
+        mooc: 0,
+        finmu: 0,
+        collaboration: 0,
+        studyYear: '2024',
+        studyPeriod: ['period_1'],
+        multiPeriod: null,
+      }
+
+      const strictFields: string[] = []
+      const result = pointRecommendCourses([examRecommendation], userCoordinates, strictFields)
+
+      // Exam course should be filtered out (coordinate mismatch: course=0, user=1)
+      expect(result.length).toBe(0)
+    })
+
+    it('includes exam courses when user has selected exam in study-place', () => {
+      const examRecommendation: CourseRecommendation = {
+        course: mockExamCourse,
+        coordinates: {
+          date: new Date('2024-09-01').getTime(),
+          org: 1,
+          spesificOrg: 1,
+          lang: 1,
+          graduation: 0,
+          mentoring: 0,
+          integrated: 0,
+          studyPlace: 1, // Exam course gets 1 when exam IS selected
+          replacement: 0,
+          challenge: 0,
+          independent: 0,
+          flexible: 0,
+          mooc: 0,
+          finmu: 0,
+          collaboration: 0,
+          multiPeriod: 0,
+        }
+      }
+
+      const userCoordinates: UserCoordinates = {
+        date: new Date('2024-09-01').getTime(),
+        org: 1,
+        spesificOrg: 1,
+        lang: 1,
+        graduation: 0,
+        mentoring: 0,
+        integrated: 0,
+        studyPlace: 1, // User coordinate is always 1
+        replacement: 0,
+        challenge: 0,
+        independent: 0,
+        flexible: 0,
+        mooc: 0,
+        finmu: 0,
+        collaboration: 0,
+        studyYear: '2024',
+        studyPeriod: ['period_1'],
+        multiPeriod: null,
+      }
+
+      const strictFields: string[] = []
+      const result = pointRecommendCourses([examRecommendation], userCoordinates, strictFields)
+
+      // Exam course should be included (coordinate match: course=1, user=1)
+      expect(result.length).toBe(1)
+      expect(result[0].points).toBeGreaterThan(0)
+    })
+  })
+
 })

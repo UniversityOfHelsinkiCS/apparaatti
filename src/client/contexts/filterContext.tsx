@@ -68,8 +68,6 @@ interface FilterContextType {
   setMultiPeriod: (s: string) => void
   strictFilters: string[]
   setStrictFilters: (s: string[]) => void
-  exam: string
-  setExam: (s: string) => void
   flexible: string
   setFlexible: (s: string) => void
   resetFilters: () => void
@@ -94,7 +92,6 @@ export const filterConfigMap = (filters: any) => new Map([
   ['mooc', { state: filters.mooc, setState: filters.setMooc }],
   ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration }],
   ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
-  ['exam', { state: filters.exam, setState: filters.setExam }],
   ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
 ])
 
@@ -180,7 +177,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [mooc, setMooc] = useState('')
   const [collaboration, setCollaboration] = useState('')
   const [multiPeriod, setMultiPeriod] = useState('')
-  const [exam, setExam] = useState('0')
   const [flexible, setFlexible] = useState('')
   const [strictFilters, setStrictFilters] = useState<string[]>([])
   const [strictFiltersInitialized, setStrictFiltersInitialized] = useState(false)
@@ -350,7 +346,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'mooc': getTrueFilterValue(mooc, 'mooc'),
       'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
       'multi-period': getTrueFilterValue(multiPeriod, 'multi-period'),
-      'exam': getTrueFilterValue(exam, 'exam'),
       'flexible': getTrueFilterValue(flexible, 'flexible'),
     }
 
@@ -395,7 +390,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     mooc,
     collaboration,
     multiPeriod,
-    exam,
     flexible,
     strictFilters,
   ])
@@ -458,8 +452,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setCollaboration,
         multiPeriod,
         setMultiPeriod,
-        exam,
-        setExam,
         flexible,
         setFlexible,
         strictFilters,
