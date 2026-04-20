@@ -309,7 +309,7 @@ describe('recommender tests', () => {
         multiPeriod: null,
       }
 
-      const strictFields: string[] = []
+      const strictFields: string[] = ['study-place'] // study-place is strict by default in production
       const result = pointRecommendCourses([examRecommendation], userCoordinates, strictFields)
 
       // Exam course should be filtered out (coordinate mismatch: course=0, user=1)

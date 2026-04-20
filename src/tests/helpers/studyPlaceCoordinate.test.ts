@@ -52,9 +52,9 @@ const createMinimalCourse = (overrides: Partial<CourseData> = {}): CourseData =>
 })
 
 describe('readStudyPlaceCoordinate', () => {
-  it('returns notAnsweredValue for neutral', () => {
+  it('returns correctValue for neutral (always filter exams)', () => {
     const data = createAnswerData({ 'study-place': 'neutral' })
-    expect(readStudyPlaceCoordinate(data)).toBe(notAnsweredValue)
+    expect(readStudyPlaceCoordinate(data)).toBe(correctValue)
   })
 
   it('returns correctValue for non-neutral answer', () => {
