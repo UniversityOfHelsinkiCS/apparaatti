@@ -9,6 +9,27 @@ const debugRouter = express.Router({mergeParams: true})
 
 debugRouter.use(express.json())
 
+function getKktTags(customCodeUrns: Record<string, string[]> | null): string[] {
+  if (!customCodeUrns) {
+    return []
+  }
+
+  const kktTags: string[] = []
+  for (const key of Object.keys(customCodeUrns)) {
+    if (!key.includes('kk-apparaatti')) {
+      continue
+    }
+
+    for (const value of customCodeUrns[key]) {
+      if (value.includes('kkt-')) {
+        kktTags.push(value)
+      }
+    }
+  }
+
+  return uniqueVals(kktTags)
+}
+
 debugRouter.get('/cur/debug', async (req: any, res: any) => {
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
@@ -16,7 +37,18 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   }
 
   const realisations = await allCurs()
-  const realisationsWithCodeUrn = realisations.filter(c => urnInCustomCodeUrns(c.customCodeUrns, 'far'))
+  const realisationsWithCodeUrn = realisations.reduce((grouped: Record<string, any[]>, cur: any) => {
+    const kktTags = getKktTags(cur.customCodeUrns)
+
+    for (const tag of kktTags) {
+      if (!grouped[tag]) {
+        grouped[tag] = []
+      }
+      grouped[tag].push(cur)
+    }
+
+    return grouped
+  }, {})
   const realisationCodeUrns = realisations.map((r: any) => r.customCodeUrns)
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
     .flatMap((u: any) => Object.values(u))

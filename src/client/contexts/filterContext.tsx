@@ -186,12 +186,16 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [strictFiltersInitialized, setStrictFiltersInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
 
+  const strictByDefaultFilterIds = filters
+    .filter((f) => f.isStrictByDefault === true)
+    .map((f) => f.id)
+
   useEffect(() => {
     if (!filtersLoading && filters.length > 0 && !strictFiltersInitialized) {
-      setStrictFilters(filters.filter((f) => f.isStrictByDefault).map((f) => f.id))
+      setStrictFilters(strictByDefaultFilterIds)
       setStrictFiltersInitialized(true)
     }
-  }, [filters, filtersLoading, strictFiltersInitialized])
+  }, [filters, filtersLoading, strictFiltersInitialized, strictByDefaultFilterIds])
 
   useEffect(() => {
     if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
@@ -260,7 +264,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setIndependent('')
     setMooc('')
     setFlexible('')
-    setStrictFilters(filters.filter((f) => f.isStrictByDefault).map((f) => f.id))
+    setStrictFilters(strictByDefaultFilterIds)
   }
 
 
