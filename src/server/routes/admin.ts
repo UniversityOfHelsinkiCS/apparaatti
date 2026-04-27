@@ -10,6 +10,8 @@ import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/valid
 import { usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
+import { searchCoursesWithPagination } from '../util/dbActions.ts'
+  
 
 const USER_FETCH_LIMIT = 100
 
@@ -72,6 +74,26 @@ adminRouter.get('/users', async (req, res) => {
 
   const users = await usersWithWhere(whereClauses, USER_FETCH_LIMIT)
   res.send(users as UserType[])
+})
+
+adminRouter.get('/courses', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const { page = '1', limit = '50', name, urn, courseCode } = req.query
+
+  const pageNum = parseInt(page as string, 10)
+  const limitNum = parseInt(limit as string, 10)
+
+  const result = await searchCoursesWithPagination(
+    name as string | undefined,
+    urn as string | undefined,
+    courseCode as string | undefined,
+    pageNum,
+    limitNum
+  )
+  
+  res.send(result)
 })
 
 adminRouter.use('/filter-config', filterConfigRouter)

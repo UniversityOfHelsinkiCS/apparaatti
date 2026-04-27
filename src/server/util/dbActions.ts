@@ -158,3 +158,84 @@ export async function cusWithIds(ids: string[]) {
 export async function cusWithWhere(where: Record<string, any>) {
   return await Cu.findAll(({ where } as any))
 }
+
+export async function searchCoursesWithPagination(
+  nameSearch: string | undefined,
+  urnSearch: string | undefined,
+  courseCodeSearch: string | undefined,
+  page: number,
+  limit: number
+) {
+  const offset = (page - 1) * limit
+
+  // Build the where clause for course realizations (name search)
+  const curWhere: any = {}
+  
+  if (nameSearch) {
+    curWhere[Op.or] = [
+      { 'name.fi': { [Op.iLike]: `%${nameSearch}%` } },
+      { 'name.en': { [Op.iLike]: `%${nameSearch}%` } },
+      { 'name.sv': { [Op.iLike]: `%${nameSearch}%` } },
+    ]
+  }
+
+  // Always include Cu to get course codes, make it required only for course code search
+  const includeOptions: any[] = [{
+    model: Cu,
+    required: !!courseCodeSearch,
+    where: courseCodeSearch ? {
+      courseCode: { [Op.iLike]: `%${courseCodeSearch}%` }
+    } : undefined,
+    through: { attributes: [] } // Don't include join table attributes
+  }]
+
+  // If URN search is present, we must fetch all matching records first,
+  // then filter by URN in JavaScript, then paginate
+  if (urnSearch) {
+    const allCurs = await Cur.findAll({
+      where: curWhere[Op.or] ? curWhere : undefined,
+      include: includeOptions,
+      order: [['name', 'ASC']],
+      subQuery: false,
+    })
+    
+    // Filter by URN (JSONB field - must be done in JavaScript)
+    const filtered = allCurs.filter((cur: any) => {
+      const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
+      if (!customCodeUrns) return false
+      
+      const allUrns = Object.values(customCodeUrns).flat()
+      return allUrns.some(urn => urn.toLowerCase().includes(urnSearch.toLowerCase()))
+    })
+
+    const total = filtered.length
+    const paginatedResults = filtered.slice(offset, offset + limit)
+
+    return {
+      courses: paginatedResults,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
+  }
+
+  // No URN search - use regular paginated query
+  const { rows: results, count: total } = await Cur.findAndCountAll({
+    where: curWhere[Op.or] ? curWhere : undefined,
+    include: includeOptions,
+    limit,
+    offset,
+    order: [['name', 'ASC']],
+    distinct: true,
+    subQuery: false,
+  })
+
+  return {
+    courses: results,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit)
+  }
+}

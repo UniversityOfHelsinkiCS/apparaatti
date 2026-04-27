@@ -70,6 +70,6 @@ CurCu.init(
     timestamps: true, // Automatically manages createdAt and updatedAt
   }
 )
-Cur.belongsToMany(Cu, { through: CurCu, foreignKey: 'cuId' })
-Cu.belongsToMany(Cur, { through: CurCu, foreignKey: 'curId' })
+Cur.belongsToMany(Cu, { through: CurCu, foreignKey: 'curId', otherKey: 'cuId' })
+Cu.belongsToMany(Cur, { through: CurCu, foreignKey: 'cuId', otherKey: 'curId' })
 export default CurCu

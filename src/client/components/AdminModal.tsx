@@ -161,6 +161,13 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
           >
             Filter config
           </Button>
+          <Button
+            variant="outlined"
+            sx={{ color: 'black', borderColor: 'black' }}
+            onClick={() => { onClose(); navigate('/admin/courses') }}
+          >
+            Courses
+          </Button>
           {user?.isSuperuser && (
             <Button
               variant="outlined"
