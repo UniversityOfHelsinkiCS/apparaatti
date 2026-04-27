@@ -30,8 +30,7 @@ export const allowedStudyPlaces: string[] = [
 
 // Frontend option aliases that map to canonical Sisu study-place IDs.
 export const studyPlaceAliasToCanonicalIds: Record<string, string[]> = {
-  online: ['teaching-participation-remote', 'teaching-participation-online'],
-  remote: ['teaching-participation-remote'],
+  online: ['teaching-participation-remote', 'teaching-participation-online', 'teaching-participation-distance'],
   contact: ['teaching-participation-contact'],
   blended: ['teaching-participation-blended'],
 }
