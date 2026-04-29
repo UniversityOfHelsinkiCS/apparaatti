@@ -42,14 +42,10 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   const filterList: FilterConfig[] = filters ?? []
 
   const handleToggleEnabled = async (filter: FilterConfig) => {
-    if (filter.enabled) {
-      await adminFetch('DELETE', `/api/admin/filter-config/${filter.id}`)
-    } else {
-      await adminFetch('PUT', `/api/admin/filter-config/${filter.id}`, {
-        ...filter,
-        enabled: true,
-      })
-    }
+    await adminFetch('PUT', `/api/admin/filter-config/${filter.id}`, {
+      ...filter,
+      enabled: !filter.enabled,
+    })
     refetch()
   }
 

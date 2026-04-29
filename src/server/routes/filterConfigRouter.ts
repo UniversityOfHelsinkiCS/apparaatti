@@ -3,7 +3,6 @@ import { z } from 'zod'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
 import {
   createFilterConfig,
-  disableFilterConfigById,
   filterConfigWithId,
   orderedFilterConfigs,
   reorderFilterConfigs,
@@ -64,20 +63,6 @@ filterConfigRouter.post('/', async (req, res) => {
 
   const filter = await createFilterConfig(parsed.data)
   res.status(201).json(filter)
-})
-
-filterConfigRouter.delete('/:id', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsSuperuser(user)
-
-  const filter = await filterConfigWithId(req.params.id)
-  if (!filter) {
-    res.status(404).json({ message: 'Filter not found' })
-    return
-  }
-
-  await disableFilterConfigById(req.params.id)
-  res.json({ message: 'Filter disabled' })
 })
 
 filterConfigRouter.patch('/reorder', async (req, res) => {
