@@ -1,6 +1,6 @@
 import type { FilterConfig } from '../../../../common/types.ts'
 
-export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlechoice']
+export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlechoice', 'info-only']
 
 export const SWITCH_SX = {
   '& .MuiSwitch-switchBase.Mui-checked': { color: 'black' },

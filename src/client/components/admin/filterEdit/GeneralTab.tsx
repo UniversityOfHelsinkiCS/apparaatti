@@ -87,7 +87,7 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         textFieldLabel="Short name"
       />
 
-      <Typography variant="subtitle2">Explanation (optional)</Typography>
+      <Typography variant="subtitle2">Explanation (optional) <Typography component="span" variant="caption" color="text.secondary">(the question icon)</Typography></Typography>
       <LocalizedField
         values={explanationVal ?? { fi: '', sv: '', en: '' }}
         onChange={patchExplanation}
@@ -96,7 +96,7 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         minRows={2}
       />
 
-      <Typography variant="subtitle2">Extra info (optional)</Typography>
+      <Typography variant="subtitle2">Extra info (optional) <Typography component="span" variant="caption" color="text.secondary">(shown when display type is info-only)</Typography></Typography>
       <LocalizedField
         values={extraInfoVal ?? { fi: '', sv: '', en: '' }}
         onChange={patchExtraInfo}

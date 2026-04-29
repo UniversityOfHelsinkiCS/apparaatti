@@ -5,6 +5,17 @@
  *
  * Run as part of seedDatabase() in development, or as a standalone one-off script
  * in production when first deploying the filters table.
+ * 
+ * Display Types:
+ * - 'singlechoice': Radio button selection (default)
+ * - 'multichoice': Checkbox multi-selection
+ * - 'dropdownselect': Dropdown menu selection
+ * - 'info-only': Displays only extraInfo as markdown in an accordion (no user interaction)
+ *   For info-only filters:
+ *   - Set displayType: 'info-only'
+ *   - Populate extraInfo with markdown content
+ *   - variants array still required (minimum 1), but options can be empty
+ *   - Does not require state management in filterConfigMap
  */
 
 import Filter from './models/filter.ts'
