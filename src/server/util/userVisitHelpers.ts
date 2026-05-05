@@ -1,19 +1,19 @@
-import { Op } from "sequelize";
+import { Op } from 'sequelize'
 
-import UserVisits from "../db/models/userVisits";
-import { createUserVisitsEntry } from "./dbActions";
-import { User } from "../../common/types";
+import UserVisits from '../db/models/userVisits'
+import { createUserVisitsEntry } from './dbActions'
+import { User } from '../../common/types'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 export async function hashUser(user): Promise<string>{
   const encoder = new TextEncoder()
-  const data = encoder.encode(user.id);
-  const hash = await crypto.subtle.digest("SHA-256", data)
+  const data = encoder.encode(user.id)
+  const hash = await crypto.subtle.digest('SHA-256', data)
 
   const hashArray = Array.from(new Uint8Array(hash))
   const hashHexString = hashArray
-  .map((b) => b.toString(16).padStart(2, "0"))
-  .join("")
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
 
   return hashHexString
 
@@ -50,7 +50,7 @@ export async function saveUserVisitIfUnique(user: User){
   const userVisits = await getUserVisitsAtHour(visitorHashHex, time)
   
   if(userVisits.length === 0){
-     await createUserVisitsEntry(visitorHashHex, time)
+    await createUserVisitsEntry(visitorHashHex, time)
   }
 }
 
