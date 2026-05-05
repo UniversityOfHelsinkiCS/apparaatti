@@ -206,6 +206,11 @@ export type AnswerData = {
 };
 
 
+export type UserVisit = {
+  visitorHashHex: string
+  date: Date
+}
+
 export type adminFeedback = {
    recommendations: CourseRecommendations
    feedBack: string  

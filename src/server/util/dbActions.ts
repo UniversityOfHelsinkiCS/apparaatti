@@ -6,6 +6,8 @@ import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
+import UserVisits from '../db/models/userVisits.ts'
+import type { UserVisit } from '../../common/types.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -239,3 +241,15 @@ export async function searchCoursesWithPagination(
     totalPages: Math.ceil(total / limit)
   }
 }
+
+
+export async function createUserVisitsEntry(visitorHashHex: string, date: Date){
+  
+  const entry: UserVisit = {
+    visitorHashHex,
+    date,
+  }
+  await UserVisits.create(entry)
+
+}
+
