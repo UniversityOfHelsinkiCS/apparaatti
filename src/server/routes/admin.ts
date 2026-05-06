@@ -7,10 +7,11 @@ import {
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import { usersWithWhere } from '../util/dbActions.ts'
+import { getUserVisits, usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
+import { z } from 'zod'
   
 
 const USER_FETCH_LIMIT = 100
@@ -94,6 +95,25 @@ adminRouter.get('/courses', async (req, res) => {
   )
   
   res.send(result)
+})
+
+
+adminRouter.get('/stats', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const statsQuerySchema = z.object({
+    start: z.coerce.date(),
+    end: z.coerce.date()
+  })
+
+  const {start, end} = statsQuerySchema.parse(req.query)
+
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+
+  const visits = await getUserVisits(startDate, endDate)
+  return visits
 })
 
 adminRouter.use('/filter-config', filterConfigRouter)

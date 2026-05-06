@@ -1,7 +1,7 @@
 import { Op } from 'sequelize'
 
 import UserVisits from '../db/models/userVisits'
-import { createUserVisitsEntry } from './dbActions'
+import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions'
 import { User } from '../../common/types'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
@@ -28,17 +28,7 @@ export async function getUserVisitsAtHour(visitorHashHex: string, date: Date){
   const endHour = new Date(startHour)
   endHour.setHours(startHour.getHours() + 1)
 
-  const visits = await UserVisits.findAll({
-    where: {
-      visitorHashHex: visitorHashHex,
-      date: {
-        [Op.gte]: startHour,
-        [Op.lt]: endHour
-      }
-    },
-    raw: true
-  })
-
+  const visits = await getUserVisitsByUser(visitorHashHex, startHour, endHour)
   return visits
 }
 

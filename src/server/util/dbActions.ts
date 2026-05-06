@@ -253,3 +253,34 @@ export async function createUserVisitsEntry(visitorHashHex: string, date: Date){
 
 }
 
+
+
+export async function getUserVisitsByUser(visitorHashHex, start, end){
+  const visits = await UserVisits.findAll({
+    where: {
+      visitorHashHex: visitorHashHex,
+      date: {
+        [Op.gte]: start,
+        [Op.lt]: end
+      }
+    },
+    raw: true
+  })
+
+  return visits
+}
+
+export async function getUserVisits(start: Date, end: Date){
+  const visits = await UserVisits.findAll({
+    where: {
+      date: {
+        [Op.gte]: start,
+        [Op.lt]: end
+      }
+    },
+    raw: true
+  })
+
+  return visits
+
+}
