@@ -21,13 +21,14 @@ const SidebarContent = () => {
         px: { xs: 0.75, sm: 1.25 },
         pb: 2,
         minHeight: '100%',
-        bgcolor: 'rgba(255, 255, 255, 0.24)',
+        bgcolor: 'transparent',
       }}
     >
       <Box sx={{ px: { xs: 0.5, sm: 0.75 }, py: 2, display: 'flex', justifyContent: 'center' }}>
         <ActionButtonV2
           onClick={() => setModalOpen(true)}
           text={t('v2:retakeQuestions')}
+          visualStyle="course-show"
         />
       </Box>
       {filtersToShow.map((filter) => (

@@ -2,6 +2,7 @@ import type { CourseRecommendation as CourseRecommendationType } from '../../com
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
+import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 
 const CourseRecommendationV2 = ({
   course,
@@ -9,9 +10,11 @@ const CourseRecommendationV2 = ({
   course: CourseRecommendationType
 }) => {
   const {t} = useTranslation()
+  const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
+  const periodVariant = getFilterVariant(filterContext, 'study-period')
 
   const creditString:() => string = () => {
     if (!course.course.credits) {
@@ -51,44 +54,142 @@ const CourseRecommendationV2 = ({
 
     return start + ' - ' + end
   }
+
+  const prettifyPeriodName = (periodName: string) => {
+    const configuredLabel = periodVariant?.options?.find((option) => option.id === periodName)?.name
+    if (configuredLabel) {
+      return configuredLabel
+    }
+
+    const regularPeriodMatch = periodName.match(/^period_(\d+)$/)
+    if (regularPeriodMatch) {
+      return `${regularPeriodMatch[1]}. ${t('course:periodName')}`
+    }
+
+    const examWeekMatch = periodName.match(/^exam_week_(\d+)$/)
+    if (examWeekMatch) {
+      return `${t('course:examWeek')} ${examWeekMatch[1]}`
+    }
+
+    const intensivePeriodMatch = periodName.match(/^intensive_(\d+)(?:_previous)?$/)
+    if (intensivePeriodMatch) {
+      return `${t('course:intensivePeriod')} ${intensivePeriodMatch[1]}`
+    }
+
+    return periodName.replace(/_/g, ' ')
+  }
+
+  const coursePeriodText = () => {
+    const periodNames = course.course.period?.map((period) => period.name) ?? []
+    const uniquePeriodNames = Array.from(new Set(periodNames))
+
+    if (uniquePeriodNames.length === 0) {
+      return null
+    }
+
+    return uniquePeriodNames
+      .map((periodName) => prettifyPeriodName(periodName))
+      .join(', ')
+  }
+
+  const periodText = coursePeriodText()
+
   if (!course) return null
   return (
     <Paper
-      elevation={2}
-      sx={{ padding: 2, margin: 1 }}
+      elevation={0}
+      sx={{
+        padding: { xs: 2, sm: 2.5 },
+        margin: 1,
+        borderRadius: 2,
+        border: '1px solid',
+        borderColor: '#d6dbe1',
+        backgroundColor: '#ffffff',
+        boxShadow: '0 1px 3px rgba(15, 23, 42, 0.06)',
+      }}
     >
       <Box>
-        <Typography variant="h6" component="h2" gutterBottom>
-          {translateLocalizedString(course.course.name)}
-        </Typography>
-        <Stack direction={'column'}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 0.75, sm: 1.5 }}
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          justifyContent="space-between"
+          sx={{ mb: 1.5 }}
+        >
+          <Typography
+            variant="h6"
+            component="h2"
+            sx={{ color: '#17212b', fontWeight: 600, lineHeight: 1.3, flex: 1 }}
+          >
+            {translateLocalizedString(course.course.name)}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: '#334155',
+              fontWeight: 600,
+              px: 1.25,
+              py: 0.5,
+              borderRadius: 1,
+              backgroundColor: '#e8edf2',
+              border: '1px solid #d5dde5',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {courseDateRange(course.course)}
+          </Typography>
+        </Stack>
+        <Stack direction={'column'} spacing={1.5}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 0.5, sm: 1.5 }}
+            useFlexGap
+            sx={{
+              pt: 0.25,
+            }}
+          >
             <Typography
               variant="body2"
-              color="textSecondary"
-              gutterBottom
+              sx={{ color: '#334155', fontWeight: 500 }}
             >
               {creditString()} {t('course:credits')}
             </Typography>
             <Typography
               variant="body2"
-              color="textSecondary"
-              gutterBottom
+              sx={{ color: '#475569' }}
             >
               {courseCodes}
             </Typography>
-
-            <Typography>{courseDateRange(course.course)}</Typography>
           </Stack>
+          {periodText && (
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#1f2937',
+                fontWeight: 600,
+                pt: 0.25,
+              }}
+            >
+              {t('filter:period')}: {periodText}
+            </Typography>
+          )}
         </Stack>
         
         <Button
           variant="contained"
-          color="primary"
           href={courseUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={{ marginTop: 1, backgroundColor: 'lightblue' }}
+          sx={{
+            marginTop: 1.5,
+            backgroundColor: '#cfd4da',
+            color: '#1f2933',
+            boxShadow: 'none',
+            '&:hover': {
+              backgroundColor: '#bfc6cd',
+              boxShadow: 'none',
+            },
+          }}
         >
           {t('course:show')}
         </Button>

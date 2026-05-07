@@ -46,7 +46,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       sx={{
         display: 'flex',
         minHeight: '100vh',
-        bgcolor: '#eef1f4',
+        bgcolor: '#f7f8fa',
       }}
     >
       <CssBaseline />
@@ -106,8 +106,8 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             boxSizing: 'border-box',
             borderRight: '1px solid',
             borderColor: 'divider',
-            bgcolor: '#dfe4ea',
-            backgroundImage: 'linear-gradient(180deg, #e6ebf0 0%, #d8dee6 100%)',
+            bgcolor: '#eef1f4',
+            backgroundImage: 'linear-gradient(180deg, #f2f4f7 0%, #e7ebf0 100%)',
           },
         }}
       >

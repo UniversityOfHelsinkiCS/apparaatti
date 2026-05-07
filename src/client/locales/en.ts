@@ -119,7 +119,10 @@ export default {
   'course': {
     'show': 'Show',
     'credits': 'cr',
-    'reasons': 'reasons'
+    'reasons': 'reasons',
+    'periodName': 'period',
+    'examWeek': 'Exam week',
+    'intensivePeriod': 'Intensive period'
   },
   'loginAsPage': {
     'title': 'user search',

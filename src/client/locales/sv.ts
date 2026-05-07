@@ -118,7 +118,10 @@ export default {
   'course': {
     'show': 'Visa',
     'credits': 'sp',
-    'reasons': 'grundläggande'
+    'reasons': 'grundläggande',
+    'periodName': 'period',
+    'examWeek': 'Tentamensvecka',
+    'intensivePeriod': 'Intensivperiod'
   },
   'filter': {
     'period': 'Studieperiod',

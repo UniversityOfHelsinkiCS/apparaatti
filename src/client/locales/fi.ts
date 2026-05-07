@@ -119,7 +119,10 @@ export default {
   'course': {
     'show': 'Näytä',
     'credits': 'op',
-    'reasons': 'perusteet'
+    'reasons': 'perusteet',
+    'periodName': 'periodi',
+    'examWeek': 'Tenttiviikko',
+    'intensivePeriod': 'Intensiivijakso'
   },
   'loginAsPage': {
     'title': 'kayttajahaku',
