@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFilterContext } from '../contexts/filterContext'
 import useApi from '../util/useApi.tsx'
+import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 
 const style = {
   position: 'absolute',
@@ -154,28 +155,19 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
           : <></> }
 
         <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
-          <Button
-            variant="outlined"
-            sx={{ color: 'black', borderColor: 'black' }}
-            onClick={() => { onClose(); navigate('/admin') }}
-          >
+          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin') }}>
             Filter config
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ color: 'black', borderColor: 'black' }}
-            onClick={() => { onClose(); navigate('/admin/courses') }}
-          >
+          </BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/courses') }}>
             Courses
-          </Button>
+          </BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/stats') }}>
+            Stats
+          </BlackOutlinedButton>
           {user?.isSuperuser && (
-            <Button
-              variant="outlined"
-              sx={{ color: 'black', borderColor: 'black' }}
-              onClick={() => { onClose(); navigate('/admin/login-as') }}
-            >
+            <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/login-as') }}>
               Login as
-            </Button>
+            </BlackOutlinedButton>
           )}
         </Box>
       </Box>

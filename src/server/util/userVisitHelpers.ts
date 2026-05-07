@@ -1,8 +1,5 @@
-import { Op } from 'sequelize'
-
-import UserVisits from '../db/models/userVisits'
-import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions'
-import { User } from '../../common/types'
+import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions.ts'
+import type { User } from '../../common/types.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 export async function hashUser(user): Promise<string>{

@@ -14,6 +14,7 @@ import { BarChart } from '@mui/x-charts/BarChart'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toDayLabel, type GroupBy } from '../../../common/datelabels.ts'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
@@ -104,17 +105,15 @@ const StatsPage = () => {
             <MenuItem value="year">Year</MenuItem>
           </Select>
         </FormControl>
-        <Button
-          variant="outlined"
+        <BlackOutlinedButton
           onClick={() => {
             setGroupBy('day')
             setStart(getDefaultStart())
             setEnd(getDefaultEnd())
           }}
-          sx={{ color: 'black', borderColor: 'black' }}
         >
                     Last 14 days
-        </Button>
+        </BlackOutlinedButton>
       </Stack>
 
       {isLoading ? (

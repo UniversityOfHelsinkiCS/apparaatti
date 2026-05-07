@@ -14,6 +14,7 @@ import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
 import { run as runUpdater } from '../updater/index.ts'
 import { allOrganisations, enabledOrderedFilterConfigs, organisationsWithSupportedCodes } from '../util/dbActions.ts'
+import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -111,6 +112,7 @@ router.get('/user', async (req, res) => {
   }
 
   const user = req.user as User
+  await saveUserVisitIfUnique(user)
 
   const adminStatus = isAdmin(user)
   const superuserStatus = isSuperuser(user)

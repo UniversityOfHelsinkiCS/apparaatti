@@ -1,12 +1,10 @@
 import { Button } from '@mui/material'
 
-
 interface actionButtonProps {
   onClick?: () => void
   text?: string
   dataCy?: string
 }
-
 
 const ActionButtonV2 = ({onClick = () => {}, text = '', dataCy}: actionButtonProps) => {
   return (
@@ -30,6 +28,5 @@ const ActionButtonV2 = ({onClick = () => {}, text = '', dataCy}: actionButtonPro
     </Button>
   )
 }
-
 
 export default ActionButtonV2
