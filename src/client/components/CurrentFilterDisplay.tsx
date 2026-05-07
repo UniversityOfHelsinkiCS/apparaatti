@@ -36,9 +36,9 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
       onDeleteValue={
         Array.isArray(cfg.state)
           ? (valueId) => {
-              const newState = cfg.state.filter((id: string) => id !== valueId)
-              cfg.setState(newState)
-            }
+            const newState = cfg.state.filter((id: string) => id !== valueId)
+            cfg.setState(newState)
+          }
           : undefined
       }
       onClear={handleClearFilter}
