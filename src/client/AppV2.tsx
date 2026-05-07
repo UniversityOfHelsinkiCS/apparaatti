@@ -11,7 +11,6 @@ import { FilterContextProvider, useFilterContext } from './contexts/filterContex
 import SidebarContent from './components/SidebarContent'
 import CourseRecommendations from './components/CourseRecommendations'
 import WelcomeModal from './components/WelcomeModal'
-import CurrentFilterDisplay from './components/CurrentFilterDisplay'
 import type { User } from '../common/types'
 import AdminModal from './components/AdminModal'
 import LanguageSelector from './components/LanguageSelector'
@@ -120,7 +119,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
         }}
       >
         <Toolbar />
-        <CurrentFilterDisplay/>
         <Box sx={{ p: 2 }}>
           <CourseRecommendations />
         </Box>

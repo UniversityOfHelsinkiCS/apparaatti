@@ -1,44 +1,11 @@
-import { Box, Typography, Button, Stack, IconButton, Chip } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
-import { getOptionDisplayTexts } from '../hooks/useQuestions'
-import { Variant } from '../../common/types'
-
-
-const FilterValueRenderer = ({cfg, variant}: {cfg: any, variant: Variant | null}) => {
-  const isArray = Array.isArray(cfg.state)
-  
-  if (isArray && cfg.state.length > 0) {
-    return (
-      <>
-        {cfg.state.map((valueId: string) => {
-          const option = variant?.options?.find((o) => o.id === valueId)
-          const displayText = option?.name || valueId
-          
-          return (
-            <Chip
-              key={valueId}
-              label={displayText}
-              size="small"
-              onDelete={() => {
-                // Remove this specific value from the array
-                const newState = cfg.state.filter((id: string) => id !== valueId)
-                cfg.setState(newState)
-              }}
-              sx={{ margin: '2px' }}
-            />
-          )
-        })}
-      </>
-    )
-  }
-  
-  const valueTexts = getOptionDisplayTexts(variant, cfg.state)
-  return (
-    valueTexts.map((s: any) => <Typography key={s}>{s}</Typography>)
-  )
-  
-}
+import { Box, Typography, Button, Stack } from '@mui/material'
+import {
+  filterConfigMap,
+  getFilterVariant,
+  isFilterStateAnswered,
+  useFilterContext,
+} from '../contexts/filterContext'
+import FilterSummaryItem from './common/FilterSummaryItem'
 
 
 const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
@@ -57,26 +24,25 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
     }
   }
 
-  if(hide || !cfg){
+  if (hide || !cfg || !isFilterStateAnswered(cfg.state)) {
     return (<></>)
   }
-  
-  const hasMultipleValues = Array.isArray(cfg.state) && cfg.state.length > 1
-  
+
   return (
-    <Stack direction="row" alignItems="center" spacing={1}>
-      <Typography variant="body1">
-        <strong>{question?.shortName || filterId}: </strong>
-      </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap">
-        <FilterValueRenderer cfg={cfg} variant={variant}/>
-      </Stack>
-      {(hasMultipleValues || !Array.isArray(cfg.state)) && (
-        <IconButton size="small" onClick={handleClearFilter} title="Clear all">
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      )}
-    </Stack>
+    <FilterSummaryItem
+      label={question?.shortName || filterId}
+      state={cfg.state}
+      variant={variant}
+      onDeleteValue={
+        Array.isArray(cfg.state)
+          ? (valueId) => {
+              const newState = cfg.state.filter((id: string) => id !== valueId)
+              cfg.setState(newState)
+            }
+          : undefined
+      }
+      onClear={handleClearFilter}
+    />
   )
 }
 
@@ -84,7 +50,10 @@ const ActiveFilterCard = ({ filterId }: {filterId: string}) => {
 const CurrentFilterDisplay = () => {
   const filterContext = useFilterContext()
   const filtersConfig = filterConfigMap(filterContext)
-  const filtersThatAreActive = Array.from(filtersConfig.keys()).filter((key) => {return filtersConfig.get(key)?.state != ''}) 
+  const filtersThatAreActive = Array.from(filtersConfig.keys()).filter((key) => {
+    const state = filtersConfig.get(key)?.state
+    return isFilterStateAnswered(state)
+  })
    
   const handleClearAllFilters = () => {
     Array.from(filtersConfig.keys()).forEach((filterId) => {

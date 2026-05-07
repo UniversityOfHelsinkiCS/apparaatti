@@ -4,15 +4,7 @@ import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 
-interface UIVariantType{
-  name: string,
-  value: string
-}
-
 interface FilterContextType {
-  uiVariant: UIVariantType[]
-  setUiVariant: (u: UIVariantType[]) => void
-
   language: string
   setLanguage: (s: string) => void
 
@@ -263,12 +255,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setStrictFilters(strictByDefaultFilterIds)
   }
 
-
-  const [uiVariant, setUiVariant] = useState([
-    {name: 'recommendation-reasons-style', value: 'question-icon'},
-    {name: 'recommendation-reasons-incorrect-hidden', value: 'false'}
-  ]) 
-
   const { data: user, isLoading: userLoading } = useApi(
     'user',
     '/api/user',
@@ -397,9 +383,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   return (
     <FilterContext.Provider
       value={{
-        uiVariant,
-        setUiVariant,
-        
         variantToDisplayId,
         language,
         setLanguage,

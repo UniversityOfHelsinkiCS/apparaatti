@@ -125,10 +125,6 @@ export default {
     'title': 'kayttajahaku',
     'userHeader': 'käyttäjä'
   },
-  'recommendationReasons': {
-    'title': 'Suosituksen perusteet',
-    'description': 'Tässä syyt, miksi tämä kurssi suositeltiin valintojesi perusteella:',
-  },
   'filter': {
     'period': 'periodi',
     'organisation': 'Organisaatio',

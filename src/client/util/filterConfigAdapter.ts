@@ -14,7 +14,6 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   superToggle: cfg.superToggle,
   showInWelcomeModal: cfg.showInWelcomeModal,
   hideInCurrentFiltersDisplay: cfg.hideInCurrentFiltersDisplay,
-  hideInRecommendationReasons: cfg.hideInRecommendationReasons,
   hideInFilterSidebar: cfg.hideInFilterSidebar,
   coordinateKey: cfg.coordinateKey ?? null,
   isStrictByDefault: cfg.isStrictByDefault,

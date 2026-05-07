@@ -1,9 +1,8 @@
-import { Box, Button, Typography, Modal, FormControl, InputLabel, Select, MenuItem, Tabs, Tab, FormControlLabel, Switch } from '@mui/material'
+import { Box, Button, Typography, Modal } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useFilterContext } from '../contexts/filterContext'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 
@@ -28,56 +27,6 @@ type TextFeedbackV2Props = {
   onClose: () => void;
   recommendations: CourseRecommendations;
 };
-const Settings = ({onClose}: {onClose: () => void}) => {
-  const {uiVariant, setUiVariant} = useFilterContext()
-
-  const periodYearVariant = uiVariant.find((v) => v.name == 'recommendation-reasons-style')?.value
-  const incorrectHidden = uiVariant.find((v) => v.name == 'recommendation-reasons-incorrect-hidden')?.value === 'true'
-  
-  const setUI = (name, value) => {
-    const newState = uiVariant.map((u) => u.name === name ? {...u, value: value } : u)
-    setUiVariant(newState)
-  }
-
-  return(
-    
-    <>
-      <Typography variant="h6" component="h2" sx={{ mb: 2 }}>Kurssin suosittelun perustelun tyyli</Typography>
-      <FormControl fullWidth>
-        <InputLabel id="my-select-label">valitse</InputLabel>
-
-        <Select labelId="my-select-label" value={periodYearVariant} label="Choose" onChange={(e) => {setUI('recommendation-reasons-style', e.target.value)}}>
-          <MenuItem value={'question-icon'}>
-               Kysymysikoni
-          </MenuItem>
-          <MenuItem value={'none'}>
-              ei perusteluita
-          </MenuItem>
-          <MenuItem value={'hover-info'}>
-              Hover Info
-          </MenuItem>
-        </Select>
-      </FormControl>
-
-      <Typography variant="h6" component="h2" sx={{ mb: 2, mt: 3 }}>Väärien suodattimien näyttäminen</Typography>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={incorrectHidden}
-            onChange={(e) => setUI('recommendation-reasons-incorrect-hidden', e.target.checked ? 'true' : 'false')}
-          />
-        }
-        label="Piilota väärät suodattimet (näytä vain vihreät)"
-      />
-
-      <Box sx={{ mt: 3 }}>
-        <Button onClick={onClose} variant="contained" color="primary" sx={{ mr: 1 }}>Valmis</Button>
-      </Box>
-
-    </>  )
-}
-
-
 const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendations: CourseRecommendations}) => {
   const [feedback, setFeedBack] = useState('')
   const handleSubmit = async (e: React.FormEvent) => {
@@ -128,8 +77,6 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
   )
 }
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
-  const [tab, setTab] = useState(0)
-  const handleChange = (_, newValue) => { setTab(newValue) }
   const navigate = useNavigate()
   const { data: user } = useApi('user', '/api/user', 'GET', null)
   return (
@@ -140,19 +87,7 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
       aria-describedby="feedback-modal-description"
     >
       <Box sx={style}>
-
-        <Tabs value={tab} onChange={handleChange} centered sx={{ '& .Mui-Tabs-indicator': { display: 'none' } }}>
-          <Tab sx={{backgroundColor: 'white', color: 'black', '&.Mui-selected': {color: 'black'}, border: '1px solid black'}} label="Palaute" />
-          <Tab sx={{backgroundColor: 'white', color: 'black', '&.Mui-selected': {color: 'black'}, border: '1px solid black', borderLeft: 'none'}} label="Asetukset" />
-        </Tabs>
-
-        {tab === 0 ?
-          <Feedback onClose={onClose} recommendations = {recommendations}/>
-          : <></> }
-
-        {tab === 1 ?
-          <Settings onClose={onClose} />
-          : <></> }
+        <Feedback onClose={onClose} recommendations = {recommendations}/>
 
         <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
           <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin') }}>

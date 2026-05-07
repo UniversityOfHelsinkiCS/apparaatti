@@ -120,10 +120,6 @@ export default {
     'credits': 'sp',
     'reasons': 'grundläggande'
   },
-  'recommendationReasons': {
-    'title': 'Rekommendationsskäl',
-    'description': 'Här är varför denna kurs rekommenderades baserat på dina val:',
-  },
   'filter': {
     'period': 'Studieperiod',
     'organisation': 'Organisation',

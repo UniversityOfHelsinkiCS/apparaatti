@@ -17,7 +17,6 @@ const BOOL_FIELDS = [
   ['superToggle', 'Super toggle'],
   ['showInWelcomeModal', 'Show in welcome modal'],
   ['hideInCurrentFiltersDisplay', 'Hide in current filters'],
-  ['hideInRecommendationReasons', 'Hide in rec. reasons'],
   ['hideInFilterSidebar', 'Hide in sidebar'],
   ['isStrictByDefault', 'Strict by default'],
   ['enabled', 'Enabled'],

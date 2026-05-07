@@ -125,10 +125,6 @@ export default {
     'title': 'user search',
     'userHeader': 'user'
   },
-  'recommendationReasons': {
-    'title': 'Recommendation Reasons',
-    'description': 'Here\'s why this course was recommended based on your selections:',
-  },
   'filter': {
     'period': 'Period',
     'organisation': 'Organisation',
