@@ -207,6 +207,7 @@ export type AnswerData = {
 
 
 export type UserVisit = {
+  id: number
   visitorHashHex: string
   date: Date
 }

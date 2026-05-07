@@ -6,12 +6,19 @@ import type {
 } from 'sequelize'
 import { sequelize } from '../connection.ts'
 class UserVisits extends Model<InferAttributes<UserVisits>, InferCreationAttributes<UserVisits>>{
+  declare id: CreationOptional<number> // sequelize breaks if the table entries wont have an id
   declare visitorHashHex: string // one way hash of user id
   declare date: Date
 }
 
 UserVisits.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
     visitorHashHex: {
       type: DataTypes.STRING, 
       allowNull: false,
@@ -24,6 +31,7 @@ UserVisits.init(
   {
     sequelize,
     underscored: true,
+    timestamps: false,
   }
 )
 
