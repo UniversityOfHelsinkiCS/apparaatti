@@ -59,14 +59,23 @@ interface FilterAccordionProps {
 
 const FilterAccordion = ({ title, children, filterId }: FilterAccordionProps) => {
   return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Accordion sx={{ mb: 1, '&:before': { display: 'none' } }}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        sx={{
+          px: 1.5,
+          minHeight: 52,
+          '& .MuiAccordionSummary-content': {
+            my: 1,
+          },
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 0.5 }}>
           <Typography sx={{ mr: 1 }}>{title}</Typography>
           {filterId && <ActiveFilterChips filterId={filterId} />}
         </Box>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ px: 1.5, pt: 0.5, pb: 1.5 }}>
         {children}
       </AccordionDetails>
     </Accordion>

@@ -18,8 +18,8 @@ import { useTranslation } from 'react-i18next'
 import useRequiredUser from './util/useRequiredUser'
 import { RedirectToLogin } from './util/redirectToLogin'
 
-const desktopDrawerWidth = '33.333vw' // 1/3 of the viewport width
-const mobileDrawerWidth = '80vw' // 80% of the viewport width for mobile
+const desktopDrawerWidth = '38vw'
+const mobileDrawerWidth = '88vw'
 
 type OneThirdDrawerLayoutProps = {
   user: User
@@ -42,7 +42,13 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
 
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        minHeight: '100vh',
+        bgcolor: '#eef1f4',
+      }}
+    >
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
       {user?.isAdmin && finalRecommendedCourses && ( 
@@ -100,6 +106,8 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             boxSizing: 'border-box',
             borderRight: '1px solid',
             borderColor: 'divider',
+            bgcolor: '#dfe4ea',
+            backgroundImage: 'linear-gradient(180deg, #e6ebf0 0%, #d8dee6 100%)',
           },
         }}
       >
@@ -113,6 +121,8 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           flexShrink: 0,
           width: open && !isMobile ? `calc(100vw - ${currentDrawerWidth})` : '100vw',
           ml: open && !isMobile ? currentDrawerWidth : 0,
+          bgcolor: '#f7f8fa',
+          backgroundImage: 'linear-gradient(180deg, #f9fafb 0%, #f1f3f6 100%)',
           transition: (theme) => theme.transitions.create(['margin-left', 'width'], {
             duration: theme.transitions.duration.shorter,
           }),

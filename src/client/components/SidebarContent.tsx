@@ -16,8 +16,15 @@ const SidebarContent = () => {
   const filtersToShow = filters.filter((f) => !f.showInWelcomeModal)
 
   return (
-    <>
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+    <Box
+      sx={{
+        px: { xs: 0.75, sm: 1.25 },
+        pb: 2,
+        minHeight: '100%',
+        bgcolor: 'rgba(255, 255, 255, 0.24)',
+      }}
+    >
+      <Box sx={{ px: { xs: 0.5, sm: 0.75 }, py: 2, display: 'flex', justifyContent: 'center' }}>
         <ActionButtonV2
           onClick={() => setModalOpen(true)}
           text={t('v2:retakeQuestions')}
@@ -26,7 +33,7 @@ const SidebarContent = () => {
       {filtersToShow.map((filter) => (
         <FilterRenderer key={filter.id} filter={filter} />
       ))}
-    </>
+    </Box>
   )
 }
 
