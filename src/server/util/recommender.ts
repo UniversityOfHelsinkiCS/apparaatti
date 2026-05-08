@@ -6,7 +6,7 @@ import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYe
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
-import { courseStudyPlaceCoordinate, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
+import { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
 
 export { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue, readStudyPlaceCoordinate } from './studyPlace.ts'
 
@@ -240,7 +240,7 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
 
   const courseRealisationsWithCodes: CourseData[] = courseRealisationsWithCourseUnits.map(
     (cur) => {
-      return {
+      const courseData = {
         ...cur,
         period: getCoursePeriod(cur),
         courseCodes: uniqueVals(courseUnitsWithCodes
@@ -252,6 +252,12 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
         credits: courseUnitsWithCodes
           .filter((cu)=> cur.unitIds.includes(cu.id))
           .map((cu) => cu.credits),
+      }
+
+      
+      return {
+        ...courseData,
+        normalizedStudyPlace: getNormalizedStudyPlace(courseData), 
       }
     }
   )

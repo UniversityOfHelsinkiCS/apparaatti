@@ -136,6 +136,9 @@ export type Period = {
 }
 
 //this is a combination of a course realisation and course unit
+//notes
+
+
 export type CourseData = {
   id: string
   name: LocalizedString
@@ -144,6 +147,12 @@ export type CourseData = {
   period: Period[] | null
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
+
+  //example: course that is considered as 'online' on the apparaatti side 
+  //may be marked as 'online', 'remote', 'distance' on the sisu side
+  //the normalized studyplace makes it easier to check correcly
+  normalizedStudyPlace?: string | null
+  
   courseCodes: string[]
   groupIds: string[]
   unitIds: string[]

@@ -15,6 +15,17 @@ const CourseRecommendationV2 = ({
   const courseUrl = `${baseUrl}/${course.course.id}`
   const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
   const periodVariant = getFilterVariant(filterContext, 'study-period')
+  const studyPlaceVariant = getFilterVariant(filterContext, 'study-place')
+  const badgeStyles = {
+    color: '#334155',
+    fontWeight: 600,
+    px: 1.25,
+    py: 0.5,
+    borderRadius: 1,
+    backgroundColor: '#e8edf2',
+    border: '1px solid #d5dde5',
+    whiteSpace: 'nowrap',
+  }
 
   const creditString:() => string = () => {
     if (!course.course.credits) {
@@ -95,7 +106,24 @@ const CourseRecommendationV2 = ({
       .join(', ')
   }
 
+  const courseStudyPlaceText = () => {
+    const normalizedStudyPlace = course.course.normalizedStudyPlace
+
+    if (!normalizedStudyPlace) {
+      return null
+    }
+
+    const configuredLabel = studyPlaceVariant?.options?.find((option) => option.id === normalizedStudyPlace)?.name
+
+    if (!configuredLabel) {
+      return null
+    }
+
+    return configuredLabel
+  }
+
   const periodText = coursePeriodText()
+  const studyPlaceText = courseStudyPlaceText()
 
   if (!course) return null
   return (
@@ -128,16 +156,7 @@ const CourseRecommendationV2 = ({
           </Typography>
           <Typography
             variant="body2"
-            sx={{
-              color: '#334155',
-              fontWeight: 600,
-              px: 1.25,
-              py: 0.5,
-              borderRadius: 1,
-              backgroundColor: '#e8edf2',
-              border: '1px solid #d5dde5',
-              whiteSpace: 'nowrap',
-            }}
+            sx={badgeStyles}
           >
             {courseDateRange(course.course)}
           </Typography>
@@ -146,23 +165,42 @@ const CourseRecommendationV2 = ({
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={{ xs: 0.5, sm: 1.5 }}
-            useFlexGap
             sx={{
               pt: 0.25,
+              alignItems: { xs: 'flex-start', sm: 'center' },
+              justifyContent: 'space-between',
             }}
           >
-            <Typography
-              variant="body2"
-              sx={{ color: '#334155', fontWeight: 500 }}
+            <Stack
+              direction="row"
+              spacing={{ xs: 0.5, sm: 1.5 }}
+              useFlexGap
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+              }}
             >
-              {creditString()} {t('course:credits')}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: '#475569' }}
-            >
-              {courseCodes}
-            </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: '#334155', fontWeight: 500 }}
+              >
+                {creditString()} {t('course:credits')}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: '#475569' }}
+              >
+                {courseCodes}
+              </Typography>
+            </Stack>
+            {studyPlaceText && (
+              <Typography
+                variant="body2"
+                sx={badgeStyles}
+              >
+                {studyPlaceText}
+              </Typography>
+            )}
           </Stack>
           {periodText && (
             <Typography
