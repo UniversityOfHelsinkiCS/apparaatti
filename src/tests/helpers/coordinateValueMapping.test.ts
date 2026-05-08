@@ -13,8 +13,8 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 import {
   commonCoordinateFromAnswerData,
   readAsStringArr,
-  readArrOrSingleValue,
 } from '../../server/util/recommender.ts'
+import { readArrOrSingleValue } from '../../server/util/studyPlace.ts'
 
 describe('commonCoordinateFromAnswerData', () => {
   it('maps 1 to yesValue', () => {

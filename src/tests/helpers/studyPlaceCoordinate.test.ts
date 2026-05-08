@@ -12,7 +12,6 @@ import {
 } from '../../server/util/recommender.ts'
 import {
   correctValue,
-  notAnsweredValue,
   incorrectValue,
 } from '../../server/util/constants.ts'
 
@@ -48,6 +47,7 @@ const createMinimalCourse = (overrides: Partial<CourseData> = {}): CourseData =>
   groupIds: [],
   unitIds: [],
   credits: [],
+  flowState: null,
   ...overrides,
 })
 

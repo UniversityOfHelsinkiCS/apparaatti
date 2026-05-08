@@ -1,11 +1,14 @@
 import type { AnswerData, CourseData, CourseRecommendation, CourseRecommendations, UserCoordinates } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
-import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasAnyRealisationCodeUrn, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
+import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHasCustomCodeUrn, courseMatches, finmuMentroingCourseCodes, getUserOrganisationRecommendations, languageSpesificCodes, languageToStudy, mentoringCourseCodes, readOrganisationRecommendationData } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn, resolveStudyPlaceLookups } from './constants.ts'
+import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
+import { courseStudyPlaceCoordinate, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
+
+export { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue, readStudyPlaceCoordinate } from './studyPlace.ts'
 
 async function recommendCourses(
   answerData: AnswerData,
@@ -46,12 +49,6 @@ function getDateFromUserInput(answerData: AnswerData){
   return new Date(parseDate(pickedPeriod.start_date)).getTime()
 }
 
-
-export function readStudyPlaceCoordinate (answerData: AnswerData){
-  //reason for this is that by default we want to filter out exam courses,
-  //this makes it look like the user has always answered to this question
-  return correctValue
-}
 
 function calculateUserCoordinates(answerData: AnswerData) {
   const userCoordinates = {
@@ -114,61 +111,6 @@ export function courseIsSpesificForUserOrg(course: CourseData, organisationCode:
   }
 
   return false
-}
-
-export function readArrOrSingleValue(val: string | string[]){
-  const value = val ? val : []
-  if(Array.isArray(value)){
-    return value
-  }
-  else{
-    return [value]
-  }
-}
-
-export function courseStudyPlaceCoordinate(course: CourseData, answerData: AnswerData){
-    
-  const userStudyPlaces = readArrOrSingleValue(answerData['study-place'])
-  const hasStudyPlaceSelection = userStudyPlaces.length > 0 && !userStudyPlaces.includes('neutral')
-  const examSelected = userStudyPlaces.includes('exam')
-  const independentSelected = userStudyPlaces.includes('independent')
-
-  // Exam courses are only valid when user has selected exam under study-place.
-  if (isExam(course)) {
-    return examSelected ? correctValue : incorrectValue
-  }
-
-  // With no study-place selection, show all non-exam courses.
-  if (!hasStudyPlaceSelection) {
-    return correctValue
-  }
-
-  // Selecting independent should always allow independent courses.
-  // If independent is not selected, independent courses are still allowed to match via other study-place selections.
-  if (isIndependentCourse(course)) {
-    if (independentSelected) {
-      return correctValue
-    }
-  }
-
-  const lookups = resolveStudyPlaceLookups(userStudyPlaces)
-
-
-  if(courseHasAnyRealisationCodeUrn(course, lookups)){
-    return correctValue 
-  }
-  return incorrectValue
-}
-
-export function isIndependentCourse(course: CourseData){
-  const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
-  const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
-
-  return hasIndependentCodeUrn || hasIndependentInName
-}
-
-export function isExam(course: CourseData){
-  return course.name.fi?.toLowerCase().includes('tentti') ?? false
 }
 
 export function localeNameIncludesAny(localizedName: { fi?: string; en?: string; sv?: string } | undefined, patterns: string[]): boolean {
