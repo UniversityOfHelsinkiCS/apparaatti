@@ -80,7 +80,10 @@ const CourseRecommendationV2 = ({
   }
 
   const coursePeriodText = () => {
-    const periodNames = course.course.period?.map((period) => period.name) ?? []
+    const periodNames =
+      course.course.period
+        ?.map((period) => period.name)
+        .filter((periodName) => !/^exam_week_\d+$/.test(periodName)) ?? []
     const uniquePeriodNames = Array.from(new Set(periodNames))
 
     if (uniquePeriodNames.length === 0) {
