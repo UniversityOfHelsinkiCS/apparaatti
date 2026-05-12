@@ -114,7 +114,12 @@ export default {
     'adminButton': 'ADMIN',
     'loginPrompt': 'Please log in:',
     'loginLink': 'here',
-    'loadingFilters': 'Loading filters...'
+    'loadingFilters': 'Loading filters...',
+    'sortBy': 'Sort by',
+    'sortRecommended': 'Recommended',
+    'sortName': 'Name',
+    'sortDate': 'Date',
+    'sortPeriod': 'Period'
   },
   'course': {
     'show': 'Show',

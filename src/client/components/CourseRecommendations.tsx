@@ -2,9 +2,14 @@ import { Box, Stack } from '@mui/material'
 import CourseRecommendationV2 from './CourseRecommendationV2'
 import { useFilterContext } from '../contexts/filterContext'
 import NoRecommendationsInfo from './NoRecommendationsInfo'
+import { useState } from 'react'
+import CourseSortControls, { type SortMode, type SortDirection } from './CourseSortControls'
+import { sortCourses } from '../util/courseSort'
 
 const CourseRecommendations = () => {
   const { finalRecommendedCourses } = useFilterContext()
+  const [sortMode, setSortMode] = useState<SortMode>('recommended')
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc')
 
   const recommendations = finalRecommendedCourses
 
@@ -18,9 +23,12 @@ const CourseRecommendations = () => {
     return <NoRecommendationsInfo />
   }
 
+  const sortedCourses = sortCourses(points, sortMode, sortDirection)
+
   return (
     <Box>
       <Stack>
+        <CourseSortControls sortMode={sortMode} sortDirection={sortDirection} onChange={setSortMode} onDirectionChange={setSortDirection} />
         <Stack
           spacing={2}
           sx={{
@@ -30,7 +38,7 @@ const CourseRecommendations = () => {
             paddingBottom: 10,
           }}
         >
-          {points.map((course) => (
+          {sortedCourses.map((course) => (
             <CourseRecommendationV2
               key={course.course.id}
               course={course}

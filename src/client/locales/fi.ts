@@ -114,7 +114,12 @@ export default {
     'adminButton': 'ADMIN',
     'loginPrompt': 'Ole hyvä ja kirjaudu sisään:',
     'loginLink': 'täältä',
-    'loadingFilters': 'Ladataan suodattimia...'
+    'loadingFilters': 'Ladataan suodattimia...',
+    'sortBy': 'Järjestä',
+    'sortRecommended': 'Oletus',
+    'sortName': 'Nimi',
+    'sortDate': 'Päivämäärä',
+    'sortPeriod': 'Periodi'
   },
   'course': {
     'show': 'Näytä',

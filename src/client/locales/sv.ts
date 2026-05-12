@@ -113,7 +113,12 @@ export default {
     'adminButton': 'ADMIN',
     'loginPrompt': 'Vänligen logga in:',
     'loginLink': 'här',
-    'loadingFilters': 'Laddar filter...'
+    'loadingFilters': 'Laddar filter...',
+    'sortBy': 'Sortera efter',
+    'sortRecommended': 'Rekommenderad',
+    'sortName': 'Namn',
+    'sortDate': 'Datum',
+    'sortPeriod': 'Period'
   },
   'course': {
     'show': 'Visa',

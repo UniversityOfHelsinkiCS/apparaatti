@@ -169,7 +169,18 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
   })
 
   const filtered = recommendationWithPoints.filter((r) => r.points >= 0)
-  const sorted = filtered.sort((a, b) => b.points - a.points)
+
+  const getEarliestPeriodStart = (c: CourseRecommendation) => {
+    if (!c.course.period || c.course.period.length === 0) {
+      return new Date(c.course.startDate).getTime()
+    }
+    return Math.min(...c.course.period.map(p => new Date(p.startDate).getTime()))
+  }
+
+  const sorted = filtered.sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points
+    return getEarliestPeriodStart(a) - getEarliestPeriodStart(b)
+  })
   return sorted
 }
 
