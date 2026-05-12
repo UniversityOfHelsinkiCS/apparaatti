@@ -7,7 +7,7 @@ WORKDIR /e2e
 copy . .
 
 
-RUN npm install
+RUN npm ci
 RUN npm install cypress
 RUN npx cypress install
 CMD ["npx", "cypress", "run", "--browser", "chrome", "--headless"]
