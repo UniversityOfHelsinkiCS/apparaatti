@@ -1,6 +1,6 @@
 import { Accordion, AccordionSummary, AccordionDetails, Typography, Chip, Stack, Box } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { ReactNode } from 'react'
+import { ReactNode, SyntheticEvent } from 'react'
 import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
 
 interface ActiveFilterChipsProps {
@@ -55,11 +55,13 @@ interface FilterAccordionProps {
   title: string
   children: ReactNode
   filterId?: string
+  expanded?: boolean
+  onChange?: (event: SyntheticEvent, isExpanded: boolean) => void
 }
 
-const FilterAccordion = ({ title, children, filterId }: FilterAccordionProps) => {
+const FilterAccordion = ({ title, children, filterId, expanded, onChange }: FilterAccordionProps) => {
   return (
-    <Accordion sx={{ mb: 1, '&:before': { display: 'none' } }}>
+    <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         sx={{

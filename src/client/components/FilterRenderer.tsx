@@ -3,8 +3,15 @@ import FilterAccordion from './FilterAccordion'
 import { useFilterContext, filterConfigMap } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { Question } from '../../common/types'
+import { SyntheticEvent } from 'react'
 
-const FilterRenderer = ({ filter }: { filter: Question }) => {
+interface FilterRendererProps {
+  filter: Question
+  expanded: boolean
+  onAccordionChange: (event: SyntheticEvent, isExpanded: boolean) => void
+}
+
+const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererProps) => {
   const filters = useFilterContext()
 
   const config = filterConfigMap(filters).get(filter.id)
@@ -28,6 +35,8 @@ const FilterRenderer = ({ filter }: { filter: Question }) => {
       key={filter.id}
       title={filterToRender.shortName}
       filterId={filter.id}
+      expanded={expanded}
+      onChange={onAccordionChange}
     >
       <Filter variant={variant} filter={filterToRender} />
     </FilterAccordion>
