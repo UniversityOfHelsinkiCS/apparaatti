@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 
 const SidebarContent = () => {
   const filterContext = useFilterContext()
-  const { filters, isLoading, setModalOpen } = filterContext
+  const { filters, isLoading, setModalOpen, resetFilters } = filterContext
   const { t } = useTranslation()
 
   if (isLoading) {
@@ -24,10 +24,24 @@ const SidebarContent = () => {
         bgcolor: 'transparent',
       }}
     >
-      <Box sx={{ px: { xs: 0.5, sm: 0.75 }, py: 2, display: 'flex', justifyContent: 'center' }}>
+      <Box
+        sx={{
+          px: { xs: 0.5, sm: 0.75 },
+          py: 2,
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
         <ActionButtonV2
           onClick={() => setModalOpen(true)}
           text={t('v2:retakeQuestions')}
+          visualStyle="course-show"
+        />
+        <Box sx={{ height: 12 }} />
+        <ActionButtonV2
+          onClick={resetFilters}
+          text={t('v2:noRecommendations.resetButton')}
           visualStyle="course-show"
         />
       </Box>

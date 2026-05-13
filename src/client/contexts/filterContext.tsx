@@ -240,6 +240,10 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   ])
 
   const resetFilters = () => {
+    setStudyField('')
+    setPrimaryLanguage('')
+    setLanguage('')
+    setPrimaryLanguageSpecification('')
     setPreviouslyDoneLang('')
     setReplacement('')
     setMentoring('')
@@ -247,11 +251,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setChallenge('')
     setGraduation('')
     setStudyPlace([])
+    setStudyYear('2025')
     setStudyPeriod([])
     setIntegrated('')
     setIndependent('')
     setMooc('')
+    setCollaboration('')
+    setMultiPeriod('')
     setFlexible('')
+    setUserOrgCode('')
     setStrictFilters(strictByDefaultFilterIds)
   }
 
