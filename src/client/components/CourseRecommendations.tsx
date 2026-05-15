@@ -5,6 +5,8 @@ import NoRecommendationsInfo from './NoRecommendationsInfo'
 import { useState } from 'react'
 import CourseSortControls, { type SortMode, type SortDirection } from './CourseSortControls'
 import { sortCourses } from '../util/courseSort'
+import CourseRecommendationSearch from './CourseRecommendationSearch'
+import type { CourseRecommendation } from '../../common/types'
 
 const CourseRecommendations = () => {
   const { finalRecommendedCourses } = useFilterContext()
@@ -29,22 +31,26 @@ const CourseRecommendations = () => {
     <Box>
       <Stack>
         <CourseSortControls sortMode={sortMode} sortDirection={sortDirection} onChange={setSortMode} onDirectionChange={setSortDirection} />
-        <Stack
-          spacing={2}
-          sx={{
-            paddingLeft: 0,
-            paddingRight: 2,
-            paddingTop: 2,
-            paddingBottom: 10,
-          }}
-        >
-          {sortedCourses.map((course) => (
-            <CourseRecommendationV2
-              key={course.course.id}
-              course={course}
-            />
-          ))}
-        </Stack>
+        <CourseRecommendationSearch courses={sortedCourses}>
+          {(filteredCourses: CourseRecommendation[]) => (
+          <Stack
+            spacing={2}
+            sx={{
+              paddingLeft: 0,
+              paddingRight: 2,
+              paddingTop: 2,
+              paddingBottom: 10,
+            }}
+          >
+            {filteredCourses.map((course) => (
+              <CourseRecommendationV2
+                key={course.course.id}
+                course={course}
+              />
+            ))}
+          </Stack>
+          )}
+        </CourseRecommendationSearch>
       </Stack>
     </Box>
   )

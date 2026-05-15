@@ -119,7 +119,15 @@ export default {
     'sortRecommended': 'Recommended',
     'sortName': 'Name',
     'sortDate': 'Date',
-    'sortPeriod': 'Period'
+    'sortPeriod': 'Period',
+    'recommendationSearch': {
+      'label': 'Search courses by name',
+      'placeholder': 'Type a course name',
+      'resultsCount': 'Showing {{shown}} of {{total}} courses',
+      'noMatchesTitle': 'No matching courses found',
+      'noMatchesDescription': 'Try another course name or clear the search to see all recommended courses.',
+      'clearButton': 'Clear search'
+    }
   },
   'course': {
     'show': 'Show',

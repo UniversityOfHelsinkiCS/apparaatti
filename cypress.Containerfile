@@ -5,6 +5,7 @@ ENV TZ="Europe/Helsinki"
 WORKDIR /e2e
 
 copy . .
+RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
 
 
 RUN npm ci

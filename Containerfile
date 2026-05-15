@@ -16,6 +16,8 @@ ENV STAGING=$STAGING
 ARG CI
 ENV CI=$CI
 
+RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+
 COPY package* ./
 RUN npm ci --omit-dev --ignore-scripts --no-audit --no-fund
 COPY . .

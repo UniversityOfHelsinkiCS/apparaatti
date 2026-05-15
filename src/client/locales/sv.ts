@@ -118,7 +118,15 @@ export default {
     'sortRecommended': 'Rekommenderad',
     'sortName': 'Namn',
     'sortDate': 'Datum',
-    'sortPeriod': 'Period'
+    'sortPeriod': 'Period',
+    'recommendationSearch': {
+      'label': 'Sök kurser efter namn',
+      'placeholder': 'Skriv kursens namn',
+      'resultsCount': 'Visar {{shown}} av {{total}} kurser',
+      'noMatchesTitle': 'Inga matchande kurser hittades',
+      'noMatchesDescription': 'Prova ett annat kursnamn eller rensa sökningen för att se alla rekommenderade kurser.',
+      'clearButton': 'Rensa sökning'
+    }
   },
   'course': {
     'show': 'Visa',

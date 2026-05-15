@@ -119,7 +119,15 @@ export default {
     'sortRecommended': 'Oletus',
     'sortName': 'Nimi',
     'sortDate': 'Päivämäärä',
-    'sortPeriod': 'Periodi'
+    'sortPeriod': 'Periodi',
+    'recommendationSearch': {
+      'label': 'Hae kursseja nimellä',
+      'placeholder': 'Kirjoita kurssin nimi',
+      'resultsCount': 'Näytetään {{shown}} / {{total}} kurssia',
+      'noMatchesTitle': 'Hakua vastaavia kursseja ei löytynyt',
+      'noMatchesDescription': 'Kokeile toista kurssin nimeä tai tyhjennä haku nähdäksesi kaikki suositellut kurssit.',
+      'clearButton': 'Tyhjennä haku'
+    }
   },
   'course': {
     'show': 'Näytä',
