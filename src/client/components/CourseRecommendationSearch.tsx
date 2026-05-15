@@ -77,12 +77,6 @@ const CourseRecommendationSearch = ({ courses, children }: CourseRecommendationS
               },
             }}
           />
-          <Typography variant="body2" sx={{ color: '#52606d' }}>
-            {t('v2:recommendationSearch.resultsCount', {
-              shown: filteredCourses.length,
-              total: courses.length,
-            })}
-          </Typography>
         </Stack>
       </Paper>
       {filteredCourses.length === 0 ? (
