@@ -33,22 +33,22 @@ const CourseRecommendations = () => {
         <CourseSortControls sortMode={sortMode} sortDirection={sortDirection} onChange={setSortMode} onDirectionChange={setSortDirection} />
         <CourseRecommendationSearch courses={sortedCourses}>
           {(filteredCourses: CourseRecommendation[]) => (
-          <Stack
-            spacing={2}
-            sx={{
-              paddingLeft: 0,
-              paddingRight: 2,
-              paddingTop: 2,
-              paddingBottom: 10,
-            }}
-          >
-            {filteredCourses.map((course) => (
-              <CourseRecommendationV2
-                key={course.course.id}
-                course={course}
-              />
-            ))}
-          </Stack>
+            <Stack
+              spacing={2}
+              sx={{
+                paddingLeft: 0,
+                paddingRight: 2,
+                paddingTop: 2,
+                paddingBottom: 10,
+              }}
+            >
+              {filteredCourses.map((course) => (
+                <CourseRecommendationV2
+                  key={course.course.id}
+                  course={course}
+                />
+              ))}
+            </Stack>
           )}
         </CourseRecommendationSearch>
       </Stack>
