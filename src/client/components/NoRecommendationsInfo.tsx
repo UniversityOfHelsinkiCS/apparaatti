@@ -2,12 +2,12 @@ import { Box, Typography, Paper, Button } from '@mui/material'
 import { useFilterContext } from '../contexts/filterContext'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
+import ResetFiltersButton from './ResetFiltersButton'
 
 const NoRecommendationsInfo = () => {
   const { t, i18n } = useTranslation()
   const {
     studyField,
-    resetFilters,
   } = useFilterContext()
 
   const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
@@ -35,20 +35,24 @@ const NoRecommendationsInfo = () => {
             <Markdown>{additionalInfo}</Markdown>
           </Box>
         )}
-        <Button
-          variant="outlined"
-          onClick={resetFilters}
-          sx={{
-            borderColor: '#90caf9',
-            color: 'black',
-            '&:hover': {
-              backgroundColor: '#2196f3',
-              color: 'white',
-            },
-          }}
-        >
-          {t('v2:noRecommendations.resetButton')}
-        </Button>
+        <ResetFiltersButton>
+          {({ label, openDialog }) => (
+            <Button
+              variant="outlined"
+              onClick={openDialog}
+              sx={{
+                borderColor: '#90caf9',
+                color: 'black',
+                '&:hover': {
+                  backgroundColor: '#2196f3',
+                  color: 'white',
+                },
+              }}
+            >
+              {label}
+            </Button>
+          )}
+        </ResetFiltersButton>
       </Box>
     </Paper>
   )
