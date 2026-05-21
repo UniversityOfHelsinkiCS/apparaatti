@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
@@ -187,11 +187,14 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }, [filters, filtersLoading, strictFiltersInitialized, strictByDefaultFilterIds])
 
-  const getDefaultMultichoiceState = (filterId: string) =>
-    getDefaultSelectedOptionIds(
-      filters.find((filter) => filter.id === filterId),
-      variantToDisplayId
-    )
+  const getDefaultMultichoiceState = useCallback(
+    (filterId: string) =>
+      getDefaultSelectedOptionIds(
+        filters.find((filter) => filter.id === filterId),
+        'default'
+      ),
+    [filters]
+  )
 
   useEffect(() => {
     if (!filtersLoading && filters.length > 0 && !multichoiceDefaultsInitialized) {
@@ -199,7 +202,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       setStudyPeriod(getDefaultMultichoiceState('study-period'))
       setMultichoiceDefaultsInitialized(true)
     }
-  }, [filters, filtersLoading, multichoiceDefaultsInitialized, variantToDisplayId])
+  }, [filters, filtersLoading, multichoiceDefaultsInitialized, getDefaultMultichoiceState])
 
   useEffect(() => {
     if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
