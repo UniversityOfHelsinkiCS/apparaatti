@@ -121,6 +121,7 @@ export default {
       'send': 'Lähetä palaute',
       'cancel': 'Peruuta',
       'sent': 'Palaute lähetetty',
+      'failed': 'Palautteen lähetys epäonnistui',
     },
     'loginPrompt': 'Ole hyvä ja kirjaudu sisään:',
     'loginLink': 'täältä',

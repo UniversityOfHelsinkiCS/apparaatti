@@ -121,6 +121,7 @@ export default {
       'send': 'Send feedback',
       'cancel': 'Cancel',
       'sent': 'Feedback sent',
+      'failed': 'Failed to send feedback',
     },
     'loginPrompt': 'Please log in:',
     'loginLink': 'here',

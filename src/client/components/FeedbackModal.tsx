@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Rating, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,6 +24,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const { t } = useTranslation()
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
 
   const resetForm = () => {
     setTextFeedback('')
@@ -38,16 +41,28 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    await fetch('/api/feedback', {
-      method: 'POST',
-      body: JSON.stringify({ textFeedback, stars }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        body: JSON.stringify({ textFeedback, stars }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-    window.alert(t('v2:feedback.sent'))
-    handleClose()
+      if (!response.ok) {
+        throw new Error('Feedback submission failed')
+      }
+
+      setSnackbarMessage(t('v2:feedback.sent'))
+      setSnackbarSeverity('success')
+      setSnackbarOpen(true)
+      handleClose()
+    } catch {
+      setSnackbarMessage(t('v2:feedback.failed'))
+      setSnackbarSeverity('error')
+      setSnackbarOpen(true)
+    }
   }
 
   return (
@@ -100,6 +115,11 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
           </Stack>
         </form>
       </Box>
+      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
+        <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Modal>
   )
 }

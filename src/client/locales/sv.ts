@@ -120,6 +120,7 @@ export default {
       'send': 'Skicka feedback',
       'cancel': 'Avbryt',
       'sent': 'Feedback skickad',
+      'failed': 'Det gick inte att skicka feedback',
     },
     'loginPrompt': 'Vänligen logga in:',
     'loginLink': 'här',
