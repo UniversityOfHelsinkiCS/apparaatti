@@ -3,6 +3,7 @@ import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/us
 import { CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
+import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
 
 interface FilterContextType {
   language: string
@@ -172,6 +173,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [flexible, setFlexible] = useState('')
   const [strictFilters, setStrictFilters] = useState<string[]>([])
   const [strictFiltersInitialized, setStrictFiltersInitialized] = useState(false)
+  const [multichoiceDefaultsInitialized, setMultichoiceDefaultsInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
 
   const strictByDefaultFilterIds = filters
@@ -184,6 +186,20 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       setStrictFiltersInitialized(true)
     }
   }, [filters, filtersLoading, strictFiltersInitialized, strictByDefaultFilterIds])
+
+  const getDefaultMultichoiceState = (filterId: string) =>
+    getDefaultSelectedOptionIds(
+      filters.find((filter) => filter.id === filterId),
+      variantToDisplayId
+    )
+
+  useEffect(() => {
+    if (!filtersLoading && filters.length > 0 && !multichoiceDefaultsInitialized) {
+      setStudyPlace(getDefaultMultichoiceState('study-place'))
+      setStudyPeriod(getDefaultMultichoiceState('study-period'))
+      setMultichoiceDefaultsInitialized(true)
+    }
+  }, [filters, filtersLoading, multichoiceDefaultsInitialized, variantToDisplayId])
 
   useEffect(() => {
     if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
@@ -250,9 +266,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setFinmu('')
     setChallenge('')
     setGraduation('')
-    setStudyPlace([])
+    setStudyPlace(getDefaultMultichoiceState('study-place'))
     setStudyYear('2025')
-    setStudyPeriod([])
+    setStudyPeriod(getDefaultMultichoiceState('study-period'))
     setIntegrated('')
     setIndependent('')
     setMooc('')
