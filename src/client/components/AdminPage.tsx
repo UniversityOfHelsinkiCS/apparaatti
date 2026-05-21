@@ -31,6 +31,9 @@ const AdminPage = () => {
         <BlackOutlinedButton onClick={() => navigate('/admin/stats')}>
           Stats
         </BlackOutlinedButton>
+        <BlackOutlinedButton onClick={() => navigate('/admin/feedback')}>
+          User feedback
+        </BlackOutlinedButton>
       </Stack>
       <FilterConfigEditor isSuperuser={user.isSuperuser === true} />
     </Box>

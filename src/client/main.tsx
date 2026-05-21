@@ -11,6 +11,7 @@ import AdminPage from './components/AdminPage.tsx'
 import LoginAsPage from './components/LoginAsPage.tsx'
 import CoursesPage from './components/CoursesPage.tsx'
 import StatsPage from './components/admin/StatsPage.tsx'
+import UserFeedbackPage from './components/admin/UserFeedbackPage.tsx'
 import AppV2 from './AppV2.tsx'
 const queryClient = new QueryClient()
 const theme = createTheme({
@@ -43,6 +44,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/courses" element={<CoursesPage/>}/>
               <Route path="/admin/login-as" element={<LoginAsPage/>}/>
               <Route path="/admin/stats" element={<StatsPage/>}/>
+              <Route path="/admin/feedback" element={<UserFeedbackPage/>}/>
             </Routes>
           </Router>
         </LanguageContextProvider>

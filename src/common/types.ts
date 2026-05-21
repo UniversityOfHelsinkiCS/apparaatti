@@ -225,3 +225,13 @@ export type adminFeedback = {
    recommendations: CourseRecommendations
    feedBack: string  
 }
+
+export type UserFeedbackSubmission = {
+  textFeedback: string
+  stars: number
+}
+
+export type UserFeedback = UserFeedbackSubmission & {
+  id: number
+  date: Date
+}

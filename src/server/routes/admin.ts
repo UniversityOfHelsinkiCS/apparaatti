@@ -7,7 +7,7 @@ import {
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import { usersWithWhere } from '../util/dbActions.ts'
+import { getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
@@ -33,6 +33,14 @@ adminRouter.post('/feedback', async (req, res) => {
   logger.info('ADMIN FEEDBACK', feedback)
   res.json({status: 'success'})
  
+})
+
+adminRouter.get('/user-feedback', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const feedback = await getUserFeedbackEntries()
+  res.send(feedback)
 })
 
 adminRouter.get('/users', async (req, res) => {
