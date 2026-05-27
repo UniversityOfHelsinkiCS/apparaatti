@@ -117,6 +117,10 @@ export const shouldRenderWelcomeFilter = (
   return true
 }
 
+export const shouldShowFilterInSidebar = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
+  return !filter.showInWelcomeModal || filter.id === 'primary-language-specification'
+}
+
 export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any): string => {
   const question = filterContext.filters.find((q: any) => q.coordinateKey === coordinateKey)
   return question?.shortName ?? coordinateKey
@@ -259,8 +263,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   ])
 
   const resetFilters = () => {
-    const nonWelcomeFilterIds = new Set(
-      filters.filter((filter) => !filter.showInWelcomeModal).map((filter) => filter.id)
+    const sidebarFilterIds = new Set(
+      filters.filter((filter) => shouldShowFilterInSidebar(filter)).map((filter) => filter.id)
     )
     const configMap = filterConfigMap({
       studyField, setStudyField,
@@ -284,7 +288,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       flexible, setFlexible,
     })
 
-    nonWelcomeFilterIds.forEach((filterId) => {
+    sidebarFilterIds.forEach((filterId) => {
       const config = configMap.get(filterId)
       if (!config) {
         return
@@ -303,13 +307,13 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       config.setState('')
     })
 
-    setUserOrgCode('')
+    setUserOrgCode(studyField)
 
     const preservedWelcomeStrictFilters = strictFilters.filter(
-      (filterId) => !nonWelcomeFilterIds.has(filterId)
+      (filterId) => !sidebarFilterIds.has(filterId)
     )
     const resetNonWelcomeStrictFilters = strictByDefaultFilterIds.filter(
-      (filterId) => nonWelcomeFilterIds.has(filterId)
+      (filterId) => sidebarFilterIds.has(filterId)
     )
 
     setStrictFilters([

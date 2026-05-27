@@ -1,4 +1,4 @@
-import { useFilterContext } from '../contexts/filterContext'
+import { shouldShowFilterInSidebar, useFilterContext } from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './common/ActionButtonV2'
@@ -16,7 +16,7 @@ const SidebarContent = () => {
     return <p>{t('v2:loadingFilters')}</p>
   }
 
-  const filtersToShow = filters.filter((f) => !f.showInWelcomeModal)
+  const filtersToShow = filters.filter((filter) => shouldShowFilterInSidebar(filter))
 
   return (
     <Box

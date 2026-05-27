@@ -36,6 +36,8 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
     null
   )
   const [editTarget, setEditTarget] = useState<FilterConfig | 'new' | null>(null)
+  const [restoringFilterId, setRestoringFilterId] = useState<string | null>(null)
+  const [filtersWithoutSeedDefaults, setFiltersWithoutSeedDefaults] = useState<string[]>([])
 
   if (isLoading) return <Typography>Loading filters...</Typography>
 
@@ -75,14 +77,30 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       return
     }
 
-    const response = await adminFetch('POST', `/api/admin/filter-config/${filterId}/restore`)
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => null)
-      window.alert(errorData?.message ?? 'Failed to restore filter defaults')
-      return
-    }
+    setRestoringFilterId(filterId)
 
-    refetch()
+    try {
+      const response = await adminFetch('POST', `/api/admin/filter-config/${filterId}/restore`)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null)
+
+        if (response.status === 404) {
+          setFiltersWithoutSeedDefaults((current) =>
+            current.includes(filterId) ? current : [...current, filterId]
+          )
+          window.alert(errorData?.message ?? 'This filter has no seeded defaults to restore')
+          return
+        }
+
+        window.alert(errorData?.message ?? 'Failed to restore filter defaults')
+        return
+      }
+
+      setFiltersWithoutSeedDefaults((current) => current.filter((id) => id !== filterId))
+      refetch()
+    } finally {
+      setRestoringFilterId(null)
+    }
   }
 
   return (
@@ -157,9 +175,13 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
                     size="small"
                     variant="outlined"
                     onClick={() => handleRestoreDefaults(filter.id)}
+                    disabled={
+                      restoringFilterId === filter.id ||
+                      filtersWithoutSeedDefaults.includes(filter.id)
+                    }
                     sx={{ color: 'black', borderColor: 'black' }}
                   >
-                    Restore
+                    {restoringFilterId === filter.id ? 'Restoring...' : 'Restore'}
                   </Button>
                 </Box>
               </TableCell>

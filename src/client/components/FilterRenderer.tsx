@@ -1,6 +1,10 @@
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
-import { useFilterContext, filterConfigMap } from '../contexts/filterContext'
+import {
+  useFilterContext,
+  filterConfigMap,
+  shouldRenderWelcomeFilter,
+} from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { Question } from '../../common/types'
 import { SyntheticEvent } from 'react'
@@ -26,7 +30,14 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererP
 
   const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
   const variant = pickVariant(filter, variantId)
-  if (!variant || variant.skipped || skipInSideBar) {
+  const shouldRenderFilter = shouldRenderWelcomeFilter(
+    filter.id,
+    variant ?? null,
+    filters.language,
+    filters.primaryLanguage
+  )
+
+  if (!variant || !shouldRenderFilter || skipInSideBar) {
     return null
   }
 
