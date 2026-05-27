@@ -1,10 +1,11 @@
-import { Box, Button, Typography, Modal } from '@mui/material'
+import { Box, Typography, Modal } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
+import FormSubmitActions from './common/FormSubmitActions.tsx'
 
 const style = {
   position: 'absolute',
@@ -70,8 +71,7 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
           fullWidth
           margin="normal"
         ></TextField>
-        <Button variant="contained" color="primary" type="submit" sx={{ mr: 1 }}>Lähetä</Button>
-        <Button variant="outlined" color="secondary" onClick={onClose}>Peruuta</Button>
+        <FormSubmitActions submitLabel="Lähetä" cancelLabel="Peruuta" onCancel={onClose} />
       </form>
     </> 
   )

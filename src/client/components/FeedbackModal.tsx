@@ -1,6 +1,7 @@
-import { Alert, Box, Button, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import FormSubmitActions from './common/FormSubmitActions'
 
 type FeedbackModalProps = {
   open: boolean
@@ -104,14 +105,11 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
               <Typography variant="body2">{stars} / 5</Typography>
             </Box>
 
-            <Box>
-              <Button variant="contained" color="primary" type="submit" sx={{ mr: 1 }}>
-                {t('v2:feedback.send')}
-              </Button>
-              <Button variant="outlined" color="secondary" onClick={handleClose}>
-                {t('v2:feedback.cancel')}
-              </Button>
-            </Box>
+            <FormSubmitActions
+              submitLabel={t('v2:feedback.send')}
+              cancelLabel={t('v2:feedback.cancel')}
+              onCancel={handleClose}
+            />
           </Stack>
         </form>
       </Box>
