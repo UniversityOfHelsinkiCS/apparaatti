@@ -9,7 +9,7 @@ type FormSubmitActionsProps = {
 
 const FormSubmitActions = ({ submitLabel, cancelLabel, onCancel }: FormSubmitActionsProps) => {
   return (
-    <Box>
+    <Box role="group" aria-label="form-actions">
       <Button variant="contained" color="primary" type="submit" sx={{ mr: 1 }}>
         {submitLabel}
       </Button>
