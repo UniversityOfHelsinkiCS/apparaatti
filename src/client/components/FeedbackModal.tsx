@@ -1,4 +1,4 @@
-import { Alert, Box, Divider, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
@@ -71,29 +71,17 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="user-feedback-modal-title"
-        aria-describedby="user-feedback-modal-description"
       >
         <Box sx={style}>
           <Stack spacing={2.5}>
-            <Box>
-              <Typography
-                id="user-feedback-modal-title"
-                variant="h4"
-                component="h2"
-                sx={{ fontWeight: 700, letterSpacing: '-0.02em' }}
-              >
-                {t('v2:feedback.title')}
-              </Typography>
-              <Typography
-                id="user-feedback-modal-description"
-                variant="body1"
-                sx={{ mt: 1.5, maxWidth: '60ch', color: 'text.secondary', lineHeight: 1.6 }}
-              >
-                {t('v2:feedback.description')}
-              </Typography>
-            </Box>
-
-            <Divider />
+            <Typography
+              id="user-feedback-modal-title"
+              variant="h4"
+              component="h2"
+              sx={{ fontWeight: 700, letterSpacing: '-0.02em' }}
+            >
+              {t('v2:feedback.title')}
+            </Typography>
 
             <form onSubmit={handleSubmit}>
               <Stack spacing={4}>
@@ -106,7 +94,6 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                     onChange={(event) => setTextFeedback(event.target.value)}
                     multiline
                     minRows={7}
-                    placeholder={t('v2:feedback.description')}
                     variant="outlined"
                     fullWidth
                     required

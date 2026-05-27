@@ -119,7 +119,6 @@ export default {
     'feedback': {
       'openButton': 'Anna palautetta',
       'title': 'Anna palautetta',
-      'description': 'Kerro, miten voimme parantaa palvelua.',
       'textLabel': 'Palaute',
       'starsLabel': 'Tähdet',
       'send': 'Lähetä palaute',
