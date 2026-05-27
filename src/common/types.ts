@@ -16,7 +16,7 @@ export type FilterOption = {
   name: LocalizedText
   valueOverride?: string | null
   setStrict?: boolean | null
-  defaultSelection?: boolean | null
+  selectedByDefault?: boolean | null
 }
 
 
@@ -53,7 +53,7 @@ export type Option = {
   name: string
   valueOverride?: string
   setStrict?: boolean
-  defaultSelection?: boolean
+  selectedByDefault?: boolean
 }
 
 
