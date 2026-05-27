@@ -55,6 +55,24 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
           <MenuItem value="false">false</MenuItem>
         </Select>
       </Box>
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="caption" color="text.secondary">
+          Selected by default
+        </Typography>
+        <Select
+          fullWidth
+          size="small"
+          value={option.selectedByDefault === true ? 'true' : option.selectedByDefault === false ? 'false' : ''}
+          onChange={(e) => {
+            const v = e.target.value as string
+            onUpdate({ selectedByDefault: v === 'true' ? true : v === 'false' ? false : null })
+          }}
+        >
+          <MenuItem value="">— null —</MenuItem>
+          <MenuItem value="true">true</MenuItem>
+          <MenuItem value="false">false</MenuItem>
+        </Select>
+      </Box>
       <IconButton color="error" size="small" onClick={onRemove}>
         <DeleteIcon />
       </IconButton>

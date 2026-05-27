@@ -27,6 +27,7 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
       name: localize(o.name, lang),
       valueOverride: o.valueOverride ?? undefined,
       setStrict: o.setStrict ?? undefined,
+      selectedByDefault: o.selectedByDefault ?? undefined,
     })),
   })),
 })
