@@ -1,10 +1,12 @@
 import { Button } from '@mui/material'
+import type { ButtonProps } from '@mui/material/Button'
 
-interface actionButtonProps {
+interface ActionButtonV2Props {
   onClick?: () => void
   text?: string
   dataCy?: string
   visualStyle?: 'default' | 'course-show' | 'app-bar'
+  type?: ButtonProps['type']
 }
 
 const ActionButtonV2 = ({
@@ -12,7 +14,8 @@ const ActionButtonV2 = ({
   text = '',
   dataCy,
   visualStyle = 'default',
-}: actionButtonProps) => {
+  type,
+}: ActionButtonV2Props) => {
   const buttonSx = visualStyle === 'course-show'
     ? {
       marginTop: 0,
@@ -38,13 +41,14 @@ const ActionButtonV2 = ({
       }
       : undefined
   const isAppBar = visualStyle === 'app-bar'
+  const buttonType = type ?? (isAppBar ? 'button' : 'submit')
 
   return (
     <Button
       data-cy={dataCy}
       color={isAppBar ? 'inherit' : undefined}
       variant={visualStyle === 'course-show' ? 'contained' : isAppBar ? 'text' : 'outlined'}
-      type={isAppBar ? 'button' : 'submit'}
+      type={buttonType}
       onClick={onClick}
       sx={{
         width: isAppBar ? 'fit-content' : 'auto',

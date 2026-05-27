@@ -106,6 +106,9 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
           <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/stats') }}>
             Stats
           </BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/feedback') }}>
+            User feedback
+          </BlackOutlinedButton>
           {user?.isSuperuser && (
             <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/login-as') }}>
               Login as
