@@ -1,8 +1,9 @@
-import { Box, Typography, Paper, Button } from '@mui/material'
+import { Box, Typography, Paper } from '@mui/material'
 import { useFilterContext } from '../contexts/filterContext'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 import ResetFiltersButton from './ResetFiltersButton'
+import ActionButtonV2 from './common/ActionButtonV2'
 
 const NoRecommendationsInfo = () => {
   const { t, i18n } = useTranslation()
@@ -37,20 +38,10 @@ const NoRecommendationsInfo = () => {
         )}
         <ResetFiltersButton>
           {({ label, openDialog }) => (
-            <Button
-              variant="outlined"
+            <ActionButtonV2
               onClick={openDialog}
-              sx={{
-                borderColor: '#90caf9',
-                color: 'black',
-                '&:hover': {
-                  backgroundColor: '#2196f3',
-                  color: 'white',
-                },
-              }}
-            >
-              {label}
-            </Button>
+              text={label}
+            />
           )}
         </ResetFiltersButton>
       </Box>
