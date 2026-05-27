@@ -115,6 +115,15 @@ export default {
     },
     'appTitle': 'Kurssökare',
     'adminButton': 'ADMIN',
+    'adminNav': {
+      'back': 'Tillbaka',
+      'backToApp': 'Tillbaka till tjänsten',
+      'overview': 'Översikt',
+      'courses': 'Kurser',
+      'stats': 'Statistik',
+      'feedback': 'Användarfeedback',
+      'loginAs': 'Logga in som'
+    },
     'feedback': {
       'openButton': 'Ge feedback',
       'title': 'Ge feedback',
@@ -125,6 +134,25 @@ export default {
       'cancel': 'Avbryt',
       'sent': 'Feedback skickad',
       'failed': 'Det gick inte att skicka feedback',
+      'admin': {
+        'backToAdmin': 'Tillbaka till admin',
+        'pageTitle': 'Användarfeedback',
+        'start': 'Start',
+        'end': 'Slut',
+        'last12Months': 'Senaste 12 månaderna',
+        'loading': 'Laddar feedback...',
+        'empty': 'Ingen feedback har skickats än.',
+        'readComment': 'Läs kommentar',
+        'dialogTitle': 'Feedbackkommentar',
+        'close': 'Stäng',
+        'starsValue': '{{stars}} / 5 stjärnor',
+        'table': {
+          'date': 'Datum',
+          'stars': 'Stjärnor',
+          'text': 'Feedback',
+          'action': 'Åtgärd'
+        }
+      }
     },
     'loginPrompt': 'Vänligen logga in:',
     'loginLink': 'här',

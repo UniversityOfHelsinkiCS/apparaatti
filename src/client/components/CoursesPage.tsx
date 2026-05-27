@@ -1,6 +1,7 @@
 import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, TextField, Pagination } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
+import AdminNavbar from './admin/AdminNavbar.tsx'
 import useRequiredUser from '../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
 import useApi from '../util/useApi.tsx'
@@ -142,6 +143,7 @@ const CoursesPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 3 }}>
         All Courses
       </Typography>

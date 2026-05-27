@@ -1,12 +1,11 @@
-import { Box, Stack } from '@mui/material'
+import { Box } from '@mui/material'
 import FilterConfigEditor from './admin/FilterConfigEditor.tsx'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import useRequiredUser from '../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
-import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
+import AdminNavbar from './admin/AdminNavbar.tsx'
 
 const AdminPage = () => {
-  const navigate = useNavigate()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
   if (isUnauthorized) {
@@ -27,14 +26,7 @@ const AdminPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-        <BlackOutlinedButton onClick={() => navigate('/admin/stats')}>
-          Stats
-        </BlackOutlinedButton>
-        <BlackOutlinedButton onClick={() => navigate('/admin/feedback')}>
-          User feedback
-        </BlackOutlinedButton>
-      </Stack>
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <FilterConfigEditor isSuperuser={user.isSuperuser === true} />
     </Box>
   )

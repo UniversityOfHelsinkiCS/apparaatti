@@ -116,6 +116,15 @@ export default {
     },
     'appTitle': 'Course Finder',
     'adminButton': 'ADMIN',
+    'adminNav': {
+      'back': 'Back',
+      'backToApp': 'Back to app',
+      'overview': 'Overview',
+      'courses': 'Courses',
+      'stats': 'Stats',
+      'feedback': 'User feedback',
+      'loginAs': 'Login as'
+    },
     'feedback': {
       'openButton': 'Send feedback',
       'title': 'Send feedback',
@@ -126,6 +135,25 @@ export default {
       'cancel': 'Cancel',
       'sent': 'Feedback sent',
       'failed': 'Failed to send feedback',
+      'admin': {
+        'backToAdmin': 'Back to admin',
+        'pageTitle': 'User feedback',
+        'start': 'Start',
+        'end': 'End',
+        'last12Months': 'Last 12 months',
+        'loading': 'Loading feedback...',
+        'empty': 'No feedback submitted yet.',
+        'readComment': 'Read comment',
+        'dialogTitle': 'Feedback comment',
+        'close': 'Close',
+        'starsValue': '{{stars}} / 5 stars',
+        'table': {
+          'date': 'Date',
+          'stars': 'Stars',
+          'text': 'Text feedback',
+          'action': 'Action'
+        }
+      }
     },
     'loginPrompt': 'Please log in:',
     'loginLink': 'here',

@@ -116,6 +116,15 @@ export default {
     },
     'appTitle': 'Kurssihakukone',
     'adminButton': 'ADMIN',
+    'adminNav': {
+      'back': 'Takaisin',
+      'backToApp': 'Takaisin palveluun',
+      'overview': 'Asetukset',
+      'courses': 'Kurssit',
+      'stats': 'Tilastot',
+      'feedback': 'Käyttäjäpalaute',
+      'loginAs': 'Kirjaudu toisena'
+    },
     'feedback': {
       'openButton': 'Anna palautetta',
       'title': 'Anna palautetta',
@@ -125,6 +134,25 @@ export default {
       'cancel': 'Peruuta',
       'sent': 'Palaute lähetetty',
       'failed': 'Palautteen lähetys epäonnistui',
+      'admin': {
+        'backToAdmin': 'Takaisin ylläpitoon',
+        'pageTitle': 'Käyttäjäpalaute',
+        'start': 'Alku',
+        'end': 'Loppu',
+        'last12Months': 'Viimeiset 12 kuukautta',
+        'loading': 'Ladataan palautteita...',
+        'empty': 'Palautteita ei ole vielä lähetetty.',
+        'readComment': 'Lue kommentti',
+        'dialogTitle': 'Palautekommentti',
+        'close': 'Sulje',
+        'starsValue': '{{stars}} / 5 tähteä',
+        'table': {
+          'date': 'Päivämäärä',
+          'stars': 'Tähdet',
+          'text': 'Palaute',
+          'action': 'Toiminto'
+        }
+      }
     },
     'loginPrompt': 'Ole hyvä ja kirjaudu sisään:',
     'loginLink': 'täältä',

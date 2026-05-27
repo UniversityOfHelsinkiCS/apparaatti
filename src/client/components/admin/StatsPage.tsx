@@ -14,6 +14,7 @@ import { BarChart } from '@mui/x-charts/BarChart'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { toDayLabel, type GroupBy } from '../../../common/datelabels.ts'
+import AdminNavbar from './AdminNavbar.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
@@ -70,6 +71,7 @@ const StatsPage = () => {
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 2 }}>
                 Usage Stats
       </Typography>

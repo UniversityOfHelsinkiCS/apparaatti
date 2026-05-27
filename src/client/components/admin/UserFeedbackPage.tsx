@@ -12,12 +12,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { Navigate } from 'react-router-dom'
+import AdminNavbar from './AdminNavbar.tsx'
 import ActionButtonV2 from '../common/ActionButtonV2.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { toDayLabel } from '../../../common/datelabels.ts'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
@@ -37,20 +41,30 @@ const truncateFeedback = (text: string, maxLength = 140) => {
   return `${text.slice(0, maxLength).trimEnd()}...`
 }
 
+const getDefaultStart = () => {
+  const date = new Date()
+  date.setFullYear(date.getFullYear() - 1)
+  return toDayLabel(date)
+}
+
+const getDefaultEnd = () => toDayLabel(new Date())
+
 type FeedbackCommentDialogProps = {
   feedback: UserFeedback | null
   onClose: () => void
 }
 
 const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps) => {
+  const { t } = useTranslation()
+
   return (
     <Dialog open={feedback !== null} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>Feedback comment</DialogTitle>
+      <DialogTitle>{t('v2:feedback.admin.dialogTitle')}</DialogTitle>
       <DialogContent dividers>
         {feedback && (
           <Stack spacing={2}>
             <Typography color="text.secondary">
-              {new Date(feedback.date).toLocaleString()} | {feedback.stars} / 5 stars
+              {new Date(feedback.date).toLocaleString()} | {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
             </Typography>
             <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
               {feedback.textFeedback}
@@ -60,7 +74,7 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
       </DialogContent>
       <DialogActions>
         <BlackOutlinedButton onClick={onClose}>
-          Close
+          {t('v2:feedback.admin.close')}
         </BlackOutlinedButton>
       </DialogActions>
     </Dialog>
@@ -68,10 +82,16 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
 }
 
 const UserFeedbackPage = () => {
-  const navigate = useNavigate()
+  const { t } = useTranslation()
   const [selectedFeedback, setSelectedFeedback] = useState<UserFeedback | null>(null)
+  const [start, setStart] = useState(getDefaultStart)
+  const [end, setEnd] = useState(getDefaultEnd)
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
-  const { data, isLoading } = useApi('admin-user-feedback', '/api/admin/user-feedback', 'GET', null) as {
+  const startDateTime = `${start}T00:00:00.000Z`
+  const endDateTime = `${end}T23:59:59.999Z`
+  const endpoint = `/api/admin/user-feedback?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`
+
+  const { data, isLoading } = useApi(`admin-user-feedback-${start}-${end}`, endpoint, 'GET', null) as {
     data: UserFeedback[] | null
     isLoading: boolean
   }
@@ -96,33 +116,58 @@ const UserFeedbackPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-        <BlackOutlinedButton onClick={() => navigate('/admin')}>Back to admin</BlackOutlinedButton>
-      </Stack>
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 2 }}>
-        User feedback
+        {t('v2:feedback.admin.pageTitle')}
       </Typography>
 
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
+        <TextField
+          label={t('v2:feedback.admin.start')}
+          type="date"
+          value={start}
+          onChange={(event) => setStart(event.target.value)}
+          InputLabelProps={{ shrink: true }}
+          size="small"
+        />
+        <TextField
+          label={t('v2:feedback.admin.end')}
+          type="date"
+          value={end}
+          onChange={(event) => setEnd(event.target.value)}
+          InputLabelProps={{ shrink: true }}
+          size="small"
+        />
+        <BlackOutlinedButton
+          onClick={() => {
+            setStart(getDefaultStart())
+            setEnd(getDefaultEnd())
+          }}
+        >
+          {t('v2:feedback.admin.last12Months')}
+        </BlackOutlinedButton>
+      </Stack>
+
       {isLoading ? (
-        <Typography>Loading feedback...</Typography>
+        <Typography>{t('v2:feedback.admin.loading')}</Typography>
       ) : feedbackRows.length === 0 ? (
-        <Typography>No feedback submitted yet.</Typography>
+        <Typography>{t('v2:feedback.admin.empty')}</Typography>
       ) : (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Stars</TableCell>
-                <TableCell>Text feedback</TableCell>
-                <TableCell align="right">Action</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.date')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.text')}</TableCell>
+                <TableCell align="right">{t('v2:feedback.admin.table.action')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {feedbackRows.map((feedback) => (
                 <TableRow key={feedback.id}>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
-                  <TableCell>{feedback.stars} / 5</TableCell>
+                  <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
                   <TableCell sx={{ maxWidth: 520 }}>
                     <Typography sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
                       {truncateFeedback(feedback.textFeedback)}
@@ -130,7 +175,7 @@ const UserFeedbackPage = () => {
                   </TableCell>
                   <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
                     <ActionButtonV2
-                      text="Read comment"
+                      text={t('v2:feedback.admin.readComment')}
                       type="button"
                       onClick={() => setSelectedFeedback(feedback)}
                     />

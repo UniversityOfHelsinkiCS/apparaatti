@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import LoginAs from './LoginAs.tsx'
 import { Navigate } from 'react-router-dom'
+import AdminNavbar from './admin/AdminNavbar.tsx'
 import useRequiredUser from '../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
 
@@ -32,6 +33,7 @@ const LoginAsPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+      <AdminNavbar isSuperuser={true} />
       <LoginAs />
     </Box>
   )
