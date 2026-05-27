@@ -108,6 +108,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
             <FormSubmitActions
               submitLabel={t('v2:feedback.send')}
               cancelLabel={t('v2:feedback.cancel')}
+              actionGroupAriaLabel={t('v2:feedback.title')}
               onCancel={handleClose}
             />
           </Stack>
