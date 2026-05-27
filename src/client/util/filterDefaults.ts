@@ -15,6 +15,6 @@ export const getDefaultSelectedOptionIds = (
   }
 
   return variant.options
-    .filter((option) => option.defaultState === true)
+    .filter((option) => option.defaultSelection === true)
     .map((option) => option.id)
 }

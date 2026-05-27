@@ -4,7 +4,7 @@ import { getDefaultSelectedOptionIds } from '../client/util/filterDefaults'
 import type { FilterConfig } from '../common/types'
 
 describe('multichoice filter defaults', () => {
-  it('preserves option defaultState when adapting filter config for the frontend', () => {
+  it('preserves option defaultSelection when adapting filter config for the frontend', () => {
     const filterConfig: FilterConfig = {
       id: 'study-place',
       mandatory: false,
@@ -27,12 +27,12 @@ describe('multichoice filter defaults', () => {
             {
               id: 'online',
               name: { fi: 'Etäopetus', sv: 'Distans', en: 'Online' },
-              defaultState: true,
+              defaultSelection: true,
             },
             {
               id: 'exam',
               name: { fi: 'Tentti', sv: 'Tentamen', en: 'Exam' },
-              defaultState: false,
+              defaultSelection: false,
             },
           ],
         },
@@ -41,7 +41,7 @@ describe('multichoice filter defaults', () => {
 
     const question = toQuestion(filterConfig, 'fi')
 
-    expect(question.variants[0].options?.map((option) => option.defaultState)).toEqual([
+    expect(question.variants[0].options?.map((option) => option.defaultSelection)).toEqual([
       true,
       false,
     ])
@@ -71,12 +71,12 @@ describe('multichoice filter defaults', () => {
               {
                 id: 'period_1',
                 name: { fi: '1. periodi', sv: '1. period', en: '1. period' },
-                defaultState: true,
+                defaultSelection: true,
               },
               {
                 id: 'period_2',
                 name: { fi: '2. periodi', sv: '2. period', en: '2. period' },
-                defaultState: false,
+                defaultSelection: false,
               },
               {
                 id: 'period_3',

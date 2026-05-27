@@ -15,7 +15,7 @@ const FilterOptionSchema = z.object({
   name: LocalizedTextSchema,
   valueOverride: z.string().nullable().optional(),
   setStrict: z.boolean().nullable().optional(),
-  defaultState: z.boolean().nullable().optional(),
+  defaultSelection: z.boolean().nullable().optional(),
 })
 
 const FilterVariantSchema = z.object({
