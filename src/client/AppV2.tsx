@@ -1,5 +1,5 @@
 
-import { Box, Stack, Typography, useTheme, useMediaQuery, Button } from '@mui/material'
+import { Box, Stack, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import useRequiredUser from './util/useRequiredUser'
 import { RedirectToLogin } from './util/redirectToLogin'
 import FeedbackModal from './components/FeedbackModal'
+import ActionButtonV2 from './components/common/ActionButtonV2'
 
 const desktopDrawerWidth = '38vw'
 const mobileDrawerWidth = '88vw'
@@ -25,17 +26,6 @@ const mobileDrawerWidth = '88vw'
 type OneThirdDrawerLayoutProps = {
   user: User
 }
-
-type HeaderActionButtonProps = {
-  label: string
-  onClick: () => void
-}
-
-const HeaderActionButton = ({ label, onClick }: HeaderActionButtonProps) => (
-  <Button color="inherit" onClick={onClick} sx={{ ml: 2 }}>
-    {label}
-  </Button>
-)
 
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
@@ -96,9 +86,13 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             {t('v2:appTitle')}
           </Typography>
           <LanguageSelector />
-          <HeaderActionButton label={t('v2:feedback.openButton')} onClick={() => setFeedbackModalOpen(true)} />
+          <ActionButtonV2
+            visualStyle="app-bar"
+            text={t('v2:feedback.openButton')}
+            onClick={() => setFeedbackModalOpen(true)}
+          />
           {user?.isAdmin && (
-            <HeaderActionButton label={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
+            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
           )}
         </Toolbar>
       </AppBar>
