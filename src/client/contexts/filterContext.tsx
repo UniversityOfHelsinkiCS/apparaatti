@@ -259,27 +259,62 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   ])
 
   const resetFilters = () => {
-    setStudyField('')
-    setPrimaryLanguage('')
-    setLanguage('')
-    setPrimaryLanguageSpecification('')
-    setPreviouslyDoneLang('')
-    setReplacement('')
-    setMentoring('')
-    setFinmu('')
-    setChallenge('')
-    setGraduation('')
-    setStudyPlace(getDefaultMultichoiceState('study-place'))
-    setStudyYear('2025')
-    setStudyPeriod(getDefaultMultichoiceState('study-period'))
-    setIntegrated('')
-    setIndependent('')
-    setMooc('')
-    setCollaboration('')
-    setMultiPeriod('')
-    setFlexible('')
+    const nonWelcomeFilterIds = new Set(
+      filters.filter((filter) => !filter.showInWelcomeModal).map((filter) => filter.id)
+    )
+    const configMap = filterConfigMap({
+      studyField, setStudyField,
+      primaryLanguage, setPrimaryLanguage,
+      language, setLanguage,
+      primaryLanguageSpecification, setPrimaryLanguageSpecification,
+      previouslyDoneLang, setPreviouslyDoneLang,
+      replacement, setReplacement,
+      mentoring, setMentoring,
+      finmu, setFinmu,
+      challenge, setChallenge,
+      graduation, setGraduation,
+      studyPlace, setStudyPlace,
+      studyYear, setStudyYear,
+      studyPeriod, setStudyPeriod,
+      integrated, setIntegrated,
+      independent, setIndependent,
+      mooc, setMooc,
+      collaboration, setCollaboration,
+      multiPeriod, setMultiPeriod,
+      flexible, setFlexible,
+    })
+
+    nonWelcomeFilterIds.forEach((filterId) => {
+      const config = configMap.get(filterId)
+      if (!config) {
+        return
+      }
+
+      if (filterId === 'study-place' || filterId === 'study-period') {
+        config.setState(getDefaultMultichoiceState(filterId))
+        return
+      }
+
+      if (filterId === 'study-year') {
+        config.setState('2025')
+        return
+      }
+
+      config.setState('')
+    })
+
     setUserOrgCode('')
-    setStrictFilters(strictByDefaultFilterIds)
+
+    const preservedWelcomeStrictFilters = strictFilters.filter(
+      (filterId) => !nonWelcomeFilterIds.has(filterId)
+    )
+    const resetNonWelcomeStrictFilters = strictByDefaultFilterIds.filter(
+      (filterId) => nonWelcomeFilterIds.has(filterId)
+    )
+
+    setStrictFilters([
+      ...new Set([...preservedWelcomeStrictFilters, ...resetNonWelcomeStrictFilters]),
+    ])
   }
 
   const { data: user, isLoading: userLoading } = useApi(

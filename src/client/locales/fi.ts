@@ -92,7 +92,7 @@ export default {
     'noRecommendations': {
       'title': 'Kursseja ei löytynyt',
       'description': 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
-      'resetButton': 'Nollaa',
+      'resetButton': 'Palauta',
       'resetConfirmationTitle': 'Nollataanko kaikki valinnat?',
       'resetConfirmationDescription': 'Tämä tyhjentää nykyiset vastauksesi ja palauttaa oletussuodattimet.',
       'resetConfirmationCancel': 'Peruuta',
