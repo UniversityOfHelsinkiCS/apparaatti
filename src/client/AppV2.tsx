@@ -26,6 +26,17 @@ type OneThirdDrawerLayoutProps = {
   user: User
 }
 
+type HeaderActionButtonProps = {
+  label: string
+  onClick: () => void
+}
+
+const HeaderActionButton = ({ label, onClick }: HeaderActionButtonProps) => (
+  <Button color="inherit" onClick={onClick} sx={{ ml: 2 }}>
+    {label}
+  </Button>
+)
+
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -85,13 +96,9 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             {t('v2:appTitle')}
           </Typography>
           <LanguageSelector />
-          <Button color="inherit" onClick={() => setFeedbackModalOpen(true)} sx={{ ml: 2 }}>
-            {t('v2:feedback.openButton')}
-          </Button>
+          <HeaderActionButton label={t('v2:feedback.openButton')} onClick={() => setFeedbackModalOpen(true)} />
           {user?.isAdmin && (
-            <Button color="inherit" onClick={() => setAdminModalOpen(true)} sx={{ ml: 2 }}>
-              {t('v2:adminButton')}
-            </Button>
+            <HeaderActionButton label={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
           )}
         </Toolbar>
       </AppBar>
