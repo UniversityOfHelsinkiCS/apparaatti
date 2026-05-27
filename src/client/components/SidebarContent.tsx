@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './common/ActionButtonV2'
 import { Box } from '@mui/material'
 import { SyntheticEvent, useState } from 'react'
+import ResetFiltersButton from './ResetFiltersButton'
 
 const SidebarContent = () => {
   const filterContext = useFilterContext()
-  const { filters, isLoading, setModalOpen, resetFilters } = filterContext
+  const { filters, isLoading, setModalOpen } = filterContext
   const { t } = useTranslation()
   const [expandedFilterId, setExpandedFilterId] = useState<string | null>(null)
 
@@ -41,11 +42,15 @@ const SidebarContent = () => {
           visualStyle="course-show"
         />
         <Box sx={{ height: 12 }} />
-        <ActionButtonV2
-          onClick={resetFilters}
-          text={t('v2:noRecommendations.resetButton')}
-          visualStyle="course-show"
-        />
+        <ResetFiltersButton>
+          {({ label, openDialog }) => (
+            <ActionButtonV2
+              onClick={openDialog}
+              text={label}
+              visualStyle="course-show"
+            />
+          )}
+        </ResetFiltersButton>
       </Box>
       {filtersToShow.map((filter) => (
         <FilterRenderer
