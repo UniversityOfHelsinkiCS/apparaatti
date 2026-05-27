@@ -24,9 +24,8 @@ const ActionButtonV2 = ({
         boxShadow: 'none',
       },
     }
-    : visualStyle === 'app-bar'
-      ? {}
-      : {
+    : visualStyle === 'default'
+      ? {
         borderColor: '#b8bec5',
         backgroundColor: '#f2f4f6',
         color: '#1f2933',
@@ -37,6 +36,7 @@ const ActionButtonV2 = ({
           color: '#1f2933',
         },
       }
+      : undefined
   const isAppBar = visualStyle === 'app-bar'
 
   return (
@@ -49,7 +49,6 @@ const ActionButtonV2 = ({
       sx={{
         width: isAppBar ? 'fit-content' : 'auto',
         ml: isAppBar ? 2 : 0,
-        mt: isAppBar ? 0 : undefined,
         ...buttonSx,
       }}
     >
