@@ -1,6 +1,7 @@
 
 import express from 'express'
 import type { User  as UserType, adminFeedback } from '../../common/types.ts'
+import { z } from 'zod'
 import {
   getWhereClauseForManyWordSearch,
   getWhereClauseForOneWordSearch,
@@ -39,7 +40,25 @@ adminRouter.get('/user-feedback', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const feedback = await getUserFeedbackEntries()
+  const userFeedbackQuerySchema = z.object({
+    start: z.coerce.date().optional(),
+    end: z.coerce.date().optional(),
+  })
+
+  const { start: queryStart, end: queryEnd } = userFeedbackQuerySchema.parse(req.query)
+  const end = queryEnd ?? new Date()
+  const start = queryStart ?? new Date(end)
+
+  if (!queryStart) {
+    start.setFullYear(start.getFullYear() - 1)
+  }
+
+  if (start > end) {
+    res.status(400).send('Start date must be before end date')
+    return
+  }
+
+  const feedback = await getUserFeedbackEntries(start, end)
   res.send(feedback)
 })
 

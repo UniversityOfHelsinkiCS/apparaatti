@@ -15,6 +15,7 @@ import { organisationCodeToUrn } from '../util/constants.ts'
 import { run as runUpdater } from '../updater/index.ts'
 import { allOrganisations, createUserFeedbackEntry, enabledOrderedFilterConfigs, organisationsWithSupportedCodes } from '../util/dbActions.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
+import { enforceIsUser } from '../util/validations.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -96,10 +97,7 @@ router.post('/form/answer', async (req, res) => {
 })
 
 router.post('/feedback', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
+  enforceIsUser(req)
 
   const feedback = UserFeedbackSchema.parse(req.body)
   await createUserFeedbackEntry(feedback.textFeedback, feedback.stars, new Date())

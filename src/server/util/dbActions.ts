@@ -294,8 +294,14 @@ export async function createUserFeedbackEntry(textFeedback: string, stars: numbe
   })
 }
 
-export async function getUserFeedbackEntries(): Promise<UserFeedbackType[]> {
+export async function getUserFeedbackEntries(start: Date, end: Date): Promise<UserFeedbackType[]> {
   return await UserFeedback.findAll({
+    where: {
+      date: {
+        [Op.gte]: start,
+        [Op.lte]: end,
+      },
+    },
     order: [['date', 'DESC']],
     raw: true,
   }) as UserFeedbackType[]
