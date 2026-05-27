@@ -2,6 +2,7 @@ import { Alert, Box, Modal, Rating, Snackbar, Stack, TextField, Typography } fro
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
+import { generateSettings } from '../util/useApi'
 
 type FeedbackModalProps = {
   open: boolean
@@ -43,13 +44,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     event.preventDefault()
 
     try {
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        body: JSON.stringify({ textFeedback, stars }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      const response = await fetch('/api/feedback', generateSettings('POST', { textFeedback, stars }))
 
       if (!response.ok) {
         throw new Error('Feedback submission failed')
