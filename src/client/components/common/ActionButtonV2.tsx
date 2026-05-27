@@ -4,7 +4,7 @@ interface actionButtonProps {
   onClick?: () => void
   text?: string
   dataCy?: string
-  visualStyle?: 'default' | 'course-show'
+  visualStyle?: 'default' | 'course-show' | 'app-bar'
 }
 
 const ActionButtonV2 = ({
@@ -24,26 +24,31 @@ const ActionButtonV2 = ({
         boxShadow: 'none',
       },
     }
-    : {
-      borderColor: '#b8bec5',
-      backgroundColor: '#f2f4f6',
-      color: '#1f2933',
-      marginTop: 4,
-      '&:hover': {
-        borderColor: '#a7afb7',
-        backgroundColor: '#e6eaee',
+    : visualStyle === 'default'
+      ? {
+        borderColor: '#b8bec5',
+        backgroundColor: '#f2f4f6',
         color: '#1f2933',
-      },
-    }
+        marginTop: 4,
+        '&:hover': {
+          borderColor: '#a7afb7',
+          backgroundColor: '#e6eaee',
+          color: '#1f2933',
+        },
+      }
+      : undefined
+  const isAppBar = visualStyle === 'app-bar'
 
   return (
     <Button
       data-cy={dataCy}
-      variant={visualStyle === 'course-show' ? 'contained' : 'outlined'}
-      type="submit"
+      color={isAppBar ? 'inherit' : undefined}
+      variant={visualStyle === 'course-show' ? 'contained' : isAppBar ? 'text' : 'outlined'}
+      type={isAppBar ? 'button' : 'submit'}
       onClick={onClick}
       sx={{
-        width: 'auto',
+        width: isAppBar ? 'fit-content' : 'auto',
+        ml: isAppBar ? 2 : 0,
         ...buttonSx,
       }}
     >

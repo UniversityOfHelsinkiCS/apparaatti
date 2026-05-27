@@ -1,5 +1,5 @@
 
-import { Box, Stack, Typography, useTheme, useMediaQuery, Button } from '@mui/material'
+import { Box, Stack, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -17,6 +17,8 @@ import LanguageSelector from './components/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 import useRequiredUser from './util/useRequiredUser'
 import { RedirectToLogin } from './util/redirectToLogin'
+import FeedbackModal from './components/FeedbackModal'
+import ActionButtonV2 from './components/common/ActionButtonV2'
 
 const desktopDrawerWidth = '38vw'
 const mobileDrawerWidth = '88vw'
@@ -30,6 +32,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile) 
   const [adminModalOpen, setAdminModalOpen] = useState(false)
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext()
   const { t } = useTranslation()
   useEffect(() => {
@@ -51,6 +54,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
     >
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
       {user?.isAdmin && finalRecommendedCourses && ( 
         <AdminModal
           open={adminModalOpen}
@@ -82,10 +86,13 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             {t('v2:appTitle')}
           </Typography>
           <LanguageSelector />
+          <ActionButtonV2
+            visualStyle="app-bar"
+            text={t('v2:feedback.openButton')}
+            onClick={() => setFeedbackModalOpen(true)}
+          />
           {user?.isAdmin && (
-            <Button color="inherit" onClick={() => setAdminModalOpen(true)} sx={{ ml: 2 }}>
-              {t('v2:adminButton')}
-            </Button>
+            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
           )}
         </Toolbar>
       </AppBar>

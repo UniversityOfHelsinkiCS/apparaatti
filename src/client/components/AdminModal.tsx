@@ -1,10 +1,12 @@
-import { Box, Button, Typography, Modal } from '@mui/material'
+import { Box, Typography, Modal } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
+import FormSubmitActions from './common/FormSubmitActions.tsx'
 
 const style = {
   position: 'absolute',
@@ -28,6 +30,7 @@ type TextFeedbackV2Props = {
   recommendations: CourseRecommendations;
 };
 const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendations: CourseRecommendations}) => {
+  const { t } = useTranslation()
   const [feedback, setFeedBack] = useState('')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,8 +73,12 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
           fullWidth
           margin="normal"
         ></TextField>
-        <Button variant="contained" color="primary" type="submit" sx={{ mr: 1 }}>Lähetä</Button>
-        <Button variant="outlined" color="secondary" onClick={onClose}>Peruuta</Button>
+        <FormSubmitActions
+          submitLabel={t('v2:feedback.send')}
+          cancelLabel={t('v2:feedback.cancel')}
+          actionGroupAriaLabel={t('v2:feedback.title')}
+          onCancel={onClose}
+        />
       </form>
     </> 
   )

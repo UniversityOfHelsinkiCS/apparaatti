@@ -1,5 +1,5 @@
 import express from 'express'
-import { AnswerSchema, StringArraySchema } from '../../common/validators.ts'
+import { AnswerSchema, StringArraySchema, UserFeedbackSchema } from '../../common/validators.ts'
 import type { AnswerData } from '../../common/types.ts'
 import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
@@ -13,8 +13,9 @@ import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
 import { run as runUpdater } from '../updater/index.ts'
-import { allOrganisations, enabledOrderedFilterConfigs, organisationsWithSupportedCodes } from '../util/dbActions.ts'
+import { allOrganisations, createUserFeedbackEntry, enabledOrderedFilterConfigs, organisationsWithSupportedCodes } from '../util/dbActions.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
+import { enforceIsUser } from '../util/validations.ts'
 
 const router = express.Router({mergeParams: true})
 
@@ -93,6 +94,15 @@ router.post('/form/answer', async (req, res) => {
   const recommendations = await recommendCourses(answerData as AnswerData, strictFields)
 
   res.json({...recommendations, answerData})
+})
+
+router.post('/feedback', async (req, res) => {
+  enforceIsUser(req)
+
+  const feedback = UserFeedbackSchema.parse(req.body)
+  await createUserFeedbackEntry(feedback.textFeedback, feedback.stars, new Date())
+
+  res.json({ status: 'success' })
 })
 
 router.get('/login', passport.authenticate('oidc'))

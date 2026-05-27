@@ -6,8 +6,9 @@ import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
+import UserFeedback from '../db/models/userFeedback.ts'
 import UserVisits from '../db/models/userVisits.ts'
-import type { UserVisit } from '../../common/types.ts'
+import type { UserFeedback as UserFeedbackType, UserVisit } from '../../common/types.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -283,4 +284,25 @@ export async function getUserVisits(start: Date, end: Date){
 
   return visits
 
+}
+
+export async function createUserFeedbackEntry(textFeedback: string, stars: number, date: Date) {
+  await UserFeedback.create({
+    textFeedback,
+    stars,
+    date,
+  })
+}
+
+export async function getUserFeedbackEntries(start: Date, end: Date): Promise<UserFeedbackType[]> {
+  return await UserFeedback.findAll({
+    where: {
+      date: {
+        [Op.gte]: start,
+        [Op.lte]: end,
+      },
+    },
+    order: [['date', 'DESC']],
+    raw: true,
+  }) as UserFeedbackType[]
 }

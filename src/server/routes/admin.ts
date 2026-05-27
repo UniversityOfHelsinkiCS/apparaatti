@@ -1,13 +1,14 @@
 
 import express from 'express'
 import type { User  as UserType, adminFeedback } from '../../common/types.ts'
+import { z } from 'zod'
 import {
   getWhereClauseForManyWordSearch,
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import { usersWithWhere } from '../util/dbActions.ts'
+import { getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
@@ -33,6 +34,32 @@ adminRouter.post('/feedback', async (req, res) => {
   logger.info('ADMIN FEEDBACK', feedback)
   res.json({status: 'success'})
  
+})
+
+adminRouter.get('/user-feedback', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const userFeedbackQuerySchema = z.object({
+    start: z.coerce.date().optional(),
+    end: z.coerce.date().optional(),
+  })
+
+  const { start: queryStart, end: queryEnd } = userFeedbackQuerySchema.parse(req.query)
+  const end = queryEnd ?? new Date()
+  const start = queryStart ?? new Date(end)
+
+  if (!queryStart) {
+    start.setFullYear(start.getFullYear() - 1)
+  }
+
+  if (start > end) {
+    res.status(400).send('Start date must be before end date')
+    return
+  }
+
+  const feedback = await getUserFeedbackEntries(start, end)
+  res.send(feedback)
 })
 
 adminRouter.get('/users', async (req, res) => {

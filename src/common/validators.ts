@@ -47,3 +47,8 @@ export const FilterUpdateSchema = z.object({
 export const FilterCreateSchema = FilterUpdateSchema.extend({
   id: z.string().regex(/^[a-z0-9-]+$/, 'id must be lowercase alphanumeric with hyphens'),
 })
+
+export const UserFeedbackSchema = z.object({
+  textFeedback: z.string().trim().min(1),
+  stars: z.number().int().min(0).max(5),
+})
