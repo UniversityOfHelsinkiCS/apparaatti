@@ -148,7 +148,6 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
       open={open}
       onClose={handleCloseIfMandatoryAnswered}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
       sx={{ border: 'none' }}
     >
       <Box sx={style}>
@@ -156,10 +155,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
           <LanguageSelector />
         </Box>
 
-        <Typography id="modal-modal-title" component="h2" variant="h5" sx={{ mb: 1 }}>
-          {t('v2:retakeQuestions')}
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mb: 3 }}>
+        <Typography id="modal-modal-title" component="h2" variant="h5" sx={{ mb: 3 }}>
           {t('v2:welcomeText')}
         </Typography>
 
