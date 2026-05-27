@@ -13,6 +13,7 @@ import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
 import { useTranslation } from 'react-i18next'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import Filter from '../filters/filter'
+import LanguageSelector from './LanguageSelector'
 
 type Props = {
   open: boolean
@@ -147,11 +148,14 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
       open={open}
       onClose={handleCloseIfMandatoryAnswered}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
       sx={{ border: 'none' }}
     >
       <Box sx={style}>
-        <Typography sx={{ mb: 3 }}>
+        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
+          <LanguageSelector />
+        </Box>
+
+        <Typography id="modal-modal-title" component="h2" variant="h5" sx={{ mb: 3 }}>
           {t('v2:welcomeText')}
         </Typography>
 

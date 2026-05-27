@@ -13,6 +13,7 @@ const LanguageSelector = () => {
     <Select
       value={language}
       onChange={handleChange}
+      aria-label="Language selector"
       size="small"
       sx={{
         color: 'inherit',
