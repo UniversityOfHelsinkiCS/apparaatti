@@ -49,7 +49,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     event.preventDefault()
 
     try {
-      await submitFeedbackMutation.mutateAsync({ textFeedback, stars }, undefined)
+      await submitFeedbackMutation.mutateAsync({ textFeedback, stars })
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
