@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 import FormSubmitActions from './common/FormSubmitActions.tsx'
@@ -29,6 +30,7 @@ type TextFeedbackV2Props = {
   recommendations: CourseRecommendations;
 };
 const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendations: CourseRecommendations}) => {
+  const { t } = useTranslation()
   const [feedback, setFeedBack] = useState('')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,7 +73,7 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
           fullWidth
           margin="normal"
         ></TextField>
-        <FormSubmitActions submitLabel="Lähetä" cancelLabel="Peruuta" onCancel={onClose} />
+        <FormSubmitActions submitLabel={t('app:send')} cancelLabel={t('app:back')} onCancel={onClose} />
       </form>
     </> 
   )
