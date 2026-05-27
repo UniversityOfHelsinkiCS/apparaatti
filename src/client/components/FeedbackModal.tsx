@@ -2,7 +2,7 @@ import { Alert, Box, Modal, Rating, Snackbar, Stack, TextField, Typography } fro
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
-import { generateSettings } from '../util/useApi'
+import useApiMutation from '../hooks/useApiMutation'
 
 type FeedbackModalProps = {
   open: boolean
@@ -29,6 +29,11 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  const submitFeedbackMutation = useApiMutation(async (res: Response) => {
+    if (!res.ok) {
+      throw new Error('Feedback submission failed')
+    }
+  }, '/api/feedback')
 
   const resetForm = () => {
     setTextFeedback('')
@@ -44,11 +49,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     event.preventDefault()
 
     try {
-      const response = await fetch('/api/feedback', generateSettings('POST', { textFeedback, stars }))
-
-      if (!response.ok) {
-        throw new Error('Feedback submission failed')
-      }
+      await submitFeedbackMutation.mutateAsync({ textFeedback, stars }, undefined)
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
