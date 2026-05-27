@@ -1,7 +1,9 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFilterContext } from '../contexts/filterContext'
+import BlackContainedButton from './common/BlackContainedButton'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
 
 type Props = {
   children: (props: { label: string; openDialog: () => void }) => ReactNode
@@ -33,12 +35,12 @@ const ResetFiltersButton = ({ children }: Props) => {
           <Typography>{t('v2:noRecommendations.resetConfirmationDescription')}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ color: 'black' }}>
+          <BlackOutlinedButton onClick={handleClose}>
             {t('v2:noRecommendations.resetConfirmationCancel')}
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleConfirm}>
+          </BlackOutlinedButton>
+          <BlackContainedButton onClick={handleConfirm}>
             {t('v2:noRecommendations.resetConfirmationConfirm')}
-          </Button>
+          </BlackContainedButton>
         </DialogActions>
       </Dialog>
     </>
