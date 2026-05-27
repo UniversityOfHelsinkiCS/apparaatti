@@ -73,7 +73,7 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
           fullWidth
           margin="normal"
         ></TextField>
-        <FormSubmitActions submitLabel={t('app:send')} cancelLabel={t('v2:feedback.cancel')} onCancel={onClose} />
+        <FormSubmitActions submitLabel={t('v2:feedback.send')} cancelLabel={t('v2:feedback.cancel')} onCancel={onClose} />
       </form>
     </> 
   )
