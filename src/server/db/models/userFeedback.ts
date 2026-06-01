@@ -10,6 +10,7 @@ class UserFeedback extends Model<InferAttributes<UserFeedback>, InferCreationAtt
   declare id: CreationOptional<number>
   declare textFeedback: string
   declare stars: number
+  declare recommendationMetadata: CreationOptional<Record<string, unknown> | null>
   declare date: Date
 }
 
@@ -28,6 +29,11 @@ UserFeedback.init(
     stars: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    recommendationMetadata: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: null,
     },
     date: {
       type: DataTypes.DATE,

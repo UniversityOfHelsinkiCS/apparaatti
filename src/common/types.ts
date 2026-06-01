@@ -231,6 +231,7 @@ export type adminFeedback = {
 export type UserFeedbackSubmission = {
   textFeedback: string
   stars: number
+  recommendationMetadata?: Record<string, unknown>
 }
 
 export type UserFeedback = UserFeedbackSubmission & {

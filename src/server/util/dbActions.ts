@@ -286,10 +286,16 @@ export async function getUserVisits(start: Date, end: Date){
 
 }
 
-export async function createUserFeedbackEntry(textFeedback: string, stars: number, date: Date) {
+export async function createUserFeedbackEntry(
+  textFeedback: string,
+  stars: number,
+  date: Date,
+  recommendationMetadata?: Record<string, unknown>
+) {
   await UserFeedback.create({
     textFeedback,
     stars,
+    recommendationMetadata: recommendationMetadata ?? null,
     date,
   })
 }

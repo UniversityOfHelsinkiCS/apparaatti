@@ -130,6 +130,8 @@ export default {
       'title': 'Anna palautetta',
       'textLabel': 'Palaute',
       'starsLabel': 'Tähdet',
+      'sendMetadata': 'lähetä metatiedot',
+      'sendMetadataInfo': 'valitsemalla tämän lähetät lomakkeen mukana filtterivalintasi ja saamasi suositukset, palaute on silti anonyymi',
       'send': 'Lähetä palaute',
       'cancel': 'Peruuta',
       'sent': 'Palaute lähetetty',

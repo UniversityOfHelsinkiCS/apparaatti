@@ -100,7 +100,12 @@ router.post('/feedback', async (req, res) => {
   enforceIsUser(req)
 
   const feedback = UserFeedbackSchema.parse(req.body)
-  await createUserFeedbackEntry(feedback.textFeedback, feedback.stars, new Date())
+  await createUserFeedbackEntry(
+    feedback.textFeedback,
+    feedback.stars,
+    new Date(),
+    feedback.recommendationMetadata
+  )
 
   res.json({ status: 'success' })
 })

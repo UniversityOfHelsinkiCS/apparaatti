@@ -1,8 +1,23 @@
-import { Alert, Box, Modal, Rating, Snackbar, Stack, TextField, Typography } from '@mui/material'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import {
+  Alert,
+  Box,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  Modal,
+  Rating,
+  Snackbar,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
 import useApiMutation from '../hooks/useApiMutation'
+import { useFilterContext } from '../contexts/filterContext'
 
 type FeedbackModalProps = {
   open: boolean
@@ -27,8 +42,10 @@ const style = {
 
 const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const { t } = useTranslation()
+  const { finalRecommendedCourses } = useFilterContext()
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
+  const [sendRecommendationMetadata, setSendRecommendationMetadata] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -41,6 +58,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const resetForm = () => {
     setTextFeedback('')
     setStars(0)
+    setSendRecommendationMetadata(false)
   }
 
   const handleClose = () => {
@@ -51,8 +69,15 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
+    const recommendationMetadata = sendRecommendationMetadata
+      ? {
+        answerData: finalRecommendedCourses?.answerData ?? null,
+        recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
+      }
+      : undefined
+
     try {
-      await submitFeedbackMutation.mutateAsync({ textFeedback, stars }, undefined)
+      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata }, undefined)
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
@@ -119,6 +144,25 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                       onChange={(_event, value) => setStars(value ?? 0)}
                     />
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>{stars} / 5</Typography>
+                  </Stack>
+                </Box>
+
+                <Box>
+                  <Stack direction="row" alignItems="center" spacing={0.5}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={sendRecommendationMetadata}
+                          onChange={(event) => setSendRecommendationMetadata(event.target.checked)}
+                        />
+                      }
+                      label={t('v2:feedback.sendMetadata')}
+                    />
+                    <Tooltip title={t('v2:feedback.sendMetadataInfo')}>
+                      <IconButton size="small" aria-label={t('v2:feedback.sendMetadataInfo')}>
+                        <InfoOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
                   </Stack>
                 </Box>
 
