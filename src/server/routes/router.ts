@@ -39,7 +39,11 @@ if (UPDATER_CRON_ENABLED) {
   })
 }
 
-router.get('/version', (_req, res) => {
+router.get('/version', (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
   res.json({ gitSha: GIT_SHA, packageVersion: PACKAGE_VERSION })
 })
 
