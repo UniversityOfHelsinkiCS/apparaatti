@@ -86,6 +86,9 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
   const navigate = useNavigate()
   const { data: user } = useApi('user', '/api/user', 'GET', null)
+  const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
+    data: { gitSha: string; packageVersion: string } | null
+  }
   return (
     <Modal
       open={open}
@@ -115,6 +118,11 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
             </BlackOutlinedButton>
           )}
         </Box>
+        {versionData && (
+          <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
+            v{versionData.packageVersion} ({versionData.gitSha})
+          </Typography>
+        )}
       </Box>
     </Modal>
   )

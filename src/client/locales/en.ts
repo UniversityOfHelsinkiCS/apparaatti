@@ -152,6 +152,7 @@ export default {
         'table': {
           'date': 'Date',
           'stars': 'Stars',
+          'version': 'Version',
           'text': 'Text feedback',
           'action': 'Action'
         }
