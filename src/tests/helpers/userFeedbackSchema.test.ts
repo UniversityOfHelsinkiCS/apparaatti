@@ -43,4 +43,14 @@ describe('UserFeedbackSchema', () => {
       })
     ).toThrow()
   })
+
+  it('rejects recommendation metadata missing required fields', () => {
+    expect(() =>
+      UserFeedbackSchema.parse({
+        textFeedback: 'ok',
+        stars: 3,
+        recommendationMetadata: { someField: 'value' },
+      })
+    ).toThrow()
+  })
 })

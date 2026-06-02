@@ -51,5 +51,8 @@ export const FilterCreateSchema = FilterUpdateSchema.extend({
 export const UserFeedbackSchema = z.object({
   textFeedback: z.string().trim().min(1),
   stars: z.number().int().min(0).max(5),
-  recommendationMetadata: z.record(z.string(), z.unknown()).optional(),
+  recommendationMetadata: z.object({
+    answerData: z.record(z.string(), z.unknown()).nullable(),
+    recommendations: z.array(z.record(z.string(), z.unknown())),
+  }).optional(),
 })
