@@ -53,7 +53,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       }}
     >
       <CssBaseline />
-      <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
       {user?.isAdmin && finalRecommendedCourses && ( 
         <AdminModal

@@ -18,6 +18,7 @@ import LanguageSelector from './LanguageSelector'
 type Props = {
   open: boolean
   onClose: () => void
+  isAdmin?: boolean
 }
 
 const style = {
@@ -32,7 +33,7 @@ const style = {
   overflowY: 'auto',
 }
 
-const WelcomeModal: FC<Props> = ({ open, onClose }) => {
+const WelcomeModal: FC<Props> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
   const {
     filters,
@@ -97,7 +98,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
   })
 
   const handleCloseIfMandatoryAnswered = () => {
-    if (!mandatoryQuestionsAnswered) {
+    if (!mandatoryQuestionsAnswered && !isAdmin) {
       return
     }
 
@@ -176,7 +177,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
           <Button
             variant="contained"
             onClick={handleCloseIfMandatoryAnswered}
-            disabled={!mandatoryQuestionsAnswered}
+            disabled={!mandatoryQuestionsAnswered && !isAdmin}
             sx={{
               textTransform: 'none',
               px: 4,
