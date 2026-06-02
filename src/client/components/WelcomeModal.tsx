@@ -98,7 +98,7 @@ const WelcomeModal: FC<Props> = ({ open, onClose, isAdmin = false }) => {
   })
 
   const handleCloseIfMandatoryAnswered = () => {
-    if (!mandatoryQuestionsAnswered && !isAdmin) {
+    if (!mandatoryQuestionsAnswered) {
       return
     }
 
@@ -171,13 +171,16 @@ const WelcomeModal: FC<Props> = ({ open, onClose, isAdmin = false }) => {
             mt: 3,
             display: 'flex',
             justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1,
             pb: '10vh',
           }}
         >
           <Button
             variant="contained"
             onClick={handleCloseIfMandatoryAnswered}
-            disabled={!mandatoryQuestionsAnswered && !isAdmin}
+            disabled={!mandatoryQuestionsAnswered}
             sx={{
               textTransform: 'none',
               px: 4,
@@ -186,6 +189,18 @@ const WelcomeModal: FC<Props> = ({ open, onClose, isAdmin = false }) => {
           >
             {t('v2:done')}
           </Button>
+          {isAdmin && (
+            <Button
+              variant="text"
+              onClick={onClose}
+              sx={{
+                textTransform: 'none',
+                color: 'text.secondary',
+              }}
+            >
+              {t('v2:skipQuestions')}
+            </Button>
+          )}
         </Box>
       </Box>
     </Modal>

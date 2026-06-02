@@ -87,6 +87,7 @@ export default {
       'title': 'Periodi'
     },
     'retakeQuestions': 'Vastaa alkukysymyksiin',
+    'skipQuestions': 'Ohita kysymykset',
     'done': 'Valmis',
     'welcomeText': 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',
     'noRecommendations': {
