@@ -228,9 +228,15 @@ export type adminFeedback = {
    feedBack: string  
 }
 
+export type RecommendationMetadata = {
+  answerData: AnswerData | null
+  recommendations: CourseRecommendation[]
+}
+
 export type UserFeedbackSubmission = {
   textFeedback: string
   stars: number
+  recommendationMetadata?: RecommendationMetadata
 }
 
 export type UserFeedback = UserFeedbackSubmission & {

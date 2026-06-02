@@ -8,7 +8,7 @@ import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
 import UserFeedback from '../db/models/userFeedback.ts'
 import UserVisits from '../db/models/userVisits.ts'
-import type { UserFeedback as UserFeedbackType, UserVisit } from '../../common/types.ts'
+import type { RecommendationMetadata, UserFeedback as UserFeedbackType, UserVisit } from '../../common/types.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -286,10 +286,16 @@ export async function getUserVisits(start: Date, end: Date){
 
 }
 
-export async function createUserFeedbackEntry(textFeedback: string, stars: number, date: Date) {
+export async function createUserFeedbackEntry(
+  textFeedback: string,
+  stars: number,
+  date: Date,
+  recommendationMetadata?: RecommendationMetadata
+) {
   await UserFeedback.create({
     textFeedback,
     stars,
+    recommendationMetadata: recommendationMetadata ?? null,
     date,
   })
 }

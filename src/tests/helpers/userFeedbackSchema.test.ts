@@ -12,6 +12,19 @@ describe('UserFeedbackSchema', () => {
     expect(parsed.stars).toBe(5)
   })
 
+  it('accepts optional recommendation metadata', () => {
+    const parsed = UserFeedbackSchema.parse({
+      textFeedback: 'Great app',
+      stars: 4,
+      recommendationMetadata: {
+        answerData: { language: 'fi' },
+        recommendations: [{ id: 'TEST-CUR' }],
+      },
+    })
+
+    expect(parsed.recommendationMetadata).toBeDefined()
+  })
+
   it('rejects empty text feedback', () => {
     expect(() => UserFeedbackSchema.parse({ textFeedback: '   ', stars: 2 })).toThrow()
   })
@@ -19,5 +32,25 @@ describe('UserFeedbackSchema', () => {
   it('rejects stars outside 0-5', () => {
     expect(() => UserFeedbackSchema.parse({ textFeedback: 'ok', stars: -1 })).toThrow()
     expect(() => UserFeedbackSchema.parse({ textFeedback: 'ok', stars: 6 })).toThrow()
+  })
+
+  it('rejects non-object recommendation metadata', () => {
+    expect(() =>
+      UserFeedbackSchema.parse({
+        textFeedback: 'ok',
+        stars: 3,
+        recommendationMetadata: 'metadata',
+      })
+    ).toThrow()
+  })
+
+  it('rejects recommendation metadata missing required fields', () => {
+    expect(() =>
+      UserFeedbackSchema.parse({
+        textFeedback: 'ok',
+        stars: 3,
+        recommendationMetadata: { someField: 'value' },
+      })
+    ).toThrow()
   })
 })

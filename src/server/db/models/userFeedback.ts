@@ -5,11 +5,13 @@ import type {
   InferCreationAttributes,
 } from 'sequelize'
 import { sequelize } from '../connection.ts'
+import type { RecommendationMetadata } from '../../../common/types.ts'
 
 class UserFeedback extends Model<InferAttributes<UserFeedback>, InferCreationAttributes<UserFeedback>> {
   declare id: CreationOptional<number>
   declare textFeedback: string
   declare stars: number
+  declare recommendationMetadata: CreationOptional<RecommendationMetadata | null>
   declare date: Date
 }
 
@@ -28,6 +30,11 @@ UserFeedback.init(
     stars: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    recommendationMetadata: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: null,
     },
     date: {
       type: DataTypes.DATE,

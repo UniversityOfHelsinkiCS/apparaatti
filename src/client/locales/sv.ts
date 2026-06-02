@@ -130,6 +130,8 @@ export default {
       'description': 'Berätta hur vi kan förbättra tjänsten.',
       'textLabel': 'Feedback',
       'starsLabel': 'Stjärnor',
+      'sendMetadata': 'skicka metadata',
+      'sendMetadataInfo': 'Om du väljer detta skickas dina filterval och rekommendationer med formuläret. Feedbacken är fortfarande anonym.',
       'send': 'Skicka feedback',
       'cancel': 'Avbryt',
       'sent': 'Feedback skickad',

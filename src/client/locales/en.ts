@@ -131,6 +131,8 @@ export default {
       'description': 'Tell us how we can improve the service.',
       'textLabel': 'Feedback',
       'starsLabel': 'Stars',
+      'sendMetadata': 'send metadata',
+      'sendMetadataInfo': 'By selecting this, your filter selections and received recommendations are sent with the form. The feedback remains anonymous.',
       'send': 'Send feedback',
       'cancel': 'Cancel',
       'sent': 'Feedback sent',
