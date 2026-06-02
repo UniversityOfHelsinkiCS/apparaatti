@@ -15,7 +15,7 @@ import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import Filter from '../filters/filter'
 import LanguageSelector from './LanguageSelector'
 
-type Props = {
+type WelcomeModalProps = {
   open: boolean
   onClose: () => void
   isAdmin?: boolean
@@ -33,7 +33,7 @@ const style = {
   overflowY: 'auto',
 }
 
-const WelcomeModal: FC<Props> = ({ open, onClose, isAdmin = false }) => {
+const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
   const {
     filters,
