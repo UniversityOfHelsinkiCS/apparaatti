@@ -182,13 +182,18 @@ export async function searchCoursesWithPagination(
     ]
   }
 
-  // Always include Cu to get course codes, make it required only for course code search
+  // Hard filter: only KK- coded courses are surfaced in the admin list.
+  // Cu.courseCode must start with 'KK-'. AND-combine with any user-supplied substring.
+  const cuWhere: any = {
+    courseCode: courseCodeSearch
+      ? { [Op.and]: [{ [Op.iLike]: 'KK-%' }, { [Op.iLike]: `%${courseCodeSearch}%` }] }
+      : { [Op.iLike]: 'KK-%' }
+  }
+
   const includeOptions: any[] = [{
     model: Cu,
-    required: !!courseCodeSearch,
-    where: courseCodeSearch ? {
-      courseCode: { [Op.iLike]: `%${courseCodeSearch}%` }
-    } : undefined,
+    required: true,
+    where: cuWhere,
     through: { attributes: [] } // Don't include join table attributes
   }]
 

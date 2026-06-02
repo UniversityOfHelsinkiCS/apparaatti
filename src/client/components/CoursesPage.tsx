@@ -145,10 +145,10 @@ const CoursesPage = () => {
     <Box sx={{ p: 3 }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 3 }}>
-        All Courses
+        KK- Courses
       </Typography>
       <Typography variant="body2" sx={{ mb: 2 }}>
-        Total courses: {totalCourses}
+        Showing only realisations whose course code starts with KK-. Total: {totalCourses}
       </Typography>
 
       {/* Search Fields */}
