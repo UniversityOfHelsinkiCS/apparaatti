@@ -152,7 +152,18 @@ export default {
           'date': 'Datum',
           'stars': 'Stjärnor',
           'text': 'Feedback',
+          'metadata': 'Metadata',
+          'hasMetadata': 'Ja',
+          'noMetadata': 'Nej',
           'action': 'Åtgärd'
+        },
+        'metadata': {
+          'title': 'Rekommendationsmetadata',
+          'filterSelections': 'Filterval',
+          'recommendations': 'Rekommendationer',
+          'points': 'Poäng',
+          'courseCodes': 'Kurskoder',
+          'period': 'Period'
         }
       }
     },
