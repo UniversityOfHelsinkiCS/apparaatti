@@ -17,6 +17,7 @@ ARG CI
 ENV CI=$CI
 
 RUN npm config set min-release-age 2 --location=global
+COPY .npmrc ./
 COPY package* ./
 RUN npm ci --omit-dev --ignore-scripts --no-audit --no-fund
 COPY . .

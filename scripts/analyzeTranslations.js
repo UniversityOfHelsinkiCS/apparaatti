@@ -4,7 +4,6 @@
 import { readFile, writeFile, opendir } from 'node:fs/promises'
 import { createInterface } from 'node:readline'
 import { join } from 'node:path'
-import { pathToFileURL } from 'node:url'
 import minimist from 'minimist'
 import _ from 'lodash'
 
@@ -362,7 +361,12 @@ class Location {
 }
 
 const readTypescriptLocale = async (filePath) => {
-  // Dynamic import needs a file URL
-  const module = await import(pathToFileURL(filePath).href);
-  return module.default;
-};
+  const source = await readFile(filePath, 'utf8')
+  const exportedObject = source.replace(/^\s*export\s+default\s+/m, '').trim().replace(/;\s*$/, '')
+
+  try {
+    return Function(`"use strict"; return (${exportedObject});`)()
+  } catch (error) {
+    throw new Error(`Failed to parse locale file ${filePath}: ${error.message}`)
+  }
+}

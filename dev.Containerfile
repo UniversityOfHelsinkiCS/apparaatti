@@ -5,7 +5,7 @@ ENV TZ="Europe/Helsinki"
 RUN apk add --no-cache tzdata
 
 WORKDIR /opt/app-root/src
-
+COPY .npmrc ./
 COPY package* ./
 RUN npm config set min-release-age 2 --location=global
 RUN npm ci
