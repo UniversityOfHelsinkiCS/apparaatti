@@ -162,18 +162,130 @@ export async function cusWithWhere(where: Record<string, any>) {
   return await Cu.findAll(({ where } as any))
 }
 
-export async function searchCoursesWithPagination(
-  nameSearch: string | undefined,
+function parseCsvList(value: string | undefined): string[] {
+  if (!value) return []
+  return value
+    .split(',')
+    .map(s => s.trim())
+    .filter(s => s.length > 0)
+}
+
+function getCurUrnsLowercase(cur: any): string[] {
+  const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
+  if (!customCodeUrns) return []
+  return Object.values(customCodeUrns).flat().map(u => u.toLowerCase())
+}
+
+function curMatchesUrnFilters(
+  cur: any,
+  urnSearchLower: string | undefined,
+  excludeUrnListLower: string[]
+): boolean {
+  const urns = getCurUrnsLowercase(cur)
+  if (urnSearchLower && !urns.some(u => u.includes(urnSearchLower))) {
+    return false
+  }
+  if (excludeUrnListLower.some(ex => urns.some(u => u.includes(ex)))) {
+    return false
+  }
+  return true
+}
+
+// Returns the ids of Curs that have ANY linked Cu whose courseCode matches
+// (case-insensitive substring) any of the given exclude codes. These Curs
+// should be removed from the main query entirely; filtering inside the include
+// would only hide the matching Cu rows while leaving the Cur reachable via
+// its other Cus.
+async function findCurIdsToExcludeByCourseCode(excludeCourseCodes: string[]): Promise<string[]> {
+  if (excludeCourseCodes.length === 0) return []
+  const excludedCurs = await Cur.findAll({
+    attributes: ['id'],
+    include: [{
+      model: Cu,
+      required: true,
+      attributes: [],
+      where: {
+        [Op.or]: excludeCourseCodes.map(code => ({
+          courseCode: { [Op.iLike]: `%${code}%` }
+        }))
+      },
+      through: { attributes: [] }
+    }],
+    raw: true,
+  })
+  return excludedCurs.map((c: any) => c.id)
+}
+
+// Fetches all Curs matching the SQL-side filters, then narrows by JSONB
+// customCodeUrns in JavaScript (URN search and/or URN excludes), and finally
+// paginates. Required because Postgres JSONB array contents can't be filtered
+// efficiently with the existing Sequelize where-clause shape.
+async function paginateCursWithJsUrnFilter(
+  curWhere: any,
+  includeOptions: any[],
   urnSearch: string | undefined,
-  courseCodeSearch: string | undefined,
+  excludeUrnListLower: string[],
+  page: number,
+  limit: number,
+  offset: number,
+) {
+  const allCurs = await Cur.findAll({
+    where: curWhere,
+    include: includeOptions,
+    order: [['name', 'ASC']],
+    subQuery: false,
+  })
+
+  const urnSearchLower = urnSearch?.toLowerCase()
+  const filtered = allCurs.filter(cur =>
+    curMatchesUrnFilters(cur, urnSearchLower, excludeUrnListLower)
+  )
+
+  const total = filtered.length
+  return {
+    courses: filtered.slice(offset, offset + limit),
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  }
+}
+
+/**
+ * Filters for the admin courses search.
+ *
+ * URN-related fields operate on the JSONB `customCodeUrns` column of Cur, and
+ * are matched as case-insensitive substrings against the URN strings.
+ * Course-code-related fields operate on the linked `Cu.courseCode`.
+ */
+export interface CourseSearchFilters {
+  /** Case-insensitive substring against `Cur.name.{fi,en,sv}`. */
+  nameSearch?: string
+
+  // --- URN filters (operate on Cur.customCodeUrns JSONB) ---
+  /** Include only Curs whose `customCodeUrns` contains this substring. */
+  urnSearch?: string
+  /** Comma-separated URN substrings; Curs matching ANY are excluded. */
+  excludeUrns?: string
+
+  // --- Course code filters (operate on linked Cu.courseCode) ---
+  /** Substring against `Cu.courseCode`. AND-combined with the hard 'KK-%' prefix. */
+  courseCodeSearch?: string
+  /** Comma-separated course-code substrings; Curs whose ANY linked Cu matches are excluded. */
+  excludeCourseCodes?: string
+}
+
+export async function searchCoursesWithPagination(
+  filters: CourseSearchFilters,
   page: number,
   limit: number
 ) {
+  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes } = filters
   const offset = (page - 1) * limit
 
   // Build the where clause for course realizations (name search)
   const curWhere: any = {}
-  
+
   if (nameSearch) {
     curWhere[Op.or] = [
       { 'name.fi': { [Op.iLike]: `%${nameSearch}%` } },
@@ -190,6 +302,14 @@ export async function searchCoursesWithPagination(
       : { [Op.iLike]: 'KK-%' }
   }
 
+  const excludeUrnList = parseCsvList(excludeUrns).map(s => s.toLowerCase())
+  const excludeCourseCodeList = parseCsvList(excludeCourseCodes)
+
+  const excludedCurIds = await findCurIdsToExcludeByCourseCode(excludeCourseCodeList)
+  if (excludedCurIds.length > 0) {
+    curWhere.id = { [Op.notIn]: excludedCurIds }
+  }
+
   const includeOptions: any[] = [{
     model: Cu,
     required: true,
@@ -197,40 +317,24 @@ export async function searchCoursesWithPagination(
     through: { attributes: [] } // Don't include join table attributes
   }]
 
-  // If URN search is present, we must fetch all matching records first,
-  // then filter by URN in JavaScript, then paginate
-  if (urnSearch) {
-    const allCurs = await Cur.findAll({
-      where: curWhere[Op.or] ? curWhere : undefined,
-      include: includeOptions,
-      order: [['name', 'ASC']],
-      subQuery: false,
-    })
-    
-    // Filter by URN (JSONB field - must be done in JavaScript)
-    const filtered = allCurs.filter((cur: any) => {
-      const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
-      if (!customCodeUrns) return false
-      
-      const allUrns = Object.values(customCodeUrns).flat()
-      return allUrns.some(urn => urn.toLowerCase().includes(urnSearch.toLowerCase()))
-    })
+  const needsJsUrnFilter = !!urnSearch || excludeUrnList.length > 0
 
-    const total = filtered.length
-    const paginatedResults = filtered.slice(offset, offset + limit)
-
-    return {
-      courses: paginatedResults,
-      total,
+  if (needsJsUrnFilter) {
+    const jsFilteredResult = await paginateCursWithJsUrnFilter(
+      curWhere,
+      includeOptions,
+      urnSearch,
+      excludeUrnList,
       page,
       limit,
-      totalPages: Math.ceil(total / limit)
-    }
+      offset,
+    )
+    return jsFilteredResult
   }
 
-  // No URN search - use regular paginated query
+  // No JS-side filtering required - use regular paginated query
   const { rows: results, count: total } = await Cur.findAndCountAll({
-    where: curWhere[Op.or] ? curWhere : undefined,
+    where: curWhere,
     include: includeOptions,
     limit,
     offset,

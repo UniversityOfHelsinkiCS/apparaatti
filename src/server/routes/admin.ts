@@ -108,15 +108,19 @@ adminRouter.get('/courses', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const { page = '1', limit = '50', name, urn, courseCode } = req.query
+  const { page = '1', limit = '50', name, urn, courseCode, excludeUrns, excludeCourseCodes } = req.query
 
   const pageNum = parseInt(page as string, 10)
   const limitNum = parseInt(limit as string, 10)
 
   const result = await searchCoursesWithPagination(
-    name as string | undefined,
-    urn as string | undefined,
-    courseCode as string | undefined,
+    {
+      nameSearch: name as string | undefined,
+      urnSearch: urn as string | undefined,
+      excludeUrns: excludeUrns as string | undefined,
+      courseCodeSearch: courseCode as string | undefined,
+      excludeCourseCodes: excludeCourseCodes as string | undefined,
+    },
     pageNum,
     limitNum
   )

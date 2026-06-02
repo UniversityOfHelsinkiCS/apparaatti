@@ -1,7 +1,9 @@
-import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, TextField, Pagination } from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, Pagination } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import AdminNavbar from './admin/AdminNavbar.tsx'
+import CoursesSearchFields from './admin/CoursesSearchFields.tsx'
+import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 import useRequiredUser from '../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
 import useApi from '../util/useApi.tsx'
@@ -43,23 +45,23 @@ const CoursesPage = () => {
   const [nameInput, setNameInput] = useState('')
   const [urnInput, setUrnInput] = useState('')
   const [courseCodeInput, setCourseCodeInput] = useState('')
-  
+  const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
+  const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
+
   // Active search values (what's actually sent to API)
   const [nameSearch, setNameSearch] = useState('')
   const [urnSearch, setUrnSearch] = useState('')
   const [courseCodeSearch, setCourseCodeSearch] = useState('')
+  const [excludeUrnsSearch, setExcludeUrnsSearch] = useState('')
+  const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
 
   const handleSearch = () => {
     setNameSearch(nameInput)
     setUrnSearch(urnInput)
     setCourseCodeSearch(courseCodeInput)
+    setExcludeUrnsSearch(excludeUrnsInput)
+    setExcludeCourseCodesSearch(excludeCourseCodesInput)
     setPage(1) // Reset to first page on new search
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
   }
 
   const buildQueryString = () => {
@@ -69,11 +71,13 @@ const CoursesPage = () => {
     if (nameSearch) params.append('name', nameSearch)
     if (urnSearch) params.append('urn', urnSearch)
     if (courseCodeSearch) params.append('courseCode', courseCodeSearch)
+    if (excludeUrnsSearch) params.append('excludeUrns', excludeUrnsSearch)
+    if (excludeCourseCodesSearch) params.append('excludeCourseCodes', excludeCourseCodesSearch)
     return params.toString()
   }
 
   const { data: coursesData, isLoading: isCoursesLoading } = useApi(
-    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}`,
+    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
     null
@@ -151,51 +155,20 @@ const CoursesPage = () => {
         Showing only realisations whose course code starts with KK-. Total: {totalCourses}
       </Typography>
 
-      {/* Search Fields */}
-      <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-        <TextField
-          label="Search by Name"
-          variant="outlined"
-          size="small"
-          value={nameInput}
-          onChange={(e) => setNameInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{ minWidth: 200 }}
-        />
-        <TextField
-          label="Search by URN"
-          variant="outlined"
-          size="small"
-          value={urnInput}
-          onChange={(e) => setUrnInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{ minWidth: 200 }}
-        />
-        <TextField
-          label="Search by Course Code"
-          variant="outlined"
-          size="small"
-          value={courseCodeInput}
-          onChange={(e) => setCourseCodeInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{ minWidth: 200 }}
-        />
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={handleSearch}
-          sx={{ 
-            color: 'black', 
-            borderColor: 'black',
-            '&:hover': {
-              borderColor: 'black',
-              backgroundColor: 'rgba(0, 0, 0, 0.04)'
-            }
-          }}
-        >
-          Search
-        </Button>
-      </Box>
+      {/* Search Fields — grouped: Name, then URN (include + exclude), then Course code (include + exclude). */}
+      <CoursesSearchFields
+        nameInput={nameInput}
+        urnInput={urnInput}
+        excludeUrnsInput={excludeUrnsInput}
+        courseCodeInput={courseCodeInput}
+        excludeCourseCodesInput={excludeCourseCodesInput}
+        setNameInput={setNameInput}
+        setUrnInput={setUrnInput}
+        setExcludeUrnsInput={setExcludeUrnsInput}
+        setCourseCodeInput={setCourseCodeInput}
+        setExcludeCourseCodesInput={setExcludeCourseCodesInput}
+        onSearch={handleSearch}
+      />
 
       <Table size="small">
         <TableHead>
@@ -213,21 +186,12 @@ const CoursesPage = () => {
               <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
               <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
               <TableCell>
-                <Button
-                  variant="outlined"
+                <BlackOutlinedButton
                   size="small"
                   onClick={() => handleVisit(course.id)}
-                  sx={{ 
-                    color: 'black', 
-                    borderColor: 'black',
-                    '&:hover': {
-                      borderColor: 'black',
-                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                    }
-                  }}
                 >
                   Visit
-                </Button>
+                </BlackOutlinedButton>
               </TableCell>
             </TableRow>
           ))}
