@@ -168,13 +168,15 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                       label={t('v2:feedback.sendMetadata')}
                     />
                     <Tooltip title={t('v2:feedback.viewMetadata')}>
-                      <IconButton
-                        size="small"
-                        aria-label={t('v2:feedback.viewMetadata')}
-                        onClick={() => setMetadataModalOpen(true)}
-                      >
-                        <InfoOutlinedIcon fontSize="small" />
-                      </IconButton>
+                      <span>
+                        <IconButton
+                          size="small"
+                          aria-label={t('v2:feedback.viewMetadata')}
+                          onClick={() => setMetadataModalOpen(true)}
+                        >
+                          <InfoOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </span>
                     </Tooltip>
                   </Stack>
                 </Box>
