@@ -55,4 +55,5 @@ export const UserFeedbackSchema = z.object({
     answerData: z.record(z.string(), z.unknown()).nullable(),
     recommendations: z.array(z.record(z.string(), z.unknown())),
   }).optional(),
+  appVersion: z.string().optional(),
 })

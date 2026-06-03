@@ -148,15 +148,27 @@ export default {
         'last12Months': 'Last 12 months',
         'loading': 'Loading feedback...',
         'empty': 'No feedback submitted yet.',
-        'readComment': 'Read comment',
+        'readComment': 'Read',
         'dialogTitle': 'Feedback comment',
         'close': 'Close',
         'starsValue': '{{stars}} / 5 stars',
         'table': {
           'date': 'Date',
           'stars': 'Stars',
+          'version': 'Version',
           'text': 'Text feedback',
+          'metadata': 'Metadata',
+          'hasMetadata': 'Yes',
+          'noMetadata': 'No',
           'action': 'Action'
+        },
+        'metadata': {
+          'title': 'Recommendation metadata',
+          'filterSelections': 'Filter selections',
+          'recommendations': 'Recommendations',
+          'points': 'Points',
+          'courseCodes': 'Course codes',
+          'period': 'Period'
         }
       }
     },

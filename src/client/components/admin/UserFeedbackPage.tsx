@@ -14,6 +14,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  Divider,
 } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,16 +22,20 @@ import { Navigate } from 'react-router-dom'
 import AdminNavbar from './AdminNavbar.tsx'
 import ActionButtonV2 from '../common/ActionButtonV2.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import FeedbackMetadataDisplay from './FeedbackMetadataDisplay.tsx'
 import { toDayLabel } from '../../../common/datelabels.ts'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
+import type { RecommendationMetadata } from '../../../common/types.ts'
 
 type UserFeedback = {
   id: number
   textFeedback: string
   stars: number
   date: string
+  recommendationMetadata?: RecommendationMetadata | null
+  appVersion?: string | null
 }
 
 const truncateFeedback = (text: string, maxLength = 140) => {
@@ -62,13 +67,21 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
       <DialogTitle>{t('v2:feedback.admin.dialogTitle')}</DialogTitle>
       <DialogContent dividers>
         {feedback && (
-          <Stack spacing={2}>
+          <Stack spacing={3}>
             <Typography color="text.secondary">
               {new Date(feedback.date).toLocaleString()} | {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
+              {feedback.appVersion && ` | v${feedback.appVersion}`}
             </Typography>
             <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
               {feedback.textFeedback}
             </Typography>
+
+            {feedback.recommendationMetadata && (
+              <>
+                <Divider />
+                <FeedbackMetadataDisplay metadata={feedback.recommendationMetadata} />
+              </>
+            )}
           </Stack>
         )}
       </DialogContent>
@@ -159,8 +172,9 @@ const UserFeedbackPage = () => {
               <TableRow>
                 <TableCell>{t('v2:feedback.admin.table.date')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.version')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.text')}</TableCell>
-                <TableCell align="right">{t('v2:feedback.admin.table.action')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.action')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -168,12 +182,13 @@ const UserFeedbackPage = () => {
                 <TableRow key={feedback.id}>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
                   <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
+                  <TableCell>{feedback.appVersion ?? '—'}</TableCell>
                   <TableCell sx={{ maxWidth: 520 }}>
                     <Typography sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
                       {truncateFeedback(feedback.textFeedback)}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     <ActionButtonV2
                       text={t('v2:feedback.admin.readComment')}
                       type="button"

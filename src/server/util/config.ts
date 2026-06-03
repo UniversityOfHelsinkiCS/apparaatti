@@ -47,3 +47,6 @@ export const IMPORTER_URL =
   process.env.IMPORTER_URL || 'localhost:3003/importer'
 
 export const LOKI_HOST = process.env.LOKI_HOST || 'http://loki-svc.toska-lokki.svc.cluster.local:3100'
+
+export const GIT_SHA = process.env.GIT_SHA || 'unknown'
+export const PACKAGE_VERSION = process.env.npm_package_version || 'unknown'

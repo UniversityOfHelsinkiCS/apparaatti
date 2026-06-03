@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 import FormSubmitActions from './common/FormSubmitActions.tsx'
+import VersionBadge from './common/VersionBadge.tsx'
 
 const style = {
   position: 'absolute',
@@ -115,6 +116,7 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
             </BlackOutlinedButton>
           )}
         </Box>
+        <VersionBadge />
       </Box>
     </Modal>
   )

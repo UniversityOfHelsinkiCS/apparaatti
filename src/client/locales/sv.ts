@@ -147,15 +147,27 @@ export default {
         'last12Months': 'Senaste 12 månaderna',
         'loading': 'Laddar feedback...',
         'empty': 'Ingen feedback har skickats än.',
-        'readComment': 'Läs kommentar',
+        'readComment': 'Läs',
         'dialogTitle': 'Feedbackkommentar',
         'close': 'Stäng',
         'starsValue': '{{stars}} / 5 stjärnor',
         'table': {
           'date': 'Datum',
           'stars': 'Stjärnor',
+          'version': 'Version',
           'text': 'Feedback',
+          'metadata': 'Metadata',
+          'hasMetadata': 'Ja',
+          'noMetadata': 'Nej',
           'action': 'Åtgärd'
+        },
+        'metadata': {
+          'title': 'Rekommendationsmetadata',
+          'filterSelections': 'Filterval',
+          'recommendations': 'Rekommendationer',
+          'points': 'Poäng',
+          'courseCodes': 'Kurskoder',
+          'period': 'Period'
         }
       }
     },

@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import useApiMutation from '../hooks/useApiMutation'
+import useApi from '../util/useApi'
 import { useFilterContext } from '../contexts/filterContext'
 
 type FeedbackModalProps = {
@@ -55,6 +56,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
+  const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
+    data: { gitSha: string; packageVersion: string } | null
+  }
   const submitFeedbackMutation = useApiMutation(async (res: Response) => {
     if (!res.ok) {
       throw new Error('Feedback submission failed')
@@ -81,12 +85,19 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
+    const recommendationMetadata = sendRecommendationMetadata
+      ? {
+        answerData: finalRecommendedCourses?.answerData ?? null,
+        recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
+      }
+      : undefined
+
+    const appVersion = versionData
+      ? `${versionData.packageVersion} (${versionData.gitSha})`
+      : undefined
+
     try {
-      await submitFeedbackMutation.mutateAsync({
-        textFeedback,
-        stars,
-        recommendationMetadata: sendRecommendationMetadata ? feedbackRecommendationMetadata : undefined,
-      }, undefined)
+      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata, appVersion }, undefined)
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')

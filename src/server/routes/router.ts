@@ -5,7 +5,7 @@ import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import debugRouter from './debugRouter.ts'
-import { inDevelopment, UPDATER_CRON_ENABLED } from '../util/config.ts'
+import { inDevelopment, UPDATER_CRON_ENABLED, GIT_SHA, PACKAGE_VERSION } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
 import { isAdmin, isSuperuser } from '../util/validations.ts'
@@ -38,6 +38,14 @@ if (UPDATER_CRON_ENABLED) {
     }
   })
 }
+
+router.get('/version', (req, res) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Unauthorized' })
+    return
+  }
+  res.json({ gitSha: GIT_SHA, packageVersion: PACKAGE_VERSION })
+})
 
 router.get('/filter-config', async (req, res) => {
   if (!req.user) {
@@ -104,7 +112,8 @@ router.post('/feedback', async (req, res) => {
     feedback.textFeedback,
     feedback.stars,
     new Date(),
-    feedback.recommendationMetadata
+    feedback.recommendationMetadata,
+    feedback.appVersion
   )
 
   res.json({ status: 'success' })
