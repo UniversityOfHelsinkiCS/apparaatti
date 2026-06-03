@@ -44,6 +44,14 @@ const SidebarContent = () => {
     }
 
     setExpandedFilterIds((previousExpandedFilterIds) => {
+      const hasNewUnansweredFilter = unansweredMandatoryFilterIds.some(
+        (filterId) => !previousExpandedFilterIds.has(filterId)
+      )
+
+      if (!hasNewUnansweredFilter) {
+        return previousExpandedFilterIds
+      }
+
       const nextExpandedFilterIds = new Set(previousExpandedFilterIds)
       unansweredMandatoryFilterIds.forEach((filterId) => {
         nextExpandedFilterIds.add(filterId)
