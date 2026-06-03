@@ -1,6 +1,6 @@
 import { Paper, Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import LanguageSelector from '../LanguageSelector.tsx'
 
@@ -10,7 +10,6 @@ type AdminNavbarProps = {
 
 const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const location = useLocation()
 
   const navItems = [
@@ -46,7 +45,8 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.25} useFlexGap flexWrap="wrap">
           <BlackOutlinedButton
             type="button"
-            onClick={() => navigate('/')}
+            component={Link}
+            to="/"
             sx={{ borderColor: '#d1d5db', color: '#111827' }}
           >
             {t('v2:adminNav.backToApp')}
@@ -58,7 +58,8 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
               <BlackOutlinedButton
                 key={item.path}
                 type="button"
-                onClick={() => navigate(item.path)}
+                component={Link}
+                to={item.path}
                 sx={
                   isActive
                     ? {

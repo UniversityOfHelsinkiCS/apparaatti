@@ -2,7 +2,7 @@ import { Box, Typography, Modal } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { CourseRecommendations } from '../../common/types'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
@@ -85,7 +85,6 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
   )
 }
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
-  const navigate = useNavigate()
   const { data: user } = useApi('user', '/api/user', 'GET', null)
   return (
     <Modal
@@ -98,20 +97,20 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
         <Feedback onClose={onClose} recommendations = {recommendations}/>
 
         <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
-          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin') }}>
+          <BlackOutlinedButton component={Link} to="/admin" onClick={onClose}>
             Filter config
           </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/courses') }}>
+          <BlackOutlinedButton component={Link} to="/admin/courses" onClick={onClose}>
             Courses
           </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/stats') }}>
+          <BlackOutlinedButton component={Link} to="/admin/stats" onClick={onClose}>
             Stats
           </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/feedback') }}>
+          <BlackOutlinedButton component={Link} to="/admin/feedback" onClick={onClose}>
             User feedback
           </BlackOutlinedButton>
           {user?.isSuperuser && (
-            <BlackOutlinedButton onClick={() => { onClose(); navigate('/admin/login-as') }}>
+            <BlackOutlinedButton component={Link} to="/admin/login-as" onClick={onClose}>
               Login as
             </BlackOutlinedButton>
           )}
