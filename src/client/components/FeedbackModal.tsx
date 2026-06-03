@@ -3,6 +3,10 @@ import {
   Alert,
   Box,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   IconButton,
   Modal,
@@ -16,6 +20,7 @@ import {
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import FormSubmitActions from './common/FormSubmitActions'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
 import useApiMutation from '../hooks/useApiMutation'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -46,6 +51,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
   const [sendRecommendationMetadata, setSendRecommendationMetadata] = useState(false)
+  const [metadataModalOpen, setMetadataModalOpen] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
@@ -54,6 +60,11 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
       throw new Error('Feedback submission failed')
     }
   }, '/api/feedback')
+  const recommendationMetadata = {
+    answerData: finalRecommendedCourses?.answerData ?? null,
+    recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
+  }
+  const recommendationMetadataPreview = JSON.stringify(recommendationMetadata, null, 2)
 
   const resetForm = () => {
     setTextFeedback('')
@@ -63,13 +74,14 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
   const handleClose = () => {
     resetForm()
+    setMetadataModalOpen(false)
     onClose()
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    const recommendationMetadata = sendRecommendationMetadata
+    const feedbackRecommendationMetadata = sendRecommendationMetadata
       ? {
         answerData: finalRecommendedCourses?.answerData ?? null,
         recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
@@ -77,7 +89,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
       : undefined
 
     try {
-      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata }, undefined)
+      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata: feedbackRecommendationMetadata }, undefined)
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
@@ -158,8 +170,12 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                       }
                       label={t('v2:feedback.sendMetadata')}
                     />
-                    <Tooltip title={t('v2:feedback.sendMetadataInfo')}>
-                      <IconButton size="small" aria-label={t('v2:feedback.sendMetadataInfo')}>
+                    <Tooltip title={t('v2:feedback.viewMetadata')}>
+                      <IconButton
+                        size="small"
+                        aria-label={t('v2:feedback.viewMetadata')}
+                        onClick={() => setMetadataModalOpen(true)}
+                      >
                         <InfoOutlinedIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -177,6 +193,38 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
           </Stack>
         </Box>
       </Modal>
+      <Dialog open={metadataModalOpen} onClose={() => setMetadataModalOpen(false)} fullWidth maxWidth="md">
+        <DialogTitle>{t('v2:feedback.metadataDialogTitle')}</DialogTitle>
+        <DialogContent dividers>
+          <Stack spacing={2}>
+            <Typography>{t('v2:feedback.metadataDialogDescription')}</Typography>
+            <Box
+              component="pre"
+              sx={{
+                m: 0,
+                p: 2,
+                maxHeight: 360,
+                overflow: 'auto',
+                borderRadius: 2,
+                backgroundColor: '#fbfbfc',
+                border: '1px solid',
+                borderColor: 'divider',
+                fontSize: '0.875rem',
+                fontFamily: 'monospace',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+              }}
+            >
+              {recommendationMetadataPreview}
+            </Box>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <BlackOutlinedButton onClick={() => setMetadataModalOpen(false)}>
+            {t('v2:feedback.cancel')}
+          </BlackOutlinedButton>
+        </DialogActions>
+      </Dialog>
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
