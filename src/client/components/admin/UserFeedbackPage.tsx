@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
   Divider,
-  Chip,
 } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -175,8 +174,7 @@ const UserFeedbackPage = () => {
                 <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.version')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.text')}</TableCell>
-                <TableCell>{t('v2:feedback.admin.table.metadata')}</TableCell>
-                <TableCell align="right">{t('v2:feedback.admin.table.action')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.action')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -190,23 +188,7 @@ const UserFeedbackPage = () => {
                       {truncateFeedback(feedback.textFeedback)}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    {feedback.recommendationMetadata ? (
-                      <Chip
-                        label={t('v2:feedback.admin.table.hasMetadata')}
-                        size="small"
-                        color="success"
-                        variant="outlined"
-                      />
-                    ) : (
-                      <Chip
-                        label={t('v2:feedback.admin.table.noMetadata')}
-                        size="small"
-                        variant="outlined"
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     <ActionButtonV2
                       text={t('v2:feedback.admin.readComment')}
                       type="button"
