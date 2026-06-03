@@ -46,13 +46,6 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.25} useFlexGap flexWrap="wrap">
           <BlackOutlinedButton
             type="button"
-            onClick={() => navigate(-1)}
-            sx={{ justifyContent: 'flex-start', color: '#374151', borderColor: '#d1d5db' }}
-          >
-            {t('v2:adminNav.back')}
-          </BlackOutlinedButton>
-          <BlackOutlinedButton
-            type="button"
             onClick={() => navigate('/')}
             sx={{ borderColor: '#d1d5db', color: '#111827' }}
           >
