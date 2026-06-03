@@ -155,10 +155,12 @@ export default {
           'metadata': 'Metatiedot',
           'hasMetadata': 'Kyllä',
           'noMetadata': 'Ei',
+          'viewMetadata': 'Näytä metatiedot',
           'action': 'Toiminto'
         },
         'metadata': {
           'title': 'Suositusmetatiedot',
+          'dialogTitle': 'Suositusmetatiedot',
           'filterSelections': 'Filtterin valinnat',
           'recommendations': 'Suositukset',
           'points': 'Pisteet',

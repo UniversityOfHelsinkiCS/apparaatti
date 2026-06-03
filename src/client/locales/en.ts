@@ -156,10 +156,12 @@ export default {
           'metadata': 'Metadata',
           'hasMetadata': 'Yes',
           'noMetadata': 'No',
+          'viewMetadata': 'View metadata',
           'action': 'Action'
         },
         'metadata': {
           'title': 'Recommendation metadata',
+          'dialogTitle': 'Recommendation metadata',
           'filterSelections': 'Filter selections',
           'recommendations': 'Recommendations',
           'points': 'Points',

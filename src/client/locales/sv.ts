@@ -155,10 +155,12 @@ export default {
           'metadata': 'Metadata',
           'hasMetadata': 'Ja',
           'noMetadata': 'Nej',
+          'viewMetadata': 'Visa metadata',
           'action': 'Åtgärd'
         },
         'metadata': {
           'title': 'Rekommendationsmetadata',
+          'dialogTitle': 'Rekommendationsmetadata',
           'filterSelections': 'Filterval',
           'recommendations': 'Rekommendationer',
           'points': 'Poäng',

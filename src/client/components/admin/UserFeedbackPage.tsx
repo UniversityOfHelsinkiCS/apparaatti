@@ -93,9 +93,33 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
   )
 }
 
+type MetadataDialogProps = {
+  metadata: RecommendationMetadata | null
+  onClose: () => void
+}
+
+const MetadataDialog = ({ metadata, onClose }: MetadataDialogProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <Dialog open={metadata !== null} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>{t('v2:feedback.admin.metadata.dialogTitle')}</DialogTitle>
+      <DialogContent dividers>
+        {metadata && <FeedbackMetadataDisplay metadata={metadata} />}
+      </DialogContent>
+      <DialogActions>
+        <BlackOutlinedButton onClick={onClose}>
+          {t('v2:feedback.admin.close')}
+        </BlackOutlinedButton>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
 const UserFeedbackPage = () => {
   const { t } = useTranslation()
   const [selectedFeedback, setSelectedFeedback] = useState<UserFeedback | null>(null)
+  const [selectedMetadata, setSelectedMetadata] = useState<RecommendationMetadata | null>(null)
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
@@ -188,11 +212,10 @@ const UserFeedbackPage = () => {
                   </TableCell>
                   <TableCell>
                     {feedback.recommendationMetadata ? (
-                      <Chip
-                        label={t('v2:feedback.admin.table.hasMetadata')}
-                        size="small"
-                        color="success"
-                        variant="outlined"
+                      <ActionButtonV2
+                        text={t('v2:feedback.admin.table.viewMetadata')}
+                        type="button"
+                        onClick={() => setSelectedMetadata(feedback.recommendationMetadata)}
                       />
                     ) : (
                       <Chip
@@ -219,6 +242,10 @@ const UserFeedbackPage = () => {
       <FeedbackCommentDialog
         feedback={selectedFeedback}
         onClose={() => setSelectedFeedback(null)}
+      />
+      <MetadataDialog
+        metadata={selectedMetadata}
+        onClose={() => setSelectedMetadata(null)}
       />
     </Box>
   )
