@@ -60,11 +60,11 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
       throw new Error('Feedback submission failed')
     }
   }, '/api/feedback')
-  const recommendationMetadata = {
+  const feedbackRecommendationMetadata = {
     answerData: finalRecommendedCourses?.answerData ?? null,
     recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
   }
-  const recommendationMetadataPreview = JSON.stringify(recommendationMetadata, null, 2)
+  const recommendationMetadataPreview = JSON.stringify(feedbackRecommendationMetadata, null, 2)
 
   const resetForm = () => {
     setTextFeedback('')
@@ -81,15 +81,12 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    const feedbackRecommendationMetadata = sendRecommendationMetadata
-      ? {
-        answerData: finalRecommendedCourses?.answerData ?? null,
-        recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
-      }
-      : undefined
-
     try {
-      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata: feedbackRecommendationMetadata }, undefined)
+      await submitFeedbackMutation.mutateAsync({
+        textFeedback,
+        stars,
+        recommendationMetadata: sendRecommendationMetadata ? feedbackRecommendationMetadata : undefined,
+      }, undefined)
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
@@ -206,7 +203,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                 maxHeight: 360,
                 overflow: 'auto',
                 borderRadius: 2,
-                backgroundColor: '#fbfbfc',
+                bgcolor: 'grey.50',
                 border: '1px solid',
                 borderColor: 'divider',
                 fontSize: '0.875rem',
