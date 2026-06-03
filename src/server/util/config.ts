@@ -1,15 +1,3 @@
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
-
-const readPackageVersion = () => {
-  try {
-    return require('../../../package.json')?.version || 'unknown'
-  } catch {
-    return 'unknown'
-  }
-}
-
 export const DATABASE_URL = process.env.DATABASE_URL || ''
 export const inProduction = process.env.IN_PRODUCTION || false
 export const inDevelopment = process.env.NODE_ENV === 'development'
