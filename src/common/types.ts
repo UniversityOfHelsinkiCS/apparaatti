@@ -174,6 +174,16 @@ export type CourseRealization = {
 
 }
 
+export type CourseAdminReviewType = {
+  id: number
+  curId: string
+  reviewed: string // possible states: 'no' and 'yes', reason behind being a string is that in the future more states wil be wanted like 'changed' or 'todo'
+  comment?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type CourseReviewState = CourseAdminReviewType | null
 
 export type User = {
   id: string

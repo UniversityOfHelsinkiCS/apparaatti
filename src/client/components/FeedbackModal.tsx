@@ -2,12 +2,10 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import {
   Alert,
   Box,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
   IconButton,
   Modal,
   Rating,
@@ -18,7 +16,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
+import type { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import LabeledCheckbox from './common/LabeledCheckbox'
 import FormSubmitActions from './common/FormSubmitActions'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import useApiMutation from '../hooks/useApiMutation'
@@ -169,13 +169,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={0.5}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={sendRecommendationMetadata}
-                          onChange={(event) => setSendRecommendationMetadata(event.target.checked)}
-                        />
-                      }
+                    <LabeledCheckbox
+                      checked={sendRecommendationMetadata}
+                      onChange={(event: ChangeEvent<HTMLInputElement>) => setSendRecommendationMetadata(event.target.checked)}
                       label={t('v2:feedback.sendMetadata')}
                     />
                     <Tooltip title={t('v2:feedback.viewMetadata')}>

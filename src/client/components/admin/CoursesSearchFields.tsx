@@ -1,5 +1,7 @@
-import { Box, TextField, Typography } from '@mui/material'
+import { Box, MenuItem, TextField, Typography } from '@mui/material'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+
+export type ReviewStatusFilterValue = 'all' | 'reviewed' | 'not-reviewed'
 
 export interface CoursesSearchFieldsValues {
   nameInput: string
@@ -7,6 +9,7 @@ export interface CoursesSearchFieldsValues {
   excludeUrnsInput: string
   courseCodeInput: string
   excludeCourseCodesInput: string
+  reviewStatusInput: ReviewStatusFilterValue
 }
 
 interface CoursesSearchFieldsProps extends CoursesSearchFieldsValues {
@@ -15,6 +18,7 @@ interface CoursesSearchFieldsProps extends CoursesSearchFieldsValues {
   setExcludeUrnsInput: (v: string) => void
   setCourseCodeInput: (v: string) => void
   setExcludeCourseCodesInput: (v: string) => void
+  setReviewStatusInput: (v: ReviewStatusFilterValue) => void
   onSearch: () => void
 }
 
@@ -37,11 +41,13 @@ const CoursesSearchFields = ({
   excludeUrnsInput,
   courseCodeInput,
   excludeCourseCodesInput,
+  reviewStatusInput,
   setNameInput,
   setUrnInput,
   setExcludeUrnsInput,
   setCourseCodeInput,
   setExcludeCourseCodesInput,
+  setReviewStatusInput,
   onSearch,
 }: CoursesSearchFieldsProps) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -107,6 +113,23 @@ const CoursesSearchFields = ({
           onKeyPress={handleKeyPress}
           sx={{ minWidth: 240 }}
         />
+      </Box>
+
+      <Box component="fieldset" sx={fieldsetSx}>
+        <Typography component="legend" sx={legendSx}>Review</Typography>
+        <TextField
+          select
+          label="Status"
+          variant="outlined"
+          size="small"
+          value={reviewStatusInput}
+          onChange={(e) => setReviewStatusInput(e.target.value as ReviewStatusFilterValue)}
+          sx={{ minWidth: 180 }}
+        >
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="reviewed">Reviewed</MenuItem>
+          <MenuItem value="not-reviewed">Not reviewed</MenuItem>
+        </TextField>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>

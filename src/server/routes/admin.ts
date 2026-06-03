@@ -8,7 +8,7 @@ import {
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
-import { getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
+import { createOrUpdateCourseAdminReviewEntry, getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
 import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
@@ -108,7 +108,7 @@ adminRouter.get('/courses', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const { page = '1', limit = '50', name, urn, courseCode, excludeUrns, excludeCourseCodes } = req.query
+  const { page = '1', limit = '50', name, urn, courseCode, excludeUrns, excludeCourseCodes, reviewStatus } = req.query
 
   const pageNum = parseInt(page as string, 10)
   const limitNum = parseInt(limit as string, 10)
@@ -120,12 +120,29 @@ adminRouter.get('/courses', async (req, res) => {
       excludeUrns: excludeUrns as string | undefined,
       courseCodeSearch: courseCode as string | undefined,
       excludeCourseCodes: excludeCourseCodes as string | undefined,
+      reviewStatus: reviewStatus as string | undefined,
     },
     pageNum,
     limitNum
   )
   
   res.send(result)
+})
+
+adminRouter.post('/course/review', async (req, res) => {
+  const user = enforceIsUser(req)
+  enforceIsAdmin(user)
+
+  const reviewSchema = z.object({
+    curId: z.string().min(1),
+    reviewed: z.string().min(1),
+    comment: z.string().optional(),
+  })
+
+  const { curId, reviewed, comment } = reviewSchema.parse(req.body)
+  const reviewState = await createOrUpdateCourseAdminReviewEntry(curId, reviewed, comment)
+
+  res.json({ status: 'success', reviewState })
 })
 
 adminRouter.use('/stats', statsRouter)

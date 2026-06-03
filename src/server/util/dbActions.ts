@@ -9,6 +9,7 @@ import User from '../db/models/user.ts'
 import UserFeedback from '../db/models/userFeedback.ts'
 import UserVisits from '../db/models/userVisits.ts'
 import type { RecommendationMetadata, UserFeedback as UserFeedbackType, UserVisit } from '../../common/types.ts'
+import CourseAdminReview from '../db/models/CourseAdminReview.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -225,6 +226,7 @@ async function paginateCursWithJsUrnFilter(
   includeOptions: any[],
   urnSearch: string | undefined,
   excludeUrnListLower: string[],
+  reviewStatus: string | undefined,
   page: number,
   limit: number,
   offset: number,
@@ -234,6 +236,7 @@ async function paginateCursWithJsUrnFilter(
     include: includeOptions,
     order: [['name', 'ASC']],
     subQuery: false,
+    raw: true,
   })
 
   const urnSearchLower = urnSearch?.toLowerCase()
@@ -241,9 +244,11 @@ async function paginateCursWithJsUrnFilter(
     curMatchesUrnFilters(cur, urnSearchLower, excludeUrnListLower)
   )
 
-  const total = filtered.length
+  const filteredWithReviews = filterCoursesByReviewStatus(await populateWithReviews(filtered), reviewStatus)
+  const total = filteredWithReviews.length
+  const paginatedCourses = filteredWithReviews.slice(offset, offset + limit)
   return {
-    courses: filtered.slice(offset, offset + limit),
+    courses: paginatedCourses,
     total,
     page,
     limit,
@@ -273,14 +278,46 @@ export interface CourseSearchFilters {
   courseCodeSearch?: string
   /** Comma-separated course-code substrings; Curs whose ANY linked Cu matches are excluded. */
   excludeCourseCodes?: string
+
+  /** Limit results to reviewed or not-reviewed courses. */
+  reviewStatus?: string
 }
+
+function filterCoursesByReviewStatus(courses: any[], reviewStatus?: string) {
+  if (reviewStatus === 'reviewed') {
+    return courses.filter(course => course.reviewState?.reviewed === 'yes')
+  }
+
+  if (reviewStatus === 'not-reviewed') {
+    return courses.filter(course => !course.reviewState || course.reviewState.reviewed !== 'yes')
+  }
+
+  return courses
+}
+
+async function populateWithReviews(curs: Cur[]) {
+  const cursWithReviews = await Promise.all(curs.map(async (cur) => {
+    const plainCur = typeof (cur as any).get === 'function'
+      ? (cur as any).get({ plain: true })
+      : cur
+
+    const reviewState = await getCourseAdminReviewByCurId(plainCur.id)
+
+    return {
+      ...plainCur,
+      reviewState,
+    }
+  }))
+  return cursWithReviews
+}
+
 
 export async function searchCoursesWithPagination(
   filters: CourseSearchFilters,
   page: number,
   limit: number
 ) {
-  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes } = filters
+  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes, reviewStatus } = filters
   const offset = (page - 1) * limit
 
   // Build the where clause for course realizations (name search)
@@ -317,39 +354,47 @@ export async function searchCoursesWithPagination(
     through: { attributes: [] } // Don't include join table attributes
   }]
 
-  const needsJsUrnFilter = !!urnSearch || excludeUrnList.length > 0
+  const needsJsFiltering = !!urnSearch || excludeUrnList.length > 0 || reviewStatus === 'reviewed' || reviewStatus === 'not-reviewed'
 
-  if (needsJsUrnFilter) {
+  if (needsJsFiltering) {
     const jsFilteredResult = await paginateCursWithJsUrnFilter(
       curWhere,
       includeOptions,
       urnSearch,
       excludeUrnList,
+      reviewStatus,
       page,
       limit,
       offset,
     )
     return jsFilteredResult
   }
+  else
+  {
+    // No JS-side filtering required - use regular paginated query
+    const { rows: results, count: total } = await Cur.findAndCountAll({
+      where: curWhere,
+      include: includeOptions,
+      limit,
+      offset,
+      order: [['name', 'ASC']],
+      distinct: true,
+      subQuery: false,
+      raw: true,
+    })
 
-  // No JS-side filtering required - use regular paginated query
-  const { rows: results, count: total } = await Cur.findAndCountAll({
-    where: curWhere,
-    include: includeOptions,
-    limit,
-    offset,
-    order: [['name', 'ASC']],
-    distinct: true,
-    subQuery: false,
-  })
+    //populating the courses with the reviews
+    const resultsWithReviews = await populateWithReviews(results)
 
-  return {
-    courses: results,
-    total,
-    page,
-    limit,
-    totalPages: Math.ceil(total / limit)
+    return {
+      courses: resultsWithReviews,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    }
   }
+  
 }
 
 
@@ -422,4 +467,34 @@ export async function getUserFeedbackEntries(start: Date, end: Date): Promise<Us
     order: [['date', 'DESC']],
     raw: true,
   }) as UserFeedbackType[]
+}
+
+export async function createOrUpdateCourseAdminReviewEntry(curId: string, reviewed: string, comment?: string) {
+  const existingReview = await CourseAdminReview.findOne({
+    where: { curId },
+    order: [['updatedAt', 'DESC']],
+  })
+
+  if (existingReview) {
+    existingReview.reviewed = reviewed
+    existingReview.comment = comment ?? ''
+    await existingReview.save()
+    return existingReview.get({ plain: true })
+  }
+
+  const createdReview = await CourseAdminReview.create({
+    curId,
+    reviewed,
+    comment: comment ?? '',
+  })
+
+  return createdReview.get({ plain: true })
+}
+
+export async function getCourseAdminReviewByCurId(curId: string) {
+  return await CourseAdminReview.findOne({
+    where: { curId },
+    order: [['updatedAt', 'DESC']],
+    raw: true,
+  })
 }

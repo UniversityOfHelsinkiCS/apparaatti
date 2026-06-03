@@ -1,5 +1,5 @@
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { green } from '@mui/material/colors'
+import { FormControlLabel, FormGroup } from '@mui/material'
+import AppCheckbox from '../components/common/AppCheckbox.tsx'
 import { Question, Option } from '../../common/types'
 import React from 'react'
 
@@ -32,10 +32,8 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             },
           }}
           control={
-            <Checkbox
+            <AppCheckbox
               onChange={handleCheckboxChange}
-              color="default"
-              sx={{ '&.Mui-checked': { color: green[500] } }}
             />
           }
           label={option.name}

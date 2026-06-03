@@ -2,12 +2,11 @@ import React from 'react'
 import {
   Box,
   FormControlLabel,
-  Checkbox,
   FormGroup,
   FormControl,
 } from '@mui/material'
-import { green } from '@mui/material/colors'
 import { Question } from '../../common/types'
+import AppCheckbox from './common/AppCheckbox.tsx'
 import QuestionTitleV2 from './QuestionTitleV2'
 import ExtraInfoModalV2 from './ExtraInfoModalV2'
 import { pickVariant } from '../hooks/useQuestions'
@@ -61,10 +60,8 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
                 },
               }}
               control={
-                <Checkbox
+                <AppCheckbox
                   onChange={handleChoice}
-                  color="default"
-                  sx={{ '&.Mui-checked': { color: green[500] } }}
                 />
               }
               label={option.name}

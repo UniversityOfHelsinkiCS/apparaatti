@@ -1,8 +1,11 @@
-import { Box, Table, TableBody, TableCell, TableHead, TableRow, Typography, Pagination } from '@mui/material'
+import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
+import type { CourseReviewState } from '../../common/types.ts'
 import AdminNavbar from './admin/AdminNavbar.tsx'
 import CoursesSearchFields from './admin/CoursesSearchFields.tsx'
+import type { ReviewStatusFilterValue } from './admin/CoursesSearchFields.tsx'
+import ReviewActions from './admin/ReviewActions.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 import useRequiredUser from '../util/useRequiredUser.ts'
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
@@ -19,7 +22,7 @@ interface CourseUnit {
 }
 
 interface Course {
-  id: string
+  id: string // cur id
   name: {
     fi: string
     en: string
@@ -27,6 +30,8 @@ interface Course {
   }
   customCodeUrns: Record<string, string[]>
   Cus?: CourseUnit[]
+  review?: CourseReviewState
+  reviewState?: CourseReviewState
 }
 
 interface PaginatedCoursesResponse {
@@ -47,6 +52,7 @@ const CoursesPage = () => {
   const [courseCodeInput, setCourseCodeInput] = useState('')
   const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
   const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
+  const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
 
   // Active search values (what's actually sent to API)
   const [nameSearch, setNameSearch] = useState('')
@@ -54,6 +60,7 @@ const CoursesPage = () => {
   const [courseCodeSearch, setCourseCodeSearch] = useState('')
   const [excludeUrnsSearch, setExcludeUrnsSearch] = useState('')
   const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
+  const [reviewStatusSearch, setReviewStatusSearch] = useState<ReviewStatusFilterValue>('all')
 
   const handleSearch = () => {
     setNameSearch(nameInput)
@@ -61,6 +68,7 @@ const CoursesPage = () => {
     setCourseCodeSearch(courseCodeInput)
     setExcludeUrnsSearch(excludeUrnsInput)
     setExcludeCourseCodesSearch(excludeCourseCodesInput)
+    setReviewStatusSearch(reviewStatusInput)
     setPage(1) // Reset to first page on new search
   }
 
@@ -73,15 +81,20 @@ const CoursesPage = () => {
     if (courseCodeSearch) params.append('courseCode', courseCodeSearch)
     if (excludeUrnsSearch) params.append('excludeUrns', excludeUrnsSearch)
     if (excludeCourseCodesSearch) params.append('excludeCourseCodes', excludeCourseCodesSearch)
+    if (reviewStatusSearch !== 'all') params.append('reviewStatus', reviewStatusSearch)
     return params.toString()
   }
 
-  const { data: coursesData, isLoading: isCoursesLoading } = useApi(
-    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}`,
+  const { data: coursesData, isLoading: isCoursesLoading, refetch } = useApi(
+    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
     null
-  ) as { data: PaginatedCoursesResponse | null; isLoading: boolean }
+  ) as {
+    data: PaginatedCoursesResponse | null
+    isLoading: boolean
+    refetch: () => Promise<unknown>
+  }
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -141,6 +154,14 @@ const CoursesPage = () => {
     return cus.map(cu => cu.courseCode).join(', ')
   }
 
+  const formatReviewUpdatedAt = (reviewState?: CourseReviewState) => {
+    if (!reviewState?.updatedAt) {
+      return '-'
+    }
+
+    return new Date(reviewState.updatedAt).toLocaleString()
+  }
+
   const handleVisit = (courseId: string) => {
     window.open(`https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/${courseId}/information/basicinfo`, '_blank')
   }
@@ -162,11 +183,13 @@ const CoursesPage = () => {
         excludeUrnsInput={excludeUrnsInput}
         courseCodeInput={courseCodeInput}
         excludeCourseCodesInput={excludeCourseCodesInput}
+        reviewStatusInput={reviewStatusInput}
         setNameInput={setNameInput}
         setUrnInput={setUrnInput}
         setExcludeUrnsInput={setExcludeUrnsInput}
         setCourseCodeInput={setCourseCodeInput}
         setExcludeCourseCodesInput={setExcludeCourseCodesInput}
+        setReviewStatusInput={setReviewStatusInput}
         onSearch={handleSearch}
       />
 
@@ -176,15 +199,31 @@ const CoursesPage = () => {
             <TableCell>Course Name</TableCell>
             <TableCell>Course Codes</TableCell>
             <TableCell>Custom URNs</TableCell>
+            <TableCell>Review</TableCell>
+            <TableCell>Review Updated</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {courseList.map((course: Course) => (
             <TableRow key={course.id}>
+              {(() => {
+                const reviewState = course.reviewState ?? course.review ?? null
+
+                return (
+                  <>
               <TableCell>{formatCourseName(course.name)}</TableCell>
               <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
               <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
+              <TableCell>
+                <ReviewActions
+                  key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}
+                  curId={course.id}
+                  reviewState={reviewState}
+                  onSaved={refetch}
+                />
+              </TableCell>
+              <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
               <TableCell>
                 <BlackOutlinedButton
                   size="small"
@@ -193,6 +232,9 @@ const CoursesPage = () => {
                   Visit
                 </BlackOutlinedButton>
               </TableCell>
+                  </>
+                )
+              })()}
             </TableRow>
           ))}
         </TableBody>

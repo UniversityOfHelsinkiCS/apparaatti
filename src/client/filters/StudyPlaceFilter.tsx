@@ -2,11 +2,10 @@ import React from 'react'
 import {
   Box,
   FormControlLabel,
-  Checkbox,
   FormGroup,
   FormControl,
 } from '@mui/material'
-import { green } from '@mui/material/colors'
+import AppCheckbox from '../components/common/AppCheckbox.tsx'
 import { Question } from '../../common/types'
 import { pickVariant } from '../hooks/useQuestions'
 import { useFilterContext } from '../contexts/filterContext'
@@ -45,10 +44,8 @@ const StudyPlaceFilter = ({
                 },
               }}
               control={
-                <Checkbox
+                <AppCheckbox
                   onChange={handleChoice}
-                  color="default"
-                  sx={{ '&.Mui-checked': { color: green[500] } }}
                 />
               }
               label={option.name}
