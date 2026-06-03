@@ -46,6 +46,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererP
       key={filter.id}
       title={filterToRender.shortName}
       filterId={filter.id}
+      mandatory={filter.mandatory}
       expanded={expanded}
       onChange={onAccordionChange}
     >

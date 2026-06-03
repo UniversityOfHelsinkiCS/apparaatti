@@ -1,25 +1,36 @@
 import { IconButton, Stack, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import { Question } from '../../common/types'
-import { useTranslation } from 'react-i18next'
+import MandatoryBadge from './common/MandatoryBadge'
 
 const MandatoryStatus = ({question}: {question: Question}) => {
-  const {t} = useTranslation()
   if(!question.mandatory){
     return (<></>)
   }
   return(
-    <Typography>{t('question:mandatory')}</Typography>
+    <MandatoryBadge />
   )
 }
 
-const QuestionTitleV2 = ({handleOpen, title, question}: {handleOpen: () => void, title: string | undefined, question: Question}) => {
+const QuestionTitleV2 = ({
+  handleOpen,
+  title,
+  question,
+  showMandatoryStatus = true,
+}: {
+  handleOpen: () => void,
+  title: string | undefined,
+  question: Question,
+  showMandatoryStatus?: boolean,
+}) => {
   return (
     <Stack sx={{marginTop: '1rem'}} data-cy={`question-title-${question.id}`}>
-      <Stack direction='row'>
-        <MandatoryStatus question={question} />
-      </Stack>
-      <Stack direction='row' sx={{display: 'flex', borderTop: '2px solid gray'}}>
+      {showMandatoryStatus && (
+        <Stack direction='row'>
+          <MandatoryStatus question={question} />
+        </Stack>
+      )}
+      <Stack direction='row' sx={{display: 'flex'}}>
         <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
           <IconButton onClick={handleOpen} aria-label='more info' sx={{paddingLeft: 0}}>
             <InfoIcon></InfoIcon> 

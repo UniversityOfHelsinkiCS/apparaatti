@@ -1,22 +1,87 @@
-import { shouldShowFilterInSidebar, useFilterContext } from '../contexts/filterContext'
+import { filterConfigMap, isFilterStateAnswered, shouldShowFilterInSidebar, useFilterContext } from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './common/ActionButtonV2'
 import { Box } from '@mui/material'
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import ResetFiltersButton from './ResetFiltersButton'
 
 const SidebarContent = () => {
   const filterContext = useFilterContext()
   const { filters, isLoading, setModalOpen } = filterContext
   const { t } = useTranslation()
-  const [expandedFilterId, setExpandedFilterId] = useState<string | null>(null)
+  const hasInitializedMandatoryFilters = useRef(false)
+  const configMap = filterConfigMap(filterContext)
+
+  const filtersToShow = filters.filter((filter) => shouldShowFilterInSidebar(filter))
+  const mandatoryFilterIds = new Set(filtersToShow.filter((filter) => filter.mandatory).map((filter) => filter.id))
+  const unansweredMandatoryFilterIds = filtersToShow
+    .filter((filter) => {
+      if (!filter.mandatory) {
+        return false
+      }
+
+      const filterConfig = configMap.get(filter.id)
+      return !filterConfig || !isFilterStateAnswered(filterConfig.state)
+    })
+    .map((filter) => filter.id)
+  const [expandedFilterIds, setExpandedFilterIds] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    // When filters finish loading, initially open every mandatory filter that still needs an answer.
+    if (isLoading || hasInitializedMandatoryFilters.current) {
+      return
+    }
+
+    setExpandedFilterIds(new Set(unansweredMandatoryFilterIds))
+    hasInitializedMandatoryFilters.current = true
+  }, [isLoading, unansweredMandatoryFilterIds])
+
+  useEffect(() => {
+    // Keep newly introduced unanswered mandatory filters expanded after the initial setup runs.
+    if (isLoading || !hasInitializedMandatoryFilters.current || unansweredMandatoryFilterIds.length === 0) {
+      return
+    }
+
+    setExpandedFilterIds((previousExpandedFilterIds) => {
+      const nextExpandedFilterIds = new Set(previousExpandedFilterIds)
+      unansweredMandatoryFilterIds.forEach((filterId) => {
+        nextExpandedFilterIds.add(filterId)
+      })
+      return nextExpandedFilterIds
+    })
+  }, [isLoading, unansweredMandatoryFilterIds])
+
+  const getNextExpandedFilterIds = (filterId: string, isExpanded: boolean, expandedFilterIds: Set<string>) => {
+    if (!isExpanded) {
+      const nextExpandedFilterIds = new Set(expandedFilterIds)
+      nextExpandedFilterIds.delete(filterId)
+      return nextExpandedFilterIds
+    }
+
+    const nextExpandedFilterIds = new Set<string>()
+
+    expandedFilterIds.forEach((expandedFilterId) => {
+      if (expandedFilterId === filterId) {
+        return
+      }
+
+      const expandedFilterConfig = configMap.get(expandedFilterId)
+      const isMandatoryFilter = mandatoryFilterIds.has(expandedFilterId)
+      const filterHasAnswer = expandedFilterConfig && isFilterStateAnswered(expandedFilterConfig.state)
+
+      if (isMandatoryFilter && !filterHasAnswer) {
+        nextExpandedFilterIds.add(expandedFilterId)
+      }
+    })
+
+    nextExpandedFilterIds.add(filterId)
+    return nextExpandedFilterIds
+  }
 
   if (isLoading) {
     return <p>{t('v2:loadingFilters')}</p>
   }
-
-  const filtersToShow = filters.filter((filter) => shouldShowFilterInSidebar(filter))
 
   return (
     <Box
@@ -56,9 +121,9 @@ const SidebarContent = () => {
         <FilterRenderer
           key={filter.id}
           filter={filter}
-          expanded={expandedFilterId === filter.id}
+          expanded={expandedFilterIds.has(filter.id)}
           onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) =>
-            setExpandedFilterId(isExpanded ? filter.id : null)
+            setExpandedFilterIds((prev) => getNextExpandedFilterIds(filter.id, isExpanded, prev))
           }
         />
       ))}

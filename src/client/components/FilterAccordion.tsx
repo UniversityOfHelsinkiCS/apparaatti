@@ -2,6 +2,7 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, Chip, Stack,
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { ReactNode, SyntheticEvent } from 'react'
 import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
+import MandatoryBadge from './common/MandatoryBadge'
 
 interface ActiveFilterChipsProps {
   filterId: string
@@ -55,11 +56,12 @@ interface FilterAccordionProps {
   title: string
   children: ReactNode
   filterId?: string
+  mandatory?: boolean
   expanded?: boolean
   onChange?: (event: SyntheticEvent, isExpanded: boolean) => void
 }
 
-const FilterAccordion = ({ title, children, filterId, expanded, onChange }: FilterAccordionProps) => {
+const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onChange }: FilterAccordionProps) => {
   return (
     <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }}>
       <AccordionSummary
@@ -73,6 +75,7 @@ const FilterAccordion = ({ title, children, filterId, expanded, onChange }: Filt
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 0.5 }}>
+          {mandatory && <MandatoryBadge />}
           <Typography sx={{ mr: 1 }}>{title}</Typography>
           {filterId && <ActiveFilterChips filterId={filterId} />}
         </Box>
