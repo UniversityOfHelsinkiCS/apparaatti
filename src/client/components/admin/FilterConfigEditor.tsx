@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ChangeEvent } from 'react'
 import {
   Box,
   Button,
@@ -16,6 +17,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import useApi from '../../util/useApi.tsx'
 import type { FilterConfig } from '../../../common/types.ts'
 import FilterEditDialog from './FilterEditDialog.tsx'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 
 interface FilterConfigEditorProps {
   isSuperuser: boolean
@@ -38,6 +40,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   const [editTarget, setEditTarget] = useState<FilterConfig | 'new' | null>(null)
   const [restoringFilterId, setRestoringFilterId] = useState<string | null>(null)
   const [filtersWithoutSeedDefaults, setFiltersWithoutSeedDefaults] = useState<string[]>([])
+  const [importFileInputKey, setImportFileInputKey] = useState<number>(0)
 
   if (isLoading) return <Typography>Loading filters...</Typography>
 
@@ -100,6 +103,71 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       refetch()
     } finally {
       setRestoringFilterId(null)
+    }
+  }
+
+  const handleExport = async () => {
+    try {
+      const response = await adminFetch('GET', '/api/admin/filter-config/export')
+      if (!response.ok) {
+        window.alert('Failed to export filter configuration')
+        return
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `filter-config-${new Date().toISOString().split('T')[0]}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      window.alert('Failed to export filter configuration')
+      console.error(error)
+    }
+  }
+
+  const handleImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+
+    try {
+      const text = await file.text()
+      const data = JSON.parse(text)
+
+      const shouldImport = window.confirm(
+        `Import filter configuration from ${file.name}?\n\nThis will update existing filters with the imported settings.`
+      )
+      if (!shouldImport) {
+        setImportFileInputKey((prev) => prev + 1)
+        return
+      }
+
+      const response = await adminFetch('POST', '/api/admin/filter-config/import', data)
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null)
+        window.alert(errorData?.message ?? 'Failed to import filter configuration')
+        return
+      }
+
+      const result = await response.json()
+      const updatedCount = result.results.filter((r: any) => r.status === 'updated').length
+      const skippedCount = result.results.filter((r: any) => r.status === 'skipped').length
+      const errorCount = result.results.filter((r: any) => r.status === 'error').length
+
+      window.alert(
+        `Import completed:\n${updatedCount} filters updated\n${skippedCount} filters skipped\n${errorCount} errors`
+      )
+      refetch()
+    } catch (error) {
+      window.alert('Failed to parse or import file')
+      console.error(error)
+    } finally {
+      setImportFileInputKey((prev) => prev + 1)
     }
   }
 
@@ -189,12 +257,25 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
           ))}
         </TableBody>
       </Table>
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         {isSuperuser && (
           <Button variant="contained" color="secondary" onClick={() => setEditTarget('new')}>
             + Add filter
           </Button>
         )}
+        <BlackOutlinedButton onClick={handleExport}>
+          Export Configuration
+        </BlackOutlinedButton>
+        <BlackOutlinedButton component="label">
+          Import Configuration
+          <input
+            key={importFileInputKey}
+            type="file"
+            accept=".json"
+            hidden
+            onChange={handleImportFile}
+          />
+        </BlackOutlinedButton>
       </Box>
       {editTarget !== null && (
         <FilterEditDialog
