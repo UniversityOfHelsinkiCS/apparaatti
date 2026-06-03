@@ -144,7 +144,7 @@ export default {
         'last12Months': 'Senaste 12 månaderna',
         'loading': 'Laddar feedback...',
         'empty': 'Ingen feedback har skickats än.',
-        'readComment': 'Läs kommentar',
+        'readComment': 'Läs',
         'dialogTitle': 'Feedbackkommentar',
         'close': 'Stäng',
         'starsValue': '{{stars}} / 5 stjärnor',
