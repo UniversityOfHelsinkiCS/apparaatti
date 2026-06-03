@@ -86,6 +86,7 @@ export default {
       'title': 'Period'
     },
     'retakeQuestions': 'Svara på startfrågorna',
+    'skipQuestions': 'Hoppa över frågorna',
     'done': 'Klar',
     'welcomeText': 'Svara först på några inledande frågor. Du kan ändra dessa senare.',
     'noRecommendations': {

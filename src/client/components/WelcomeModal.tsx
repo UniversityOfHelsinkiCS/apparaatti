@@ -1,5 +1,6 @@
 import { Modal, Box, Typography, Button } from '@mui/material'
 import { FC, Fragment, useEffect, useRef } from 'react'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
   filterConfigMap,
   isFilterStateAnswered,
@@ -15,9 +16,10 @@ import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import Filter from '../filters/filter'
 import LanguageSelector from './LanguageSelector'
 
-type Props = {
+type WelcomeModalProps = {
   open: boolean
   onClose: () => void
+  isAdmin?: boolean
 }
 
 const style = {
@@ -32,7 +34,7 @@ const style = {
   overflowY: 'auto',
 }
 
-const WelcomeModal: FC<Props> = ({ open, onClose }) => {
+const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
   const {
     filters,
@@ -170,6 +172,9 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
             mt: 3,
             display: 'flex',
             justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1,
             pb: '10vh',
           }}
         >
@@ -185,6 +190,11 @@ const WelcomeModal: FC<Props> = ({ open, onClose }) => {
           >
             {t('v2:done')}
           </Button>
+          {isAdmin && (
+            <BlackOutlinedButton onClick={onClose}>
+              {t('v2:skipQuestions')}
+            </BlackOutlinedButton>
+          )}
         </Box>
       </Box>
     </Modal>
