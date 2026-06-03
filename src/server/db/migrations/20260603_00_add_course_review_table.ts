@@ -4,7 +4,7 @@ import type { Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.createTable('course_admin_reviews', {
-      id: {
+    id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,

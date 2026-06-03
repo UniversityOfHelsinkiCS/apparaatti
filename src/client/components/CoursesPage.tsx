@@ -212,26 +212,26 @@ const CoursesPage = () => {
 
                 return (
                   <>
-              <TableCell>{formatCourseName(course.name)}</TableCell>
-              <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
-              <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
-              <TableCell>
-                <ReviewActions
-                  key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}
-                  curId={course.id}
-                  reviewState={reviewState}
-                  onSaved={refetch}
-                />
-              </TableCell>
-              <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
-              <TableCell>
-                <BlackOutlinedButton
-                  size="small"
-                  onClick={() => handleVisit(course.id)}
-                >
+                    <TableCell>{formatCourseName(course.name)}</TableCell>
+                    <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
+                    <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
+                    <TableCell>
+                      <ReviewActions
+                        key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}
+                        curId={course.id}
+                        reviewState={reviewState}
+                        onSaved={refetch}
+                      />
+                    </TableCell>
+                    <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
+                    <TableCell>
+                      <BlackOutlinedButton
+                        size="small"
+                        onClick={() => handleVisit(course.id)}
+                      >
                   Visit
-                </BlackOutlinedButton>
-              </TableCell>
+                      </BlackOutlinedButton>
+                    </TableCell>
                   </>
                 )
               })()}
