@@ -1,5 +1,6 @@
 import { Modal, Box, Typography, Button } from '@mui/material'
 import { FC, Fragment, useEffect, useRef } from 'react'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
   filterConfigMap,
   isFilterStateAnswered,
@@ -190,16 +191,9 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
             {t('v2:done')}
           </Button>
           {isAdmin && (
-            <Button
-              variant="text"
-              onClick={onClose}
-              sx={{
-                textTransform: 'none',
-                color: 'text.secondary',
-              }}
-            >
+            <BlackOutlinedButton onClick={onClose}>
               {t('v2:skipQuestions')}
-            </Button>
+            </BlackOutlinedButton>
           )}
         </Box>
       </Box>
