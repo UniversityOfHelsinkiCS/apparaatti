@@ -36,6 +36,7 @@ type UserFeedback = {
   stars: number
   date: string
   recommendationMetadata?: RecommendationMetadata | null
+  appVersion?: string | null
 }
 
 const truncateFeedback = (text: string, maxLength = 140) => {
@@ -70,6 +71,7 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
           <Stack spacing={3}>
             <Typography color="text.secondary">
               {new Date(feedback.date).toLocaleString()} | {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
+              {feedback.appVersion && ` | v${feedback.appVersion}`}
             </Typography>
             <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
               {feedback.textFeedback}
@@ -171,6 +173,7 @@ const UserFeedbackPage = () => {
               <TableRow>
                 <TableCell>{t('v2:feedback.admin.table.date')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.version')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.text')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.metadata')}</TableCell>
                 <TableCell align="right">{t('v2:feedback.admin.table.action')}</TableCell>
@@ -181,6 +184,7 @@ const UserFeedbackPage = () => {
                 <TableRow key={feedback.id}>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
                   <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
+                  <TableCell>{feedback.appVersion ?? '—'}</TableCell>
                   <TableCell sx={{ maxWidth: 520 }}>
                     <Typography sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
                       {truncateFeedback(feedback.textFeedback)}

@@ -151,6 +151,7 @@ export default {
         'table': {
           'date': 'Datum',
           'stars': 'Stjärnor',
+          'version': 'Version',
           'text': 'Feedback',
           'metadata': 'Metadata',
           'hasMetadata': 'Ja',

@@ -12,6 +12,7 @@ class UserFeedback extends Model<InferAttributes<UserFeedback>, InferCreationAtt
   declare textFeedback: string
   declare stars: number
   declare recommendationMetadata: CreationOptional<RecommendationMetadata | null>
+  declare appVersion: CreationOptional<string | null>
   declare date: Date
 }
 
@@ -33,6 +34,11 @@ UserFeedback.init(
     },
     recommendationMetadata: {
       type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: null,
+    },
+    appVersion: {
+      type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null,
     },

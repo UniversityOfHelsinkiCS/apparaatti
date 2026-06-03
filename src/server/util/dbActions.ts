@@ -399,12 +399,14 @@ export async function createUserFeedbackEntry(
   textFeedback: string,
   stars: number,
   date: Date,
-  recommendationMetadata?: RecommendationMetadata
+  recommendationMetadata?: RecommendationMetadata,
+  appVersion?: string
 ) {
   await UserFeedback.create({
     textFeedback,
     stars,
     recommendationMetadata: recommendationMetadata ?? null,
+    appVersion: appVersion ?? null,
     date,
   })
 }

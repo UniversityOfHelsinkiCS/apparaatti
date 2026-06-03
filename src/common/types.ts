@@ -237,6 +237,7 @@ export type UserFeedbackSubmission = {
   textFeedback: string
   stars: number
   recommendationMetadata?: RecommendationMetadata
+  appVersion?: string
 }
 
 export type UserFeedback = UserFeedbackSubmission & {

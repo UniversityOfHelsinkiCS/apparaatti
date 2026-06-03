@@ -25,6 +25,25 @@ describe('UserFeedbackSchema', () => {
     expect(parsed.recommendationMetadata).toBeDefined()
   })
 
+  it('accepts optional appVersion', () => {
+    const parsed = UserFeedbackSchema.parse({
+      textFeedback: 'Great app',
+      stars: 4,
+      appVersion: '0.0.1 (abc1234)',
+    })
+
+    expect(parsed.appVersion).toBe('0.0.1 (abc1234)')
+  })
+
+  it('allows feedback without appVersion', () => {
+    const parsed = UserFeedbackSchema.parse({
+      textFeedback: 'Great app',
+      stars: 4,
+    })
+
+    expect(parsed.appVersion).toBeUndefined()
+  })
+
   it('rejects empty text feedback', () => {
     expect(() => UserFeedbackSchema.parse({ textFeedback: '   ', stars: 2 })).toThrow()
   })

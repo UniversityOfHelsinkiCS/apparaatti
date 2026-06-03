@@ -151,6 +151,7 @@ export default {
         'table': {
           'date': 'Päivämäärä',
           'stars': 'Tähdet',
+          'version': 'Versio',
           'text': 'Palaute',
           'metadata': 'Metatiedot',
           'hasMetadata': 'Kyllä',
