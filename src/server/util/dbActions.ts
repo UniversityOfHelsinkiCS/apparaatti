@@ -236,7 +236,6 @@ async function paginateCursWithJsUrnFilter(
     include: includeOptions,
     order: [['name', 'ASC']],
     subQuery: false,
-    raw: true,
   })
 
   const urnSearchLower = urnSearch?.toLowerCase()
@@ -350,6 +349,7 @@ export async function searchCoursesWithPagination(
   const includeOptions: any[] = [{
     model: Cu,
     required: true,
+    attributes: ['id', 'courseCode', 'name'],
     where: cuWhere,
     through: { attributes: [] } // Don't include join table attributes
   }]
@@ -380,7 +380,6 @@ export async function searchCoursesWithPagination(
       order: [['name', 'ASC']],
       distinct: true,
       subQuery: false,
-      raw: true,
     })
 
     //populating the courses with the reviews
