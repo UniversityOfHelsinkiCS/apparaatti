@@ -153,7 +153,18 @@ export default {
           'date': 'Date',
           'stars': 'Stars',
           'text': 'Text feedback',
+          'metadata': 'Metadata',
+          'hasMetadata': 'Yes',
+          'noMetadata': 'No',
           'action': 'Action'
+        },
+        'metadata': {
+          'title': 'Recommendation metadata',
+          'filterSelections': 'Filter selections',
+          'recommendations': 'Recommendations',
+          'points': 'Points',
+          'courseCodes': 'Course codes',
+          'period': 'Period'
         }
       }
     },

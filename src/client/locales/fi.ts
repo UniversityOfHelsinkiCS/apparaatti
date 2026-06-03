@@ -152,7 +152,18 @@ export default {
           'date': 'Päivämäärä',
           'stars': 'Tähdet',
           'text': 'Palaute',
+          'metadata': 'Metatiedot',
+          'hasMetadata': 'Kyllä',
+          'noMetadata': 'Ei',
           'action': 'Toiminto'
+        },
+        'metadata': {
+          'title': 'Suositusmetatiedot',
+          'filterSelections': 'Filtterin valinnat',
+          'recommendations': 'Suositukset',
+          'points': 'Pisteet',
+          'courseCodes': 'Kurssikoodit',
+          'period': 'Ajanjakso'
         }
       }
     },
