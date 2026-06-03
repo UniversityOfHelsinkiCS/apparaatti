@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import useApi from '../util/useApi.tsx'
 import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
 import FormSubmitActions from './common/FormSubmitActions.tsx'
+import VersionBadge from './common/VersionBadge.tsx'
 
 const style = {
   position: 'absolute',
@@ -86,9 +87,6 @@ const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendati
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
   const navigate = useNavigate()
   const { data: user } = useApi('user', '/api/user', 'GET', null)
-  const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
-    data: { gitSha: string; packageVersion: string } | null
-  }
   return (
     <Modal
       open={open}
@@ -118,11 +116,7 @@ const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => 
             </BlackOutlinedButton>
           )}
         </Box>
-        {versionData && (
-          <Typography variant="caption" sx={{ mt: 1, display: 'block', color: 'text.secondary' }}>
-            v{versionData.packageVersion} ({versionData.gitSha})
-          </Typography>
-        )}
+        <VersionBadge />
       </Box>
     </Modal>
   )
