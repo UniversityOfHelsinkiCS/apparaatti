@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import useApi from '../../util/useApi.tsx'
+import useApi from '../../util/useApi'
 
 const VersionBadge = () => {
   const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
