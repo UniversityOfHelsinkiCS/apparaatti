@@ -21,6 +21,8 @@ jobs:
             ./Containerfile
           build-args: |
             GIT_SHA=${{ github.sha }}
+            IMAGE_SHA=${{ github.sha }}
+            RELEASE_VERSION=${{ github.event.release.tag_name }}
             STAGING=false
       - name: Push to quay.io
         uses: redhat-actions/push-to-registry@v2

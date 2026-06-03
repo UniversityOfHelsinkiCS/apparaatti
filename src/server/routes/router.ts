@@ -5,7 +5,7 @@ import passport from 'passport'
 import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import debugRouter from './debugRouter.ts'
-import { inDevelopment, UPDATER_CRON_ENABLED, GIT_SHA, PACKAGE_VERSION } from '../util/config.ts'
+import { inDevelopment, UPDATER_CRON_ENABLED, GIT_SHA, PACKAGE_VERSION, IMAGE_SHA, RELEASE_VERSION } from '../util/config.ts'
 import { codesInOrganisations, courseHasCustomCodeUrn, getUserOrganisationRecommendations, readOrganisationRecommendationData } from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
 import { isAdmin, isSuperuser } from '../util/validations.ts'
@@ -44,7 +44,12 @@ router.get('/version', (req, res) => {
     res.status(401).json({ message: 'Unauthorized' })
     return
   }
-  res.json({ gitSha: GIT_SHA, packageVersion: PACKAGE_VERSION })
+  res.json({
+    gitSha: GIT_SHA,
+    packageVersion: PACKAGE_VERSION,
+    imageSha: IMAGE_SHA,
+    releaseVersion: RELEASE_VERSION,
+  })
 })
 
 router.get('/filter-config', async (req, res) => {

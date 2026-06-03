@@ -1,3 +1,15 @@
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+
+const readPackageVersion = () => {
+  try {
+    return require('../../../package.json')?.version || 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
 export const DATABASE_URL = process.env.DATABASE_URL || ''
 export const inProduction = process.env.IN_PRODUCTION || false
 export const inDevelopment = process.env.NODE_ENV === 'development'
@@ -49,4 +61,6 @@ export const IMPORTER_URL =
 export const LOKI_HOST = process.env.LOKI_HOST || 'http://loki-svc.toska-lokki.svc.cluster.local:3100'
 
 export const GIT_SHA = process.env.GIT_SHA || 'unknown'
-export const PACKAGE_VERSION = process.env.npm_package_version || 'unknown'
+export const IMAGE_SHA = process.env.IMAGE_SHA || GIT_SHA
+export const RELEASE_VERSION = process.env.RELEASE_VERSION || 'unknown'
+export const PACKAGE_VERSION = process.env.APP_VERSION || process.env.npm_package_version || readPackageVersion()

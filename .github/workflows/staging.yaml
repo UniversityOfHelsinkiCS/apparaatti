@@ -59,6 +59,8 @@ jobs:
             ./Containerfile
           build-args: |
             GIT_SHA=${{ github.sha }}
+            IMAGE_SHA=${{ github.sha }}
+            RELEASE_VERSION=${{ github.ref_name }}
             STAGING=true
           # Extra args are needed to increase the number of open files
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
