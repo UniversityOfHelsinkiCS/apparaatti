@@ -16,13 +16,13 @@ const AppRouter = () => {
           <Route index element={<AppV2 />} />
          
         </Route>
-         <Route path="/admin" element={<AdminMain />}>
-            <Route index element={<AdminPage />} />
-            <Route path="courses" element={<CoursesPage />} />
-            <Route path="login-as" element={<LoginAsPage />} />
-            <Route path="stats" element={<StatsPage />} />
-            <Route path="feedback" element={<UserFeedbackPage />} />
-          </Route>
+        <Route path="/admin" element={<AdminMain />}>
+          <Route index element={<AdminPage />} />
+          <Route path="courses" element={<CoursesPage />} />
+          <Route path="login-as" element={<LoginAsPage />} />
+          <Route path="stats" element={<StatsPage />} />
+          <Route path="feedback" element={<UserFeedbackPage />} />
+        </Route>
       </Routes>
     </Router>
   )
