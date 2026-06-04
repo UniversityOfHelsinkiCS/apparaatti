@@ -1,5 +1,6 @@
 import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions.ts'
 import type { User } from '../../common/types.ts'
+import { localLog } from './dev.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 export async function hashUser(user): Promise<string>{
@@ -34,10 +35,19 @@ export async function saveUserVisitIfUnique(user: User){
   
   const time = new Date()
   const visitorHashHex = await hashUser(user)
+  localLog(time, 'saveUserVisitIfUnique')
+  localLog(visitorHashHex, 'saveUserVisitIfUnique')
+
+
   const userVisits = await getUserVisitsAtHour(visitorHashHex, time)
+  localLog(userVisits, 'saveUserVisitIfUnique')
   
   if(userVisits.length === 0){
+    localLog('created entry', 'saveUserVisitIfUnique')
     await createUserVisitsEntry(visitorHashHex, time)
+  }
+  else{
+    localLog('entry exists skipping', 'saveUserVisitIfUnique')
   }
 }
 

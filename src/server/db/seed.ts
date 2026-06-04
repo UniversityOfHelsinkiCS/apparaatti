@@ -428,10 +428,12 @@ export async function seedDatabase() {
     
     await wipeDatabase()
     await seedUsers()
+    /*
     await UserVisits.bulkCreate(Array.from({ length: 12 }, (_, i) => ({
       visitorHashHex: `e2e-visitor-${(i % 4) + 1}`,
       date: new Date(Date.now() - i * 3600000),
     })) as any)
+     */
     await seedOrganisations()
     const courses = await seedCourses()
     const realizations = await seedCourseRealizations(courses)
