@@ -25,17 +25,6 @@ interface UserSearchQuery {
   onlyEmployees?: boolean
 }
 
-adminRouter.post('/feedback', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
-  const feedback: adminFeedback = req.body
-
-  logger.info('ADMIN FEEDBACK', feedback)
-  res.json({status: 'success'})
- 
-})
-
 adminRouter.get('/user-feedback', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
