@@ -16,18 +16,31 @@ export const pickVariant = (question: Question, variantId: string) => {
 
 
 
-
+// lang: the language taught in the course ("mikä kieli kurssilla opetetaan")
+// primaryLanguage: school lang
+// primaryLanguageSpecification: what communication the course trains 
 export const variantLookUp: Map<{language: string, primaryLanguage: string, primaryLanguageSpecification: string}, string> = new Map([
+ 
+  //finnish variants
   [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
   [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
-  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_written'],
+  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_any'],
   [{ language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
+  
+  //english as a secondary
   [{ language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
+ 
+  //svedish variants
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'spoken' }, 'sv_primary_spoken'],
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'written' }, 'sv_primary_written'],
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
   [{ language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
   [{ language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
+
+  //this allows to specifically change the language variant 
+  [{ language: '', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'fi_unknown'],
+  [{ language: '', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_unknown'],
+
 ])
 
 export const pickQuestionExplanation = (variantId: string | undefined, question: Question, t) => {

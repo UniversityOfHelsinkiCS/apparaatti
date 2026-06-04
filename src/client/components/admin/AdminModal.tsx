@@ -1,12 +1,13 @@
 import { Box, Typography, Modal } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import { CourseRecommendations } from '../../common/types'
+import { CourseRecommendations } from '../../../common/types.ts'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useApi from '../util/useApi.tsx'
-import BlackOutlinedButton from './common/BlackOutlinedButton.tsx'
-import FormSubmitActions from './common/FormSubmitActions.tsx'
-import VersionBadge from './common/VersionBadge.tsx'
+import useApi from '../../util/useApi.tsx'
+import useApiMutation from '../../hooks/useApiMutation.tsx'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import FormSubmitActions from '../common/FormSubmitActions.tsx'
+import VersionBadge from '../common/VersionBadge.tsx'
 import { useNavigate } from 'react-router-dom'
 
 const style = {
@@ -33,22 +34,26 @@ type TextFeedbackV2Props = {
 const Feedback = ({onClose, recommendations}: {onClose: () => void, recommendations: CourseRecommendations}) => {
   const { t } = useTranslation()
   const [feedback, setFeedBack] = useState('')
+  const submitFeedbackMutation = useApiMutation(async (res: Response) => {
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null)
+      throw new Error(errorData?.message ?? 'Failed to send feedback')
+    }
+  }, '/api/admin/feedback')
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const payload = {
       recommendations: recommendations,
       feedback: feedback
     }
-    await fetch('api/admin/feedback', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-
-    window.alert('palaute annettu')
-    onClose()
+    try {
+      await submitFeedbackMutation.mutateAsync(payload, undefined)
+      window.alert('palaute annettu')
+      onClose()
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to send feedback'
+      window.alert(msg)
+    }
   }
 
   return(
