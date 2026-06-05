@@ -398,12 +398,20 @@ export async function searchCoursesWithPagination(
 
 
 export async function createUserVisitsEntry(visitorHashHex: string, date: Date){
-  
+  // Normalize to UTC hour start
+  const startHour = new Date(date)
+  startHour.setUTCHours(startHour.getUTCHours(), 0, 0, 0)
+
   const entry: UserVisit = {
     visitorHashHex,
-    date,
+    date: startHour,
   }
-  await UserVisits.create(entry)
+
+  // findOrCreate to avoid duplicates when multiple requests arrive
+  await UserVisits.findOrCreate({
+    where: { visitorHashHex: entry.visitorHashHex, date: entry.date },
+    defaults: entry,
+  })
 
 }
 
@@ -424,6 +432,7 @@ export async function getUserVisitsByUser(visitorHashHex, start, end){
   return visits
 }
 
+// returns user visits in db grouped by the user
 export async function getUserVisits(start: Date, end: Date){
   const visits = await UserVisits.findAll({
     where: {
@@ -432,7 +441,7 @@ export async function getUserVisits(start: Date, end: Date){
         [Op.lt]: end
       }
     },
-    raw: true
+    raw: true,
   })
 
   return visits

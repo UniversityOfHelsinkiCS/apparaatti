@@ -21,10 +21,11 @@ export async function hashUser(user): Promise<string>{
 //returns all visits of the hour so 10:02 and 10:10 returns the visits for hour 10
 export async function getUserVisitsAtHour(visitorHashHex: string, date: Date){
   const startHour = new Date(date)
-  startHour.setMinutes(0, 0, 0)
+  // Normalize to UTC hour boundaries to match stored UTC timestamps
+  startHour.setUTCHours(startHour.getUTCHours(), 0, 0, 0)
 
   const endHour = new Date(startHour)
-  endHour.setHours(startHour.getHours() + 1)
+  endHour.setUTCHours(startHour.getUTCHours() + 1)
 
   const visits = await getUserVisitsByUser(visitorHashHex, startHour, endHour)
   return visits

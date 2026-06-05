@@ -24,7 +24,7 @@ UserVisits.init(
       allowNull: false,
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATE, // in utc
       allowNull: false
     }
   },

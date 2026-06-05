@@ -7,6 +7,7 @@ import { localLog } from '../util/dev.ts'
 
 const statsRouter = express.Router()
 
+//Returns unique users grouped by 'hour', 'day', 'month', 'year'
 statsRouter.get('/', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
@@ -20,6 +21,11 @@ statsRouter.get('/', async (req, res) => {
   const { start, end, groupBy } = statsQuerySchema.parse(req.query)
   const visits = await getUserVisits(new Date(start), new Date(end))
   localLog(visits, 'statsRouter')
+
+  //set of visitorhashhex + label strings for dedublication
+  const countedForLabel = new Set<string>()
+
+  //label: the groupby parameter, hour, day .... in utc and the number of visits
   const counts = new Map<string, number>()
 
   for (const visit of visits) {
@@ -27,14 +33,18 @@ statsRouter.get('/', async (req, res) => {
     if (Number.isNaN(date.getTime())) {
       continue
     }
-
     const label = getGroupLabel(date, groupBy)
-    counts.set(label, (counts.get(label) ?? 0) + 1)
+    const key: string = visit.visitorHashHex + label
+
+    if(!countedForLabel.has(key)){
+      counts.set(label, (counts.get(label) ?? 0) + 1)
+      countedForLabel.add(key)
+    }
   }
 
   const result = Array.from(counts.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([label, count]) => ({ label, count }))
+    .sort(([a], [b]) => a.localeCompare(b)) //sorting time so that it goes from left -> right
+    .map(([label, count]) => ({ label, count })) //now it is [{label: '', count: ''}]
 
   localLog(result, 'statsrouter')
   res.send(
