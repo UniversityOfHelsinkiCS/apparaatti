@@ -2,7 +2,7 @@ import express from 'express'
 import { AnswerSchema, StringArraySchema, UserFeedbackSchema } from '../../common/validators.ts'
 import type { AnswerData } from '../../common/types.ts'
 import passport from 'passport'
-import recommendCourses, { getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
+import recommendCourses, { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import debugRouter from './debugRouter.ts'
 import { inDevelopment, UPDATER_CRON_ENABLED, GIT_SHA, PACKAGE_VERSION, IMAGE_SHA, RELEASE_VERSION } from '../util/config.ts'
@@ -108,6 +108,17 @@ router.post('/form/answer', async (req, res) => {
 
   res.json({...recommendations, answerData})
 })
+
+
+router.post('/form/coursedata', async (req, res) => {
+  enforceIsUser(req)
+  const submission:FormSubmission = req.body
+  const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
+ 
+  return getCourseData(answerData)
+
+})
+
 
 router.post('/feedback', async (req, res) => {
   enforceIsUser(req)

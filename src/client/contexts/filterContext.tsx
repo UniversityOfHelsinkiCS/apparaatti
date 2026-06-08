@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import { CourseRecommendations, Question, User } from '../../common/types'
+import { CourseData, CourseRecommendations, FilterConfig, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
@@ -87,6 +87,12 @@ export const filterConfigMap = (filters: any) => new Map([
   ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
   ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
 ])
+
+
+export const filterLocally = (courseData: CourseData[], filters: FilterConfig) => {
+  
+}
+
 
 export const isFilterStateAnswered = (state: unknown): boolean => {
   if (Array.isArray(state)) {

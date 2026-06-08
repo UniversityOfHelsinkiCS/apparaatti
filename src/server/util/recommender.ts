@@ -5,8 +5,9 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHa
 import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
+import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn, bonusPoint } from './constants.ts'
 import { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
+import { C } from 'vitest/dist/chunks/reporters.d.BuRON0I0.js'
 
 export { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue, readStudyPlaceCoordinate } from './studyPlace.ts'
 
@@ -31,7 +32,7 @@ export function commonCoordinateFromAnswerData(value: string, yesValue: number, 
   }
 }
 
-export function readAnswer(answerData: AnswerData, key: string): string | string[]{
+export function readAnswer(answerData: AnswerData, key: keyof AnswerData): string | string[]{
   const value = answerData[key]
   if(!value || (Array.isArray(value) && value.length === 0)){
     return 'neutral'
@@ -370,5 +371,69 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   
   return allRecommendations
 }
+
+
+function isChallengeCourse (course: CourseData, courseLanguageType: string) {
+   return courseMatches(course, challegeCourseCodes, courseLanguageType)
+}
+
+function isMentoringCourse (course: CourseData){
+  return  courseHasAnyOfCodes(course, mentoringCourseCodes)
+
+}
+
+//returns courses ordered by heuristic rules
+function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
+      const datasWithPoints = courseDatas.map((c) => {
+      // Bonus point tiers (when no other filters active):
+      //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
+      //   2. generic / KAIKKI                                       → 3×
+      //   3. numbered (ENG-201, RUO-205…)                          → 2×
+      //   4. ERI / challenge                                        → 0× (unless user wants challenge)
+      const isEriOrChallenge  = isChallengeCourse(c, courseLanguageType) || c.courseCodes.some(code => code.includes('ERI'))
+      const isGeneric = c.courseCodes.some(code => code.includes('KAIKKI'))
+      // const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
+  
+      //those courses that are not mentoring courses are mandatory courses
+      //courses that are mentoring courses (value of 1) are usually numbered courses
+      const isMandatory = isMentoringCourse(c) 
+  
+      let bonusPoints = 0
+      if (!isEriOrChallenge) {
+        if (isMandatory && !isGeneric)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
+        else if (isGeneric)  bonusPoints = bonusPoint * 4  // tier 2: KAIKKI
+        else if (!isMandatory) bonusPoints = bonusPoint * 3  // tier 3: numbered
+      }
+      return{
+        ...c,
+        points: bonusPoints
+      }
+    })
+    .sort((a, b) => a.points - b.points)
+   
+    return datasWithPoints satisfies CourseData[]
+}
+
+export async function getCourseData(answerData: AnswerData): Promise<CourseData[]> {
+
+  const lang: string = readAnswer(answerData, 'lang')
+  const primaryLang = readAnswer(answerData, 'primary-language')
+  const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
+  const organisationCode = readAnswer(answerData, 'study-field-select')
+
+  const organisationRecommendations = readOrganisationRecommendationData()
+  const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
+
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
+  const courseLanguageType = languageToStudy(lang, primaryLang)
+
+
+  
+  const sorted = sortCourseData(courseData, courseLanguageType)
+  
+  return sorted
+}
+
+
 
 export default recommendCourses

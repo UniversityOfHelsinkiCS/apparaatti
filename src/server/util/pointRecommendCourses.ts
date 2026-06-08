@@ -185,4 +185,8 @@ function pointRecommendedCourses(courses: CourseRecommendation[], userCoordinate
 }
 
 
+
+
+
+
 export default pointRecommendedCourses
