@@ -374,7 +374,7 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
 
 
 function isChallengeCourse (course: CourseData, courseLanguageType: string) {
-   return courseMatches(course, challegeCourseCodes, courseLanguageType)
+  return courseMatches(course, challegeCourseCodes, courseLanguageType)
 }
 
 function isMentoringCourse (course: CourseData){
@@ -384,34 +384,34 @@ function isMentoringCourse (course: CourseData){
 
 //returns courses ordered by heuristic rules
 function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
-      const datasWithPoints = courseDatas.map((c) => {
-      // Bonus point tiers (when no other filters active):
-      //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
-      //   2. generic / KAIKKI                                       → 3×
-      //   3. numbered (ENG-201, RUO-205…)                          → 2×
-      //   4. ERI / challenge                                        → 0× (unless user wants challenge)
-      const isEriOrChallenge  = isChallengeCourse(c, courseLanguageType) || c.courseCodes.some(code => code.includes('ERI'))
-      const isGeneric = c.courseCodes.some(code => code.includes('KAIKKI'))
-      // const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
+  const datasWithPoints = courseDatas.map((c) => {
+    // Bonus point tiers (when no other filters active):
+    //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
+    //   2. generic / KAIKKI                                       → 3×
+    //   3. numbered (ENG-201, RUO-205…)                          → 2×
+    //   4. ERI / challenge                                        → 0× (unless user wants challenge)
+    const isEriOrChallenge  = isChallengeCourse(c, courseLanguageType) || c.courseCodes.some(code => code.includes('ERI'))
+    const isGeneric = c.courseCodes.some(code => code.includes('KAIKKI'))
+    // const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
   
-      //those courses that are not mentoring courses are mandatory courses
-      //courses that are mentoring courses (value of 1) are usually numbered courses
-      const isMandatory = isMentoringCourse(c) 
+    //those courses that are not mentoring courses are mandatory courses
+    //courses that are mentoring courses (value of 1) are usually numbered courses
+    const isMandatory = isMentoringCourse(c) 
   
-      let bonusPoints = 0
-      if (!isEriOrChallenge) {
-        if (isMandatory && !isGeneric)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
-        else if (isGeneric)  bonusPoints = bonusPoint * 4  // tier 2: KAIKKI
-        else if (!isMandatory) bonusPoints = bonusPoint * 3  // tier 3: numbered
-      }
-      return{
-        ...c,
-        points: bonusPoints
-      }
-    })
+    let bonusPoints = 0
+    if (!isEriOrChallenge) {
+      if (isMandatory && !isGeneric)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
+      else if (isGeneric)  bonusPoints = bonusPoint * 4  // tier 2: KAIKKI
+      else if (!isMandatory) bonusPoints = bonusPoint * 3  // tier 3: numbered
+    }
+    return{
+      ...c,
+      points: bonusPoints
+    }
+  })
     .sort((a, b) => a.points - b.points)
    
-    return datasWithPoints satisfies CourseData[]
+  return datasWithPoints satisfies CourseData[]
 }
 
 export async function getCourseData(answerData: AnswerData): Promise<CourseData[]> {
