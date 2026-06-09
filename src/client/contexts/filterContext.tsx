@@ -1,9 +1,28 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import { CourseData, CourseRecommendations, FilterConfig, Question, User } from '../../common/types'
+import { CourseData, CourseRecommendations, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
+import {
+  checkChallenge,
+  checkCollaboration,
+  checkFinmu,
+  checkFlexible,
+  checkGraduation,
+  checkIndependent,
+  checkIntegrated,
+  checkMentoring,
+  checkMooc,
+  checkMultiPeriod,
+  checkPrimaryLanguageSpecification,
+  checkPreviouslyDoneLang,
+  checkReplacement,
+  checkStudyPeriod,
+  checkStudyPlace,
+  checkStudyYear,
+  isActiveFilterState,
+} from '../util/filtering'
 
 interface FilterContextType {
   language: string
@@ -66,31 +85,83 @@ interface FilterContextType {
   resetFilters: () => void
 }
 
-export const filterConfigMap = (filters: any) => new Map([
-  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField }],
-  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage }],
-  ['lang', { state: filters.language, setState: filters.setLanguage }],
-  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification }],
-  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
-  ['replacement', { state: filters.replacement, setState: filters.setReplacement }],
-  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring }],
-  ['finmu', { state: filters.finmu, setState: filters.setFinmu }],
-  ['challenge', { state: filters.challenge, setState: filters.setChallenge }],
-  ['graduation', { state: filters.graduation, setState: filters.setGraduation }],
-  ['integrated', { state: filters.integrated, setState: filters.setIntegrated }],
-  ['independent', { state: filters.independent, setState: filters.setIndependent }],
-  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace }],
-  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear }],
-  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod }],
-  ['mooc', { state: filters.mooc, setState: filters.setMooc }],
-  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration }],
-  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
-  ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
+export type filterConfigMapType = {
+  state: string | string[]
+  setState: (state: string | string[]) => void
+  check: (course: CourseData) => boolean
+}
+
+const localFilterIds = new Set([
+  'primary-language-specification',
+  'previusly-done-lang',
+  'replacement',
+  'mentoring',
+  'finmu',
+  'challenge',
+  'graduation',
+  'integrated',
+  'independent',
+  'study-place',
+  'study-year',
+  'study-period',
+  'mooc',
+  'collaboration',
+  'multi-period',
+  'flexible',
 ])
 
-
-export const filterLocally = (courseData: CourseData[], filters: FilterConfig) => {
+/**
+ * Returns a helper map to easily access the state of the filters and the comparison function of the filter
+ * @param filters 
+ * @returns 
+ */
+export const filterConfigMap = (filters: any) => new Map<string, filterConfigMapType>([
   
+  //server side filters
+  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField, check: () => true }],
+  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage, check: () => true }],
+  ['lang', { state: filters.language, setState: filters.setLanguage, check: () => true }],
+  
+  //local filters
+  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification, check: checkPrimaryLanguageSpecification }],
+  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang, check: checkPreviouslyDoneLang }],
+  ['replacement', { state: filters.replacement, setState: filters.setReplacement, check: checkReplacement }],
+  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring, check: checkMentoring }],
+  ['finmu', { state: filters.finmu, setState: filters.setFinmu, check: checkFinmu }],
+  ['challenge', { state: filters.challenge, setState: filters.setChallenge, check: checkChallenge }],
+  ['graduation', { state: filters.graduation, setState: filters.setGraduation, check: checkGraduation }],
+  ['integrated', { state: filters.integrated, setState: filters.setIntegrated, check: checkIntegrated }],
+  ['independent', { state: filters.independent, setState: filters.setIndependent, check: checkIndependent }],
+  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace, check: (course) => checkStudyPlace(course, filters.studyPlace) }],
+  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear, check: (course) => checkStudyYear(course, filters.studyYear) }],
+  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod, check: (course) => checkStudyPeriod(course, filters.studyPeriod) }],
+  ['mooc', { state: filters.mooc, setState: filters.setMooc, check: checkMooc }],
+  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration, check: checkCollaboration }],
+  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod, check: checkMultiPeriod }],
+  ['flexible', { state: filters.flexible, setState: filters.setFlexible, check: checkFlexible }],
+])
+
+/**
+ * @param courseData 
+ * applies local filters to courseData according to the choices 
+ * 
+ * 
+ * @param filters 
+ */
+
+export const filterCourseDatas = (courseData: CourseData[], filters: any) => {
+  const configs = Array.from(filterConfigMap(filters).entries())
+    .filter(([filterId]) => localFilterIds.has(filterId))
+    .map(([, config]) => config)
+
+  let result: CourseData[] = Array.from(courseData)
+  configs.forEach((filter) => {
+    if (isActiveFilterState(filter.state)) {
+      result = result.filter((c) => filter.check(c))
+    }
+  })
+  
+  return result
 }
 
 
@@ -390,21 +461,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       'primary-language-specification': shouldUsePrimaryLanguageSpecification
         ? getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification')
         : '',
-      'previusly-done-lang': getTrueFilterValue(previouslyDoneLang, 'previusly-done-lang'),
-      'replacement': getTrueFilterValue(replacement, 'replacement'),
-      'mentoring': getTrueFilterValue(mentoring, 'mentoring'),
-      'finmu': getTrueFilterValue(finmu, 'finmu'),
-      'challenge': getTrueFilterValue(challenge, 'challenge'),
-      'graduation': getTrueFilterValue(graduation, 'graduation'),
-      'study-place': studyPlace,
-      'study-period': studyPeriod.length > 0 ? studyPeriod : ['neutral'],
-      'study-year': getTrueFilterValue(studyYear, 'study-year'),
-      'integrated': getTrueFilterValue(integrated, 'integrated'),
-      'independent': getTrueFilterValue(independent, 'independent'),
-      'mooc': getTrueFilterValue(mooc, 'mooc'),
-      'collaboration': getTrueFilterValue(collaboration, 'collaboration'),
-      'multi-period': getTrueFilterValue(multiPeriod, 'multi-period'),
-      'flexible': getTrueFilterValue(flexible, 'flexible'),
     }
 
     const answerData = Object.fromEntries(

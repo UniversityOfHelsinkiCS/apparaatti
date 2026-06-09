@@ -7,7 +7,6 @@ import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGr
 import pointRecommendedCourses from './pointRecommendCourses.ts'
 import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn, bonusPoint } from './constants.ts'
 import { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
-import { C } from 'vitest/dist/chunks/reporters.d.BuRON0I0.js'
 
 export { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue, readStudyPlaceCoordinate } from './studyPlace.ts'
 
@@ -383,7 +382,7 @@ function isMentoringCourse (course: CourseData){
 }
 
 //returns courses ordered by heuristic rules
-function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
+export function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
   const datasWithPoints = courseDatas.map((c) => {
     // Bonus point tiers (when no other filters active):
     //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
@@ -409,7 +408,7 @@ function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): 
       points: bonusPoints
     }
   })
-    .sort((a, b) => a.points - b.points)
+    .sort((a, b) => b.points - a.points)
    
   return datasWithPoints satisfies CourseData[]
 }
