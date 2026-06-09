@@ -37,7 +37,7 @@ describe('studyPeriods', () => {
 
   it('dateObjToPeriod returns overlapping periods when applicable', () => {
     const hits = dateObjToPeriod(parseDate('6.5.2025'))
-    const names = hits.map((period) => period.name)
+    const names = hits.map(period => period.name)
 
     expect(names).toContain('exam_week_4')
     expect(names).toContain('intensive_3')
@@ -55,7 +55,7 @@ describe('studyPeriods', () => {
       endDate: parseDate('6.5.2025'),
     })
 
-    const names = periods?.map((period) => period.name) ?? []
+    const names = periods?.map(period => period.name) ?? []
     expect(names).toContain('exam_week_4')
     expect(names).toContain('intensive_3')
   })
@@ -79,8 +79,8 @@ describe('studyPeriods', () => {
       endDate: parseDate('20.10.2024'),
     })
 
-    expect(startBoundary?.some((period) => period.name === 'period_1')).toBe(true)
-    expect(endBoundary?.some((period) => period.name === 'period_1')).toBe(true)
+    expect(startBoundary?.some(period => period.name === 'period_1')).toBe(true)
+    expect(endBoundary?.some(period => period.name === 'period_1')).toBe(true)
   })
 
   it('getCoursePeriod returns multiple periods for long course spans', () => {
@@ -89,7 +89,7 @@ describe('studyPeriods', () => {
       endDate: parseDate('20.12.2025'),
     })
 
-    const names = periods?.map((period) => period.name) ?? []
+    const names = periods?.map(period => period.name) ?? []
     expect(names).toEqual(expect.arrayContaining(['period_1', 'exam_week_1', 'period_2', 'exam_week_2']))
   })
 
@@ -108,7 +108,7 @@ describe('studyPeriods', () => {
       endDate: new Date(2025, 8, 1, 23, 59, 59),
     })
 
-    expect(periods?.some((period) => period.name === 'period_1')).toBe(true)
+    expect(periods?.some(period => period.name === 'period_1')).toBe(true)
   })
 
   it('getStudyPeriod finds known periods and maps intensive_3_previous alias', () => {

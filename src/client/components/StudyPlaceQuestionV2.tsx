@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  Box,
-  FormControlLabel,
-  FormGroup,
-  FormControl,
-} from '@mui/material'
+import { Box, FormControlLabel, FormGroup, FormControl } from '@mui/material'
 import { Question } from '../../common/types'
 import AppCheckbox from './common/AppCheckbox.tsx'
 import QuestionTitleV2 from './QuestionTitleV2'
@@ -15,7 +10,7 @@ import { useFilterContext } from '../contexts/filterContext'
 const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
   const [open, setOpen] = React.useState(false)
   const { studyPlace, setStudyPlace } = useFilterContext()
- 
+
   const variant = pickVariant(question, 'default')
 
   const handleOpen = () => setOpen(true)
@@ -28,7 +23,7 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
     if (isChecked) {
       setStudyPlace([...studyPlace, optionId])
     } else {
-      setStudyPlace(studyPlace.filter((id) => id !== optionId))
+      setStudyPlace(studyPlace.filter(id => id !== optionId))
     }
   }
 
@@ -42,11 +37,11 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question}/>
-      <FormControl sx={{m: 0, display: 'flex'}} component="fieldset" variant="standard">
-        <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose}/>
+      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question} />
+      <FormControl sx={{ m: 0, display: 'flex' }} component="fieldset" variant="standard">
+        <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
         <FormGroup>
-          {variant.options.map((option) => (
+          {variant.options.map(option => (
             <FormControlLabel
               checked={studyPlace.includes(option.id)}
               key={option.id}
@@ -59,15 +54,10 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
                   borderRadius: '4px',
                 },
               }}
-              control={
-                <AppCheckbox
-                  onChange={handleChoice}
-                />
-              }
+              control={<AppCheckbox onChange={handleChoice} />}
               label={option.name}
             />
           ))}
-         
         </FormGroup>
       </FormControl>
     </Box>

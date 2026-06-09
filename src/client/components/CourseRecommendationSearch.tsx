@@ -12,10 +12,7 @@ interface CourseRecommendationSearchProps {
 
 const normalizeSearchText = (value: string) => value.toLowerCase()
 
-const matchesCourseNameSearch = (
-  course: CourseData,
-  normalizedSearchQuery: string
-) => {
+const matchesCourseNameSearch = (course: CourseData, normalizedSearchQuery: string) => {
   if (normalizedSearchQuery === '') {
     return true
   }
@@ -25,9 +22,7 @@ const matchesCourseNameSearch = (
     ...Object.values(course.name).filter((name): name is string => Boolean(name)),
   ]
 
-  return searchableNames.some((name) =>
-    normalizeSearchText(name).includes(normalizedSearchQuery)
-  )
+  return searchableNames.some(name => normalizeSearchText(name).includes(normalizedSearchQuery))
 }
 
 const CourseRecommendationSearch = ({ courses, children }: CourseRecommendationSearchProps) => {
@@ -39,9 +34,7 @@ const CourseRecommendationSearch = ({ courses, children }: CourseRecommendationS
   }, [courses])
 
   const normalizedSearchQuery = normalizeSearchText(searchQuery.trim())
-  const filteredCourses = courses.filter((course) =>
-    matchesCourseNameSearch(course, normalizedSearchQuery)
-  )
+  const filteredCourses = courses.filter(course => matchesCourseNameSearch(course, normalizedSearchQuery))
 
   return (
     <>
@@ -66,7 +59,7 @@ const CourseRecommendationSearch = ({ courses, children }: CourseRecommendationS
             label={t('v2:recommendationSearch.label')}
             placeholder={t('v2:recommendationSearch.placeholder')}
             value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
+            onChange={event => setSearchQuery(event.target.value)}
             slotProps={{
               input: {
                 startAdornment: (

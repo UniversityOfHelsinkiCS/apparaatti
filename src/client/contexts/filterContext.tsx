@@ -47,7 +47,6 @@ interface FilterContextType {
   setModalOpen: (open: boolean) => void
   finalRecommendedCourses: CourseData[] | null
 
-
   studyField: string
   setStudyField: (s: string) => void
   previouslyDoneLang: string
@@ -84,7 +83,6 @@ interface FilterContextType {
   setFlexible: (s: string) => void
   resetFilters: () => void
 }
-
 
 export type filtersGroupedType = {
   studyField: string
@@ -153,44 +151,47 @@ const localFilterIds = new Set([
  * @param filters
  * @returns
  */
-export const filterConfigMap = (filters: any) => new Map<string, filterConfigMapType>([
+export const filterConfigMap = (filters: any) =>
+  new Map<string, filterConfigMapType>([
+    //server side filters
+    ['study-field-select', { state: filters.studyField, setState: filters.setStudyField }],
+    ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage }],
+    [
+      'primary-language-specification',
+      { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification },
+    ],
+    ['lang', { state: filters.language, setState: filters.setLanguage }],
 
-  //server side filters
-  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField}],
-  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage}],
-  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification}],
-  ['lang', { state: filters.language, setState: filters.setLanguage}],
+    //just a info filter
+    ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
 
-  //just a info filter
-  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
+    //local filters
+    ['replacement', { state: filters.replacement, setState: filters.setReplacement }],
+    ['mentoring', { state: filters.mentoring, setState: filters.setMentoring }],
+    ['finmu', { state: filters.finmu, setState: filters.setFinmu }],
+    ['challenge', { state: filters.challenge, setState: filters.setChallenge }],
+    ['graduation', { state: filters.graduation, setState: filters.setGraduation }],
+    ['integrated', { state: filters.integrated, setState: filters.setIntegrated }],
+    ['independent', { state: filters.independent, setState: filters.setIndependent }],
+    ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace }],
+    ['study-year', { state: filters.studyYear, setState: filters.setStudyYear }],
+    ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod }],
+    ['mooc', { state: filters.mooc, setState: filters.setMooc }],
+    ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration }],
+    ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
+    ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
+  ])
 
-  //local filters
-  ['replacement', { state: filters.replacement, setState: filters.setReplacement}],
-  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring}],
-  ['finmu', { state: filters.finmu, setState: filters.setFinmu}],
-  ['challenge', { state: filters.challenge, setState: filters.setChallenge}],
-  ['graduation', { state: filters.graduation, setState: filters.setGraduation}],
-  ['integrated', { state: filters.integrated, setState: filters.setIntegrated}],
-  ['independent', { state: filters.independent, setState: filters.setIndependent}],
-  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace}],
-  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear}],
-  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod}],
-  ['mooc', { state: filters.mooc, setState: filters.setMooc}],
-  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration}],
-  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod}],
-  ['flexible', { state: filters.flexible, setState: filters.setFlexible}],
-])
-
-
-
-const runFilter = (result: CourseData[], value: string | string[], check: (c: CourseData, value: any) => boolean): CourseData[] => {
-  if(isActiveFilterState(value)){
-    return result.filter((c) => check(c, value))
+const runFilter = (
+  result: CourseData[],
+  value: string | string[],
+  check: (c: CourseData, value: any) => boolean
+): CourseData[] => {
+  if (isActiveFilterState(value)) {
+    return result.filter(c => check(c, value))
   }
   return result
 }
-
-
 
 /**
  * @param courseData
@@ -201,9 +202,7 @@ const runFilter = (result: CourseData[], value: string | string[], check: (c: Co
  */
 
 export const filterCourseDatas = (courseData: CourseData[], filters: filtersGroupedType) => {
-
   let result: CourseData[] = Array.from(courseData)
-
 
   result = runFilter(result, filters.replacement, checkReplacement)
   result = runFilter(result, filters.mentoring, checkMentoring)
@@ -220,12 +219,8 @@ export const filterCourseDatas = (courseData: CourseData[], filters: filtersGrou
   result = runFilter(result, filters.multiPeriod, checkMultiPeriod)
   result = runFilter(result, filters.flexible, checkFlexible)
 
-
-
-
   return result
 }
-
 
 export const isFilterStateAnswered = (state: unknown): boolean => {
   if (Array.isArray(state)) {
@@ -265,16 +260,18 @@ export const getCoordinateDisplayName = (coordinateKey: string, filterContext: a
   return question?.shortName ?? coordinateKey
 }
 
-
 export const getFilterVariant = (filterContext: FilterContextType, filterId: string) => {
   const question = filterContext.filters.find((q: any) => q.id === filterId)
-  const variantId = updateVariantToDisplayId(filterContext.language, filterContext.primaryLanguage, filterContext.primaryLanguageSpecification)
+  const variantId = updateVariantToDisplayId(
+    filterContext.language,
+    filterContext.primaryLanguage,
+    filterContext.primaryLanguageSpecification
+  )
 
   const variant = question != undefined ? pickVariant(question, variantId) : null
-  if(variant){
+  if (variant) {
     return variant
-  }
-  else{
+  } else {
     return null
   }
 }
@@ -283,19 +280,15 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined)
 
 export const FilterContextProvider = ({ children }: { children: ReactNode }) => {
   const [primaryLanguage, setPrimaryLanguage] = useState('')
-  const [primaryLanguageSpecification, setPrimaryLanguageSpecification] =
-    useState('')
+  const [primaryLanguageSpecification, setPrimaryLanguageSpecification] = useState('')
   const [language, setLanguage] = useState('')
   const [studyField, setStudyField] = useState('')
   const [userOrgCode, setUserOrgCode] = useState('')
-  const [courseRecommendations, setCourseRecommendations] =
-    useState<CourseData[] | null>(null)
-  const [finalRecommendedCourses, setFinalRecommendedCourses] =
-    useState<CourseData[] | null>(null)
+  const [courseRecommendations, setCourseRecommendations] = useState<CourseData[] | null>(null)
+  const [finalRecommendedCourses, setFinalRecommendedCourses] = useState<CourseData[] | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
-  const shouldUsePrimaryLanguageSpecification =
-    language !== '' && language !== 'en' && language === primaryLanguage
+  const shouldUsePrimaryLanguageSpecification = language !== '' && language !== 'en' && language === primaryLanguage
 
   const variantToDisplayId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
@@ -319,9 +312,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [multichoiceDefaultsInitialized, setMultichoiceDefaultsInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
 
-  const strictByDefaultFilterIds = filters
-    .filter((f) => f.isStrictByDefault === true)
-    .map((f) => f.id)
+  const strictByDefaultFilterIds = filters.filter(f => f.isStrictByDefault === true).map(f => f.id)
 
   useEffect(() => {
     if (!filtersLoading && filters.length > 0 && !strictFiltersInitialized) {
@@ -333,7 +324,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const getDefaultMultichoiceState = useCallback(
     (filterId: string) =>
       getDefaultSelectedOptionIds(
-        filters.find((filter) => filter.id === filterId),
+        filters.find(filter => filter.id === filterId),
         'default'
       ),
     [filters]
@@ -351,38 +342,54 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
       setPrimaryLanguageSpecification('')
     }
-  }, [
-    shouldUsePrimaryLanguageSpecification,
-    primaryLanguageSpecification,
-  ])
+  }, [shouldUsePrimaryLanguageSpecification, primaryLanguageSpecification])
 
   const filterState = {
-    studyField, setStudyField,
-    primaryLanguage, setPrimaryLanguage,
-    language, setLanguage,
-    primaryLanguageSpecification, setPrimaryLanguageSpecification,
-    previouslyDoneLang, setPreviouslyDoneLang,
-    replacement, setReplacement,
-    mentoring, setMentoring,
-    finmu, setFinmu,
-    challenge, setChallenge,
-    graduation, setGraduation,
-    studyPlace, setStudyPlace,
-    studyYear, setStudyYear,
-    studyPeriod, setStudyPeriod,
-    integrated, setIntegrated,
-    independent, setIndependent,
-    mooc, setMooc,
-    collaboration, setCollaboration,
-    multiPeriod, setMultiPeriod,
-    flexible, setFlexible,
+    studyField,
+    setStudyField,
+    primaryLanguage,
+    setPrimaryLanguage,
+    language,
+    setLanguage,
+    primaryLanguageSpecification,
+    setPrimaryLanguageSpecification,
+    previouslyDoneLang,
+    setPreviouslyDoneLang,
+    replacement,
+    setReplacement,
+    mentoring,
+    setMentoring,
+    finmu,
+    setFinmu,
+    challenge,
+    setChallenge,
+    graduation,
+    setGraduation,
+    studyPlace,
+    setStudyPlace,
+    studyYear,
+    setStudyYear,
+    studyPeriod,
+    setStudyPeriod,
+    integrated,
+    setIntegrated,
+    independent,
+    setIndependent,
+    mooc,
+    setMooc,
+    collaboration,
+    setCollaboration,
+    multiPeriod,
+    setMultiPeriod,
+    flexible,
+    setFlexible,
   }
 
   const checkWelcomeQuestionsAnswered = () => {
     const configMap = filterConfigMap(filterState)
 
-    const welcomeQuestions = filters.filter((q) => q.showInWelcomeModal)
-    return welcomeQuestions.every((question) => {
+    const welcomeQuestions = filters.filter(q => q.showInWelcomeModal)
+    return welcomeQuestions.every(question => {
       const config = configMap.get(question.id)
       if (!config) return true
       if (!question.mandatory) return true
@@ -418,11 +425,11 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const resetFilters = () => {
     const sidebarFilterIds = new Set(
-      filters.filter((filter) => shouldShowFilterInSidebar(filter)).map((filter) => filter.id)
+      filters.filter(filter => shouldShowFilterInSidebar(filter)).map(filter => filter.id)
     )
     const configMap = filterConfigMap(filterState)
 
-    sidebarFilterIds.forEach((filterId) => {
+    sidebarFilterIds.forEach(filterId => {
       const config = configMap.get(filterId)
       if (!config) {
         return
@@ -443,34 +450,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
     setUserOrgCode(studyField)
 
-    const preservedWelcomeStrictFilters = strictFilters.filter(
-      (filterId) => !sidebarFilterIds.has(filterId)
-    )
-    const resetNonWelcomeStrictFilters = strictByDefaultFilterIds.filter(
-      (filterId) => sidebarFilterIds.has(filterId)
-    )
+    const preservedWelcomeStrictFilters = strictFilters.filter(filterId => !sidebarFilterIds.has(filterId))
+    const resetNonWelcomeStrictFilters = strictByDefaultFilterIds.filter(filterId => sidebarFilterIds.has(filterId))
 
-    setStrictFilters([
-      ...new Set([...preservedWelcomeStrictFilters, ...resetNonWelcomeStrictFilters]),
-    ])
+    setStrictFilters([...new Set([...preservedWelcomeStrictFilters, ...resetNonWelcomeStrictFilters])])
   }
 
-  const { data: user, isLoading: userLoading } = useApi(
-    'user',
-    '/api/user',
-    'GET',
-    undefined
-  )
-  const { data: studyData, isLoading: studyDataLoading } = useApi(
-    'studyData',
-    '/api/user/studydata',
-    'GET',
-    undefined
-  )
-  const {
-    data: supportedOrganisations,
-    isLoading: supportedOrganisationsLoading,
-  } = useApi(
+  const { data: user, isLoading: userLoading } = useApi('user', '/api/user', 'GET', undefined)
+  const { data: studyData, isLoading: studyDataLoading } = useApi('studyData', '/api/user/studydata', 'GET', undefined)
+  const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi(
     'supportedOrganisations',
     '/api/organisations/supported',
     'GET',
@@ -485,14 +473,15 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       throw new Error('Network response was not ok')
     }
 
-    const dateFormatted: CourseData[] = recommendations.map((c: any) => { return {
-      ...c,
-      startDate: new Date(c.startDate),
-      endDate: new Date(c.endDate),
-    }})
+    const dateFormatted: CourseData[] = recommendations.map((c: any) => {
+      return {
+        ...c,
+        startDate: new Date(c.startDate),
+        endDate: new Date(c.endDate),
+      }
+    })
 
     setCourseRecommendations(dateFormatted)
-
   }, '/api/form/coursedata')
 
   useEffect(() => {
@@ -501,22 +490,20 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const getTrueFilterValue = (filterOptionId: string, questionId: string) => {
     const filter = filters.find(f => f.id === questionId)
-    if(!filter || !filter.variants){
+    if (!filter || !filter.variants) {
       return filterOptionId
     }
 
     const variant = pickVariant(filter, variantToDisplayId)
-    if(!variant || !variant.options){
+    if (!variant || !variant.options) {
       return filterOptionId
     }
     const option = variant?.options.find(o => o.id === filterOptionId)
-    if(option?.valueOverride != undefined){
+    if (option?.valueOverride != undefined) {
       return option.valueOverride
-    }
-    else{
+    } else {
       return filterOptionId
     }
-
   }
   const submitFilters = () => {
     const answerDataRaw = {
@@ -547,19 +534,12 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   useEffect(() => {
     submitFilters()
-  }, [
-    userOrgCode,
-    primaryLanguage,
-    language,
-    primaryLanguageSpecification,
-  ])
+  }, [userOrgCode, primaryLanguage, language, primaryLanguageSpecification])
 
   useEffect(() => {
     const filtered = filterCourseDatas(courseRecommendations ?? [], filterState)
 
     setFinalRecommendedCourses(filtered)
-
-
   }, [
     previouslyDoneLang,
     replacement,
@@ -603,7 +583,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         modalOpen,
         setModalOpen,
         finalRecommendedCourses,
-
 
         studyField,
         setStudyField,

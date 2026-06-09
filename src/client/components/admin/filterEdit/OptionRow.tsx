@@ -27,14 +27,14 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
         label="Option ID"
         size="small"
         value={option.id}
-        onChange={(e) => onUpdate({ id: e.target.value })}
+        onChange={e => onUpdate({ id: e.target.value })}
         sx={{ flex: 1 }}
       />
       <TextField
         label="Value override"
         size="small"
         value={option.valueOverride ?? ''}
-        onChange={(e) => onUpdate({ valueOverride: e.target.value || undefined })}
+        onChange={e => onUpdate({ valueOverride: e.target.value || undefined })}
         sx={{ flex: 1 }}
       />
       <Box sx={{ flex: 1 }}>
@@ -45,7 +45,7 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
           fullWidth
           size="small"
           value={option.setStrict === true ? 'true' : option.setStrict === false ? 'false' : ''}
-          onChange={(e) => {
+          onChange={e => {
             const v = e.target.value as string
             onUpdate({ setStrict: v === 'true' ? true : v === 'false' ? false : null })
           }}
@@ -63,7 +63,7 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
           fullWidth
           size="small"
           value={option.selectedByDefault === true ? 'true' : option.selectedByDefault === false ? 'false' : ''}
-          onChange={(e) => {
+          onChange={e => {
             const v = e.target.value as string
             onUpdate({ selectedByDefault: v === 'true' ? true : v === 'false' ? false : null })
           }}
@@ -77,12 +77,7 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
         <DeleteIcon />
       </IconButton>
     </Box>
-    <LocalizedField
-      values={option.name}
-      onChange={onUpdateName}
-      textFieldLabel="Name"
-      size="small"
-    />
+    <LocalizedField values={option.name} onChange={onUpdateName} textFieldLabel="Name" size="small" />
   </Box>
 )
 

@@ -11,7 +11,8 @@ interface SortButtonProps {
 
 const SortButton = ({ value, label, arrow, active, flippable }: SortButtonProps) => (
   <ToggleButton value={value}>
-    {label}{flippable && active ? arrow : ''}
+    {label}
+    {flippable && active ? arrow : ''}
   </ToggleButton>
 )
 

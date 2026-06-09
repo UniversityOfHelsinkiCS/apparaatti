@@ -7,27 +7,23 @@ import { clearOffsets } from './util.ts'
 import { fetchEnrolments } from './enrolments.ts'
 
 const runUpdater = async () => {
-
-  try{
+  try {
     await fetchOrganisations()
 
     await fetchUsers()
 
     await fetchCoursesAndResponsibilities()
 
-
     await fetchStudyRights()
-
-  }catch(e){
+  } catch (e) {
     console.log('error on updater exiting!')
     console.log(e)
   }
- 
 }
 
 export const run = async (clear: boolean) => {
   try {
-    if(clear){
+    if (clear) {
       await clearOffsets()
     }
     await runUpdater()

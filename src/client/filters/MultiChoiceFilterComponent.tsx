@@ -18,7 +18,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
 }) => {
   return (
     <FormGroup>
-      {options.map((option) => (
+      {options.map(option => (
         <FormControlLabel
           checked={state.includes(option.id)}
           key={option.id}
@@ -31,11 +31,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
               borderRadius: '4px',
             },
           }}
-          control={
-            <AppCheckbox
-              onChange={handleCheckboxChange}
-            />
-          }
+          control={<AppCheckbox onChange={handleCheckboxChange} />}
           label={option.name}
         />
       ))}

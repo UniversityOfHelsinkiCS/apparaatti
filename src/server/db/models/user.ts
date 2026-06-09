@@ -1,9 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string

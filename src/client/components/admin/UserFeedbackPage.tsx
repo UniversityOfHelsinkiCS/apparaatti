@@ -69,7 +69,8 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
         {feedback && (
           <Stack spacing={3}>
             <Typography color="text.secondary">
-              {new Date(feedback.date).toLocaleString()} | {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
+              {new Date(feedback.date).toLocaleString()} |{' '}
+              {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
               {feedback.appVersion && ` | v${feedback.appVersion}`}
             </Typography>
             <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
@@ -86,9 +87,7 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
         )}
       </DialogContent>
       <DialogActions>
-        <BlackOutlinedButton onClick={onClose}>
-          {t('v2:feedback.admin.close')}
-        </BlackOutlinedButton>
+        <BlackOutlinedButton onClick={onClose}>{t('v2:feedback.admin.close')}</BlackOutlinedButton>
       </DialogActions>
     </Dialog>
   )
@@ -139,7 +138,7 @@ const UserFeedbackPage = () => {
           label={t('v2:feedback.admin.start')}
           type="date"
           value={start}
-          onChange={(event) => setStart(event.target.value)}
+          onChange={event => setStart(event.target.value)}
           InputLabelProps={{ shrink: true }}
           size="small"
         />
@@ -147,7 +146,7 @@ const UserFeedbackPage = () => {
           label={t('v2:feedback.admin.end')}
           type="date"
           value={end}
-          onChange={(event) => setEnd(event.target.value)}
+          onChange={event => setEnd(event.target.value)}
           InputLabelProps={{ shrink: true }}
           size="small"
         />
@@ -178,7 +177,7 @@ const UserFeedbackPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {feedbackRows.map((feedback) => (
+              {feedbackRows.map(feedback => (
                 <TableRow key={feedback.id}>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
                   <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
@@ -202,10 +201,7 @@ const UserFeedbackPage = () => {
         </TableContainer>
       )}
 
-      <FeedbackCommentDialog
-        feedback={selectedFeedback}
-        onClose={() => setSelectedFeedback(null)}
-      />
+      <FeedbackCommentDialog feedback={selectedFeedback} onClose={() => setSelectedFeedback(null)} />
     </Box>
   )
 }

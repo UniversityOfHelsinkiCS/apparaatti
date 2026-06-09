@@ -1,10 +1,6 @@
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
-import {
-  useFilterContext,
-  filterConfigMap,
-  shouldRenderWelcomeFilter,
-} from '../contexts/filterContext'
+import { useFilterContext, filterConfigMap, shouldRenderWelcomeFilter } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { Question } from '../../common/types'
 import { SyntheticEvent } from 'react'
@@ -28,7 +24,11 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererP
 
   const filterToRender = { ...filter, displayType, state, setState, superToggle, shortName }
 
-  const variantId = updateVariantToDisplayId(filters.language, filters.primaryLanguage, filters.primaryLanguageSpecification)
+  const variantId = updateVariantToDisplayId(
+    filters.language,
+    filters.primaryLanguage,
+    filters.primaryLanguageSpecification
+  )
   const variant = pickVariant(filter, variantId)
   const shouldRenderFilter = shouldRenderWelcomeFilter(
     filter.id,

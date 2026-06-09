@@ -6,10 +6,7 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 }))
 
 import type { CourseData } from '../../common/types.ts'
-import {
-  courseIsSpesificForUserOrg,
-  courseInSameOrganisationAsUser,
-} from '../../server/util/recommender.ts'
+import { courseIsSpesificForUserOrg, courseInSameOrganisationAsUser } from '../../server/util/recommender.ts'
 
 import { organisationWithGroupIdOf } from '../../server/util/dbActions.ts'
 
@@ -97,7 +94,7 @@ describe('courseInSameOrganisationAsUser', () => {
 
     // EXPECTED: should return true because organisation with code 'H40' is associated with the course
     // ACTUAL: returns false due to `'H40' in ['H40']` checking array properties instead of values
-    // FIX: Change line 94 in recommender.ts from `if( organisationCode in orgCodes)` 
+    // FIX: Change line 94 in recommender.ts from `if( organisationCode in orgCodes)`
     // to `if(orgCodes.includes(organisationCode))`
     expect(await courseInSameOrganisationAsUser(course, 'H40', [])).toBe(true)
   })

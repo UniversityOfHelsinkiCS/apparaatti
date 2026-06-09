@@ -162,5 +162,4 @@ export const up: Migration = async ({ context: queryInterface }) => {
   })
 }
 
-export const down: Migration = ({ context: queryInterface }) =>
-  queryInterface.dropTable('users')
+export const down: Migration = ({ context: queryInterface }) => queryInterface.dropTable('users')

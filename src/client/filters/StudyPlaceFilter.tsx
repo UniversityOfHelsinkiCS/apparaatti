@@ -1,20 +1,11 @@
 import React from 'react'
-import {
-  Box,
-  FormControlLabel,
-  FormGroup,
-  FormControl,
-} from '@mui/material'
+import { Box, FormControlLabel, FormGroup, FormControl } from '@mui/material'
 import AppCheckbox from '../components/common/AppCheckbox.tsx'
 import { Question } from '../../common/types'
 import { pickVariant } from '../hooks/useQuestions'
 import { useFilterContext } from '../contexts/filterContext'
 
-const StudyPlaceFilter = ({
-  filter,
-}: {
-  filter: Question
-}) => {
+const StudyPlaceFilter = ({ filter }: { filter: Question }) => {
   const { setStudyPlace } = useFilterContext()
   const variant = pickVariant(filter, 'default')
   const [state, setState] = React.useState<Record<string, boolean>>({})
@@ -22,7 +13,7 @@ const StudyPlaceFilter = ({
   const handleChoice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newState = { ...state, [event.target.value]: event.target.checked }
     setState(newState)
-    const selectedPlaces = Object.keys(newState).filter((key) => newState[key])
+    const selectedPlaces = Object.keys(newState).filter(key => newState[key])
     setStudyPlace(selectedPlaces)
   }
 
@@ -30,7 +21,7 @@ const StudyPlaceFilter = ({
     <Box>
       <FormControl sx={{ m: 0, display: 'flex' }} component="fieldset" variant="standard">
         <FormGroup>
-          {variant.options.map((option) => (
+          {variant.options.map(option => (
             <FormControlLabel
               checked={state[option.id] || false}
               key={option.id}
@@ -43,11 +34,7 @@ const StudyPlaceFilter = ({
                   borderRadius: '4px',
                 },
               }}
-              control={
-                <AppCheckbox
-                  onChange={handleChoice}
-                />
-              }
+              control={<AppCheckbox onChange={handleChoice} />}
               label={option.name}
             />
           ))}

@@ -5,7 +5,7 @@
  *
  * Run as part of seedDatabase() in development, or as a standalone one-off script
  * in production when first deploying the filters table.
- * 
+ *
  * Display Types:
  * - 'singlechoice': Radio button selection (default)
  * - 'multichoice': Checkbox multi-selection
@@ -24,7 +24,7 @@ import logger from '../util/logger.ts'
 
 // ── Shared localized option sets ────────────────────────────────────────────
 
-const neutral = { fi: 'En välitä', sv: 'Jag bryr mig inte', en: 'I don\'t care' }
+const neutral = { fi: 'En välitä', sv: 'Jag bryr mig inte', en: "I don't care" }
 const yes = { fi: 'Kyllä', sv: 'Ja', en: 'Yes' }
 const no = { fi: 'Ei', sv: 'Nej', en: 'No' }
 const finnish = { fi: 'suomi', sv: 'finska', en: 'finnish' }
@@ -84,7 +84,11 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mikä on koulusivistyskielesi?', sv: 'Vilket är ditt undervisningsspråk?', en: 'What is your language of instruction?' },
+        question: {
+          fi: 'Mikä on koulusivistyskielesi?',
+          sv: 'Vilket är ditt undervisningsspråk?',
+          en: 'What is your language of instruction?',
+        },
         options: [
           { id: 'fi', name: finnish },
           { id: 'sv', name: swedish },
@@ -99,7 +103,7 @@ const FILTER_SEEDS: FilterSeed[] = [
     explanation: {
       fi: '\nKaikkiin kandidaatin tutkintoihin kuuluu vähintään 10 op pakollisia kieli- ja viestintäopintoja. Opinnot suoritetaan koulusivistyskielesi mukaan seuraavasti:  \n\n  - äidinkieli (suomi/ruotsi) 3 op  \n\n  - Toinen kotimainen kieli (ruotsi/suomi) 3 op \n\n  - Vieras kieli (lähtötaitotaso englannissa CEFR B2, muissa kielissä CEFR B1) 4 op \n',
       sv: '\nAlla kandidatexamina omfattar minst 10 studiepoäng obligatoriska språk- och kommunikationsstudier. Studierna genomförs enligt ditt utbildningsspråk på följande sätt:\n\n- Modersmål (finska/svenska) 3 sp\n- Andra inhemska språket (svenska/finska) 3 sp\n- Främmande språk (startnivå i engelska CEFR B2, i andra språk CEFR B1) 4 sp\n',
-      en: '\nAll bachelor\'s degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n',
+      en: "\nAll bachelor's degrees include at least 10 credits of compulsory language and communication studies. The studies are completed according to your language of education as follows:\n\n- Mother tongue (Finnish/Swedish) 3 cr\n- Second national language (Swedish/Finnish) 3 cr\n- Foreign language (starting level in English CEFR B2, in other languages CEFR B1) 4 cr\n",
     },
     displayOrder: 2,
     superToggle: false,
@@ -113,7 +117,11 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mistä kielestä haet kursseja?', sv: 'Vilket språk letar du efter kurser i?', en: 'What language are you looking for?' },
+        question: {
+          fi: 'Mistä kielestä haet kursseja?',
+          sv: 'Vilket språk letar du efter kurser i?',
+          en: 'What language are you looking for?',
+        },
         options: [
           { id: 'fi', name: finnish },
           { id: 'sv', name: swedish },
@@ -138,10 +146,24 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Kumman ensisijaisen kielen tyypin haluat valita?', sv: 'Vilken primär språktyp skulle du vilja välja?', en: 'Which primary language type do you want to choose?' },
+        question: {
+          fi: 'Kumman ensisijaisen kielen tyypin haluat valita?',
+          sv: 'Vilken primär språktyp skulle du vilja välja?',
+          en: 'Which primary language type do you want to choose?',
+        },
         options: [
-          { id: 'writtenAndSpoken', name: { fi: 'Kirjoitus- ja puheviestintä', sv: 'Skriftlig och muntlig kommunikation', en: 'Written and verbal communication' } },
-          { id: 'written', name: { fi: 'Kirjoitusviestintä', sv: 'Skriftlig kommunikation', en: 'Written communication' } },
+          {
+            id: 'writtenAndSpoken',
+            name: {
+              fi: 'Kirjoitus- ja puheviestintä',
+              sv: 'Skriftlig och muntlig kommunikation',
+              en: 'Written and verbal communication',
+            },
+          },
+          {
+            id: 'written',
+            name: { fi: 'Kirjoitusviestintä', sv: 'Skriftlig kommunikation', en: 'Written communication' },
+          },
           { id: 'spoken', name: { fi: 'Puheviestintä', sv: 'Röstkommunikation', en: 'Verbal communication' } },
         ],
       },
@@ -223,14 +245,26 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mikä on haluamasi kurssin suoritusajankohta?', sv: 'Vilket datum är din önskade kurs?', en: 'What is the date of your desired course?' },
+        question: {
+          fi: 'Mikä on haluamasi kurssin suoritusajankohta?',
+          sv: 'Vilket datum är din önskade kurs?',
+          en: 'What is the date of your desired course?',
+        },
         options: [
-          { id: 'intensive_3_previous', name: { fi: 'Intensiivijakso 1', sv: 'Intensivperiod 1', en: 'Intensive Period 1' }, selectedByDefault: true },
+          {
+            id: 'intensive_3_previous',
+            name: { fi: 'Intensiivijakso 1', sv: 'Intensivperiod 1', en: 'Intensive Period 1' },
+            selectedByDefault: true,
+          },
           { id: 'period_1', name: { fi: '1. periodi', sv: '1. period', en: '1. period' }, selectedByDefault: true },
           { id: 'period_2', name: { fi: '2. periodi', sv: '2. period', en: '2. period' }, selectedByDefault: true },
           { id: 'period_3', name: { fi: '3. periodi', sv: '3. period', en: '3. period' }, selectedByDefault: true },
           { id: 'period_4', name: { fi: '4. periodi', sv: '4. period', en: '4. period' }, selectedByDefault: true },
-          { id: 'intensive_3', name: { fi: 'Intensiivijakso 2', sv: 'Intensivperiod 2', en: 'Intensive Period 2' }, selectedByDefault: true },
+          {
+            id: 'intensive_3',
+            name: { fi: 'Intensiivijakso 2', sv: 'Intensivperiod 2', en: 'Intensive Period 2' },
+            selectedByDefault: true,
+          },
         ],
       },
     ],
@@ -251,7 +285,11 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Hae kursseja jotka kestävät usean periodin ajan', sv: 'Sök kurser som sträcker sig över flera perioder', en: 'Search for courses that span multiple periods' },
+        question: {
+          fi: 'Hae kursseja jotka kestävät usean periodin ajan',
+          sv: 'Sök kurser som sträcker sig över flera perioder',
+          en: 'Search for courses that span multiple periods',
+        },
         options: yesNoOptions,
       },
     ],
@@ -281,7 +319,11 @@ const FILTER_SEEDS: FilterSeed[] = [
       },
       {
         name: 'fi_primary_written',
-        explanation: { fi: 'Suomi äidinkielenä oleva infolaatikko', sv: 'Suomi äidinkielenä oleva infolaatikko', en: 'Suomi äidinkielenä oleva infolaatikko' },
+        explanation: {
+          fi: 'Suomi äidinkielenä oleva infolaatikko',
+          sv: 'Suomi äidinkielenä oleva infolaatikko',
+          en: 'Suomi äidinkielenä oleva infolaatikko',
+        },
         question: {
           fi: 'Oletko kirjoittanut äidinkielen (suomi) (tai S2:n) ylioppilaskokeesta laudaturin tai eximian tai oletko muuten taitava ja itseohjautuva kirjoittaja?',
           sv: 'Har du skrivit en laudatur eller eximia i modersmålets (finska) (eller S2) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
@@ -343,11 +385,29 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?', sv: 'Behöver du övning innan du slutför en kurs som ingår i din examen?', en: 'Do you need practice before completing a course that is part of your degree?' },
+        question: {
+          fi: 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
+          sv: 'Behöver du övning innan du slutför en kurs som ingår i din examen?',
+          en: 'Do you need practice before completing a course that is part of your degree?',
+        },
         options: [
           { id: 'neutral', name: neutral },
-          { id: '0', name: { fi: 'En koe tarvitsevani harjoitusta', sv: 'Jag känner inte att jag behöver motion.', en: 'I dont think that i need training' } },
-          { id: '1', name: { fi: 'Kaipaisin valmennusta ennen opintojen suoritusta', sv: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.', en: 'I would like to have a litle bit of training before starting my studies' } },
+          {
+            id: '0',
+            name: {
+              fi: 'En koe tarvitsevani harjoitusta',
+              sv: 'Jag känner inte att jag behöver motion.',
+              en: 'I dont think that i need training',
+            },
+          },
+          {
+            id: '1',
+            name: {
+              fi: 'Kaipaisin valmennusta ennen opintojen suoritusta',
+              sv: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.',
+              en: 'I would like to have a litle bit of training before starting my studies',
+            },
+          },
         ],
       },
       {
@@ -367,7 +427,11 @@ const FILTER_SEEDS: FilterSeed[] = [
       },
       {
         name: 'sv_primary_written',
-        question: { fi: 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?', sv: 'Behöver du övning innan du slutför en kurs som ingår i din examen?', en: 'Do you need practice before completing a course that is part of your degree?' },
+        question: {
+          fi: 'Tarvitsetko harjoitusta ennen kuin suoritat tutkintoon kuuluvan opintojakson?',
+          sv: 'Behöver du övning innan du slutför en kurs som ingår i din examen?',
+          en: 'Do you need practice before completing a course that is part of your degree?',
+        },
         options: yesNoOptions,
       },
     ],
@@ -449,7 +513,7 @@ const FILTER_SEEDS: FilterSeed[] = [
         question: {
           fi: 'Jännitätkö suomen kielen käyttämistä niin paljon, että et voi osallistua kurssille, jossa harjoitellaan kieltä yhdessä muiden kanssa?',
           sv: 'Är du så nervös över att använda finska språket att du inte kan delta i en kurs där man övar språket tillsammans med andra?',
-          en: 'Are you so anxious about using the Finnish language that you can\'t participate in a course where the language is practiced together with others?',
+          en: "Are you so anxious about using the Finnish language that you can't participate in a course where the language is practiced together with others?",
         },
         options: yesNoOptions,
       },
@@ -489,11 +553,25 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Valmistutko puolen vuoden sisällä?', sv: 'Tar du examen inom sex månader?', en: 'Are you graduating within six months?' },
+        question: {
+          fi: 'Valmistutko puolen vuoden sisällä?',
+          sv: 'Tar du examen inom sex månader?',
+          en: 'Are you graduating within six months?',
+        },
         options: [
           { id: 'neutral', name: neutral },
-          { id: '0', name: { fi: 'En ole valmistumassa puolen vuoden sisällä.', sv: 'Jag tar inte examen om sex månader.', en: 'I am not graduating within half a year.' } },
-          { id: '1', name: { fi: 'Kyllä, puolen vuoden sisällä.', sv: 'Ja, inom sex månader.', en: 'Yes, within half a year.' } },
+          {
+            id: '0',
+            name: {
+              fi: 'En ole valmistumassa puolen vuoden sisällä.',
+              sv: 'Jag tar inte examen om sex månader.',
+              en: 'I am not graduating within half a year.',
+            },
+          },
+          {
+            id: '1',
+            name: { fi: 'Kyllä, puolen vuoden sisällä.', sv: 'Ja, inom sex månader.', en: 'Yes, within half a year.' },
+          },
         ],
       },
     ],
@@ -515,12 +593,32 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Mikä opiskelumuoto sopii sinulle parhaiten?', sv: 'Vilken studieform passar dig bäst?', en: 'Which form of study suits you best?' },
+        question: {
+          fi: 'Mikä opiskelumuoto sopii sinulle parhaiten?',
+          sv: 'Vilken studieform passar dig bäst?',
+          en: 'Which form of study suits you best?',
+        },
         options: [
-          { id: 'online', name: { fi: 'Etäopetus', sv: 'Distans- eller nätstudier', en: 'Online or remote study' }, selectedByDefault: true },
-          { id: 'independent', name: { fi: 'Itsenäinen opiskelu', sv: 'Självständiga studier', en: 'Independent study' }, selectedByDefault: true },
-          { id: 'contact', name: { fi: 'Lähiopetus', sv: 'Närundervisning', en: 'Face-to-face teaching' }, selectedByDefault: true },
-          { id: 'blended', name: { fi: 'Monimuoto-opetus', sv: 'Blended learning', en: 'Blended learning' }, selectedByDefault: true },
+          {
+            id: 'online',
+            name: { fi: 'Etäopetus', sv: 'Distans- eller nätstudier', en: 'Online or remote study' },
+            selectedByDefault: true,
+          },
+          {
+            id: 'independent',
+            name: { fi: 'Itsenäinen opiskelu', sv: 'Självständiga studier', en: 'Independent study' },
+            selectedByDefault: true,
+          },
+          {
+            id: 'contact',
+            name: { fi: 'Lähiopetus', sv: 'Närundervisning', en: 'Face-to-face teaching' },
+            selectedByDefault: true,
+          },
+          {
+            id: 'blended',
+            name: { fi: 'Monimuoto-opetus', sv: 'Blended learning', en: 'Blended learning' },
+            selectedByDefault: true,
+          },
           { id: 'exam', name: { fi: 'Tentti', sv: 'Tentamen', en: 'Exam' }, selectedByDefault: true },
         ],
       },
@@ -542,18 +640,30 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.', sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.', en: 'I am interested in a course that is integrated into the studies in my field.' },
+        question: {
+          fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
+          sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.',
+          en: 'I am interested in a course that is integrated into the studies in my field.',
+        },
         skipped: false,
         options: yesNoOptions,
       },
       {
         name: 'en_secondary_any',
-        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.', sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.', en: 'I am interested in a course that is integrated into the studies in my field.' },
+        question: {
+          fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
+          sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.',
+          en: 'I am interested in a course that is integrated into the studies in my field.',
+        },
         options: yesNoOptions,
       },
       {
         name: 'sv_secondary_any',
-        question: { fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.', sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.', en: 'I am interested in a course that is integrated into the studies in my field.' },
+        question: {
+          fi: 'Olen kiinnostonut kurssista, joka on integroitu oman alani opintoihin.',
+          sv: 'Jag är intresserad av en kurs som är integrerad i mina studier inom mitt område.',
+          en: 'I am interested in a course that is integrated into the studies in my field.',
+        },
         options: yesNoOptions,
       },
     ],
@@ -574,18 +684,30 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.', sv: 'Jag vill arbeta självständigt eller autonomt.', en: 'I want to work independently or autonomously.' },
+        question: {
+          fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.',
+          sv: 'Jag vill arbeta självständigt eller autonomt.',
+          en: 'I want to work independently or autonomously.',
+        },
         skipped: true,
         options: yesNoOptions,
       },
       {
         name: 'en_secondary_any',
-        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.', sv: 'Jag vill arbeta självständigt eller autonomt.', en: 'I want to work independently or autonomously.' },
+        question: {
+          fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.',
+          sv: 'Jag vill arbeta självständigt eller autonomt.',
+          en: 'I want to work independently or autonomously.',
+        },
         options: yesNoOptions,
       },
       {
         name: 'sv_secondary_any',
-        question: { fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.', sv: 'Jag vill arbeta självständigt eller autonomt.', en: 'I want to work independently or autonomously.' },
+        question: {
+          fi: 'Haluan työskennellä itsenäisesti tai autonomisesti.',
+          sv: 'Jag vill arbeta självständigt eller autonomt.',
+          en: 'I want to work independently or autonomously.',
+        },
         options: yesNoOptions,
       },
     ],
@@ -606,7 +728,11 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?', sv: 'Vill du söka efter MOOCs (Massive Open Online Courses)?', en: 'Do you want to search for MOOCs (Massive Open Online Courses)?' },
+        question: {
+          fi: 'Haluatko etsiä MOOC-kursseja (Massive Open Online Courses)?',
+          sv: 'Vill du söka efter MOOCs (Massive Open Online Courses)?',
+          en: 'Do you want to search for MOOCs (Massive Open Online Courses)?',
+        },
         options: yesNoOptions,
       },
     ],
@@ -627,7 +753,11 @@ const FILTER_SEEDS: FilterSeed[] = [
     variants: [
       {
         name: 'default',
-        question: { fi: 'Näytä yhteistyökumppanien kursseja', sv: 'Visa samarbetspartnerkurser', en: 'Show collaboration partner courses' },
+        question: {
+          fi: 'Näytä yhteistyökumppanien kursseja',
+          sv: 'Visa samarbetspartnerkurser',
+          en: 'Show collaboration partner courses',
+        },
         skipped: false,
         options: yesNoOptions,
       },
@@ -658,10 +788,9 @@ const FILTER_SEEDS: FilterSeed[] = [
 ]
 
 export function seedFilterWithId(id: string): FilterSeed | null {
-  const seed = FILTER_SEEDS.find((filter) => filter.id === id)
+  const seed = FILTER_SEEDS.find(filter => filter.id === id)
   return seed ? structuredClone(seed) : null
 }
-
 
 export async function seedFilters() {
   logger.info('Seeding filters...')
@@ -671,8 +800,8 @@ export async function seedFilters() {
     return
   }
 
-  const parents = FILTER_SEEDS.filter((f) => !f.parentFilterId)
-  const children = FILTER_SEEDS.filter((f) => f.parentFilterId)
+  const parents = FILTER_SEEDS.filter(f => !f.parentFilterId)
+  const children = FILTER_SEEDS.filter(f => f.parentFilterId)
 
   for (const filter of [...parents, ...children]) {
     await Filter.create(filter as any)

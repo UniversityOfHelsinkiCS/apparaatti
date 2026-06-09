@@ -1,4 +1,12 @@
-import { FormControlLabel, Radio, RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import {
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Question, Option } from '../../common/types'
 import React, { useState } from 'react'
@@ -32,7 +40,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   return (
     <>
       <RadioGroup name={filter.id} value={state} onChange={onRadioChange}>
-        {options.map((option) => (
+        {options.map(option => (
           <FormControlLabel
             key={option.id}
             value={option.id}
@@ -57,18 +65,21 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
         ))}
       </RadioGroup>
 
-      {extrainfo && state === '1' && ( // Conditionally render accordion
-        <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)} data-cy={`${filter.id}-extrainfo-accordion`}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`${filter.id}-extrainfo-accordion-summary`}>
-            <Typography>{t('question:extrainfo')}: </Typography>
-          </AccordionSummary>
-          <AccordionDetails data-cy={`${filter.id}-extrainfo-accordion-details`}>
-            <Markdown>
-              {extrainfo}
-            </Markdown>
-          </AccordionDetails>
-        </Accordion>
-      )}
+      {extrainfo &&
+        state === '1' && ( // Conditionally render accordion
+          <Accordion
+            expanded={accordionOpen}
+            onChange={() => setAccordionOpen(!accordionOpen)}
+            data-cy={`${filter.id}-extrainfo-accordion`}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`${filter.id}-extrainfo-accordion-summary`}>
+              <Typography>{t('question:extrainfo')}: </Typography>
+            </AccordionSummary>
+            <AccordionDetails data-cy={`${filter.id}-extrainfo-accordion-details`}>
+              <Markdown>{extrainfo}</Markdown>
+            </AccordionDetails>
+          </Accordion>
+        )}
     </>
   )
 }

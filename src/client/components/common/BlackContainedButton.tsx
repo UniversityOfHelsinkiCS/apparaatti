@@ -8,7 +8,7 @@ const BlackContainedButton = ({ sx, ...props }: ButtonProps) => {
     <Button
       variant="contained"
       sx={[
-        (theme) => ({
+        theme => ({
           color: theme.palette.common.white,
           backgroundColor: theme.palette.secondary.main,
         }),

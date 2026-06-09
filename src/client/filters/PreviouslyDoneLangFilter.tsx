@@ -8,19 +8,13 @@ import { pickVariant } from '../hooks/useQuestions'
 import Markdown from 'react-markdown'
 import { useFilterContext } from '../contexts/filterContext'
 
-const PreviouslyDoneLangFilter = ({
-  filter,
-  languageId,
-}: {
-  filter: Question;
-  languageId: string;
-}) => {
+const PreviouslyDoneLangFilter = ({ filter, languageId }: { filter: Question; languageId: string }) => {
   const { t } = useTranslation()
   const { setPreviouslyDoneLang } = useFilterContext()
   const variant = pickVariant(filter, languageId)
-  const neutralOption = variant.options.find((o) => o.id === 'neutral')
-  const yesOption = variant.options.find((o) => o.id === '1')
-  const noOption = variant.options.find((o) => o.id === '0')
+  const neutralOption = variant.options.find(o => o.id === 'neutral')
+  const yesOption = variant.options.find(o => o.id === '1')
+  const noOption = variant.options.find(o => o.id === '0')
 
   if (!yesOption || !noOption) {
     return <p>Unknown error on filter</p>
@@ -66,14 +60,16 @@ const PreviouslyDoneLangFilter = ({
       </RadioGroup>
 
       {selectedValue === yesOption.id && (
-        <Accordion expanded={accordionOpen} onChange={() => setAccordionOpen(!accordionOpen)} data-cy="previously-done-lang-accordion">
+        <Accordion
+          expanded={accordionOpen}
+          onChange={() => setAccordionOpen(!accordionOpen)}
+          data-cy="previously-done-lang-accordion"
+        >
           <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy="previously-done-lang-accordion-summary">
             <Typography>{t('question:extrainfo')}: </Typography>
           </AccordionSummary>
           <AccordionDetails data-cy="previously-done-lang-accordion-details">
-            <Markdown>
-              {t('question:checkInstructionsCrediting')}
-            </Markdown>
+            <Markdown>{t('question:checkInstructionsCrediting')}</Markdown>
           </AccordionDetails>
         </Accordion>
       )}

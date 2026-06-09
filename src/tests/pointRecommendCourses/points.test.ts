@@ -14,8 +14,8 @@ describe('pointRecommendCourses', () => {
     })
 
     const result = pointRecommendedCourses([replacementMatch, replacementMiss], user, [])
-    const matchPoints = result.find((course) => course.course.id === 'replacement-match')?.points
-    const missPoints = result.find((course) => course.course.id === 'replacement-miss')?.points
+    const matchPoints = result.find(course => course.course.id === 'replacement-match')?.points
+    const missPoints = result.find(course => course.course.id === 'replacement-miss')?.points
 
     expect(matchPoints).toBeDefined()
     expect(missPoints).toBeDefined()
@@ -33,8 +33,8 @@ describe('pointRecommendCourses', () => {
     })
 
     const result = pointRecommendedCourses([matchingCourse, mismatchingCourse], user, [])
-    const matchPoints = result.find((course) => course.course.id === 'finmu-independent-match')?.points
-    const missPoints = result.find((course) => course.course.id === 'finmu-independent-miss')?.points
+    const matchPoints = result.find(course => course.course.id === 'finmu-independent-match')?.points
+    const missPoints = result.find(course => course.course.id === 'finmu-independent-miss')?.points
 
     expect(matchPoints).toBeDefined()
     expect(missPoints).toBeDefined()

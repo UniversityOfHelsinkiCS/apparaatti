@@ -2,12 +2,7 @@ import * as openidClient from 'openid-client'
 import passport from 'passport'
 
 import User from '../db/models/user.ts'
-import {
-  OIDC_ISSUER,
-  OIDC_CLIENT_ID,
-  OIDC_CLIENT_SECRET,
-  OIDC_REDIRECT_URI,
-} from './config.ts'
+import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
 
 const params = {
   scope: 'openid profile email',
@@ -46,12 +41,7 @@ const getClient = async () => {
   return client
 }
 
-const verifyLogin = async (
-  _tokenSet: openidClient.TokenSet,
-  userinfo,
-  done: (err: any, user?: unknown) => void
-) => {
-
+const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (err: any, user?: unknown) => void) => {
   const user: User = {
     id: userinfo.hyPersonSisuId as string,
     username: userinfo.uid as string,
@@ -79,10 +69,7 @@ const setupAuthentication = async () => {
     return done(null, obj)
   })
 
-  passport.use(
-    'oidc',
-    new openidClient.Strategy({ client, params }, verifyLogin)
-  )
+  passport.use('oidc', new openidClient.Strategy({ client, params }, verifyLogin))
 }
 
 export default setupAuthentication

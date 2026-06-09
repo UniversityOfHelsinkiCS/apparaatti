@@ -87,14 +87,12 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
     const recommendationMetadata = sendRecommendationMetadata
       ? {
-        answerData: finalRecommendedCourses?.answerData ?? null,
-        recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
-      }
+          answerData: finalRecommendedCourses?.answerData ?? null,
+          recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
+        }
       : undefined
 
-    const appVersion = versionData
-      ? `${versionData.packageVersion} (${versionData.gitSha})`
-      : undefined
+    const appVersion = versionData ? `${versionData.packageVersion} (${versionData.gitSha})` : undefined
 
     try {
       await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata, appVersion }, undefined)
@@ -112,11 +110,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="user-feedback-modal-title"
-      >
+      <Modal open={open} onClose={handleClose} aria-labelledby="user-feedback-modal-title">
         <Box sx={style}>
           <Stack spacing={2.5}>
             <Typography
@@ -136,7 +130,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                   </Typography>
                   <TextField
                     value={textFeedback}
-                    onChange={(event) => setTextFeedback(event.target.value)}
+                    onChange={event => setTextFeedback(event.target.value)}
                     multiline
                     minRows={7}
                     variant="outlined"
@@ -163,7 +157,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                       size="large"
                       onChange={(_event, value) => setStars(value ?? 0)}
                     />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>{stars} / 5</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      {stars} / 5
+                    </Typography>
                   </Stack>
                 </Box>
 
@@ -171,7 +167,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                   <Stack direction="row" alignItems="center" spacing={0.5}>
                     <LabeledCheckbox
                       checked={sendRecommendationMetadata}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) => setSendRecommendationMetadata(event.target.checked)}
+                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                        setSendRecommendationMetadata(event.target.checked)
+                      }
                       label={t('v2:feedback.sendMetadata')}
                     />
                     <Tooltip title={t('v2:feedback.viewMetadata')}>

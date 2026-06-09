@@ -11,8 +11,7 @@ transports.push(new winston.transports.File({ filename: 'debug.log' }))
 
 if (!inProduction) {
   const devFormat = printf(
-    ({ level, message, timestamp, ...rest }) =>
-      `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`
+    ({ level, message, timestamp, ...rest }) => `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`
   )
 
   transports.push(
@@ -39,13 +38,12 @@ if (!inProduction) {
     })
   )
   transports.push(new winston.transports.Console({ format: prodFormat }))
-  transports.push(new LokiTransport(
-    {
+  transports.push(
+    new LokiTransport({
       host: LOKI_HOST,
-      labels: {app: 'apparaatti', environment: process.env.NODE_ENV || 'production'}
-    }
-  ))
-
+      labels: { app: 'apparaatti', environment: process.env.NODE_ENV || 'production' },
+    })
+  )
 }
 const logger = winston.createLogger({ transports })
 export default logger

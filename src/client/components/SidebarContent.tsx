@@ -1,4 +1,9 @@
-import { filterConfigMap, isFilterStateAnswered, shouldShowFilterInSidebar, useFilterContext } from '../contexts/filterContext'
+import {
+  filterConfigMap,
+  isFilterStateAnswered,
+  shouldShowFilterInSidebar,
+  useFilterContext,
+} from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './common/ActionButtonV2'
@@ -13,10 +18,10 @@ const SidebarContent = () => {
   const hasInitializedMandatoryFilters = useRef(false)
   const configMap = filterConfigMap(filterContext)
 
-  const filtersToShow = filters.filter((filter) => shouldShowFilterInSidebar(filter))
-  const mandatoryFilterIds = new Set(filtersToShow.filter((filter) => filter.mandatory).map((filter) => filter.id))
+  const filtersToShow = filters.filter(filter => shouldShowFilterInSidebar(filter))
+  const mandatoryFilterIds = new Set(filtersToShow.filter(filter => filter.mandatory).map(filter => filter.id))
   const unansweredMandatoryFilterIds = filtersToShow
-    .filter((filter) => {
+    .filter(filter => {
       if (!filter.mandatory) {
         return false
       }
@@ -24,7 +29,7 @@ const SidebarContent = () => {
       const filterConfig = configMap.get(filter.id)
       return !filterConfig || !isFilterStateAnswered(filterConfig.state)
     })
-    .map((filter) => filter.id)
+    .map(filter => filter.id)
   const [expandedFilterIds, setExpandedFilterIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
@@ -43,9 +48,9 @@ const SidebarContent = () => {
       return
     }
 
-    setExpandedFilterIds((previousExpandedFilterIds) => {
+    setExpandedFilterIds(previousExpandedFilterIds => {
       const hasNewUnansweredFilter = unansweredMandatoryFilterIds.some(
-        (filterId) => !previousExpandedFilterIds.has(filterId)
+        filterId => !previousExpandedFilterIds.has(filterId)
       )
 
       if (!hasNewUnansweredFilter) {
@@ -53,7 +58,7 @@ const SidebarContent = () => {
       }
 
       const nextExpandedFilterIds = new Set(previousExpandedFilterIds)
-      unansweredMandatoryFilterIds.forEach((filterId) => {
+      unansweredMandatoryFilterIds.forEach(filterId => {
         nextExpandedFilterIds.add(filterId)
       })
       return nextExpandedFilterIds
@@ -69,7 +74,7 @@ const SidebarContent = () => {
 
     const nextExpandedFilterIds = new Set<string>()
 
-    expandedFilterIds.forEach((expandedFilterId) => {
+    expandedFilterIds.forEach(expandedFilterId => {
       if (expandedFilterId === filterId) {
         return
       }
@@ -109,29 +114,19 @@ const SidebarContent = () => {
           flexDirection: 'column',
         }}
       >
-        <ActionButtonV2
-          onClick={() => setModalOpen(true)}
-          text={t('v2:retakeQuestions')}
-          visualStyle="course-show"
-        />
+        <ActionButtonV2 onClick={() => setModalOpen(true)} text={t('v2:retakeQuestions')} visualStyle="course-show" />
         <Box sx={{ height: 12 }} />
         <ResetFiltersButton>
-          {({ label, openDialog }) => (
-            <ActionButtonV2
-              onClick={openDialog}
-              text={label}
-              visualStyle="course-show"
-            />
-          )}
+          {({ label, openDialog }) => <ActionButtonV2 onClick={openDialog} text={label} visualStyle="course-show" />}
         </ResetFiltersButton>
       </Box>
-      {filtersToShow.map((filter) => (
+      {filtersToShow.map(filter => (
         <FilterRenderer
           key={filter.id}
           filter={filter}
           expanded={expandedFilterIds.has(filter.id)}
           onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) =>
-            setExpandedFilterIds((prev) => getNextExpandedFilterIds(filter.id, isExpanded, prev))
+            setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
           }
         />
       ))}

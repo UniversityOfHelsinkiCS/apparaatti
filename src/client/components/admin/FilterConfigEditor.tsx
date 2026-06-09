@@ -31,12 +31,7 @@ const adminFetch = (method: string, path: string, body?: unknown) =>
   })
 
 const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
-  const { data: filters, isLoading, refetch } = useApi(
-    'admin-filter-config',
-    '/api/admin/filter-config',
-    'GET',
-    null
-  )
+  const { data: filters, isLoading, refetch } = useApi('admin-filter-config', '/api/admin/filter-config', 'GET', null)
   const [editTarget, setEditTarget] = useState<FilterConfig | 'new' | null>(null)
   const [restoringFilterId, setRestoringFilterId] = useState<string | null>(null)
   const [filtersWithoutSeedDefaults, setFiltersWithoutSeedDefaults] = useState<string[]>([])
@@ -88,9 +83,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
         const errorData = await response.json().catch(() => null)
 
         if (response.status === 404) {
-          setFiltersWithoutSeedDefaults((current) =>
-            current.includes(filterId) ? current : [...current, filterId]
-          )
+          setFiltersWithoutSeedDefaults(current => (current.includes(filterId) ? current : [...current, filterId]))
           window.alert(errorData?.message ?? 'This filter has no seeded defaults to restore')
           return
         }
@@ -99,7 +92,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
         return
       }
 
-      setFiltersWithoutSeedDefaults((current) => current.filter((id) => id !== filterId))
+      setFiltersWithoutSeedDefaults(current => current.filter(id => id !== filterId))
       refetch()
     } finally {
       setRestoringFilterId(null)
@@ -143,7 +136,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
         `Import filter configuration from ${file.name}?\n\nThis will update existing filters with the imported settings.`
       )
       if (!shouldImport) {
-        setImportFileInputKey((prev) => prev + 1)
+        setImportFileInputKey(prev => prev + 1)
         return
       }
 
@@ -167,7 +160,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       window.alert('Failed to parse or import file')
       console.error(error)
     } finally {
-      setImportFileInputKey((prev) => prev + 1)
+      setImportFileInputKey(prev => prev + 1)
     }
   }
 
@@ -191,18 +184,10 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
           {filterList.map((filter, index) => (
             <TableRow key={filter.id}>
               <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                <IconButton
-                  size="small"
-                  disabled={index === 0}
-                  onClick={() => move(index, -1)}
-                >
+                <IconButton size="small" disabled={index === 0} onClick={() => move(index, -1)}>
                   <KeyboardArrowUpIcon />
                 </IconButton>
-                <IconButton
-                  size="small"
-                  disabled={index === filterList.length - 1}
-                  onClick={() => move(index, 1)}
-                >
+                <IconButton size="small" disabled={index === filterList.length - 1} onClick={() => move(index, 1)}>
                   <KeyboardArrowDownIcon />
                 </IconButton>
                 {filter.displayOrder}
@@ -243,10 +228,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
                     size="small"
                     variant="outlined"
                     onClick={() => handleRestoreDefaults(filter.id)}
-                    disabled={
-                      restoringFilterId === filter.id ||
-                      filtersWithoutSeedDefaults.includes(filter.id)
-                    }
+                    disabled={restoringFilterId === filter.id || filtersWithoutSeedDefaults.includes(filter.id)}
                     sx={{ color: 'black', borderColor: 'black' }}
                   >
                     {restoringFilterId === filter.id ? 'Restoring...' : 'Restore'}
@@ -263,18 +245,10 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
             + Add filter
           </Button>
         )}
-        <BlackOutlinedButton onClick={handleExport}>
-          Export Configuration
-        </BlackOutlinedButton>
+        <BlackOutlinedButton onClick={handleExport}>Export Configuration</BlackOutlinedButton>
         <BlackOutlinedButton component="label">
           Import Configuration
-          <input
-            key={importFileInputKey}
-            type="file"
-            accept=".json"
-            hidden
-            onChange={handleImportFile}
-          />
+          <input key={importFileInputKey} type="file" accept=".json" hidden onChange={handleImportFile} />
         </BlackOutlinedButton>
       </Box>
       {editTarget !== null && (

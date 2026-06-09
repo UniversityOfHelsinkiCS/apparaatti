@@ -1,9 +1,4 @@
-import {
-  Box,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Question } from '../../common/types.ts'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
 import { useState } from 'react'
@@ -11,17 +6,9 @@ import { useFilterContext } from '../contexts/filterContext'
 import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 
-const PrimaryLanguageSpecificationV2 = ({
-  question,
-}: {
-  question: Question
-}) => {
-  const {
-    language,
-    primaryLanguage,
-    primaryLanguageSpecification,
-    setPrimaryLanguageSpecification,
-  } = useFilterContext()
+const PrimaryLanguageSpecificationV2 = ({ question }: { question: Question }) => {
+  const { language, primaryLanguage, primaryLanguageSpecification, setPrimaryLanguageSpecification } =
+    useFilterContext()
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -36,7 +23,7 @@ const PrimaryLanguageSpecificationV2 = ({
   }
 
   const shouldShow: boolean = checkShouldShow()
-  
+
   const variant = pickVariant(question, 'default')
 
   const handleChange = (e: any) => {
@@ -53,15 +40,11 @@ const PrimaryLanguageSpecificationV2 = ({
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question}/>
-      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose}/>
+      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question} />
+      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
 
-      <RadioGroup
-        name={question.id}
-        onChange={handleChange}
-        value={primaryLanguageSpecification}
-      >
-        {variant.options.map((option) => (
+      <RadioGroup name={question.id} onChange={handleChange} value={primaryLanguageSpecification}>
+        {variant.options.map(option => (
           <FormControlLabel
             key={option.id}
             value={option.id}

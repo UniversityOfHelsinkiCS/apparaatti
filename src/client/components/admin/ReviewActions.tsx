@@ -85,21 +85,14 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
   return (
     <Stack spacing={1} sx={{ minWidth: 300, maxWidth: 360 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AppCheckbox
-          checked={reviewed}
-          onChange={handleReviewedChange}
-          size="small"
-          sx={{ p: 0.5 }}
-        />
-        <Typography variant="body2">
-          {reviewed ? 'Reviewed' : 'Not reviewed'}
-        </Typography>
+        <AppCheckbox checked={reviewed} onChange={handleReviewedChange} size="small" sx={{ p: 0.5 }} />
+        <Typography variant="body2">{reviewed ? 'Reviewed' : 'Not reviewed'}</Typography>
         {isSaving ? <CircularProgress size={16} /> : null}
       </Box>
 
       <TextField
         value={comment}
-        onChange={(event) => setComment(event.target.value)}
+        onChange={event => setComment(event.target.value)}
         placeholder="Add comment"
         size="small"
         multiline
@@ -111,11 +104,7 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
       {showSavedMessage ? <Alert severity="success">Review saved</Alert> : null}
 
       <Box>
-        <BlackOutlinedButton
-          size="small"
-          onClick={() => void handleSave()}
-          disabled={!isDirty || isSaving}
-        >
+        <BlackOutlinedButton size="small" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
           Save review
         </BlackOutlinedButton>
       </Box>

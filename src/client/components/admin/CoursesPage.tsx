@@ -45,7 +45,7 @@ interface PaginatedCoursesResponse {
 const CoursesPage = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const [page, setPage] = useState(1)
-  
+
   // Input field values (what user types)
   const [nameInput, setNameInput] = useState('')
   const [urnInput, setUrnInput] = useState('')
@@ -85,7 +85,11 @@ const CoursesPage = () => {
     return params.toString()
   }
 
-  const { data: coursesData, isLoading: isCoursesLoading, refetch } = useApi(
+  const {
+    data: coursesData,
+    isLoading: isCoursesLoading,
+    refetch,
+  } = useApi(
     `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
@@ -128,7 +132,7 @@ const CoursesPage = () => {
     if (!customCodeUrns || Object.keys(customCodeUrns).length === 0) {
       return '-'
     }
-    
+
     return Object.entries(customCodeUrns)
       .flatMap(([_, values]) => values)
       .map(urn => {
@@ -163,7 +167,10 @@ const CoursesPage = () => {
   }
 
   const handleVisit = (courseId: string) => {
-    window.open(`https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/${courseId}/information/basicinfo`, '_blank')
+    window.open(
+      `https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/${courseId}/information/basicinfo`,
+      '_blank'
+    )
   }
 
   return (
@@ -225,11 +232,8 @@ const CoursesPage = () => {
                     </TableCell>
                     <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
                     <TableCell>
-                      <BlackOutlinedButton
-                        size="small"
-                        onClick={() => handleVisit(course.id)}
-                      >
-                  Visit
+                      <BlackOutlinedButton size="small" onClick={() => handleVisit(course.id)}>
+                        Visit
                       </BlackOutlinedButton>
                     </TableCell>
                   </>

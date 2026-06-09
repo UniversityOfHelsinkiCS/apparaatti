@@ -2,13 +2,9 @@ import { redis } from '../util/redis.ts'
 
 import type { PartialRecord } from './types.ts'
 
-const logError = (message: string, error: Error) => {
-}
+const logError = (message: string, error: Error) => {}
 
-type AllowedBulkCreateOptionField =
-  | 'conflictAttributes'
-  | 'updateOnDuplicate'
-  | 'ignoreDuplicates'
+type AllowedBulkCreateOptionField = 'conflictAttributes' | 'updateOnDuplicate' | 'ignoreDuplicates'
 type AllowedFallbackCreateOptionField = 'fields' | 'conflictFields'
 
 interface BulkCreateOptions {

@@ -6,29 +6,23 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 }))
 
 import type { AnswerData, CourseData } from '../../common/types.ts'
-import {
-  readStudyPlaceCoordinate,
-  courseStudyPlaceCoordinate,
-} from '../../server/util/recommender.ts'
-import {
-  correctValue,
-  incorrectValue,
-} from '../../server/util/constants.ts'
+import { readStudyPlaceCoordinate, courseStudyPlaceCoordinate } from '../../server/util/recommender.ts'
+import { correctValue, incorrectValue } from '../../server/util/constants.ts'
 
 const createAnswerData = (overrides: Partial<AnswerData> = {}): AnswerData => ({
   'study-year': 'neutral',
   'study-period': 'neutral',
-  'graduation': 'neutral',
-  'mentoring': 'neutral',
-  'integrated': 'neutral',
+  graduation: 'neutral',
+  mentoring: 'neutral',
+  integrated: 'neutral',
   'study-place': 'neutral',
-  'replacement': 'neutral',
-  'challenge': 'neutral',
-  'independent': 'neutral',
-  'flexible': 'neutral',
-  'mooc': 'neutral',
+  replacement: 'neutral',
+  challenge: 'neutral',
+  independent: 'neutral',
+  flexible: 'neutral',
+  mooc: 'neutral',
   'study-field-select': 'neutral',
-  'lang': 'neutral',
+  lang: 'neutral',
   'primary-language': 'neutral',
   'primary-language-specification': 'neutral',
   'multi-period': 'neutral',

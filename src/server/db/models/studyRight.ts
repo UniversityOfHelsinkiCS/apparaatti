@@ -1,15 +1,8 @@
 import { Model, BIGINT, STRING, JSONB, DATE, DataTypes } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
-class StudyRight extends Model<
-  InferAttributes<StudyRight>,
-  InferCreationAttributes<StudyRight>
-> {
+class StudyRight extends Model<InferAttributes<StudyRight>, InferCreationAttributes<StudyRight>> {
   declare autoId: CreationOptional<number>
   declare id: string
   declare personId: string

@@ -31,7 +31,7 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
       <TextField
         label="ID"
         value={draft.id}
-        onChange={(e) => patch({ id: e.target.value })}
+        onChange={e => patch({ id: e.target.value })}
         disabled={!isCreate}
         helperText={isCreate ? 'Lowercase alphanumeric + hyphens' : ''}
       />
@@ -42,10 +42,10 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         <Select
           fullWidth
           value={draft.displayType ?? ''}
-          onChange={(e) => patch({ displayType: (e.target.value as string) || null })}
+          onChange={e => patch({ displayType: (e.target.value as string) || null })}
         >
           <MenuItem value="">— none —</MenuItem>
-          {DISPLAY_TYPES.map((t) => (
+          {DISPLAY_TYPES.map(t => (
             <MenuItem key={t} value={t}>
               {t}
             </MenuItem>
@@ -56,12 +56,12 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         label="Display order"
         type="number"
         value={draft.displayOrder}
-        onChange={(e) => patch({ displayOrder: Number(e.target.value) })}
+        onChange={e => patch({ displayOrder: Number(e.target.value) })}
       />
       <TextField
         label="Parent filter ID (optional)"
         value={draft.parentFilterId ?? ''}
-        onChange={(e) => patch({ parentFilterId: e.target.value || null })}
+        onChange={e => patch({ parentFilterId: e.target.value || null })}
       />
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
         {BOOL_FIELDS.map(([field, label]) => (
@@ -69,24 +69,21 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
             key={field}
             label={label}
             control={
-              <Switch
-                checked={!!draft[field]}
-                onChange={(e) => patch({ [field]: e.target.checked })}
-                sx={SWITCH_SX}
-              />
+              <Switch checked={!!draft[field]} onChange={e => patch({ [field]: e.target.checked })} sx={SWITCH_SX} />
             }
           />
         ))}
       </Box>
 
       <Typography variant="subtitle2">Short name</Typography>
-      <LocalizedField
-        values={draft.shortName}
-        onChange={patchShortName}
-        textFieldLabel="Short name"
-      />
+      <LocalizedField values={draft.shortName} onChange={patchShortName} textFieldLabel="Short name" />
 
-      <Typography variant="subtitle2">Explanation (optional) <Typography component="span" variant="caption" color="text.secondary">(the question icon)</Typography></Typography>
+      <Typography variant="subtitle2">
+        Explanation (optional){' '}
+        <Typography component="span" variant="caption" color="text.secondary">
+          (the question icon)
+        </Typography>
+      </Typography>
       <LocalizedField
         values={explanationVal ?? { fi: '', sv: '', en: '' }}
         onChange={patchExplanation}
@@ -95,7 +92,12 @@ const GeneralTab = ({ draft, isCreate, patch, patchShortName, patchExplanation, 
         minRows={2}
       />
 
-      <Typography variant="subtitle2">Extra info (optional) <Typography component="span" variant="caption" color="text.secondary">(shown when display type is info-only)</Typography></Typography>
+      <Typography variant="subtitle2">
+        Extra info (optional){' '}
+        <Typography component="span" variant="caption" color="text.secondary">
+          (shown when display type is info-only)
+        </Typography>
+      </Typography>
       <LocalizedField
         values={extraInfoVal ?? { fi: '', sv: '', en: '' }}
         onChange={patchExtraInfo}

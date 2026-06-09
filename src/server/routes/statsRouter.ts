@@ -15,7 +15,7 @@ statsRouter.get('/', async (req, res) => {
   const statsQuerySchema = z.object({
     start: z.coerce.date(),
     end: z.coerce.date(),
-    groupBy: z.enum(['hour', 'day', 'month', 'year']).default('day')
+    groupBy: z.enum(['hour', 'day', 'month', 'year']).default('day'),
   })
 
   const { start, end, groupBy } = statsQuerySchema.parse(req.query)
@@ -36,7 +36,7 @@ statsRouter.get('/', async (req, res) => {
     const label = getGroupLabel(date, groupBy)
     const key: string = visit.visitorHashHex + label
 
-    if(!countedForLabel.has(key)){
+    if (!countedForLabel.has(key)) {
       counts.set(label, (counts.get(label) ?? 0) + 1)
       countedForLabel.add(key)
     }
@@ -47,9 +47,7 @@ statsRouter.get('/', async (req, res) => {
     .map(([label, count]) => ({ label, count })) //now it is [{label: '', count: ''}]
 
   localLog(result, 'statsrouter')
-  res.send(
-    result
-  )
+  res.send(result)
 })
 
 export default statsRouter

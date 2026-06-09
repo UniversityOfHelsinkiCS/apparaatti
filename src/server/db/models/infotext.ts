@@ -1,19 +1,10 @@
-import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  CreationOptional,
-  DataTypes,
-} from 'sequelize'
+import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize'
 
 import { sequelize } from '../connection'
 
 import { Locales } from '../../types'
 
-class InfoText extends Model<
-  InferAttributes<InfoText>,
-  InferCreationAttributes<InfoText>
-> {
+class InfoText extends Model<InferAttributes<InfoText>, InferCreationAttributes<InfoText>> {
   declare id: CreationOptional<string>
 
   declare name: string

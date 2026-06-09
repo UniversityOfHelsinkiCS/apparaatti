@@ -1,9 +1,5 @@
 import { Model, DataTypes } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 import Cur from './cur.ts'
 
@@ -12,7 +8,7 @@ import Cur from './cur.ts'
 class CourseAdminReview extends Model<InferAttributes<CourseAdminReview>, InferCreationAttributes<CourseAdminReview>> {
   declare id: CreationOptional<number>
   declare curId: string
-  declare reviewed: string // possible states: 'no' and 'yes', reason behind being a string is that in the future more states wil be wanted like 'changed' or 'todo' 
+  declare reviewed: string // possible states: 'no' and 'yes', reason behind being a string is that in the future more states wil be wanted like 'changed' or 'todo'
   declare comment: CreationOptional<string>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>

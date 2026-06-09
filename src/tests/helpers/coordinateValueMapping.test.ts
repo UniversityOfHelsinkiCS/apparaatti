@@ -10,10 +10,7 @@ vi.mock('../../server/util/dbActions.ts', () => ({
   organisationWithGroupIdOf: vi.fn(),
 }))
 
-import {
-  commonCoordinateFromAnswerData,
-  readAsStringArr,
-} from '../../server/util/recommender.ts'
+import { commonCoordinateFromAnswerData, readAsStringArr } from '../../server/util/recommender.ts'
 import { readArrOrSingleValue } from '../../server/util/studyPlace.ts'
 
 describe('commonCoordinateFromAnswerData', () => {

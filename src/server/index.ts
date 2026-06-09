@@ -8,12 +8,7 @@ import passport from 'passport'
 
 import router from './routes/router.ts'
 
-import {
-  SESSION_SECRET,
-  UPDATER_CRON_ENABLED,
-  inDevelopment,
-  IN_E2E,
-} from './util/config.ts'
+import { SESSION_SECRET, UPDATER_CRON_ENABLED, inDevelopment, IN_E2E } from './util/config.ts'
 import { RedisStore } from 'connect-redis'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
@@ -25,7 +20,7 @@ redis.on('ready', () => {
   console.log('Redis connected')
 })
 
-redis.on('error', (err) => {
+redis.on('error', err => {
   console.error('Redis connection error:', err)
 })
 
@@ -41,7 +36,7 @@ app.use(
 
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(express.json({limit: '10mb'}))
+app.use(express.json({ limit: '10mb' }))
 
 // in development and E2E, fake the user
 if (inDevelopment || IN_E2E) {
@@ -52,7 +47,6 @@ if (inDevelopment || IN_E2E) {
   })
 }
 
-
 app.use('/api', router)
 app.use('/api/ping', (_req, res) => {
   res.send('pong')
@@ -62,10 +56,7 @@ app.use('/api', (_, res) => {
 })
 
 if (process.env.NODE_ENV === 'production') {
-  const DIST_PATH = path.resolve(
-    dirname(fileURLToPath(import.meta.url)),
-    '../../dist'
-  )
+  const DIST_PATH = path.resolve(dirname(fileURLToPath(import.meta.url)), '../../dist')
   const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
   app.use(express.static(DIST_PATH))
   app.get('/*mint', (_, res) => res.sendFile(INDEX_PATH))
@@ -85,5 +76,4 @@ app.listen(process.env.PORT, async () => {
   if (UPDATER_CRON_ENABLED) {
     await setupCron()
   }
-
 })

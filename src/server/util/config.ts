@@ -10,15 +10,15 @@ export const OIDC_ISSUER = inProduction
   ? 'https://login.helsinki.fi/.well-known/openid-configuration'
   : 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'
 export const OIDC_AUTHORIZATION_URL = inProduction
-  ?  'https://login.helsinki.fi/idp/profile/oidc/authorize'  
+  ? 'https://login.helsinki.fi/idp/profile/oidc/authorize'
   : 'https://login-test.it.helsinki.fi/idp/profile/oidc/authorize'
 
 export const OIDC_TOKEN_URL = inProduction
-  ?  'https://login.helsinki.fi/idp/profile/oidc/token' 
-  :  'https://login-test.it.helsinki.fi/idp/profile/oidc/token'
+  ? 'https://login.helsinki.fi/idp/profile/oidc/token'
+  : 'https://login-test.it.helsinki.fi/idp/profile/oidc/token'
 
 export const OIDC_USERINFO_URL = inProduction
-  ?  'https://login.helsinki.fi/idp/profile/oidc/userinfo' 
+  ? 'https://login.helsinki.fi/idp/profile/oidc/userinfo'
   : 'https://login-test.it.helsinki.fi/idp/profile/oidc/userinfo'
 
 export const OIDC_CLIENT_ID = process.env.OIDC_CLIENT_ID || '1234'
@@ -43,8 +43,7 @@ export const PATE_URL = inProduction
   ? 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate/'
   : 'https://api-toska.apps.ocp-test-0.k8s.it.helsinki.fi/pate/'
 
-export const IMPORTER_URL =
-  process.env.IMPORTER_URL || 'localhost:3003/importer'
+export const IMPORTER_URL = process.env.IMPORTER_URL || 'localhost:3003/importer'
 
 export const LOKI_HOST = process.env.LOKI_HOST || 'http://loki-svc.toska-lokki.svc.cluster.local:3100'
 

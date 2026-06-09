@@ -5,8 +5,18 @@ import Markdown from 'react-markdown'
 import ActionButtonV2 from './common/ActionButtonV2'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
 
-const ExtraInfoModalV2 = ({question, open, handleClose, currentVariant}: {question: Question, open: boolean, handleClose: () => void, currentVariant?: string}) => {
-  const {t} = useTranslation()
+const ExtraInfoModalV2 = ({
+  question,
+  open,
+  handleClose,
+  currentVariant,
+}: {
+  question: Question
+  open: boolean
+  handleClose: () => void
+  currentVariant?: string
+}) => {
+  const { t } = useTranslation()
   const style = {
     position: 'absolute',
     top: '50%',
@@ -20,10 +30,9 @@ const ExtraInfoModalV2 = ({question, open, handleClose, currentVariant}: {questi
     p: 4,
   }
 
-  
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
 
-  return(
+  return (
     <Modal
       open={open}
       onClose={handleClose}
@@ -34,16 +43,12 @@ const ExtraInfoModalV2 = ({question, open, handleClose, currentVariant}: {questi
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {t('question:extrainfo')}
         </Typography>
-        <Markdown>
-          {explanationToShow}
-        </Markdown>
+        <Markdown>{explanationToShow}</Markdown>
 
         <ActionButtonV2 onClick={handleClose} text={t('question:close')}></ActionButtonV2>
       </Box>
     </Modal>
   )
-
 }
-
 
 export default ExtraInfoModalV2

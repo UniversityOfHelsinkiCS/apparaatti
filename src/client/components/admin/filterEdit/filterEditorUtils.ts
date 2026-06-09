@@ -32,15 +32,13 @@ export const normalizeDraft = (f: FilterConfig): FilterConfig => ({
   ...f,
   explanation: f.explanation ?? blankLocalized(),
   extraInfo: f.extraInfo ?? blankLocalized(),
-  variants: (f.variants ?? []).map((v) => ({
+  variants: (f.variants ?? []).map(v => ({
     ...v,
     options: v.options ?? [],
   })),
 })
 
-export const toNullIfEmpty = (
-  loc: { fi: string; sv: string; en: string } | null | undefined
-) => {
+export const toNullIfEmpty = (loc: { fi: string; sv: string; en: string } | null | undefined) => {
   if (!loc) return null
   if (!loc.fi && !loc.sv && !loc.en) return null
   return loc

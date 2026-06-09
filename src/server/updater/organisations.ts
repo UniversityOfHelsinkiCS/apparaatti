@@ -4,7 +4,7 @@ import { safeBulkCreate } from './util.ts'
 
 const organisationsHandler = async (organisations: any) => {
   const ids = new Set()
-  const uniqueOrganisations = organisations.filter((org) => {
+  const uniqueOrganisations = organisations.filter(org => {
     if (!ids.has(org.id)) {
       ids.add(org.id)
       return true

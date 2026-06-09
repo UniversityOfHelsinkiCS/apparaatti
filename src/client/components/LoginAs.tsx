@@ -1,20 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControl,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Autocomplete, Box, Button, FormControl, TextField, Typography } from '@mui/material'
 import { loginAs } from '../util/loginAs'
 import useApi from '../util/useApi'
 import { User } from '../../common/types'
 
-
 const trimSearch = (search: string) => {
- 
   const trimmedSearch = search.trim()
   if (!trimmedSearch || trimmedSearch.length < 5) {
     return []
@@ -27,11 +18,11 @@ const LoginAs = () => {
   const [loginAsCandidate, setLoginAsCandidate] = useState<User | null>(null)
 
   const [userSearch, setUserSearch] = useState('')
-  
-  const trimmedSearch = trimSearch(userSearch)  
+
+  const trimmedSearch = trimSearch(userSearch)
   const url = `/api/admin/users?search=${trimmedSearch ? trimmedSearch : ''}`
 
-  const {data: users, refetch} = useApi('users', url, 'GET',)
+  const { data: users, refetch } = useApi('users', url, 'GET')
 
   const handleLoginAs = () => {
     loginAs(loginAsCandidate)
@@ -39,7 +30,6 @@ const LoginAs = () => {
 
   useEffect(() => {
     refetch()
-
   }, [userSearch])
 
   return (
@@ -64,18 +54,12 @@ const LoginAs = () => {
             data-testid="login-as-user"
             disablePortal
             options={users ?? []}
-            getOptionLabel={(user) =>
+            getOptionLabel={user =>
               `${user.firstName} ${user.lastName} ${user.email ? `(${user.email})` : ''} ${user.username ? `(${user.username})` : ''}`
             }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('loginAsPage:userHeader')}
-                required
-              />
-            )}
+            renderInput={params => <TextField {...params} label={t('loginAsPage:userHeader')} required />}
             inputValue={userSearch}
-            filterOptions={(x) => x}
+            filterOptions={x => x}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             value={loginAsCandidate}
             onChange={(_, value) => {

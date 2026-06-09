@@ -72,7 +72,7 @@ describe('pointRecommendCourses', () => {
 
     const result = pointRecommendedCourses([specificCourse, genericCourse], user, ['spesificOrg'])
 
-    expect(result.map((c) => c.course.id)).toEqual(['specific-org-match'])
+    expect(result.map(c => c.course.id)).toEqual(['specific-org-match'])
   })
 
   it('always enforces org as strict even when not listed in strictFields', () => {

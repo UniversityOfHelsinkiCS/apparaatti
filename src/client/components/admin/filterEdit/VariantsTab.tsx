@@ -70,7 +70,7 @@ const VariantsTab = ({
                   size="small"
                   edge="end"
                   color="error"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation()
                     const newIdx = vIdx <= safeIdx && safeIdx > 0 ? safeIdx - 1 : safeIdx
                     setSelectedIdx(newIdx)
@@ -103,13 +103,13 @@ const VariantsTab = ({
         <VariantEditor
           variant={selectedVariant}
           variantIdx={safeIdx}
-          onPatchVariant={(fields) => onPatchVariant(safeIdx, fields)}
+          onPatchVariant={fields => onPatchVariant(safeIdx, fields)}
           onPatchQuestion={(lang, val) => onPatchVariantQuestion(safeIdx, lang, val)}
           onPatchExplanation={(lang, val) => onPatchVariantExplanation(safeIdx, lang, val)}
           onUpdateOption={(oIdx, fields) => onUpdateOption(safeIdx, oIdx, fields)}
           onUpdateOptionName={(oIdx, lang, val) => onUpdateOptionName(safeIdx, oIdx, lang, val)}
           onAddOption={() => onAddOption(safeIdx)}
-          onRemoveOption={(oIdx) => onRemoveOption(safeIdx, oIdx)}
+          onRemoveOption={oIdx => onRemoveOption(safeIdx, oIdx)}
         />
       )}
     </Box>

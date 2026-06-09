@@ -10,14 +10,13 @@ vi.mock('../server/util/dbActions.ts', () => ({
   organisationWithGroupIdOf: vi.fn().mockResolvedValue([]),
 }))
 
-
 describe('recommender tests', () => {
   it('passes', () => {
     const val = true
     expect(val === true)
   })
 
-  it('recommender returns an empty answer with a invalid input', async() => {
+  it('recommender returns an empty answer with a invalid input', async () => {
     await recommendCourses({})
   })
 
@@ -41,7 +40,7 @@ describe('recommender tests', () => {
     })
 
     it('returns the string when value is a string', () => {
-      const answerData = { 'lang': 'fi' }
+      const answerData = { lang: 'fi' }
       const result = readAnswer(answerData, 'lang')
       expect(result).toBe('fi')
     })
@@ -65,20 +64,22 @@ describe('recommender tests', () => {
       name: { fi: 'Test Course', en: 'Test Course', sv: 'Test Course' },
       startDate: new Date('2024-09-01'),
       endDate: new Date('2024-12-15'),
-      period: [{
-        name: 'period_1',
-        startDate: new Date('2024-09-01'),
-        endDate: new Date('2024-10-31'),
-        startYear: '2024',
-        endYear: '2024'
-      }],
+      period: [
+        {
+          name: 'period_1',
+          startDate: new Date('2024-09-01'),
+          endDate: new Date('2024-10-31'),
+          startYear: '2024',
+          endYear: '2024',
+        },
+      ],
       customCodeUrns: {},
       courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation',
       courseCodes: ['TEST-101'],
       groupIds: ['group-1'],
       unitIds: ['unit-1'],
       credits: [{ fi: 5, en: 5, sv: 5 }],
-      flowState: 'PUBLISHED'
+      flowState: 'PUBLISHED',
     }
 
     it('does not filter out courses when study-period is not answered (neutral) even if strict', () => {
@@ -101,7 +102,7 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-        }
+        },
       }
 
       const userCoordinates: UserCoordinates = {
@@ -157,7 +158,7 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-        }
+        },
       }
 
       const userCoordinates: UserCoordinates = {
@@ -211,7 +212,7 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-        }
+        },
       }
 
       const userCoordinates: UserCoordinates = {
@@ -249,20 +250,22 @@ describe('recommender tests', () => {
       name: { fi: 'Suomen kielen tentti', en: 'Finnish language exam', sv: 'Finska språket tentamen' },
       startDate: new Date('2024-09-01'),
       endDate: new Date('2024-12-15'),
-      period: [{
-        name: 'period_1',
-        startDate: new Date('2024-09-01'),
-        endDate: new Date('2024-10-31'),
-        startYear: '2024',
-        endYear: '2024'
-      }],
+      period: [
+        {
+          name: 'period_1',
+          startDate: new Date('2024-09-01'),
+          endDate: new Date('2024-10-31'),
+          startYear: '2024',
+          endYear: '2024',
+        },
+      ],
       customCodeUrns: {},
       courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation',
       courseCodes: ['FIN-EXAM-101'],
       groupIds: ['group-1'],
       unitIds: ['unit-1'],
       credits: [{ fi: 0, en: 0, sv: 0 }],
-      flowState: 'PUBLISHED'
+      flowState: 'PUBLISHED',
     }
 
     it('filters out exam courses when user has not selected exam in study-place', () => {
@@ -285,7 +288,7 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-        }
+        },
       }
 
       const userCoordinates: UserCoordinates = {
@@ -336,7 +339,7 @@ describe('recommender tests', () => {
           finmu: 0,
           collaboration: 0,
           multiPeriod: 0,
-        }
+        },
       }
 
       const userCoordinates: UserCoordinates = {
@@ -368,5 +371,4 @@ describe('recommender tests', () => {
       expect(result[0].points).toBeGreaterThan(0)
     })
   })
-
 })

@@ -39,7 +39,7 @@ const StudyPhaseFilter = ({
 
   const [selectedValue, setSelectedValue] = useState(startValue())
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     e.preventDefault()
     setSelectedValue(e.target.value)
   }
@@ -74,9 +74,7 @@ const StudyPhaseFilter = ({
           </MenuItem>
         ))}
       </Select>
-      {organisations.length < 2 && (
-        <input type="hidden" value={selectedValue} name={filter.id} />
-      )}
+      {organisations.length < 2 && <input type="hidden" value={selectedValue} name={filter.id} />}
     </Box>
   )
 }

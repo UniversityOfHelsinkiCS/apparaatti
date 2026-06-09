@@ -40,7 +40,7 @@ export async function curcusWithUnitIdOf(courseUnitIds: string[]) {
 export async function organisationWithGroupIdOf(groupIds: string[]) {
   return await Organisation.findAll({
     where: {
-      id: groupIds
+      id: groupIds,
     },
     raw: true,
   })
@@ -92,11 +92,7 @@ export async function disableFilterConfigById(id: string): Promise<any | null> {
 }
 
 export async function reorderFilterConfigs(entries: Array<{ id: string; displayOrder: number }>) {
-  await Promise.all(
-    entries.map(({ id, displayOrder }) =>
-      Filter.update({ displayOrder }, { where: { id } })
-    )
-  )
+  await Promise.all(entries.map(({ id, displayOrder }) => Filter.update({ displayOrder }, { where: { id } })))
 }
 
 export async function organisationsWithSupportedCodes(codes: string[]) {
@@ -141,7 +137,7 @@ export async function allCursRaw() {
 }
 
 export async function cursWithWhereRaw(where: Record<string, any>) {
-  return await Cur.findAll(({ where, raw: true } as any))
+  return await Cur.findAll({ where, raw: true } as any)
 }
 
 export async function allCurCusRaw() {
@@ -160,7 +156,7 @@ export async function cusWithIds(ids: string[]) {
 }
 
 export async function cusWithWhere(where: Record<string, any>) {
-  return await Cu.findAll(({ where } as any))
+  return await Cu.findAll({ where } as any)
 }
 
 function parseCsvList(value: string | undefined): string[] {
@@ -174,14 +170,12 @@ function parseCsvList(value: string | undefined): string[] {
 function getCurUrnsLowercase(cur: any): string[] {
   const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
   if (!customCodeUrns) return []
-  return Object.values(customCodeUrns).flat().map(u => u.toLowerCase())
+  return Object.values(customCodeUrns)
+    .flat()
+    .map(u => u.toLowerCase())
 }
 
-function curMatchesUrnFilters(
-  cur: any,
-  urnSearchLower: string | undefined,
-  excludeUrnListLower: string[]
-): boolean {
+function curMatchesUrnFilters(cur: any, urnSearchLower: string | undefined, excludeUrnListLower: string[]): boolean {
   const urns = getCurUrnsLowercase(cur)
   if (urnSearchLower && !urns.some(u => u.includes(urnSearchLower))) {
     return false
@@ -201,17 +195,19 @@ async function findCurIdsToExcludeByCourseCode(excludeCourseCodes: string[]): Pr
   if (excludeCourseCodes.length === 0) return []
   const excludedCurs = await Cur.findAll({
     attributes: ['id'],
-    include: [{
-      model: Cu,
-      required: true,
-      attributes: [],
-      where: {
-        [Op.or]: excludeCourseCodes.map(code => ({
-          courseCode: { [Op.iLike]: `%${code}%` }
-        }))
+    include: [
+      {
+        model: Cu,
+        required: true,
+        attributes: [],
+        where: {
+          [Op.or]: excludeCourseCodes.map(code => ({
+            courseCode: { [Op.iLike]: `%${code}%` },
+          })),
+        },
+        through: { attributes: [] },
       },
-      through: { attributes: [] }
-    }],
+    ],
     raw: true,
   })
   return excludedCurs.map((c: any) => c.id)
@@ -229,7 +225,7 @@ async function paginateCursWithJsUrnFilter(
   reviewStatus: string | undefined,
   page: number,
   limit: number,
-  offset: number,
+  offset: number
 ) {
   const allCurs = await Cur.findAll({
     where: curWhere,
@@ -239,9 +235,7 @@ async function paginateCursWithJsUrnFilter(
   })
 
   const urnSearchLower = urnSearch?.toLowerCase()
-  const filtered = allCurs.filter(cur =>
-    curMatchesUrnFilters(cur, urnSearchLower, excludeUrnListLower)
-  )
+  const filtered = allCurs.filter(cur => curMatchesUrnFilters(cur, urnSearchLower, excludeUrnListLower))
 
   const filteredWithReviews = filterCoursesByReviewStatus(await populateWithReviews(filtered), reviewStatus)
   const total = filteredWithReviews.length
@@ -295,27 +289,22 @@ function filterCoursesByReviewStatus(courses: any[], reviewStatus?: string) {
 }
 
 async function populateWithReviews(curs: Cur[]) {
-  const cursWithReviews = await Promise.all(curs.map(async (cur) => {
-    const plainCur = typeof (cur as any).get === 'function'
-      ? (cur as any).get({ plain: true })
-      : cur
+  const cursWithReviews = await Promise.all(
+    curs.map(async cur => {
+      const plainCur = typeof (cur as any).get === 'function' ? (cur as any).get({ plain: true }) : cur
 
-    const reviewState = await getCourseAdminReviewByCurId(plainCur.id)
+      const reviewState = await getCourseAdminReviewByCurId(plainCur.id)
 
-    return {
-      ...plainCur,
-      reviewState,
-    }
-  }))
+      return {
+        ...plainCur,
+        reviewState,
+      }
+    })
+  )
   return cursWithReviews
 }
 
-
-export async function searchCoursesWithPagination(
-  filters: CourseSearchFilters,
-  page: number,
-  limit: number
-) {
+export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
   const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes, reviewStatus } = filters
   const offset = (page - 1) * limit
 
@@ -335,7 +324,7 @@ export async function searchCoursesWithPagination(
   const cuWhere: any = {
     courseCode: courseCodeSearch
       ? { [Op.and]: [{ [Op.iLike]: 'KK-%' }, { [Op.iLike]: `%${courseCodeSearch}%` }] }
-      : { [Op.iLike]: 'KK-%' }
+      : { [Op.iLike]: 'KK-%' },
   }
 
   const excludeUrnList = parseCsvList(excludeUrns).map(s => s.toLowerCase())
@@ -346,15 +335,18 @@ export async function searchCoursesWithPagination(
     curWhere.id = { [Op.notIn]: excludedCurIds }
   }
 
-  const includeOptions: any[] = [{
-    model: Cu,
-    required: true,
-    attributes: ['id', 'courseCode', 'name'],
-    where: cuWhere,
-    through: { attributes: [] } // Don't include join table attributes
-  }]
+  const includeOptions: any[] = [
+    {
+      model: Cu,
+      required: true,
+      attributes: ['id', 'courseCode', 'name'],
+      where: cuWhere,
+      through: { attributes: [] }, // Don't include join table attributes
+    },
+  ]
 
-  const needsJsFiltering = !!urnSearch || excludeUrnList.length > 0 || reviewStatus === 'reviewed' || reviewStatus === 'not-reviewed'
+  const needsJsFiltering =
+    !!urnSearch || excludeUrnList.length > 0 || reviewStatus === 'reviewed' || reviewStatus === 'not-reviewed'
 
   if (needsJsFiltering) {
     const jsFilteredResult = await paginateCursWithJsUrnFilter(
@@ -365,12 +357,10 @@ export async function searchCoursesWithPagination(
       reviewStatus,
       page,
       limit,
-      offset,
+      offset
     )
     return jsFilteredResult
-  }
-  else
-  {
+  } else {
     // No JS-side filtering required - use regular paginated query
     const { rows: results, count: total } = await Cur.findAndCountAll({
       where: curWhere,
@@ -390,14 +380,12 @@ export async function searchCoursesWithPagination(
       total,
       page,
       limit,
-      totalPages: Math.ceil(total / limit)
+      totalPages: Math.ceil(total / limit),
     }
   }
-  
 }
 
-
-export async function createUserVisitsEntry(visitorHashHex: string, date: Date){
+export async function createUserVisitsEntry(visitorHashHex: string, date: Date) {
   // Normalize to UTC hour start
   const startHour = new Date(date)
   startHour.setUTCHours(startHour.getUTCHours(), 0, 0, 0)
@@ -412,40 +400,36 @@ export async function createUserVisitsEntry(visitorHashHex: string, date: Date){
     where: { visitorHashHex: entry.visitorHashHex, date: entry.date },
     defaults: entry,
   })
-
 }
 
-
-
-export async function getUserVisitsByUser(visitorHashHex, start, end){
+export async function getUserVisitsByUser(visitorHashHex, start, end) {
   const visits = await UserVisits.findAll({
     where: {
       visitorHashHex: visitorHashHex,
       date: {
         [Op.gte]: start,
-        [Op.lt]: end
-      }
+        [Op.lt]: end,
+      },
     },
-    raw: true
+    raw: true,
   })
 
   return visits
 }
 
 // returns user visits in db grouped by the user
-export async function getUserVisits(start: Date, end: Date){
+export async function getUserVisits(start: Date, end: Date) {
   const visits = await UserVisits.findAll({
     where: {
       date: {
         [Op.gte]: start,
-        [Op.lt]: end
-      }
+        [Op.lt]: end,
+      },
     },
     raw: true,
   })
 
   return visits
-
 }
 
 export async function createUserFeedbackEntry(
@@ -465,7 +449,7 @@ export async function createUserFeedbackEntry(
 }
 
 export async function getUserFeedbackEntries(start: Date, end: Date): Promise<UserFeedbackType[]> {
-  return await UserFeedback.findAll({
+  return (await UserFeedback.findAll({
     where: {
       date: {
         [Op.gte]: start,
@@ -474,7 +458,7 @@ export async function getUserFeedbackEntries(start: Date, end: Date): Promise<Us
     },
     order: [['date', 'DESC']],
     raw: true,
-  }) as UserFeedbackType[]
+  })) as UserFeedbackType[]
 }
 
 export async function createOrUpdateCourseAdminReviewEntry(curId: string, reviewed: string, comment?: string) {

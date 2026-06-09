@@ -70,10 +70,12 @@ filterConfigRouter.patch('/reorder', async (req, res) => {
   const user = enforceIsUser(req)
   enforceIsAdmin(user)
 
-  const ReorderSchema = z.array(z.object({
-    id: z.string(),
-    displayOrder: z.number().int(),
-  }))
+  const ReorderSchema = z.array(
+    z.object({
+      id: z.string(),
+      displayOrder: z.number().int(),
+    })
+  )
 
   const parsed = ReorderSchema.safeParse(req.body)
   if (!parsed.success) {
@@ -118,7 +120,7 @@ filterConfigRouter.get('/export', async (req, res) => {
   enforceIsAdmin(user)
 
   const filters = await orderedFilterConfigs()
-  
+
   const exportData = {
     appVersion: GIT_SHA,
     exportedAt: new Date().toISOString(),
@@ -126,7 +128,10 @@ filterConfigRouter.get('/export', async (req, res) => {
   }
 
   res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Content-Disposition', `attachment; filename="filter-config-${new Date().toISOString().split('T')[0]}.json"`)
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="filter-config-${new Date().toISOString().split('T')[0]}.json"`
+  )
   res.json(exportData)
 })
 

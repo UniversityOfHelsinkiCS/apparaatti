@@ -1,15 +1,4 @@
-
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -21,8 +10,8 @@ import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 
 type StatsRow = {
-    label: string
-    count: number
+  label: string
+  count: number
 }
 
 const getDefaultStart = () => {
@@ -44,12 +33,10 @@ const StatsPage = () => {
 
   const endpoint = `/api/admin/stats?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}&groupBy=${encodeURIComponent(groupBy)}`
 
-  const { data, isLoading } = useApi(
-    `admin-stats-${start}-${end}-${groupBy}`,
-    endpoint,
-    'GET',
-    null
-  ) as { data: StatsRow[] | null; isLoading: boolean }
+  const { data, isLoading } = useApi(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET', null) as {
+    data: StatsRow[] | null
+    isLoading: boolean
+  }
 
   const groupedCounts = Array.isArray(data) ? data : []
 
@@ -73,7 +60,7 @@ const StatsPage = () => {
     <Box sx={{ p: { xs: 2, md: 4 } }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 2 }}>
-                Usage Stats
+        Usage Stats
       </Typography>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
@@ -81,7 +68,7 @@ const StatsPage = () => {
           label="Start"
           type="date"
           value={start}
-          onChange={(event) => setStart(event.target.value)}
+          onChange={event => setStart(event.target.value)}
           InputLabelProps={{ shrink: true }}
           size="small"
         />
@@ -89,7 +76,7 @@ const StatsPage = () => {
           label="End"
           type="date"
           value={end}
-          onChange={(event) => setEnd(event.target.value)}
+          onChange={event => setEnd(event.target.value)}
           InputLabelProps={{ shrink: true }}
           size="small"
         />
@@ -99,7 +86,7 @@ const StatsPage = () => {
             labelId="stats-group-by-label"
             value={groupBy}
             label="Group by"
-            onChange={(event) => setGroupBy(event.target.value as GroupBy)}
+            onChange={event => setGroupBy(event.target.value as GroupBy)}
           >
             <MenuItem value="hour">Hour</MenuItem>
             <MenuItem value="day">Day</MenuItem>
@@ -114,7 +101,7 @@ const StatsPage = () => {
             setEnd(getDefaultEnd())
           }}
         >
-                    Last 14 days
+          Last 14 days
         </BlackOutlinedButton>
       </Stack>
 
@@ -126,8 +113,8 @@ const StatsPage = () => {
         <BarChart
           height={420}
           margin={{ top: 20, right: 20, bottom: 60, left: 50 }}
-          xAxis={[{ scaleType: 'band', data: groupedCounts.map((item) => item.label) }]}
-          series={[{ data: groupedCounts.map((item) => item.count), label: 'Visits' }]}
+          xAxis={[{ scaleType: 'band', data: groupedCounts.map(item => item.label) }]}
+          series={[{ data: groupedCounts.map(item => item.count), label: 'Visits' }]}
         />
       )}
     </Box>

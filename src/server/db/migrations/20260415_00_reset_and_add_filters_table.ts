@@ -32,7 +32,7 @@ const SPECIFIC_ORG_FILTER = {
       question: {
         fi: 'Rajaa oman organisaation kurssit',
         sv: 'Begränsa till kurser i den egna organisationen',
-        en: 'Restrict to courses in the user\'s own organisation',
+        en: "Restrict to courses in the user's own organisation",
       },
     },
   ],
@@ -52,7 +52,7 @@ const tableName = (table: unknown) => {
 
 export const up: Migration = async ({ context: queryInterface }) => {
   const existingTables = await queryInterface.showAllTables()
-  const filtersTableExists = existingTables.some((table) => tableName(table) === 'filters')
+  const filtersTableExists = existingTables.some(table => tableName(table) === 'filters')
 
   if (filtersTableExists) {
     await queryInterface.dropTable('filters')
@@ -161,11 +161,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
 
   await seedFilters()
 
-  await queryInterface.bulkUpdate(
-    'filters',
-    { is_strict_by_default: true },
-    { id: STRICT_DEFAULT_IDS }
-  )
+  await queryInterface.bulkUpdate('filters', { is_strict_by_default: true }, { id: STRICT_DEFAULT_IDS })
 
   await queryInterface.bulkInsert('filters', [
     {

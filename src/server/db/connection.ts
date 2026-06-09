@@ -29,7 +29,7 @@ const testConnection = async () => {
   await runMigrations()
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const connectToDatabase = async (attempt = 0): Promise<void | null> => {
   try {

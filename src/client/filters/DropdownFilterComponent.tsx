@@ -10,12 +10,7 @@ interface DropdownFilterComponentProps {
   options: Option[]
 }
 
-const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
-  filter,
-  state,
-  handleChange,
-  options,
-}) => {
+const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filter, state, handleChange, options }) => {
   return (
     <FormControl sx={{ marginBottom: 2, paddingTop: 1 }}>
       <Select
@@ -31,7 +26,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
         value={state}
         onChange={handleChange}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <MenuItem key={option.id} value={option.id}>
             {translateLocalizedString(option.name)}
           </MenuItem>

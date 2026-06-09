@@ -1,28 +1,11 @@
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Question } from '../../common/types.tsx'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import { useFilterContext } from '../contexts/filterContext'
 
-const MultiChoiceFilter = ({
-  filter,
-  variantId,
-}: {
-  filter: Question
-  variantId: string
-}) => {
-  const {
-    setReplacement,
-    setMentoring,
-    setFinmu,
-    setChallenge,
-    setGraduation,
-    setIntegrated,
-    setIndependent,
-  } = useFilterContext()
+const MultiChoiceFilter = ({ filter, variantId }: { filter: Question; variantId: string }) => {
+  const { setReplacement, setMentoring, setFinmu, setChallenge, setGraduation, setIntegrated, setIndependent } =
+    useFilterContext()
 
   const variant = pickVariant(filter, variantId)
   if (!variant || variant?.skipped) {
@@ -32,35 +15,35 @@ const MultiChoiceFilter = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     switch (filter.id) {
-    case 'replacement':
-      setReplacement(value)
-      break
-    case 'mentoring':
-      setMentoring(value)
-      break
-    case 'finmu':
-      setFinmu(value)
-      break
-    case 'challenge':
-      setChallenge(value)
-      break
-    case 'graduation':
-      setGraduation(value)
-      break
-    case 'integrated':
-      setIntegrated(value)
-      break
-    case 'independent':
-      setIndependent(value)
-      break
-    default:
-      break
+      case 'replacement':
+        setReplacement(value)
+        break
+      case 'mentoring':
+        setMentoring(value)
+        break
+      case 'finmu':
+        setFinmu(value)
+        break
+      case 'challenge':
+        setChallenge(value)
+        break
+      case 'graduation':
+        setGraduation(value)
+        break
+      case 'integrated':
+        setIntegrated(value)
+        break
+      case 'independent':
+        setIndependent(value)
+        break
+      default:
+        break
     }
   }
 
   return (
     <RadioGroup name={filter.id} onChange={handleChange}>
-      {variant.options.map((option) => (
+      {variant.options.map(option => (
         <FormControlLabel
           key={option.id}
           value={option.id}

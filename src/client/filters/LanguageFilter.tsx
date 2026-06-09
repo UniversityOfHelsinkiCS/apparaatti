@@ -1,18 +1,8 @@
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 
-const LanguageFilter = ({
-  filter,
-  setLanguage,
-}: {
-  filter: Question
-  setLanguage: (id: string) => void
-}) => {
+const LanguageFilter = ({ filter, setLanguage }: { filter: Question; setLanguage: (id: string) => void }) => {
   const variant = pickVariant(filter, 'default')
 
   const handleChoice = (id: string) => {
@@ -25,7 +15,7 @@ const LanguageFilter = ({
 
   return (
     <RadioGroup name={filter.id}>
-      {variant.options.map((option) => (
+      {variant.options.map(option => (
         <FormControlLabel
           onClick={() => handleChoice(option.id)}
           key={option.id}

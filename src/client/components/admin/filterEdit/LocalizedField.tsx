@@ -41,9 +41,9 @@ const LocalizedField = ({
           size={size}
           id={selectId}
           value={selectedLang}
-          onChange={(e) => setSelectedLang(e.target.value as Lang)}
+          onChange={e => setSelectedLang(e.target.value as Lang)}
         >
-          {LANG_OPTIONS.map((option) => (
+          {LANG_OPTIONS.map(option => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -55,9 +55,9 @@ const LocalizedField = ({
         size={size}
         label={textFieldLabel}
         multiline={multiline}
-        minRows={multiline ? minRows ?? 2 : undefined}
+        minRows={multiline ? (minRows ?? 2) : undefined}
         value={values[selectedLang] ?? ''}
-        onChange={(e) => onChange(selectedLang, e.target.value)}
+        onChange={e => onChange(selectedLang, e.target.value)}
         sx={{
           '& .MuiInputBase-root': {
             minHeight: inputMinHeight,

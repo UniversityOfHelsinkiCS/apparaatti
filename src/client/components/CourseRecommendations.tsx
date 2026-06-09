@@ -15,18 +15,22 @@ const CourseRecommendations = () => {
 
   const recommendations = finalRecommendedCourses
 
-
-  if(!recommendations){
-    return (<></>)
+  if (!recommendations) {
+    return <></>
   }
 
   const sortedCourses = sortCourses(recommendations, sortMode, sortDirection)
   return (
     <Box>
       <Stack>
-        <CourseSortControls sortMode={sortMode} sortDirection={sortDirection} onChange={setSortMode} onDirectionChange={setSortDirection} />
+        <CourseSortControls
+          sortMode={sortMode}
+          sortDirection={sortDirection}
+          onChange={setSortMode}
+          onDirectionChange={setSortDirection}
+        />
         <CourseRecommendationSearch courses={sortedCourses}>
-          {(filteredCourses) => (
+          {filteredCourses => (
             <Stack
               spacing={2}
               sx={{
@@ -36,11 +40,8 @@ const CourseRecommendations = () => {
                 paddingBottom: 10,
               }}
             >
-              {filteredCourses.map((course) => (
-                <CourseRecommendationV2
-                  key={course.id}
-                  course={course}
-                />
+              {filteredCourses.map(course => (
+                <CourseRecommendationV2 key={course.id} course={course} />
               ))}
             </Stack>
           )}

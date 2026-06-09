@@ -12,16 +12,16 @@ declare global {
   }
 }
 
-export function translateLocalizedString(text: LocalizedString): string{
+export function translateLocalizedString(text: LocalizedString): string {
   const currentLanguage = i18n.language
   const keys = Object.keys(text)
-  if(keys.includes(currentLanguage)){
+  if (keys.includes(currentLanguage)) {
     return text[currentLanguage]
   }
   //sometimes sisu course does not have an english/svedish translation so checking both and preferring english
-  const englishFallBack:string | undefined = text['en']
-  const finnishFallBack:string | undefined = text['fi']
-  
+  const englishFallBack: string | undefined = text['en']
+  const finnishFallBack: string | undefined = text['fi']
+
   return englishFallBack != undefined ? englishFallBack : finnishFallBack
 }
 

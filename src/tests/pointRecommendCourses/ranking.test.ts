@@ -15,10 +15,7 @@ describe('pointRecommendCourses', () => {
 
     const result = pointRecommendedCourses([lowerScore, higherScore], user, [])
 
-    expect(result.map((course) => course.course.id)).toEqual([
-      'higher-score',
-      'lower-score',
-    ])
+    expect(result.map(course => course.course.id)).toEqual(['higher-score', 'lower-score'])
   })
 
   it('adds non-generic mandatory bonus point when not challenge course', () => {
@@ -34,8 +31,8 @@ describe('pointRecommendCourses', () => {
     })
 
     const result = pointRecommendedCourses([nonGeneric, generic], user, [])
-    const nonGenericPoints = result.find((course) => course.course.id === 'non-generic')?.points
-    const genericPoints = result.find((course) => course.course.id === 'generic')?.points
+    const nonGenericPoints = result.find(course => course.course.id === 'non-generic')?.points
+    const genericPoints = result.find(course => course.course.id === 'generic')?.points
 
     expect(nonGenericPoints).toBeDefined()
     expect(genericPoints).toBeDefined()
@@ -63,7 +60,7 @@ describe('pointRecommendCourses', () => {
     })
 
     const result = pointRecommendedCourses([numbered, eri, kaikki, specific], user, [])
-    const ids = result.map((c) => c.course.id)
+    const ids = result.map(c => c.course.id)
 
     expect(ids.indexOf('specific')).toBeLessThan(ids.indexOf('kaikki'))
     expect(ids.indexOf('kaikki')).toBeLessThan(ids.indexOf('numbered'))

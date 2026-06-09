@@ -32,7 +32,7 @@ const VariantEditor = ({
       label="Variant name"
       size="small"
       value={variant.name}
-      onChange={(e) => onPatchVariant({ name: e.target.value })}
+      onChange={e => onPatchVariant({ name: e.target.value })}
       disabled={variant.name === 'default'}
     />
     <FormControlLabel
@@ -40,7 +40,7 @@ const VariantEditor = ({
       control={
         <Switch
           checked={!!variant.skipped}
-          onChange={(e) => onPatchVariant({ skipped: e.target.checked })}
+          onChange={e => onPatchVariant({ skipped: e.target.checked })}
           sx={SWITCH_SX}
         />
       }
@@ -65,24 +65,17 @@ const VariantEditor = ({
     />
 
     <Divider />
-    <Typography variant="subtitle2">
-      Options ({(variant.options ?? []).length})
-    </Typography>
+    <Typography variant="subtitle2">Options ({(variant.options ?? []).length})</Typography>
     {(variant.options ?? []).map((option, oIdx) => (
       <OptionRow
         key={oIdx}
         option={option}
-        onUpdate={(fields) => onUpdateOption(oIdx, fields)}
+        onUpdate={fields => onUpdateOption(oIdx, fields)}
         onUpdateName={(lang, val) => onUpdateOptionName(oIdx, lang, val)}
         onRemove={() => onRemoveOption(oIdx)}
       />
     ))}
-    <Button
-      startIcon={<AddIcon />}
-      size="small"
-      onClick={onAddOption}
-      sx={{ color: 'black', alignSelf: 'flex-start' }}
-    >
+    <Button startIcon={<AddIcon />} size="small" onClick={onAddOption} sx={{ color: 'black', alignSelf: 'flex-start' }}>
       Add option
     </Button>
   </Box>

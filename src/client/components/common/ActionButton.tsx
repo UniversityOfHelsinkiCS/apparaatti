@@ -6,7 +6,7 @@ interface actionButtonProps {
   dataCy?: string
 }
 
-const ActionButton = ({onClick = () => {}, text = '', dataCy}: actionButtonProps) => {
+const ActionButton = ({ onClick = () => {}, text = '', dataCy }: actionButtonProps) => {
   return (
     <Button
       data-cy={dataCy}

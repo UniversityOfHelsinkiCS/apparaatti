@@ -2,7 +2,7 @@ import type { User } from '../../common/types.ts'
 
 export const isSuperuser = (user: User) => {
   const groups = user?.hyGroupCn
-  if(!groups){
+  if (!groups) {
     return false
   }
   return groups.includes('grp-toska')
@@ -10,10 +10,14 @@ export const isSuperuser = (user: User) => {
 
 export const isAdmin = (user: User) => {
   const groups = user?.hyGroupCn
-  if(!groups){
+  if (!groups) {
     return false
   }
-  return groups?.includes('hy-kielikeskus-employees') ||  groups?.includes('grp-toska') || groups?.includes('grp-a90600-opintot')
+  return (
+    groups?.includes('hy-kielikeskus-employees') ||
+    groups?.includes('grp-toska') ||
+    groups?.includes('grp-a90600-opintot')
+  )
 }
 
 export const enforceIsUser = (req: any): User => {
@@ -25,7 +29,7 @@ export const enforceIsUser = (req: any): User => {
 
 export const enforceIsAdmin = (user: User) => {
   const isadmin = isAdmin(user)
-  if(!isadmin){
+  if (!isadmin) {
     throw new Error('Unauthorized')
     return
   }
@@ -35,7 +39,7 @@ export const enforceIsAdmin = (user: User) => {
 
 export const enforceIsSuperuser = (user: User) => {
   const superuser = isSuperuser(user)
-  if(!superuser){
+  if (!superuser) {
     throw new Error('Unauthorized')
     return
   }

@@ -47,16 +47,16 @@ describe('isIndependentCourse', () => {
   })
 
   it('returns true when name includes itsenäinen', () => {
-    const course = createMinimalCourse({ 
-      name: { fi: 'Itsenäinen opiskelu' } 
+    const course = createMinimalCourse({
+      name: { fi: 'Itsenäinen opiskelu' },
     })
 
     expect(isIndependentCourse(course)).toBe(true)
   })
 
   it('returns true when name includes itsenäinen in any case variation', () => {
-    const course = createMinimalCourse({ 
-      name: { fi: 'ITSENÄINEN Project Work' } 
+    const course = createMinimalCourse({
+      name: { fi: 'ITSENÄINEN Project Work' },
     })
 
     expect(isIndependentCourse(course)).toBe(true)
@@ -94,18 +94,11 @@ describe('localeNameIncludesAny', () => {
   })
 
   it('matches multiple patterns', () => {
-    expect(
-      localeNameIncludesAny({ fi: 'Matematiikka-kurssi' }, ['mathemat', 'matema'])
-    ).toBe(true)
+    expect(localeNameIncludesAny({ fi: 'Matematiikka-kurssi' }, ['mathemat', 'matema'])).toBe(true)
   })
 
   it('returns false when no pattern matches', () => {
-    expect(
-      localeNameIncludesAny(
-        { fi: 'Kurssi', en: 'Course', sv: 'Kurs' },
-        ['xyz', 'abc']
-      )
-    ).toBe(false)
+    expect(localeNameIncludesAny({ fi: 'Kurssi', en: 'Course', sv: 'Kurs' }, ['xyz', 'abc'])).toBe(false)
   })
 
   it('handles undefined localizedName', () => {
@@ -128,25 +121,21 @@ describe('courseIsCollaboration', () => {
   })
 
   it('returns true when organisation name includes collaboration pattern', async () => {
-    mockOrganisationWithGroupIdOf.mockResolvedValue([
-      { name: { fi: 'Vaasa kampus' } } as any,
-    ])
+    mockOrganisationWithGroupIdOf.mockResolvedValue([{ name: { fi: 'Vaasa kampus' } } as any])
     const course = createMinimalCourse({ groupIds: ['g1'] })
 
     expect(await courseIsCollaboration(course)).toBe(true)
   })
 
   it('returns false when neither course nor organisation name match collaboration patterns', async () => {
-    mockOrganisationWithGroupIdOf.mockResolvedValue([
-      { name: { fi: 'Regular org' } } as any,
-    ])
+    mockOrganisationWithGroupIdOf.mockResolvedValue([{ name: { fi: 'Regular org' } } as any])
     const course = createMinimalCourse({ name: { fi: 'Regular course' } })
 
     expect(await courseIsCollaboration(course)).toBe(false)
   })
 
   it('returns false when no groupIds provided and name does not match', async () => {
-    const course = createMinimalCourse({ 
+    const course = createMinimalCourse({
       name: { fi: 'Regular course' },
       groupIds: [],
     })
@@ -205,4 +194,3 @@ describe('courseSpansMultiplePeriods', () => {
     expect(courseSpansMultiplePeriods(course)).toBe(false)
   })
 })
-

@@ -1,5 +1,3 @@
-
-
 import type { Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {
@@ -11,9 +9,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
   })
 }
 
-export const down: Migration = async ({context: queryInterface}) => {
+export const down: Migration = async ({ context: queryInterface }) => {
   await queryInterface.removeIndex('cur_cu', 'cu_index')
   await queryInterface.removeIndex('cur_cu', 'cur_index')
-
 }
- 

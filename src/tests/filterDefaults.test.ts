@@ -41,10 +41,7 @@ describe('multichoice filter defaults', () => {
 
     const question = toQuestion(filterConfig, 'fi')
 
-    expect(question.variants[0].options?.map((option) => option.selectedByDefault)).toEqual([
-      true,
-      false,
-    ])
+    expect(question.variants[0].options?.map(option => option.selectedByDefault)).toEqual([true, false])
   })
 
   it('returns the option ids marked selected by default', () => {

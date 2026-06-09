@@ -1,6 +1,5 @@
-
 import express from 'express'
-import type { User  as UserType, adminFeedback } from '../../common/types.ts'
+import type { User as UserType, adminFeedback } from '../../common/types.ts'
 import { z } from 'zod'
 import {
   getWhereClauseForManyWordSearch,
@@ -13,7 +12,6 @@ import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'
-  
 
 const USER_FETCH_LIMIT = 100
 
@@ -114,7 +112,7 @@ adminRouter.get('/courses', async (req, res) => {
     pageNum,
     limitNum
   )
-  
+
   res.send(result)
 })
 

@@ -4,7 +4,6 @@ import { UPDATER_CRON_ENABLED, inProduction } from '../util/config.ts'
 import { run } from './index.ts'
 
 const setupCron = async () => {
-
   if (!inProduction) {
     // await run(true)
   } else if (UPDATER_CRON_ENABLED) {

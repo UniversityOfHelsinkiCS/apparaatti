@@ -23,8 +23,8 @@ const FilterValueRenderer = ({
   if (Array.isArray(state) && state.length > 0) {
     return (
       <>
-        {state.map((valueId) => {
-          const option = variant?.options?.find((o) => o.id === valueId)
+        {state.map(valueId => {
+          const option = variant?.options?.find(o => o.id === valueId)
           const displayText = option?.name || valueId
 
           return (
@@ -41,20 +41,14 @@ const FilterValueRenderer = ({
     )
   }
 
-  return getOptionDisplayTexts(variant, state).map((text) => (
+  return getOptionDisplayTexts(variant, state).map(text => (
     <Typography key={text} variant="body1">
       {text}
     </Typography>
   ))
 }
 
-const FilterSummaryItem = ({
-  label,
-  state,
-  variant,
-  onDeleteValue,
-  onClear,
-}: FilterSummaryItemProps) => {
+const FilterSummaryItem = ({ label, state, variant, onDeleteValue, onClear }: FilterSummaryItemProps) => {
   const hasMultipleValues = Array.isArray(state) && state.length > 1
 
   return (
@@ -63,11 +57,7 @@ const FilterSummaryItem = ({
         <strong>{label}: </strong>
       </Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-        <FilterValueRenderer
-          state={state}
-          variant={variant}
-          onDeleteValue={onDeleteValue}
-        />
+        <FilterValueRenderer state={state} variant={variant} onDeleteValue={onDeleteValue} />
       </Stack>
       {onClear && (hasMultipleValues || !Array.isArray(state)) && (
         <IconButton size="small" onClick={onClear} title="Clear all">

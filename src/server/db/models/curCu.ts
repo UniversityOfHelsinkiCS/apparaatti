@@ -1,17 +1,10 @@
 import { Model, DataTypes } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 import Cu from './cu.ts'
 import Cur from './cur.ts'
 
-class CurCu extends Model<
-  InferAttributes<CurCu>,
-  InferCreationAttributes<CurCu>
-> {
+class CurCu extends Model<InferAttributes<CurCu>, InferCreationAttributes<CurCu>> {
   declare id: CreationOptional<number>
   declare cuId: string
   declare curId: string
@@ -56,12 +49,12 @@ CurCu.init(
     indexes: [
       {
         name: 'cu_index',
-        fields: ['cu_id']
+        fields: ['cu_id'],
       },
       {
         name: 'cur_index',
-        fields: ['cur_id']
-      }
+        fields: ['cur_id'],
+      },
     ],
     sequelize,
     modelName: 'CurCu',

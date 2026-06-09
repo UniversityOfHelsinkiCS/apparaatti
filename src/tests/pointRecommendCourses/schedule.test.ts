@@ -32,19 +32,11 @@ describe('pointRecommendCourses', () => {
     })
 
     const strictUser = createUserCoordinates({ studyYear: '2025' })
-    const strictResult = pointRecommendedCourses(
-      [matchingYear, nonMatchingYear],
-      strictUser,
-      ['study-year']
-    )
+    const strictResult = pointRecommendedCourses([matchingYear, nonMatchingYear], strictUser, ['study-year'])
 
-    expect(strictResult.map((course) => course.course.id)).toEqual(['year-match'])
+    expect(strictResult.map(course => course.course.id)).toEqual(['year-match'])
 
-    const nonStrictResult = pointRecommendedCourses(
-      [matchingYear, nonMatchingYear],
-      strictUser,
-      []
-    )
+    const nonStrictResult = pointRecommendedCourses([matchingYear, nonMatchingYear], strictUser, [])
 
     expect(nonStrictResult).toHaveLength(2)
 
@@ -63,19 +55,11 @@ describe('pointRecommendCourses', () => {
     })
 
     const strictUser = createUserCoordinates({ studyPeriod: ['period_1'] })
-    const strictResult = pointRecommendedCourses(
-      [periodMatch, periodMiss],
-      strictUser,
-      ['study-period']
-    )
+    const strictResult = pointRecommendedCourses([periodMatch, periodMiss], strictUser, ['study-period'])
 
-    expect(strictResult.map((course) => course.course.id)).toEqual(['period-match'])
+    expect(strictResult.map(course => course.course.id)).toEqual(['period-match'])
 
-    const nonStrictResult = pointRecommendedCourses(
-      [periodMatch, periodMiss],
-      strictUser,
-      []
-    )
+    const nonStrictResult = pointRecommendedCourses([periodMatch, periodMiss], strictUser, [])
 
     expect(nonStrictResult).toHaveLength(2)
 
@@ -96,8 +80,8 @@ describe('pointRecommendCourses', () => {
     })
 
     const result = pointRecommendedCourses([earlyDate, lateDate], user, [])
-    const earlyPoints = result.find((course) => course.course.id === 'early-date')?.points
-    const latePoints = result.find((course) => course.course.id === 'late-date')?.points
+    const earlyPoints = result.find(course => course.course.id === 'early-date')?.points
+    const latePoints = result.find(course => course.course.id === 'late-date')?.points
 
     expect(result).toHaveLength(2)
     expect(earlyPoints).toBe(latePoints)

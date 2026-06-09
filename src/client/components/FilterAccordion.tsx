@@ -38,13 +38,13 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   }
 
   return (
-    <Stack direction="row" spacing={0.5} flexWrap="wrap" onClick={(e) => e.stopPropagation()} sx={{ ml: 'auto' }}>
-      {activeChips.map((chip) => (
+    <Stack direction="row" spacing={0.5} flexWrap="wrap" onClick={e => e.stopPropagation()} sx={{ ml: 'auto' }}>
+      {activeChips.map(chip => (
         <Chip
           key={chip.id}
           label={chip.label}
           size="small"
-          onDelete={(e) => handleDelete(e, chip.id)}
+          onDelete={e => handleDelete(e, chip.id)}
           sx={{ pointerEvents: 'all' }}
         />
       ))}
@@ -80,9 +80,7 @@ const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onCha
           {filterId && <ActiveFilterChips filterId={filterId} />}
         </Box>
       </AccordionSummary>
-      <AccordionDetails sx={{ px: 1.5, pt: 0.5, pb: 1.5 }}>
-        {children}
-      </AccordionDetails>
+      <AccordionDetails sx={{ px: 1.5, pt: 0.5, pb: 1.5 }}>{children}</AccordionDetails>
     </Accordion>
   )
 }

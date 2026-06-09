@@ -1,9 +1,5 @@
 import { Model, DataTypes } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 import type { LocalizedString } from '../../../common/types.ts'
 class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
@@ -13,7 +9,7 @@ class Cur extends Model<InferAttributes<Cur>, InferCreationAttributes<Cur>> {
   declare startDate: Date
   declare endDate: Date
   declare courseUnitRealisationTypeUrn: string
-  declare customCodeUrns: Record<string, string[]> 
+  declare customCodeUrns: Record<string, string[]>
   declare flowState: CreationOptional<string>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
@@ -43,15 +39,15 @@ Cur.init(
       allowNull: false,
     },
     customCodeUrns: {
-      type: DataTypes.JSONB
-    }, 
+      type: DataTypes.JSONB,
+    },
     courseUnitRealisationTypeUrn: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     flowState: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,

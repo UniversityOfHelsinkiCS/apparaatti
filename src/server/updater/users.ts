@@ -21,25 +21,22 @@ interface SisuUser {
 }
 
 const usersHandler = async (users: SisuUser[]) => {
-  const parsedUsers = users.map((user) => {
+  const parsedUsers = users.map(user => {
     return {
       id: user.id,
       language: parsePreferredLanguageUrnToLanguage(user.preferredLanguageUrn),
-      username: user.eduPersonPrincipalName
-        ? user.eduPersonPrincipalName.split('@')[0]
-        : user.id,
+      username: user.eduPersonPrincipalName ? user.eduPersonPrincipalName.split('@')[0] : user.id,
       studentNumber: user.studentNumber,
       firstNames: user.firstNames,
-      lastName: user.lastName
+      lastName: user.lastName,
     }
   })
 
-  try{
-    for(const u of parsedUsers){
+  try {
+    for (const u of parsedUsers) {
       await User.upsert(u)
     }
-  }
-  catch(error){
+  } catch (error) {
     console.error('Error creating users', error)
   }
 }

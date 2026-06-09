@@ -7,9 +7,7 @@ import ActionButtonV2 from './common/ActionButtonV2'
 
 const NoRecommendationsInfo = () => {
   const { t, i18n } = useTranslation()
-  const {
-    studyField,
-  } = useFilterContext()
+  const { studyField } = useFilterContext()
 
   const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
   const additionalInfo = i18n.exists(additionalInfoKey) ? t(additionalInfoKey) : null
@@ -37,12 +35,7 @@ const NoRecommendationsInfo = () => {
           </Box>
         )}
         <ResetFiltersButton>
-          {({ label, openDialog }) => (
-            <ActionButtonV2
-              onClick={openDialog}
-              text={label}
-            />
-          )}
+          {({ label, openDialog }) => <ActionButtonV2 onClick={openDialog} text={label} />}
         </ResetFiltersButton>
       </Box>
     </Paper>

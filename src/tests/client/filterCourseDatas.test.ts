@@ -5,7 +5,7 @@ import { filterCourseDatas } from '../../client/contexts/filterContext.tsx'
 
 const createCustomCodeUrns = (...codes: string[]) => ({
   'urn:code:custom:hy-university-root-id:kk-apparaatti': codes.map(
-    (code) => `urn:code:custom:hy-university-root-id:kk-apparaatti:${code}`
+    code => `urn:code:custom:hy-university-root-id:kk-apparaatti:${code}`
   ),
 })
 
@@ -34,24 +34,25 @@ const createCourse = (overrides: Partial<CourseData> = {}): CourseData => ({
   ...overrides,
 })
 
-const createLocalFilters = (overrides: Record<string, unknown> = {}) => ({
-  studyPlace: [],
-  independent: '',
-  multiPeriod: '',
-  flexible: '',
-  mooc: '',
-  collaboration: '',
-  previouslyDoneLang: '',
-  replacement: '',
-  mentoring: '',
-  finmu: '',
-  challenge: '',
-  graduation: '',
-  integrated: '',
-  studyYear: '',
-  studyPeriod: [],
-  ...overrides,
-}) as unknown as FilterConfig
+const createLocalFilters = (overrides: Record<string, unknown> = {}) =>
+  ({
+    studyPlace: [],
+    independent: '',
+    multiPeriod: '',
+    flexible: '',
+    mooc: '',
+    collaboration: '',
+    previouslyDoneLang: '',
+    replacement: '',
+    mentoring: '',
+    finmu: '',
+    challenge: '',
+    graduation: '',
+    integrated: '',
+    studyYear: '',
+    studyPeriod: [],
+    ...overrides,
+  }) as unknown as FilterConfig
 
 describe('filterCourseDatas', () => {
   it.each([
@@ -163,6 +164,6 @@ describe('filterCourseDatas', () => {
   ])('applies the $title local filter', ({ filters, matchingCourse, otherCourse, expectedIds }) => {
     const filtered = filterCourseDatas([matchingCourse, otherCourse], filters)
 
-    expect(filtered.map((course) => course.id)).toEqual(expectedIds)
+    expect(filtered.map(course => course.id)).toEqual(expectedIds)
   })
 })

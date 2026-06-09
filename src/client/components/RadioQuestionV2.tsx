@@ -1,9 +1,4 @@
-import {
-  Box,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
@@ -15,9 +10,9 @@ const RadioQuestionV2 = ({
   value,
   setValue,
 }: {
-  question: Question,
-  value: string,
-  setValue: (value: string) => void,
+  question: Question
+  value: string
+  setValue: (value: string) => void
 }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -25,7 +20,7 @@ const RadioQuestionV2 = ({
 
   const variant = pickVariant(question, 'default')
 
-  if(!variant || variant?.skipped){
+  if (!variant || variant?.skipped) {
     return null
   }
   return (
@@ -34,11 +29,11 @@ const RadioQuestionV2 = ({
         paddingTop: 1,
       }}
     >
-      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question}/>
-      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose}/>
+      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question} />
+      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
 
-      <RadioGroup name={question.id} value={value} onChange={(e) => setValue(e.target.value)}>
-        {variant.options.map((option) => (
+      <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)}>
+        {variant.options.map(option => (
           <FormControlLabel
             key={option.id}
             value={option.id}

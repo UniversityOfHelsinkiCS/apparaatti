@@ -1,10 +1,7 @@
 import { Question } from '../../common/types'
 import { pickVariant } from '../hooks/useQuestions'
 
-export const getDefaultSelectedOptionIds = (
-  question: Question | undefined,
-  variantId: string
-): string[] => {
+export const getDefaultSelectedOptionIds = (question: Question | undefined, variantId: string): string[] => {
   if (!question) {
     return []
   }
@@ -14,7 +11,5 @@ export const getDefaultSelectedOptionIds = (
     return []
   }
 
-  return variant.options
-    .filter((option) => option.selectedByDefault === true)
-    .map((option) => option.id)
+  return variant.options.filter(option => option.selectedByDefault === true).map(option => option.id)
 }

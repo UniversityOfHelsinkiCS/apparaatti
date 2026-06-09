@@ -25,7 +25,7 @@ type WelcomeModalProps = {
 const style = {
   marginLeft: 'auto',
   marginRight: 'auto',
-  width: {xs: '100vw', sm: '33vw'},
+  width: { xs: '100vw', sm: '33vw' },
   height: '100vh',
   bgcolor: 'background.paper',
   boxShadow: 24,
@@ -36,21 +36,12 @@ const style = {
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
-  const {
-    filters,
-    language,
-    primaryLanguage,
-    primaryLanguageSpecification,
-  } = filterContext
+  const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
   const { t } = useTranslation()
   const hasAutoClosedRef = useRef(false)
   const configMap = filterConfigMap(filterContext)
 
-  const variantId = updateVariantToDisplayId(
-    language,
-    primaryLanguage,
-    primaryLanguageSpecification
-  )
+  const variantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
   const buildFilter = (filter: Question, config: any) => {
     const state = config.state
@@ -63,7 +54,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   }
 
   const welcomeFilters = filters
-    .map((question) => {
+    .map(question => {
       const config = configMap.get(question.id)
       if (!question.showInWelcomeModal) {
         return null
@@ -78,7 +69,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     })
     .filter((entry): entry is { question: Question; config: any; variant: any } => entry !== null)
 
-  const allWelcomeQuestionsAnswered = welcomeFilters.every((entry) => {
+  const allWelcomeQuestionsAnswered = welcomeFilters.every(entry => {
     if (!entry.config) {
       return true
     }
@@ -86,7 +77,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     return isFilterStateAnswered(entry.config.state)
   })
 
-  const mandatoryQuestionsAnswered = welcomeFilters.every((entry) => {
+  const mandatoryQuestionsAnswered = welcomeFilters.every(entry => {
     if (!entry.config) {
       return true
     }
@@ -112,34 +103,18 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     }
 
     if (entry.question.id === 'primary-language' || entry.question.id === 'lang') {
-      return (
-        <RadioQuestionV2
-          question={entry.question}
-          value={entry.config.state}
-          setValue={entry.config.setState}
-        />
-      )
+      return <RadioQuestionV2 question={entry.question} value={entry.config.state} setValue={entry.config.setState} />
     }
 
     if (entry.question.id === 'primary-language-specification') {
       return <PrimaryLanguageSpecificationV2 question={entry.question} />
     }
 
-    return (
-      <Filter
-        variant={entry.variant}
-        filter={buildFilter(entry.question, entry.config)}
-      />
-    )
+    return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />
   }
 
   useEffect(() => {
-    if (
-      open &&
-      welcomeFilters.length > 0 &&
-      allWelcomeQuestionsAnswered &&
-      !hasAutoClosedRef.current
-    ) {
+    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && !hasAutoClosedRef.current) {
       onClose()
       hasAutoClosedRef.current = true
     }
@@ -161,12 +136,10 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
           {t('v2:welcomeText')}
         </Typography>
 
-        {welcomeFilters.map((entry) => (
-          <Fragment key={entry.question.id}>
-            {renderWelcomeFilter(entry)}
-          </Fragment>
+        {welcomeFilters.map(entry => (
+          <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
         ))}
-        
+
         <Box
           sx={{
             mt: 3,
@@ -190,11 +163,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
           >
             {t('v2:done')}
           </Button>
-          {isAdmin && (
-            <BlackOutlinedButton onClick={onClose}>
-              {t('v2:skipQuestions')}
-            </BlackOutlinedButton>
-          )}
+          {isAdmin && <BlackOutlinedButton onClick={onClose}>{t('v2:skipQuestions')}</BlackOutlinedButton>}
         </Box>
       </Box>
     </Modal>

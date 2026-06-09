@@ -1,7 +1,6 @@
 import type { FilterConfig, LocalizedText, Question } from '../../common/types'
 
-const localize = (text: LocalizedText, lang: string): string =>
-  text[lang as keyof LocalizedText] ?? text.fi ?? ''
+const localize = (text: LocalizedText, lang: string): string => text[lang as keyof LocalizedText] ?? text.fi ?? ''
 
 export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   id: cfg.id,
@@ -17,12 +16,12 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   hideInFilterSidebar: cfg.hideInFilterSidebar,
   coordinateKey: cfg.coordinateKey ?? null,
   isStrictByDefault: cfg.isStrictByDefault,
-  variants: cfg.variants.map((v) => ({
+  variants: cfg.variants.map(v => ({
     name: v.name,
     skipped: v.skipped,
     question: localize(v.question, lang),
     explanation: v.explanation ? localize(v.explanation, lang) : undefined,
-    options: v.options?.map((o) => ({
+    options: v.options?.map(o => ({
       id: o.id,
       name: localize(o.name, lang),
       valueOverride: o.valueOverride ?? undefined,

@@ -1,11 +1,7 @@
 import { DataTypes, Model } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
-class UserVisits extends Model<InferAttributes<UserVisits>, InferCreationAttributes<UserVisits>>{
+class UserVisits extends Model<InferAttributes<UserVisits>, InferCreationAttributes<UserVisits>> {
   declare id: CreationOptional<number> // sequelize breaks if the table entries wont have an id
   declare visitorHashHex: string // one way hash of user id
   declare date: Date
@@ -20,13 +16,13 @@ UserVisits.init(
       autoIncrement: true,
     },
     visitorHashHex: {
-      type: DataTypes.STRING, 
+      type: DataTypes.STRING,
       allowNull: false,
     },
     date: {
       type: DataTypes.DATE, // in utc
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     sequelize,

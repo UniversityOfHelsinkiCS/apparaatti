@@ -12,12 +12,11 @@ const logError = (message: string, error: Error) => {
  * Stop Updater from running indefinitely
  */
 const checkTimeout = (start: number) => {
-  if (Date.now() - start > 7_200_000)
-    throw new Error('Updater time limit exceeded!')
+  if (Date.now() - start > 7_200_000) throw new Error('Updater time limit exceeded!')
   return true
 }
 //assumes that the endpoint is at the normal url + /count
-const fetchMaxRecordCount = async (url) => {
+const fetchMaxRecordCount = async url => {
   const data = await fetchData(`${url}/count`, {})
   return data
 }
@@ -58,9 +57,8 @@ export const mangleData = async <T = object>(
    */
 
   while (checkTimeout(start)) {
-    await sleep(100) //making updater intentionally slower in order to let importer work 
+    await sleep(100) //making updater intentionally slower in order to let importer work
     try {
-
       try {
         currentData = await nextData
       } catch (e: any) {
@@ -74,12 +72,11 @@ export const mangleData = async <T = object>(
       const requestTime = (Date.now() - requestStart).toFixed(0)
       requestStart = Date.now()
 
-      try{
+      try {
         nextData = fetchData<T[]>(url, { limit, offset, since })
-      }
-      catch(_e){
+      } catch (_e) {
         await sleep(1000) //the fail might be server stall so lets give it some time
-        continue 
+        continue
       }
       if (!currentData) continue // first iteration
 
@@ -111,19 +108,13 @@ export const mangleData = async <T = object>(
     } catch (e: any) {
       if (!e.isLogged) {
         logError('Unknown updaterloop error:', e)
-        await sleep(1000) 
+        await sleep(1000)
       }
     }
   }
 }
 
-
-export const mangleData2 = async(
-  url: string,
-  limit: number,
-  handler: any,
-  since: Date = null) => {
-  
+export const mangleData2 = async (url: string, limit: number, handler: any, since: Date = null) => {
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const maxRecords = await fetchMaxRecordCount(url)
   console.log('expecting max entiries of: ')
@@ -135,10 +126,10 @@ export const mangleData2 = async(
   const errorSleepTime = 30 * 1000 //30s
   const loopSleepTime = 1000 //1s
 
-  const maxIterations = Math.ceil((maxRecords / limit)) + 1
+  const maxIterations = Math.ceil(maxRecords / limit) + 1
   console.log(`max iterations is ${maxIterations}`)
 
-  if(maxIterations > 500){
+  if (maxIterations > 500) {
     console.log(`WARNING attempting to do a large amount of requests to ${url} consider to adjust limit`)
   }
 
@@ -152,22 +143,22 @@ export const mangleData2 = async(
   let iterations = 0
 
   while (iterations < maxIterations) {
-    await sleep(loopSleepTime)//one second for debug //the importer is slower than the updater, so slow the updater to one request every 200ms  
+    await sleep(loopSleepTime) //one second for debug //the importer is slower than the updater, so slow the updater to one request every 200ms
     const requestTime = (Date.now() - requestStart).toFixed(0)
     requestStart = Date.now()
 
     let currentData = null
-    try{
+    try {
       logger.info('[UPDATER] getting data')
       currentData = await fetchData<T[]>(url, { limit, offset, since })
-    }catch(e){
+    } catch (e) {
       console.log(e)
       console.log(`FATAL error on updater ${e}, offset ${offset}`)
       break
     }
 
-    if (!currentData){
-      if(retries < maxRetries){
+    if (!currentData) {
+      if (retries < maxRetries) {
         retries += 1
         await sleep(errorSleepTime)
         continue
@@ -175,7 +166,7 @@ export const mangleData2 = async(
 
       logger.info('[UPDATER] updater failed to get any more data')
       break
-    } 
+    }
 
     logger.info('[UPDATER] got data')
     console.log(`entering saving data ${url} ${offset} `)
@@ -207,7 +198,7 @@ export const mangleData2 = async(
 
     count += currentData.length
     offset += limit
-  
+
     const duration = Date.now() - start
     logger.info(
       `[UPDATER] Updated ${count} items at ${(duration / count).toFixed(
@@ -221,4 +212,3 @@ export const mangleData2 = async(
   }
   console.log('mankeloi is done')
 }
-

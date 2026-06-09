@@ -1,9 +1,5 @@
 import { DataTypes, Model } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
 /**
@@ -14,10 +10,7 @@ import { sequelize } from '../connection.ts'
  *
  */
 
-class Organisation extends Model<
-  InferAttributes<Organisation>,
-  InferCreationAttributes<Organisation>
-> {
+class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   declare id: CreationOptional<number>
   declare name: object
   declare code: string

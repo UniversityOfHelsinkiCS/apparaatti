@@ -19,7 +19,6 @@ export type FilterOption = {
   selectedByDefault?: boolean | null
 }
 
-
 export type FilterVariant = {
   name: string
   skipped?: boolean
@@ -55,7 +54,6 @@ export type Option = {
   setStrict?: boolean
   selectedByDefault?: boolean
 }
-
 
 export type Question = {
   id: string
@@ -97,35 +95,34 @@ export type CourseRecommendation = {
   course: CourseData
   coordinates: CourseCoordinates
   points?: number
-} 
-
-
-export type CourseCoordinates = {
-  date: number;
-  org: number;
-  spesificOrg: number | null;
-  lang: number;
-  graduation?: number | null;
-  mentoring?: number | null;
-  integrated?: number | null;
-  studyPlace: number;
-  replacement?: number | null;
-  challenge?: number | null;
-  independent?: number | null;
-  flexible?: number | null;
-  mooc?: number | null;
-  finmu?: number | null;
-  collaboration?: number | null;
-  studyYear?: string | null;
-  studyPeriod?: string[] | null;
-  multiPeriod?: number | null;
 }
 
-export type UserCoordinates = CourseCoordinates;
+export type CourseCoordinates = {
+  date: number
+  org: number
+  spesificOrg: number | null
+  lang: number
+  graduation?: number | null
+  mentoring?: number | null
+  integrated?: number | null
+  studyPlace: number
+  replacement?: number | null
+  challenge?: number | null
+  independent?: number | null
+  flexible?: number | null
+  mooc?: number | null
+  finmu?: number | null
+  collaboration?: number | null
+  studyYear?: string | null
+  studyPeriod?: string[] | null
+  multiPeriod?: number | null
+}
+
+export type UserCoordinates = CourseCoordinates
 
 export type CourseRecommendations = {
   pointBasedRecommendations: CourseRecommendation[]
-  userCoordinates: UserCoordinates  
+  userCoordinates: UserCoordinates
   answerData?: AnswerData
 }
 
@@ -133,13 +130,12 @@ export type Period = {
   name: string
   startDate: Date
   endDate: Date
-  startYear: string,
+  startYear: string
   endYear: string
 }
 
 //this is a combination of a course realisation and course unit
 //notes
-
 
 export type CourseData = {
   id: string
@@ -150,11 +146,11 @@ export type CourseData = {
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
 
-  //example: course that is considered as 'online' on the apparaatti side 
+  //example: course that is considered as 'online' on the apparaatti side
   //may be marked as 'online', 'remote', 'distance' on the sisu side
   //the normalized studyplace makes it easier to check correcly
   normalizedStudyPlace?: string | null
-  
+
   courseCodes: string[]
   groupIds: string[]
   unitIds: string[]
@@ -171,7 +167,6 @@ export type CourseRealization = {
   customCodeUrns: Record<string, string[]>
   courseUnitRealisationTypeUrn: string
   flowState: string
-
 }
 
 export type CourseAdminReviewType = {
@@ -193,7 +188,7 @@ export type User = {
   studentNumber: string | null
   isAdmin?: boolean
   isSuperuser?: boolean
- }
+}
 
 export type CurCuRelation = {
   cuId: string
@@ -201,31 +196,28 @@ export type CurCuRelation = {
 }
 
 export type FormSubmission = {
-  answerData: AnswerData, // choices of the form
-  strictFields: string[]  // list of fields of answerData that should be treated as 
+  answerData: AnswerData // choices of the form
+  strictFields: string[] // list of fields of answerData that should be treated as
 }
 
-
-
 export type AnswerData = {
-  'study-year': string;
-  'study-period': string[] | string;
-  'graduation': string;
-  'mentoring': string;
-  'integrated': string;
-  'study-place': string;
-  'replacement': string;
-  'challenge': string;
-  'independent': string;
-  'flexible': string;
-  'mooc': string;
-  'study-field-select': string;
-  'lang': string;
-  'primary-language': string;
-  'primary-language-specification': string;
-  'multi-period': string;
-};
-
+  'study-year': string
+  'study-period': string[] | string
+  graduation: string
+  mentoring: string
+  integrated: string
+  'study-place': string
+  replacement: string
+  challenge: string
+  independent: string
+  flexible: string
+  mooc: string
+  'study-field-select': string
+  lang: string
+  'primary-language': string
+  'primary-language-specification': string
+  'multi-period': string
+}
 
 export type UserVisit = {
   id: number
@@ -234,8 +226,8 @@ export type UserVisit = {
 }
 
 export type adminFeedback = {
-   recommendations: CourseRecommendations
-   feedBack: string  
+  recommendations: CourseRecommendations
+  feedBack: string
 }
 
 export type RecommendationMetadata = {

@@ -5,9 +5,7 @@ export type CourseRecommendationOverride = Partial<CourseRecommendation> & {
   coordinates?: Partial<CourseRecommendation['coordinates']>
 }
 
-export const createUserCoordinates = (
-  overrides: Partial<UserCoordinates> = {}
-): UserCoordinates => ({
+export const createUserCoordinates = (overrides: Partial<UserCoordinates> = {}): UserCoordinates => ({
   date: 0,
   org: 1,
   spesificOrg: 0,

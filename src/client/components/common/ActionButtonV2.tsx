@@ -16,30 +16,31 @@ const ActionButtonV2 = ({
   visualStyle = 'default',
   type,
 }: ActionButtonV2Props) => {
-  const buttonSx = visualStyle === 'course-show'
-    ? {
-      marginTop: 0,
-      backgroundColor: '#cfd4da',
-      color: '#1f2933',
-      boxShadow: 'none',
-      '&:hover': {
-        backgroundColor: '#bfc6cd',
-        boxShadow: 'none',
-      },
-    }
-    : visualStyle === 'default'
+  const buttonSx =
+    visualStyle === 'course-show'
       ? {
-        borderColor: '#b8bec5',
-        backgroundColor: '#f2f4f6',
-        color: '#1f2933',
-        marginTop: 4,
-        '&:hover': {
-          borderColor: '#a7afb7',
-          backgroundColor: '#e6eaee',
+          marginTop: 0,
+          backgroundColor: '#cfd4da',
           color: '#1f2933',
-        },
-      }
-      : undefined
+          boxShadow: 'none',
+          '&:hover': {
+            backgroundColor: '#bfc6cd',
+            boxShadow: 'none',
+          },
+        }
+      : visualStyle === 'default'
+        ? {
+            borderColor: '#b8bec5',
+            backgroundColor: '#f2f4f6',
+            color: '#1f2933',
+            marginTop: 4,
+            '&:hover': {
+              borderColor: '#a7afb7',
+              backgroundColor: '#e6eaee',
+              color: '#1f2933',
+            },
+          }
+        : undefined
   const isAppBar = visualStyle === 'app-bar'
   const buttonType = type ?? (isAppBar ? 'button' : 'submit')
 

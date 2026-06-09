@@ -22,45 +22,28 @@ const style = {
 }
 
 type TextFeedbackV2Props = {
-  open: boolean;
-  onClose: () => void;
-  recommendations: CourseRecommendations;
-};
+  open: boolean
+  onClose: () => void
+  recommendations: CourseRecommendations
+}
 const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
   const { data: user } = useApi('user', '/api/user', 'GET', null)
   const navigate = useNavigate()
 
-  
-
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="admin-modal-title"
-      aria-describedby="admin-modal-description"
-    >
+    <Modal open={open} onClose={onClose} aria-labelledby="admin-modal-title" aria-describedby="admin-modal-description">
       <Box sx={style}>
         <Typography id="admin-modal-title" variant="h6" component="h2">
           Admin
         </Typography>
-       
+
         <Box sx={{ mt: 3, borderTop: '1px solid', borderColor: 'divider', pt: 2, display: 'flex', gap: 1 }}>
-          <BlackOutlinedButton onClick={() => navigate('/admin')}>
-            Filter config
-          </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => navigate('/admin/courses')}>
-            Courses
-          </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => navigate('/admin/stats')}>
-            Stats
-          </BlackOutlinedButton>
-          <BlackOutlinedButton onClick={() => navigate('/admin/feedback')}>
-            User feedback
-          </BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => navigate('/admin')}>Filter config</BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => navigate('/admin/courses')}>Courses</BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => navigate('/admin/stats')}>Stats</BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => navigate('/admin/feedback')}>User feedback</BlackOutlinedButton>
           {user?.isSuperuser && (
-            <BlackOutlinedButton onClick={() => navigate('/admin/login-as')}>
-              Login as
-            </BlackOutlinedButton>
+            <BlackOutlinedButton onClick={() => navigate('/admin/login-as')}>Login as</BlackOutlinedButton>
           )}
         </Box>
         <VersionBadge />

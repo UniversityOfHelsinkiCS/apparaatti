@@ -16,17 +16,17 @@ import { readAnswer } from '../../server/util/recommender.ts'
 const createAnswerData = (overrides: Partial<AnswerData> = {}): AnswerData => ({
   'study-year': 'neutral',
   'study-period': 'neutral',
-  'graduation': 'neutral',
-  'mentoring': 'neutral',
-  'integrated': 'neutral',
+  graduation: 'neutral',
+  mentoring: 'neutral',
+  integrated: 'neutral',
   'study-place': 'neutral',
-  'replacement': 'neutral',
-  'challenge': 'neutral',
-  'independent': 'neutral',
-  'flexible': 'neutral',
-  'mooc': 'neutral',
+  replacement: 'neutral',
+  challenge: 'neutral',
+  independent: 'neutral',
+  flexible: 'neutral',
+  mooc: 'neutral',
   'study-field-select': 'neutral',
-  'lang': 'neutral',
+  lang: 'neutral',
   'primary-language': 'neutral',
   'primary-language-specification': 'neutral',
   'multi-period': 'neutral',
@@ -35,7 +35,7 @@ const createAnswerData = (overrides: Partial<AnswerData> = {}): AnswerData => ({
 
 describe('readAnswer', () => {
   it('returns existing value for key', () => {
-    const data = createAnswerData({ 'graduation': '1' })
+    const data = createAnswerData({ graduation: '1' })
     expect(readAnswer(data, 'graduation')).toBe('1')
   })
 
@@ -45,7 +45,7 @@ describe('readAnswer', () => {
   })
 
   it('returns neutral for falsy/empty value', () => {
-    const data = createAnswerData({ 'graduation': '' as any })
+    const data = createAnswerData({ graduation: '' as any })
     expect(readAnswer(data, 'graduation')).toBe('neutral')
   })
 })

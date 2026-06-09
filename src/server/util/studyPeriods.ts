@@ -4,13 +4,12 @@ import type { Period } from '../../common/types.ts'
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
 import { getCurrentDate } from './testUtils.ts'
 
-export const dateIsInPeriod = (date: Date, period, _debug=false) => {
+export const dateIsInPeriod = (date: Date, period, _debug = false) => {
   const compare = dateAtMidnight(date)
   const start = dateAtMidnight(parseDate(period.start_date))
   const end = dateAtMidnight(parseDate(period.end_date))
   return compare >= start && compare <= end
 }
-
 
 const dateAtMidnight = (date: Date) => {
   return date.setUTCHours(0, 0, 0, 0)
@@ -27,9 +26,7 @@ const correctedPeriod = (period: string) => {
 export const getStudyPeriod = (startYear: string, period: string) => {
   const newPeriod = correctedPeriod(period)
 
-  const studyPeriod = studyPeriods.periods.find(
-    (p) => p.start_year === startYear && p.name === newPeriod,
-  )
+  const studyPeriod = studyPeriods.periods.find(p => p.start_year === startYear && p.name === newPeriod)
   if (!studyPeriod) {
     return null
   }
@@ -49,7 +46,7 @@ export const dateToPeriod = (date: string) => {
 
 export const dateObjToPeriod = (dateObj: Date, debug = false) => {
   const hits = []
-  studyPeriods.periods.forEach((period) => {
+  studyPeriods.periods.forEach(period => {
     if (dateIsInPeriod(dateObj, period, debug)) {
       hits.push(period)
     }
@@ -59,7 +56,7 @@ export const dateObjToPeriod = (dateObj: Date, debug = false) => {
 }
 
 export const getCoursePeriod = (course: { startDate: Date; endDate: Date }): Period[] | null => {
-  const overlappingPeriods = studyPeriods.periods.filter((periodData) => {
+  const overlappingPeriods = studyPeriods.periods.filter(periodData => {
     const periodStart = parseDate(periodData.start_date)
     const periodEnd = parseDate(periodData.end_date)
     return periodStart <= course.endDate && periodEnd >= course.startDate
@@ -69,7 +66,7 @@ export const getCoursePeriod = (course: { startDate: Date; endDate: Date }): Per
     return null
   }
 
-  const periods: Period[] = overlappingPeriods.map((periodData) => ({
+  const periods: Period[] = overlappingPeriods.map(periodData => ({
     name: periodData.name,
     startDate: parseDate(periodData.start_date),
     endDate: parseDate(periodData.end_date),
@@ -84,29 +81,27 @@ export const getCoursePeriod = (course: { startDate: Date; endDate: Date }): Per
 export const closestPeriod = (name: string = '') => {
   const date = getCurrentDate()
 
-  const periods = studyPeriods.periods
-    .filter((p) => {
-      if (name.length > 0) {
-        return p.name.localeCompare(name) === 0
-      } else {
-        return true
-      }
-    })
+  const periods = studyPeriods.periods.filter(p => {
+    if (name.length > 0) {
+      return p.name.localeCompare(name) === 0
+    } else {
+      return true
+    }
+  })
 
   const distances = periods
-    .map((p) => {
+    .map(p => {
       return {
         period: p,
         distance: parseDate(p.start_date).getTime() - date.getTime(),
       }
     })
-    .filter((p) => p.distance > 0)
+    .filter(p => p.distance > 0)
     .sort((a, b) => a.distance - b.distance)
 
   const period = distances[0]
   return period
 }
-
 
 const studyPeriodsData = {
   years: [
@@ -602,7 +597,7 @@ const studyPeriodsData = {
 }
 
 export const getStudyYear = (dateObj: Date) => {
-  const yearData = studyPeriodsData.years.find((year) => {
+  const yearData = studyPeriodsData.years.find(year => {
     const firstPeriod = year.periods[0]
     const lastPeriod = year.periods[year.periods.length - 1]
 
@@ -615,12 +610,12 @@ export const getStudyYear = (dateObj: Date) => {
   return yearData ? yearData.start_year : null
 }
 
-const allPeriods = studyPeriodsData.years.flatMap((year) =>
-  year.periods.map((period) => ({
+const allPeriods = studyPeriodsData.years.flatMap(year =>
+  year.periods.map(period => ({
     ...period,
     start_year: year.start_year,
     end_year: year.end_year,
-  })),
+  }))
 )
 
 const studyPeriods = {

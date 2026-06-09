@@ -1,15 +1,8 @@
 import { Model, DataTypes } from 'sequelize'
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from 'sequelize'
+import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
 
-class Answer extends Model<
-  InferAttributes<Answer>,
-  InferCreationAttributes<Answer>
-> {
+class Answer extends Model<InferAttributes<Answer>, InferCreationAttributes<Answer>> {
   declare id: CreationOptional<number>
   declare userId: string
   declare formId: number

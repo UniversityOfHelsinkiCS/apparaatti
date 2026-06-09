@@ -25,14 +25,14 @@ export const toYearLabel = (date: Date) => String(date.getUTCFullYear())
 
 export const getGroupLabel = (date: Date, groupBy: GroupBy) => {
   switch (groupBy) {
-  case 'hour':
-    return toHourLabel(date)
-  case 'year':
-    return toYearLabel(date)
-  case 'month':
-    return toMonthLabel(date)
-  case 'day':
-  default:
-    return toDayLabel(date)
+    case 'hour':
+      return toHourLabel(date)
+    case 'year':
+      return toYearLabel(date)
+    case 'month':
+      return toMonthLabel(date)
+    case 'day':
+    default:
+      return toDayLabel(date)
   }
 }

@@ -1,4 +1,3 @@
-
 import { Box, Stack, Typography, useTheme, useMediaQuery } from '@mui/material'
 import { useState, useEffect } from 'react'
 import AppBar from '@mui/material/AppBar'
@@ -30,19 +29,18 @@ type OneThirdDrawerLayoutProps = {
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const [open, setOpen] = useState(!isMobile) 
+  const [open, setOpen] = useState(!isMobile)
   const [adminModalOpen, setAdminModalOpen] = useState(false)
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext()
   const { t } = useTranslation()
   useEffect(() => {
-    setOpen(!isMobile) 
+    setOpen(!isMobile)
   }, [isMobile])
 
-  const toggleDrawer = () => setOpen((prev) => !prev)
+  const toggleDrawer = () => setOpen(prev => !prev)
 
   const currentDrawerWidth = isMobile ? mobileDrawerWidth : desktopDrawerWidth
-
 
   return (
     <Box
@@ -55,11 +53,11 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
-      {user?.isAdmin && finalRecommendedCourses && ( 
+      {user?.isAdmin && finalRecommendedCourses && (
         <AdminModal
           open={adminModalOpen}
           onClose={() => setAdminModalOpen(false)}
-          recommendations={finalRecommendedCourses} 
+          recommendations={finalRecommendedCourses}
         />
       )}
 
@@ -71,9 +69,10 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           color: 'text.primary',
           borderBottom: '1px solid',
           borderColor: 'divider',
-          transition: (theme) => theme.transitions.create(['margin-left', 'width'], {
-            duration: theme.transitions.duration.shorter,
-          }),
+          transition: theme =>
+            theme.transitions.create(['margin-left', 'width'], {
+              duration: theme.transitions.duration.shorter,
+            }),
           ml: open && !isMobile ? currentDrawerWidth : 0,
           width: open && !isMobile ? `calc(100vw - ${currentDrawerWidth})` : '100vw',
         }}
@@ -104,10 +103,10 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
         onClose={toggleDrawer}
         ModalProps={{
           keepMounted: isMobile ? false : true,
-          disablePortal: isMobile ? true : false, 
+          disablePortal: isMobile ? true : false,
         }}
         sx={{
-          zIndex: (theme) => theme.zIndex.appBar - 1,
+          zIndex: theme => theme.zIndex.appBar - 1,
           '& .MuiDrawer-paper': {
             width: currentDrawerWidth,
             boxSizing: 'border-box',
@@ -119,7 +118,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
         }}
       >
         <Toolbar />
-        <SidebarContent/>
+        <SidebarContent />
       </Drawer>
 
       <Box
@@ -130,9 +129,10 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           ml: open && !isMobile ? currentDrawerWidth : 0,
           bgcolor: '#f7f8fa',
           backgroundImage: 'linear-gradient(180deg, #f9fafb 0%, #f1f3f6 100%)',
-          transition: (theme) => theme.transitions.create(['margin-left', 'width'], {
-            duration: theme.transitions.duration.shorter,
-          }),
+          transition: theme =>
+            theme.transitions.create(['margin-left', 'width'], {
+              duration: theme.transitions.duration.shorter,
+            }),
         }}
       >
         <Toolbar />
@@ -153,18 +153,19 @@ const AppV2 = () => {
 
   if (isUserLoading || !user) {
     return (
-      <Stack direction='column' sx={{ width: '100vw', height: '100vh' }}>
-        <Typography variant='h2' sx={{ marginLeft: 'auto', marginRight: 'auto' }}>Apparaatti</Typography>
+      <Stack direction="column" sx={{ width: '100vw', height: '100vh' }}>
+        <Typography variant="h2" sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
+          Apparaatti
+        </Typography>
       </Stack>
     )
   }
 
   return (
     <FilterContextProvider>
-      <OneThirdDrawerLayout user={user}/>
+      <OneThirdDrawerLayout user={user} />
     </FilterContextProvider>
   )
 }
-
 
 export default AppV2

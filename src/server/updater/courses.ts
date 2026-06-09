@@ -8,17 +8,16 @@ import CurCu from '../db/models/curCu.ts'
 import { Op } from 'sequelize'
 // Find the newest course unit that has started before the course realisation
 
-const createCursFromUpdater = async (
-  realisations: SisuCourseWithRealization[]
-) => {
-  const curs: CourseRealization[] = realisations.map((realisation) => {
-    const { id, name, nameSpecifier, activityPeriod, customCodeUrns, courseUnitRealisationTypeUrn, flowState } = realisation
+const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
+  const curs: CourseRealization[] = realisations.map(realisation => {
+    const { id, name, nameSpecifier, activityPeriod, customCodeUrns, courseUnitRealisationTypeUrn, flowState } =
+      realisation
     const startDate = new Date(activityPeriod.startDate)
     const endDate = new Date(activityPeriod.endDate)
     return {
       id,
       name,
-      customCodeUrns, 
+      customCodeUrns,
       courseUnitRealisationTypeUrn,
       nameSpecifier,
       flowState,
@@ -29,7 +28,7 @@ const createCursFromUpdater = async (
 
   try {
     //Cur.bulkCreate(curs, { ignoreDuplicates: true })
-    for (const cur of curs){
+    for (const cur of curs) {
       Cur.upsert(cur)
     }
   } catch (error) {
@@ -37,11 +36,9 @@ const createCursFromUpdater = async (
   }
 }
 
-const createCusFromUpdater = async (
-  realisations: SisuCourseWithRealization[]
-) => {
+const createCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
   const cus = realisations
-    .map((realisation) => {
+    .map(realisation => {
       const { courseUnits } = realisation
       return courseUnits
     })
@@ -58,7 +55,7 @@ const createCusFromUpdater = async (
 
   try {
     //Cu.bulkCreate(cus, { ignoreDuplicates: true })
-    for (const cur of cus){
+    for (const cur of cus) {
       Cu.upsert(cur)
     }
   } catch (error) {
@@ -66,12 +63,10 @@ const createCusFromUpdater = async (
   }
 }
 
-const createCurCusFromUpdater = async (
-  realisations: SisuCourseWithRealization[]
-) => {
-  const CourseUnitIdsOfRealization = realisations.map((realisation) => {
+const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]) => {
+  const CourseUnitIdsOfRealization = realisations.map(realisation => {
     const { id } = realisation
-    const courseUnitIds = realisation.courseUnits.map((unit) => unit.id)
+    const courseUnitIds = realisation.courseUnits.map(unit => unit.id)
 
     return {
       curId: id,
@@ -80,9 +75,9 @@ const createCurCusFromUpdater = async (
   })
 
   const curCuRelations: CurCuRelation[] = []
-  CourseUnitIdsOfRealization.forEach((relation) => {
+  CourseUnitIdsOfRealization.forEach(relation => {
     const { curId, cuIds } = relation
-    cuIds.forEach((cuId) => {
+    cuIds.forEach(cuId => {
       curCuRelations.push({
         cuId,
         curId,
@@ -96,10 +91,9 @@ const createCurCusFromUpdater = async (
     today.setHours(0, 0, 0, 0)
     await CurCu.destroy({
       where: {
-        createdAt: {[Op.lt]: today,},
+        createdAt: { [Op.lt]: today },
       },
-    }
-    )
+    })
     CurCu.bulkCreate(curCuRelations, { ignoreDuplicates: true })
   } catch (error) {
     console.error('Error creating kurkkuja:', error)
@@ -108,10 +102,9 @@ const createCurCusFromUpdater = async (
 
 const coursesHandler = async (courseRealizations: any[]) => {
   const filteredCourseRealizations = courseRealizations.filter(
-    (course) =>
-      course.courseUnits.length 
-      // course.flowState !== 'CANCELLED' &&
-      // course.flowState !== 'ARCHIVED'
+    course => course.courseUnits.length
+    // course.flowState !== 'CANCELLED' &&
+    // course.flowState !== 'ARCHIVED'
   )
 
   await createCursFromUpdater(filteredCourseRealizations)

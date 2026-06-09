@@ -30,8 +30,8 @@ const CourseSortControls = ({ sortMode, sortDirection, onChange, onDirectionChan
 
   const buttons: { value: SortMode; label: string; flippable: boolean }[] = [
     { value: 'recommended', label: t('v2:sortRecommended'), flippable: false },
-    { value: 'name',        label: t('v2:sortName'),        flippable: true  },
-    { value: 'period',      label: t('v2:sortPeriod'),      flippable: true  },
+    { value: 'name', label: t('v2:sortName'), flippable: true },
+    { value: 'period', label: t('v2:sortPeriod'), flippable: true },
   ]
 
   return (
@@ -39,14 +39,16 @@ const CourseSortControls = ({ sortMode, sortDirection, onChange, onDirectionChan
       <Typography variant="body2" sx={{ color: '#475569' }}>
         {t('v2:sortBy')}:
       </Typography>
-      <ToggleButtonGroup
-        value={sortMode}
-        exclusive
-        size="small"
-        onChange={handleModeChange}
-      >
+      <ToggleButtonGroup value={sortMode} exclusive size="small" onChange={handleModeChange}>
         {buttons.map(({ value, label, flippable }) => (
-          <SortButton key={value} value={value} label={label} arrow={arrow} active={sortMode === value} flippable={flippable} />
+          <SortButton
+            key={value}
+            value={value}
+            label={label}
+            arrow={arrow}
+            active={sortMode === value}
+            flippable={flippable}
+          />
         ))}
       </ToggleButtonGroup>
     </Stack>

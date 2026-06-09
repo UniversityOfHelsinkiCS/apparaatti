@@ -8,12 +8,7 @@ type FormSubmitActionsProps = {
   onCancel: () => void
 }
 
-const FormSubmitActions = ({
-  submitLabel,
-  cancelLabel,
-  actionGroupAriaLabel,
-  onCancel,
-}: FormSubmitActionsProps) => {
+const FormSubmitActions = ({ submitLabel, cancelLabel, actionGroupAriaLabel, onCancel }: FormSubmitActionsProps) => {
   return (
     <Box
       role="group"

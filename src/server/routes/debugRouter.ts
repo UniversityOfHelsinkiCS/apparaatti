@@ -3,9 +3,18 @@ import { Op } from 'sequelize'
 
 import { uniqueVals } from '../util/misc.ts'
 import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
-import { allCurs, allCursRaw, allCurCus, allCurCusRaw, cusWithIds, cusWithWhere, cursWithWhereRaw, organisationWithGroupIdOf } from '../util/dbActions.ts'
+import {
+  allCurs,
+  allCursRaw,
+  allCurCus,
+  allCurCusRaw,
+  cusWithIds,
+  cusWithWhere,
+  cursWithWhereRaw,
+  organisationWithGroupIdOf,
+} from '../util/dbActions.ts'
 
-const debugRouter = express.Router({mergeParams: true})
+const debugRouter = express.Router({ mergeParams: true })
 
 debugRouter.use(express.json())
 
@@ -49,7 +58,8 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
 
     return grouped
   }, {})
-  const realisationCodeUrns = realisations.map((r: any) => r.customCodeUrns)
+  const realisationCodeUrns = realisations
+    .map((r: any) => r.customCodeUrns)
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))
     .flatMap((u: any) => Object.values(u))
     .flat()
@@ -64,15 +74,13 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
   const courseUnits = await cusWithIds(courseUnitIds)
 
   // Extract unique organisation group IDs
-  const groupIds = courseUnits
-    .map((cu: any) => cu.groupId)
-    .filter((gid: string | null) => gid !== null)
+  const groupIds = courseUnits.map((cu: any) => cu.groupId).filter((gid: string | null) => gid !== null)
   const uniqueGroupIds = uniqueVals(groupIds)
 
   // Fetch organisation details for unique group IDs
   const uniqueOrganisations = await organisationWithGroupIdOf(uniqueGroupIds)
 
-  res.json({uniqueCodeUrns, uniqueTypeUrns, realisationsWithCodeUrn, uniqueOrganisations})
+  res.json({ uniqueCodeUrns, uniqueTypeUrns, realisationsWithCodeUrn, uniqueOrganisations })
 })
 
 debugRouter.get('/cur', async (req: any, res: any) => {
@@ -84,22 +92,22 @@ debugRouter.get('/cur', async (req: any, res: any) => {
 
   const nameQuery = name
     ? {
-      [Op.or]: [
-        { 'name.fi': { [Op.like]: `%${name}%` } },
-        { 'name.en': { [Op.like]: `%${name}%` } },
-        { 'name.sv': { [Op.like]: `%${name}%` } },
-      ],
-    }
+        [Op.or]: [
+          { 'name.fi': { [Op.like]: `%${name}%` } },
+          { 'name.en': { [Op.like]: `%${name}%` } },
+          { 'name.sv': { [Op.like]: `%${name}%` } },
+        ],
+      }
     : {}
 
   const curs = await cursWithWhereRaw(nameQuery)
-  if(codeurn){
+  if (codeurn) {
     const urnFilteredCourses = curs.filter((cur: any) => {
       return urnInCustomCodeUrns(cur.customCodeUrns, codeurn as string)
     })
     return res.json(urnFilteredCourses)
   }
-  
+
   res.json(curs)
 })
 
@@ -112,18 +120,18 @@ debugRouter.get('/cu', async (req: any, res: any) => {
 
   const nameQuery = name
     ? {
-      [Op.or]: [
-        { 'name.fi': { [Op.like]: `%${name}%` } },
-        { 'name.en': { [Op.like]: `%${name}%` } },
-        { 'name.sv': { [Op.like]: `%${name}%` } },
-      ],
-    }
+        [Op.or]: [
+          { 'name.fi': { [Op.like]: `%${name}%` } },
+          { 'name.en': { [Op.like]: `%${name}%` } },
+          { 'name.sv': { [Op.like]: `%${name}%` } },
+        ],
+      }
     : {}
 
   const codeQuery = code
     ? {
-      courseCode: { [Op.like]: `%${code}%` },
-    }
+        courseCode: { [Op.like]: `%${code}%` },
+      }
     : {}
 
   const whereQuery = {

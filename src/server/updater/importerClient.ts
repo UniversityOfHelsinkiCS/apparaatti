@@ -30,19 +30,15 @@ export const fetchData = async <T = unknown>(
   if (data.waitAndRetry) {
     // importer is working to prepare data. Wait a bit and try again
     const waitTime = data.waitTime ?? 1000
-    logger.info(
-      `[UPDATER] Importer told me to wait ${waitTime}ms before retrying`
-    )
-    await new Promise((resolve) => {
+    logger.info(`[UPDATER] Importer told me to wait ${waitTime}ms before retrying`)
+    await new Promise(resolve => {
       setTimeout(resolve, waitTime)
     })
     return fetchData(url, params)
   }
 
   if (!validator(data)) {
-    throw new Error(
-      `[UPDATER] Invalid data received from importer: ${JSON.stringify(data)}`
-    )
+    throw new Error(`[UPDATER] Invalid data received from importer: ${JSON.stringify(data)}`)
   }
 
   return data

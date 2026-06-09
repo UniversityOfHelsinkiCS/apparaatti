@@ -1,13 +1,4 @@
-import {
-  Box,
-  Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Stack,
-  Paper,
-  Chip,
-} from '@mui/material'
+import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack, Paper, Chip } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { useTranslation } from 'react-i18next'
 import type { RecommendationMetadata } from '../../../common/types.ts'
@@ -47,7 +38,7 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
                       sx={{
                         fontWeight: 600,
                         minWidth: 200,
-                        color: 'text.secondary'
+                        color: 'text.secondary',
                       }}
                     >
                       {key}:
@@ -74,11 +65,7 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
           <AccordionDetails>
             <Stack spacing={2}>
               {metadata.recommendations.map((rec, index) => (
-                <Paper
-                  key={index}
-                  variant="outlined"
-                  sx={{ p: 2, backgroundColor: 'background.default' }}
-                >
+                <Paper key={index} variant="outlined" sx={{ p: 2, backgroundColor: 'background.default' }}>
                   <Stack spacing={1}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 600, flex: 1 }}>
@@ -100,14 +87,16 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
 
                     {rec.course.courseCodes.length > 0 && (
                       <Typography variant="body2" color="text.secondary">
-                        <strong>{t('v2:feedback.admin.metadata.courseCodes')}:</strong> {rec.course.courseCodes.join(', ')}
+                        <strong>{t('v2:feedback.admin.metadata.courseCodes')}:</strong>{' '}
+                        {rec.course.courseCodes.join(', ')}
                       </Typography>
                     )}
 
                     {rec.course.startDate && rec.course.endDate && (
                       <Typography variant="body2" color="text.secondary">
                         <strong>{t('v2:feedback.admin.metadata.period')}:</strong>{' '}
-                        {new Date(rec.course.startDate).toLocaleDateString()} - {new Date(rec.course.endDate).toLocaleDateString()}
+                        {new Date(rec.course.startDate).toLocaleDateString()} -{' '}
+                        {new Date(rec.course.endDate).toLocaleDateString()}
                       </Typography>
                     )}
                   </Stack>

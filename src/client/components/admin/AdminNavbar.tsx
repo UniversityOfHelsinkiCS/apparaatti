@@ -51,7 +51,7 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
           >
             {t('v2:adminNav.backToApp')}
           </BlackOutlinedButton>
-          {navItems.map((item) => {
+          {navItems.map(item => {
             const isActive = location.pathname === item.path
 
             return (
@@ -62,18 +62,18 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
                 sx={
                   isActive
                     ? {
-                      backgroundColor: '#111827',
-                      color: '#fff',
-                      boxShadow: 'none',
-                      '&:hover': {
-                        backgroundColor: '#1f2937',
+                        backgroundColor: '#111827',
+                        color: '#fff',
                         boxShadow: 'none',
-                      },
-                    }
+                        '&:hover': {
+                          backgroundColor: '#1f2937',
+                          boxShadow: 'none',
+                        },
+                      }
                     : {
-                      borderColor: '#d1d5db',
-                      color: '#111827',
-                    }
+                        borderColor: '#d1d5db',
+                        color: '#111827',
+                      }
                 }
               >
                 {item.label}

@@ -2,7 +2,7 @@ import StudyRight from '../db/models/studyRight.ts'
 import { mangleData, mangleData2 } from './mangleData.ts'
 
 const studyRightsHandler = async (studyRights: any[]) => {
-  for(const studyRight of studyRights ){
+  for (const studyRight of studyRights) {
     await StudyRight.upsert({
       id: studyRight.id,
       personId: studyRight.personId,
@@ -38,10 +38,5 @@ const studyRightsHandler = async (studyRights: any[]) => {
 //assumes that there is a table Users with studentNumber field
 export const fetchStudyRights = async () => {
   const speed = 1000
-  await mangleData2(
-    'studyrights',
-    speed,
-    studyRightsHandler,
-    new Date(2023, 0, 1)
-  )
+  await mangleData2('studyrights', speed, studyRightsHandler, new Date(2023, 0, 1))
 }

@@ -130,12 +130,7 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
           Save
         </Button>
       </DialogActions>
-      <Snackbar
-        open={error !== null}
-        message={error}
-        autoHideDuration={6000}
-        onClose={() => setError(null)}
-      />
+      <Snackbar open={error !== null} message={error} autoHideDuration={6000} onClose={() => setError(null)} />
     </Dialog>
   )
 }
