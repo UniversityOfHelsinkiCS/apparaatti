@@ -21,9 +21,14 @@
     "prepare": "husky"
   },
   "prettier": {
-    "trailingComma": "es5",
     "semi": false,
-    "singleQuote": true
+    "arrowParens": "avoid",
+    "singleQuote": true,
+    "printWidth": 120,
+    "tabWidth": 2,
+    "useTabs": false,
+    "jsxSingleQuote": false,
+    "trailingComma": "es5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
@@ -39,11 +44,13 @@
     "concurrently": "^9.2.1",
     "cypress": "^14.5.4",
     "eslint": "^9.39.4",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "minimist": "^1.2.8",
     "nodemon": "^3.1.14",
+    "prettier": "3.8.3",
     "typescript": "^5.9.3",
     "vite": "^6.4.1",
     "vitest": "^3.2.4"

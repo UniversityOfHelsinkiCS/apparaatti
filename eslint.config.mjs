@@ -13,56 +13,57 @@ const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
+  allConfig: js.configs.all,
 })
 
-export default defineConfig([{
-  extends: compat.extends(
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-  ),
+export default defineConfig([
+  {
+    extends: compat.extends(
+      'eslint:recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react/recommended'
+    ),
 
-  plugins: {
-    '@typescript-eslint': typescriptEslint,
-    react,
-  },
-
-  languageOptions: {
-    globals: {
-      ...globals.browser,
-      ...globals.node,
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+      react,
     },
 
-    parser: tsParser,
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-  },
-
-  rules: {
-    indent: ['error', 2],
-    'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
-    semi: ['error', 'never'],
-    'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
-    ],
-  },
-}, {
-  files: ['**/.eslintrc.{js,cjs}'],
 
-  languageOptions: {
-    globals: {
-      ...globals.node,
+      parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
 
-    ecmaVersion: 5,
-    sourceType: 'commonjs',
+    rules: {
+      'linebreak-style': ['error', 'unix'],
+      semi: ['error', 'never'],
+      'react/react-in-jsx-scope': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+    },
   },
-}])
+  {
+    files: ['**/.eslintrc.{js,cjs}'],
+
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+
+      ecmaVersion: 5,
+      sourceType: 'commonjs',
+    },
+  },
+])
