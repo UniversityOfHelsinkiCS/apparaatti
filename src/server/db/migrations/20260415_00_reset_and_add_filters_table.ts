@@ -51,6 +51,7 @@ const tableName = (table: unknown) => {
 }
 
 export const up: Migration = async ({ context: queryInterface }) => {
+  return
   const existingTables = await queryInterface.showAllTables()
   const filtersTableExists = existingTables.some(table => tableName(table) === 'filters')
 
