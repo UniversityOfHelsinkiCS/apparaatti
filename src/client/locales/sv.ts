@@ -197,6 +197,9 @@ export default {
     'examWeek': 'Tentamensvecka',
     'intensivePeriod': 'Intensivperiod'
   },
+  'opintotarjonta': {
+    'mooc': 'mooc'
+  },
   'filter': {
     'period': 'Studieperiod',
     'organisation': 'Organisation',
@@ -230,6 +233,7 @@ export default {
     'Lukuvuosi': 'Läsår',
     'Periodi': 'Period',
     'MOOC': 'MOOC',
+    'opintotarjonta:mooc': 'mooc',
     'Yhteistyo': 'Samarbete',
     'Kurssinpituus': 'Kurslängd',
     'Exam': 'Tentamen',

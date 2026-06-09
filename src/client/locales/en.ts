@@ -198,6 +198,9 @@ export default {
     'examWeek': 'Exam week',
     'intensivePeriod': 'Intensive period'
   },
+  'opintotarjonta': {
+    'mooc': 'mooc'
+  },
   'loginAsPage': {
     'title': 'user search',
     'userHeader': 'user'
@@ -235,6 +238,7 @@ export default {
     'Lukuvuosi': 'Academic Year',
     'Periodi': 'Period',
     'MOOC': 'MOOC',
+    'opintotarjonta:mooc': 'mooc',
     'Yhteistyo': 'Collaboration',
     'Kurssinpituus': 'Course Duration',
     'Exam': 'Exam',

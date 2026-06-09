@@ -5,7 +5,7 @@ import {challegeCourseCodes, codesInOrganisations, courseHasAnyOfCodes, courseHa
 import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import pointRecommendedCourses from './pointRecommendCourses.ts'
-import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn } from './constants.ts'
+import { collaborationOrganisationNames, collaborationOrganisationCourseNameIncludes, correctValue, incorrectValue, notAnsweredValue, organisationCodeToUrn, bonusPoint } from './constants.ts'
 import { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readStudyPlaceCoordinate } from './studyPlace.ts'
 
 export { courseStudyPlaceCoordinate, getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue, readStudyPlaceCoordinate } from './studyPlace.ts'
@@ -31,7 +31,7 @@ export function commonCoordinateFromAnswerData(value: string, yesValue: number, 
   }
 }
 
-export function readAnswer(answerData: AnswerData, key: string): string | string[]{
+export function readAnswer(answerData: AnswerData, key: keyof AnswerData): string | string[]{
   const value = answerData[key]
   if(!value || (Array.isArray(value) && value.length === 0)){
     return 'neutral'
@@ -370,5 +370,73 @@ async function getRecommendations(userCoordinates: UserCoordinates, answerData: 
   
   return allRecommendations
 }
+
+
+function isChallengeCourse (course: CourseData, courseLanguageType: string) {
+  return courseMatches(course, challegeCourseCodes, courseLanguageType)
+}
+
+function isMentoringCourse (course: CourseData){
+  return  courseHasAnyOfCodes(course, mentoringCourseCodes)
+
+}
+
+//returns courses ordered by heuristic rules the order should be: RUFARM, RUKAIKKI, RU123, RUERI and the rest
+export function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
+  const datasWithPoints = courseDatas.map((c) => {
+   
+
+    const isEriOrChallenge  = isChallengeCourse(c, courseLanguageType) || c.courseCodes.some(code => code.includes('ERI'))
+    const isGeneric = c.courseCodes.some(code => code.includes('KAIKKI'))
+  
+    //those courses that are not mentoring courses are mandatory courses
+    const isMentoring = isMentoringCourse(c)
+    const isMandatory = !isMentoring
+  
+    let points = 0
+    if(isEriOrChallenge) points = 1
+    else if (isMandatory && !isGeneric) points = 4 // tier 1: faculty-specific
+    else if (isGeneric)  points = 3
+    else if (isMentoring) points = 2 //numbered courses are usually mentoring courses
+   
+    
+    
+
+  
+   
+   
+    
+    
+    return{
+      ...c,
+      points: points
+    }
+  })
+    .sort((a, b) => b.points - a.points)
+   
+  return datasWithPoints satisfies CourseData[]
+}
+
+export async function getCourseData(answerData: AnswerData): Promise<CourseData[]> {
+
+  const lang: string = readAnswer(answerData, 'lang')
+  const primaryLang = readAnswer(answerData, 'primary-language')
+  const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
+  const organisationCode = readAnswer(answerData, 'study-field-select')
+
+  const organisationRecommendations = readOrganisationRecommendationData()
+  const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
+
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific) 
+  const courseLanguageType = languageToStudy(lang, primaryLang)
+
+
+  
+  const sorted = sortCourseData(courseData, courseLanguageType)
+  
+  return sorted
+}
+
+
 
 export default recommendCourses
