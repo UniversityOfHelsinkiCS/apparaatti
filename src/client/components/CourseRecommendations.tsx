@@ -20,7 +20,7 @@ const CourseRecommendations = () => {
     return (<></>)
   }
 
-  const sortedCourses = finalRecommendedCourses //sortCourses(recommendations, sortMode, sortDirection)
+  const sortedCourses = sortCourses(recommendations, sortMode, sortDirection)
   return (
     <Box>
       <Stack>
