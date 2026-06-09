@@ -2,18 +2,18 @@ import SearchIcon from '@mui/icons-material/Search'
 import { Button, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
 import { type ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { CourseRecommendation } from '../../common/types'
+import type { CourseData, CourseRecommendation } from '../../common/types'
 import { translateLocalizedString } from '../util/i18n'
 
 interface CourseRecommendationSearchProps {
-  courses: CourseRecommendation[]
-  children: (filteredCourses: CourseRecommendation[]) => ReactNode
+  courses: CourseData[]
+  children: (filteredCourses: CourseData[]) => ReactNode
 }
 
 const normalizeSearchText = (value: string) => value.toLowerCase()
 
 const matchesCourseNameSearch = (
-  course: CourseRecommendation,
+  course: CourseData,
   normalizedSearchQuery: string
 ) => {
   if (normalizedSearchQuery === '') {
@@ -21,8 +21,8 @@ const matchesCourseNameSearch = (
   }
 
   const searchableNames = [
-    translateLocalizedString(course.course.name),
-    ...Object.values(course.course.name).filter((name): name is string => Boolean(name)),
+    translateLocalizedString(course.name),
+    ...Object.values(course.name).filter((name): name is string => Boolean(name)),
   ]
 
   return searchableNames.some((name) =>

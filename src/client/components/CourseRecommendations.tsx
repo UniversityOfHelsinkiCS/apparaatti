@@ -6,7 +6,7 @@ import { useState } from 'react'
 import CourseSortControls, { type SortMode, type SortDirection } from './CourseSortControls'
 import { sortCourses } from '../util/courseSort'
 import CourseRecommendationSearch from './CourseRecommendationSearch'
-import type { CourseRecommendation } from '../../common/types'
+import type { CourseData, CourseRecommendation } from '../../common/types'
 
 const CourseRecommendations = () => {
   const { finalRecommendedCourses } = useFilterContext()
@@ -15,24 +15,18 @@ const CourseRecommendations = () => {
 
   const recommendations = finalRecommendedCourses
 
-  const points = recommendations?.pointBasedRecommendations ?? []
 
-  if(!recommendations || !points){
+  if(!recommendations){
     return (<></>)
   }
 
-  if(points.length === 0) {
-    return <NoRecommendationsInfo />
-  }
-
-  const sortedCourses = sortCourses(points, sortMode, sortDirection)
-
+  const sortedCourses = finalRecommendedCourses //sortCourses(recommendations, sortMode, sortDirection)
   return (
     <Box>
       <Stack>
         <CourseSortControls sortMode={sortMode} sortDirection={sortDirection} onChange={setSortMode} onDirectionChange={setSortDirection} />
         <CourseRecommendationSearch courses={sortedCourses}>
-          {(filteredCourses: CourseRecommendation[]) => (
+          {(filteredCourses) => (
             <Stack
               spacing={2}
               sx={{
@@ -44,7 +38,7 @@ const CourseRecommendations = () => {
             >
               {filteredCourses.map((course) => (
                 <CourseRecommendationV2
-                  key={course.course.id}
+                  key={course.id}
                   course={course}
                 />
               ))}

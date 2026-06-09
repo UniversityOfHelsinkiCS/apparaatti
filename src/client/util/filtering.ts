@@ -29,60 +29,72 @@ export const checkPrimaryLanguageSpecification = () => true
 
 export const checkPreviouslyDoneLang = () => true
 
-export const checkReplacement = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'kks-kor')
+export const checkReplacement = (course: CourseData, value: string) => {
+    const result = hasApparaattiCodeUrn(course, 'kks-kor')
+    return value != '0' ? result : !result
 }
 
-export const checkMentoring = (course: CourseData) => {
-  return hasAnyCourseCode(course, mentoringCourseCodes)
+export const checkMentoring = (course: CourseData, value: string) => {
+    const result = hasAnyCourseCode(course, mentoringCourseCodes)
+    return value != '0' ? result : !result
 }
 
-export const checkFinmu = (course: CourseData) => {
-  return hasAnyCourseCode(course, ['KK-FINMU'])
+export const checkFinmu = (course: CourseData, value: string) => {
+    const result = hasAnyCourseCode(course, ['KK-FINMU'])
+    return value != '0' ? result : !result
 }
 
-export const checkChallenge = (course: CourseData) => {
-  return course.courseCodes.some((code) => code.includes('ERI')) || hasApparaattiCodeUrn(course, 'kks-kor')
+export const checkChallenge = (course: CourseData, value: string) => {
+    const result = course.courseCodes.some((code) => code.includes('ERI')) || hasApparaattiCodeUrn(course, 'kks-kor')
+    return value != '0' ? result : !result
 }
 
-export const checkGraduation = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'kks-val') || hasApparaattiCodeUrn(course, 'kkt-val')
+export const checkGraduation = (course: CourseData, value: string) => {
+    const result = hasApparaattiCodeUrn(course, 'kks-val') || hasApparaattiCodeUrn(course, 'kkt-val')
+    return value != '0' ? result : !result
 }
 
-export const checkIntegrated = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'kks-int')
+export const checkIntegrated = (course: CourseData, value: string) => {
+    const result = hasApparaattiCodeUrn(course, 'kks-int')
+    return value != '0' ? result : !result
 }
 
-export const checkIndependent = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'kks-alm') || (course.name.fi?.toLowerCase().includes('itsenäinen') ?? false)
+export const checkIndependent = (course: CourseData, value: string) => {
+    const result = hasApparaattiCodeUrn(course, 'kks-alm') || (course.name.fi?.toLowerCase().includes('itsenäinen') ?? false)
+    return value != '0' ? result : !result
 }
 
 export const checkStudyPlace = (course: CourseData, studyPlace: string[]) => {
-  return studyPlace.includes(course.normalizedStudyPlace ?? '')
+    return studyPlace.includes(course.normalizedStudyPlace ?? '')
 }
 
 export const checkStudyYear = (course: CourseData, studyYear: string) => {
-  return course.startDate.getFullYear().toString() === studyYear
+    return course.startDate.getFullYear().toString() === studyYear
 }
 
 export const checkStudyPeriod = (course: CourseData, studyPeriod: string[]) => {
-  return (course.period ?? []).some((period: Period) => studyPeriod.includes(period.name))
+    return (course.period ?? []).some((period: Period) => studyPeriod.includes(period.name))
 }
 
-export const checkMooc = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'opintotarjonta:mooc')
+export const checkMooc = (course: CourseData, value: string) => {
+    const result = hasApparaattiCodeUrn(course, 'opintotarjonta:mooc')
+
+    return value != '0' ? result : !result
 }
 
-export const checkCollaboration = (course: CourseData) => {
-  return hasAnyNamePattern(course, collaborationNamePatterns)
+export const checkCollaboration = (course: CourseData, value: string) => {
+    const result = hasAnyNamePattern(course, collaborationNamePatterns)
+    return value != '0' ? result : !result
 }
 
-export const checkMultiPeriod = (course: CourseData) => {
-  return (course.period?.length ?? 0) > 1
+export const checkMultiPeriod = (course: CourseData, value: string) => {
+    const result = (course.period?.length ?? 0) > 1
+    return value != '0' ? result : !result
 }
 
-export const checkFlexible = (course: CourseData) => {
-  return hasApparaattiCodeUrn(course, 'kks-jou')
+export const checkFlexible = (course: CourseData, value: string) => {
+  const result = hasApparaattiCodeUrn(course, 'kks-jou')
+  return value != '0' ? result : !result
 }
 
 export const isActiveFilterState = (state: string | string[]) => {

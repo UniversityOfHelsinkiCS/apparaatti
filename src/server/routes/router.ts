@@ -1,6 +1,7 @@
+import type { Response } from 'express'
 import express from 'express'
 import { AnswerSchema, StringArraySchema, UserFeedbackSchema } from '../../common/validators.ts'
-import type { AnswerData } from '../../common/types.ts'
+import type { AnswerData, CourseData } from '../../common/types.ts'
 import passport from 'passport'
 import recommendCourses, { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
@@ -69,7 +70,7 @@ router.get('/organisations/supported', async(req, res) => {
   const organisationCodes:string[]= Object.keys(organisationCodeToUrn)
   const organisations = await organisationsWithSupportedCodes(organisationCodes)
   res.json(organisations)
-  
+
 })
 
 router.get('/organisations/integrated', async(req, res) => {
@@ -84,10 +85,10 @@ router.get('/organisations/integrated', async(req, res) => {
     const organisationRecommendations =  readOrganisationRecommendationData()
     const recommendations = getUserOrganisationRecommendations(code, organisationRecommendations)
     const organisationCourseCodes = codesInOrganisations(recommendations)
-    const courseData = await getRealisationsWithCourseUnitCodes(organisationCourseCodes) 
+    const courseData = await getRealisationsWithCourseUnitCodes(organisationCourseCodes)
     const integratedCourses = courseData.filter((c) => courseHasCustomCodeUrn(c, 'kks-int'))
     if(integratedCourses.length > 0){
-      organisationsWithIntegratedStudies.push(code) 
+      organisationsWithIntegratedStudies.push(code)
     }
   }
   res.json(organisationsWithIntegratedStudies)
@@ -97,25 +98,27 @@ router.post('/form/answer', async (req, res) => {
 
   const submission:FormSubmission = req.body
   const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
-  const strictFields: string[] = StringArraySchema.parse(submission.strictFields) 
+  const strictFields: string[] = StringArraySchema.parse(submission.strictFields)
 
   if (!req.user) {
     res.status(404).json({ message: 'User not found' })
     return
   }
-  
+
   const recommendations = await recommendCourses(answerData as AnswerData, strictFields)
 
   res.json({...recommendations, answerData})
 })
 
 
-router.post('/form/coursedata', async (req, res) => {
+router.post('/form/coursedata', async (req, res: Response<CourseData[]>) => {
   enforceIsUser(req)
+
   const submission:FormSubmission = req.body
   const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
- 
-  return getCourseData(answerData)
+
+  const result = await getCourseData(answerData)
+  return res.json(result)
 
 })
 
@@ -183,7 +186,7 @@ router.get('/organisations', async (req, res) => {
   }
   const organisations = await allOrganisations()
   res.json(organisations)
-    
+
 
 })
 

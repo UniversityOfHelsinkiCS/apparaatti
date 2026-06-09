@@ -85,10 +85,48 @@ interface FilterContextType {
   resetFilters: () => void
 }
 
+
+export type filtersGroupedType = {
+  studyField: string
+  setStudyField: (s: string) => void
+  previouslyDoneLang: string
+  setPreviouslyDoneLang: (s: string) => void
+  replacement: string
+  setReplacement: (s: string) => void
+  mentoring: string
+  setMentoring: (s: string) => void
+  finmu: string
+  setFinmu: (s: string) => void
+  challenge: string
+  setChallenge: (s: string) => void
+  graduation: string
+  setGraduation: (s: string) => void
+  studyPlace: string[]
+  setStudyPlace: (s: string[]) => void
+  studyYear: string
+  setStudyYear: (s: string) => void
+  studyPeriod: string[]
+  setStudyPeriod: (s: string[]) => void
+  integrated: string
+  setIntegrated: (s: string) => void
+  independent: string
+  setIndependent: (s: string) => void
+  mooc: string
+  setMooc: (s: string) => void
+  collaboration: string
+  setCollaboration: (s: string) => void
+  multiPeriod: string
+  setMultiPeriod: (s: string) => void
+  strictFilters: string[]
+  setStrictFilters: (s: string[]) => void
+  flexible: string
+  setFlexible: (s: string) => void
+  resetFilters: () => void
+}
+
 export type filterConfigMapType = {
   state: string | string[]
   setState: (state: string | string[]) => void
-  check: (course: CourseData) => boolean
 }
 
 const localFilterIds = new Set([
@@ -112,55 +150,79 @@ const localFilterIds = new Set([
 
 /**
  * Returns a helper map to easily access the state of the filters and the comparison function of the filter
- * @param filters 
- * @returns 
+ * @param filters
+ * @returns
  */
 export const filterConfigMap = (filters: any) => new Map<string, filterConfigMapType>([
-  
+
   //server side filters
-  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField, check: () => true }],
-  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage, check: () => true }],
-  ['lang', { state: filters.language, setState: filters.setLanguage, check: () => true }],
-  
+  ['study-field-select', { state: filters.studyField, setState: filters.setStudyField}],
+  ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage}],
+  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification}],
+   ['lang', { state: filters.language, setState: filters.setLanguage}],
+
+   //just a info filter
+   ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
+
   //local filters
-  ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification, check: checkPrimaryLanguageSpecification }],
-  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang, check: checkPreviouslyDoneLang }],
-  ['replacement', { state: filters.replacement, setState: filters.setReplacement, check: checkReplacement }],
-  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring, check: checkMentoring }],
-  ['finmu', { state: filters.finmu, setState: filters.setFinmu, check: checkFinmu }],
-  ['challenge', { state: filters.challenge, setState: filters.setChallenge, check: checkChallenge }],
-  ['graduation', { state: filters.graduation, setState: filters.setGraduation, check: checkGraduation }],
-  ['integrated', { state: filters.integrated, setState: filters.setIntegrated, check: checkIntegrated }],
-  ['independent', { state: filters.independent, setState: filters.setIndependent, check: checkIndependent }],
-  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace, check: (course) => checkStudyPlace(course, filters.studyPlace) }],
-  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear, check: (course) => checkStudyYear(course, filters.studyYear) }],
-  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod, check: (course) => checkStudyPeriod(course, filters.studyPeriod) }],
-  ['mooc', { state: filters.mooc, setState: filters.setMooc, check: checkMooc }],
-  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration, check: checkCollaboration }],
-  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod, check: checkMultiPeriod }],
-  ['flexible', { state: filters.flexible, setState: filters.setFlexible, check: checkFlexible }],
+  ['replacement', { state: filters.replacement, setState: filters.setReplacement}],
+  ['mentoring', { state: filters.mentoring, setState: filters.setMentoring}],
+  ['finmu', { state: filters.finmu, setState: filters.setFinmu}],
+  ['challenge', { state: filters.challenge, setState: filters.setChallenge}],
+  ['graduation', { state: filters.graduation, setState: filters.setGraduation}],
+  ['integrated', { state: filters.integrated, setState: filters.setIntegrated}],
+  ['independent', { state: filters.independent, setState: filters.setIndependent}],
+  ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace}],
+  ['study-year', { state: filters.studyYear, setState: filters.setStudyYear}],
+  ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod}],
+  ['mooc', { state: filters.mooc, setState: filters.setMooc}],
+  ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration}],
+  ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod}],
+  ['flexible', { state: filters.flexible, setState: filters.setFlexible}],
 ])
 
+
+
+const runFilter = (result: CourseData[], value: string | string[], check: (c: CourseData, value: any) => boolean): CourseData[] => {
+  if(isActiveFilterState(value)){
+    return result.filter((c) => check(c, value))
+  }
+  return result
+}
+
+
+
 /**
- * @param courseData 
- * applies local filters to courseData according to the choices 
- * 
- * 
- * @param filters 
+ * @param courseData
+ * applies local filters to courseData according to the choices
+ *
+ *
+ * @param filters
  */
 
-export const filterCourseDatas = (courseData: CourseData[], filters: any) => {
-  const configs = Array.from(filterConfigMap(filters).entries())
-    .filter(([filterId]) => localFilterIds.has(filterId))
-    .map(([, config]) => config)
+export const filterCourseDatas = (courseData: CourseData[], filters: filtersGroupedType) => {
 
   let result: CourseData[] = Array.from(courseData)
-  configs.forEach((filter) => {
-    if (isActiveFilterState(filter.state)) {
-      result = result.filter((c) => filter.check(c))
-    }
-  })
-  
+
+
+  result = runFilter(result, filters.replacement, checkReplacement)
+  result = runFilter(result, filters.mentoring, checkMentoring)
+  result = runFilter(result, filters.finmu, checkFinmu)
+  result = runFilter(result, filters.challenge, checkChallenge)
+  result = runFilter(result, filters.graduation, checkGraduation)
+  result = runFilter(result, filters.integrated, checkIntegrated)
+  result = runFilter(result, filters.independent, checkIndependent)
+  result = runFilter(result, filters.studyPlace, checkStudyPlace)
+  result = runFilter(result, filters.studyYear, checkStudyYear)
+  result = runFilter(result, filters.studyPeriod, checkStudyPeriod)
+  result = runFilter(result, filters.mooc, checkMooc)
+  result = runFilter(result, filters.collaboration, checkCollaboration)
+  result = runFilter(result, filters.multiPeriod, checkMultiPeriod)
+  result = runFilter(result, filters.flexible, checkFlexible)
+
+
+
+
   return result
 }
 
@@ -419,10 +481,18 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const submitAnswerMutation = useApiMutation(async (res: Response) => {
     const recommendations = await res.json()
-    setCourseRecommendations(recommendations)
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
+
+    const dateFormatted: CourseData[] = recommendations.map((c: any) => { return {
+      ...c,
+      startDate: new Date(c.startDate),
+      endDate: new Date(c.endDate),
+    }})
+
+    setCourseRecommendations(dateFormatted)
+
   }, '/api/form/coursedata')
 
   useEffect(() => {
@@ -435,7 +505,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       return filterOptionId
     }
 
-    const variant = pickVariant(filter, variantToDisplayId)  
+    const variant = pickVariant(filter, variantToDisplayId)
     if(!variant || !variant.options){
       return filterOptionId
     }
@@ -446,7 +516,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     else{
       return filterOptionId
     }
-    
+
   }
   const submitFilters = () => {
     const answerDataRaw = {
@@ -534,7 +604,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setModalOpen,
         finalRecommendedCourses,
 
-      
+
         studyField,
         setStudyField,
         previouslyDoneLang,

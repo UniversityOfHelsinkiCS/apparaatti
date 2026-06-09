@@ -1,4 +1,4 @@
-import type { CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseData, CourseRecommendation as CourseRecommendationType } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
@@ -7,13 +7,13 @@ import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 const CourseRecommendationV2 = ({
   course,
 }: {
-  course: CourseRecommendationType
+  course: CourseData
 }) => {
   const {t} = useTranslation()
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
-  const courseUrl = `${baseUrl}/${course.course.id}`
-  const courseCodes = course.course.courseCodes.map((code) => code).join(', ')
+  const courseUrl = `${baseUrl}/${course.id}`
+  const courseCodes = course.courseCodes.map((code) => code).join(', ')
   const periodVariant = getFilterVariant(filterContext, 'study-period')
   const studyPlaceVariant = getFilterVariant(filterContext, 'study-place')
   const badgeStyles = {
@@ -28,11 +28,11 @@ const CourseRecommendationV2 = ({
   }
 
   const creditString:() => string = () => {
-    if (!course.course.credits) {
+    if (!course.credits) {
       return ''
     }
-    const maxCredits: number = course.course.credits.map(c => c['max']).sort((a, b) => b - a)[0]
-    const minCredits: number = course.course.credits.map(c => c['min']).sort()[0]
+    const maxCredits: number = course.credits.map(c => c['max']).sort((a, b) => b - a)[0]
+    const minCredits: number = course.credits.map(c => c['min']).sort()[0]
 
     if (!maxCredits && !minCredits) {
       return ''
@@ -46,7 +46,7 @@ const CourseRecommendationV2 = ({
 
     return minCredits + '-' + maxCredits
   }
-  const courseDateRange = (course: any) => {
+  const courseDateRange = (course: CourseData) => {
     const startDate = new Date(course.startDate)
     const endDate = new Date(course.endDate)
 
@@ -92,7 +92,7 @@ const CourseRecommendationV2 = ({
 
   const coursePeriodText = () => {
     const periodNames =
-      course.course.period
+      course.period
         ?.map((period) => period.name)
         .filter((periodName) => !/^exam_week_\d+$/.test(periodName)) ?? []
     const uniquePeriodNames = Array.from(new Set(periodNames))
@@ -107,7 +107,7 @@ const CourseRecommendationV2 = ({
   }
 
   const courseStudyPlaceText = () => {
-    const normalizedStudyPlace = course.course.normalizedStudyPlace
+    const normalizedStudyPlace = course.normalizedStudyPlace
 
     if (!normalizedStudyPlace) {
       return null
@@ -152,13 +152,13 @@ const CourseRecommendationV2 = ({
             component="h2"
             sx={{ color: '#17212b', fontWeight: 600, lineHeight: 1.3, flex: 1 }}
           >
-            {translateLocalizedString(course.course.name)}
+            {translateLocalizedString(course.name)}
           </Typography>
           <Typography
             variant="body2"
             sx={badgeStyles}
           >
-            {courseDateRange(course.course)}
+            {courseDateRange(course)}
           </Typography>
         </Stack>
         <Stack direction={'column'} spacing={1.5}>
