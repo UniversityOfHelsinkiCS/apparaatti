@@ -159,10 +159,10 @@ export const filterConfigMap = (filters: any) => new Map<string, filterConfigMap
   ['study-field-select', { state: filters.studyField, setState: filters.setStudyField}],
   ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage}],
   ['primary-language-specification', { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification}],
-   ['lang', { state: filters.language, setState: filters.setLanguage}],
+  ['lang', { state: filters.language, setState: filters.setLanguage}],
 
-   //just a info filter
-   ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
+  //just a info filter
+  ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
 
   //local filters
   ['replacement', { state: filters.replacement, setState: filters.setReplacement}],

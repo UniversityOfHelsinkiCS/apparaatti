@@ -31,14 +31,14 @@ function createCourse(id: string, courseCodes: string[]): CourseData {
 
 describe('sortCourseData', () => {
   it('orders courses by heuristic: faculty-specific mandatory -> generic -> numbered -> ERI/challenge', () => {
-    const facultySpecific = createCourse('faculty', ['KK-ENG301']) // mentoring code -> treated as mandatory
-    const generic = createCourse('generic', ['KAIKKI'])
-    const numbered = createCourse('numbered', ['ENG-201'])
-    const eri = createCourse('eri', ['KK-ENERI'])
+    const facultySpecific = createCourse('faculty', ['KK-RUMALU']) // mentoring code -> treated as mandatory
+    const generic = createCourse('generic', ['KK-RUKAIKKI'])
+    const numbered = createCourse('numbered', ['KK-RUO205'])
+    const eri = createCourse('eri', ['KK-RUERI'])
 
     const input = [numbered, eri, generic, facultySpecific]
 
-    const ordered = sortCourseData(input, 'en-primary')
+    const ordered = sortCourseData(input, 'sv-secondary')
 
     const ids = ordered.map(c => c.id)
 

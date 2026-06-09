@@ -30,66 +30,66 @@ export const checkPrimaryLanguageSpecification = () => true
 export const checkPreviouslyDoneLang = () => true
 
 export const checkReplacement = (course: CourseData, value: string) => {
-    const result = hasApparaattiCodeUrn(course, 'kks-kor')
-    return value != '0' ? result : !result
+  const result = hasApparaattiCodeUrn(course, 'kks-kor')
+  return value != '0' ? result : !result
 }
 
 export const checkMentoring = (course: CourseData, value: string) => {
-    const result = hasAnyCourseCode(course, mentoringCourseCodes)
-    return value != '0' ? result : !result
+  const result = hasAnyCourseCode(course, mentoringCourseCodes)
+  return value != '0' ? result : !result
 }
 
 export const checkFinmu = (course: CourseData, value: string) => {
-    const result = hasAnyCourseCode(course, ['KK-FINMU'])
-    return value != '0' ? result : !result
+  const result = hasAnyCourseCode(course, ['KK-FINMU'])
+  return value != '0' ? result : !result
 }
 
 export const checkChallenge = (course: CourseData, value: string) => {
-    const result = course.courseCodes.some((code) => code.includes('ERI')) || hasApparaattiCodeUrn(course, 'kks-kor')
-    return value != '0' ? result : !result
+  const result = course.courseCodes.some((code) => code.includes('ERI')) || hasApparaattiCodeUrn(course, 'kks-kor')
+  return value != '0' ? result : !result
 }
 
 export const checkGraduation = (course: CourseData, value: string) => {
-    const result = hasApparaattiCodeUrn(course, 'kks-val') || hasApparaattiCodeUrn(course, 'kkt-val')
-    return value != '0' ? result : !result
+  const result = hasApparaattiCodeUrn(course, 'kks-val') || hasApparaattiCodeUrn(course, 'kkt-val')
+  return value != '0' ? result : !result
 }
 
 export const checkIntegrated = (course: CourseData, value: string) => {
-    const result = hasApparaattiCodeUrn(course, 'kks-int')
-    return value != '0' ? result : !result
+  const result = hasApparaattiCodeUrn(course, 'kks-int')
+  return value != '0' ? result : !result
 }
 
 export const checkIndependent = (course: CourseData, value: string) => {
-    const result = hasApparaattiCodeUrn(course, 'kks-alm') || (course.name.fi?.toLowerCase().includes('itsenäinen') ?? false)
-    return value != '0' ? result : !result
+  const result = hasApparaattiCodeUrn(course, 'kks-alm') || (course.name.fi?.toLowerCase().includes('itsenäinen') ?? false)
+  return value != '0' ? result : !result
 }
 
 export const checkStudyPlace = (course: CourseData, studyPlace: string[]) => {
-    return studyPlace.includes(course.normalizedStudyPlace ?? '')
+  return studyPlace.includes(course.normalizedStudyPlace ?? '')
 }
 
 export const checkStudyYear = (course: CourseData, studyYear: string) => {
-    return course.startDate.getFullYear().toString() === studyYear
+  return course.startDate.getFullYear().toString() === studyYear
 }
 
 export const checkStudyPeriod = (course: CourseData, studyPeriod: string[]) => {
-    return (course.period ?? []).some((period: Period) => studyPeriod.includes(period.name))
+  return (course.period ?? []).some((period: Period) => studyPeriod.includes(period.name))
 }
 
 export const checkMooc = (course: CourseData, value: string) => {
-    const result = hasApparaattiCodeUrn(course, 'opintotarjonta:mooc')
+  const result = hasApparaattiCodeUrn(course, 'opintotarjonta:mooc')
 
-    return value != '0' ? result : !result
+  return value != '0' ? result : !result
 }
 
 export const checkCollaboration = (course: CourseData, value: string) => {
-    const result = hasAnyNamePattern(course, collaborationNamePatterns)
-    return value != '0' ? result : !result
+  const result = hasAnyNamePattern(course, collaborationNamePatterns)
+  return value != '0' ? result : !result
 }
 
 export const checkMultiPeriod = (course: CourseData, value: string) => {
-    const result = (course.period?.length ?? 0) > 1
-    return value != '0' ? result : !result
+  const result = (course.period?.length ?? 0) > 1
+  return value != '0' ? result : !result
 }
 
 export const checkFlexible = (course: CourseData, value: string) => {

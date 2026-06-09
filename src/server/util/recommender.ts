@@ -381,31 +381,35 @@ function isMentoringCourse (course: CourseData){
 
 }
 
-//returns courses ordered by heuristic rules
+//returns courses ordered by heuristic rules the order should be: RUFARM, RUKAIKKI, RU123, RUERI and the rest
 export function sortCourseData(courseDatas: CourseData[], courseLanguageType: string): CourseData[]{
   const datasWithPoints = courseDatas.map((c) => {
-    // Bonus point tiers (when no other filters active):
-    //   1. faculty-specific mandatory (RUFARM, RUMATLU, ENLAAK…) → 4×
-    //   2. generic / KAIKKI                                       → 3×
-    //   3. numbered (ENG-201, RUO-205…)                          → 2×
-    //   4. ERI / challenge                                        → 0× (unless user wants challenge)
+   
+
     const isEriOrChallenge  = isChallengeCourse(c, courseLanguageType) || c.courseCodes.some(code => code.includes('ERI'))
     const isGeneric = c.courseCodes.some(code => code.includes('KAIKKI'))
-    // const isNumbered = c.course.courseCodes.some(code => /\d+$/.test(code))
   
     //those courses that are not mentoring courses are mandatory courses
-    //courses that are mentoring courses (value of 1) are usually numbered courses
-    const isMandatory = isMentoringCourse(c) 
+    const isMentoring = isMentoringCourse(c)
+    const isMandatory = !isMentoring
   
-    let bonusPoints = 0
-    if (!isEriOrChallenge) {
-      if (isMandatory && !isGeneric)  bonusPoints = bonusPoint * 5  // tier 1: faculty-specific
-      else if (isGeneric)  bonusPoints = bonusPoint * 4  // tier 2: KAIKKI
-      else if (!isMandatory) bonusPoints = bonusPoint * 3  // tier 3: numbered
-    }
+    let points = 0
+    if(isEriOrChallenge) points = 1
+    else if (isMandatory && !isGeneric) points = 4 // tier 1: faculty-specific
+    else if (isGeneric)  points = 3
+    else if (isMentoring) points = 2 //numbered courses are usually mentoring courses
+   
+    
+    
+
+  
+   
+   
+    
+    
     return{
       ...c,
-      points: bonusPoints
+      points: points
     }
   })
     .sort((a, b) => b.points - a.points)
