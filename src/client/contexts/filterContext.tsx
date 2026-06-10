@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import { CourseData, Question, User } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
@@ -23,6 +23,43 @@ import {
   checkStudyYear,
   isActiveFilterState,
 } from '../util/filtering'
+
+type LocalFilterStateKey =
+  | 'replacement'
+  | 'mentoring'
+  | 'finmu'
+  | 'challenge'
+  | 'graduation'
+  | 'integrated'
+  | 'independent'
+  | 'studyPlace'
+  | 'studyYear'
+  | 'studyPeriod'
+  | 'mooc'
+  | 'collaboration'
+  | 'multiPeriod'
+  | 'flexible'
+
+/**
+ * Maps filter sidebar ids to the corresponding key in FiltersGroupedType.
+ * Only contains the ids handled by filterCourseDatas (local/client-side filters).
+ */
+const localFilterStateKeys: Record<string, LocalFilterStateKey> = {
+  replacement: 'replacement',
+  mentoring: 'mentoring',
+  finmu: 'finmu',
+  challenge: 'challenge',
+  graduation: 'graduation',
+  integrated: 'integrated',
+  independent: 'independent',
+  'study-place': 'studyPlace',
+  'study-year': 'studyYear',
+  'study-period': 'studyPeriod',
+  mooc: 'mooc',
+  collaboration: 'collaboration',
+  'multi-period': 'multiPeriod',
+  flexible: 'flexible',
+}
 
 interface FilterContextType {
   language: string
@@ -82,9 +119,10 @@ interface FilterContextType {
   flexible: string
   setFlexible: (s: string) => void
   resetFilters: () => void
+  getOptionCount: (optionId: string, filterId: string) => number | null
 }
 
-export type filtersGroupedType = {
+export type FiltersGroupedType = {
   studyField: string
   setStudyField: (s: string) => void
   previouslyDoneLang: string
@@ -120,6 +158,7 @@ export type filtersGroupedType = {
   flexible: string
   setFlexible: (s: string) => void
   resetFilters: () => void
+  getOptionCount: (filterId: string, optionId: string) => number | null
 }
 
 export type filterConfigMapType = {
@@ -201,7 +240,7 @@ const runFilter = (
  * @param filters
  */
 
-export const filterCourseDatas = (courseData: CourseData[], filters: filtersGroupedType) => {
+export const filterCourseDatas = (courseData: CourseData[], filters: Pick<FiltersGroupedType, LocalFilterStateKey>) => {
   let result: CourseData[] = Array.from(courseData)
 
   result = runFilter(result, filters.replacement, checkReplacement)
@@ -383,6 +422,64 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setMultiPeriod,
     flexible,
     setFlexible,
+  }
+
+  /**
+   * Precomputed map of `${filterId}:${optionId}` → course count that would be
+   * visible if that option were selected (given all other active filters).
+   * Only populated for local (client-side) filter ids.
+   */
+  const optionCountMap = useMemo(() => {
+    const map = new Map<string, number>()
+
+    for (const question of filters) {
+      const stateKey = localFilterStateKeys[question.id]
+      if (!stateKey) continue
+
+      const variant = pickVariant(question, variantToDisplayId)
+      if (!variant || variant.skipped || !variant.options) continue
+
+      for (const option of variant.options) {
+        let hypotheticalValue: string | string[]
+
+        if (question.displayType === 'multichoice') {
+          // Show how many courses match this option alone (with all other filters active)
+          hypotheticalValue = [option.id]
+        } else {
+          // singlechoice and dropdownselect: replace
+          hypotheticalValue = option.id
+        }
+
+        const hypotheticalState = { ...filterState, [stateKey]: hypotheticalValue }
+        const count = filterCourseDatas(courseRecommendations ?? [], hypotheticalState).length
+        map.set(`${question.id}:${option.id}`, count)
+      }
+    }
+
+    return map
+  }, [
+    courseRecommendations,
+    filters,
+    variantToDisplayId,
+    replacement,
+    mentoring,
+    finmu,
+    challenge,
+    graduation,
+    studyPlace,
+    studyYear,
+    studyPeriod,
+    integrated,
+    independent,
+    mooc,
+    collaboration,
+    multiPeriod,
+    flexible,
+  ])
+
+  const getOptionCount = (filterId: string, optionId: string): number | null => {
+    if (!(filterId in localFilterStateKeys)) return null
+    return optionCountMap.get(`${filterId}:${optionId}`) ?? null
   }
 
   const checkWelcomeQuestionsAnswered = () => {
@@ -619,6 +716,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         strictFilters,
         setStrictFilters,
         resetFilters,
+        getOptionCount,
       }}
     >
       {children}

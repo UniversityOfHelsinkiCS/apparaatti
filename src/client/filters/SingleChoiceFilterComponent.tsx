@@ -12,6 +12,7 @@ import { Question, Option } from '../../common/types'
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
+import { useFilterContext } from '../contexts/filterContext'
 
 interface SingleChoiceFilterComponentProps {
   filter: Question
@@ -30,6 +31,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
 }) => {
   const { t } = useTranslation()
   const [accordionOpen, setAccordionOpen] = useState(false)
+  const { getOptionCount } = useFilterContext()
 
   const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleRadioChange(event) // Call the passed handler
@@ -40,29 +42,35 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   return (
     <>
       <RadioGroup name={filter.id} value={state} onChange={onRadioChange}>
-        {options.map(option => (
-          <FormControlLabel
-            key={option.id}
-            value={option.id}
-            data-cy={`${filter.id}-option-${option.id}`}
-            control={
-              <Radio
-                sx={{
-                  '&.Mui-checked': {
-                    color: '#4caf50',
-                  },
-                }}
-              />
-            }
-            label={option.name}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#e0e0e0',
-                borderRadius: '4px',
-              },
-            }}
-          />
-        ))}
+        {options.map(option => {
+          const count = getOptionCount(filter.id, option.id)
+          const label = count != null ? `${option.name} (${count})` : option.name
+          return (
+            <FormControlLabel
+              key={option.id}
+              value={option.id}
+              disabled={count === 0}
+              data-cy={`${filter.id}-option-${option.id}`}
+              control={
+                <Radio
+                  sx={{
+                    '&.Mui-checked': {
+                      color: '#4caf50',
+                    },
+                  }}
+                />
+              }
+              label={label}
+              sx={{
+                opacity: count === 0 ? 0.4 : 1,
+                '&:hover': {
+                  backgroundColor: '#e0e0e0',
+                  borderRadius: '4px',
+                },
+              }}
+            />
+          )
+        })}
       </RadioGroup>
 
       {extrainfo &&

@@ -2,6 +2,7 @@ import { FormControl, MenuItem, Select } from '@mui/material'
 import { Question, Option } from '../../common/types'
 import React from 'react'
 import { translateLocalizedString } from '../util/i18n'
+import { useFilterContext } from '../contexts/filterContext'
 
 interface DropdownFilterComponentProps {
   filter: Question
@@ -11,6 +12,8 @@ interface DropdownFilterComponentProps {
 }
 
 const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filter, state, handleChange, options }) => {
+  const { getOptionCount } = useFilterContext()
+
   return (
     <FormControl sx={{ marginBottom: 2, paddingTop: 1 }}>
       <Select
@@ -26,11 +29,15 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
         value={state}
         onChange={handleChange}
       >
-        {options.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {translateLocalizedString(option.name)}
-          </MenuItem>
-        ))}
+        {options.map(option => {
+          const count = getOptionCount(filter.id, option.id)
+          const label = translateLocalizedString(option.name)
+          return (
+            <MenuItem key={option.id} value={option.id} disabled={count === 0} sx={{ opacity: count === 0 ? 0.4 : 1 }}>
+              {count != null ? `${label} (${count})` : label}
+            </MenuItem>
+          )
+        })}
       </Select>
     </FormControl>
   )
