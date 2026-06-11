@@ -2,7 +2,7 @@ import { Model, InferAttributes, InferCreationAttributes, CreationOptional, Data
 
 import { sequelize } from '../connection'
 
-import { Locales } from '../../types'
+import type { Locales } from '../../updater/types'
 
 class InfoText extends Model<InferAttributes<InfoText>, InferCreationAttributes<InfoText>> {
   declare id: CreationOptional<string>

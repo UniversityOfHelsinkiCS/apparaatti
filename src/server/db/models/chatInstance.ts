@@ -1,6 +1,6 @@
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from 'sequelize'
 
-import { ActivityPeriod, CourseUnit, Locales } from '../../types'
+import type { ActivityPeriod, CourseUnit, Locales } from '../../updater/types'
 import { sequelize } from '../connection'
 
 class ChatInstance extends Model<InferAttributes<ChatInstance>, InferCreationAttributes<ChatInstance>> {
