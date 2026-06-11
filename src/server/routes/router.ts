@@ -110,21 +110,6 @@ router.get('/organisations/integrated', async (req, res) => {
   res.json(organisationsWithIntegratedStudies)
 })
 
-router.post('/form/answer', async (req, res) => {
-  const submission: FormSubmission = req.body
-  const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
-  const strictFields: string[] = StringArraySchema.parse(submission.strictFields)
-
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
-  const recommendations = await recommendCourses(answerData as AnswerData, strictFields)
-
-  res.json({ ...recommendations, answerData })
-})
-
 router.post('/form/coursedata', async (req, res: Response<CourseData[]>) => {
   enforceIsUser(req)
 

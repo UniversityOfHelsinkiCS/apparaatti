@@ -1,9 +1,6 @@
 import type {
   AnswerData,
   CourseData,
-  CourseRecommendation,
-  CourseRecommendations,
-  UserCoordinates,
 } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
@@ -13,7 +10,6 @@ import {
   courseHasAnyOfCodes,
   courseHasCustomCodeUrn,
   courseMatches,
-  finmuMentroingCourseCodes,
   getUserOrganisationRecommendations,
   languageSpesificCodes,
   languageToStudy,
@@ -22,22 +18,13 @@ import {
 } from './organisationCourseRecommmendations.ts'
 import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
-import pointRecommendedCourses from './pointRecommendCourses.ts'
 import {
   collaborationOrganisationNames,
   collaborationOrganisationCourseNameIncludes,
-  correctValue,
-  incorrectValue,
-  notAnsweredValue,
   organisationCodeToUrn,
-  bonusPoint,
 } from './constants.ts'
 import {
-  courseStudyPlaceCoordinate,
   getNormalizedStudyPlace,
-  isExam,
-  isIndependentCourse,
-  readStudyPlaceCoordinate,
 } from './studyPlace.ts'
 
 export {
@@ -49,12 +36,6 @@ export {
   readStudyPlaceCoordinate,
 } from './studyPlace.ts'
 
-async function recommendCourses(answerData: AnswerData, strictFields: string[] = []) {
-  const userCoordinates: UserCoordinates = calculateUserCoordinates(answerData)
-  const recommendations = await getRecommendations(userCoordinates, answerData, strictFields)
-
-  return recommendations
-}
 
 export function commonCoordinateFromAnswerData(
   value: string,
@@ -84,91 +65,7 @@ export function readAsStringArr(variable: string[] | string): string[] {
   return Array.isArray(variable) ? variable : [variable]
 }
 
-function getDateFromUserInput(answerData: AnswerData) {
-  const periods = getRelevantPeriods(readAnswer(answerData, 'study-period'))
-  const pickedPeriod = periods[0]
-  return new Date(parseDate(pickedPeriod.start_date)).getTime()
-}
 
-function calculateUserCoordinates(answerData: AnswerData) {
-  const userCoordinates = {
-    //  'period': convertUserPeriodPickToFloat(readAnswer(answerData, 'study-period')),
-    date: getDateFromUserInput(answerData),
-    org: correctValue, // courses that have the same organisation will get the coordinate of 1 as well and the ones that are not get a big number, thus leading to better ordering of courses
-    spesificOrg: correctValue, //there are generic courses for everybody, and then there are spesific courses for the organisation of the user. When a course is not generic course and is for the user then this coordinate is the same
-    lang: correctValue, // courses that have the same language as the user will get the coordinate of 0 as well and the ones that are not will get a big number
-    graduation: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'graduation'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    mentoring: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'mentoring'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    finmu: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'finmu'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    integrated: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'integrated'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    studyPlace: readStudyPlaceCoordinate(answerData), // courses that have the correct studyPlace based on the answerData will get coord of 1.
-    replacement: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'replacement'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    challenge: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'challenge'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    independent: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'independent'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    flexible: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'flexible'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    mooc: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'mooc'),
-      correctValue,
-      incorrectValue,
-      notAnsweredValue
-    ),
-    collaboration: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'collaboration'),
-      correctValue,
-      incorrectValue,
-      incorrectValue
-    ),
-    studyYear: readAnswer(answerData, 'study-year'),
-    studyPeriod: readAsStringArr(readAnswer(answerData, 'study-period')),
-    multiPeriod: commonCoordinateFromAnswerData(
-      readAnswer(answerData, 'multi-period'),
-      correctValue,
-      incorrectValue,
-      null
-    ),
-  }
-  return userCoordinates
-}
 
 //generic courses have many cases where they are considered to be for the users organisation
 export async function courseInSameOrganisationAsUser(
@@ -246,79 +143,7 @@ export async function courseIsCollaboration(course: CourseData): Promise<boolean
   return false
 }
 
-async function calculateCourseCoordinates(
-  course: CourseData,
-  userCoordinates: UserCoordinates,
-  codes: courseCodes,
-  courseLanguageType: string,
-  organisationCode: string,
-  answerData: AnswerData
-): Promise<CourseRecommendation> {
-  const sameOrganisationAsUser = await courseInSameOrganisationAsUser(course, organisationCode, codes.userOrganisation)
 
-  const courseIsSpesific = courseIsSpesificForUserOrg(course, organisationCode)
-
-  const correctLang = courseHasAnyOfCodes(course, codes.languageSpesific)
-
-  const hasGraduationCodeUrn = courseHasCustomCodeUrn(course, 'kks-val') || courseHasCustomCodeUrn(course, 'kkt-val')
-  const hasIntegratedCodeUrn = courseHasCustomCodeUrn(course, 'kks-int')
-  const hasReplacementCodeUrn = courseHasCustomCodeUrn(course, 'kks-kor')
-  const hasFlexibleCodeUrn = courseHasCustomCodeUrn(course, 'kks-jou')
-  const hasMoocCodeUrn = courseHasCustomCodeUrn(course, 'opintotarjonta:mooc')
-
-  const isIndependent = isIndependentCourse(course)
-  const isMentoringCourse = courseHasAnyOfCodes(course, mentoringCourseCodes)
-  const isFinmuMentoringCourse = courseHasAnyOfCodes(course, finmuMentroingCourseCodes)
-
-  const isChallengeCourse = courseMatches(course, challegeCourseCodes, courseLanguageType)
-  const isCollaboration = await courseIsCollaboration(course)
-  const isMultiPeriod = courseSpansMultiplePeriods(course)
-
-  const courseCoordinates = {
-    date: course.startDate.getTime(),
-    org: sameOrganisationAsUser === true ? correctValue : incorrectValue, // there is a offset value for this field to make sure that different organisation leads to a really high distance
-    spesificOrg: courseIsSpesific === true ? correctValue : incorrectValue,
-    lang: correctLang === true ? correctValue : incorrectValue, // if the course is different language than the users pick we want to have it very far away.
-    graduation: hasGraduationCodeUrn ? correctValue : incorrectValue,
-    mentoring: isMentoringCourse ? correctValue : incorrectValue,
-    finmu: isFinmuMentoringCourse ? correctValue : incorrectValue,
-    integrated: hasIntegratedCodeUrn ? correctValue : incorrectValue,
-    studyPlace: courseStudyPlaceCoordinate(course, answerData),
-    replacement: hasReplacementCodeUrn ? correctValue : incorrectValue,
-    challenge: isChallengeCourse ? correctValue : incorrectValue,
-    independent: isIndependent ? correctValue : incorrectValue,
-    flexible: hasFlexibleCodeUrn ? correctValue : incorrectValue,
-    mooc: hasMoocCodeUrn ? correctValue : incorrectValue,
-    collaboration: isCollaboration ? correctValue : incorrectValue,
-    multiPeriod: isMultiPeriod ? correctValue : incorrectValue,
-  }
-
-  return { course: course, coordinates: courseCoordinates }
-}
-
-//returns a list of courseRecommendation
-// the coordinates field can then be used in recommending the course (currently using point based)
-async function calculateAllCourseCoordinates(
-  userCoordinates: UserCoordinates,
-  availableCourses: CourseData[],
-  courseCodes: courseCodes,
-  courseLanguageType: string,
-  organisationCode: string,
-  answerData: AnswerData
-): Promise<CourseRecommendation[]> {
-  const distancePromises = availableCourses.map(course => {
-    return calculateCourseCoordinates(
-      course,
-      userCoordinates,
-      courseCodes,
-      courseLanguageType,
-      organisationCode,
-      answerData
-    )
-  })
-  const distances = await Promise.all(distancePromises)
-  return distances
-}
 
 export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData[]> {
   const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
@@ -436,46 +261,6 @@ function getCourseCodes(
   }
 }
 
-function shouldUseStrictSpecificOrg(lang: string, primaryLanguage: string) {
-  return lang === primaryLanguage && (lang === 'fi' || lang === 'sv')
-}
-
-async function getRecommendations(
-  userCoordinates: UserCoordinates,
-  answerData: AnswerData,
-  strictFields: string[]
-): Promise<CourseRecommendations> {
-  const lang = readAnswer(answerData, 'lang')
-  const primaryLang = readAnswer(answerData, 'primary-language')
-  const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
-  const organisationCode = readAnswer(answerData, 'study-field-select')
-
-  const organisationRecommendations = readOrganisationRecommendationData()
-  const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
-  const strictFieldsWithLang = shouldUseStrictSpecificOrg(lang, primaryLang)
-    ? uniqueVals([...strictFields, 'spesificOrg'])
-    : strictFields
-
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific)
-  const courseLanguageType = languageToStudy(lang, primaryLang)
-  const recommendations = await calculateAllCourseCoordinates(
-    userCoordinates,
-    courseData,
-    courseCodes,
-    courseLanguageType,
-    organisationCode,
-    answerData
-  )
-
-  const pointBasedRecommendations = pointRecommendedCourses(recommendations, userCoordinates, strictFieldsWithLang)
-
-  const allRecommendations = {
-    pointBasedRecommendations: pointBasedRecommendations,
-    userCoordinates: userCoordinates,
-  }
-
-  return allRecommendations
-}
 
 function isChallengeCourse(course: CourseData, courseLanguageType: string) {
   return courseMatches(course, challegeCourseCodes, courseLanguageType)
@@ -531,4 +316,3 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   return sorted
 }
 
-export default recommendCourses
