@@ -23,13 +23,18 @@ export const generateSettings = (method: string, jsonBody?: any) => {
   return settings
 }
 
-const useApi = (queryKey, endPoint, method, jsonBody) => {
-  const { data, isLoading, refetch } = useQuery({
+const useApi = <T = unknown,>(
+  queryKey: string,
+  endPoint: string,
+  method: string,
+  jsonBody?: Record<string, unknown>
+) => {
+  const { data, isLoading, refetch } = useQuery<T>({
     queryKey: [queryKey],
     queryFn: async () => {
       const settings = generateSettings(method, jsonBody)
       const res = await fetch(endPoint, settings)
-      return res.json()
+      return res.json() as Promise<T>
     },
   })
 

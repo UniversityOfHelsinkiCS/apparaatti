@@ -1,7 +1,7 @@
 import type { Response } from 'express'
 import express from 'express'
 import { AnswerSchema, UserFeedbackSchema } from '../../common/validators.ts'
-import type { AnswerData, CourseData } from '../../common/types.ts'
+import type { AnswerData, CourseData, RecommendationMetadata } from '../../common/types.ts'
 import passport from 'passport'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
@@ -128,7 +128,7 @@ router.post('/feedback', async (req, res) => {
     feedback.textFeedback,
     feedback.stars,
     new Date(),
-    feedback.recommendationMetadata,
+    feedback.recommendationMetadata as RecommendationMetadata,
     feedback.appVersion
   )
 

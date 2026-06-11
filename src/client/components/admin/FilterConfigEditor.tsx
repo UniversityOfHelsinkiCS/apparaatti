@@ -31,7 +31,7 @@ const adminFetch = (method: string, path: string, body?: unknown) =>
   })
 
 const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
-  const { data: filters, isLoading, refetch } = useApi('admin-filter-config', '/api/admin/filter-config', 'GET', null)
+  const { data: filters, isLoading, refetch } = useApi<FilterConfig[]>('admin-filter-config', '/api/admin/filter-config', 'GET', null)
   const [editTarget, setEditTarget] = useState<FilterConfig | 'new' | null>(null)
   const [restoringFilterId, setRestoringFilterId] = useState<string | null>(null)
   const [filtersWithoutSeedDefaults, setFiltersWithoutSeedDefaults] = useState<string[]>([])

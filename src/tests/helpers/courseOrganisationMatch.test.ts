@@ -24,6 +24,7 @@ const createMinimalCourse = (overrides: Partial<CourseData> = {}): CourseData =>
   groupIds: [],
   unitIds: [],
   credits: [],
+  flowState: null,
   ...overrides,
 })
 

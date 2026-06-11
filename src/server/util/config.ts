@@ -50,4 +50,4 @@ export const LOKI_HOST = process.env.LOKI_HOST || 'http://loki-svc.toska-lokki.s
 export const GIT_SHA = process.env.GIT_SHA || 'unknown'
 export const IMAGE_SHA = process.env.IMAGE_SHA || GIT_SHA
 export const RELEASE_VERSION = process.env.RELEASE_VERSION || 'unknown'
-export const PACKAGE_VERSION = process.env.APP_VERSION || process.env.npm_package_version || readPackageVersion()
+export const PACKAGE_VERSION = process.env.APP_VERSION || process.env.npm_package_version

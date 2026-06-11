@@ -22,7 +22,7 @@ const LoginAs = () => {
   const trimmedSearch = trimSearch(userSearch)
   const url = `/api/admin/users?search=${trimmedSearch ? trimmedSearch : ''}`
 
-  const { data: users, refetch } = useApi('users', url, 'GET')
+  const { data: users, refetch } = useApi<User[]>('users', url, 'GET')
 
   const handleLoginAs = () => {
     loginAs(loginAsCandidate)

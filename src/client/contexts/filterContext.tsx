@@ -578,7 +578,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     setStrictFilters([...new Set([...preservedWelcomeStrictFilters, ...resetNonWelcomeStrictFilters])])
   }
 
-  const { data: user, isLoading: userLoading } = useApi('user', '/api/user', 'GET', undefined)
+  const { data: user, isLoading: userLoading } = useApi<User>('user', '/api/user', 'GET', undefined)
   const { data: studyData, isLoading: studyDataLoading } = useApi('studyData', '/api/user/studydata', 'GET', undefined)
   const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi(
     'supportedOrganisations',

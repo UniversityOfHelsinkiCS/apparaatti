@@ -402,10 +402,10 @@ export async function createUserVisitsEntry(visitorHashHex: string, date: Date) 
   })
 }
 
-export async function getUserVisitsByUser(visitorHashHex, start, end) {
+export async function getUserVisitsByUser(visitorHashHex: string, start: Date, end: Date) {
   const visits = await UserVisits.findAll({
     where: {
-      visitorHashHex: visitorHashHex,
+      visitorHashHex,
       date: {
         [Op.gte]: start,
         [Op.lt]: end,

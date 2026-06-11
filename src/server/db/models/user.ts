@@ -4,7 +4,7 @@ import { sequelize } from '../connection.ts'
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string
   declare username: string
-  declare firstName: CreationOptional<string>
+  declare firstNames: CreationOptional<string>
   declare lastName: CreationOptional<string>
   declare hyGroupCn: CreationOptional<string[]>
   declare language?: CreationOptional<string>

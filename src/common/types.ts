@@ -233,7 +233,7 @@ export type adminFeedback = {
 }
 
 export type RecommendationMetadata = {
-  filterState: FilterStateType
+  filterState?: FilterStateType
   courses: CourseData[]
 }
 
