@@ -22,6 +22,7 @@ export const variantLookUp: Map<
   string
 > = new Map([
   //finnish variants
+  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'fi_unknown'],
   [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
   [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
   [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_any'],
@@ -31,6 +32,7 @@ export const variantLookUp: Map<
   [{ language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
 
   //svedish variants
+  [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_unknown'],
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'spoken' }, 'sv_primary_spoken'],
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'written' }, 'sv_primary_written'],
   [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
