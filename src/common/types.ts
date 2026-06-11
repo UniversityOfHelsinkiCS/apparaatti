@@ -89,45 +89,6 @@ export type Form = {
   questions: Question[]
 }
 
-export const DIMENSIONS = ['fear', 'teachingMethod', 'experience'] as const
-
-export type Dimension = (typeof DIMENSIONS)[number]
-
-export type CourseRecommendation = {
-  course: CourseData
-  coordinates: CourseCoordinates
-  points?: number
-}
-
-export type CourseCoordinates = {
-  date: number
-  org: number
-  spesificOrg: number | null
-  lang: number
-  graduation?: number | null
-  mentoring?: number | null
-  integrated?: number | null
-  studyPlace: number
-  replacement?: number | null
-  challenge?: number | null
-  independent?: number | null
-  flexible?: number | null
-  mooc?: number | null
-  finmu?: number | null
-  collaboration?: number | null
-  studyYear?: string | null
-  studyPeriod?: string[] | null
-  multiPeriod?: number | null
-}
-
-export type UserCoordinates = CourseCoordinates
-
-export type CourseRecommendations = {
-  pointBasedRecommendations: CourseRecommendation[]
-  userCoordinates: UserCoordinates
-  answerData?: AnswerData
-}
-
 export type Period = {
   name: string
   startDate: Date
@@ -212,11 +173,6 @@ export type AnswerData = {
 export type UserVisit = {
   visitorHashHex: string
   date: Date
-}
-
-export type adminFeedback = {
-  recommendations: CourseRecommendations
-  feedBack: string
 }
 
 export type RecommendationMetadata = {

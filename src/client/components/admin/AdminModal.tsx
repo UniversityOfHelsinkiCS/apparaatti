@@ -1,5 +1,5 @@
 import { Box, Typography, Modal } from '@mui/material'
-import { CourseRecommendations, User } from '../../../common/types.ts'
+import { User } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import VersionBadge from '../common/VersionBadge.tsx'
@@ -24,9 +24,8 @@ const style = {
 type TextFeedbackV2Props = {
   open: boolean
   onClose: () => void
-  recommendations: CourseRecommendations
 }
-const AdminModal = ({ open, onClose, recommendations }: TextFeedbackV2Props) => {
+const AdminModal = ({ open, onClose }: TextFeedbackV2Props) => {
   const { data: user } = useApi<User>('user', '/api/user', 'GET', null)
   const navigate = useNavigate()
 

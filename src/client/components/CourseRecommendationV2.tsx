@@ -1,4 +1,4 @@
-import type { CourseData, CourseRecommendation as CourseRecommendationType } from '../../common/types'
+import type { CourseData } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'

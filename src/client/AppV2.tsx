@@ -54,11 +54,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
       {user?.isAdmin && finalRecommendedCourses && (
-        <AdminModal
-          open={adminModalOpen}
-          onClose={() => setAdminModalOpen(false)}
-          recommendations={finalRecommendedCourses}
-        />
+        <AdminModal open={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
       )}
 
       <AppBar
