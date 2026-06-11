@@ -2,14 +2,12 @@ import { Typography } from '@mui/material'
 import useApi from '../../util/useApi'
 
 const VersionBadge = () => {
-  const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
-    data: {
-      gitSha: string
-      packageVersion: string
-      imageSha?: string
-      releaseVersion?: string
-    } | null
-  }
+  const { data: versionData } = useApi<{
+    gitSha: string
+    packageVersion: string
+    imageSha?: string
+    releaseVersion?: string
+  }>('version', '/api/version', 'GET')
 
   if (!versionData) return null
 

@@ -26,7 +26,7 @@ type TextFeedbackV2Props = {
   onClose: () => void
 }
 const AdminModal = ({ open, onClose }: TextFeedbackV2Props) => {
-  const { data: user } = useApi<User>('user', '/api/user', 'GET', null)
+  const { data: user } = useApi<User>('user', '/api/user', 'GET', undefined)
   const navigate = useNavigate()
 
   return (

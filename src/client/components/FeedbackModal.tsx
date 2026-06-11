@@ -56,9 +56,12 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
-  const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
-    data: { gitSha: string; packageVersion: string } | null
-  }
+  const { data: versionData } = useApi<{ gitSha: string; packageVersion: string }>(
+    'version',
+    '/api/version',
+    'GET',
+    undefined
+  )
 
   const submitFeedbackMutation = useApiMutation(async (res: Response) => {
     if (!res.ok) {

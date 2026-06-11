@@ -103,10 +103,7 @@ const UserFeedbackPage = () => {
   const endDateTime = `${end}T23:59:59.999Z`
   const endpoint = `/api/admin/user-feedback?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`
 
-  const { data, isLoading } = useApi(`admin-user-feedback-${start}-${end}`, endpoint, 'GET', null) as {
-    data: UserFeedback[] | null
-    isLoading: boolean
-  }
+  const { data, isLoading } = useApi<UserFeedback[]>(`admin-user-feedback-${start}-${end}`, endpoint, 'GET')
 
   if (isUnauthorized) {
     return <RedirectToLogin />

@@ -1,5 +1,5 @@
 import User from '../db/models/user.ts'
-import { mangleData, mangleData2 } from './mangleData.ts'
+import { mangleData } from './mangleData.ts'
 
 const parsePreferredLanguageUrnToLanguage = (urn: string) => {
   const fallBackLanguage = 'en'
@@ -42,5 +42,5 @@ const usersHandler = async (users: SisuUser[]) => {
 }
 
 export const fetchUsers = async () => {
-  await mangleData2('persons', 1000, usersHandler)
+  await mangleData('persons', 1000, usersHandler)
 }

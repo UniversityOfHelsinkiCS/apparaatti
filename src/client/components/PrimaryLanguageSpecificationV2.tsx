@@ -44,7 +44,7 @@ const PrimaryLanguageSpecificationV2 = ({ question }: { question: Question }) =>
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
 
       <RadioGroup name={question.id} onChange={handleChange} value={primaryLanguageSpecification}>
-        {variant.options.map(option => (
+        {variant.options?.map(option => (
           <FormControlLabel
             key={option.id}
             value={option.id}

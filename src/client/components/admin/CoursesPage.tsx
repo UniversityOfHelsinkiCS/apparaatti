@@ -89,16 +89,12 @@ const CoursesPage = () => {
     data: coursesData,
     isLoading: isCoursesLoading,
     refetch,
-  } = useApi(
+  } = useApi<PaginatedCoursesResponse>(
     `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
-    null
-  ) as {
-    data: PaginatedCoursesResponse | null
-    isLoading: boolean
-    refetch: () => Promise<unknown>
-  }
+    undefined
+  )
 
   if (isUnauthorized) {
     return <RedirectToLogin />

@@ -1,5 +1,5 @@
 import type { SisuCourseWithRealization } from './types.ts'
-import { mangleData, mangleData2 } from './mangleData.ts'
+import { mangleData } from './mangleData.ts'
 
 import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
@@ -116,5 +116,5 @@ const coursesHandler = async (courseRealizations: SisuCourseWithRealization[]) =
 const BATCH_SIZE = 1000
 
 export const fetchCoursesAndResponsibilities = async () => {
-  await mangleData2('courses', BATCH_SIZE, coursesHandler, new Date(2023, 0, 1))
+  await mangleData('courses', BATCH_SIZE, coursesHandler, new Date(2023, 0, 1))
 }

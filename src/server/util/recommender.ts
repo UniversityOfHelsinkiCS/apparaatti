@@ -22,14 +22,7 @@ import {
 } from './constants.ts'
 import { getNormalizedStudyPlace } from './studyPlace.ts'
 
-export {
-  courseStudyPlaceCoordinate,
-  getNormalizedStudyPlace,
-  isExam,
-  isIndependentCourse,
-  readArrOrSingleValue,
-  readStudyPlaceCoordinate,
-} from './studyPlace.ts'
+export { getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue } from './studyPlace.ts'
 
 export function commonCoordinateFromAnswerData(
   value: string,
@@ -172,36 +165,6 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
 
 export function courseSpansMultiplePeriods(course: CourseData): boolean {
   return (course.period?.length ?? 0) > 1
-}
-
-const getPeriodsWantedByUser = periodsArg => {
-  const periods = readAsStringArr(periodsArg)
-  if (periods.includes('neutral') || periods.length === 0) {
-    return ['intensive_3_previous', 'period_1', 'period_2', 'period_3', 'period_4', 'intensive_3']
-  }
-  return periods
-}
-
-const getStudyYearFromPeriod = (_id: string) => {
-  const today = new Date()
-  const currentPeriod = dateObjToPeriod(today)[0]
-  const currentPeriodDate = parseDate(currentPeriod['start_date'])
-  const currentStudyYearStart = currentPeriodDate.getFullYear()
-  return currentStudyYearStart.toString()
-}
-
-//Takes a list of period names or a single period name and returns a list of periods that are in the current study year of the user
-//For example if it is autumn 2024 and the user picks sends: [period_1, period_4] -> [{period that starts in autumn in 2024}, {period that starts in spring in 2025}]
-export function getRelevantPeriods(periodsArg: string[] | string) {
-  const periods = getPeriodsWantedByUser(periodsArg)
-
-  const pickedPeriods = periods.map((period: string) => {
-    const startYearOfPeriod = getStudyYearFromPeriod(period)
-    const pickedPeriod = getStudyPeriod(startYearOfPeriod, period)
-    return pickedPeriod
-  })
-
-  return pickedPeriods
 }
 
 type courseCodes = {

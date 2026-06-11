@@ -33,10 +33,7 @@ const StatsPage = () => {
 
   const endpoint = `/api/admin/stats?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}&groupBy=${encodeURIComponent(groupBy)}`
 
-  const { data, isLoading } = useApi(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET', null) as {
-    data: StatsRow[] | null
-    isLoading: boolean
-  }
+  const { data, isLoading } = useApi<StatsRow[]>(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET')
 
   const groupedCounts = Array.isArray(data) ? data : []
 

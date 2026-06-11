@@ -41,7 +41,7 @@ const StudyPlaceQuestionV2 = ({ question }: { question: Question }) => {
       <FormControl sx={{ m: 0, display: 'flex' }} component="fieldset" variant="standard">
         <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
         <FormGroup>
-          {variant.options.map(option => (
+          {variant.options?.map(option => (
             <FormControlLabel
               checked={studyPlace.includes(option.id)}
               key={option.id}
