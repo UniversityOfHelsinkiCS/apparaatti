@@ -1,7 +1,4 @@
-import type {
-  AnswerData,
-  CourseData,
-} from '../../common/types.ts'
+import type { AnswerData, CourseData } from '../../common/types.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {
@@ -23,9 +20,7 @@ import {
   collaborationOrganisationCourseNameIncludes,
   organisationCodeToUrn,
 } from './constants.ts'
-import {
-  getNormalizedStudyPlace,
-} from './studyPlace.ts'
+import { getNormalizedStudyPlace } from './studyPlace.ts'
 
 export {
   courseStudyPlaceCoordinate,
@@ -35,7 +30,6 @@ export {
   readArrOrSingleValue,
   readStudyPlaceCoordinate,
 } from './studyPlace.ts'
-
 
 export function commonCoordinateFromAnswerData(
   value: string,
@@ -64,8 +58,6 @@ export function readAnswer(answerData: AnswerData, key: keyof AnswerData): strin
 export function readAsStringArr(variable: string[] | string): string[] {
   return Array.isArray(variable) ? variable : [variable]
 }
-
-
 
 //generic courses have many cases where they are considered to be for the users organisation
 export async function courseInSameOrganisationAsUser(
@@ -142,8 +134,6 @@ export async function courseIsCollaboration(course: CourseData): Promise<boolean
 
   return false
 }
-
-
 
 export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: string[]): Promise<CourseData[]> {
   const courseUnitsWithCodes = await cuWithCourseCodeOf(courseCodeStrings)
@@ -261,7 +251,6 @@ function getCourseCodes(
   }
 }
 
-
 function isChallengeCourse(course: CourseData, courseLanguageType: string) {
   return courseMatches(course, challegeCourseCodes, courseLanguageType)
 }
@@ -315,4 +304,3 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
 
   return sorted
 }
-
