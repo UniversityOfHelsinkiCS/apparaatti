@@ -31,10 +31,6 @@ export const hasAnyNamePattern = (course: CourseData, patterns: string[]) => {
   return patterns.some(pattern => localizedNames.some(name => name.includes(pattern)))
 }
 
-export const checkPrimaryLanguageSpecification = () => true
-
-export const checkPreviouslyDoneLang = () => true
-
 export const checkReplacement = (course: CourseData, value: string) => {
   const result = hasApparaattiCodeUrn(course, 'kks-kor')
   return value != '0' ? result : !result

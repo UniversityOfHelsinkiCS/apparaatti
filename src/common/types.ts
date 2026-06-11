@@ -1,5 +1,3 @@
-import { FilterStateType } from '../client/contexts/filterContext'
-
 export type LocalizedString = Partial<{
   fi: string
   sv: string
@@ -175,8 +173,30 @@ export type UserVisit = {
   date: Date
 }
 
+export type FilterStateValues = {
+  primaryLanguage: string
+  language: string
+  primaryLanguageSpecification: string
+  studyField: string
+  previouslyDoneLang: string
+  replacement: string
+  mentoring: string
+  finmu: string
+  challenge: string
+  graduation: string
+  studyPlace: string[]
+  studyYear: string
+  studyPeriod: string[]
+  integrated: string
+  independent: string
+  mooc: string
+  collaboration: string
+  multiPeriod: string
+  flexible: string
+}
+
 export type RecommendationMetadata = {
-  filterState?: FilterStateType
+  filterState?: FilterStateValues
   courses: CourseData[]
 }
 

@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  lint:
+  lint-and-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
         run: npm ci --include=dev
 
       - name: Run lint
-        run: npm run lint
+        run: npm run lint:all
 
       - name: Run tsc
         run: npm run tsc

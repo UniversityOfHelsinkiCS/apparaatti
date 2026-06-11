@@ -13,6 +13,7 @@
     "tsc": "tsc --build --noEmit",
     "test": "vitest",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:all": "eslint 'src/**/*.{ts,tsx}' && prettier 'src/**/*.{ts,tsx,json,css,md}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "lint:fix:all": "eslint 'src/**/*.{ts,tsx}' --fix && prettier --write 'src/**/*.{ts,tsx,json,css,md}'",
     "translations": "node scripts/analyzeTranslations.js",

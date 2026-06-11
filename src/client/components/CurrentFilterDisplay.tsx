@@ -4,34 +4,34 @@ import FilterSummaryItem from './common/FilterSummaryItem'
 
 const ActiveFilterCard = ({ filterId }: { filterId: string }) => {
   const filterContext = useFilterContext()
-  const cfg = filterConfigMap(filterContext).get(filterId)
+  const config = filterConfigMap(filterContext).get(filterId)
   const hide = filterContext.filters.find((q: any) => q.id === filterId)?.hideInCurrentFiltersDisplay ?? false
   const variant = getFilterVariant(filterContext, filterId)
   const question = filterContext.filters.find((q: any) => q.id === filterId)
+  const configState = config.state
 
   const handleClearFilter = () => {
-    if (!cfg) return
-    if (Array.isArray(cfg.state)) {
-      cfg.setState([])
+    if (!config) return
+    if (Array.isArray(configState)) {
+      config.setState([])
     } else {
-      cfg.setState('')
+      config.setState('')
     }
   }
 
-  if (hide || !cfg || !isFilterStateAnswered(cfg.state)) {
+  if (hide || !config || !isFilterStateAnswered(config.state)) {
     return <></>
   }
 
   return (
     <FilterSummaryItem
       label={question?.shortName || filterId}
-      state={cfg.state}
+      state={configState}
       variant={variant}
       onDeleteValue={
-        Array.isArray(cfg.state)
+        Array.isArray(configState)
           ? valueId => {
-              const newState = cfg.state.filter((id: string) => id !== valueId)
-              cfg.setState(newState)
+              config.setState(configState.filter(id => id !== valueId))
             }
           : undefined
       }

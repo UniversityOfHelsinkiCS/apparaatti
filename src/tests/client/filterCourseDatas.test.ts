@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { CourseData, FilterConfig, Period } from '../../common/types.ts'
-import { filterCourseDatas } from '../../client/contexts/filterContext.tsx'
+import { filterCourseDatas, FilterStateType } from '../../client/contexts/filterContext.tsx'
 
 const createCustomCodeUrns = (...codes: string[]) => ({
   'urn:code:custom:hy-university-root-id:kk-apparaatti': codes.map(
@@ -52,7 +52,7 @@ const createLocalFilters = (overrides: Record<string, unknown> = {}) =>
     studyYear: '',
     studyPeriod: [],
     ...overrides,
-  }) as unknown as FilterConfig
+  }) as unknown as FilterStateType
 
 describe('filterCourseDatas', () => {
   it.each([

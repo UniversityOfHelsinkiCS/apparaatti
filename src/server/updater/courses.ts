@@ -100,7 +100,7 @@ const createCurCusFromUpdater = async (realisations: SisuCourseWithRealization[]
   }
 }
 
-const coursesHandler = async (courseRealizations: any[]) => {
+const coursesHandler = async (courseRealizations: SisuCourseWithRealization[]) => {
   const filteredCourseRealizations = courseRealizations.filter(
     course => course.courseUnits.length
     // course.flowState !== 'CANCELLED' &&
@@ -113,8 +113,8 @@ const coursesHandler = async (courseRealizations: any[]) => {
 }
 
 // default 1000, set to 10 for example when debugging
-const SPEED = 1000
+const BATCH_SIZE = 1000
 
 export const fetchCoursesAndResponsibilities = async () => {
-  await mangleData2('courses', SPEED, coursesHandler, new Date(2023, 0, 1))
+  await mangleData2('courses', BATCH_SIZE, coursesHandler, new Date(2023, 0, 1))
 }

@@ -16,7 +16,7 @@ const checkTimeout = (start: number) => {
   return true
 }
 //assumes that the endpoint is at the normal url + /count
-const fetchMaxRecordCount = async url => {
+const fetchMaxRecordCount = async (url: string) => {
   const data = await fetchData(`${url}/count`, {})
   return data
 }
@@ -116,7 +116,7 @@ export const mangleData = async <T = object>(
 
 export const mangleData2 = async (url: string, limit: number, handler: any, since: Date = null) => {
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
-  const maxRecords = await fetchMaxRecordCount(url)
+  const maxRecords = Number(await fetchMaxRecordCount(url))
   console.log('expecting max entiries of: ')
   console.log(maxRecords)
 
@@ -150,7 +150,7 @@ export const mangleData2 = async (url: string, limit: number, handler: any, sinc
     let currentData = null
     try {
       logger.info('[UPDATER] getting data')
-      currentData = await fetchData<T[]>(url, { limit, offset, since })
+      currentData = await fetchData(url, { limit, offset, since })
     } catch (e) {
       console.log(e)
       console.log(`FATAL error on updater ${e}, offset ${offset}`)

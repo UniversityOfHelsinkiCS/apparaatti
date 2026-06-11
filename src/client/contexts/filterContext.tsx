@@ -15,8 +15,6 @@ import {
   checkMentoring,
   checkMooc,
   checkMultiPeriod,
-  checkPrimaryLanguageSpecification,
-  checkPreviouslyDoneLang,
   checkReplacement,
   checkStudyPeriod,
   checkStudyPlace,
@@ -62,15 +60,6 @@ const localFilterStateKeys: Record<string, LocalFilterStateKey> = {
 }
 
 interface FilterContextType {
-  language: string
-  setLanguage: (s: string) => void
-
-  primaryLanguage: string
-  setPrimaryLanguage: (s: string) => void
-
-  primaryLanguageSpecification: string
-  setPrimaryLanguageSpecification: (s: string) => void
-
   variantToDisplayId: string
 
   filters: Question[]
@@ -83,6 +72,13 @@ interface FilterContextType {
   modalOpen: boolean
   setModalOpen: (open: boolean) => void
   finalRecommendedCourses: CourseData[] | null
+
+  language: string
+  setLanguage: (s: string) => void
+  primaryLanguage: string
+  setPrimaryLanguage: (s: string) => void
+  primaryLanguageSpecification: string
+  setPrimaryLanguageSpecification: (s: string) => void
 
   studyField: string
   setStudyField: (s: string) => void
@@ -118,12 +114,19 @@ interface FilterContextType {
   setStrictFilters: (s: string[]) => void
   flexible: string
   setFlexible: (s: string) => void
+
   resetFilters: () => void
   getOptionCount: (optionId: string, filterId: string) => number | null
   filterState: FilterStateType
 }
 
 export type FilterStateType = {
+  primaryLanguage: string
+  setPrimaryLanguage: (s: string) => void
+  language: string
+  setLanguage: (s: string) => void
+  primaryLanguageSpecification: string
+  setPrimaryLanguageSpecification: (s: string) => void
   studyField: string
   setStudyField: (s: string) => void
   previouslyDoneLang: string
@@ -237,7 +240,7 @@ const runFilter = (
  * @param filters
  */
 
-export const filterCourseDatas = (courseData: CourseData[], filters: Pick<FilterStateType, LocalFilterStateKey>) => {
+export const filterCourseDatas = (courseData: CourseData[], filters: FilterStateType) => {
   let result: CourseData[] = Array.from(courseData)
 
   result = runFilter(result, filters.replacement, checkReplacement)
@@ -408,7 +411,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }, [shouldUsePrimaryLanguageSpecification, primaryLanguageSpecification])
 
-  const filterState = {
+  const filterState: FilterStateType = {
     studyField,
     setStudyField,
     primaryLanguage,
