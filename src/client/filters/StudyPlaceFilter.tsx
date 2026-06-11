@@ -21,7 +21,7 @@ const StudyPlaceFilter = ({ filter }: { filter: Question }) => {
     <Box>
       <FormControl sx={{ m: 0, display: 'flex' }} component="fieldset" variant="standard">
         <FormGroup>
-          {variant.options.map(option => (
+          {variant?.options?.map(option => (
             <FormControlLabel
               checked={state[option.id] || false}
               key={option.id}

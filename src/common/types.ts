@@ -1,15 +1,9 @@
-export type LocalizedString = Partial<{
-  fi: string
-  sv: string
-  en: string
-}>
+export type Language = 'fi' | 'sv' | 'en'
+
+export type LocalizedString = Partial<Record<Language, string>>
 
 // Fully-specified localized string used for filter config stored in the DB
-export type LocalizedText = {
-  fi: string
-  sv: string
-  en: string
-}
+export type LocalizedText = Record<Language, string>
 
 export type FilterOption = {
   id: string
@@ -122,7 +116,7 @@ export type CourseData = {
 export type CourseRealization = {
   id: string
   name: LocalizedString
-  nameSpecifier?: LocalizedString
+  nameSpecifier: LocalizedString
   startDate: Date
   endDate: Date
   customCodeUrns: Record<string, string[]>

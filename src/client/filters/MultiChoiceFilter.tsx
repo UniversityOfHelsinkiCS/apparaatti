@@ -43,7 +43,7 @@ const MultiChoiceFilter = ({ filter, variantId }: { filter: Question; variantId:
 
   return (
     <RadioGroup name={filter.id} onChange={handleChange}>
-      {variant.options.map(option => (
+      {variant.options?.map(option => (
         <FormControlLabel
           key={option.id}
           value={option.id}

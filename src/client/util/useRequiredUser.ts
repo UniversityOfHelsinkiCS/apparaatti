@@ -9,7 +9,7 @@ type RequiredUserResult = {
 }
 
 const useRequiredUser = (): RequiredUserResult => {
-  const { data, isLoading } = useApi('user', '/api/user', 'GET', null)
+  const { data, isLoading } = useApi<User>('user', '/api/user', 'GET')
 
   if (isLoading || isUnauthorizedResponse(data)) {
     return {
@@ -20,7 +20,7 @@ const useRequiredUser = (): RequiredUserResult => {
   }
 
   return {
-    user: (data as User | null) ?? null,
+    user: data ?? null,
     isLoading: false,
     isUnauthorized: false,
   }

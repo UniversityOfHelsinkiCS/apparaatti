@@ -20,9 +20,9 @@ const PreviouslyDoneLangFilter = ({ filter, languageId }: { filter: Question; la
   const { t } = useTranslation()
   const { setPreviouslyDoneLang } = useFilterContext()
   const variant = pickVariant(filter, languageId)
-  const neutralOption = variant.options.find(o => o.id === 'neutral')
-  const yesOption = variant.options.find(o => o.id === '1')
-  const noOption = variant.options.find(o => o.id === '0')
+  const neutralOption = variant?.options?.find(o => o.id === 'neutral')
+  const yesOption = variant?.options?.find(o => o.id === '1')
+  const noOption = variant?.options?.find(o => o.id === '0')
 
   if (!yesOption || !noOption) {
     return <p>Unknown error on filter</p>

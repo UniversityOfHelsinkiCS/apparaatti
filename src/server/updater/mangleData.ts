@@ -22,7 +22,7 @@ const fetchMaxRecordCount = async (url: string) => {
 }
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms))
 
-export const mangleData = async (url: string, limit: number, handler: any, since: Date = null) => {
+export const mangleData = async (url: string, limit: number, handler: any, since: Date | null = null) => {
   logger.info(`[UPDATER] Starting to update items with url ${url}`)
   const maxRecords = Number(await fetchMaxRecordCount(url))
   console.log('expecting max entiries of: ')

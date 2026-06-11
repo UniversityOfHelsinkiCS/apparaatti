@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TFunction } from 'i18next'
 import { Question, Variant, FilterConfig } from '../../common/types'
 import useApi from '../util/useApi'
 import { toQuestion } from '../util/filterConfigAdapter'
@@ -44,7 +45,7 @@ export const variantLookUp: Map<
   [{ language: '', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_unknown'],
 ])
 
-export const pickQuestionExplanation = (variantId: string | undefined, question: Question, t) => {
+export const pickQuestionExplanation = (variantId: string | undefined, question: Question, t: TFunction) => {
   if (variantId) {
     const explanationVariant = question.variants.find(v => v.name === variantId)
     if (explanationVariant?.explanation) {

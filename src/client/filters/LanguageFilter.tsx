@@ -15,7 +15,7 @@ const LanguageFilter = ({ filter, setLanguage }: { filter: Question; setLanguage
 
   return (
     <RadioGroup name={filter.id}>
-      {variant.options.map(option => (
+      {variant.options?.map(option => (
         <FormControlLabel
           onClick={() => handleChoice(option.id)}
           key={option.id}

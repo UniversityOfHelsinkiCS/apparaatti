@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select } from '@mui/material'
+import { Box, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Question, User } from '../../common/types'
 import { translateLocalizedString } from '../util/i18n'
@@ -39,7 +39,7 @@ const StudyPhaseFilter = ({
 
   const [selectedValue, setSelectedValue] = useState(startValue())
 
-  const handleChange = e => {
+  const handleChange = (e: SelectChangeEvent) => {
     e.preventDefault()
     setSelectedValue(e.target.value)
   }

@@ -1,16 +1,16 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, type MutateOptions } from '@tanstack/react-query'
 import { generateSettings } from '../util/useApi'
 
-const useApiMutation = (mutationFn, endpoint) => {
+const useApiMutation = <TData = unknown,>(mutationFn: (res: Response) => Promise<void>, endpoint: string) => {
   const mutation = useMutation({
-    mutationFn: async data => {
+    mutationFn: async (data: TData) => {
       const settings = generateSettings('POST', data)
       const res = await fetch(endpoint, settings)
       await mutationFn(res)
     },
   })
 
-  const mutateAsync = (data, settings) => {
+  const mutateAsync = (data: TData, settings?: MutateOptions<void, Error, TData>) => {
     return mutation.mutateAsync(data, settings)
   }
 

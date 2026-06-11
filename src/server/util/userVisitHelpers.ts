@@ -3,7 +3,7 @@ import type { User } from '../../common/types.ts'
 import { localLog } from './dev.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
-export async function hashUser(user): Promise<string> {
+export async function hashUser(user: User): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode(user.id)
   const hash = await crypto.subtle.digest('SHA-256', data)

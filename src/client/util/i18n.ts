@@ -4,7 +4,13 @@ import { initReactI18next } from 'react-i18next'
 import en from '../locales/en.ts'
 import fi from '../locales/fi.ts'
 import sv from '../locales/sv.ts'
-import { LocalizedString } from '../../common/types'
+import { Language, LocalizedString } from '../../common/types'
+
+const languageKeys: readonly Language[] = ['fi', 'sv', 'en'] as const
+
+function isLanguage(lang: string): lang is Language {
+  return languageKeys.some(key => key === lang)
+}
 
 declare global {
   interface Window {
@@ -14,15 +20,11 @@ declare global {
 
 export function translateLocalizedString(text: LocalizedString): string {
   const currentLanguage = i18n.language
-  const keys = Object.keys(text)
-  if (keys.includes(currentLanguage)) {
+  if (isLanguage(currentLanguage) && text[currentLanguage] !== undefined) {
     return text[currentLanguage]
   }
-  //sometimes sisu course does not have an english/svedish translation so checking both and preferring english
-  const englishFallBack: string | undefined = text['en']
-  const finnishFallBack: string | undefined = text['fi']
-
-  return englishFallBack ?? finnishFallBack
+  // sometimes sisu course is missing translations
+  return text.en ?? text.fi ?? text.sv ?? ''
 }
 
 const initializeI18n = () =>
@@ -31,7 +33,7 @@ const initializeI18n = () =>
       en,
       fi,
       sv,
-    },
+    } satisfies Record<Language, any>,
     lng: 'en',
     fallbackLng: 'en',
     defaultNS: 'common',

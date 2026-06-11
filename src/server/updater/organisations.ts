@@ -2,7 +2,7 @@ import Organisation from '../db/models/organisation.ts'
 import { mangleData } from './mangleData.ts'
 import { safeBulkCreate } from './util.ts'
 
-const organisationsHandler = async (organisations: any) => {
+const organisationsHandler = async (organisations: Organisation[]) => {
   const ids = new Set()
   const uniqueOrganisations = organisations.filter(org => {
     if (!ids.has(org.id)) {
