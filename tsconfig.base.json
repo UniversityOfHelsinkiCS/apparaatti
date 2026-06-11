@@ -11,8 +11,6 @@
 
     /* Strictness */
     "strict": true,
-    // "strictNullChecks": true,
-    // "noImplicitAny": true,
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
