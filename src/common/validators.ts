@@ -53,8 +53,8 @@ export const UserFeedbackSchema = z.object({
   stars: z.number().int().min(0).max(5),
   recommendationMetadata: z
     .object({
-      answerData: z.record(z.string(), z.unknown()).nullable(),
-      recommendations: z.array(z.record(z.string(), z.unknown())),
+      filterState: z.record(z.string(), z.unknown()).nullable(),
+      courses: z.array(z.record(z.string(), z.unknown())),
     })
     .optional(),
   appVersion: z.string().optional(),

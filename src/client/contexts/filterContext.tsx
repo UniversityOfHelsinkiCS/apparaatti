@@ -120,9 +120,10 @@ interface FilterContextType {
   setFlexible: (s: string) => void
   resetFilters: () => void
   getOptionCount: (optionId: string, filterId: string) => number | null
+  filterState: FilterStateType
 }
 
-export type FiltersGroupedType = {
+export type FilterStateType = {
   studyField: string
   setStudyField: (s: string) => void
   previouslyDoneLang: string
@@ -153,12 +154,8 @@ export type FiltersGroupedType = {
   setCollaboration: (s: string) => void
   multiPeriod: string
   setMultiPeriod: (s: string) => void
-  strictFilters: string[]
-  setStrictFilters: (s: string[]) => void
   flexible: string
   setFlexible: (s: string) => void
-  resetFilters: () => void
-  getOptionCount: (filterId: string, optionId: string) => number | null
 }
 
 export type filterConfigMapType = {
@@ -240,7 +237,7 @@ const runFilter = (
  * @param filters
  */
 
-export const filterCourseDatas = (courseData: CourseData[], filters: Pick<FiltersGroupedType, LocalFilterStateKey>) => {
+export const filterCourseDatas = (courseData: CourseData[], filters: Pick<FilterStateType, LocalFilterStateKey>) => {
   let result: CourseData[] = Array.from(courseData)
 
   result = runFilter(result, filters.replacement, checkReplacement)
@@ -745,6 +742,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setStrictFilters,
         resetFilters,
         getOptionCount,
+        filterState,
       }}
     >
       {children}

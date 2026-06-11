@@ -112,11 +112,7 @@ const UserFeedbackPage = () => {
     return <RedirectToLogin />
   }
 
-  if (isUserLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (!user) {
+  if (isUserLoading || !user) {
     return <div>Loading...</div>
   }
 

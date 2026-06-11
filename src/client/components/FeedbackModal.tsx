@@ -48,7 +48,7 @@ const style = {
 
 const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const { t } = useTranslation()
-  const { finalRecommendedCourses } = useFilterContext()
+  const { finalRecommendedCourses, filterState } = useFilterContext()
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
   const [sendRecommendationMetadata, setSendRecommendationMetadata] = useState(false)
@@ -59,14 +59,16 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const { data: versionData } = useApi('version', '/api/version', 'GET', null) as {
     data: { gitSha: string; packageVersion: string } | null
   }
+
   const submitFeedbackMutation = useApiMutation(async (res: Response) => {
     if (!res.ok) {
       throw new Error('Feedback submission failed')
     }
   }, '/api/feedback')
+
   const feedbackRecommendationMetadata = {
-    answerData: finalRecommendedCourses?.answerData ?? null,
-    recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
+    filterState,
+    courses: finalRecommendedCourses,
   }
   const recommendationMetadataPreview = JSON.stringify(feedbackRecommendationMetadata, null, 2)
 
@@ -85,12 +87,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    const recommendationMetadata = sendRecommendationMetadata
-      ? {
-          answerData: finalRecommendedCourses?.answerData ?? null,
-          recommendations: finalRecommendedCourses?.pointBasedRecommendations ?? [],
-        }
-      : undefined
+    const recommendationMetadata = sendRecommendationMetadata ? feedbackRecommendationMetadata : undefined
 
     const appVersion = versionData ? `${versionData.packageVersion} (${versionData.gitSha})` : undefined
 

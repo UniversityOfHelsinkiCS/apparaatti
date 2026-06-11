@@ -1,3 +1,5 @@
+import { FilterStateType } from '../client/contexts/filterContext'
+
 export type LocalizedString = Partial<{
   fi: string
   sv: string
@@ -231,8 +233,8 @@ export type adminFeedback = {
 }
 
 export type RecommendationMetadata = {
-  answerData: AnswerData | null
-  recommendations: CourseRecommendation[]
+  filterState: FilterStateType
+  courses: CourseData[]
 }
 
 export type UserFeedbackSubmission = {
