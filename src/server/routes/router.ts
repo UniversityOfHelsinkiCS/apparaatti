@@ -1,9 +1,9 @@
 import type { Response } from 'express'
 import express from 'express'
-import { AnswerSchema, StringArraySchema, UserFeedbackSchema } from '../../common/validators.ts'
+import { AnswerSchema, UserFeedbackSchema } from '../../common/validators.ts'
 import type { AnswerData, CourseData } from '../../common/types.ts'
 import passport from 'passport'
-import recommendCourses, { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
+import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import debugRouter from './debugRouter.ts'
 import {
