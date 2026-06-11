@@ -290,6 +290,34 @@ export const shouldRenderWelcomeFilter = (
   return true
 }
 
+/**
+ * @returns
+ * Mandatory filters that are being displayed in the app,
+ * taking into account the cases where the user searches for main language courses
+ */
+export const getUnansweredCurrentMandatoryFilters = (filters: Question[], filterContext: FilterContextType) => {
+  const configMap = filterConfigMap(filterContext)
+  const { variantToDisplayId, language, primaryLanguage } = filterContext
+
+  return filters.filter(filter => {
+    if (!filter.mandatory) {
+      return false
+    }
+
+    const variant = pickVariant(filter, variantToDisplayId) ?? null
+    if (!shouldRenderWelcomeFilter(filter.id, variant, language, primaryLanguage)) {
+      return false
+    }
+
+    const config = configMap.get(filter.id)
+    if (!config) {
+      return false
+    }
+
+    return !isFilterStateAnswered(config.state)
+  })
+}
+
 export const shouldShowFilterInSidebar = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
   return !filter.showInWelcomeModal || filter.id === 'primary-language-specification'
 }
