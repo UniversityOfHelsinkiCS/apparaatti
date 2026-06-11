@@ -41,7 +41,11 @@ const getClient = async () => {
   return client
 }
 
-const verifyLogin = async (_tokenSet: openidClient.TokenSet, userinfo, done: (err: any, user?: unknown) => void) => {
+const verifyLogin = async (
+  _tokenSet: openidClient.TokenSet,
+  userinfo: openidClient.UserinfoResponse,
+  done: (err: any, user?: unknown) => void
+) => {
   const user: User = {
     id: userinfo.hyPersonSisuId as string,
     username: userinfo.uid as string,
@@ -65,7 +69,7 @@ const setupAuthentication = async () => {
     return done(null, user)
   })
 
-  passport.deserializeUser((obj, done) => {
+  passport.deserializeUser((obj: Express.User, done) => {
     return done(null, obj)
   })
 

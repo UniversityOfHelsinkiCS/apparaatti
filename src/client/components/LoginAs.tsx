@@ -24,6 +24,7 @@ const LoginAs = () => {
   const { data: users, refetch } = useApi<User[]>('users', url, 'GET')
 
   const handleLoginAs = () => {
+    if (!loginAsCandidate) return
     loginAs(loginAsCandidate)
   }
 

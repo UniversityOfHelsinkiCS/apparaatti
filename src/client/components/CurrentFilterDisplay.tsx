@@ -8,7 +8,7 @@ const ActiveFilterCard = ({ filterId }: { filterId: string }) => {
   const hide = filterContext.filters.find((q: any) => q.id === filterId)?.hideInCurrentFiltersDisplay ?? false
   const variant = getFilterVariant(filterContext, filterId)
   const question = filterContext.filters.find((q: any) => q.id === filterId)
-  const configState = config?.state
+  const configState = config?.state ?? ''
 
   const handleClearFilter = () => {
     if (!config) return

@@ -4,7 +4,7 @@ import type { Period } from '../../common/types.ts'
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
 import { getCurrentDate } from './testUtils.ts'
 
-export const dateIsInPeriod = (date: Date, period, _debug = false) => {
+export const dateIsInPeriod = (date: Date, period: { start_date: string; end_date: string }, _debug = false) => {
   const compare = dateAtMidnight(date)
   const start = dateAtMidnight(parseDate(period.start_date))
   const end = dateAtMidnight(parseDate(period.end_date))
@@ -45,14 +45,7 @@ export const dateToPeriod = (date: string) => {
 }
 
 export const dateObjToPeriod = (dateObj: Date, debug = false) => {
-  const hits = []
-  studyPeriods.periods.forEach(period => {
-    if (dateIsInPeriod(dateObj, period, debug)) {
-      hits.push(period)
-    }
-  })
-
-  return hits
+  return studyPeriods.periods.filter(period => dateIsInPeriod(dateObj, period, debug))
 }
 
 export const getCoursePeriod = (course: { startDate: Date; endDate: Date }): Period[] | null => {

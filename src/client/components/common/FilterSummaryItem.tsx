@@ -5,7 +5,7 @@ import { getOptionDisplayTexts } from '../../hooks/useQuestions'
 
 interface FilterSummaryItemProps {
   label: string
-  state: string | string[] | undefined
+  state: string | string[]
   variant: Variant | null
   onDeleteValue?: (valueId: string) => void
   onClear?: () => void

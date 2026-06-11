@@ -63,7 +63,7 @@ interface FilterContextType {
   variantToDisplayId: string
 
   filters: Question[]
-  user: User | null
+  user: User | undefined
   studyData: any
   supportedOrganisations: any
   setUserOrgCode: (s: string) => void
@@ -161,29 +161,10 @@ export type FilterStateType = {
   setFlexible: (s: string) => void
 }
 
-export type filterConfigMapType = {
+export type FilterConfigMapType = {
   state: string | string[]
   setState: (state: string | string[]) => void
 }
-
-const localFilterIds = new Set([
-  'primary-language-specification',
-  'previusly-done-lang',
-  'replacement',
-  'mentoring',
-  'finmu',
-  'challenge',
-  'graduation',
-  'integrated',
-  'independent',
-  'study-place',
-  'study-year',
-  'study-period',
-  'mooc',
-  'collaboration',
-  'multi-period',
-  'flexible',
-])
 
 /**
  * Returns a helper map to easily access the state of the filters and the comparison function of the filter
@@ -191,7 +172,7 @@ const localFilterIds = new Set([
  * @returns
  */
 export const filterConfigMap = (filters: any) =>
-  new Map<string, filterConfigMapType>([
+  new Map<string, FilterConfigMapType>([
     //server side filters
     ['study-field-select', { state: filters.studyField, setState: filters.setStudyField }],
     ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage }],

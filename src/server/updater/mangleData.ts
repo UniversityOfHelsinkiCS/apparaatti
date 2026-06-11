@@ -1,20 +1,11 @@
 import logger from '../util/logger.ts'
-import { fetchData, importerClient } from './importerClient.ts'
+import { fetchData } from './importerClient.ts'
 import * as redis from '../util/redis.ts'
-import { IMPORTER_URL } from '../util/config.ts'
 
 const logError = (message: string, error: Error) => {
   logger.error(`[UPDATER] ${message} ${error.name}, ${error.message}`)
 }
 
-/**
- * If a single update category takes over two hours, something is probably wrong
- * Stop Updater from running indefinitely
- */
-const checkTimeout = (start: number) => {
-  if (Date.now() - start > 7_200_000) throw new Error('Updater time limit exceeded!')
-  return true
-}
 //assumes that the endpoint is at the normal url + /count
 const fetchMaxRecordCount = async (url: string) => {
   const data = await fetchData(`${url}/count`, {})
@@ -52,13 +43,13 @@ export const mangleData = async (url: string, limit: number, handler: any, since
 
   while (iterations < maxIterations) {
     await sleep(loopSleepTime) //one second for debug //the importer is slower than the updater, so slow the updater to one request every 200ms
-    const requestTime = (Date.now() - requestStart).toFixed(0)
+    const requestTime = requestStart ? (Date.now() - requestStart).toFixed(0) : null
     requestStart = Date.now()
 
-    let currentData = null
+    let currentData: any[] | null = null
     try {
       logger.info('[UPDATER] getting data')
-      currentData = await fetchData(url, { limit, offset, since })
+      currentData = await fetchData<any[]>(url, { limit, offset, since })
     } catch (e) {
       console.log(e)
       console.log(`FATAL error on updater ${e}, offset ${offset}`)

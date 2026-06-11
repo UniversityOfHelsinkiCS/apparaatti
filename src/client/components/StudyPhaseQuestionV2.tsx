@@ -13,7 +13,7 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const showAllOptions = (user: User | null) => {
+  const showAllOptions = (user: User | undefined) => {
     return user?.isAdmin ? true : false
   }
 
