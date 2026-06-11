@@ -22,7 +22,7 @@ export function translateLocalizedString(text: LocalizedString): string {
   const englishFallBack: string | undefined = text['en']
   const finnishFallBack: string | undefined = text['fi']
 
-  return englishFallBack != undefined ? englishFallBack : finnishFallBack
+  return englishFallBack ?? finnishFallBack
 }
 
 const initializeI18n = () =>

@@ -1,13 +1,12 @@
-import { FormControl, MenuItem, Select } from '@mui/material'
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import { Question, Option } from '../../common/types'
 import React from 'react'
-import { translateLocalizedString } from '../util/i18n'
 import { useFilterContext } from '../contexts/filterContext'
 
 interface DropdownFilterComponentProps {
   filter: Question
   state: string
-  handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  handleChange: (event: SelectChangeEvent<string>) => void
   options: Option[]
 }
 
@@ -31,7 +30,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
       >
         {options.map(option => {
           const count = getOptionCount(filter.id, option.id)
-          const label = translateLocalizedString(option.name)
+          const label = option.name
           return (
             <MenuItem key={option.id} value={option.id} disabled={count === 0} sx={{ opacity: count === 0 ? 0.4 : 1 }}>
               {count != null ? `${label} (${count})` : label}

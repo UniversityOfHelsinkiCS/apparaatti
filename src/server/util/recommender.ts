@@ -47,9 +47,9 @@ export function commonCoordinateFromAnswerData(
   }
 }
 
-export function readAnswer(answerData: AnswerData, key: keyof AnswerData): string | string[] {
+export function readAnswer(answerData: AnswerData, key: keyof AnswerData): string {
   const value = answerData[key]
-  if (!value || (Array.isArray(value) && value.length === 0)) {
+  if (!value?.length) {
     return 'neutral'
   }
   return value

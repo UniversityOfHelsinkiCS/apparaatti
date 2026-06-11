@@ -88,7 +88,7 @@ adminRouter.get('/users', async (req, res) => {
   }
 
   const users = await usersWithWhere(whereClauses, USER_FETCH_LIMIT)
-  res.send(users as UserType[])
+  res.send(users)
 })
 
 adminRouter.get('/courses', async (req, res) => {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SelectChangeEvent } from '@mui/material'
 import { Variant } from '../../common/types'
 import QuestionTitleV2 from '../components/QuestionTitleV2'
 import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
@@ -39,7 +40,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
     }
   }
 
-  const handleDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleDropdownChange = (event: SelectChangeEvent<string>) => {
     const optionId = event.target.value
     setState(optionId)
   }

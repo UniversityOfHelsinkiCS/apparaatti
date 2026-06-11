@@ -203,26 +203,13 @@ export type FormSubmission = {
 }
 
 export type AnswerData = {
-  'study-year': string
-  'study-period': string[] | string
-  graduation: string
-  mentoring: string
-  integrated: string
-  'study-place': string
-  replacement: string
-  challenge: string
-  independent: string
-  flexible: string
-  mooc: string
   'study-field-select': string
   lang: string
   'primary-language': string
   'primary-language-specification': string
-  'multi-period': string
 }
 
 export type UserVisit = {
-  id: number
   visitorHashHex: string
   date: Date
 }

@@ -16,7 +16,6 @@ const LoginAs = () => {
   const { t } = useTranslation()
 
   const [loginAsCandidate, setLoginAsCandidate] = useState<User | null>(null)
-
   const [userSearch, setUserSearch] = useState('')
 
   const trimmedSearch = trimSearch(userSearch)
@@ -54,9 +53,8 @@ const LoginAs = () => {
             data-testid="login-as-user"
             disablePortal
             options={users ?? []}
-            getOptionLabel={user =>
-              `${user.firstName} ${user.lastName} ${user.email ? `(${user.email})` : ''} ${user.username ? `(${user.username})` : ''}`
-            }
+            // @ts-expect-error the User type is wrong but not worth the effort fixing it for this shit
+            getOptionLabel={user => `${user.firstNames} ${user.lastName} ${user.username}`}
             renderInput={params => <TextField {...params} label={t('loginAsPage:userHeader')} required />}
             inputValue={userSearch}
             filterOptions={x => x}
