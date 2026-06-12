@@ -12,11 +12,23 @@ import {
   cusWithWhere,
   cursWithWhereRaw,
   organisationWithGroupIdOf,
+  updateUserSettings,
 } from '../util/dbActions.ts'
+import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
 
 const debugRouter = express.Router({ mergeParams: true })
 
 debugRouter.use(express.json())
+
+//yes i know a get should not edit anything but this is convinient and only in local anyways
+debugRouter.get('/reset/settings', async (req: any, res: any) => {
+  enforceIsUser(req)
+  enforceIsAdmin(req.user)
+
+  await updateUserSettings(req.user.id, { educationLanguage: '' })
+
+  res.json({ message: 'User settings reset' })
+})
 
 function getKktTags(customCodeUrns: Record<string, string[]> | null): string[] {
   if (!customCodeUrns) {
