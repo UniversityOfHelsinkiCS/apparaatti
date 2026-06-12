@@ -1,5 +1,5 @@
 import { Box, MenuItem, Select } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Question, User } from '../../common/types'
 import { useTranslation } from 'react-i18next'
 import { translateLocalizedString } from '../util/i18n'
@@ -32,14 +32,6 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
     setStudyField(e.target.value)
     setUserOrgCode(e.target.value)
   }
-
-  useEffect(() => {
-    if (organisations && organisations.length > 0 && !studyField) {
-      const initialValue = organisations[0].code
-      setStudyField(initialValue)
-      setUserOrgCode(initialValue)
-    }
-  }, [organisations, studyField, setStudyField, setUserOrgCode])
 
   if (!organisations) {
     return <p>no organisation found</p>

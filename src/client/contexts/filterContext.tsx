@@ -578,6 +578,16 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     'GET'
   )
 
+  useEffect(() => {
+    const organisations = user?.isAdmin ? supportedOrganisations : studyData?.organisations
+
+    if (organisations && organisations.length > 0 && !studyField) {
+      const initialValue = organisations[0].code
+      setStudyField(initialValue)
+      setUserOrgCode(initialValue)
+    }
+  }, [user, supportedOrganisations, studyData, studyField])
+
   const isLoading =
     userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading || userSettingsLoading
 
