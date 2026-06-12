@@ -59,13 +59,23 @@ const localFilterStateKeys: Record<string, LocalFilterStateKey> = {
   flexible: 'flexible',
 }
 
+type OrganisationOption = {
+  id: string
+  code: string
+  name: unknown
+}
+
+type StudyDataResponse = {
+  organisations: OrganisationOption[]
+}
+
 interface FilterContextType {
   variantToDisplayId: string
 
   filters: Question[]
   user: User | undefined
-  studyData: any
-  supportedOrganisations: any
+  studyData: StudyDataResponse | undefined
+  supportedOrganisations: OrganisationOption[] | undefined
   setUserOrgCode: (s: string) => void
   courseRecommendations: CourseData[] | null
   isLoading: boolean
@@ -571,8 +581,12 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     isLoading: userSettingsLoading,
     refetch: refetchUserSettings,
   } = useApi<UserSettings>('userSettings', '/api/user/settings', 'GET')
-  const { data: studyData, isLoading: studyDataLoading } = useApi('studyData', '/api/user/studydata', 'GET')
-  const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi(
+  const { data: studyData, isLoading: studyDataLoading } = useApi<StudyDataResponse>(
+    'studyData',
+    '/api/user/studydata',
+    'GET'
+  )
+  const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi<OrganisationOption[]>(
     'supportedOrganisations',
     '/api/organisations/supported',
     'GET'
