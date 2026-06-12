@@ -1,7 +1,12 @@
 import type { Response } from 'express'
 import express from 'express'
-import { AnswerSchema, UserFeedbackSchema } from '../../common/validators.ts'
-import type { AnswerData, CourseData, RecommendationMetadata } from '../../common/types.ts'
+import { AnswerSchema, UserFeedbackSchema, UserSettingsSchema } from '../../common/validators.ts'
+import type {
+  AnswerData,
+  CourseData,
+  RecommendationMetadata,
+  UserSettings as UserSettingsType,
+} from '../../common/types.ts'
 import passport from 'passport'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
@@ -30,7 +35,9 @@ import {
   allOrganisations,
   createUserFeedbackEntry,
   enabledOrderedFilterConfigs,
+  getUserSettings,
   organisationsWithSupportedCodes,
+  updateUserSettings,
 } from '../util/dbActions.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
 import { enforceIsUser } from '../util/validations.ts'
@@ -142,11 +149,7 @@ router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '
 })
 
 router.get('/user', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-
+  enforceIsUser(req)
   const user = req.user as User
   await saveUserVisitIfUnique(user)
 
@@ -161,21 +164,30 @@ router.get('/user', async (req, res) => {
   res.json(returnData)
 })
 
+router.get('/user/settings', async (req, res) => {
+  enforceIsUser(req)
+  const user = req.user as User
+  const settings = await getUserSettings(user.id)
+  res.json(settings)
+})
+
+router.post('/user/settings', async (req, res) => {
+  enforceIsUser(req)
+  const user = req.user as User
+  const settings = UserSettingsSchema.parse(req.body) as UserSettingsType
+  const updated = await updateUserSettings(user.id, settings)
+  res.json(updated)
+})
+
 router.get('/user/studydata', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
+  enforceIsUser(req)
   const studydata = await getStudyData(req.user as User)
 
   res.json(studydata)
 })
 
 router.get('/organisations', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
+  enforceIsUser(req)
   const organisations = await allOrganisations()
   res.json(organisations)
 })
@@ -187,11 +199,7 @@ router.get('/fail', async (_req, res) => {
 })
 
 router.get('/logout', async (req, res, next) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
-
+  enforceIsUser(req)
   req.logout(err => {
     if (err) return next(err)
     res.redirect('/')

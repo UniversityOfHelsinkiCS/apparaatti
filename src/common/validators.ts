@@ -59,3 +59,7 @@ export const UserFeedbackSchema = z.object({
     .optional(),
   appVersion: z.string().optional(),
 })
+
+export const UserSettingsSchema = z.object({
+  educationLanguage: z.string().min(1),
+})

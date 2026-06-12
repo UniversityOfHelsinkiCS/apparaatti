@@ -167,6 +167,10 @@ export type UserVisit = {
   date: Date
 }
 
+export type UserSettings = {
+  educationLanguage: string
+}
+
 export type FilterStateValues = {
   primaryLanguage: string
   language: string

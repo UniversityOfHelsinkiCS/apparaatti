@@ -6,9 +6,15 @@ import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import User from '../db/models/user.ts'
+import UserSettings from '../db/models/userSettings.ts'
 import UserFeedback from '../db/models/userFeedback.ts'
 import UserVisits from '../db/models/userVisits.ts'
-import type { RecommendationMetadata, UserFeedback as UserFeedbackType, UserVisit } from '../../common/types.ts'
+import type {
+  RecommendationMetadata,
+  UserFeedback as UserFeedbackType,
+  UserVisit,
+  UserSettings as UserSettingsType,
+} from '../../common/types.ts'
 import CourseAdminReview from '../db/models/CourseAdminReview.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
@@ -48,6 +54,20 @@ export async function organisationWithGroupIdOf(groupIds: string[]) {
 
 export async function userWithId(id: string) {
   return await User.findByPk(id)
+}
+
+export async function getUserSettings(userId: string) {
+  return await UserSettings.findOne({
+    where: { userId },
+  })
+}
+
+export async function updateUserSettings(userId: string, settings: UserSettingsType) {
+  const [userSettings] = await UserSettings.upsert({
+    ...settings,
+    userId,
+  })
+  return userSettings
 }
 
 export async function usersWithWhere(where: Record<string, any>, limit: number) {

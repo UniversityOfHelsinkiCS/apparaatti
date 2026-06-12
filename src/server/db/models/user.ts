@@ -1,6 +1,8 @@
 import { DataTypes, Model } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { sequelize } from '../connection.ts'
+import type UserSettings from './userSettings.ts'
+
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: string
   declare username: string
@@ -11,6 +13,8 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare studentNumber: CreationOptional<string>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
+
+  declare userSettings?: UserSettings
 }
 
 User.init(
