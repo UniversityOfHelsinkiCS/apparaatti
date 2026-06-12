@@ -56,7 +56,7 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
           padding: '1px',
           minWidth: 100,
           border: '1px solid lightgray',
-          marginTop: 1,
+          marginTop: 1.5,
         }}
         disabled={organisations.length < 2 ? true : false}
         name={question.id}

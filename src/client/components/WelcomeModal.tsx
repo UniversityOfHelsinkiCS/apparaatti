@@ -1,4 +1,4 @@
-import { Modal, Box, Typography, Button } from '@mui/material'
+import { Modal, Box, Typography, Button, SxProps, Theme } from '@mui/material'
 import { FC, Fragment, useEffect } from 'react'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
@@ -8,7 +8,6 @@ import {
   shouldRenderWelcomeFilter,
   useFilterContext,
 } from '../contexts/filterContext'
-import PrimaryLanguageSpecificationV2 from './PrimaryLanguageSpecificationV2'
 import { Question, Variant } from '../../common/types'
 import RadioQuestionV2 from './RadioQuestionV2'
 import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
@@ -26,14 +25,14 @@ type WelcomeModalProps = {
 const style = {
   marginLeft: 'auto',
   marginRight: 'auto',
-  width: { xs: '100vw', sm: '33vw' },
+  maxWidth: '800px',
   height: '100vh',
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   border: 'none',
   overflowY: 'auto',
-}
+} satisfies SxProps<Theme>
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
@@ -110,11 +109,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     }
 
     if ((entry.question.id === 'primary-language' || entry.question.id === 'lang') && !Array.isArray(configState)) {
-      return <RadioQuestionV2 question={entry.question} value={configState} setValue={entry.config?.setState} />
-    }
-
-    if (entry.question.id === 'primary-language-specification') {
-      return <PrimaryLanguageSpecificationV2 question={entry.question} />
+      return <RadioQuestionV2 question={entry.question} value={configState} setValue={entry.config.setState} />
     }
 
     return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />

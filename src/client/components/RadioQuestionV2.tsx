@@ -33,7 +33,7 @@ const RadioQuestionV2 = ({
 
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
 
-      <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)} sx={{ marginTop: 0.5 }}>
+      <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)} sx={{ marginTop: 1 }}>
         {variant.options?.map(option => (
           <FormControlLabel
             key={option.id}
