@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
+import type { User } from '../../common/types.ts'
 import { isAdmin } from '../util/validations.ts'
 
 const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
@@ -7,7 +8,9 @@ const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
     return
   }
 
-  if (!isAdmin(req.user)) {
+  const user = req.user as User
+
+  if (!isAdmin(user)) {
     res.status(403).json({ message: 'Forbidden' })
     return
   }
