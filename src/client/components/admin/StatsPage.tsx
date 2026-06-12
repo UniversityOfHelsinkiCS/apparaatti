@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'

@@ -7,7 +7,6 @@ import {
 } from '../util/usersSearchHelper.ts'
 import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
 import { createOrUpdateCourseAdminReviewEntry, getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
-import logger from '../util/logger.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'

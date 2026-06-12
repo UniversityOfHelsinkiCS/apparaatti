@@ -1,4 +1,4 @@
-import { DataTypes, JSONB } from 'sequelize'
+import { DataTypes } from 'sequelize'
 
 import type { Migration } from '../connection.ts'
 

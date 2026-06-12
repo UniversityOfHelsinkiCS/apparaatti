@@ -15,7 +15,6 @@ const organisationsHandler = async (organisations: Organisation[]) => {
   const fieldsToUpdate = ['name', 'code', 'parentId']
 
   await safeBulkCreate({
-    entityName: 'Organisation',
     entities: uniqueOrganisations,
     bulkCreate: async (e: any, opt) => Organisation.bulkCreate(e, opt),
     fallbackCreate: async (e: any, opt) => Organisation.upsert(e, opt),

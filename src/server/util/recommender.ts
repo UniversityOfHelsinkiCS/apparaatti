@@ -13,7 +13,7 @@ import {
   mentoringCourseCodes,
   readOrganisationRecommendationData,
 } from './organisationCourseRecommmendations.ts'
-import { dateObjToPeriod, getCoursePeriod, getStudyPeriod, parseDate, getStudyYear } from './studyPeriods.ts'
+import { getCoursePeriod } from './studyPeriods.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import {
   collaborationOrganisationNames,

@@ -41,7 +41,7 @@ app.use(express.json({ limit: '10mb' }))
 // in development and E2E, fake the user
 if (inDevelopment || IN_E2E) {
   app.use(mockUserMiddleware)
-  app.use((req, res, next) => {
+  app.use((_req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     next()
   })

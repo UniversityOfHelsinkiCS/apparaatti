@@ -5,7 +5,6 @@ import Cur from './models/cur.ts'
 import CurCu from './models/curCu.ts'
 import StudyRight from './models/studyRight.ts'
 import Enrolment from './models/enrolment.ts'
-import UserVisits from './models/userVisits.ts'
 import logger from '../util/logger.ts'
 
 async function wipeDatabase() {
