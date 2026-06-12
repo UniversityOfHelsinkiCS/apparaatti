@@ -22,13 +22,13 @@ export const safeBulkCreate = async ({
   try {
     const result = await bulkCreate(entities, bulkCreateOptions)
     return result
-  } catch (bulkCreateError: any) {
+  } catch {
     const result = []
     for (const entity of entities) {
       try {
         const res = await fallbackCreate(entity, fallbackCreateOptions)
         result.push(res)
-      } catch (fallbackCreateError: any) {
+      } catch {
         console.log('error on fallback create')
       }
     }

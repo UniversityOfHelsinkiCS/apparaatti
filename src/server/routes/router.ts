@@ -58,7 +58,7 @@ if (UPDATER_CRON_ENABLED) {
     try {
       await runUpdater(true)
       res.json({ message: 'Updater run completed successfully' })
-    } catch (error) {
+    } catch {
       res.status(500).json({ message: 'Updater run failed' })
     }
   })
