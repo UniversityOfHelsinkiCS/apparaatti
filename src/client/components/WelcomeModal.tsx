@@ -1,5 +1,5 @@
 import { Modal, Box, Typography, Button } from '@mui/material'
-import { FC, Fragment, useEffect, useRef } from 'react'
+import { FC, Fragment, useEffect } from 'react'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
   filterConfigMap,
@@ -38,7 +38,6 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   const filterContext = useFilterContext()
   const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
   const { t } = useTranslation()
-  const hasAutoClosedRef = useRef(false)
   const configMap = filterConfigMap(filterContext)
 
   const variantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
