@@ -38,7 +38,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   }
 
   return (
-    <Stack direction="row" spacing={0.5} flexWrap="wrap" onClick={e => e.stopPropagation()} sx={{ ml: 'auto' }}>
+    <Stack onClick={e => e.stopPropagation()} sx={{ ml: 'auto', flexDirection: 'row', gap: 0.5, flexWrap: 'wrap' }}>
       {activeChips.map(chip => (
         <Chip
           key={chip.id}
