@@ -2,16 +2,15 @@ import express from 'express'
 import { z } from 'zod'
 import { getGroupLabel } from '../../common/datelabels.ts'
 import { getUserVisits } from '../util/dbActions.ts'
-import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
+import requireAdmin from '../middleware/requireAdmin.ts'
 import { localLog } from '../util/dev.ts'
 
 const statsRouter = express.Router()
 
+statsRouter.use(requireAdmin)
+
 //Returns unique users grouped by 'hour', 'day', 'month', 'year'
 statsRouter.get('/', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const statsQuerySchema = z.object({
     start: z.coerce.date(),
     end: z.coerce.date(),

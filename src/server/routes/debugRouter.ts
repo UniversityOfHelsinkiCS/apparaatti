@@ -14,17 +14,16 @@ import {
   organisationWithGroupIdOf,
   updateUserSettings,
 } from '../util/dbActions.ts'
-import { enforceIsAdmin, enforceIsUser } from '../util/validations.ts'
+import requireAdmin from '../middleware/requireAdmin.ts'
+import requireUser from '../middleware/requireUser.ts'
 
 const debugRouter = express.Router({ mergeParams: true })
 
 debugRouter.use(express.json())
+debugRouter.use(requireUser)
 
 //yes i know a get should not edit anything but this is convinient and only in local anyways
-debugRouter.get('/reset/settings', async (req: any, res: any) => {
-  enforceIsUser(req)
-  enforceIsAdmin(req.user)
-
+debugRouter.get('/reset/settings', requireAdmin, async (req: any, res: any) => {
   await updateUserSettings(req.user.id, { educationLanguage: '' })
 
   res.json({ message: 'User settings reset' })
@@ -51,12 +50,7 @@ function getKktTags(customCodeUrns: Record<string, string[]> | null): string[] {
   return uniqueVals(kktTags)
 }
 
-debugRouter.get('/cur/debug', async (req: any, res: any) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
+debugRouter.get('/cur/debug', async (_req: any, res: any) => {
   const realisations = await allCurs()
   const realisationsWithCodeUrn = realisations.reduce((grouped: Record<string, any[]>, cur: any) => {
     const kktTags = getKktTags(cur.customCodeUrns)
@@ -96,10 +90,6 @@ debugRouter.get('/cur/debug', async (req: any, res: any) => {
 })
 
 debugRouter.get('/cur', async (req: any, res: any) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
   const { name, codeurn } = req.query
 
   const nameQuery = name
@@ -124,10 +114,6 @@ debugRouter.get('/cur', async (req: any, res: any) => {
 })
 
 debugRouter.get('/cu', async (req: any, res: any) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
   const { name, code } = req.query
 
   const nameQuery = name
@@ -154,12 +140,7 @@ debugRouter.get('/cu', async (req: any, res: any) => {
   res.json(cus)
 })
 
-debugRouter.get('/strict', async (req: any, res: any) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
+debugRouter.get('/strict', async (_req: any, res: any) => {
   const realisations = await allCursRaw()
 
   const grouped: Record<string, any[]> = {}
@@ -188,12 +169,7 @@ debugRouter.get('/strict', async (req: any, res: any) => {
   res.json(grouped)
 })
 
-debugRouter.get('/curcu', async (req: any, res: any) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
+debugRouter.get('/curcu', async (_req: any, res: any) => {
   const curcur = await allCurCus()
   res.json(curcur)
 })

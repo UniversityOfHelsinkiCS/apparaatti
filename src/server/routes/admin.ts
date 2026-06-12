@@ -5,15 +5,20 @@ import {
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
-import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
 import { createOrUpdateCourseAdminReviewEntry, getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'
+import requireUser from '../middleware/requireUser.ts'
+import requireAdmin from '../middleware/requireAdmin.ts'
+import requireSuperuser from '../middleware/requireSuperuser.ts'
 
 const USER_FETCH_LIMIT = 100
 
 const adminRouter = express.Router()
+
+adminRouter.use(requireUser)
+adminRouter.use(requireAdmin)
 
 interface UserSearchQuery {
   search?: string
@@ -22,9 +27,6 @@ interface UserSearchQuery {
 }
 
 adminRouter.get('/user-feedback', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const userFeedbackQuerySchema = z.object({
     start: z.coerce.date().optional(),
     end: z.coerce.date().optional(),
@@ -47,10 +49,7 @@ adminRouter.get('/user-feedback', async (req, res) => {
   res.send(feedback)
 })
 
-adminRouter.get('/users', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsSuperuser(user)
-
+adminRouter.get('/users', requireSuperuser, async (req, res) => {
   const { search } = req.query as UserSearchQuery
   if (!search) {
     res.status(400).send('Search string must be provided as a query parameter')
@@ -90,9 +89,6 @@ adminRouter.get('/users', async (req, res) => {
 })
 
 adminRouter.get('/courses', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const { page = '1', limit = '50', name, urn, courseCode, excludeUrns, excludeCourseCodes, reviewStatus } = req.query
 
   const pageNum = parseInt(page as string, 10)
@@ -115,9 +111,6 @@ adminRouter.get('/courses', async (req, res) => {
 })
 
 adminRouter.post('/course/review', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const reviewSchema = z.object({
     curId: z.string().min(1),
     reviewed: z.string().min(1),

@@ -27,6 +27,7 @@ import {
 } from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
 import { isAdmin, isSuperuser } from '../util/validations.ts'
+import requireUser from '../middleware/requireUser.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
@@ -40,7 +41,6 @@ import {
   updateUserSettings,
 } from '../util/dbActions.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
-import { enforceIsUser } from '../util/validations.ts'
 
 const router = express.Router({ mergeParams: true })
 
@@ -48,10 +48,10 @@ router.use(express.json())
 router.use(loginAsMiddleware)
 
 if (inDevelopment) {
-  router.use('/debug', debugRouter)
+  router.use('/debug', requireUser, debugRouter)
 }
 
-router.use('/admin', adminRouter)
+router.use('/admin', requireUser, adminRouter)
 
 if (UPDATER_CRON_ENABLED) {
   router.post('/updater/run', async (_req, res) => {
@@ -64,11 +64,7 @@ if (UPDATER_CRON_ENABLED) {
   })
 }
 
-router.get('/version', (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
+router.get('/version', requireUser, (req, res) => {
   res.json({
     gitSha: GIT_SHA,
     packageVersion: PACKAGE_VERSION,
@@ -77,31 +73,18 @@ router.get('/version', (req, res) => {
   })
 })
 
-router.get('/filter-config', async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: 'Unauthorized' })
-    return
-  }
+router.get('/filter-config', requireUser, async (req, res) => {
   const filters = await enabledOrderedFilterConfigs()
   res.json(filters)
 })
 
-router.get('/organisations/supported', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
+router.get('/organisations/supported', requireUser, async (req, res) => {
   const organisationCodes: string[] = Object.keys(organisationCodeToUrn)
   const organisations = await organisationsWithSupportedCodes(organisationCodes)
   res.json(organisations)
 })
 
-router.get('/organisations/integrated', async (req, res) => {
-  if (!req.user) {
-    res.status(404).json({ message: 'User not found' })
-    return
-  }
-
+router.get('/organisations/integrated', requireUser, async (req, res) => {
   const organisationsWithIntegratedStudies = []
   const organisationCodes = Object.keys(organisationCodeToUrn)
   for (const code of organisationCodes) {
@@ -117,9 +100,7 @@ router.get('/organisations/integrated', async (req, res) => {
   res.json(organisationsWithIntegratedStudies)
 })
 
-router.post('/form/coursedata', async (req, res: Response<CourseData[]>) => {
-  enforceIsUser(req)
-
+router.post('/form/coursedata', requireUser, async (req, res: Response<CourseData[]>) => {
   const submission: FormSubmission = req.body
   const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
 
@@ -127,9 +108,7 @@ router.post('/form/coursedata', async (req, res: Response<CourseData[]>) => {
   return res.json(result)
 })
 
-router.post('/feedback', async (req, res) => {
-  enforceIsUser(req)
-
+router.post('/feedback', requireUser, async (req, res) => {
   const feedback = UserFeedbackSchema.parse(req.body)
   await createUserFeedbackEntry(
     feedback.textFeedback,
@@ -148,8 +127,7 @@ router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '
   res.redirect('/')
 })
 
-router.get('/user', async (req, res) => {
-  enforceIsUser(req)
+router.get('/user', requireUser, async (req, res) => {
   const user = req.user as User
   await saveUserVisitIfUnique(user)
 
@@ -164,35 +142,31 @@ router.get('/user', async (req, res) => {
   res.json(returnData)
 })
 
-router.get('/user/settings', async (req, res) => {
-  enforceIsUser(req)
+router.get('/user/settings', requireUser, async (req, res) => {
   const user = req.user as User
   const settings = await getUserSettings(user.id)
   if (settings) {
     res.json(settings)
   } else {
     const newSettings = await updateUserSettings(user.id, { educationLanguage: '' })
-    return newSettings
+    res.json(newSettings)
   }
 })
 
-router.post('/user/settings', async (req, res) => {
-  enforceIsUser(req)
+router.post('/user/settings', requireUser, async (req, res) => {
   const user = req.user as User
   const settings = UserSettingsSchema.parse(req.body) as UserSettingsType
   const updated = await updateUserSettings(user.id, settings)
   res.json(updated)
 })
 
-router.get('/user/studydata', async (req, res) => {
-  enforceIsUser(req)
+router.get('/user/studydata', requireUser, async (req, res) => {
   const studydata = await getStudyData(req.user as User)
 
   res.json(studydata)
 })
 
-router.get('/organisations', async (req, res) => {
-  enforceIsUser(req)
+router.get('/organisations', requireUser, async (req, res) => {
   const organisations = await allOrganisations()
   res.json(organisations)
 })
@@ -203,8 +177,7 @@ router.get('/fail', async (_req, res) => {
   })
 })
 
-router.get('/logout', async (req, res, next) => {
-  enforceIsUser(req)
+router.get('/logout', requireUser, async (req, res, next) => {
   req.logout(err => {
     if (err) return next(err)
     res.redirect('/')

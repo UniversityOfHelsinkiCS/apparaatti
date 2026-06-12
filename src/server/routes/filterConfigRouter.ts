@@ -1,6 +1,9 @@
 import express from 'express'
 import { z } from 'zod'
-import { enforceIsAdmin, enforceIsSuperuser, enforceIsUser } from '../util/validations.ts'
+import type { User } from '../../common/types.ts'
+import requireAdmin from '../middleware/requireAdmin.ts'
+import requireSuperuser from '../middleware/requireSuperuser.ts'
+import { isSuperuser } from '../util/validations.ts'
 import {
   createFilterConfig,
   filterConfigWithId,
@@ -14,17 +17,14 @@ import { GIT_SHA } from '../util/config.ts'
 
 const filterConfigRouter = express.Router()
 
+filterConfigRouter.use(requireAdmin)
+
 filterConfigRouter.get('/', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
   const filters = await orderedFilterConfigs()
   res.json(filters)
 })
 
 filterConfigRouter.put('/:id', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const filter = await filterConfigWithId(req.params.id)
   if (!filter) {
     res.status(404).json({ message: 'Filter not found' })
@@ -38,18 +38,17 @@ filterConfigRouter.put('/:id', async (req, res) => {
   }
 
   const currentVariants = ((filter as any).variants as unknown[]) ?? []
-  if (parsed.data.variants.length > currentVariants.length) {
-    enforceIsSuperuser(user)
+  const user = req.user as User
+  if (parsed.data.variants.length > currentVariants.length && !isSuperuser(user)) {
+    res.status(403).json({ message: 'Forbidden' })
+    return
   }
 
   const updatedFilter = await updateFilterConfigById(req.params.id, parsed.data)
   res.json(updatedFilter)
 })
 
-filterConfigRouter.post('/', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsSuperuser(user)
-
+filterConfigRouter.post('/', requireSuperuser, async (req, res) => {
   const parsed = FilterCreateSchema.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
@@ -67,9 +66,6 @@ filterConfigRouter.post('/', async (req, res) => {
 })
 
 filterConfigRouter.patch('/reorder', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const ReorderSchema = z.array(
     z.object({
       id: z.string(),
@@ -88,9 +84,6 @@ filterConfigRouter.patch('/reorder', async (req, res) => {
 })
 
 filterConfigRouter.post('/:id/restore', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const seed = seedFilterWithId(req.params.id)
   if (!seed) {
     res.status(404).json({ message: 'Seed default for filter not found' })
@@ -116,9 +109,6 @@ filterConfigRouter.post('/:id/restore', async (req, res) => {
 })
 
 filterConfigRouter.get('/export', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const filters = await orderedFilterConfigs()
 
   const exportData = {
@@ -136,9 +126,6 @@ filterConfigRouter.get('/export', async (req, res) => {
 })
 
 filterConfigRouter.post('/import', async (req, res) => {
-  const user = enforceIsUser(req)
-  enforceIsAdmin(user)
-
   const FilterImportItemSchema = FilterUpdateSchema.extend({
     id: z.string(),
     coordinateKey: z.string().nullable().optional(),

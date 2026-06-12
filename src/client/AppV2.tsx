@@ -143,11 +143,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
 const AppV2 = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading || !user) {
+  if (isUserLoading) {
     return (
       <Stack direction="column" sx={{ width: '100vw', height: '100vh' }}>
         <Typography variant="h2" sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -155,6 +151,10 @@ const AppV2 = () => {
         </Typography>
       </Stack>
     )
+  }
+
+  if (isUnauthorized || !user) {
+    return <RedirectToLogin />
   }
 
   return (
