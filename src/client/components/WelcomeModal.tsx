@@ -3,12 +3,13 @@ import { FC, Fragment, useEffect } from 'react'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
   filterConfigMap,
+  FilterConfigMapType,
   isFilterStateAnswered,
   shouldRenderWelcomeFilter,
   useFilterContext,
 } from '../contexts/filterContext'
 import PrimaryLanguageSpecificationV2 from './PrimaryLanguageSpecificationV2'
-import { Question } from '../../common/types'
+import { Question, Variant } from '../../common/types'
 import RadioQuestionV2 from './RadioQuestionV2'
 import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +43,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
 
   const variantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
-  const buildFilter = (filter: Question, config: any) => {
+  const buildFilter = (filter: Question, config: FilterConfigMapType) => {
     const state = config.state
     const setState = config.setState
     const displayType = filter.displayType ?? 'singlechoice'
@@ -59,14 +60,19 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         return null
       }
 
-      const variant = pickVariant(question, variantId) ?? null
+      const variant = pickVariant(question, variantId)
+
       if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
+        return null
+      }
+
+      if (!config || !variant) {
         return null
       }
 
       return { question, config, variant }
     })
-    .filter((entry): entry is { question: Question; config: any; variant: any } => entry !== null)
+    .filter(entry => entry !== null)
 
   const allWelcomeQuestionsAnswered = welcomeFilters.every(entry => {
     if (!entry.config) {
@@ -96,13 +102,15 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     onClose()
   }
 
-  const renderWelcomeFilter = (entry: { question: Question; config: any; variant: any }) => {
+  const renderWelcomeFilter = (entry: { question: Question; config: FilterConfigMapType; variant: Variant }) => {
+    const configState = entry.config.state
+
     if (entry.question.id === 'study-field-select') {
       return <StudyPhaseQuestionV2 question={entry.question} />
     }
 
-    if (entry.question.id === 'primary-language' || entry.question.id === 'lang') {
-      return <RadioQuestionV2 question={entry.question} value={entry.config.state} setValue={entry.config.setState} />
+    if ((entry.question.id === 'primary-language' || entry.question.id === 'lang') && !Array.isArray(configState)) {
+      return <RadioQuestionV2 question={entry.question} value={configState} setValue={entry.config?.setState} />
     }
 
     if (entry.question.id === 'primary-language-specification') {

@@ -30,12 +30,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererP
     filters.primaryLanguageSpecification
   )
   const variant = pickVariant(filter, variantId)
-  const shouldRenderFilter = shouldRenderWelcomeFilter(
-    filter.id,
-    variant ?? null,
-    filters.language,
-    filters.primaryLanguage
-  )
+  const shouldRenderFilter = shouldRenderWelcomeFilter(filter.id, variant, filters.language, filters.primaryLanguage)
 
   if (!variant || !shouldRenderFilter || skipInSideBar) {
     return null

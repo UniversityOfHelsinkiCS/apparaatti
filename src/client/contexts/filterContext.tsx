@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import { CourseData, Question, User, UserSettings } from '../../common/types'
+import { CourseData, Question, User, UserSettings, Variant } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
@@ -256,7 +256,7 @@ export const isFilterStateAnswered = (state: unknown): boolean => {
 
 export const shouldRenderWelcomeFilter = (
   filterId: string,
-  variant: { skipped?: boolean } | null,
+  variant: Variant | undefined,
   language: string,
   primaryLanguage: string
 ): boolean => {
@@ -285,7 +285,7 @@ export const getUnansweredCurrentMandatoryFilters = (filters: Question[], filter
       return false
     }
 
-    const variant = pickVariant(filter, variantToDisplayId) ?? null
+    const variant = pickVariant(filter, variantToDisplayId)
     if (!shouldRenderWelcomeFilter(filter.id, variant, language, primaryLanguage)) {
       return false
     }
@@ -500,7 +500,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       if (!config) return true
       if (!question.mandatory) return true
 
-      const variant = pickVariant(question, variantToDisplayId) ?? null
+      const variant = pickVariant(question, variantToDisplayId)
       if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) return true
 
       return isFilterStateAnswered(config.state)
