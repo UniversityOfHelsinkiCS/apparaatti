@@ -21,7 +21,7 @@ export const isAdmin = (user: User) => {
 }
 
 export const enforceIsUser = (req: any): User => {
-  if (!req.user) {
+  if (!req?.user) {
     throw new Error('Unauthorized')
   }
   return req.user as User
