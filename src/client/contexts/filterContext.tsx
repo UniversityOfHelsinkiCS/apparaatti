@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react'
 import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import { CourseData, Question, User } from '../../common/types'
+import { CourseData, Question, User, UserSettings } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
@@ -347,7 +347,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [challenge, setChallenge] = useState('')
   const [graduation, setGraduation] = useState('')
   const [studyPlace, setStudyPlace] = useState<string[]>([])
-  const [studyYear, setStudyYear] = useState('2025')
+  const [studyYear, setStudyYear] = useState('2026')
   const [studyPeriod, setStudyPeriod] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
@@ -508,14 +508,17 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   useEffect(() => {
-    if (filtersLoading) {
+    if (isLoading) {
       return
     }
 
     const hasVisited = sessionStorage.getItem('hasVisitedV2')
     if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
-      setModalOpen(true)
       sessionStorage.setItem('hasVisitedV2', 'true')
+      //preventing the modal from automatically opening if the user already has a first language
+      if (userSettings?.educationLanguage == '' || !userSettings?.educationLanguage) {
+        setModalOpen(true)
+      }
     }
   }, [
     filtersLoading,
@@ -563,6 +566,11 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   const { data: user, isLoading: userLoading } = useApi<User>('user', '/api/user', 'GET')
+  const {
+    data: userSettings,
+    isLoading: userSettingsLoading,
+    refetch: refetchUserSettings,
+  } = useApi<UserSettings>('userSettings', '/api/user/settings', 'GET')
   const { data: studyData, isLoading: studyDataLoading } = useApi('studyData', '/api/user/studydata', 'GET')
   const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi(
     'supportedOrganisations',
@@ -570,7 +578,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     'GET'
   )
 
-  const isLoading = userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading
+  const isLoading =
+    userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading || userSettingsLoading
 
   const submitAnswerMutation = useApiMutation(async (res: Response) => {
     const recommendations = await res.json()
@@ -588,6 +597,13 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
     setCourseRecommendations(dateFormatted)
   }, '/api/form/coursedata')
+
+  const submitSettingsMutation = useApiMutation(async (res: Response) => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
+    }
+    refetchUserSettings()
+  }, '/api/user/settings')
 
   useEffect(() => {
     setFinalRecommendedCourses(courseRecommendations)
@@ -637,7 +653,20 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     submitAnswerMutation.mutateAsync(payload, undefined)
   }
 
+  //setting the welcome modal open if there is no lang in db.
   useEffect(() => {
+    if (!userSettingsLoading) {
+      const lang = userSettings?.educationLanguage
+      if (lang && lang.length > 0 && primaryLanguage != lang) {
+        setPrimaryLanguage(lang)
+      }
+    }
+  }, [userSettings])
+
+  useEffect(() => {
+    if (primaryLanguage && primaryLanguage.length > 0 && primaryLanguage != userSettings?.educationLanguage) {
+      submitSettingsMutation.mutateAsync({ educationLanguage: primaryLanguage }, undefined)
+    }
     submitFilters()
   }, [userOrgCode, primaryLanguage, language, primaryLanguageSpecification])
 

@@ -168,7 +168,12 @@ router.get('/user/settings', async (req, res) => {
   enforceIsUser(req)
   const user = req.user as User
   const settings = await getUserSettings(user.id)
-  res.json(settings)
+  if (settings) {
+    res.json(settings)
+  } else {
+    const newSettings = await updateUserSettings(user.id, { educationLanguage: '' })
+    return newSettings
+  }
 })
 
 router.post('/user/settings', async (req, res) => {

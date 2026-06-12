@@ -113,10 +113,10 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />
   }
 
+  // autoclose when questions have been answered to
   useEffect(() => {
-    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && !hasAutoClosedRef.current) {
+    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && !sessionStorage.getItem('hasVisitedV2')) {
       onClose()
-      hasAutoClosedRef.current = true
     }
   }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
 
