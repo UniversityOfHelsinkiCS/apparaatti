@@ -48,6 +48,7 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
   return (
     <Box sx={{ minWidth: 200, marginBottom: 2, paddingTop: 1 }}>
       <QuestionTitleV2 handleOpen={handleOpen} title={t('question:pickStudy')} question={question} />
+
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
 
       <Select
@@ -55,6 +56,7 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
           padding: '1px',
           minWidth: 100,
           border: '1px solid lightgray',
+          marginTop: 1,
         }}
         disabled={organisations.length < 2 ? true : false}
         name={question.id}

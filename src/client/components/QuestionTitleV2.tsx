@@ -22,17 +22,21 @@ const QuestionTitleV2 = ({
   showMandatoryStatus?: boolean
 }) => {
   return (
-    <Stack sx={{ marginTop: '1rem' }} data-cy={`question-title-${question.id}`}>
+    <Stack data-cy={`question-title-${question.id}`} sx={{ gap: 0.75 }}>
       {showMandatoryStatus && (
         <Stack direction="row">
           <MandatoryStatus question={question} />
         </Stack>
       )}
-      <Stack direction="row" sx={{ display: 'flex' }}>
-        <Typography gutterBottom sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
-          <IconButton onClick={handleOpen} aria-label="more info" sx={{ paddingLeft: 0 }}>
-            <InfoIcon></InfoIcon>
-          </IconButton>
+      <Stack direction="row" sx={{ display: 'flex', alignItems: 'center' }}>
+        <IconButton
+          onClick={handleOpen}
+          aria-label="more info"
+          sx={{ padding: 0.5, marginRight: 0.5, marginLeft: -0.5, marginY: 'auto' }}
+        >
+          <InfoIcon />
+        </IconButton>
+        <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
           {title}
         </Typography>
       </Stack>

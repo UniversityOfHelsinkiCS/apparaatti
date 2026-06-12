@@ -9,9 +9,9 @@ import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 import DropdownFilterComponent from './DropdownFilterComponent'
 import InfoOnlyFilterComponent from './InfoOnlyFilterComponent'
 
-/*
- a filter can be multichoice, single choice, or a drop down menu it can be read from the filter object 
-*/
+/**
+ * A filter can be multichoice, single choice, or a drop down menu it can be read from the filter object
+ */
 const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -48,12 +48,8 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
   const showAsQuestion = filter.displayType !== 'info-only'
 
   return (
-    <Box
-      sx={{
-        paddingTop: 1,
-      }}
-    >
-      {showAsQuestion ? (
+    <Box>
+      {showAsQuestion && (
         <>
           <QuestionTitleV2
             handleOpen={handleOpen}
@@ -63,44 +59,44 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
           />
           <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
         </>
-      ) : (
-        <></>
       )}
-      {(() => {
-        switch (filter.displayType) {
-          case 'info-only':
-            return <InfoOnlyFilterComponent extraInfo={filter.extraInfo} />
-          case 'multichoice':
-            return (
-              <MultiChoiceFilterComponent
-                filter={filter}
-                state={state}
-                handleCheckboxChange={handleCheckboxChange}
-                options={variant.options || []}
-              />
-            )
-          case 'dropdownselect':
-            return (
-              <DropdownFilterComponent
-                filter={filter}
-                state={state}
-                handleChange={handleDropdownChange}
-                options={variant.options || []}
-              />
-            )
-          case 'singlechoice':
-          default:
-            return (
-              <SingleChoiceFilterComponent
-                filter={filter}
-                state={state}
-                handleRadioChange={handleRadioChange}
-                options={variant.options || []}
-                extrainfo={filter.extraInfo}
-              />
-            )
-        }
-      })()}
+      <Box sx={{ marginTop: 0.5 }}>
+        {(() => {
+          switch (filter.displayType) {
+            case 'info-only':
+              return <InfoOnlyFilterComponent extraInfo={filter.extraInfo} />
+            case 'multichoice':
+              return (
+                <MultiChoiceFilterComponent
+                  filter={filter}
+                  state={state}
+                  handleCheckboxChange={handleCheckboxChange}
+                  options={variant.options || []}
+                />
+              )
+            case 'dropdownselect':
+              return (
+                <DropdownFilterComponent
+                  filter={filter}
+                  state={state}
+                  handleChange={handleDropdownChange}
+                  options={variant.options || []}
+                />
+              )
+            case 'singlechoice':
+            default:
+              return (
+                <SingleChoiceFilterComponent
+                  filter={filter}
+                  state={state}
+                  handleRadioChange={handleRadioChange}
+                  options={variant.options || []}
+                  extrainfo={filter.extraInfo}
+                />
+              )
+          }
+        })()}
+      </Box>
     </Box>
   )
 }

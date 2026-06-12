@@ -63,7 +63,7 @@ interface FilterAccordionProps {
 
 const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onChange }: FilterAccordionProps) => {
   return (
-    <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }}>
+    <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }} disableGutters>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         sx={{
