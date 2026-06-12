@@ -6,41 +6,45 @@ import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
 
 export default defineConfig([
+  js.configs.recommended,
+  typescriptEslint.configs['flat/recommended'],
+  react.configs.flat.recommended,
   {
-    extends: compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended'),
-
-    plugins: {
-      '@typescript-eslint': typescriptEslint,
-      react,
+    settings: {
+      react: {
+        version: 'detect',
+      },
     },
 
     languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-
       parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ['eslint.config.mjs'],
+        },
+        tsconfigRootDir: __dirname,
+      },
     },
 
     rules: {
       'linebreak-style': ['error', 'unix'],
       semi: ['error', 'never'],
+
       'react/react-in-jsx-scope': 'off',
+
       '@typescript-eslint/no-explicit-any': 'off',
+      // NOTE: enable these when cba to fix problems
+      // '@typescript-eslint/no-floating-promises': 'error',
+      // '@typescript-eslint/no-misused-promises': 'error',
+
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -51,15 +55,24 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/.eslintrc.{js,cjs}'],
-
+    files: ['src/client/**/*'],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  {
+    files: ['src/server/**/*'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
+    files: ['src/tests/**/*'],
     languageOptions: {
       globals: {
+        ...globals.browser,
         ...globals.node,
       },
-
-      ecmaVersion: 5,
-      sourceType: 'commonjs',
     },
   },
 ])
