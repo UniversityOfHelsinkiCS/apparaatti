@@ -1,25 +1,4 @@
-//this file might be useful to move to the common/types in order to share with the client
-import express from 'express'
-
 export type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>
-
-export interface User {
-  id: string
-  username: string
-  language?: string
-  iamGroups: string[]
-  email?: string
-  isAdmin: boolean
-  isPowerUser: boolean
-  activeCourseIds?: string[]
-  ownCourses?: string[]
-  isStatsViewer: boolean
-}
-
-export interface RequestWithUser extends express.Request {
-  user: User
-  hijackedBy?: User
-}
 
 export type ActivityPeriod = {
   startDate: string

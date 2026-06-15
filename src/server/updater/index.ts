@@ -5,26 +5,25 @@ import { fetchUsers } from './users.ts'
 import { clearOffsets } from './util.ts'
 
 const runUpdater = async () => {
-  try {
-    await fetchOrganisations()
-    await fetchUsers()
-    await fetchCoursesAndResponsibilities()
-    await fetchStudyRights()
-  } catch (e) {
-    console.log('error on updater exiting!')
-    console.log(e)
-  }
+  await fetchOrganisations()
+  await fetchUsers()
+  await fetchCoursesAndResponsibilities()
+  await fetchStudyRights()
 }
 
+// Throws on failure — use this when you want to handle errors yourself
+export const runWithClear = async (clear: boolean) => {
+  if (clear) {
+    await clearOffsets()
+  }
+  await runUpdater()
+}
+
+// Cron-safe wrapper that swallows errors
 export const run = async (clear: boolean) => {
   try {
-    if (clear) {
-      await clearOffsets()
-    }
-    await runUpdater()
-  } catch (_error) {
-    console.log(_error)
-    return
+    await runWithClear(clear)
+  } catch (error) {
+    console.log(error)
   }
-  return
 }

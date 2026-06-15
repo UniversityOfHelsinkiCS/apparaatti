@@ -1,6 +1,8 @@
 import type { User } from '../../common/types.ts'
 
-export const isSuperuser = (user: User) => {
+type WithGroups = { hyGroupCn?: string[] | null }
+
+export const isSuperuser = (user: WithGroups) => {
   const groups = user?.hyGroupCn
   if (!groups) {
     return false
@@ -8,7 +10,7 @@ export const isSuperuser = (user: User) => {
   return groups.includes('grp-toska')
 }
 
-export const isAdmin = (user: User) => {
+export const isAdmin = (user: WithGroups) => {
   const groups = user?.hyGroupCn
   if (!groups) {
     return false

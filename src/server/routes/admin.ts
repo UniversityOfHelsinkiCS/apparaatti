@@ -5,13 +5,19 @@ import {
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
-import { createOrUpdateCourseAdminReviewEntry, getUserFeedbackEntries, usersWithWhere } from '../util/dbActions.ts'
+import {
+  createOrUpdateCourseAdminReviewEntry,
+  getUserFeedbackEntries,
+  getUpdaterRuns,
+  usersWithWhere,
+} from '../util/dbActions.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'
 import requireUser from '../middleware/requireUser.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
+import { triggerUpdaterRun } from '../updater/manualRun.ts'
 
 const USER_FETCH_LIMIT = 100
 
@@ -121,6 +127,22 @@ adminRouter.post('/course/review', async (req, res) => {
   const reviewState = await createOrUpdateCourseAdminReviewEntry(curId, reviewed, comment)
 
   res.json({ status: 'success', reviewState })
+})
+
+adminRouter.post('/updater/run', requireSuperuser, async (req, res) => {
+  const user = req.user
+  const triggeredBy = user?.username ?? user?.id ?? 'manual run'
+  const runRow = await triggerUpdaterRun(triggeredBy)
+  if (!runRow) {
+    res.status(409).json({ message: 'A run is already in progress' })
+    return
+  }
+  res.status(202).json(runRow)
+})
+
+adminRouter.get('/updater/runs', requireSuperuser, async (_req, res) => {
+  const runs = await getUpdaterRuns()
+  res.json(runs)
 })
 
 adminRouter.use('/stats', statsRouter)

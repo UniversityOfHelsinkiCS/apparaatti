@@ -6,6 +6,7 @@ import CoursesPage from './components/admin/CoursesPage.tsx'
 import LoginAsPage from './components/LoginAsPage.tsx'
 import RootMain from './components/RootMain'
 import StatsPage from './components/admin/StatsPage.tsx'
+import UpdaterPage from './components/admin/UpdaterPage.tsx'
 import UserFeedbackPage from './components/admin/UserFeedbackPage.tsx'
 
 const AppRouter = () => {
@@ -21,6 +22,7 @@ const AppRouter = () => {
           <Route path="login-as" element={<LoginAsPage />} />
           <Route path="stats" element={<StatsPage />} />
           <Route path="feedback" element={<UserFeedbackPage />} />
+          <Route path="updater" element={<UpdaterPage />} />
         </Route>
       </Routes>
     </Router>

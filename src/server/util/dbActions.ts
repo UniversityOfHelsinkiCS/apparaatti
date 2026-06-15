@@ -11,11 +11,13 @@ import UserFeedback from '../db/models/userFeedback.ts'
 import UserVisits from '../db/models/userVisits.ts'
 import type {
   RecommendationMetadata,
+  UpdaterRun as UpdaterRunType,
   UserFeedback as UserFeedbackType,
   UserVisit,
   UserSettings as UserSettingsType,
 } from '../../common/types.ts'
 import CourseAdminReview from '../db/models/CourseAdminReview.ts'
+import UpdaterRun from '../db/models/updaterRun.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({
@@ -509,4 +511,41 @@ export async function getCourseAdminReviewByCurId(curId: string) {
     order: [['updatedAt', 'DESC']],
     raw: true,
   })
+}
+
+export async function getRunningUpdaterRun() {
+  return await UpdaterRun.findOne({ where: { status: 'running' } })
+}
+
+export async function createUpdaterRun(triggeredBy: string): Promise<UpdaterRunType> {
+  const startedAt = new Date()
+  const run = await UpdaterRun.create({ status: 'running', triggeredBy, startedAt })
+  return {
+    id: run.id,
+    status: 'running',
+    triggeredBy: run.triggeredBy ?? null,
+    error: run.error ?? null,
+    startedAt,
+    finishedAt: null,
+  }
+}
+
+export async function finishUpdaterRun(id: number, status: 'success' | 'failed', error?: string) {
+  await UpdaterRun.update({ status, finishedAt: new Date(), error: error ?? null }, { where: { id } })
+}
+
+export async function getUpdaterRuns(limit = 20): Promise<UpdaterRunType[]> {
+  const runs = await UpdaterRun.findAll({
+    order: [['startedAt', 'DESC']],
+    limit,
+    raw: true,
+  })
+  return runs.map(r => ({
+    id: r.id,
+    status: r.status as UpdaterRunType['status'],
+    triggeredBy: r.triggeredBy ?? null,
+    error: r.error ?? null,
+    startedAt: r.startedAt,
+    finishedAt: r.finishedAt ?? null,
+  }))
 }

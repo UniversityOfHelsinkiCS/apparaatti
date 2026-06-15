@@ -1,3 +1,14 @@
+export type UpdaterRunStatus = 'running' | 'success' | 'failed'
+
+export type UpdaterRun = {
+  id: number
+  status: UpdaterRunStatus
+  triggeredBy: string | null
+  error: string | null
+  startedAt: Date
+  finishedAt: Date | null
+}
+
 export type Language = 'fi' | 'sv' | 'en'
 
 export type LocalizedString = Partial<Record<Language, string>>
