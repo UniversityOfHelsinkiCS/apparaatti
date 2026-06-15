@@ -56,7 +56,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
-  const { data: versionData } = useApi<{ gitSha: string; packageVersion: string }>(
+  const { data: versionData } = useApi<{ packageVersion: string; releaseVersion?: string }>(
     'version',
     '/api/version',
     'GET',
@@ -92,7 +92,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
     const recommendationMetadata = sendRecommendationMetadata ? feedbackRecommendationMetadata : undefined
 
-    const appVersion = versionData ? `${versionData.packageVersion} (${versionData.gitSha})` : undefined
+    const appVersion = versionData ? versionData.releaseVersion || versionData.packageVersion : undefined
 
     try {
       await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata, appVersion }, undefined)
