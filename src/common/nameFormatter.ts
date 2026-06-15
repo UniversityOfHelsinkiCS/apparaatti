@@ -6,7 +6,19 @@ type CourseNameInput = {
   nameSpecifier?: LocalizedString | null
 }
 
+type FormatLocalizedCourseNameInput = CourseNameInput & {
+  dropStudyMethod?: boolean
+}
+
 const fallbackLanguages: Language[] = ['fi', 'en', 'sv']
+
+const removableStudyMethodPhrases = [
+  'Monimuoto-opetus',
+  'monimuoto',
+  'etäopetus',
+  'lähiopetus',
+  'verkko-opetus',
+] as const
 
 const getLanguageValue = (
   values: LocalizedString | null | undefined,
@@ -31,6 +43,35 @@ const getLanguageValue = (
 const hasSisuLikeNamingConvention = (id: string): boolean => id.startsWith('otm-') || id.startsWith('hy-cur-aili-')
 
 const isOptimeOriginatingId = (id: string): boolean => id.startsWith('hy-opt-cur-')
+
+const escapeForRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const removeStudyMethodPhrase = (value: string, phrase: string): string =>
+  value.replace(new RegExp(escapeForRegExp(phrase), 'giu'), ' ')
+
+const stripStudyMethodFromCourseName = (value: string | null): string | null => {
+  if (!value) {
+    return value
+  }
+
+  const cleanedSegments = value
+    .split('|')
+    .map(segment => segment.trim())
+    .map(segment => removableStudyMethodPhrases.reduce(removeStudyMethodPhrase, segment))
+    .map(segment =>
+      segment
+        .replace(/\(\s*\)/g, ' ')
+        .replace(/\[\s*\]/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\s+([,;:)\]])/g, '$1')
+        .replace(/([([])\s+/g, '$1')
+        .replace(/^[\s,;:/-]+|[\s,;:/-]+$/g, '')
+        .trim()
+    )
+    .filter(segment => /[\p{L}\p{N}]/u.test(segment))
+
+  return cleanedSegments.length > 0 ? cleanedSegments.join(' | ') : null
+}
 
 const courseNameWithCourseType = (
   name: LocalizedString | string | null | undefined,
@@ -73,14 +114,26 @@ export const formatCourseName = (
 
 export const getDisplayCourseName = (
   { id, name, nameSpecifier }: CourseNameInput,
-  lang: Language | string
-): string | null => formatCourseName(id, name, nameSpecifier, lang)
+  lang: Language | string,
+  dropStudyMethod = true
+): string | null => {
+  const formattedName = formatCourseName(id, name, nameSpecifier, lang)
 
-export const formatLocalizedCourseName = ({ id, name, nameSpecifier }: CourseNameInput): string => {
-  const names = []
-  const finnishName = formatCourseName(id, name, nameSpecifier, 'fi')
-  const englishName = formatCourseName(id, name, nameSpecifier, 'en')
-  const swedishName = formatCourseName(id, name, nameSpecifier, 'sv')
+  return dropStudyMethod ? stripStudyMethodFromCourseName(formattedName) : formattedName
+}
+
+export const formatLocalizedCourseName = ({
+  id,
+  name,
+  nameSpecifier,
+  dropStudyMethod = true,
+}: FormatLocalizedCourseNameInput): string => {
+  const names: string[] = []
+  const applyStudyMethodOption = (value: string | null) =>
+    dropStudyMethod ? stripStudyMethodFromCourseName(value) : value
+  const finnishName = applyStudyMethodOption(formatCourseName(id, name, nameSpecifier, 'fi'))
+  const englishName = applyStudyMethodOption(formatCourseName(id, name, nameSpecifier, 'en'))
+  const swedishName = applyStudyMethodOption(formatCourseName(id, name, nameSpecifier, 'sv'))
 
   if (finnishName) names.push(`FI: ${finnishName}`)
   if (englishName) names.push(`EN: ${englishName}`)
