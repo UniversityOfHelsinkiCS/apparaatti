@@ -3,6 +3,7 @@ import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import { getDisplayCourseName } from '../../common/nameFormatter'
 
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
   return (
@@ -65,7 +66,7 @@ const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] })
 }
 
 const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.id}`
@@ -153,7 +154,8 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
   const periodText = coursePeriodText()
   const studyPlaceText = courseStudyPlaceText()
   const periodItems = periodText?.split(', ').filter(Boolean) ?? []
-  const courseTitle = translateLocalizedString(course.name)
+  const courseTitle =
+    getDisplayCourseName(course, i18n.resolvedLanguage ?? i18n.language) ?? translateLocalizedString(course.name)
 
   if (!course) return null
   return (

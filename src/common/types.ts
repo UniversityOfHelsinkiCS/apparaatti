@@ -106,6 +106,7 @@ export type Period = {
 export type CourseData = {
   id: string
   name: LocalizedString
+  nameSpecifier?: LocalizedString | null
   startDate: Date
   endDate: Date
   period: Period[] | null

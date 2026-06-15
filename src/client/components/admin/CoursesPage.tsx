@@ -1,7 +1,8 @@
 import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
-import type { CourseReviewState } from '../../../common/types.ts'
+import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
+import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
 import AdminNavbar from './AdminNavbar.tsx'
 import CoursesSearchFields from './CoursesSearchFields.tsx'
 import type { ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
@@ -14,20 +15,13 @@ import useApi from '../../util/useApi.tsx'
 interface CourseUnit {
   id: string
   courseCode: string
-  name: {
-    fi: string
-    en: string
-    sv: string
-  }
+  name: LocalizedString
 }
 
 interface Course {
   id: string // cur id
-  name: {
-    fi: string
-    en: string
-    sv: string
-  }
+  name: LocalizedString
+  nameSpecifier: LocalizedString
   customCodeUrns: Record<string, string[]>
   Cus?: CourseUnit[]
   review?: CourseReviewState
@@ -139,14 +133,6 @@ const CoursesPage = () => {
       .join(', ')
   }
 
-  const formatCourseName = (name: { fi: string; en: string; sv: string }) => {
-    const names = []
-    if (name.fi) names.push(`FI: ${name.fi}`)
-    if (name.en) names.push(`EN: ${name.en}`)
-    if (name.sv) names.push(`SV: ${name.sv}`)
-    return names.length > 0 ? names.join(' | ') : '-'
-  }
-
   const formatCourseCodes = (cus?: CourseUnit[]) => {
     if (!cus || cus.length === 0) {
       return '-'
@@ -215,7 +201,7 @@ const CoursesPage = () => {
 
                 return (
                   <>
-                    <TableCell>{formatCourseName(course.name)}</TableCell>
+                    <TableCell>{formatLocalizedCourseName(course)}</TableCell>
                     <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
                     <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
                     <TableCell>
