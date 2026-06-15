@@ -1,9 +1,23 @@
 import type { CourseData } from '../../common/types'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import LaptopIcon from '@mui/icons-material/LaptopOutlined'
+import PeopleIcon from '@mui/icons-material/PeopleOutlined'
+import DevicesIcon from '@mui/icons-material/DevicesOutlined'
+import QuizIcon from '@mui/icons-material/QuizOutlined'
+import PersonIcon from '@mui/icons-material/PersonOutlined'
+import type { SvgIconComponent } from '@mui/icons-material'
 import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 import { getDisplayCourseName } from '../../common/nameFormatter'
+
+const studyPlaceIcons: Record<string, SvgIconComponent> = {
+  online: LaptopIcon,
+  contact: PeopleIcon,
+  blended: DevicesIcon,
+  exam: QuizIcon,
+  independent: PersonIcon,
+}
 
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
   return (
@@ -82,6 +96,8 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
     backgroundColor: '#e8edf2',
     border: '1px solid #d5dde5',
     whiteSpace: 'nowrap',
+    minWidth: 164,
+    textAlign: 'center',
   }
 
   const creditString: () => string = () => {
@@ -223,11 +239,26 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
                 {courseCodes}
               </Typography>
             </Stack>
-            {studyPlaceText && (
-              <Typography variant="body2" sx={badgeStyles}>
-                {studyPlaceText}
-              </Typography>
-            )}
+            {studyPlaceText &&
+              (() => {
+                const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
+                return (
+                  <Box
+                    sx={{
+                      ...badgeStyles,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    }}
+                  >
+                    {StudyPlaceIcon && <StudyPlaceIcon sx={{ fontSize: 16, flexShrink: 0 }} />}
+                    <Typography variant="body2" sx={{ fontWeight: 'inherit', color: 'inherit' }}>
+                      {studyPlaceText}
+                    </Typography>
+                  </Box>
+                )
+              })()}
           </Stack>
           {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
         </Stack>
