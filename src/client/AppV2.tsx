@@ -11,13 +11,13 @@ import SidebarContent from './components/SidebarContent'
 import CourseRecommendations from './components/CourseRecommendations'
 import WelcomeModal from './components/WelcomeModal'
 import type { User } from '../common/types'
-import AdminModal from './components/admin/AdminModal.tsx'
 import LanguageSelector from './components/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 import useRequiredUser from './util/useRequiredUser'
 import { RedirectToLogin } from './util/redirectToLogin'
 import FeedbackModal from './components/FeedbackModal'
 import ActionButtonV2 from './components/common/ActionButtonV2'
+import { useNavigate } from 'react-router-dom'
 
 const desktopDrawerWidth = '38vw'
 const mobileDrawerWidth = '88vw'
@@ -30,10 +30,10 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(!isMobile)
-  const [adminModalOpen, setAdminModalOpen] = useState(false)
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
-  const { modalOpen, setModalOpen, finalRecommendedCourses } = useFilterContext()
+  const { modalOpen, setModalOpen } = useFilterContext()
   const { t } = useTranslation()
+  const navigate = useNavigate()
   useEffect(() => {
     setOpen(!isMobile)
   }, [isMobile])
@@ -53,9 +53,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
-      {user?.isAdmin && finalRecommendedCourses && (
-        <AdminModal open={adminModalOpen} onClose={() => setAdminModalOpen(false)} />
-      )}
 
       <AppBar
         position="fixed"
@@ -87,7 +84,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             onClick={() => setFeedbackModalOpen(true)}
           />
           {user?.isAdmin && (
-            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
+            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => navigate('/admin')} />
           )}
         </Toolbar>
       </AppBar>
