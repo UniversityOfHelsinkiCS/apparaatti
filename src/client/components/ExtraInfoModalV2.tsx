@@ -1,9 +1,8 @@
-import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
 import Markdown from 'react-markdown'
-import ActionButtonV2 from './common/ActionButtonV2'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
+import DsButton from './common/DsButton'
 
 const ExtraInfoModalV2 = ({
   question,
@@ -17,37 +16,24 @@ const ExtraInfoModalV2 = ({
   currentVariant?: string
 }) => {
   const { t } = useTranslation()
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: { xs: '90vw', sm: '70vw', md: '60vw' },
-    bgcolor: 'background.paper',
-    border: '2px solid #545454',
-    borderRadius: '10px',
-    boxShadow: 24,
-    p: 4,
-  }
 
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+    <ds-modal
+      ds-open={open}
+      ds-heading-text={t('question:extrainfo')}
+      ds-size="medium"
+      ds-scrollable={true}
+      ondsModalClose={handleClose}
     >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {t('question:extrainfo')}
-        </Typography>
+      <div slot="content">
         <Markdown>{explanationToShow}</Markdown>
-
-        <ActionButtonV2 onClick={handleClose} text={t('question:close')}></ActionButtonV2>
-      </Box>
-    </Modal>
+      </div>
+      <div slot="footer">
+        <DsButton text={t('question:close')} variant="secondary" onClick={handleClose} />
+      </div>
+    </ds-modal>
   )
 }
 

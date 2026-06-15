@@ -6,9 +6,9 @@ import {
 } from '../contexts/filterContext'
 import FilterRenderer from './FilterRenderer'
 import { useTranslation } from 'react-i18next'
-import ActionButtonV2 from './common/ActionButtonV2'
+import DsButton from './common/DsButton'
 import { Box } from '@mui/material'
-import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ResetFiltersButton from './ResetFiltersButton'
 
 const SidebarContent = () => {
@@ -114,10 +114,10 @@ const SidebarContent = () => {
           flexDirection: 'column',
         }}
       >
-        <ActionButtonV2 onClick={() => setModalOpen(true)} text={t('v2:retakeQuestions')} visualStyle="course-show" />
+        <DsButton onClick={() => setModalOpen(true)} text={t('v2:retakeQuestions')} variant="secondary" />
         <Box sx={{ height: 12 }} />
         <ResetFiltersButton>
-          {({ label, openDialog }) => <ActionButtonV2 onClick={openDialog} text={label} visualStyle="course-show" />}
+          {({ label, openDialog }) => <DsButton onClick={openDialog} text={label} variant="secondary" />}
         </ResetFiltersButton>
       </Box>
       {filtersToShow.map(filter => (
@@ -125,7 +125,7 @@ const SidebarContent = () => {
           key={filter.id}
           filter={filter}
           expanded={expandedFilterIds.has(filter.id)}
-          onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) =>
+          onAccordionChange={(_event: unknown, isExpanded: boolean) =>
             setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
           }
         />

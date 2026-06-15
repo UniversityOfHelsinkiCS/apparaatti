@@ -3,7 +3,7 @@ import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../conte
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
 import ResetFiltersButton from './ResetFiltersButton'
-import ActionButtonV2 from './common/ActionButtonV2'
+import DsButton from './common/DsButton'
 
 type UnansweredPromtProps = {
   filters: { id: string; shortName?: string }[]
@@ -83,7 +83,7 @@ const NoRecommendationsInfo = () => {
                   </Box>
                 )}
                 <ResetFiltersButton>
-                  {({ label, openDialog }) => <ActionButtonV2 onClick={openDialog} text={label} />}
+                  {({ label, openDialog }) => <DsButton onClick={openDialog} text={label} variant="secondary" />}
                 </ResetFiltersButton>
               </>
             )}

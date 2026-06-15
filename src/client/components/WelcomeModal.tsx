@@ -1,6 +1,5 @@
-import { Modal, Box, Typography, Button, SxProps, Theme } from '@mui/material'
+import { Box } from '@mui/material'
 import { FC, Fragment, useEffect } from 'react'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
 import {
   filterConfigMap,
   FilterConfigMapType,
@@ -15,24 +14,13 @@ import { useTranslation } from 'react-i18next'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import Filter from '../filters/filter'
 import LanguageSelector from './LanguageSelector'
+import DsButton from './common/DsButton'
 
 type WelcomeModalProps = {
   open: boolean
   onClose: () => void
   isAdmin?: boolean
 }
-
-const style = {
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  maxWidth: '800px',
-  height: '100vh',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  border: 'none',
-  overflowY: 'auto',
-} satisfies SxProps<Theme>
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
@@ -123,52 +111,35 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
 
   return (
-    <Modal
-      open={open}
-      onClose={handleCloseIfMandatoryAnswered}
-      aria-labelledby="modal-modal-title"
-      sx={{ border: 'none' }}
+    <ds-modal
+      ds-open={open}
+      ds-heading-text={t('v2:welcomeText')}
+      ds-size="large"
+      ds-scrollable={true}
+      ds-closeable={false}
+      ds-backdrop-closeable={mandatoryQuestionsAnswered}
+      ondsModalClose={onClose}
     >
-      <Box sx={style}>
+      <div slot="content">
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
           <LanguageSelector />
         </Box>
 
-        <Typography id="modal-modal-title" component="h2" variant="h5" sx={{ mb: 3 }}>
-          {t('v2:welcomeText')}
-        </Typography>
-
         {welcomeFilters.map(entry => (
           <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
         ))}
+      </div>
 
-        <Box
-          sx={{
-            mt: 3,
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 1,
-            pb: '10vh',
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={handleCloseIfMandatoryAnswered}
-            disabled={!mandatoryQuestionsAnswered}
-            sx={{
-              textTransform: 'none',
-              px: 4,
-              py: 1,
-            }}
-          >
-            {t('v2:done')}
-          </Button>
-          {isAdmin && <BlackOutlinedButton onClick={onClose}>{t('v2:skipQuestions')}</BlackOutlinedButton>}
-        </Box>
-      </Box>
-    </Modal>
+      <div slot="footer">
+        <DsButton
+          variant="primary"
+          text={t('v2:done')}
+          disabled={!mandatoryQuestionsAnswered}
+          onClick={handleCloseIfMandatoryAnswered}
+        />
+        {isAdmin && <DsButton variant="supplementary" text={t('v2:skipQuestions')} onClick={onClose} />}
+      </div>
+    </ds-modal>
   )
 }
 

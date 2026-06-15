@@ -3,12 +3,10 @@ import FilterAccordion from './FilterAccordion'
 import { useFilterContext, filterConfigMap, shouldRenderWelcomeFilter } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { Question } from '../../common/types'
-import { SyntheticEvent } from 'react'
-
 interface FilterRendererProps {
   filter: Question
   expanded: boolean
-  onAccordionChange: (event: SyntheticEvent, isExpanded: boolean) => void
+  onAccordionChange: (event: unknown, isExpanded: boolean) => void
 }
 
 const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererProps) => {

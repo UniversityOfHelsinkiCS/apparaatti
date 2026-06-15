@@ -2,12 +2,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import {
   Alert,
   Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  Modal,
   Rating,
   Snackbar,
   Stack,
@@ -20,7 +15,6 @@ import type { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import LabeledCheckbox from './common/LabeledCheckbox'
 import FormSubmitActions from './common/FormSubmitActions'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
 import { useFilterContext } from '../contexts/filterContext'
@@ -28,22 +22,6 @@ import { useFilterContext } from '../contexts/filterContext'
 type FeedbackModalProps = {
   open: boolean
   onClose: () => void
-}
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: { xs: '94vw', sm: 'min(760px, 92vw)' },
-  maxHeight: '88vh',
-  bgcolor: 'background.paper',
-  color: 'black',
-  border: '1px solid #c9ced6',
-  borderRadius: 3,
-  boxShadow: '0 24px 60px rgba(15, 23, 42, 0.18)',
-  p: { xs: 3, sm: 4 },
-  overflowY: 'auto',
 }
 
 const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
@@ -87,8 +65,10 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     onClose()
   }
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
+  const handleSubmit = async () => {
+    if (!textFeedback.trim()) {
+      return
+    }
 
     const recommendationMetadata = sendRecommendationMetadata ? feedbackRecommendationMetadata : undefined
 
@@ -110,94 +90,94 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} aria-labelledby="user-feedback-modal-title">
-        <Box sx={style}>
-          <Stack spacing={2.5}>
-            <Typography
-              id="user-feedback-modal-title"
-              variant="h4"
-              component="h2"
-              sx={{ fontWeight: 700, letterSpacing: '-0.02em' }}
-            >
-              {t('v2:feedback.title')}
-            </Typography>
+      <ds-modal
+        ds-open={open}
+        ds-heading-text={t('v2:feedback.title')}
+        ds-size="large"
+        ds-scrollable={true}
+        ondsModalClose={handleClose}
+      >
+        <div slot="content">
+          <Stack spacing={4}>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.25 }}>
+                {t('v2:feedback.textLabel')}
+              </Typography>
+              <TextField
+                value={textFeedback}
+                onChange={event => setTextFeedback(event.target.value)}
+                multiline
+                minRows={7}
+                variant="outlined"
+                fullWidth
+                required
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    alignItems: 'flex-start',
+                    backgroundColor: '#fbfbfc',
+                  },
+                }}
+              />
+            </Box>
 
-            <form onSubmit={handleSubmit}>
-              <Stack spacing={4}>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.25 }}>
-                    {t('v2:feedback.textLabel')}
-                  </Typography>
-                  <TextField
-                    value={textFeedback}
-                    onChange={event => setTextFeedback(event.target.value)}
-                    multiline
-                    minRows={7}
-                    variant="outlined"
-                    fullWidth
-                    required
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        alignItems: 'flex-start',
-                        backgroundColor: '#fbfbfc',
-                      },
-                    }}
-                  />
-                </Box>
-
-                <Box sx={{ py: 1 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.25 }}>
-                    {t('v2:feedback.starsLabel')}
-                  </Typography>
-                  <Stack spacing={1.25}>
-                    <Rating
-                      name="user-feedback-stars"
-                      value={stars}
-                      max={5}
-                      size="large"
-                      onChange={(_event, value) => setStars(value ?? 0)}
-                    />
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {stars} / 5
-                    </Typography>
-                  </Stack>
-                </Box>
-
-                <Box>
-                  <Stack direction="row" alignItems="center" spacing={0.5}>
-                    <LabeledCheckbox
-                      checked={sendRecommendationMetadata}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        setSendRecommendationMetadata(event.target.checked)
-                      }
-                      label={t('v2:feedback.sendMetadata')}
-                    />
-                    <Tooltip title={t('v2:feedback.viewMetadata')}>
-                      <IconButton
-                        size="small"
-                        aria-label={t('v2:feedback.viewMetadata')}
-                        onClick={() => setMetadataModalOpen(true)}
-                      >
-                        <InfoOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                </Box>
-
-                <FormSubmitActions
-                  submitLabel={t('v2:feedback.send')}
-                  cancelLabel={t('v2:feedback.cancel')}
-                  actionGroupAriaLabel={t('v2:feedback.title')}
-                  onCancel={handleClose}
+            <Box sx={{ py: 1 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.25 }}>
+                {t('v2:feedback.starsLabel')}
+              </Typography>
+              <Stack spacing={1.25}>
+                <Rating
+                  name="user-feedback-stars"
+                  value={stars}
+                  max={5}
+                  size="large"
+                  onChange={(_event, value) => setStars(value ?? 0)}
                 />
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {stars} / 5
+                </Typography>
               </Stack>
-            </form>
+            </Box>
+
+            <Box>
+              <Stack direction="row" alignItems="center" spacing={0.5}>
+                <LabeledCheckbox
+                  checked={sendRecommendationMetadata}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setSendRecommendationMetadata(event.target.checked)
+                  }
+                  label={t('v2:feedback.sendMetadata')}
+                />
+                <Tooltip title={t('v2:feedback.viewMetadata')}>
+                  <IconButton
+                    size="small"
+                    aria-label={t('v2:feedback.viewMetadata')}
+                    onClick={() => setMetadataModalOpen(true)}
+                  >
+                    <InfoOutlinedIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </Box>
+
+            <FormSubmitActions
+              submitLabel={t('v2:feedback.send')}
+              cancelLabel={t('v2:feedback.cancel')}
+              actionGroupAriaLabel={t('v2:feedback.title')}
+              onSubmit={handleSubmit}
+              onCancel={handleClose}
+            />
           </Stack>
-        </Box>
-      </Modal>
-      <Dialog open={metadataModalOpen} onClose={() => setMetadataModalOpen(false)} fullWidth maxWidth="md">
-        <DialogTitle>{t('v2:feedback.metadataDialogTitle')}</DialogTitle>
-        <DialogContent dividers>
+        </div>
+      </ds-modal>
+
+      <ds-modal
+        ds-open={metadataModalOpen}
+        ds-heading-text={t('v2:feedback.metadataDialogTitle')}
+        ds-size="medium"
+        ds-scrollable={true}
+        ondsModalClose={() => setMetadataModalOpen(false)}
+      >
+        <div slot="content">
           <Stack spacing={2}>
             <Typography>{t('v2:feedback.metadataDialogDescription')}</Typography>
             <Box
@@ -220,13 +200,16 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
               {recommendationMetadataPreview}
             </Box>
           </Stack>
-        </DialogContent>
-        <DialogActions>
-          <BlackOutlinedButton onClick={() => setMetadataModalOpen(false)}>
-            {t('v2:feedback.cancel')}
-          </BlackOutlinedButton>
-        </DialogActions>
-      </Dialog>
+        </div>
+        <div slot="footer">
+          <ds-button
+            ds-text={t('v2:feedback.cancel')}
+            ds-variant="secondary"
+            onClick={() => setMetadataModalOpen(false)}
+          />
+        </div>
+      </ds-modal>
+
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
         <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}

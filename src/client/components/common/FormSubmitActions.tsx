@@ -1,22 +1,23 @@
 import { Box } from '@mui/material'
-import ActionButtonV2 from './ActionButtonV2'
+import DsButton from './DsButton'
 
 type FormSubmitActionsProps = {
   submitLabel: string
   cancelLabel: string
   actionGroupAriaLabel: string
+  onSubmit: () => void
   onCancel: () => void
 }
 
-const FormSubmitActions = ({ submitLabel, cancelLabel, actionGroupAriaLabel, onCancel }: FormSubmitActionsProps) => {
+const FormSubmitActions = ({ submitLabel, cancelLabel, actionGroupAriaLabel, onSubmit, onCancel }: FormSubmitActionsProps) => {
   return (
     <Box
       role="group"
       aria-label={actionGroupAriaLabel}
       sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: 'flex-end' }}
     >
-      <ActionButtonV2 text={submitLabel} type="submit" />
-      <ActionButtonV2 text={cancelLabel} type="button" onClick={onCancel} />
+      <DsButton text={submitLabel} variant="primary" onClick={onSubmit} />
+      <DsButton text={cancelLabel} variant="secondary" onClick={onCancel} />
     </Box>
   )
 }
