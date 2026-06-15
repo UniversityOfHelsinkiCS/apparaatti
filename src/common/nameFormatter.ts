@@ -18,6 +18,14 @@ const removableStudyMethodPhrases = [
   'etäopetus',
   'lähiopetus',
   'verkko-opetus',
+  'itsenäinen projekti',
+  'blended teaching',
+  'distance teaching',
+  'contact teaching',
+  'online teaching',
+  'flerformsundervisning',
+  'distansundervisning',
+  'kontaktundervisning',
 ] as const
 
 const getLanguageValue = (
@@ -46,6 +54,8 @@ const isOptimeOriginatingId = (id: string): boolean => id.startsWith('hy-opt-cur
 
 const escapeForRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
+//'giu' means: g = global, all matches, i = case insensitive, and u = unicode
+//order matters here since reduce calls this as value=accumulator and phrase=currentItem
 const removeStudyMethodPhrase = (value: string, phrase: string): string =>
   value.replace(new RegExp(escapeForRegExp(phrase), 'giu'), ' ')
 
@@ -60,15 +70,15 @@ const stripStudyMethodFromCourseName = (value: string | null): string | null => 
     .map(segment => removableStudyMethodPhrases.reduce(removeStudyMethodPhrase, segment))
     .map(segment =>
       segment
-        .replace(/\(\s*\)/g, ' ')
-        .replace(/\[\s*\]/g, ' ')
-        .replace(/\s{2,}/g, ' ')
-        .replace(/\s+([,;:)\]])/g, '$1')
-        .replace(/([([])\s+/g, '$1')
-        .replace(/^[\s,;:/-]+|[\s,;:/-]+$/g, '')
+        .replace(/\(\s*\)/g, ' ') // remove empty parens: "( )" → " "
+        .replace(/\[\s*\]/g, ' ') // remove empty brackets: "[ ]" → " "
+        .replace(/\s{2,}/g, ' ') // collapse multiple spaces into one
+        .replace(/\s+([,;:)\]])/g, '$1') // remove space before punctuation: " ," → ","
+        .replace(/([([])\s+/g, '$1') // remove space after opening bracket: "( " → "("
+        .replace(/^[\s,;:/-]+|[\s,;:/-]+$/g, '') // strip leading/trailing spaces and punctuation
         .trim()
     )
-    .filter(segment => /[\p{L}\p{N}]/u.test(segment))
+    .filter(segment => /[\p{L}\p{N}]/u.test(segment)) // drop segments with no letters or numbers (e.g. leftover punctuation)
 
   return cleanedSegments.length > 0 ? cleanedSegments.join(' | ') : null
 }
@@ -112,14 +122,30 @@ export const formatCourseName = (
   return courseNameWithCourseType(name, nameSpecifier, lang)
 }
 
+export const stripPeriodTextFromCourseName = (name: string | null) => {
+  if (!name) {
+    return null
+  }
+  const pieces = name.split(',')
+  const noPeriodPieces = pieces.filter(p => !p.toLowerCase().includes('period'))
+  const result = noPeriodPieces.join(', ')
+  return result
+}
+
+export const cleanUpCourseName = (name: string | null) => {
+  const studyMethodDropped = stripStudyMethodFromCourseName(name)
+  const periodDropped = stripPeriodTextFromCourseName(studyMethodDropped)
+  return periodDropped
+}
+
 export const getDisplayCourseName = (
   { id, name, nameSpecifier }: CourseNameInput,
   lang: Language | string,
-  dropStudyMethod = true
+  cleanName = true
 ): string | null => {
   const formattedName = formatCourseName(id, name, nameSpecifier, lang)
 
-  return dropStudyMethod ? stripStudyMethodFromCourseName(formattedName) : formattedName
+  return cleanName ? cleanUpCourseName(formattedName) : formattedName
 }
 
 export const formatLocalizedCourseName = ({
