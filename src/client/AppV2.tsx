@@ -16,12 +16,8 @@ import { useTranslation } from 'react-i18next'
 import useRequiredUser from './util/useRequiredUser'
 import { RedirectToLogin } from './util/redirectToLogin'
 import FeedbackModal from './components/FeedbackModal'
-<<<<<<< Updated upstream
-import ActionButtonV2 from './components/common/ActionButtonV2'
 import { useNavigate } from 'react-router-dom'
-=======
 import DsButton from './components/common/DsButton'
->>>>>>> Stashed changes
 
 const desktopDrawerWidth = '38vw'
 const mobileDrawerWidth = '88vw'
@@ -88,11 +84,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             onClick={() => setFeedbackModalOpen(true)}
           />
           {user?.isAdmin && (
-<<<<<<< Updated upstream
-            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => navigate('/admin')} />
-=======
-            <DsButton variant="supplementary" text={t('v2:adminButton')} onClick={() => setAdminModalOpen(true)} />
->>>>>>> Stashed changes
+            <DsButton variant="supplementary" text={t('v2:adminButton')} onClick={() => navigate('/admin')} />
           )}
         </Toolbar>
       </AppBar>

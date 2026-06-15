@@ -1,5 +1,5 @@
 import { Box, Chip, Stack, Typography } from '@mui/material'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useLayoutEffect, useRef } from 'react'
 import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
 import MandatoryBadge from './common/MandatoryBadge'
 
@@ -67,7 +67,7 @@ interface FilterAccordionProps {
 const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onChange }: FilterAccordionProps) => {
   const accordionRef = useRef<DsAccordionElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     accordionRef.current?.setIsExpanded(expanded ?? false)
   }, [expanded])
 

@@ -67,6 +67,7 @@ const SidebarContent = () => {
 
   const getNextExpandedFilterIds = (filterId: string, isExpanded: boolean, expandedFilterIds: Set<string>) => {
     if (!isExpanded) {
+      if (!expandedFilterIds.has(filterId)) return expandedFilterIds
       const nextExpandedFilterIds = new Set(expandedFilterIds)
       nextExpandedFilterIds.delete(filterId)
       return nextExpandedFilterIds
