@@ -24,9 +24,8 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
     return null
   }
 
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const optionId = event.target.value
-    setState(optionId)
+  const handleRadioChange = (value: string) => {
+    setState(value)
   }
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
