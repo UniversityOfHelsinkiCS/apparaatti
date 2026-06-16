@@ -2,9 +2,9 @@ import { Alert, Box, CircularProgress, Stack, TextField, Typography } from '@mui
 import { useEffect, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import type { CourseReviewState } from '../../../common/types.ts'
-import AppCheckbox from '../common/AppCheckbox'
 import useApiMutation from '../../hooks/useApiMutation.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import HyCheckbox from '../common/hy/HyCheckbox.tsx'
 
 type ReviewActionsProps = {
   curId: string
@@ -85,7 +85,7 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
   return (
     <Stack spacing={1} sx={{ minWidth: 300, maxWidth: 360 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <AppCheckbox checked={reviewed} onChange={handleReviewedChange} size="small" sx={{ p: 0.5 }} />
+        <HyCheckbox checked={reviewed} onChange={handleReviewedChange} size="small" sx={{ p: 0.5 }} />
         <Typography variant="body2">{reviewed ? 'Reviewed' : 'Not reviewed'}</Typography>
         {isSaving ? <CircularProgress size={16} /> : null}
       </Box>

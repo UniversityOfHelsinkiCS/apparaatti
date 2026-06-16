@@ -1,8 +1,8 @@
 import { FormControlLabel, FormGroup } from '@mui/material'
-import AppCheckbox from '../components/common/AppCheckbox.tsx'
 import { Question, Option } from '../../common/types'
 import React from 'react'
 import { useFilterContext } from '../contexts/filterContext'
+import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
 
 interface MultiChoiceFilterComponentProps {
   filter: Question
@@ -31,13 +31,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             name={filter.id}
             value={option.id}
             data-cy={`${filter.id}-option-${option.id}`}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#e0e0e0',
-                borderRadius: '4px',
-              },
-            }}
-            control={<AppCheckbox onChange={handleCheckboxChange} />}
+            control={<HyCheckbox onChange={handleCheckboxChange} />}
             label={label}
           />
         )
