@@ -24,15 +24,19 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
     return null
   }
 
-  const handleRadioChange = (value: string) => {
-    setState(value)
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const optionId = event.target.value
+    setState(optionId)
   }
 
-  const handleCheckboxChange = (value: string, checked: boolean) => {
-    if (checked) {
-      if (!state.includes(value)) setState([...state, value])
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const optionId = event.target.value
+    const isChecked = event.target.checked
+
+    if (isChecked) {
+      setState([...state, optionId])
     } else {
-      setState(state.filter((id: string) => id !== value))
+      setState(state.filter((id: string) => id !== optionId))
     }
   }
 
@@ -87,6 +91,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
                   state={state}
                   handleRadioChange={handleRadioChange}
                   options={variant.options || []}
+                  extrainfo={filter.extraInfo}
                 />
               )
           }

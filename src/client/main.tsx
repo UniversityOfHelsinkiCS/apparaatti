@@ -7,13 +7,7 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { LanguageContextProvider } from './contexts/languageContext.tsx'
 import initializeI18n from './util/i18n.ts'
 import AppRouter from './router.tsx'
-
-// hy-design-system stuff
-import '@uh-design-system/component-library/dist/component-library/component-library.css'
 import '@uh-design-system/component-library/dist/fonts/fonts.css'
-import './assets/ds-overrides.css'
-import { defineCustomElements } from '@uh-design-system/component-library/loader'
-defineCustomElements()
 
 const queryClient = new QueryClient()
 
