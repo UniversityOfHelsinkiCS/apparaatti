@@ -84,6 +84,7 @@
     "@mui/material": "^7.3.9",
     "@mui/x-charts": "^9.0.4",
     "@tanstack/react-query": "^5.90.21",
+    "@uh-design-system/component-library": "1.5.2",
     "axios": "1.13.6",
     "bindings": "^1.5.0",
     "connect-redis": "^8.1.0",

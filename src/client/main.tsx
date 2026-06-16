@@ -7,8 +7,14 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { LanguageContextProvider } from './contexts/languageContext.tsx'
 import initializeI18n from './util/i18n.ts'
 import AppRouter from './router.tsx'
+import '@uh-design-system/component-library/dist/fonts/fonts.css'
+
 const queryClient = new QueryClient()
+
 const theme = createTheme({
+  typography: {
+    fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
+  },
   palette: {
     primary: {
       main: '#ffffff',
@@ -24,7 +30,9 @@ const theme = createTheme({
     },
   },
 })
+
 initializeI18n()
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
