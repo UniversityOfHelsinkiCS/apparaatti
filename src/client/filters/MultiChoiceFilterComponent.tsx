@@ -24,7 +24,6 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
       id: o.id,
       label: count != null ? `${o.name} (${count})` : o.name,
       checked: state.includes(o.id),
-      disabled: count === 0,
     }
   })
 

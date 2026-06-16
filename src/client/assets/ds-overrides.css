@@ -1,0 +1,36 @@
+/*
+ * Stencil injects component styles with compound selectors (.className.sc-ds-*)
+ * giving specificity (0,2,0), so !important is needed to override from outside.
+ */
+
+ds-checkbox-group,
+ds-radio-button-group {
+  display: block !important;
+}
+
+ds-checkbox-group > fieldset,
+ds-radio-button-group > fieldset {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+ds-checkbox-group > fieldset > div,
+ds-radio-button-group > fieldset > div {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+
+ds-checkbox-group ds-checkbox,
+ds-radio-button-group ds-radio-button {
+  display: block !important;
+  width: 100% !important;
+}
+
+ds-checkbox-group ds-checkbox > div > label,
+ds-radio-button-group ds-radio-button > div > label {
+  display: flex !important;
+  width: 100% !important;
+  align-self: auto !important;
+}
