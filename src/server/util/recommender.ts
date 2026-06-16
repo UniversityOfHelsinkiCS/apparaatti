@@ -251,6 +251,14 @@ export function sortCourseData(courseDatas: CourseData[], courseLanguageType: st
   return datasWithPoints satisfies CourseData[]
 }
 
+function filterIfIsPrimaryLang(data: CourseData[], organisationCode: string, lang: string, primaryLang: string) {
+  if (lang === primaryLang) {
+    return data.filter(c => courseIsSpesificForUserOrg(c, organisationCode))
+  } else {
+    return data
+  }
+}
+
 export async function getCourseData(answerData: AnswerData): Promise<CourseData[]> {
   const lang: string = readAnswer(answerData, 'lang')
   const primaryLang = readAnswer(answerData, 'primary-language')
@@ -263,7 +271,8 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific)
   const courseLanguageType = languageToStudy(lang, primaryLang)
 
-  const sorted = sortCourseData(courseData, courseLanguageType)
+  const filteredForOrg = filterIfIsPrimaryLang(courseData, organisationCode, lang, primaryLang)
+  const sorted = sortCourseData(filteredForOrg, courseLanguageType)
 
   return sorted
 }

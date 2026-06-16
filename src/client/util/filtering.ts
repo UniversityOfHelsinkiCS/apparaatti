@@ -95,8 +95,13 @@ export const checkCollaboration = (course: CourseData, value: string) => {
   return value != '0' ? result : !result
 }
 
+//It is now considered spec that since the question for this gives the impression of a course
+//taking a long time the filter should try to show courses that are > n weeks
 export const checkMultiPeriod = (course: CourseData, value: string) => {
-  const result = (course.period?.length ?? 0) > 1
+  const diffWeeks = Math.abs((course.endDate.getTime() - course.startDate.getTime()) / (1000 * 60 * 60 * 24 * 7))
+  // period is 7 weeks but looking for > 8
+  // since some single period courses last a little bit to the next period
+  const result = diffWeeks > 8
   return value != '0' ? result : !result
 }
 
