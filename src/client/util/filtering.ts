@@ -72,7 +72,12 @@ export const checkStudyPlace = (course: CourseData, studyPlace: string[]) => {
 }
 
 export const checkStudyYear = (course: CourseData, studyYear: string) => {
-  return course.startDate.getFullYear().toString() === studyYear
+  const periods = course.period
+  if (!periods) {
+    return false // should not happen
+  }
+
+  return periods.some(p => p.startYear === studyYear)
 }
 
 export const checkStudyPeriod = (course: CourseData, studyPeriod: string[]) => {
