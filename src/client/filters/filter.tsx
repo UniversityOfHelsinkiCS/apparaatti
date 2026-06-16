@@ -90,7 +90,6 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
                   state={state}
                   handleRadioChange={handleRadioChange}
                   options={variant.options || []}
-                  extrainfo={filter.extraInfo}
                 />
               )
           }
