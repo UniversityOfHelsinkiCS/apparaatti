@@ -1,4 +1,5 @@
-import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { Box, FormControlLabel, RadioGroup } from '@mui/material'
+import HyRadio from './common/hy/HyRadio'
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
@@ -39,22 +40,8 @@ const RadioQuestionV2 = ({
             key={option.id}
             value={option.id}
             data-cy={`${question.id}-option-${option.id}`}
-            control={
-              <Radio
-                sx={{
-                  '&.Mui-checked': {
-                    color: '#4caf50',
-                  },
-                }}
-              />
-            }
+            control={<HyRadio />}
             label={option.name}
-            sx={{
-              '&:hover': {
-                backgroundColor: '#e0e0e0',
-                borderRadius: '4px',
-              },
-            }}
           />
         ))}
       </RadioGroup>

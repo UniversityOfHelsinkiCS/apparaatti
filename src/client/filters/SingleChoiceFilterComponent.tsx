@@ -1,12 +1,5 @@
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from '@mui/material'
+import { FormControlLabel, RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import HyRadio from '../components/common/hy/HyRadio'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Question, Option } from '../../common/types'
 import React, { useState } from 'react'
@@ -51,23 +44,9 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
               value={option.id}
               disabled={count === 0}
               data-cy={`${filter.id}-option-${option.id}`}
-              control={
-                <Radio
-                  sx={{
-                    '&.Mui-checked': {
-                      color: '#4caf50',
-                    },
-                  }}
-                />
-              }
+              control={<HyRadio />}
               label={label}
-              sx={{
-                opacity: count === 0 ? 0.4 : 1,
-                '&:hover': {
-                  backgroundColor: '#e0e0e0',
-                  borderRadius: '4px',
-                },
-              }}
+              sx={{ opacity: count === 0 ? 0.4 : 1 }}
             />
           )
         })}
