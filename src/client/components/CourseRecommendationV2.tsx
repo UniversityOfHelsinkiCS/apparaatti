@@ -140,8 +140,9 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
   }
 
   const coursePeriodText = () => {
+    const validPeriodIds = new Set(periodVariant?.options?.map(o => o.id) ?? [])
     const periodNames =
-      course.period?.map(period => period.name).filter(periodName => !/^exam_week_\d+$/.test(periodName)) ?? []
+      course.period?.map(period => period.name).filter(periodName => validPeriodIds.has(periodName)) ?? []
     const uniquePeriodNames = Array.from(new Set(periodNames))
 
     if (uniquePeriodNames.length === 0) {
