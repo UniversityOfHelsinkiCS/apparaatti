@@ -14,10 +14,12 @@ import {
 import filterConfigRouter from './filterConfigRouter.ts'
 import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'
+import axios from 'axios'
 import requireUser from '../middleware/requireUser.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
-import { triggerUpdaterRun } from '../updater/manualRun.ts'
+
+const UPDATER_RUN_URL = 'http://apparaatti-updater/api/updater/run'
 
 const USER_FETCH_LIMIT = 100
 
@@ -129,15 +131,17 @@ adminRouter.post('/course/review', async (req, res) => {
   res.json({ status: 'success', reviewState })
 })
 
-adminRouter.post('/updater/run', requireSuperuser, async (req, res) => {
-  const user = req.user
-  const triggeredBy = user?.username ?? user?.id ?? 'manual run'
-  const runRow = await triggerUpdaterRun(triggeredBy)
-  if (!runRow) {
-    res.status(409).json({ message: 'A run is already in progress' })
-    return
+adminRouter.post('/updater/run', requireSuperuser, async (_req, res) => {
+  try {
+    const response = await axios.post(UPDATER_RUN_URL, undefined, { timeout: 10_000 })
+    res.status(response.status).json(response.data)
+  } catch (e) {
+    if (axios.isAxiosError(e) && e.response) {
+      res.status(e.response.status).json(e.response.data)
+      return
+    }
+    res.status(502).json({ message: 'Failed to reach updater service' })
   }
-  res.status(202).json(runRow)
 })
 
 adminRouter.get('/updater/runs', requireSuperuser, async (_req, res) => {

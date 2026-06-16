@@ -31,7 +31,7 @@ import requireUser from '../middleware/requireUser.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import adminRouter from './admin.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
-import { run as runUpdater } from '../updater/index.ts'
+import { triggerUpdaterRun } from '../updater/manualRun.ts'
 import {
   allOrganisations,
   createUserFeedbackEntry,
@@ -55,12 +55,12 @@ router.use('/admin', requireUser, adminRouter)
 
 if (UPDATER_CRON_ENABLED) {
   router.post('/updater/run', async (_req, res) => {
-    try {
-      await runUpdater(true)
-      res.json({ message: 'Updater run completed successfully' })
-    } catch {
-      res.status(500).json({ message: 'Updater run failed' })
+    const runRow = await triggerUpdaterRun('manual run')
+    if (!runRow) {
+      res.status(409).json({ message: 'A run is already in progress' })
+      return
     }
+    res.status(202).json(runRow)
   })
 }
 

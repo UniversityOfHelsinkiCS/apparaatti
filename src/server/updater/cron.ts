@@ -1,26 +1,14 @@
 import cron from 'node-cron'
 
 import { UPDATER_CRON_ENABLED, inProduction } from '../util/config.ts'
-import { run } from './index.ts'
-import { createUpdaterRun, finishUpdaterRun } from '../util/dbActions.ts'
-
-const runTracked = async () => {
-  const runRow = await createUpdaterRun('cron')
-  try {
-    await run(true)
-    await finishUpdaterRun(runRow.id, 'success')
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? (e.stack ?? e.message) : String(e)
-    await finishUpdaterRun(runRow.id, 'failed', msg)
-  }
-}
+import { triggerUpdaterRun } from './manualRun.ts'
 
 const setupCron = async () => {
   if (!inProduction) {
-    // await runTracked()
+    // await triggerUpdaterRun('cron')
   } else if (UPDATER_CRON_ENABLED) {
-    // await runTracked()
-    cron.schedule('0 3 * * 0', () => runTracked()) // Run updater once a week on Sunday at 3:00 AM
+    // await triggerUpdaterRun('cron')
+    cron.schedule('0 3 * * 0', () => void triggerUpdaterRun('cron')) // Run updater once a week on Sunday at 3:00 AM
   }
 }
 
