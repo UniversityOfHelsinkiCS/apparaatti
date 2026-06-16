@@ -192,7 +192,7 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={{ xs: 0.75, sm: 1.5 }}
-          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          alignItems="flex-start"
           justifyContent="space-between"
           sx={{ mb: 1.5 }}
         >
@@ -210,36 +210,10 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
           >
             {courseTitle}
           </Typography>
-          <Typography variant="body2" sx={badgeStyles}>
-            {courseDateRange(course)}
-          </Typography>
-        </Stack>
-        <Stack direction={'column'} spacing={1.5}>
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={{ xs: 0.5, sm: 1.5 }}
-            sx={{
-              pt: 0.25,
-              alignItems: { xs: 'flex-start', sm: 'center' },
-              justifyContent: 'space-between',
-            }}
-          >
-            <Stack
-              direction="row"
-              spacing={{ xs: 0.5, sm: 1.5 }}
-              useFlexGap
-              sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: '#334155', fontWeight: 500 }}>
-                {creditString()} {t('course:credits')}
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#475569' }}>
-                {courseCodes}
-              </Typography>
-            </Stack>
+          <Stack direction="column" spacing={0.75} sx={{ flexShrink: 0 }}>
+            <Typography variant="body2" sx={badgeStyles}>
+              {courseDateRange(course)}
+            </Typography>
             {studyPlaceText &&
               (() => {
                 const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
@@ -260,6 +234,25 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
                   </Box>
                 )
               })()}
+          </Stack>
+        </Stack>
+        <Stack direction={'column'} spacing={1.5}>
+          <Stack
+            direction="row"
+            spacing={{ xs: 0.5, sm: 1.5 }}
+            useFlexGap
+            sx={{
+              pt: 0.25,
+              flexWrap: 'wrap',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="body2" sx={{ color: '#334155', fontWeight: 500 }}>
+              {creditString()} {t('course:credits')}
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#475569' }}>
+              {courseCodes}
+            </Typography>
           </Stack>
           {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
         </Stack>
