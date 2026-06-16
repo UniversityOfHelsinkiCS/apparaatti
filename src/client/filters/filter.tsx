@@ -28,14 +28,11 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
     setState(value)
   }
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const optionId = event.target.value
-    const isChecked = event.target.checked
-
-    if (isChecked) {
-      setState([...state, optionId])
+  const handleCheckboxChange = (value: string, checked: boolean) => {
+    if (checked) {
+      if (!state.includes(value)) setState([...state, value])
     } else {
-      setState(state.filter((id: string) => id !== optionId))
+      setState(state.filter((id: string) => id !== value))
     }
   }
 

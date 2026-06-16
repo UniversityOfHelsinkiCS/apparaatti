@@ -9,6 +9,8 @@ declare module 'react' {
     interface IntrinsicElements {
       'ds-radio-button-group': DsProps<Components.DsRadioButtonGroup>
       'ds-radio-button': DsProps<Components.DsRadioButton>
+      'ds-checkbox': DsProps<Components.DsCheckbox>
+      'ds-checkbox-group': DsProps<Components.DsCheckboxGroup>
     }
   }
 }
