@@ -258,7 +258,7 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
           {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
         </Stack>
 
-        <HyLinkCta href={courseUrl} target="_blank" sx={{ mt: 1.5 }}>
+        <HyLinkCta href={courseUrl} target="_blank" sx={{ mt: 2 }}>
           {t('course:show')}
         </HyLinkCta>
       </Box>
