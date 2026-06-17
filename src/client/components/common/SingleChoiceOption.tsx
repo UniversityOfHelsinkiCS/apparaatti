@@ -14,7 +14,7 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
     count != null ? (
       <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         {option.name}
-        <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>getOptionCount
+        <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
       </span>
     ) : (
       option.name
