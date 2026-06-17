@@ -36,7 +36,7 @@ export const checkFinmu = (course: CourseData, value: string) => {
 }
 
 export const checkChallenge = (course: CourseData, value: string) => {
-  const result = course.courseCodes.some(code => code.includes('ERI')) || hasApparaattiCodeUrn(course, 'kks-kor')
+  const result = hasApparaattiCodeUrn(course, 'kks-muk')
   return value != '0' ? result : !result
 }
 

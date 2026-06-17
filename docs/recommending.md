@@ -13,22 +13,22 @@ The app recommends courses in two phases: the server narrows and sorts the pool 
 
 ## Local filters
 
-| filter id | check function | true when |
-|---|---|---|
-| `replacement` | `checkReplacement` | course has `kks-kor` |
-| `mentoring` | `checkMentoring` | course has `kks-pre` |
-| `finmu` | `checkFinmu` | course code is `KK-FINMU` |
-| `challenge` | `checkChallenge` | course code contains `ERI` or has `kks-kor` |
-| `graduation` | `checkGraduation` | course has `kks-val` or `kkt-val` |
-| `integrated` | `checkIntegrated` | course has `kks-int` |
-| `independent` | `checkIndependent` | `courseUnitRealisationTypeUrn` contains `independent` |
-| `study-place` | `checkStudyPlace` | `normalizedStudyPlace` is in the selected set |
-| `study-year` | `checkStudyYear` | any course period has the selected `startYear` |
-| `study-period` | `checkStudyPeriod` | any course period is in the selected set |
-| `mooc` | `checkMooc` | course has `opintotarjonta:mooc` |
-| `collaboration` | `checkCollaboration` | course name matches collaboration patterns |
-| `multi-period` | `checkMultiPeriod` | course spans more than 8 weeks |
-| `flexible` | `checkFlexible` | course has `kks-jou` |
+| filter id | shortName (fi) | check function | true when |
+|---|---|---|---|
+| `replacement` | Korvaava | `checkReplacement` | course has `kks-kor` |
+| `mentoring` | Valmentava | `checkMentoring` | course has `kks-pre` |
+| `finmu` | Finmu | `checkFinmu` | course code is `KK-FINMU` |
+| `challenge` | Mukautettu | `checkChallenge` | course has `kks-muk` |
+| `graduation` | Valmistuville | `checkGraduation` | course has `kks-val` or `kkt-val` |
+| `integrated` | Integroitu | `checkIntegrated` | course has `kks-int` |
+| `independent` | Itsenäinen | `checkIndependent` | `courseUnitRealisationTypeUrn` contains `independent` |
+| `study-place` | Opetusmuoto | `checkStudyPlace` | `normalizedStudyPlace` is in the selected set |
+| `study-year` | Lukuvuosi | `checkStudyYear` | any course period has the selected `startYear` |
+| `study-period` | Periodi | `checkStudyPeriod` | any course period is in the selected set |
+| `mooc` | MOOC | `checkMooc` | course has `opintotarjonta:mooc` |
+| `collaboration` | Yhteistyö | `checkCollaboration` | course name matches collaboration patterns |
+| `multi-period` | Kurssin pituus | `checkMultiPeriod` | course spans more than 8 weeks |
+| `flexible` | Joustava | `checkFlexible` | course has `kks-jou` |
 
 Filters whose value is `'1'` keep only matching courses; `'0'` keeps only non-matching courses.
 
