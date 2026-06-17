@@ -1,17 +1,6 @@
 import type { CourseData, Period } from '../../common/types'
 
 const collaborationNamePatterns = ['työväen akatemia', 'laajasalon opisto']
-const mentoringCourseCodes = [
-  'KK-ENG301',
-  'KK-ENG302',
-  'KK-ENG303',
-  'KK-RUO204',
-  'KK-RUO205',
-  'KK-RUO206',
-  'KK-FIN01',
-  'KK-FIN02',
-  'KK-FIN08',
-]
 
 export const hasApparaattiCodeUrn = (course: CourseData, codeUrn: string) => {
   return Object.entries(course.customCodeUrns ?? {}).some(([key, values]) => {
@@ -37,7 +26,7 @@ export const checkReplacement = (course: CourseData, value: string) => {
 }
 
 export const checkMentoring = (course: CourseData, value: string) => {
-  const result = hasAnyCourseCode(course, mentoringCourseCodes)
+  const result = hasApparaattiCodeUrn(course, 'kks-pre')
   return value != '0' ? result : !result
 }
 
