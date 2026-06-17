@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
 import { hy } from './hyColors'
 
@@ -9,6 +9,7 @@ interface HyChipProps {
   ariaLabel?: string
   /** `small` is a custom addition, not part of the hy-ds spec */
   size?: 'medium' | 'small'
+  sx?: SxProps<Theme>
 }
 
 const ChipRoot = styled('div')<{ ownerState: { size: 'medium' | 'small'; clickable: boolean } }>(({ ownerState }) => ({
@@ -41,7 +42,7 @@ const ChipText = styled('span')<{ ownerState: { size: 'medium' | 'small' } }>(({
   padding: ownerState.size === 'small' ? '0 3px' : '0 4px',
 }))
 
-const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium' }: HyChipProps) => {
+const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium', sx }: HyChipProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
@@ -52,6 +53,7 @@ const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium' }: HyCh
   return (
     <ChipRoot
       ownerState={{ size, clickable: !!onClick }}
+      sx={sx}
       {...(onClick && {
         role: 'button',
         tabIndex: 0,

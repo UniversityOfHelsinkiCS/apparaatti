@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { hy } from './hyColors'
 
 type BadgeVariant = 'default' | 'success' | 'attention' | 'danger' | 'info' | 'notification' | 'primary' | 'disabled'
@@ -8,6 +8,7 @@ interface HyBadgeProps {
   ariaLabel?: string
   hiddenAssistiveText?: string
   children?: React.ReactNode
+  sx?: SxProps<Theme>
 }
 
 const variantStyles: Record<BadgeVariant, { backgroundColor: string; color: string }> = {
@@ -58,8 +59,8 @@ const VisuallyHidden = styled('span')({
   whiteSpace: 'nowrap',
 })
 
-const HyBadge = ({ variant = 'default', ariaLabel, hiddenAssistiveText, children }: HyBadgeProps) => (
-  <BadgeRoot ownerState={{ variant }}>
+const HyBadge = ({ variant = 'default', ariaLabel, hiddenAssistiveText, children, sx }: HyBadgeProps) => (
+  <BadgeRoot ownerState={{ variant }} sx={sx}>
     <BadgeContent>
       <BadgeText aria-label={ariaLabel}>
         {children}

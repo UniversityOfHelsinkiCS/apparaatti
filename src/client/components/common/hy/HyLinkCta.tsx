@@ -1,6 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
-import { styled } from '@mui/material/styles'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { hy } from './hyColors'
 
 type Variant = 'primary' | 'secondary' | 'supplementary'
@@ -19,6 +19,7 @@ interface HyLinkCtaProps {
   disabled?: boolean
   'aria-label'?: string
   children: React.ReactNode
+  sx?: SxProps<Theme>
 }
 
 type OwnerState = { variant: Variant; colour: Colour; size: Size }
@@ -207,6 +208,7 @@ const HyLinkCta = ({
   disabled = false,
   'aria-label': ariaLabel,
   children,
+  sx,
 }: HyLinkCtaProps) => {
   const opensNewTab = target === '_blank'
   const effectiveRel = opensNewTab ? (rel ? `${rel} noopener noreferrer` : 'noopener noreferrer') : rel
@@ -221,6 +223,7 @@ const HyLinkCta = ({
   return (
     <Root
       ownerState={{ variant, colour, size }}
+      sx={sx}
       href={href}
       target={target}
       rel={effectiveRel}

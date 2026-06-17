@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
-import { styled } from '@mui/material/styles'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { hy } from './hyColors'
 
 type HyLinkIcon = 'arrow_forward' | 'arrow_back' | 'arrow_outward'
@@ -15,6 +15,7 @@ interface HyLinkWithArrowProps {
   iconPosition?: HyIconPosition
   fullWidth?: boolean
   children: React.ReactNode
+  sx?: SxProps<Theme>
 }
 
 const ICON_CLASS = 'HyLinkWithArrow-icon'
@@ -108,6 +109,7 @@ const HyLinkWithArrow = ({
   iconPosition = 'start',
   fullWidth = false,
   children,
+  sx,
 }: HyLinkWithArrowProps) => {
   const opensNewTab = target === '_blank'
   const effectiveIcon = opensNewTab ? 'arrow_outward' : icon
@@ -120,7 +122,7 @@ const HyLinkWithArrow = ({
   )
 
   return (
-    <Root ownerState={{ fullWidth }} href={href} target={target} rel={effectiveRel}>
+    <Root ownerState={{ fullWidth }} href={href} target={target} rel={effectiveRel} sx={sx}>
       {iconPosition === 'start' && iconEl}
       {children}
       {iconPosition === 'end' && iconEl}

@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { hy } from './hyColors'
 
 type TagColour = 'default' | 'black' | 'white' | 'info' | 'danger' | 'attention' | 'success'
@@ -12,6 +12,7 @@ interface HyTagProps {
   suffixIcon?: React.ReactNode
   role?: string
   ariaHidden?: boolean
+  sx?: SxProps<Theme>
 }
 
 type ColourTokens = {
@@ -104,12 +105,22 @@ const TagLink = styled('a')({
   '&:focus-visible': { outline: 'none' },
 })
 
-const HyTag = ({ text, colour = 'default', href, target, prefixIcon, suffixIcon, role, ariaHidden }: HyTagProps) => {
+const HyTag = ({
+  text,
+  colour = 'default',
+  href,
+  target,
+  prefixIcon,
+  suffixIcon,
+  role,
+  ariaHidden,
+  sx,
+}: HyTagProps) => {
   const isLink = !!href
   const effectiveAriaHidden = ariaHidden ?? !isLink
 
   return (
-    <TagRoot ownerState={{ colour, isLink }} aria-hidden={effectiveAriaHidden} role={role}>
+    <TagRoot ownerState={{ colour, isLink }} aria-hidden={effectiveAriaHidden} role={role} sx={sx}>
       {prefixIcon}
       {isLink ? (
         <TagLink href={href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
