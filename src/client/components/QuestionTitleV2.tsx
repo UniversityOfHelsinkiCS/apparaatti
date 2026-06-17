@@ -1,13 +1,15 @@
 import { IconButton, Stack, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
+import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
-import MandatoryBadge from './common/MandatoryBadge'
+import HyTag from './common/hy/HyTag'
 
 const MandatoryStatus = ({ question }: { question: Question }) => {
+  const { t } = useTranslation()
   if (!question.mandatory) {
     return <></>
   }
-  return <MandatoryBadge />
+  return <HyTag text={t('question:mandatory')} colour="info" ariaHidden={false} sx={{ mr: 0.5 }} />
 }
 
 const QuestionTitleV2 = ({

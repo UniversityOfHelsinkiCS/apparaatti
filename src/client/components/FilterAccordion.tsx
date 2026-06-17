@@ -2,8 +2,9 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Box }
 import HyChip from './common/hy/HyChip'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { ReactNode, SyntheticEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
-import MandatoryBadge from './common/MandatoryBadge'
+import HyTag from './common/hy/HyTag'
 
 interface ActiveFilterChipsProps {
   filterId: string
@@ -56,6 +57,7 @@ interface FilterAccordionProps {
 }
 
 const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onChange }: FilterAccordionProps) => {
+  const { t } = useTranslation()
   return (
     <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }} disableGutters>
       <AccordionSummary
@@ -68,8 +70,8 @@ const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onCha
           },
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 0.5 }}>
-          {mandatory && <MandatoryBadge />}
+        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 1 }}>
+          {mandatory && <HyTag text={t('question:mandatory')} colour="attention" ariaHidden={false} />}
           <Typography sx={{ mr: 1 }}>{title}</Typography>
           {filterId && <ActiveFilterChips filterId={filterId} />}
         </Box>
