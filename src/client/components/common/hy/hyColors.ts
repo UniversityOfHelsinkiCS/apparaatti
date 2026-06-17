@@ -5,6 +5,8 @@ export const hy = {
     default: '#808080', // --ds-borderColor-default
     primary: '#005a94', // --ds-borderColor-primary
     disabledOnLight: 'rgb(0 0 0 / 15%)', // --ds-borderColor-disabled-onLight
+    white: '#fff', // --ds-borderColor-white
+    black: '#0c0c0c', // --ds-borderColor-black
   },
   bgColor: {
     white: '#fff', // --ds-bgColor-white
@@ -17,6 +19,12 @@ export const hy = {
     secondaryActive: '#cdebff', // --ds-bgColor-secondary-active
     disabledOnLight: 'rgb(0 0 0 / 10%)', // --ds-bgColor-disabled-onLight
     black: '#0c0c0c', // --ds-bgColor-black
+    blackHover: '#333', // --ds-bgColor-black-hover
+    blackActive: '#4d4d4d', // --ds-bgColor-black-active
+    transparentOnLightHover: 'rgb(0 0 0 / 5%)', // --ds-bgColor-transparent-onLight-hover
+    transparentOnLightActive: 'rgb(0 0 0 / 10%)', // --ds-bgColor-transparent-onLight-active
+    transparentOnDarkHover: 'rgb(255 255 255 / 15%)', // --ds-bgColor-transparent-onDark-hover
+    transparentOnDarkActive: 'rgb(255 255 255 / 30%)', // --ds-bgColor-transparent-onDark-active
     success: '#dffbe1', // --ds-bgColor-success
     attention: '#fff1db', // --ds-bgColor-attention
     danger: '#ffeceb', // --ds-bgColor-danger
@@ -31,6 +39,9 @@ export const hy = {
     attention: '#7a4b00', // --ds-textColor-attention
     danger: '#8b2623', // --ds-textColor-danger
     info: '#005b80', // --ds-textColor-info
+    link: '#005a94', // --ds-textColor-link
+    linkHover: '#003152', // --ds-textColor-link-hover
+    linkActive: '#001929', // --ds-textColor-link-active
   },
   overlay: {
     black10: 'rgb(0 0 0 / 10%)', // --ds-overlay-black-10

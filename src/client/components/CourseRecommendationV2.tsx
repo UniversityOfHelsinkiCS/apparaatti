@@ -1,5 +1,5 @@
 import type { CourseData } from '../../common/types'
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { Box, Paper, Stack, Typography } from '@mui/material'
 import LaptopIcon from '@mui/icons-material/LaptopOutlined'
 import PeopleIcon from '@mui/icons-material/PeopleOutlined'
 import DevicesIcon from '@mui/icons-material/DevicesOutlined'
@@ -10,6 +10,7 @@ import { translateLocalizedString } from '../util/i18n'
 import { useTranslation } from 'react-i18next'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 import { getDisplayCourseName } from '../../common/nameFormatter'
+import HyLinkCta from './common/hy/HyLinkCta'
 
 const studyPlaceIcons: Record<string, SvgIconComponent> = {
   online: LaptopIcon,
@@ -257,24 +258,11 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
           {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
         </Stack>
 
-        <Button
-          variant="contained"
-          href={courseUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{
-            marginTop: 1.5,
-            backgroundColor: '#cfd4da',
-            color: '#1f2933',
-            boxShadow: 'none',
-            '&:hover': {
-              backgroundColor: '#bfc6cd',
-              boxShadow: 'none',
-            },
-          }}
-        >
-          {t('course:show')}
-        </Button>
+        <Box sx={{ mt: 1.5 }}>
+          <HyLinkCta href={courseUrl} target="_blank">
+            {t('course:show')}
+          </HyLinkCta>
+        </Box>
       </Box>
     </Paper>
   )
