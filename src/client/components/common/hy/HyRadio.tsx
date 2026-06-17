@@ -67,7 +67,14 @@ const HyRadio = ({ sx, ...props }: RadioProps) => (
     icon={<RadioIcon />}
     checkedIcon={<RadioCheckedIcon />}
     disableRipple
-    sx={[{ '&:hover': { backgroundColor: 'transparent' } }, ...(Array.isArray(sx) ? sx : [sx])]}
+    sx={[
+      {
+        cursor: 'default',
+        '&:hover': { backgroundColor: 'transparent' },
+        '& .MuiTouchRipple-root': { display: 'none' },
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
   />
 )
 

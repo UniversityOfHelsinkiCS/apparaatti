@@ -1,6 +1,5 @@
-import { FormControlLabel, RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-import HyRadio from '../components/common/hy/HyRadio'
-import HyBadge from '../components/common/hy/HyBadge'
+import { RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Question, Option } from '../../common/types'
 import React, { useState } from 'react'
@@ -36,29 +35,14 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   return (
     <>
       <RadioGroup name={filter.id} value={state} onChange={onRadioChange}>
-        {options.map(option => {
-          const count = getOptionCount(filter.id, option.id)
-          const label =
-            count != null ? (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                {option.name}
-                <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
-              </span>
-            ) : (
-              option.name
-            )
-          return (
-            <FormControlLabel
-              key={option.id}
-              value={option.id}
-              disabled={count === 0}
-              data-cy={`${filter.id}-option-${option.id}`}
-              control={<HyRadio />}
-              label={label}
-              sx={{ opacity: count === 0 ? 0.4 : 1 }}
-            />
-          )
-        })}
+        {options.map(option => (
+          <SingleChoiceOption
+            key={option.id}
+            option={option}
+            filterId={filter.id}
+            count={getOptionCount(filter.id, option.id)}
+          />
+        ))}
       </RadioGroup>
 
       {extrainfo &&

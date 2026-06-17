@@ -1,5 +1,5 @@
-import { Box, FormControlLabel, RadioGroup } from '@mui/material'
-import HyRadio from './common/hy/HyRadio'
+import { Box, RadioGroup } from '@mui/material'
+import SingleChoiceOption from './common/SingleChoiceOption'
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import QuestionTitleV2 from './QuestionTitleV2.tsx'
@@ -36,13 +36,7 @@ const RadioQuestionV2 = ({
 
       <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)} sx={{ marginTop: 1 }}>
         {variant.options?.map(option => (
-          <FormControlLabel
-            key={option.id}
-            value={option.id}
-            data-cy={`${question.id}-option-${option.id}`}
-            control={<HyRadio />}
-            label={option.name}
-          />
+          <SingleChoiceOption key={option.id} option={option} filterId={question.id} />
         ))}
       </RadioGroup>
     </Box>
