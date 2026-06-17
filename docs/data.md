@@ -33,8 +33,6 @@ These URNs are inspected from `customCodeUrns`.
   - Also used as part of Finnish challenge-course detection.
 - `kks-jou`
   - Flexible study mode.
-- `kks-alm`
-  - Independent course.
 - `opintotarjonta:mooc`
   - MOOC course.
 
@@ -87,8 +85,7 @@ Study place detection does not use `customCodeUrns`. It checks whether `courseUn
   - Not a realization type URN.
   - Exams are detected heuristically from the Finnish course name containing `tentti`.
 - `independent`
-  - Not resolved through realization type URNs.
-  - Independent courses are detected from `kks-alm` or the Finnish name containing `itsenainen`.
+  - Detected when `courseUnitRealisationTypeUrn` contains `independent` (e.g. `independent-work-essay`, `independent-work-project`).
 
 ## Hardcoded Course Code Sets
 
@@ -188,13 +185,6 @@ Some properties are inferred from names rather than structured metadata.
 The app treats a course as an exam when the Finnish name contains:
 
 - `tentti`
-
-### Independent-course detection
-
-The app treats a course as independent when either of these is true:
-
-- it has custom URN `kks-alm`
-- its Finnish name contains `itsenainen`
 
 ### Collaboration detection
 
