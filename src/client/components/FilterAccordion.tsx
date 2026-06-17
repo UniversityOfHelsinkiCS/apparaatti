@@ -1,4 +1,5 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Chip, Stack, Box } from '@mui/material'
+import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Box } from '@mui/material'
+import HyChip from './common/hy/HyChip'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { ReactNode, SyntheticEvent } from 'react'
 import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
@@ -28,8 +29,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
 
   if (activeChips.length === 0) return null
 
-  const handleDelete = (e: React.MouseEvent, valueId: string) => {
-    e.stopPropagation()
+  const handleDelete = (valueId: string) => {
     if (Array.isArray(cfg.state)) {
       cfg.setState(cfg.state.filter((id: string) => id !== valueId))
     } else {
@@ -40,13 +40,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   return (
     <Stack onClick={e => e.stopPropagation()} sx={{ ml: 'auto', flexDirection: 'row', gap: 0.5, flexWrap: 'wrap' }}>
       {activeChips.map(chip => (
-        <Chip
-          key={chip.id}
-          label={chip.label}
-          size="small"
-          onDelete={e => handleDelete(e, chip.id)}
-          sx={{ pointerEvents: 'all' }}
-        />
+        <HyChip key={chip.id} label={chip.label} onClick={() => handleDelete(chip.id)} size="small" />
       ))}
     </Stack>
   )
