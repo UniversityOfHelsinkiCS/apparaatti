@@ -237,7 +237,7 @@ export default {
     },
   },
   course: {
-    show: 'Visa',
+    show: 'Kurssida',
     credits: 'sp',
     reasons: 'grundläggande',
     periodName: 'period',

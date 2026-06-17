@@ -237,7 +237,7 @@ export default {
     },
   },
   course: {
-    show: 'Näytä',
+    show: 'Kurssisivu',
     credits: 'op',
     reasons: 'perusteet',
     periodName: 'periodi',

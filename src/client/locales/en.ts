@@ -238,7 +238,7 @@ export default {
     },
   },
   course: {
-    show: 'Show',
+    show: 'Course page',
     credits: 'cr',
     reasons: 'reasons',
     periodName: 'period',
