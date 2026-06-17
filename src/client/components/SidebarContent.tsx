@@ -126,9 +126,10 @@ const SidebarContent = () => {
           key={filter.id}
           filter={filter}
           expanded={expandedFilterIds.has(filter.id)}
-          onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) =>
+          onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) => {
+            if (!isExpanded && unansweredMandatoryFilterIds.includes(filter.id)) return
             setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
-          }
+          }}
         />
       ))}
     </Box>
