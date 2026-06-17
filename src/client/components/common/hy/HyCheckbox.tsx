@@ -99,7 +99,13 @@ const HyCheckbox = ({ sx, ...props }: CheckboxProps) => (
     checkedIcon={<CheckboxCheckedIcon />}
     indeterminateIcon={<CheckboxIndeterminateIcon />}
     disableRipple
-    sx={[{ '&:hover': { backgroundColor: 'transparent' } }, ...(Array.isArray(sx) ? sx : [sx])]}
+    sx={[
+      {
+        cursor: 'default',
+        '&:hover': { backgroundColor: 'transparent' },
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
   />
 )
 

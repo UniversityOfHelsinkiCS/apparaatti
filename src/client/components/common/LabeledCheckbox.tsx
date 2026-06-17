@@ -8,7 +8,7 @@ type LabeledCheckboxProps = {
 } & CheckboxProps
 
 const LabeledCheckbox = ({ label, ...checkboxProps }: LabeledCheckboxProps) => {
-  return <FormControlLabel control={<HyCheckbox {...checkboxProps} />} label={label} />
+  return <FormControlLabel control={<HyCheckbox {...checkboxProps} />} label={label} sx={{ cursor: 'default' }} />
 }
 
 export default LabeledCheckbox

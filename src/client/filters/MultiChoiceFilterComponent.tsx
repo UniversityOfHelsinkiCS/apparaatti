@@ -33,6 +33,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             data-cy={`${filter.id}-option-${option.id}`}
             control={<HyCheckbox onChange={handleCheckboxChange} />}
             label={label}
+            sx={{ cursor: 'default' }}
           />
         )
       })}
