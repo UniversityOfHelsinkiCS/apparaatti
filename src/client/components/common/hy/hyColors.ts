@@ -25,10 +25,21 @@ export const hy = {
     transparentOnLightActive: 'rgb(0 0 0 / 10%)', // --ds-bgColor-transparent-onLight-active
     transparentOnDarkHover: 'rgb(255 255 255 / 15%)', // --ds-bgColor-transparent-onDark-hover
     transparentOnDarkActive: 'rgb(255 255 255 / 30%)', // --ds-bgColor-transparent-onDark-active
+    neutral: '#f2f2f2', // --ds-bgColor-neutral
+    neutralHover: '#e6e6e6', // --ds-bgColor-neutral-hover
+    neutralActive: '#ccc', // --ds-bgColor-neutral-active
     success: '#dffbe1', // --ds-bgColor-success
+    successHover: '#bef4c1', // --ds-bgColor-success-hover
+    successActive: '#85e08a', // --ds-bgColor-success-active
     attention: '#fff1db', // --ds-bgColor-attention
+    attentionHover: '#ffe7c2', // --ds-bgColor-attention-hover
+    attentionActive: '#ffd799', // --ds-bgColor-attention-active
     danger: '#ffeceb', // --ds-bgColor-danger
+    dangerHover: '#ffd8d6', // --ds-bgColor-danger-hover
+    dangerActive: '#fdb7b4', // --ds-bgColor-danger-active
     info: '#e5f8ff', // --ds-bgColor-info
+    infoHover: '#c2eeff', // --ds-bgColor-info-hover
+    infoActive: '#8adeff', // --ds-bgColor-info-active
   },
   textColor: {
     default: '#0c0c0c', // --ds-textColor-default
