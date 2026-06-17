@@ -25,6 +25,10 @@ Prefer semantic token names when naming constants, since they communicate intent
 
 All imitation components live in `src/client/components/common/hy/`. Name them `Hy<Component>` (e.g. `HyRadio`, `HyCheckbox`). Keep each component self-contained in a single file — no separate styles file unless the styles are genuinely shared across multiple components.
 
+## sx prop
+
+Every component must expose `sx?: SxProps<Theme>` in its props interface and pass it to the root styled element. Import the types as `import { styled, type SxProps, type Theme } from '@mui/material/styles'`.
+
 ## MUI customisation approach
 
 MUI exposes `icon`, `checkedIcon` (and `indeterminateIcon` for Checkbox) props on form controls that accept any `ReactNode`. Use these to pass fully custom styled elements, giving complete visual control without fighting MUI's defaults. Both `Radio` and `Checkbox` use this same API.
