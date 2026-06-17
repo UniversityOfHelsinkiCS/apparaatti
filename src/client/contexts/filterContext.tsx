@@ -357,7 +357,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [challenge, setChallenge] = useState('')
   const [graduation, setGraduation] = useState('')
   const [studyPlace, setStudyPlace] = useState<string[]>([])
-  const [studyYear, setStudyYear] = useState('2025')
+  const [studyYear, setStudyYear] = useState('2026')
   const [studyPeriod, setStudyPeriod] = useState<string[]>([])
   const [integrated, setIntegrated] = useState('')
   const [independent, setIndependent] = useState('')
