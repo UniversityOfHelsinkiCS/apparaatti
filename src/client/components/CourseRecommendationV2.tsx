@@ -1,15 +1,16 @@
-import type { CourseData } from '../../common/types'
-import { Box, Paper, Stack, Typography } from '@mui/material'
+import type { SvgIconComponent } from '@mui/icons-material'
+import DevicesIcon from '@mui/icons-material/DevicesOutlined'
 import LaptopIcon from '@mui/icons-material/LaptopOutlined'
 import PeopleIcon from '@mui/icons-material/PeopleOutlined'
-import DevicesIcon from '@mui/icons-material/DevicesOutlined'
-import QuizIcon from '@mui/icons-material/QuizOutlined'
 import PersonIcon from '@mui/icons-material/PersonOutlined'
-import type { SvgIconComponent } from '@mui/icons-material'
-import { translateLocalizedString } from '../util/i18n'
+import QuizIcon from '@mui/icons-material/QuizOutlined'
+import { Box, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
+
 import { getDisplayCourseName } from '../../common/nameFormatter'
+import type { CourseData } from '../../common/types'
+import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import { translateLocalizedString } from '../util/i18n'
 import HyLinkCta from './common/hy/HyLinkCta'
 
 const studyPlaceIcons: Record<string, SvgIconComponent> = {

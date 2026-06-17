@@ -1,20 +1,20 @@
-import path from 'path'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { connectToDatabase } from './db/connection.ts'
+
+import { RedisStore } from 'connect-redis'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
+import path from 'path'
 
+import { connectToDatabase } from './db/connection.ts'
+import { seedDatabase } from './db/seed.ts'
+import mockUserMiddleware from './middleware/mock_user.ts'
 import router from './routes/router.ts'
-
-import { SESSION_SECRET, UPDATER_CRON_ENABLED, inDevelopment, IN_E2E } from './util/config.ts'
-import { RedisStore } from 'connect-redis'
+import setupCron from './updater/cron.ts'
+import { IN_E2E, inDevelopment, SESSION_SECRET, UPDATER_CRON_ENABLED } from './util/config.ts'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
-import setupCron from './updater/cron.ts'
-import mockUserMiddleware from './middleware/mock_user.ts'
-import { seedDatabase } from './db/seed.ts'
 
 redis.on('ready', () => {
   console.log('Redis connected')

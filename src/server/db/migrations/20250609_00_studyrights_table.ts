@@ -1,4 +1,5 @@
 import { DataTypes, JSONB } from 'sequelize'
+
 import { type Migration } from '../connection.ts'
 
 export const up: Migration = async ({ context: queryInterface }) => {

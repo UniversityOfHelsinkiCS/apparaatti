@@ -1,14 +1,15 @@
+import { Box } from '@mui/material'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
   filterConfigMap,
   isFilterStateAnswered,
   shouldShowFilterInSidebar,
   useFilterContext,
 } from '../contexts/filterContext'
-import FilterRenderer from './FilterRenderer'
-import { useTranslation } from 'react-i18next'
 import ActionButtonV2 from './common/ActionButtonV2'
-import { Box } from '@mui/material'
-import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
 const SidebarContent = () => {

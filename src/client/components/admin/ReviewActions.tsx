@@ -1,6 +1,7 @@
 import { Alert, Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useEffect, useState } from 'react'
+
 import type { CourseReviewState } from '../../../common/types.ts'
 import useApiMutation from '../../hooks/useApiMutation.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'

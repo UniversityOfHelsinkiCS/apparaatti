@@ -6,9 +6,8 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 }))
 
 import type { CourseData } from '../../common/types.ts'
-import { courseIsSpesificForUserOrg, courseInSameOrganisationAsUser } from '../../server/util/recommender.ts'
-
 import { organisationWithGroupIdOf } from '../../server/util/dbActions.ts'
+import { courseInSameOrganisationAsUser, courseIsSpesificForUserOrg } from '../../server/util/recommender.ts'
 
 const mockOrganisationWithGroupIdOf = organisationWithGroupIdOf as any
 

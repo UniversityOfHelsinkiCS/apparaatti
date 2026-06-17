@@ -1,6 +1,7 @@
-import { IconButton, Stack, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
+import { IconButton, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
 import { Question } from '../../common/types'
 import HyTag from './common/hy/HyTag'
 

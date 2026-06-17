@@ -2,7 +2,7 @@ import * as openidClient from 'openid-client'
 import passport from 'passport'
 
 import User from '../db/models/user.ts'
-import { OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_REDIRECT_URI } from './config.ts'
+import { OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, OIDC_ISSUER, OIDC_REDIRECT_URI } from './config.ts'
 
 const params = {
   scope: 'openid profile email',

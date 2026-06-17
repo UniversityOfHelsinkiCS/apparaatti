@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import {
   closestPeriod,
-  getCoursePeriod,
   dateIsInPeriod,
   dateObjToPeriod,
   dateToPeriod,
+  getCoursePeriod,
   getStudyPeriod,
   getStudyYear,
   parseDate,

@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize'
-import { Umzug, SequelizeStorage } from 'umzug'
+import { SequelizeStorage, Umzug } from 'umzug'
 
-import logger from '../util/logger.ts'
 import { DATABASE_URL } from '../util/config.ts'
+import logger from '../util/logger.ts'
 
 if (DATABASE_URL === '') {
   logger.error('Database URL not set!')

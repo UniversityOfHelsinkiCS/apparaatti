@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { formatLocalizedCourseName, getDisplayCourseName } from '../common/nameFormatter.ts'
 
 describe('nameFormatter', () => {

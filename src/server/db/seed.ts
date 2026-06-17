@@ -1,11 +1,11 @@
-import User from './models/user.ts'
-import Organisation from './models/organisation.ts'
+import logger from '../util/logger.ts'
 import Cu from './models/cu.ts'
 import Cur from './models/cur.ts'
 import CurCu from './models/curCu.ts'
-import StudyRight from './models/studyRight.ts'
 import Enrolment from './models/enrolment.ts'
-import logger from '../util/logger.ts'
+import Organisation from './models/organisation.ts'
+import StudyRight from './models/studyRight.ts'
+import User from './models/user.ts'
 
 async function wipeDatabase() {
   logger.info(LOG.wipingDb)

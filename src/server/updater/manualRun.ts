@@ -1,5 +1,5 @@
-import { createUpdaterRun, finishUpdaterRun, getRunningUpdaterRun } from '../util/dbActions.ts'
 import type { UpdaterRun } from '../../common/types.ts'
+import { createUpdaterRun, finishUpdaterRun, getRunningUpdaterRun } from '../util/dbActions.ts'
 import { runWithClear } from './index.ts'
 
 // Returns the newly created run row, or null if a run is already in progress.

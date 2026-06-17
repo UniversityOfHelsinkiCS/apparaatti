@@ -1,4 +1,5 @@
 import { ToggleButton } from '@mui/material'
+
 import type { SortMode } from '../CourseSortControls'
 
 interface SortButtonProps {

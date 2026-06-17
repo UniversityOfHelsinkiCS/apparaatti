@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react'
-import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+
 import { CourseData, Question, User, UserSettings, Variant } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
-import useApi from '../util/useApi'
+import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
 import {
   checkChallenge,
@@ -21,6 +21,7 @@ import {
   checkStudyYear,
   isActiveFilterState,
 } from '../util/filtering'
+import useApi from '../util/useApi'
 
 type LocalFilterStateKey =
   | 'replacement'

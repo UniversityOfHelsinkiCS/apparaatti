@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import type { CourseData, Period } from '../../common/types.ts'
 import { filterCourseDatas, FilterStateType } from '../../client/contexts/filterContext.tsx'
+import type { CourseData, Period } from '../../common/types.ts'
 
 const createCustomCodeUrns = (...codes: string[]) => ({
   'urn:code:custom:hy-university-root-id:kk-apparaatti': codes.map(

@@ -1,23 +1,24 @@
+import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
+
+import requireAdmin from '../middleware/requireAdmin.ts'
+import requireSuperuser from '../middleware/requireSuperuser.ts'
+import requireUser from '../middleware/requireUser.ts'
+import {
+  createOrUpdateCourseAdminReviewEntry,
+  getUpdaterRuns,
+  getUserFeedbackEntries,
+  usersWithWhere,
+} from '../util/dbActions.ts'
+import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import {
   getWhereClauseForManyWordSearch,
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
-import {
-  createOrUpdateCourseAdminReviewEntry,
-  getUserFeedbackEntries,
-  getUpdaterRuns,
-  usersWithWhere,
-} from '../util/dbActions.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
-import { searchCoursesWithPagination } from '../util/dbActions.ts'
 import statsRouter from './statsRouter.ts'
-import axios from 'axios'
-import requireUser from '../middleware/requireUser.ts'
-import requireAdmin from '../middleware/requireAdmin.ts'
-import requireSuperuser from '../middleware/requireSuperuser.ts'
 
 const UPDATER_RUN_URL = 'http://apparaatti-updater/api/updater/run'
 

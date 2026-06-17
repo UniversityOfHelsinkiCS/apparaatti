@@ -1,6 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps, type Theme } from '@mui/material/styles'
+
 import { hy } from './hyColors'
 
 type Variant = 'primary' | 'secondary' | 'supplementary'

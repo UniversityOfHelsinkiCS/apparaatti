@@ -18,9 +18,9 @@
  *   - Does not require state management in filterConfigMap
  */
 
-import Filter from './models/filter.ts'
 import type { FilterConfig } from '../../common/types.ts'
 import logger from '../util/logger.ts'
+import Filter from './models/filter.ts'
 
 // ── Shared localized option sets ────────────────────────────────────────────
 

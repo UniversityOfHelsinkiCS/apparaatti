@@ -1,6 +1,7 @@
 import { useState } from 'react'
+
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
-import { blankLocalized, blankFilter, normalizeDraft } from './filterEditorUtils.ts'
+import { blankFilter, blankLocalized, normalizeDraft } from './filterEditorUtils.ts'
 
 export const useFilterDraft = (filter: FilterConfig | null) => {
   const [draft, setDraft] = useState<FilterConfig>(() => (filter === null ? blankFilter() : normalizeDraft(filter)))

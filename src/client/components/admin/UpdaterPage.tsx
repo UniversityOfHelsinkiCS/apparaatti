@@ -1,6 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
-import { Navigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import {
   Alert,
   Box,
@@ -19,14 +16,18 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import AdminNavbar from './AdminNavbar.tsx'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Navigate } from 'react-router-dom'
+
+import type { UpdaterRun } from '../../../common/types.ts'
+import useApiMutation from '../../hooks/useApiMutation.tsx'
+import { RedirectToLogin } from '../../util/redirectToLogin.ts'
+import useApi from '../../util/useApi.tsx'
+import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackContainedButton from '../common/BlackContainedButton.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
-import useApi from '../../util/useApi.tsx'
-import useApiMutation from '../../hooks/useApiMutation.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
-import type { UpdaterRun } from '../../../common/types.ts'
+import AdminNavbar from './AdminNavbar.tsx'
 
 const POLL_INTERVAL_MS = 5000
 

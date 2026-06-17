@@ -15,15 +15,16 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
 import type { ChangeEvent } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import LabeledCheckbox from './common/LabeledCheckbox'
-import FormSubmitActions from './common/FormSubmitActions'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
+
+import { useFilterContext } from '../contexts/filterContext'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
-import { useFilterContext } from '../contexts/filterContext'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
+import FormSubmitActions from './common/FormSubmitActions'
+import LabeledCheckbox from './common/LabeledCheckbox'
 
 type FeedbackModalProps = {
   open: boolean

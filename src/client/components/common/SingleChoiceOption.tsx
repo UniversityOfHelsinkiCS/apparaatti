@@ -1,7 +1,8 @@
 import { FormControlLabel } from '@mui/material'
-import HyRadio from './hy/HyRadio'
-import HyBadge from './hy/HyBadge'
+
 import { Option } from '../../../common/types'
+import HyBadge from './hy/HyBadge'
+import HyRadio from './hy/HyRadio'
 
 interface SingleChoiceOptionProps {
   option: Option

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Agent as HttpAgent } from 'http'
 import { Agent as HttpsAgent } from 'https'
 
-import { IMPORTER_URL, API_TOKEN } from '../util/config.ts'
+import { API_TOKEN, IMPORTER_URL } from '../util/config.ts'
 import logger from '../util/logger.ts'
 
 export const importerClient = axios.create({

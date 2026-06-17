@@ -1,6 +1,6 @@
 import logger from '../util/logger.ts'
-import { fetchData } from './importerClient.ts'
 import * as redis from '../util/redis.ts'
+import { fetchData } from './importerClient.ts'
 
 const logError = (message: string, error: Error) => {
   logger.error(`[UPDATER] ${message} ${error.name}, ${error.message}`)

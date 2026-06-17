@@ -1,8 +1,9 @@
 import express from 'express'
 import { z } from 'zod'
+
 import { getGroupLabel } from '../../common/datelabels.ts'
-import { getUserVisits } from '../util/dbActions.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
+import { getUserVisits } from '../util/dbActions.ts'
 import { localLog } from '../util/dev.ts'
 
 const statsRouter = express.Router()

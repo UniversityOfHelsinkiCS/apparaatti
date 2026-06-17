@@ -1,6 +1,6 @@
 import type { User } from '../../common/types'
-import useApi from './useApi'
 import { isUnauthorizedResponse } from './redirectToLogin'
+import useApi from './useApi'
 
 type RequiredUserResult = {
   user: User | null

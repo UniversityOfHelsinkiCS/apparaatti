@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize'
+
 import type { Migration } from '../connection.ts'
 import { seedFilters } from '../seedFilters.ts'
 

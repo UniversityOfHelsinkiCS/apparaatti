@@ -1,16 +1,17 @@
 import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
-import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
+import { Navigate } from 'react-router-dom'
+
 import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
-import AdminNavbar from './AdminNavbar.tsx'
-import CoursesSearchFields from './CoursesSearchFields.tsx'
-import type { ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
-import ReviewActions from './ReviewActions.tsx'
-import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
+import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
+import useRequiredUser from '../../util/useRequiredUser.ts'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import AdminNavbar from './AdminNavbar.tsx'
+import type { ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
+import CoursesSearchFields from './CoursesSearchFields.tsx'
+import ReviewActions from './ReviewActions.tsx'
 
 interface CourseUnit {
   id: string

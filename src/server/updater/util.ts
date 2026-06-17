@@ -1,5 +1,4 @@
 import { redis } from '../util/redis.ts'
-
 import type { PartialRecord } from './types.ts'
 
 type AllowedBulkCreateOptionField = 'conflictAttributes' | 'updateOnDuplicate' | 'ignoreDuplicates'

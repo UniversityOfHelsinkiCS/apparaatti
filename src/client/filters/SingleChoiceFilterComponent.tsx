@@ -1,10 +1,11 @@
-import { RadioGroup, Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Question, Option } from '../../common/types'
+import { Accordion, AccordionDetails, AccordionSummary, RadioGroup, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import Markdown from 'react-markdown'
 import { useTranslation } from 'react-i18next'
+import Markdown from 'react-markdown'
+
+import { Option, Question } from '../../common/types'
+import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import { useFilterContext } from '../contexts/filterContext'
 
 interface SingleChoiceFilterComponentProps {

@@ -1,5 +1,6 @@
-import { DataTypes, Model } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
+
 import { sequelize } from '../connection.ts'
 class UserVisits extends Model<InferAttributes<UserVisits>, InferCreationAttributes<UserVisits>> {
   declare id: CreationOptional<number> // sequelize breaks if the table entries wont have an id

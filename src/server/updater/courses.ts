@@ -1,11 +1,11 @@
-import type { SisuCourseWithRealization } from './types.ts'
-import { mangleData } from './mangleData.ts'
+import { Op } from 'sequelize'
 
-import Cur from '../db/models/cur.ts'
 import type { CourseRealization, CurCuRelation } from '../../common/types.ts'
 import Cu from '../db/models/cu.ts'
+import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
-import { Op } from 'sequelize'
+import { mangleData } from './mangleData.ts'
+import type { SisuCourseWithRealization } from './types.ts'
 // Find the newest course unit that has started before the course realisation
 
 const createCursFromUpdater = async (realisations: SisuCourseWithRealization[]) => {

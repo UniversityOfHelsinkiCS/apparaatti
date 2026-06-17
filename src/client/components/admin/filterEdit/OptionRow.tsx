@@ -1,5 +1,6 @@
-import { Box, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Box, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material'
+
 import type { FilterOption } from '../../../../common/types.ts'
 import LocalizedField from './LocalizedField.tsx'
 

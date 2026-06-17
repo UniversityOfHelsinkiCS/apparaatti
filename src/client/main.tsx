@@ -1,13 +1,13 @@
+import '@uh-design-system/component-library/dist/fonts/fonts.css'
+
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { LanguageContextProvider } from './contexts/languageContext.tsx'
-import initializeI18n from './util/i18n.ts'
 import AppRouter from './router.tsx'
-import '@uh-design-system/component-library/dist/fonts/fonts.css'
+import initializeI18n from './util/i18n.ts'
 
 const queryClient = new QueryClient()
 

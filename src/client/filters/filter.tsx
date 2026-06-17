@@ -1,13 +1,14 @@
-import { useState } from 'react'
 import { SelectChangeEvent } from '@mui/material'
-import { Variant } from '../../common/types'
-import QuestionTitleV2 from '../components/QuestionTitleV2'
-import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
 import { Box } from '@mui/material'
-import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
-import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
+import { useState } from 'react'
+
+import { Variant } from '../../common/types'
+import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
+import QuestionTitleV2 from '../components/QuestionTitleV2'
 import DropdownFilterComponent from './DropdownFilterComponent'
 import InfoOnlyFilterComponent from './InfoOnlyFilterComponent'
+import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
+import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 
 /**
  * A filter can be multichoice, single choice, or a drop down menu it can be read from the filter object

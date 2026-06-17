@@ -1,7 +1,8 @@
-import { Model, DataTypes } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
-import { sequelize } from '../connection.ts'
+import { DataTypes, Model } from 'sequelize'
+
 import type { LocalizedString } from '../../../common/types.ts'
+import { sequelize } from '../connection.ts'
 class Cu extends Model<InferAttributes<Cu>, InferCreationAttributes<Cu>> {
   declare id: string
   declare credits: Record<string, number>

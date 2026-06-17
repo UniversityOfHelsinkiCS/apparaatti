@@ -1,7 +1,8 @@
-import { DataTypes, Model } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
-import { sequelize } from '../connection.ts'
+import { DataTypes, Model } from 'sequelize'
+
 import type { RecommendationMetadata } from '../../../common/types.ts'
+import { sequelize } from '../connection.ts'
 
 class UserFeedback extends Model<InferAttributes<UserFeedback>, InferCreationAttributes<UserFeedback>> {
   declare id: CreationOptional<number>

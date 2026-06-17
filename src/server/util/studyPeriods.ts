@@ -1,5 +1,4 @@
 import type { Period } from '../../common/types.ts'
-
 //source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
 //end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
 import { getCurrentDate } from './testUtils.ts'

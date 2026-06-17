@@ -1,6 +1,6 @@
 import type { CourseData } from '../../common/types'
-import { translateLocalizedString } from './i18n'
 import type { SortDirection, SortMode } from '../components/CourseSortControls'
+import { translateLocalizedString } from './i18n'
 
 export const getEarliestPeriodStart = (c: CourseData): number => {
   if (!c.period || c.period.length === 0) {

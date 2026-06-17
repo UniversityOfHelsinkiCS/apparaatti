@@ -1,9 +1,10 @@
 import { Box } from '@mui/material'
-import FilterConfigEditor from './FilterConfigEditor.tsx'
 import { Navigate } from 'react-router-dom'
-import useRequiredUser from '../../util/useRequiredUser.ts'
+
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
+import useRequiredUser from '../../util/useRequiredUser.ts'
 import AdminNavbar from './AdminNavbar.tsx'
+import FilterConfigEditor from './FilterConfigEditor.tsx'
 
 const AdminPage = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()

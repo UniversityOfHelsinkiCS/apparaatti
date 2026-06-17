@@ -1,6 +1,7 @@
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Stack, Paper } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
 import type { RecommendationMetadata } from '../../../common/types.ts'
 
 type FeedbackMetadataDisplayProps = {

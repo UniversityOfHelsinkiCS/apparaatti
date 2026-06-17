@@ -1,6 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { useFilterContext } from '../contexts/filterContext'
 import BlackContainedButton from './common/BlackContainedButton'
 import BlackOutlinedButton from './common/BlackOutlinedButton'

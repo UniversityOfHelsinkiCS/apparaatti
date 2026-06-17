@@ -1,5 +1,5 @@
-import LokiTransport from 'winston-loki'
 import winston from 'winston'
+import LokiTransport from 'winston-loki'
 
 import { inProduction, LOKI_HOST } from './config.ts'
 

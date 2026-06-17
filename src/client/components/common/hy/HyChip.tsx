@@ -1,5 +1,6 @@
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
+
 import { hy } from './hyColors'
 
 interface HyChipProps {

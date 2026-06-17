@@ -1,5 +1,6 @@
-import { DataTypes, Model } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
+
 import { sequelize } from '../connection.ts'
 import type UserSettings from './userSettings.ts'
 

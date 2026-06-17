@@ -1,6 +1,7 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { Question, Option } from '../../common/types'
 import React from 'react'
+
+import { Option, Question } from '../../common/types'
 import { useFilterContext } from '../contexts/filterContext'
 
 interface DropdownFilterComponentProps {

@@ -1,10 +1,11 @@
 import { Box, RadioGroup } from '@mui/material'
-import SingleChoiceOption from './common/SingleChoiceOption'
+import { useState } from 'react'
+
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
-import QuestionTitleV2 from './QuestionTitleV2.tsx'
-import { useState } from 'react'
+import SingleChoiceOption from './common/SingleChoiceOption'
 import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'
+import QuestionTitleV2 from './QuestionTitleV2.tsx'
 
 const RadioQuestionV2 = ({
   question,

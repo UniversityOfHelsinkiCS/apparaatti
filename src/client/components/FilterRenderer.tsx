@@ -1,9 +1,10 @@
+import { SyntheticEvent } from 'react'
+
+import { Question } from '../../common/types'
+import { filterConfigMap, shouldRenderWelcomeFilter, useFilterContext } from '../contexts/filterContext'
+import Filter from '../filters/filter'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import FilterAccordion from './FilterAccordion'
-import { useFilterContext, filterConfigMap, shouldRenderWelcomeFilter } from '../contexts/filterContext'
-import Filter from '../filters/filter'
-import { Question } from '../../common/types'
-import { SyntheticEvent } from 'react'
 
 interface FilterRendererProps {
   filter: Question

@@ -1,9 +1,10 @@
 import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Question } from '../../common/types'
 import Markdown from 'react-markdown'
-import ActionButtonV2 from './common/ActionButtonV2'
+
+import { Question } from '../../common/types'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
+import ActionButtonV2 from './common/ActionButtonV2'
 
 const ExtraInfoModalV2 = ({
   question,

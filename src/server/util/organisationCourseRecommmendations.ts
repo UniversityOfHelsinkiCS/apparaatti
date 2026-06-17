@@ -1,5 +1,6 @@
-import xlsx from 'xlsx'
 import path from 'path'
+import xlsx from 'xlsx'
+
 import type { CourseData } from '../../common/types.ts'
 type Language = {
   name: string

@@ -1,6 +1,7 @@
 import { Paper, Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import LanguageSelector from '../LanguageSelector.tsx'
 

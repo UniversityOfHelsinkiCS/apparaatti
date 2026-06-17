@@ -1,6 +1,6 @@
 import cron from 'node-cron'
 
-import { UPDATER_CRON_ENABLED, inProduction } from '../util/config.ts'
+import { inProduction, UPDATER_CRON_ENABLED } from '../util/config.ts'
 import { triggerUpdaterRun } from './manualRun.ts'
 
 const setupCron = async () => {

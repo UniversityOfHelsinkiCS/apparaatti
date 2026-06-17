@@ -1,4 +1,5 @@
-import { useMutation, type MutateOptions } from '@tanstack/react-query'
+import { type MutateOptions, useMutation } from '@tanstack/react-query'
+
 import { generateSettings } from '../util/useApi'
 
 const useApiMutation = <TData = unknown,>(mutationFn: (res: Response) => Promise<void>, endpoint: string) => {

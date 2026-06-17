@@ -1,9 +1,10 @@
+import { Autocomplete, Box, Button, FormControl, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Autocomplete, Box, Button, FormControl, TextField, Typography } from '@mui/material'
+
+import { User } from '../../common/types'
 import { loginAs } from '../util/loginAs'
 import useApi from '../util/useApi'
-import { User } from '../../common/types'
 
 const trimSearch = (search: string) => {
   const trimmedSearch = search.trim()

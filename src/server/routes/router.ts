@@ -1,37 +1,27 @@
 import type { Response } from 'express'
 import express from 'express'
-import { AnswerSchema, UserFeedbackSchema, UserSettingsSchema } from '../../common/validators.ts'
+import passport from 'passport'
+
 import type {
   AnswerData,
   CourseData,
   RecommendationMetadata,
   UserSettings as UserSettingsType,
 } from '../../common/types.ts'
-import passport from 'passport'
-import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
-import { getStudyData } from '../util/studydata.ts'
-import debugRouter from './debugRouter.ts'
-import {
-  inDevelopment,
-  UPDATER_CRON_ENABLED,
-  GIT_SHA,
-  PACKAGE_VERSION,
-  IMAGE_SHA,
-  RELEASE_VERSION,
-} from '../util/config.ts'
-import {
-  codesInOrganisations,
-  courseHasCustomCodeUrn,
-  getUserOrganisationRecommendations,
-  readOrganisationRecommendationData,
-} from '../util/organisationCourseRecommmendations.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
-import { isAdmin, isSuperuser } from '../util/validations.ts'
-import requireUser from '../middleware/requireUser.ts'
+import { AnswerSchema, UserFeedbackSchema, UserSettingsSchema } from '../../common/validators.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
-import adminRouter from './admin.ts'
-import { organisationCodeToUrn } from '../util/constants.ts'
+import requireUser from '../middleware/requireUser.ts'
 import { triggerUpdaterRun } from '../updater/manualRun.ts'
+import {
+  GIT_SHA,
+  IMAGE_SHA,
+  inDevelopment,
+  PACKAGE_VERSION,
+  RELEASE_VERSION,
+  UPDATER_CRON_ENABLED,
+} from '../util/config.ts'
+import { organisationCodeToUrn } from '../util/constants.ts'
 import {
   allOrganisations,
   createUserFeedbackEntry,
@@ -40,7 +30,18 @@ import {
   organisationsWithSupportedCodes,
   updateUserSettings,
 } from '../util/dbActions.ts'
+import {
+  codesInOrganisations,
+  courseHasCustomCodeUrn,
+  getUserOrganisationRecommendations,
+  readOrganisationRecommendationData,
+} from '../util/organisationCourseRecommmendations.ts'
+import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
+import { getStudyData } from '../util/studydata.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
+import { isAdmin, isSuperuser } from '../util/validations.ts'
+import adminRouter from './admin.ts'
+import debugRouter from './debugRouter.ts'
 
 const router = express.Router({ mergeParams: true })
 

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('../../server/util/dbActions.ts', () => ({
   curcusWithUnitIdOf: vi.fn(),
@@ -7,8 +7,8 @@ vi.mock('../../server/util/dbActions.ts', () => ({
   organisationWithGroupIdOf: vi.fn(),
 }))
 
-import { sortCourseData } from '../../server/util/recommender.ts'
 import type { CourseData } from '../../common/types.ts'
+import { sortCourseData } from '../../server/util/recommender.ts'
 
 function createCourse(id: string, courseCodes: string[]): CourseData {
   const now = new Date()

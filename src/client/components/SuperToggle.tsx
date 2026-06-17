@@ -1,5 +1,6 @@
 import { FormControlLabel, Switch } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
 import { useFilterContext } from '../contexts/filterContext'
 
 const SuperToggle = ({ filterId }: { filterId: string }) => {

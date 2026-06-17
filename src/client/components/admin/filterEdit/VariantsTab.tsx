@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { Box, Button, IconButton, List, ListItemButton, ListItemText } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Box, Button, IconButton, List, ListItemButton, ListItemText } from '@mui/material'
+import { useState } from 'react'
+
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
 import VariantEditor from './VariantEditor.tsx'
 

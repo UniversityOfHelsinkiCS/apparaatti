@@ -1,4 +1,10 @@
 import type { AnswerData, CourseData } from '../../common/types.ts'
+import {
+  collaborationOrganisationCourseNameIncludes,
+  collaborationOrganisationNames,
+  organisationCodeToUrn,
+} from './constants.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import { uniqueVals } from './misc.ts'
 import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {
@@ -14,12 +20,6 @@ import {
   readOrganisationRecommendationData,
 } from './organisationCourseRecommmendations.ts'
 import { getCoursePeriod } from './studyPeriods.ts'
-import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
-import {
-  collaborationOrganisationNames,
-  collaborationOrganisationCourseNameIncludes,
-  organisationCodeToUrn,
-} from './constants.ts'
 import { getNormalizedStudyPlace } from './studyPlace.ts'
 
 export { getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue } from './studyPlace.ts'

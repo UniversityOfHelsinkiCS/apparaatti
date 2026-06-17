@@ -1,11 +1,13 @@
-import { defineConfig } from 'eslint/config'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
-import react from 'eslint-plugin-react'
-import globals from 'globals'
-import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
 import js from '@eslint/js'
+import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+import { defineConfig } from 'eslint/config'
+import react from 'eslint-plugin-react'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import globals from 'globals'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -33,7 +35,14 @@ export default defineConfig([
       },
     },
 
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+
     rules: {
+      'simple-import-sort/imports': 'warn',
+      'simple-import-sort/exports': 'warn',
+
       'linebreak-style': ['error', 'unix'],
       semi: ['error', 'never'],
 

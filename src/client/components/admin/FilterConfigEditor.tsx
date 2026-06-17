@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import type { ChangeEvent } from 'react'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import {
   Box,
   Button,
@@ -12,12 +12,13 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import useApi from '../../util/useApi.tsx'
+import type { ChangeEvent } from 'react'
+import { useState } from 'react'
+
 import type { FilterConfig } from '../../../common/types.ts'
-import FilterEditDialog from './FilterEditDialog.tsx'
+import useApi from '../../util/useApi.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import FilterEditDialog from './FilterEditDialog.tsx'
 
 interface FilterConfigEditorProps {
   isSuperuser: boolean

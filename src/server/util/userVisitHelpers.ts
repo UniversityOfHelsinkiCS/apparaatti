@@ -1,5 +1,5 @@
-import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions.ts'
 import type { User } from '../../common/types.ts'
+import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions.ts'
 import { localLog } from './dev.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest

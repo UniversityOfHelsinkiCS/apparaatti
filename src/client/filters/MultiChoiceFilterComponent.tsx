@@ -1,8 +1,9 @@
 import { FormControlLabel, FormGroup } from '@mui/material'
-import { Question, Option } from '../../common/types'
 import React from 'react'
-import { useFilterContext } from '../contexts/filterContext'
+
+import { Option, Question } from '../../common/types'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
+import { useFilterContext } from '../contexts/filterContext'
 
 interface MultiChoiceFilterComponentProps {
   filter: Question

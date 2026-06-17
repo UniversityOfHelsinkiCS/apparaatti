@@ -1,9 +1,10 @@
+import { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TFunction } from 'i18next'
-import { Question, Variant, FilterConfig } from '../../common/types'
-import useApi from '../util/useApi'
+
+import { FilterConfig, Question, Variant } from '../../common/types'
 import { toQuestion } from '../util/filterConfigAdapter'
+import useApi from '../util/useApi'
 
 export const pickVariant = (question: Question, variantId: string) => {
   const hit = question.variants.find(v => v.name === variantId)

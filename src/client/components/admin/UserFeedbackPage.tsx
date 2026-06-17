@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   Paper,
   Stack,
   Table,
@@ -14,20 +15,20 @@ import {
   TableRow,
   TextField,
   Typography,
-  Divider,
 } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
-import AdminNavbar from './AdminNavbar.tsx'
-import ActionButtonV2 from '../common/ActionButtonV2.tsx'
-import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
-import FeedbackMetadataDisplay from './FeedbackMetadataDisplay.tsx'
+
 import { toDayLabel } from '../../../common/datelabels.ts'
-import useRequiredUser from '../../util/useRequiredUser.ts'
+import type { RecommendationMetadata } from '../../../common/types.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
-import type { RecommendationMetadata } from '../../../common/types.ts'
+import useRequiredUser from '../../util/useRequiredUser.ts'
+import ActionButtonV2 from '../common/ActionButtonV2.tsx'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import AdminNavbar from './AdminNavbar.tsx'
+import FeedbackMetadataDisplay from './FeedbackMetadataDisplay.tsx'
 
 type UserFeedback = {
   id: number

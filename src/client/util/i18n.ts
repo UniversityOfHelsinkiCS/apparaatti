@@ -1,10 +1,10 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
+import { Language, LocalizedString } from '../../common/types'
 import en from '../locales/en.ts'
 import fi from '../locales/fi.ts'
 import sv from '../locales/sv.ts'
-import { Language, LocalizedString } from '../../common/types'
 
 const languageKeys: readonly Language[] = ['fi', 'sv', 'en'] as const
 

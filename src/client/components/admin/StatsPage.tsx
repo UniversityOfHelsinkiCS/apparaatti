@@ -1,13 +1,14 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
-import { Navigate } from 'react-router-dom'
 import { useState } from 'react'
-import { toDayLabel, type GroupBy } from '../../../common/datelabels.ts'
-import AdminNavbar from './AdminNavbar.tsx'
-import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
+import { Navigate } from 'react-router-dom'
+
+import { type GroupBy, toDayLabel } from '../../../common/datelabels.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
+import useRequiredUser from '../../util/useRequiredUser.ts'
+import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import AdminNavbar from './AdminNavbar.tsx'
 
 type StatsRow = {
   label: string

@@ -1,23 +1,24 @@
 import { Op } from 'sequelize'
+
+import type {
+  RecommendationMetadata,
+  UpdaterRun as UpdaterRunType,
+  UserFeedback as UserFeedbackType,
+  UserSettings as UserSettingsType,
+  UserVisit,
+} from '../../common/types.ts'
+import CourseAdminReview from '../db/models/CourseAdminReview.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
 import StudyRight from '../db/models/studyRight.ts'
-import User from '../db/models/user.ts'
-import UserSettings from '../db/models/userSettings.ts'
-import UserFeedback from '../db/models/userFeedback.ts'
-import UserVisits from '../db/models/userVisits.ts'
-import type {
-  RecommendationMetadata,
-  UpdaterRun as UpdaterRunType,
-  UserFeedback as UserFeedbackType,
-  UserVisit,
-  UserSettings as UserSettingsType,
-} from '../../common/types.ts'
-import CourseAdminReview from '../db/models/CourseAdminReview.ts'
 import UpdaterRun from '../db/models/updaterRun.ts'
+import User from '../db/models/user.ts'
+import UserFeedback from '../db/models/userFeedback.ts'
+import UserSettings from '../db/models/userSettings.ts'
+import UserVisits from '../db/models/userVisits.ts'
 
 export async function cuWithCourseCodeOf(courseCodeStrings: string[]) {
   return await Cu.findAll({

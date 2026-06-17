@@ -1,21 +1,21 @@
 import express from 'express'
 import { Op } from 'sequelize'
 
-import { uniqueVals } from '../util/misc.ts'
-import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
+import requireAdmin from '../middleware/requireAdmin.ts'
+import requireUser from '../middleware/requireUser.ts'
 import {
-  allCurs,
-  allCursRaw,
   allCurCus,
   allCurCusRaw,
+  allCurs,
+  allCursRaw,
+  cursWithWhereRaw,
   cusWithIds,
   cusWithWhere,
-  cursWithWhereRaw,
   organisationWithGroupIdOf,
   updateUserSettings,
 } from '../util/dbActions.ts'
-import requireAdmin from '../middleware/requireAdmin.ts'
-import requireUser from '../middleware/requireUser.ts'
+import { uniqueVals } from '../util/misc.ts'
+import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
 
 const debugRouter = express.Router({ mergeParams: true })
 

@@ -1,5 +1,6 @@
 import { Stack, ToggleButtonGroup, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
 import SortButton from './common/SortButton'
 
 export type SortMode = 'recommended' | 'name' | 'period'

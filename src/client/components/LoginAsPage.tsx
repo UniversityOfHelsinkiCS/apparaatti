@@ -1,9 +1,10 @@
 import { Box } from '@mui/material'
-import LoginAs from './LoginAs.tsx'
 import { Navigate } from 'react-router-dom'
-import AdminNavbar from './admin/AdminNavbar.tsx'
-import useRequiredUser from '../util/useRequiredUser.ts'
+
 import { RedirectToLogin } from '../util/redirectToLogin.ts'
+import useRequiredUser from '../util/useRequiredUser.ts'
+import AdminNavbar from './admin/AdminNavbar.tsx'
+import LoginAs from './LoginAs.tsx'
 
 const LoginAsPage = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()

@@ -1,6 +1,8 @@
-import { Modal, Box, Typography, Button, SxProps, Theme } from '@mui/material'
+import { Box, Button, Modal, SxProps, Theme, Typography } from '@mui/material'
 import { FC, Fragment, useEffect } from 'react'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
+import { useTranslation } from 'react-i18next'
+
+import { Question, Variant } from '../../common/types'
 import {
   filterConfigMap,
   FilterConfigMapType,
@@ -8,13 +10,12 @@ import {
   shouldRenderWelcomeFilter,
   useFilterContext,
 } from '../contexts/filterContext'
-import { Question, Variant } from '../../common/types'
+import Filter from '../filters/filter'
+import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import BlackOutlinedButton from './common/BlackOutlinedButton'
+import LanguageSelector from './LanguageSelector'
 import RadioQuestionV2 from './RadioQuestionV2'
 import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
-import { useTranslation } from 'react-i18next'
-import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import Filter from '../filters/filter'
-import LanguageSelector from './LanguageSelector'
 
 type WelcomeModalProps = {
   open: boolean

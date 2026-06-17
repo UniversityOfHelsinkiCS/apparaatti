@@ -1,9 +1,10 @@
-import { Box, Typography, Paper, Stack } from '@mui/material'
-import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
+import { Box, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
-import ResetFiltersButton from './ResetFiltersButton'
+
+import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
 import ActionButtonV2 from './common/ActionButtonV2'
+import ResetFiltersButton from './ResetFiltersButton'
 
 type UnansweredPromtProps = {
   filters: { id: string; shortName?: string }[]

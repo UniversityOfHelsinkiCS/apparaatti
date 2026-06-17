@@ -1,10 +1,11 @@
 import { Box, Stack } from '@mui/material'
-import CourseRecommendationV2 from './CourseRecommendationV2'
-import { useFilterContext } from '../contexts/filterContext'
-import NoRecommendationsInfo from './NoRecommendationsInfo'
 import { useState } from 'react'
-import CourseSortControls, { type SortMode, type SortDirection } from './CourseSortControls'
+
+import { useFilterContext } from '../contexts/filterContext'
 import { sortCourses } from '../util/courseSort'
+import CourseRecommendationV2 from './CourseRecommendationV2'
+import CourseSortControls, { type SortDirection, type SortMode } from './CourseSortControls'
+import NoRecommendationsInfo from './NoRecommendationsInfo'
 
 const CourseRecommendations = () => {
   const { finalRecommendedCourses } = useFilterContext()

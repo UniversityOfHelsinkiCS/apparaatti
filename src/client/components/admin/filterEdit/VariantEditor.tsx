@@ -1,9 +1,10 @@
-import { Box, Button, Divider, FormControlLabel, Switch, TextField, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
+import { Box, Button, Divider, FormControlLabel, Switch, TextField, Typography } from '@mui/material'
+
 import type { FilterOption, FilterVariant } from '../../../../common/types.ts'
 import { SWITCH_SX } from './filterEditorUtils.ts'
-import OptionRow from './OptionRow.tsx'
 import LocalizedField from './LocalizedField.tsx'
+import OptionRow from './OptionRow.tsx'
 
 interface VariantEditorProps {
   variant: FilterVariant

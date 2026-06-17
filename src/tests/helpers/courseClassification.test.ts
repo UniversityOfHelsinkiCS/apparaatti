@@ -6,14 +6,13 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 }))
 
 import type { CourseData } from '../../common/types.ts'
+import { organisationWithGroupIdOf } from '../../server/util/dbActions.ts'
 import {
-  isIndependentCourse,
-  localeNameIncludesAny,
   courseIsCollaboration,
   courseSpansMultiplePeriods,
+  isIndependentCourse,
+  localeNameIncludesAny,
 } from '../../server/util/recommender.ts'
-
-import { organisationWithGroupIdOf } from '../../server/util/dbActions.ts'
 
 const mockOrganisationWithGroupIdOf = organisationWithGroupIdOf as any
 

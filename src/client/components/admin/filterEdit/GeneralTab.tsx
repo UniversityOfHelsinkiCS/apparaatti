@@ -1,4 +1,5 @@
 import { Box, FormControlLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material'
+
 import type { FilterConfig } from '../../../../common/types.ts'
 import { DISPLAY_TYPES, SWITCH_SX } from './filterEditorUtils.ts'
 import LocalizedField from './LocalizedField.tsx'

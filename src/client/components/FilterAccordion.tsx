@@ -1,9 +1,10 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack, Box } from '@mui/material'
-import HyChip from './common/hy/HyChip'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
 import { ReactNode, SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFilterContext, filterConfigMap, getFilterVariant } from '../contexts/filterContext'
+
+import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import HyChip from './common/hy/HyChip'
 import HyTag from './common/hy/HyTag'
 
 interface ActiveFilterChipsProps {

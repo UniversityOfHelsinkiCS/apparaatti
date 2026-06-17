@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { toQuestion } from '../client/util/filterConfigAdapter'
 import { getDefaultSelectedOptionIds } from '../client/util/filterDefaults'
 import type { FilterConfig } from '../common/types'

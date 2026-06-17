@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Button,
   CircularProgress,
@@ -10,10 +9,12 @@ import {
   Tab,
   Tabs,
 } from '@mui/material'
+import { useState } from 'react'
+
 import type { FilterConfig } from '../../../common/types.ts'
 import { adminFetch, toNullIfEmpty } from './filterEdit/filterEditorUtils.ts'
-import { useFilterDraft } from './filterEdit/useFilterDraft.ts'
 import GeneralTab from './filterEdit/GeneralTab.tsx'
+import { useFilterDraft } from './filterEdit/useFilterDraft.ts'
 import VariantsTab from './filterEdit/VariantsTab.tsx'
 
 interface FilterEditDialogProps {

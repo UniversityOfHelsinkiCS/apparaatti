@@ -1,5 +1,6 @@
-import { Model, BIGINT, STRING, JSONB, DATE, DataTypes } from 'sequelize'
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
+import { BIGINT, DataTypes, DATE, JSONB, Model, STRING } from 'sequelize'
+
 import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model<InferAttributes<StudyRight>, InferCreationAttributes<StudyRight>> {
