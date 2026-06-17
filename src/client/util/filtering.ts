@@ -51,8 +51,7 @@ export const checkIntegrated = (course: CourseData, value: string) => {
 }
 
 export const checkIndependent = (course: CourseData, value: string) => {
-  const result =
-    hasApparaattiCodeUrn(course, 'kks-alm') || (course.name.fi?.toLowerCase().includes('itsenäinen') ?? false)
+  const result = course.courseUnitRealisationTypeUrn?.includes('independent') ?? false
   return value != '0' ? result : !result
 }
 
