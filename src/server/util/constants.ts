@@ -4,7 +4,7 @@ export const organisationCodeToUrn: Record<string, string> = {
   H20: 'kkt-oik',
   H10: 'kkt-teo',
   H74: 'kkt-ssk',
-  H70: 'kkt-val', //kkt-val -> valtiotieteel. might be confused with kks-val -> valmistuville, graduation,
+  H70: 'kkt-val',
   H90: 'kkt-ela',
   H60: 'kkt-kas', //kasvatustieteel.
   H57: 'kkt-bio',

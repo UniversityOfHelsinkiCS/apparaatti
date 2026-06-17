@@ -41,7 +41,7 @@ export const checkChallenge = (course: CourseData, value: string) => {
 }
 
 export const checkGraduation = (course: CourseData, value: string) => {
-  const result = hasApparaattiCodeUrn(course, 'kks-val') || hasApparaattiCodeUrn(course, 'kkt-val')
+  const result = hasApparaattiCodeUrn(course, 'kks-val')
   return value != '0' ? result : !result
 }
 

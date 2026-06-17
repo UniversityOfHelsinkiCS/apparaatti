@@ -254,7 +254,7 @@ export const organisationCodeToName: Record<string, string> = {
   H20: 'Oikeustieteellinen',
   H10: 'Teologinen',
   H74: 'Svenska social- och kommunalhögskolan',
-  H70: 'Valtiotieteellinen', //kkt-val -> valtiotieteel. might be confused with kks-val -> valmistuville, graduation,
+  H70: 'Valtiotieteellinen',
   H90: 'Eläinlääketieteellinen',
   H60: 'Kasvatustieteellinen', //kasvatustieteel.
   H57: 'Bio- ja ympäristö',

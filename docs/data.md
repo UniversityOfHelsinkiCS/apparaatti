@@ -24,8 +24,6 @@ These URNs are inspected from `customCodeUrns`.
 
 - `kks-val`
   - Graduation-related course.
-- `kkt-val`
-  - Also treated as graduation-related.
 - `kks-int`
   - Integrated studies.
 - `kks-kor`
@@ -40,22 +38,24 @@ These URNs are inspected from `customCodeUrns`.
 
 These URNs are used to detect whether a course is specific to the user's organisation. The app maps organisation codes to these URNs in `organisationCodeToUrn`.
 
-- `H40` -> `kkt-hum`
-- `H50` -> `kkt-mat`
-- `H20` -> `kkt-oik`
-- `H10` -> `kkt-teo`
-- `H74` -> `kkt-ssk`
-- `H70` -> `kkt-val`
-- `H90` -> `kkt-ela`
-- `H60` -> `kkt-kas`
-- `H57` -> `kkt-bio`
-- `H80` -> `kkt-mm`
-- `4141` -> `kkt-sps`
-- `H305` -> `kkt-ham`
-- `H30` -> `kkt-laa`
-- `H3456` -> `kkt-log`
-- `414` -> `kkt-psy`
-- `H55` -> `kkt-far`
+| Organisation code | Faculty | URN |
+|---|---|---|
+| `H40` | Humanistinen | `kkt-hum` |
+| `H50` | Matemaattis-luonnontieteellinen | `kkt-mat` |
+| `H20` | Oikeustieteellinen | `kkt-oik` |
+| `H10` | Teologinen | `kkt-teo` |
+| `H74` | Svenska social- och kommunalhögskolan | `kkt-ssk` |
+| `H70` | Valtiotieteellinen | `kkt-val` |
+| `H90` | Eläinlääketieteellinen | `kkt-ela` |
+| `H60` | Kasvatustieteellinen | `kkt-kas` |
+| `H57` | Bio- ja ympäristö | `kkt-bio` |
+| `H80` | Maatalous-metsä | `kkt-mm` |
+| `4141` | Soveltava psykologia | `kkt-sps` |
+| `H305` | Hammaslääketiede | `kkt-ham` |
+| `H30` | Lääketiede | `kkt-laa` |
+| `H3456` | Logopedia | `kkt-log` |
+| `414` | Psykologia | `kkt-psy` |
+| `H55` | Farmasia | `kkt-far` |
 
 ## Realisation Type URNs
 

@@ -19,7 +19,7 @@ The app recommends courses in two phases: the server narrows and sorts the pool 
 | `mentoring` | Valmentava | `checkMentoring` | course has `kks-pre` |
 | `finmu` | Finmu | `checkFinmu` | course code is `KK-FINMU` |
 | `challenge` | Mukautettu | `checkChallenge` | course has `kks-muk` |
-| `graduation` | Valmistuville | `checkGraduation` | course has `kks-val` or `kkt-val` |
+| `graduation` | Valmistuville | `checkGraduation` | course has `kks-val` |
 | `integrated` | Integroitu | `checkIntegrated` | course has `kks-int` |
 | `independent` | Itsenäinen | `checkIndependent` | `courseUnitRealisationTypeUrn` contains `independent` |
 | `study-place` | Opetusmuoto | `checkStudyPlace` | `normalizedStudyPlace` is in the selected set |
