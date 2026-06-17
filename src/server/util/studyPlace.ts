@@ -1,5 +1,4 @@
 import type { CourseData } from '../../common/types.ts'
-import { courseHasCustomCodeUrn } from './organisationCourseRecommmendations.ts'
 import { studyPlaceAliasToCanonicalIds } from './constants.ts'
 
 export function readArrOrSingleValue(val: string | string[]) {
@@ -32,10 +31,7 @@ export function getNormalizedStudyPlace(course: CourseData) {
 }
 
 export function isIndependentCourse(course: CourseData) {
-  const hasIndependentCodeUrn = courseHasCustomCodeUrn(course, 'kks-alm')
-  const hasIndependentInName = course.name.fi?.toLowerCase().includes('itsenäinen')
-
-  return hasIndependentCodeUrn || hasIndependentInName
+  return course.courseUnitRealisationTypeUrn?.includes('independent') ?? false
 }
 
 export function isExam(course: CourseData) {
