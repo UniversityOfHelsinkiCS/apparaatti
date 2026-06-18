@@ -1,4 +1,4 @@
-import { Box, Button, Modal, SxProps, Theme, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { FC, Fragment, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,7 +12,8 @@ import {
 } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
+import HyButton from './common/hy/HyButton'
+import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
 import RadioQuestionV2 from './RadioQuestionV2'
 import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
@@ -22,18 +23,6 @@ type WelcomeModalProps = {
   onClose: () => void
   isAdmin?: boolean
 }
-
-const style = {
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  maxWidth: '800px',
-  height: '100vh',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-  border: 'none',
-  overflowY: 'auto',
-} satisfies SxProps<Theme>
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
@@ -124,52 +113,41 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
 
   return (
-    <Modal
+    <HyModal
       open={open}
       onClose={handleCloseIfMandatoryAnswered}
-      aria-labelledby="modal-modal-title"
-      sx={{ border: 'none' }}
+      title={t('v2:welcomeText')}
+      size="large"
+      scrollable
+      closeable={false}
+      footer={
+        <>
+          <HyButton
+            variant="primary"
+            colour="blue"
+            onClick={handleCloseIfMandatoryAnswered}
+            disabled={!mandatoryQuestionsAnswered}
+          >
+            {t('v2:done')}
+          </HyButton>
+          {isAdmin && (
+            <HyButton variant="secondary" colour="black" onClick={onClose}>
+              {t('v2:skipQuestions')}
+            </HyButton>
+          )}
+        </>
+      }
     >
-      <Box sx={style}>
-        <Box sx={{ mb: 3, display: 'flex', justifyContent: 'flex-end' }}>
+      <Box sx={{ my: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <LanguageSelector />
         </Box>
-
-        <Typography id="modal-modal-title" component="h2" variant="h5" sx={{ mb: 3 }}>
-          {t('v2:welcomeText')}
-        </Typography>
 
         {welcomeFilters.map(entry => (
           <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
         ))}
-
-        <Box
-          sx={{
-            mt: 3,
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 1,
-            pb: '10vh',
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={handleCloseIfMandatoryAnswered}
-            disabled={!mandatoryQuestionsAnswered}
-            sx={{
-              textTransform: 'none',
-              px: 4,
-              py: 1,
-            }}
-          >
-            {t('v2:done')}
-          </Button>
-          {isAdmin && <BlackOutlinedButton onClick={onClose}>{t('v2:skipQuestions')}</BlackOutlinedButton>}
-        </Box>
       </Box>
-    </Modal>
+    </HyModal>
   )
 }
 

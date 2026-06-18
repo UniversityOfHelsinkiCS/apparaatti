@@ -325,7 +325,6 @@ const HyModal = ({
   const [atTop, setAtTop] = useState(true)
   const [atBottom, setAtBottom] = useState(true)
   const contentRef = useRef<HTMLDivElement>(null)
-  const headingRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     let inTimer: ReturnType<typeof setTimeout>
@@ -337,7 +336,6 @@ const HyModal = ({
       rafId = requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setContainerOpen(true)
-          headingRef.current?.focus()
         })
       })
       inTimer = setTimeout(() => setContainerIn(false), MODAL_IN_DURATION)
@@ -408,7 +406,7 @@ const HyModal = ({
           {header ?? (
             <Header $sticky={scrollable}>
               {title && (
-                <Heading id="hy-modal-title" role="heading" aria-level={headingLevel} tabIndex={-1} ref={headingRef}>
+                <Heading id="hy-modal-title" role="heading" aria-level={headingLevel} tabIndex={-1}>
                   {variant === 'danger' && (
                     <ReportIcon
                       aria-label="Warning"
