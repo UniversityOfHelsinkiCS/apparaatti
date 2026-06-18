@@ -1,11 +1,9 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../contexts/filterContext'
-import BlackContainedButton from './common/BlackContainedButton'
-import BlackOutlinedButton from './common/BlackOutlinedButton'
 import HyButton from './common/hy/HyButton'
+import HyModal from './common/hy/HyModal'
 
 const ResetFiltersButton = () => {
   const [open, setOpen] = useState(false)
@@ -27,20 +25,19 @@ const ResetFiltersButton = () => {
         {t('v2:noRecommendations.resetButton')}
       </HyButton>
 
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
-        <DialogTitle>{t('v2:noRecommendations.resetConfirmationTitle')}</DialogTitle>
-        <DialogContent>
-          <Typography>{t('v2:noRecommendations.resetConfirmationDescription')}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <BlackOutlinedButton onClick={handleClose}>
-            {t('v2:noRecommendations.resetConfirmationCancel')}
-          </BlackOutlinedButton>
-          <BlackContainedButton onClick={handleConfirm}>
+      <HyModal
+        open={open}
+        onClose={handleClose}
+        size="small"
+        title={t('v2:noRecommendations.resetConfirmationTitle')}
+        footer={
+          <HyButton variant="primary" colour="black" onClick={handleConfirm}>
             {t('v2:noRecommendations.resetConfirmationConfirm')}
-          </BlackContainedButton>
-        </DialogActions>
-      </Dialog>
+          </HyButton>
+        }
+      >
+        {t('v2:noRecommendations.resetConfirmationDescription')}
+      </HyModal>
     </>
   )
 }
