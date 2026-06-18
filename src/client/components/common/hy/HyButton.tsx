@@ -184,7 +184,7 @@ const StyledButton = styled('button', {
   justifyContent: 'center',
   borderRadius: 0,
   borderStyle: 'solid',
-  fontFamily: "'Open Sans', sans-serif",
+  fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
   fontWeight: 600,
   cursor: 'pointer',
   textTransform: 'none',
