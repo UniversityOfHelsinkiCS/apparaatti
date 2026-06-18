@@ -27,7 +27,13 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
       data-cy={`${filterId}-option-${option.id}`}
       control={<HyRadio />}
       label={label}
-      sx={{ opacity: count === 0 ? 0.4 : 1, cursor: 'default' }}
+      sx={{
+        py: '2px',
+        // overriding negative margin because MUI default marginLeft: -11px looks bad
+        marginLeft: '-8px',
+        opacity: count === 0 ? 0.4 : 1,
+        cursor: 'default',
+      }}
     />
   )
 }

@@ -34,7 +34,12 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             data-cy={`${filter.id}-option-${option.id}`}
             control={<HyCheckbox onChange={handleCheckboxChange} />}
             label={label}
-            sx={{ cursor: 'default' }}
+            sx={{
+              py: '2px',
+              // overriding negative margin because MUI default marginLeft: -11px looks bad
+              marginLeft: '-8px',
+              cursor: 'default',
+            }}
           />
         )
       })}
