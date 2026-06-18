@@ -104,6 +104,9 @@ const Container = styled('div', {
     minHeight: 'calc(320px - 2 * 1rem)',
 
     '@media (min-width: 30rem)': {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: $size === 'full' ? '100%' : $size === 'auto' ? 'fit-content' : sizeWidths[$size],
       maxWidth: 'calc(100vw - 2 * 1rem)',
       maxHeight: 'calc(100dvh - 2 * 1rem)',
     },
