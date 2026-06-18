@@ -23,15 +23,11 @@ Prefer semantic token names when naming constants, since they communicate intent
 
 ## File organisation
 
-All imitation components live in `src/client/components/common/hy/`. Name them `Hy<Component>` (e.g. `HyRadio`, `HyCheckbox`). Keep each component self-contained in a single file — no separate styles file unless the styles are genuinely shared across multiple components.
-
-## sx prop
-
-Every component must expose `sx?: SxProps<Theme>` in its props interface and pass it to the root styled element. Import the types as `import { styled, type SxProps, type Theme } from '@mui/material/styles'`.
+All imitation components live in `src/client/components/common/hy/`. Name them `Hy<Component>` (e.g. `HyRadio`, `HyCheckbox`). Keep each component self-contained in a single file — no separate styles file.
 
 ## MUI customisation approach
 
-MUI exposes `icon`, `checkedIcon` (and `indeterminateIcon` for Checkbox) props on form controls that accept any `ReactNode`. Use these to pass fully custom styled elements, giving complete visual control without fighting MUI's defaults. Both `Radio` and `Checkbox` use this same API.
+Every component must expose `sx?: SxProps<Theme>` in its props interface and pass it to the root styled element. Import the types as `import { styled, type SxProps, type Theme } from '@mui/material/styles'`.
 
 For state-driven styling on icon elements, use CSS sibling selectors that target MUI's hidden `<input>` sibling:
 
@@ -53,14 +49,9 @@ outline: 2px solid <hy.bgColor.black>          ← black ring
 outline-offset: 1px
 ```
 
-## What not to carry over from MUI defaults
-
-- Remove any `color` prop if the component uses custom icons — the color prop controls MUI's SVG fill and has no effect on custom icon elements
-- Remove row-background hover sx on `FormControlLabel` — hy-ds has no row-level hover
-
 ## Verification checklist
 
 1. Read the hy-ds component JS to confirm the exact geometry (dimensions, border widths, circle radii, etc.)
 2. Visually check all states: default, hover, active, focus-visible (tab to it), disabled
 3. `npm run tsc` — clean
-4. `npm run lint` — clean
+4. `npm run lint:fix` — clean

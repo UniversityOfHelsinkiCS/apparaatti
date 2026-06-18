@@ -5,8 +5,10 @@ export const hy = {
     default: '#808080', // --ds-borderColor-default
     primary: '#005a94', // --ds-borderColor-primary
     disabledOnLight: 'rgb(0 0 0 / 15%)', // --ds-borderColor-disabled-onLight
+    disabledOnDark: 'rgb(255 255 255 / 15%)', // --ds-borderColor-disabled-onDark
     white: '#fff', // --ds-borderColor-white
     black: '#0c0c0c', // --ds-borderColor-black
+    danger: '#bd2828', // --ds-borderColor-danger
   },
   bgColor: {
     white: '#fff', // --ds-bgColor-white
@@ -18,6 +20,7 @@ export const hy = {
     secondaryHover: '#e5f5ff', // --ds-bgColor-secondary-hover
     secondaryActive: '#cdebff', // --ds-bgColor-secondary-active
     disabledOnLight: 'rgb(0 0 0 / 10%)', // --ds-bgColor-disabled-onLight
+    disabledOnDark: 'rgb(255 255 255 / 10%)', // --ds-bgColor-disabled-onDark
     black: '#0c0c0c', // --ds-bgColor-black
     blackHover: '#333', // --ds-bgColor-black-hover
     blackActive: '#4d4d4d', // --ds-bgColor-black-active
@@ -37,6 +40,9 @@ export const hy = {
     danger: '#ffeceb', // --ds-bgColor-danger
     dangerHover: '#ffd8d6', // --ds-bgColor-danger-hover
     dangerActive: '#fdb7b4', // --ds-bgColor-danger-active
+    dangerBold: '#bd2828', // --ds-bgColor-danger-bold
+    dangerBoldHover: '#8b2623', // --ds-bgColor-danger-bold-hover
+    dangerBoldActive: '#602220', // --ds-bgColor-danger-bold-active
     info: '#e5f8ff', // --ds-bgColor-info
     infoHover: '#c2eeff', // --ds-bgColor-info-hover
     infoActive: '#8adeff', // --ds-bgColor-info-active
@@ -46,6 +52,7 @@ export const hy = {
     primary: '#005a94', // --ds-textColor-primary
     white: '#fff', // --ds-textColor-white
     disabledOnLight: '#999', // --ds-textColor-disabled-onLight
+    disabledOnDark: 'rgb(255 255 255 / 40%)', // --ds-textColor-disabled-onDark
     success: '#216325', // --ds-textColor-success
     attention: '#7a4b00', // --ds-textColor-attention
     danger: '#8b2623', // --ds-textColor-danger
