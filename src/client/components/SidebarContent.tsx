@@ -8,7 +8,7 @@ import {
   shouldShowFilterInSidebar,
   useFilterContext,
 } from '../contexts/filterContext'
-import ActionButtonV2 from './common/ActionButtonV2'
+import HyButton from './common/hy/HyButton'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
@@ -115,11 +115,9 @@ const SidebarContent = () => {
           flexDirection: 'column',
         }}
       >
-        <ActionButtonV2 onClick={() => setModalOpen(true)} text={t('v2:retakeQuestions')} visualStyle="course-show" />
+        <HyButton onClick={() => setModalOpen(true)}>{t('v2:retakeQuestions')}</HyButton>
         <Box sx={{ height: 12 }} />
-        <ResetFiltersButton>
-          {({ label, openDialog }) => <ActionButtonV2 onClick={openDialog} text={label} visualStyle="course-show" />}
-        </ResetFiltersButton>
+        <ResetFiltersButton />
       </Box>
       {filtersToShow.map(filter => (
         <FilterRenderer

@@ -1,16 +1,13 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../contexts/filterContext'
 import BlackContainedButton from './common/BlackContainedButton'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
+import HyButton from './common/hy/HyButton'
 
-type Props = {
-  children: (props: { label: string; openDialog: () => void }) => ReactNode
-}
-
-const ResetFiltersButton = ({ children }: Props) => {
+const ResetFiltersButton = () => {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
   const { resetFilters } = useFilterContext()
@@ -26,10 +23,10 @@ const ResetFiltersButton = ({ children }: Props) => {
 
   return (
     <>
-      {children({
-        label: t('v2:noRecommendations.resetButton'),
-        openDialog: () => setOpen(true),
-      })}
+      <HyButton variant="supplementary" colour="blue" onClick={() => setOpen(true)}>
+        {t('v2:noRecommendations.resetButton')}
+      </HyButton>
+
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
         <DialogTitle>{t('v2:noRecommendations.resetConfirmationTitle')}</DialogTitle>
         <DialogContent>
