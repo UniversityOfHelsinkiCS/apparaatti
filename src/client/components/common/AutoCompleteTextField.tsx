@@ -8,9 +8,10 @@ interface AutoCompleteTextFieldProps {
   options: string[]
   label: string
   sx?: SxProps
+  size?: 'small' | 'medium'
 }
 
-const AutoCompleteTextField = ({ id, value, onChange, options, label, sx }: AutoCompleteTextFieldProps) => (
+const AutoCompleteTextField = ({ id, value, onChange, options, label, sx, size }: AutoCompleteTextFieldProps) => (
   <Autocomplete
     id={id}
     value={value}
@@ -19,6 +20,7 @@ const AutoCompleteTextField = ({ id, value, onChange, options, label, sx }: Auto
     onInputChange={(_event, newInputValue) => onChange(newInputValue)}
     options={options}
     sx={sx}
+    size={size}
     renderInput={params => <TextField {...params} label={label} />}
   />
 )

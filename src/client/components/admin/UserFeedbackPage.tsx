@@ -144,7 +144,7 @@ const UserFeedbackPage = () => {
         {t('v2:feedback.admin.pageTitle')}
       </Typography>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }} flexWrap="wrap">
         <TextField
           label={t('v2:feedback.admin.start')}
           type="date"
@@ -162,6 +162,7 @@ const UserFeedbackPage = () => {
           size="small"
         />
         <BlackOutlinedButton
+          size="small"
           onClick={() => {
             setStart(getDefaultStart())
             setEnd(getDefaultEnd())
@@ -169,9 +170,6 @@ const UserFeedbackPage = () => {
         >
           {t('v2:feedback.admin.last12Months')}
         </BlackOutlinedButton>
-      </Stack>
-
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
         <TextField
           select
           label={t('v2:feedback.admin.emailFilterLabel')}
@@ -191,6 +189,7 @@ const UserFeedbackPage = () => {
           options={emailOptions}
           label={t('v2:feedback.admin.emailSearchLabel')}
           sx={{ minWidth: 260 }}
+          size="small"
         />
       </Stack>
 

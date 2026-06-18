@@ -194,11 +194,13 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
 
                 {user?.email && (
                   <Box>
-                    <LabeledCheckbox
-                      checked={sendContactEmail}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) => setSendContactEmail(event.target.checked)}
-                      label={t('v2:feedback.sendContactEmail')}
-                    />
+                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                      <LabeledCheckbox
+                        checked={sendContactEmail}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => setSendContactEmail(event.target.checked)}
+                        label={t('v2:feedback.sendContactEmail')}
+                      />
+                    </Stack>
                     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5, ml: 4 }}>
                       {t('v2:feedback.sendContactEmailInfo')}
                     </Typography>
