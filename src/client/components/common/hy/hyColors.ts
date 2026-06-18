@@ -9,6 +9,7 @@ export const hy = {
     white: '#fff', // --ds-borderColor-white
     black: '#0c0c0c', // --ds-borderColor-black
     danger: '#bd2828', // --ds-borderColor-danger
+    light: '#ccc', // --ds-borderColor-light (--ds-palette-black-20)
   },
   bgColor: {
     white: '#fff', // --ds-bgColor-white
@@ -24,6 +25,7 @@ export const hy = {
     black: '#0c0c0c', // --ds-bgColor-black
     blackHover: '#333', // --ds-bgColor-black-hover
     blackActive: '#4d4d4d', // --ds-bgColor-black-active
+    transparentOnLight: 'rgb(0 0 0 / 0%)', // --ds-bgColor-transparent-onLight
     transparentOnLightHover: 'rgb(0 0 0 / 5%)', // --ds-bgColor-transparent-onLight-hover
     transparentOnLightActive: 'rgb(0 0 0 / 10%)', // --ds-bgColor-transparent-onLight-active
     transparentOnDarkHover: 'rgb(255 255 255 / 15%)', // --ds-bgColor-transparent-onDark-hover
@@ -31,6 +33,7 @@ export const hy = {
     neutral: '#f2f2f2', // --ds-bgColor-neutral
     neutralHover: '#e6e6e6', // --ds-bgColor-neutral-hover
     neutralActive: '#ccc', // --ds-bgColor-neutral-active
+    backdrop: 'rgb(0 0 0 / 50%)', // --ds-bgColor-backdrop
     success: '#dffbe1', // --ds-bgColor-success
     successHover: '#bef4c1', // --ds-bgColor-success-hover
     successActive: '#85e08a', // --ds-bgColor-success-active
@@ -60,6 +63,13 @@ export const hy = {
     link: '#005a94', // --ds-textColor-link
     linkHover: '#003152', // --ds-textColor-link-hover
     linkActive: '#001929', // --ds-textColor-link-active
+  },
+  iconColor: {
+    danger: '#bd2828', // --ds-iconColor-danger (--ds-palette-red-60)
+    primary: '#005a94', // --ds-iconColor-primary (--ds-palette-mainBlue-70)
+  },
+  shadow: {
+    overlay: '0 8px 15px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 30%)', // --ds-shadow-overlay
   },
   overlay: {
     black10: 'rgb(0 0 0 / 10%)', // --ds-overlay-black-10
