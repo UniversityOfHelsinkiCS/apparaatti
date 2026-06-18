@@ -26,11 +26,7 @@ const RadioQuestionV2 = ({
     return null
   }
   return (
-    <Box
-      sx={{
-        paddingTop: 1,
-      }}
-    >
+    <Box>
       <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question} />
 
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />

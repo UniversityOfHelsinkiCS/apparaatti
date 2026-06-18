@@ -19,6 +19,7 @@ export interface HyModalProps {
   size?: ModalSize
   closeable?: boolean
   backdropCloseable?: boolean
+  showCloseButton?: boolean
   scrollable?: boolean
   headingLevel?: number
   header?: ReactNode
@@ -268,7 +269,8 @@ const ScrollScrim = styled('div', {
   pointerEvents: 'none',
   width: '100%',
   height: '2.75rem',
-  marginTop: '-2.75rem',
+  marginTop: $position === 'bottom' ? '-2.75rem' : 0,
+  marginBottom: $position === 'top' ? '-2.75rem' : 0,
   flex: '0 0 auto',
   position: 'sticky',
   zIndex: 1,
@@ -311,6 +313,7 @@ const HyModal = ({
   size = 'medium',
   closeable = true,
   backdropCloseable = true,
+  showCloseButton = true,
   scrollable = false,
   headingLevel = 2,
   header,
@@ -426,7 +429,7 @@ const HyModal = ({
                   <HeadingText>{title}</HeadingText>
                 </Heading>
               )}
-              {closeable && (
+              {closeable && showCloseButton && (
                 <CloseButton aria-label="Close" onClick={onClose} type="button">
                   <CloseIconSvg />
                 </CloseButton>

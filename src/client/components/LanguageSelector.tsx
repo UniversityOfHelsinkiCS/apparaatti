@@ -1,9 +1,10 @@
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import { MenuItem, Select, SelectChangeEvent, SxProps } from '@mui/material'
 import { useContext } from 'react'
 
 import { LanguageContext } from '../contexts/languageContext'
+import { mergeSx } from '../util/sx'
 
-const LanguageSelector = () => {
+const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
   const { language, setAppLanguage } = useContext(LanguageContext)
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -16,19 +17,22 @@ const LanguageSelector = () => {
       onChange={handleChange}
       aria-label="Language selector"
       size="small"
-      sx={{
-        color: 'inherit',
-        '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: 'rgba(0, 0, 0, 0.23)',
+      sx={mergeSx(
+        {
+          color: 'inherit',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(0, 0, 0, 0.23)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(0, 0, 0, 0.87)',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'primary.main',
+          },
+          minWidth: 80,
         },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-          borderColor: 'rgba(0, 0, 0, 0.87)',
-        },
-        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-          borderColor: 'primary.main',
-        },
-        minWidth: 80,
-      }}
+        sx
+      )}
     >
       <MenuItem value="fi">Suomi</MenuItem>
       <MenuItem value="en">English</MenuItem>

@@ -39,7 +39,7 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
   }
 
   return (
-    <Box sx={{ minWidth: 200, marginBottom: 2, paddingTop: 1 }}>
+    <Box sx={{ minWidth: 200 }}>
       <QuestionTitleV2 handleOpen={handleOpen} title={t('question:pickStudy')} question={question} />
 
       <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />

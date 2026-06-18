@@ -10,7 +10,7 @@ const MandatoryStatus = ({ question }: { question: Question }) => {
   if (!question.mandatory) {
     return <></>
   }
-  return <HyTag text={t('question:mandatory')} colour="info" ariaHidden={false} sx={{ mr: 0.5 }} />
+  return <HyTag text={t('question:mandatory')} colour="attention" ariaHidden={false} sx={{ mr: 0.5 }} />
 }
 
 const QuestionTitleV2 = ({

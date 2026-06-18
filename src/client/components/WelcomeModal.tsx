@@ -1,5 +1,5 @@
-import { Box } from '@mui/material'
-import { FC, Fragment, useEffect } from 'react'
+import { Box, Stack } from '@mui/material'
+import { FC, Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question, Variant } from '../../common/types'
@@ -25,6 +25,8 @@ type WelcomeModalProps = {
 }
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
+  const prevOpenRef = useRef(false)
+  const autoCloseEnabledRef = useRef(false)
   const filterContext = useFilterContext()
   const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
   const { t } = useTranslation()
@@ -64,18 +66,10 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     .filter(entry => entry !== null)
 
   const allWelcomeQuestionsAnswered = welcomeFilters.every(entry => {
-    if (!entry.config) {
-      return true
-    }
-
     return isFilterStateAnswered(entry.config.state)
   })
 
   const mandatoryQuestionsAnswered = welcomeFilters.every(entry => {
-    if (!entry.config) {
-      return true
-    }
-
     if (!entry.question.mandatory) {
       return true
     }
@@ -105,9 +99,19 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />
   }
 
-  // autoclose when questions have been answered to
+  // autoclose when questions have been answered to, but not if modal opened with questions already answered
   useEffect(() => {
-    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && !sessionStorage.getItem('hasVisitedV2')) {
+    const wasOpen = prevOpenRef.current
+    prevOpenRef.current = open
+
+    if (!wasOpen && open) {
+      autoCloseEnabledRef.current = !allWelcomeQuestionsAnswered
+    } else if (!open) {
+      autoCloseEnabledRef.current = false
+    }
+
+    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && autoCloseEnabledRef.current) {
+      autoCloseEnabledRef.current = false
       onClose()
     }
   }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
@@ -119,7 +123,8 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       title={t('v2:welcomeText')}
       size="large"
       scrollable
-      closeable={false}
+      closeable={mandatoryQuestionsAnswered}
+      showCloseButton={false}
       footer={
         <>
           <HyButton
@@ -139,13 +144,13 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       }
     >
       <Box sx={{ my: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <LanguageSelector />
-        </Box>
+        <LanguageSelector sx={{ float: 'right' }} />
 
-        {welcomeFilters.map(entry => (
-          <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
-        ))}
+        <Stack spacing={3}>
+          {welcomeFilters.map(entry => (
+            <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
+          ))}
+        </Stack>
       </Box>
     </HyModal>
   )
