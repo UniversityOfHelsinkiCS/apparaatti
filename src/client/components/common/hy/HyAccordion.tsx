@@ -1,0 +1,191 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import type { ReactNode } from 'react'
+import { useId, useState } from 'react'
+
+import { hy } from './hyColors'
+
+type AccordionVariant = 'default' | 'compact'
+
+export interface HyAccordionProps {
+  summary: ReactNode
+  children: ReactNode
+  defaultOpen?: boolean
+  open?: boolean
+  onChange?: (open: boolean) => void
+  variant?: AccordionVariant
+  headingLevel?: number
+  id?: string
+  sx?: SxProps<Theme>
+}
+
+// --- Styled elements ---
+
+const Root = styled('div')({
+  boxSizing: 'border-box',
+  position: 'relative',
+})
+
+const Title = styled('div')({
+  position: 'relative',
+  display: 'flex',
+})
+
+const OpenButtonContainer = styled('div')({
+  position: 'relative',
+  width: '100%',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'transparent',
+    pointerEvents: 'none',
+    zIndex: 1,
+  },
+  '&:hover::after': {
+    backgroundColor: hy.bgColor.transparentOnLightHover,
+  },
+  '&:active::after': {
+    backgroundColor: hy.bgColor.transparentOnLightActive,
+  },
+})
+
+interface OpenButtonProps {
+  $variant: AccordionVariant
+  $expanded: boolean
+}
+
+const OpenButton = styled('button', {
+  shouldForwardProp: p => p !== '$variant' && p !== '$expanded',
+})<OpenButtonProps>(({ $variant, $expanded }) => ({
+  all: 'unset',
+  boxSizing: 'border-box',
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'flex-start',
+  flexDirection: 'row',
+  gap: '0.75rem',
+  width: '100%',
+  color: hy.textColor.default,
+  fill: hy.textColor.default,
+  outline: '4px solid transparent',
+  borderTop: `1px solid ${hy.borderColor.light}`,
+  borderBottom: $expanded ? 'none' : `1px solid ${hy.borderColor.light}`,
+  fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
+  fontWeight: 600,
+  letterSpacing: '0px',
+  lineHeight: '1.5',
+  padding: 'calc(0.75rem - 1px) 0.75rem',
+  fontSize: $variant === 'compact' ? '14px' : '16px',
+  cursor: 'pointer',
+  backgroundColor: $expanded ? hy.bgColor.neutralLight : 'transparent',
+
+  '&:focus-visible': {
+    boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
+    outline: `2px solid ${hy.borderColor.black}`,
+    outlineOffset: '0px',
+    zIndex: 1,
+  },
+
+  '@media (min-width: 60rem)': {
+    fontSize: $variant === 'compact' ? '16px' : '18px',
+  },
+}))
+
+const IconWrapper = styled('span')({
+  display: 'flex',
+  alignItems: 'center',
+  flexShrink: 0,
+  paddingBlock: '0.25rem',
+})
+
+interface HeaderSlotProps {
+  $variant: AccordionVariant
+}
+
+const HeaderSlot = styled('span', {
+  shouldForwardProp: p => p !== '$variant',
+})<HeaderSlotProps>(({ $variant }) => ({
+  display: 'inline-block',
+  width: '100%',
+  paddingBlock: $variant === 'compact' ? '0.0625rem' : '0.25rem',
+
+  '@media (min-width: 60rem)': {
+    paddingBlock: $variant === 'compact' ? '0' : '0.125rem',
+  },
+}))
+
+const Panel = styled('div')({
+  backgroundColor: hy.bgColor.neutralLight,
+})
+
+const Content = styled('div')({
+  position: 'relative',
+  color: hy.textColor.default,
+  padding: '0.5rem 0.75rem 1rem 0.75rem',
+  borderBottom: `1px solid ${hy.borderColor.light}`,
+})
+
+// --- Component ---
+
+const HyAccordion = ({
+  summary,
+  children,
+  defaultOpen = false,
+  open: controlledOpen,
+  onChange,
+  variant = 'default',
+  headingLevel = 2,
+  id: idProp,
+  sx,
+}: HyAccordionProps) => {
+  const generatedId = useId()
+  const id = idProp ?? generatedId
+  const panelId = `${id}-panel`
+
+  const [internalOpen, setInternalOpen] = useState(defaultOpen)
+  const isControlled = controlledOpen !== undefined
+  const isExpanded = isControlled ? controlledOpen : internalOpen
+
+  const handleClick = () => {
+    const next = !isExpanded
+    if (!isControlled) setInternalOpen(next)
+    onChange?.(next)
+  }
+
+  return (
+    <Root sx={sx}>
+      <Title role="heading" aria-level={headingLevel}>
+        <OpenButtonContainer>
+          <OpenButton
+            $variant={variant}
+            $expanded={isExpanded}
+            onClick={handleClick}
+            aria-expanded={isExpanded}
+            aria-controls={panelId}
+            id={id}
+            type="button"
+          >
+            <IconWrapper aria-hidden="true">
+              {isExpanded ? (
+                <KeyboardArrowUpIcon sx={{ fontSize: '1.5rem' }} />
+              ) : (
+                <KeyboardArrowDownIcon sx={{ fontSize: '1.5rem' }} />
+              )}
+            </IconWrapper>
+            <HeaderSlot $variant={variant}>{summary}</HeaderSlot>
+          </OpenButton>
+        </OpenButtonContainer>
+      </Title>
+
+      {isExpanded && (
+        <Panel id={panelId} role="region" aria-labelledby={id}>
+          <Content>{children}</Content>
+        </Panel>
+      )}
+    </Root>
+  )
+}
+
+export default HyAccordion

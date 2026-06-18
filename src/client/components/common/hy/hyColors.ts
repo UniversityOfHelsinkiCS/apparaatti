@@ -33,6 +33,9 @@ export const hy = {
     neutral: '#f2f2f2', // --ds-bgColor-neutral
     neutralHover: '#e6e6e6', // --ds-bgColor-neutral-hover
     neutralActive: '#ccc', // --ds-bgColor-neutral-active
+    neutralLight: '#f7f7f7', // --ds-bgColor-neutralLight
+    neutralLightHover: '#f2f2f2', // --ds-bgColor-neutralLight-hover
+    neutralLightActive: '#e6e6e6', // --ds-bgColor-neutralLight-active
     backdrop: 'rgb(0 0 0 / 50%)', // --ds-bgColor-backdrop
     success: '#dffbe1', // --ds-bgColor-success
     successHover: '#bef4c1', // --ds-bgColor-success-hover
