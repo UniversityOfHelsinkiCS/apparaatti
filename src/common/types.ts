@@ -158,6 +158,7 @@ export type User = {
   hyGroupCn: string[] | null
   language: string | null
   studentNumber: string | null
+  email?: string | null
   isAdmin?: boolean
   isSuperuser?: boolean
 }
@@ -225,4 +226,5 @@ export type UserFeedbackSubmission = {
 export type UserFeedback = UserFeedbackSubmission & {
   id: number
   date: Date
+  email?: string | null
 }

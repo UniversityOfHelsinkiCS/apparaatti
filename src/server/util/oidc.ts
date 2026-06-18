@@ -50,6 +50,7 @@ const verifyLogin = async (
     id: userinfo.hyPersonSisuId as string,
     username: userinfo.uid as string,
     hyGroupCn: userinfo.hyGroupCn as string[],
+    email: (userinfo.email as string) ?? null,
     language: 'fi',
     createdAt: new Date(),
     updatedAt: new Date(),

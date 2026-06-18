@@ -188,6 +188,10 @@ export default {
       cancel: 'Cancel',
       sent: 'Feedback sent',
       failed: 'Failed to send feedback',
+      sendContactEmail: 'Send contact information',
+      sendContactEmailInfo:
+        'This will attach your helsinki.fi email to the feedback. Use this if you want us to be able to respond back to your feedback. The feedback will not be anonymous if you choose this option.',
+      attachedEmail: 'Attached email: {{email}}',
       admin: {
         backToAdmin: 'Back to admin',
         pageTitle: 'User feedback',
@@ -200,10 +204,16 @@ export default {
         dialogTitle: 'Feedback comment',
         close: 'Close',
         starsValue: '{{stars}} / 5 stars',
+        emailFilterLabel: 'Contact email',
+        emailFilterAll: 'All',
+        emailFilterHas: 'Has email',
+        emailFilterNo: 'No email',
+        emailSearchLabel: 'Search by email',
         table: {
           date: 'Date',
           stars: 'Stars',
           version: 'Version',
+          email: 'Email',
           text: 'Text feedback',
           metadata: 'Metadata',
           hasMetadata: 'Yes',

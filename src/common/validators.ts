@@ -58,6 +58,7 @@ export const UserFeedbackSchema = z.object({
     })
     .optional(),
   appVersion: z.string().optional(),
+  sendContactEmail: z.boolean().optional(),
 })
 
 export const UserSettingsSchema = z.object({

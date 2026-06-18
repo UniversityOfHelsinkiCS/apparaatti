@@ -12,6 +12,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare hyGroupCn: CreationOptional<string[]>
   declare language?: CreationOptional<string>
   declare studentNumber: CreationOptional<string>
+  declare email: CreationOptional<string | null>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -47,6 +48,11 @@ User.init(
     studentNumber: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
     createdAt: {
       type: DataTypes.DATE,

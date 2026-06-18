@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { useFilterContext } from '../contexts/filterContext'
 import useApiMutation from '../hooks/useApiMutation'
 import useApi from '../util/useApi'
+import useRequiredUser from '../util/useRequiredUser'
 import BlackOutlinedButton from './common/BlackOutlinedButton'
 import FormSubmitActions from './common/FormSubmitActions'
 import LabeledCheckbox from './common/LabeledCheckbox'
@@ -53,6 +54,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
   const [sendRecommendationMetadata, setSendRecommendationMetadata] = useState(false)
+  const [sendContactEmail, setSendContactEmail] = useState(false)
   const [metadataModalOpen, setMetadataModalOpen] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
@@ -63,6 +65,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     'GET',
     undefined
   )
+  const { user } = useRequiredUser()
 
   const submitFeedbackMutation = useApiMutation(async (res: Response) => {
     if (!res.ok) {
@@ -80,6 +83,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     setTextFeedback('')
     setStars(0)
     setSendRecommendationMetadata(false)
+    setSendContactEmail(false)
   }
 
   const handleClose = () => {
@@ -96,7 +100,10 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
     const appVersion = versionData ? versionData.releaseVersion || versionData.packageVersion : undefined
 
     try {
-      await submitFeedbackMutation.mutateAsync({ textFeedback, stars, recommendationMetadata, appVersion }, undefined)
+      await submitFeedbackMutation.mutateAsync(
+        { textFeedback, stars, recommendationMetadata, appVersion, sendContactEmail },
+        undefined
+      )
 
       setSnackbarMessage(t('v2:feedback.sent'))
       setSnackbarSeverity('success')
@@ -184,6 +191,24 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                     </Tooltip>
                   </Stack>
                 </Box>
+
+                {user?.email && (
+                  <Box>
+                    <LabeledCheckbox
+                      checked={sendContactEmail}
+                      onChange={(event: ChangeEvent<HTMLInputElement>) => setSendContactEmail(event.target.checked)}
+                      label={t('v2:feedback.sendContactEmail')}
+                    />
+                    <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5, ml: 4 }}>
+                      {t('v2:feedback.sendContactEmailInfo')}
+                    </Typography>
+                    {sendContactEmail && (
+                      <Typography variant="body2" sx={{ mt: 0.75, ml: 4, fontWeight: 500 }}>
+                        {t('v2:feedback.attachedEmail', { email: user.email })}
+                      </Typography>
+                    )}
+                  </Box>
+                )}
 
                 <FormSubmitActions
                   submitLabel={t('v2:feedback.send')}

@@ -111,12 +111,15 @@ router.post('/form/coursedata', requireUser, async (req, res: Response<CourseDat
 
 router.post('/feedback', requireUser, async (req, res) => {
   const feedback = UserFeedbackSchema.parse(req.body)
+  const user = req.user as User
+  const email = feedback.sendContactEmail ? (user.email ?? undefined) : undefined
   await createUserFeedbackEntry(
     feedback.textFeedback,
     feedback.stars,
     new Date(),
     feedback.recommendationMetadata as RecommendationMetadata,
-    feedback.appVersion
+    feedback.appVersion,
+    email
   )
 
   res.json({ status: 'success' })

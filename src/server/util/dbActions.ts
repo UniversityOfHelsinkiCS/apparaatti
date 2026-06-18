@@ -460,13 +460,15 @@ export async function createUserFeedbackEntry(
   stars: number,
   date: Date,
   recommendationMetadata?: RecommendationMetadata,
-  appVersion?: string
+  appVersion?: string,
+  email?: string
 ) {
   await UserFeedback.create({
     textFeedback,
     stars,
     recommendationMetadata: recommendationMetadata ?? null,
     appVersion: appVersion ?? null,
+    email: email ?? null,
     date,
   })
 }

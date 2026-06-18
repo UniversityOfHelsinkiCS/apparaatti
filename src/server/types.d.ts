@@ -13,6 +13,7 @@ declare global {
       hyGroupCn: string[] | null
       language: string | null
       studentNumber?: string | null
+      email?: string | null
     }
   }
 }

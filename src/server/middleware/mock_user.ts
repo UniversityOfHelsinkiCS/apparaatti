@@ -9,6 +9,7 @@ const mockUser: User = {
   isAdmin: true,
   hyGroupCn: ['grp-toska', 'hy-kielikeskus-employees'],
   studentNumber: null,
+  email: 'grp-toska@helsinki.fi',
 }
 
 const mockUserMiddleware = (req: Request, _: Response, next: NextFunction) => {

@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  MenuItem,
   Paper,
   Stack,
   Table,
@@ -26,6 +27,7 @@ import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import ActionButtonV2 from '../common/ActionButtonV2.tsx'
+import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import FeedbackMetadataDisplay from './FeedbackMetadataDisplay.tsx'
@@ -37,7 +39,10 @@ type UserFeedback = {
   date: string
   recommendationMetadata?: RecommendationMetadata | null
   appVersion?: string | null
+  email?: string | null
 }
+
+type EmailFilterValue = 'all' | 'has-email' | 'no-email'
 
 const truncateFeedback = (text: string, maxLength = 140) => {
   if (text.length <= maxLength) {
@@ -73,6 +78,7 @@ const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps
               {new Date(feedback.date).toLocaleString()} |{' '}
               {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
               {feedback.appVersion && ` | v${feedback.appVersion}`}
+              {feedback.email && ` | ${feedback.email}`}
             </Typography>
             <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
               {feedback.textFeedback}
@@ -99,6 +105,8 @@ const UserFeedbackPage = () => {
   const [selectedFeedback, setSelectedFeedback] = useState<UserFeedback | null>(null)
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
+  const [emailFilter, setEmailFilter] = useState<EmailFilterValue>('all')
+  const [emailSearch, setEmailSearch] = useState('')
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const startDateTime = `${start}T00:00:00.000Z`
   const endDateTime = `${end}T23:59:59.999Z`
@@ -120,6 +128,15 @@ const UserFeedbackPage = () => {
 
   const feedbackRows = Array.isArray(data) ? data : []
 
+  const emailOptions = Array.from(new Set(feedbackRows.map(f => f.email).filter((e): e is string => Boolean(e))))
+
+  const filteredRows = feedbackRows.filter(f => {
+    if (emailFilter === 'has-email' && !f.email) return false
+    if (emailFilter === 'no-email' && f.email) return false
+    if (emailSearch && (!f.email || !f.email.toLowerCase().includes(emailSearch.toLowerCase()))) return false
+    return true
+  })
+
   return (
     <Box sx={{ p: 3 }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
@@ -127,7 +144,7 @@ const UserFeedbackPage = () => {
         {t('v2:feedback.admin.pageTitle')}
       </Typography>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
         <TextField
           label={t('v2:feedback.admin.start')}
           type="date"
@@ -154,6 +171,29 @@ const UserFeedbackPage = () => {
         </BlackOutlinedButton>
       </Stack>
 
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
+        <TextField
+          select
+          label={t('v2:feedback.admin.emailFilterLabel')}
+          value={emailFilter}
+          onChange={event => setEmailFilter(event.target.value as EmailFilterValue)}
+          size="small"
+          sx={{ minWidth: 160 }}
+        >
+          <MenuItem value="all">{t('v2:feedback.admin.emailFilterAll')}</MenuItem>
+          <MenuItem value="has-email">{t('v2:feedback.admin.emailFilterHas')}</MenuItem>
+          <MenuItem value="no-email">{t('v2:feedback.admin.emailFilterNo')}</MenuItem>
+        </TextField>
+        <AutoCompleteTextField
+          id="email-search"
+          value={emailSearch}
+          onChange={setEmailSearch}
+          options={emailOptions}
+          label={t('v2:feedback.admin.emailSearchLabel')}
+          sx={{ minWidth: 260 }}
+        />
+      </Stack>
+
       {isLoading ? (
         <Typography>{t('v2:feedback.admin.loading')}</Typography>
       ) : feedbackRows.length === 0 ? (
@@ -166,16 +206,18 @@ const UserFeedbackPage = () => {
                 <TableCell>{t('v2:feedback.admin.table.date')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.version')}</TableCell>
+                <TableCell>{t('v2:feedback.admin.table.email')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.text')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.action')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {feedbackRows.map(feedback => (
+              {filteredRows.map(feedback => (
                 <TableRow key={feedback.id}>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
                   <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
                   <TableCell>{feedback.appVersion ?? '—'}</TableCell>
+                  <TableCell>{feedback.email ?? '—'}</TableCell>
                   <TableCell sx={{ maxWidth: 520 }}>
                     <Typography sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
                       {truncateFeedback(feedback.textFeedback)}

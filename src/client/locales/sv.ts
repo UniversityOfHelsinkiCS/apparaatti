@@ -187,6 +187,10 @@ export default {
       cancel: 'Avbryt',
       sent: 'Feedback skickad',
       failed: 'Det gick inte att skicka feedback',
+      sendContactEmail: 'Skicka kontaktuppgifter',
+      sendContactEmailInfo:
+        'Detta bifogar din helsinki.fi-e-postadress till feedbacken. Välj detta om du vill att vi ska kunna svara på din feedback. Feedbacken är inte anonym om du väljer detta alternativ.',
+      attachedEmail: 'Bifogad e-post: {{email}}',
       admin: {
         backToAdmin: 'Tillbaka till admin',
         pageTitle: 'Användarfeedback',
@@ -199,10 +203,16 @@ export default {
         dialogTitle: 'Feedbackkommentar',
         close: 'Stäng',
         starsValue: '{{stars}} / 5 stjärnor',
+        emailFilterLabel: 'Kontakt-e-post',
+        emailFilterAll: 'Alla',
+        emailFilterHas: 'Har e-post',
+        emailFilterNo: 'Ingen e-post',
+        emailSearchLabel: 'Sök på e-post',
         table: {
           date: 'Datum',
           stars: 'Stjärnor',
           version: 'Version',
+          email: 'E-post',
           text: 'Feedback',
           metadata: 'Metadata',
           hasMetadata: 'Ja',

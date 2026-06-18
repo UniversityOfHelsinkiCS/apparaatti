@@ -187,6 +187,10 @@ export default {
       cancel: 'Peruuta',
       sent: 'Palaute lähetetty',
       failed: 'Palautteen lähetys epäonnistui',
+      sendContactEmail: 'Lähetä yhteystiedot',
+      sendContactEmailInfo:
+        'Tämä liittää helsinki.fi-sähköpostiosoitteesi palautteeseen. Valitse tämä, jos haluat meidän voivan vastata palautteeseen. Palaute ei ole anonyymi, jos valitset tämän vaihtoehdon.',
+      attachedEmail: 'Liitetty sähköposti: {{email}}',
       admin: {
         backToAdmin: 'Takaisin ylläpitoon',
         pageTitle: 'Käyttäjäpalaute',
@@ -199,10 +203,16 @@ export default {
         dialogTitle: 'Palautekommentti',
         close: 'Sulje',
         starsValue: '{{stars}} / 5 tähteä',
+        emailFilterLabel: 'Yhteyssähköposti',
+        emailFilterAll: 'Kaikki',
+        emailFilterHas: 'Sähköposti liitetty',
+        emailFilterNo: 'Ei sähköpostia',
+        emailSearchLabel: 'Hae sähköpostilla',
         table: {
           date: 'Päivämäärä',
           stars: 'Tähdet',
           version: 'Versio',
+          email: 'Sähköposti',
           text: 'Palaute',
           metadata: 'Metatiedot',
           hasMetadata: 'Kyllä',
