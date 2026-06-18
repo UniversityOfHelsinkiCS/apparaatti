@@ -40,6 +40,10 @@ input:disabled ~ &   → disabled state
 
 Add `disableRipple` and `sx={{ '&:hover': { backgroundColor: 'transparent' } }}` on the MUI component wrapper to suppress MUI's circular hover highlight so the icon's own hover styling shows through.
 
+## Font family
+
+Always use `'Open Sans Variable', 'Open Sans', sans-serif` — not `'Open Sans'` alone. The design system's `variables.css` overrides `--ds-fontFamily-body` to `'Open Sans Variable'` when supported, so hardcoding the static font produces a visually different weight rendering.
+
 ## Focus ring spec
 
 The hy-ds focus ring is consistent across all interactive components:
