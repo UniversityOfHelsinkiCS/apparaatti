@@ -64,6 +64,7 @@ debugRouter.get('/cur/debug', async (_req: any, res: any) => {
 
     return grouped
   }, {})
+
   const realisationCodeUrns = realisations
     .map((r: any) => r.customCodeUrns)
     .filter((u: any) => urnInCustomCodeUrns(u, 'kkt'))

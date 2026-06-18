@@ -1,3 +1,8 @@
+export type UniqueUrnResponse = {
+  codeUrns: string[]
+  typeUrns: string[]
+}
+
 export type UpdaterRunStatus = 'running' | 'success' | 'failed'
 
 export type UpdaterRun = {

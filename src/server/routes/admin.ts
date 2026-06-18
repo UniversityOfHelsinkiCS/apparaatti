@@ -2,16 +2,19 @@ import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
 
+import type { UniqueUrnResponse } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
 import {
+  allCurs,
   createOrUpdateCourseAdminReviewEntry,
   getUpdaterRuns,
   getUserFeedbackEntries,
+  searchCoursesWithPagination,
   usersWithWhere,
 } from '../util/dbActions.ts'
-import { searchCoursesWithPagination } from '../util/dbActions.ts'
+import { uniqueVals } from '../util/misc.ts'
 import {
   getWhereClauseForManyWordSearch,
   getWhereClauseForOneWordSearch,
@@ -117,6 +120,30 @@ adminRouter.get('/courses', async (req, res) => {
   )
 
   res.send(result)
+})
+
+/**
+ * returns all unique code urns and type urns
+ */
+adminRouter.get('/courses/urns', async (req, res) => {
+  const realisations = await allCurs()
+
+  const realisationCodeUrns = realisations
+    .map(r => {
+      return r.customCodeUrns ?? []
+    })
+    .flatMap(u => Object.values(u))
+    .flat()
+  const uniqueCodeUrns: string[] = uniqueVals(realisationCodeUrns)
+
+  const realisationTypeUrns = realisations.map(r => r.courseUnitRealisationTypeUrn)
+  const uniqueTypeUrns: string[] = uniqueVals(realisationTypeUrns)
+
+  const result: UniqueUrnResponse = {
+    codeUrns: uniqueCodeUrns,
+    typeUrns: uniqueTypeUrns,
+  }
+  return res.json(result)
 })
 
 adminRouter.post('/course/review', async (req, res) => {

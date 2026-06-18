@@ -1,5 +1,9 @@
 import { Box, MenuItem, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
 
+import type { UniqueUrnResponse } from '../../../common/types.ts'
+import useApi from '../../util/useApi.tsx'
+import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 
 export type ReviewStatusFilterValue = 'all' | 'reviewed' | 'not-reviewed'
@@ -13,14 +17,8 @@ export interface CoursesSearchFieldsValues {
   reviewStatusInput: ReviewStatusFilterValue
 }
 
-interface CoursesSearchFieldsProps extends CoursesSearchFieldsValues {
-  setNameInput: (v: string) => void
-  setUrnInput: (v: string) => void
-  setExcludeUrnsInput: (v: string) => void
-  setCourseCodeInput: (v: string) => void
-  setExcludeCourseCodesInput: (v: string) => void
-  setReviewStatusInput: (v: ReviewStatusFilterValue) => void
-  onSearch: () => void
+interface CoursesSearchFieldsProps {
+  onSearch: (values: CoursesSearchFieldsValues) => void
 }
 
 const fieldsetSx = {
@@ -36,25 +34,23 @@ const fieldsetSx = {
 } as const
 const legendSx = { px: 0.5, fontWeight: 600, fontSize: 12 } as const
 
-const CoursesSearchFields = ({
-  nameInput,
-  urnInput,
-  excludeUrnsInput,
-  courseCodeInput,
-  excludeCourseCodesInput,
-  reviewStatusInput,
-  setNameInput,
-  setUrnInput,
-  setExcludeUrnsInput,
-  setCourseCodeInput,
-  setExcludeCourseCodesInput,
-  setReviewStatusInput,
-  onSearch,
-}: CoursesSearchFieldsProps) => {
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') onSearch()
+const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
+  const [nameInput, setNameInput] = useState('')
+  const [urnInput, setUrnInput] = useState('')
+  const [courseCodeInput, setCourseCodeInput] = useState('')
+  const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
+  const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
+  const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
+
+  const handleSearch = () => {
+    onSearch({ nameInput, urnInput, courseCodeInput, excludeUrnsInput, excludeCourseCodesInput, reviewStatusInput })
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleSearch()
+  }
+
+  const { data: urnOptions } = useApi<UniqueUrnResponse>('urns', '/api/admin/courses/urns', 'GET')
   return (
     <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'stretch' }}>
       <Box component="fieldset" sx={fieldsetSx}>
@@ -77,23 +73,21 @@ const CoursesSearchFields = ({
         <Typography component="legend" sx={legendSx}>
           URN
         </Typography>
-        <TextField
-          label="Include"
-          variant="outlined"
-          size="small"
+        <AutoCompleteTextField
+          id="course-urn-include"
           value={urnInput}
-          onChange={e => setUrnInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{ minWidth: 180 }}
+          onChange={setUrnInput}
+          options={urnOptions?.codeUrns ?? []}
+          label="Include"
+          sx={{ minWidth: 300 }}
         />
-        <TextField
-          label="Exclude (comma-separated)"
-          variant="outlined"
-          size="small"
+        <AutoCompleteTextField
+          id="course-urn-exclude"
           value={excludeUrnsInput}
-          onChange={e => setExcludeUrnsInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          sx={{ minWidth: 240 }}
+          onChange={setExcludeUrnsInput}
+          options={urnOptions?.codeUrns ?? []}
+          label="Exclude"
+          sx={{ minWidth: 300 }}
         />
       </Box>
 
@@ -142,7 +136,7 @@ const CoursesSearchFields = ({
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <BlackOutlinedButton size="small" onClick={onSearch}>
+        <BlackOutlinedButton size="small" onClick={handleSearch}>
           Search
         </BlackOutlinedButton>
       </Box>

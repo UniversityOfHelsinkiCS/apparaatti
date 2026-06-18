@@ -9,7 +9,7 @@ import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
-import type { ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
+import type { CoursesSearchFieldsValues, ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
 import CoursesSearchFields from './CoursesSearchFields.tsx'
 import ReviewActions from './ReviewActions.tsx'
 
@@ -41,14 +41,6 @@ const CoursesPage = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const [page, setPage] = useState(1)
 
-  // Input field values (what user types)
-  const [nameInput, setNameInput] = useState('')
-  const [urnInput, setUrnInput] = useState('')
-  const [courseCodeInput, setCourseCodeInput] = useState('')
-  const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
-  const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
-  const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
-
   // Active search values (what's actually sent to API)
   const [nameSearch, setNameSearch] = useState('')
   const [urnSearch, setUrnSearch] = useState('')
@@ -57,14 +49,21 @@ const CoursesPage = () => {
   const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
   const [reviewStatusSearch, setReviewStatusSearch] = useState<ReviewStatusFilterValue>('all')
 
-  const handleSearch = () => {
+  const handleSearch = ({
+    nameInput,
+    urnInput,
+    courseCodeInput,
+    excludeUrnsInput,
+    excludeCourseCodesInput,
+    reviewStatusInput,
+  }: CoursesSearchFieldsValues) => {
     setNameSearch(nameInput)
     setUrnSearch(urnInput)
     setCourseCodeSearch(courseCodeInput)
     setExcludeUrnsSearch(excludeUrnsInput)
     setExcludeCourseCodesSearch(excludeCourseCodesInput)
     setReviewStatusSearch(reviewStatusInput)
-    setPage(1) // Reset to first page on new search
+    setPage(1)
   }
 
   const buildQueryString = () => {
@@ -105,14 +104,6 @@ const CoursesPage = () => {
 
   if (!user.isAdmin) {
     return <Navigate to={'/'} replace />
-  }
-
-  if (isCoursesLoading) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography>Loading courses...</Typography>
-      </Box>
-    )
   }
 
   const courseList: Course[] = coursesData?.courses ?? []
@@ -167,65 +158,55 @@ const CoursesPage = () => {
       </Typography>
 
       {/* Search Fields — grouped: Name, then URN (include + exclude), then Course code (include + exclude). */}
-      <CoursesSearchFields
-        nameInput={nameInput}
-        urnInput={urnInput}
-        excludeUrnsInput={excludeUrnsInput}
-        courseCodeInput={courseCodeInput}
-        excludeCourseCodesInput={excludeCourseCodesInput}
-        reviewStatusInput={reviewStatusInput}
-        setNameInput={setNameInput}
-        setUrnInput={setUrnInput}
-        setExcludeUrnsInput={setExcludeUrnsInput}
-        setCourseCodeInput={setCourseCodeInput}
-        setExcludeCourseCodesInput={setExcludeCourseCodesInput}
-        setReviewStatusInput={setReviewStatusInput}
-        onSearch={handleSearch}
-      />
+      <CoursesSearchFields onSearch={handleSearch} />
 
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Course Name</TableCell>
-            <TableCell>Course Codes</TableCell>
-            <TableCell>Custom URNs</TableCell>
-            <TableCell>Review</TableCell>
-            <TableCell>Review Updated</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {courseList.map((course: Course) => (
-            <TableRow key={course.id}>
-              {(() => {
-                const reviewState = course.reviewState ?? course.review ?? null
-
-                return (
-                  <>
-                    <TableCell>{formatLocalizedCourseName(course)}</TableCell>
-                    <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
-                    <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
-                    <TableCell>
-                      <ReviewActions
-                        key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}
-                        curId={course.id}
-                        reviewState={reviewState}
-                        onSaved={refetch}
-                      />
-                    </TableCell>
-                    <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
-                    <TableCell>
-                      <BlackOutlinedButton size="small" onClick={() => handleVisit(course.id)}>
-                        Visit
-                      </BlackOutlinedButton>
-                    </TableCell>
-                  </>
-                )
-              })()}
+      {isCoursesLoading ? (
+        <Typography>Loading courses...</Typography>
+      ) : (
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Course Name</TableCell>
+              <TableCell>Course Codes</TableCell>
+              <TableCell>Custom URNs</TableCell>
+              <TableCell>Review</TableCell>
+              <TableCell>Review Updated</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {courseList.map((course: Course) => (
+              <TableRow key={course.id}>
+                {(() => {
+                  const reviewState = course.reviewState ?? course.review ?? null
+
+                  return (
+                    <>
+                      <TableCell>{formatLocalizedCourseName(course)}</TableCell>
+                      <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
+                      <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
+                      <TableCell>
+                        <ReviewActions
+                          key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}
+                          curId={course.id}
+                          reviewState={reviewState}
+                          onSaved={refetch}
+                        />
+                      </TableCell>
+                      <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
+                      <TableCell>
+                        <BlackOutlinedButton size="small" onClick={() => handleVisit(course.id)}>
+                          Visit
+                        </BlackOutlinedButton>
+                      </TableCell>
+                    </>
+                  )
+                })()}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
       {/* Pagination */}
       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
