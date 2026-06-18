@@ -14,10 +14,10 @@ const RadioIcon = styled('span')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  'input:hover ~ &': {
+  'input:not(:disabled):hover ~ &': {
     backgroundColor: hy.bgColor.whiteHover,
   },
-  'input:active ~ &': {
+  'input:not(:disabled):active ~ &': {
     backgroundColor: hy.bgColor.whiteActive,
   },
   'input:disabled ~ &': {
@@ -41,14 +41,14 @@ const RadioCheckedIcon = styled(RadioIcon)({
     borderRadius: '50%',
     backgroundColor: hy.bgColor.primary,
   },
-  'input:hover ~ &': {
+  'input:not(:disabled):hover ~ &': {
     backgroundColor: hy.bgColor.white,
     borderColor: hy.bgColor.primaryHover,
     '&::before': {
       backgroundColor: hy.bgColor.primaryHover,
     },
   },
-  'input:active ~ &': {
+  'input:not(:disabled):active ~ &': {
     backgroundColor: hy.bgColor.white,
     borderColor: hy.bgColor.primaryActive,
     '&::before': {
