@@ -5,7 +5,7 @@ import { hy } from './hyColors'
 
 interface HyChipProps {
   label: string
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent) => void
   prefixIcon?: React.ReactNode
   ariaLabel?: string
   /** `small` is a custom addition, not part of the hy-ds spec */

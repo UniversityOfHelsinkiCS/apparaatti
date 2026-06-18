@@ -40,9 +40,17 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   }
 
   return (
-    <Stack onClick={e => e.stopPropagation()} sx={{ ml: 'auto', flexDirection: 'row', gap: 0.5, flexWrap: 'wrap' }}>
+    <Stack sx={{ ml: 'auto', flexDirection: 'row', gap: 0.5, flexWrap: 'wrap' }}>
       {activeChips.map(chip => (
-        <HyChip key={chip.id} label={chip.label} onClick={() => handleDelete(chip.id)} size="small" />
+        <HyChip
+          key={chip.id}
+          label={chip.label}
+          onClick={e => {
+            e?.stopPropagation()
+            handleDelete(chip.id)
+          }}
+          size="small"
+        />
       ))}
     </Stack>
   )
