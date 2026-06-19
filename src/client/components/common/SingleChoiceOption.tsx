@@ -31,7 +31,7 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
         py: '2px',
         // overriding negative margin because MUI default marginLeft: -11px looks bad
         marginLeft: '-8px',
-        opacity: count === 0 ? 0.4 : 1,
+        opacity: count === 0 ? 0.5 : 1,
         cursor: 'default',
       }}
     />
