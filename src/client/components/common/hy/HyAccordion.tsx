@@ -68,7 +68,7 @@ const OpenButton = styled('button', {
   boxSizing: 'border-box',
   position: 'relative',
   display: 'flex',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   flexDirection: 'row',
   gap: '0.75rem',
   width: '100%',
