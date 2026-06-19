@@ -18,7 +18,9 @@ export interface HyAccordionProps {
   headingLevel?: number
   id?: string
   sx?: SxProps<Theme>
+  /* 200ms opening animation, not part of original hy-ds spec */
   animate?: boolean
+  borders?: 'both' | 'top' | 'bottom' | 'none'
 }
 
 // --- Styled elements ---
@@ -55,11 +57,13 @@ const OpenButtonContainer = styled('div')({
 interface OpenButtonProps {
   $variant: AccordionVariant
   $expanded: boolean
+  $showTopBorder: boolean
+  $showBottomBorder: boolean
 }
 
 const OpenButton = styled('button', {
-  shouldForwardProp: p => p !== '$variant' && p !== '$expanded',
-})<OpenButtonProps>(({ $variant, $expanded }) => ({
+  shouldForwardProp: p => p !== '$variant' && p !== '$expanded' && p !== '$showTopBorder' && p !== '$showBottomBorder',
+})<OpenButtonProps>(({ $variant, $expanded, $showTopBorder, $showBottomBorder }) => ({
   all: 'unset',
   boxSizing: 'border-box',
   position: 'relative',
@@ -71,8 +75,8 @@ const OpenButton = styled('button', {
   color: hy.textColor.default,
   fill: hy.textColor.default,
   outline: '4px solid transparent',
-  borderTop: `1px solid ${hy.borderColor.light}`,
-  borderBottom: $expanded ? 'none' : `1px solid ${hy.borderColor.light}`,
+  borderTop: $showTopBorder ? `1px solid ${hy.borderColor.light}` : 'none',
+  borderBottom: $showBottomBorder && !$expanded ? `1px solid ${hy.borderColor.light}` : 'none',
   fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
   fontWeight: 600,
   letterSpacing: '0px',
@@ -138,12 +142,18 @@ const Panel = styled('div')({
   backgroundColor: hy.bgColor.neutralLight,
 })
 
-const Content = styled('div')({
+interface ContentProps {
+  $showBottomBorder: boolean
+}
+
+const Content = styled('div', {
+  shouldForwardProp: p => p !== '$showBottomBorder',
+})<ContentProps>(({ $showBottomBorder }) => ({
   position: 'relative',
   color: hy.textColor.default,
   padding: '0.5rem 0.75rem 1rem 0.75rem',
-  borderBottom: `1px solid ${hy.borderColor.light}`,
-})
+  borderBottom: $showBottomBorder ? `1px solid ${hy.borderColor.light}` : 'none',
+}))
 
 // --- Component ---
 
@@ -158,10 +168,14 @@ const HyAccordion = ({
   id: idProp,
   sx,
   animate = false,
+  borders = 'both',
 }: HyAccordionProps) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
   const panelId = `${id}-panel`
+
+  const showTopBorder = borders === 'both' || borders === 'top'
+  const showBottomBorder = borders === 'both' || borders === 'bottom'
 
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
   const isControlled = controlledOpen !== undefined
@@ -173,6 +187,12 @@ const HyAccordion = ({
     onChange?.(next)
   }
 
+  const renderPanelContent = () => (
+    <Panel id={panelId} role="region" aria-labelledby={id}>
+      <Content $showBottomBorder={showBottomBorder}>{children}</Content>
+    </Panel>
+  )
+
   return (
     <Root sx={sx}>
       <Title role="heading" aria-level={headingLevel}>
@@ -180,6 +200,8 @@ const HyAccordion = ({
           <OpenButton
             $variant={variant}
             $expanded={isExpanded}
+            $showTopBorder={showTopBorder}
+            $showBottomBorder={showBottomBorder}
             onClick={handleClick}
             aria-expanded={isExpanded}
             aria-controls={panelId}
@@ -200,18 +222,10 @@ const HyAccordion = ({
 
       {animate ? (
         <PanelWrapper $expanded={isExpanded}>
-          <PanelOverflowClip>
-            <Panel id={panelId} role="region" aria-labelledby={id}>
-              <Content>{children}</Content>
-            </Panel>
-          </PanelOverflowClip>
+          <PanelOverflowClip>{renderPanelContent()}</PanelOverflowClip>
         </PanelWrapper>
       ) : (
-        isExpanded && (
-          <Panel id={panelId} role="region" aria-labelledby={id}>
-            <Content>{children}</Content>
-          </Panel>
-        )
+        isExpanded && renderPanelContent()
       )}
     </Root>
   )
