@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { SyntheticEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -100,7 +100,6 @@ const SidebarContent = () => {
   return (
     <Box
       sx={{
-        px: { xs: 0.75, sm: 1.25 },
         pb: 2,
         minHeight: '100%',
         bgcolor: 'transparent',
@@ -108,7 +107,6 @@ const SidebarContent = () => {
     >
       <Box
         sx={{
-          px: { xs: 0.5, sm: 0.75 },
           py: 2,
           display: 'flex',
           alignItems: 'center',
@@ -119,15 +117,16 @@ const SidebarContent = () => {
         <Box sx={{ height: 12 }} />
         <ResetFiltersButton />
       </Box>
-      {filtersToShow.map(filter => (
+      {filtersToShow.map((filter, index) => (
         <FilterRenderer
           key={filter.id}
           filter={filter}
           expanded={expandedFilterIds.has(filter.id)}
-          onAccordionChange={(_event: SyntheticEvent, isExpanded: boolean) => {
+          onAccordionChange={(isExpanded: boolean) => {
             if (!isExpanded && unansweredMandatoryFilterIds.includes(filter.id)) return
             setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
           }}
+          isFirst={index === 0}
         />
       ))}
     </Box>

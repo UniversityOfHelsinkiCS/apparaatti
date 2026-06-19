@@ -1,5 +1,3 @@
-import { SyntheticEvent } from 'react'
-
 import { Question } from '../../common/types'
 import { filterConfigMap, shouldRenderWelcomeFilter, useFilterContext } from '../contexts/filterContext'
 import Filter from '../filters/filter'
@@ -9,10 +7,11 @@ import FilterAccordion from './FilterAccordion'
 interface FilterRendererProps {
   filter: Question
   expanded: boolean
-  onAccordionChange: (event: SyntheticEvent, isExpanded: boolean) => void
+  onAccordionChange: (isExpanded: boolean) => void
+  isFirst: boolean
 }
 
-const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererProps) => {
+const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: FilterRendererProps) => {
   const filters = useFilterContext()
 
   const config = filterConfigMap(filters).get(filter.id)
@@ -45,6 +44,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange }: FilterRendererP
       mandatory={filter.mandatory}
       expanded={expanded}
       onChange={onAccordionChange}
+      isFirst={isFirst}
     >
       <Filter variant={variant} filter={filterToRender} />
     </FilterAccordion>

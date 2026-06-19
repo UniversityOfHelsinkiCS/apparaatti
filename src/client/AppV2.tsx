@@ -106,8 +106,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             boxSizing: 'border-box',
             borderRight: '1px solid',
             borderColor: 'divider',
-            bgcolor: '#eef1f4',
-            backgroundImage: 'linear-gradient(180deg, #f2f4f7 0%, #e7ebf0 100%)',
           },
         }}
       >

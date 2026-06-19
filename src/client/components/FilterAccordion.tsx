@@ -1,9 +1,9 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Accordion, AccordionDetails, AccordionSummary, Box, Stack, Typography } from '@mui/material'
-import { ReactNode, SyntheticEvent } from 'react'
+import { Box } from '@mui/material'
+import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import HyAccordion from './common/hy/HyAccordion'
 import HyChip from './common/hy/HyChip'
 import HyTag from './common/hy/HyTag'
 
@@ -40,7 +40,17 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   }
 
   return (
-    <Stack sx={{ ml: 'auto', flexDirection: 'row', gap: 0.5, flexWrap: 'wrap' }}>
+    <Box
+      component="span"
+      sx={{
+        ml: 'auto',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 0.5,
+        flexWrap: 'wrap',
+        zIndex: 2, // render above the mouseover highlight of accordion header
+      }}
+    >
       {activeChips.map(chip => (
         <HyChip
           key={chip.id}
@@ -52,7 +62,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
           size="small"
         />
       ))}
-    </Stack>
+    </Box>
   )
 }
 
@@ -62,31 +72,37 @@ interface FilterAccordionProps {
   filterId?: string
   mandatory?: boolean
   expanded?: boolean
-  onChange?: (event: SyntheticEvent, isExpanded: boolean) => void
+  onChange?: (isExpanded: boolean) => void
+  isFirst?: boolean
 }
 
-const FilterAccordion = ({ title, children, filterId, mandatory, expanded, onChange }: FilterAccordionProps) => {
+const FilterAccordion = ({
+  title,
+  children,
+  filterId,
+  mandatory,
+  expanded,
+  onChange,
+  isFirst = true,
+}: FilterAccordionProps) => {
   const { t } = useTranslation()
   return (
-    <Accordion expanded={expanded} onChange={onChange} sx={{ mb: 1, '&:before': { display: 'none' } }} disableGutters>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        sx={{
-          px: 1.5,
-          minHeight: 52,
-          '& .MuiAccordionSummary-content': {
-            my: 1,
-          },
-        }}
-      >
+    <HyAccordion
+      open={expanded}
+      onChange={onChange}
+      variant="compact"
+      animate
+      borders={isFirst ? 'both' : 'bottom'}
+      summary={
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 1 }}>
           {mandatory && <HyTag text={t('question:mandatory')} colour="attention" ariaHidden={false} />}
-          <Typography sx={{ mr: 1 }}>{title}</Typography>
+          {title}
           {filterId && <ActiveFilterChips filterId={filterId} />}
         </Box>
-      </AccordionSummary>
-      <AccordionDetails sx={{ px: 1.5, pt: 0.5, pb: 1.5 }}>{children}</AccordionDetails>
-    </Accordion>
+      }
+    >
+      {children}
+    </HyAccordion>
   )
 }
 
