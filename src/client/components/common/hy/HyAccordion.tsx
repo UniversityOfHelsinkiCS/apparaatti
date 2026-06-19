@@ -18,6 +18,7 @@ export interface HyAccordionProps {
   headingLevel?: number
   id?: string
   sx?: SxProps<Theme>
+  animate?: boolean
 }
 
 // --- Styled elements ---
@@ -116,6 +117,23 @@ const HeaderSlot = styled('span', {
   },
 }))
 
+interface PanelWrapperProps {
+  $expanded: boolean
+}
+
+const PanelWrapper = styled('div', {
+  shouldForwardProp: p => p !== '$expanded',
+})<PanelWrapperProps>(({ $expanded }) => ({
+  display: 'grid',
+  gridTemplateRows: $expanded ? '1fr' : '0fr',
+  transition: 'grid-template-rows 200ms ease',
+  visibility: $expanded ? 'visible' : 'hidden',
+}))
+
+const PanelOverflowClip = styled('div')({
+  overflow: 'hidden',
+})
+
 const Panel = styled('div')({
   backgroundColor: hy.bgColor.neutralLight,
 })
@@ -139,6 +157,7 @@ const HyAccordion = ({
   headingLevel = 2,
   id: idProp,
   sx,
+  animate = false,
 }: HyAccordionProps) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
@@ -179,10 +198,20 @@ const HyAccordion = ({
         </OpenButtonContainer>
       </Title>
 
-      {isExpanded && (
-        <Panel id={panelId} role="region" aria-labelledby={id}>
-          <Content>{children}</Content>
-        </Panel>
+      {animate ? (
+        <PanelWrapper $expanded={isExpanded}>
+          <PanelOverflowClip>
+            <Panel id={panelId} role="region" aria-labelledby={id}>
+              <Content>{children}</Content>
+            </Panel>
+          </PanelOverflowClip>
+        </PanelWrapper>
+      ) : (
+        isExpanded && (
+          <Panel id={panelId} role="region" aria-labelledby={id}>
+            <Content>{children}</Content>
+          </Panel>
+        )
       )}
     </Root>
   )
