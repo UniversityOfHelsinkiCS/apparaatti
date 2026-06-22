@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 import type { User } from '../common/types'
 import HyButton from './components/common/hy/HyButton'
+import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
@@ -20,7 +21,7 @@ import { FilterContextProvider, useFilterContext } from './contexts/filterContex
 import { RedirectToLogin } from './util/redirectToLogin'
 import useRequiredUser from './util/useRequiredUser'
 
-const desktopDrawerWidth = '38vw'
+const desktopDrawerWidth = '38%'
 const mobileDrawerWidth = '88vw'
 
 type OneThirdDrawerLayoutProps = {
@@ -29,7 +30,7 @@ type OneThirdDrawerLayoutProps = {
 
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(!isMobile)
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   const { modalOpen, setModalOpen } = useFilterContext()
@@ -41,101 +42,122 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
 
   const toggleDrawer = () => setOpen(prev => !prev)
 
-  const currentDrawerWidth = isMobile ? mobileDrawerWidth : desktopDrawerWidth
-
   return (
     <Box
       sx={{
         display: 'flex',
-        minHeight: '100vh',
-        bgcolor: '#f7f8fa',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100vh',
+        bgcolor: hy.bgColor.white,
+        overflow: 'hidden',
       }}
     >
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
 
-      <AppBar
-        position="fixed"
-        elevation={0}
+      <Box
         sx={{
-          bgcolor: 'background.paper',
-          color: 'text.primary',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          transition: theme =>
-            theme.transitions.create(['margin-left', 'width'], {
-              duration: theme.transitions.duration.shorter,
-            }),
-          ml: open && !isMobile ? currentDrawerWidth : 0,
-          width: open && !isMobile ? `calc(100vw - ${currentDrawerWidth})` : '100vw',
+          display: 'flex',
+          width: '100%',
+          maxWidth: '1200px',
+          height: '100%',
+          position: 'relative',
         }}
       >
-        <Toolbar>
-          <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h4" noWrap sx={{ flexGrow: 1 }}>
-            {t('v2:appTitle')}
-          </Typography>
-          <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
-            {t('v2:feedback.openButton')}
-          </HyButton>
-          {user?.isAdmin && (
-            <HyButton
-              variant="supplementary"
-              colour="black"
-              size="small"
-              onClick={() => navigate('/admin')}
-              sx={{ ml: 2 }}
-            >
-              {t('v2:adminButton')}
-            </HyButton>
-          )}
-          <LanguageSelector sx={{ ml: 3 }} />
-        </Toolbar>
-      </AppBar>
+        <Drawer
+          variant={isMobile ? 'temporary' : 'persistent'}
+          anchor="left"
+          open={open}
+          onClose={toggleDrawer}
+          ModalProps={{
+            keepMounted: isMobile ? false : true,
+            disablePortal: isMobile ? true : false,
+          }}
+          sx={{
+            zIndex: theme => theme.zIndex.appBar - 1,
+            '& .MuiDrawer-paper': {
+              width: isMobile ? mobileDrawerWidth : '100%',
+              maxWidth: isMobile ? 'none' : '456px',
+              boxSizing: 'border-box',
+              borderRight: '1px solid',
+              borderLeft: '1px solid',
+              borderColor: 'divider',
+              position: isMobile ? 'fixed' : 'relative',
+              height: '100%',
+            },
+            ...(!isMobile && {
+              width: open ? desktopDrawerWidth : 0,
+              maxWidth: open ? '456px' : 0,
+              flexShrink: 0,
+              transition: theme =>
+                theme.transitions.create(['width', 'max-width'], {
+                  duration: theme.transitions.duration.shorter,
+                }),
+            }),
+          }}
+        >
+          <Toolbar />
+          <SidebarContent />
+        </Drawer>
 
-      <Drawer
-        variant={isMobile ? 'temporary' : 'persistent'}
-        anchor="left"
-        open={open}
-        onClose={toggleDrawer}
-        ModalProps={{
-          keepMounted: isMobile ? false : true,
-          disablePortal: isMobile ? true : false,
-        }}
-        sx={{
-          zIndex: theme => theme.zIndex.appBar - 1,
-          '& .MuiDrawer-paper': {
-            width: currentDrawerWidth,
-            boxSizing: 'border-box',
+        <Box
+          component="main"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            width: isMobile ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
+            height: '100%',
+            bgcolor: hy.bgColor.neutral,
+            transition: theme =>
+              theme.transitions.create('width', {
+                duration: theme.transitions.duration.shorter,
+              }),
+            overflowY: 'auto',
             borderRight: '1px solid',
             borderColor: 'divider',
-          },
-        }}
-      >
-        <Toolbar />
-        <SidebarContent />
-      </Drawer>
+          }}
+        >
+          <AppBar
+            position="sticky"
+            elevation={0}
+            sx={{
+              bgcolor: 'background.paper',
+              color: 'text.primary',
+              borderBottom: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Toolbar>
+              <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h4" noWrap sx={{ flexGrow: 1 }}>
+                {t('v2:appTitle')}
+              </Typography>
+              <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
+                {t('v2:feedback.openButton')}
+              </HyButton>
+              {user?.isAdmin && (
+                <HyButton
+                  variant="supplementary"
+                  colour="black"
+                  size="small"
+                  onClick={() => navigate('/admin')}
+                  sx={{ ml: 2 }}
+                >
+                  {t('v2:adminButton')}
+                </HyButton>
+              )}
+              <LanguageSelector sx={{ ml: 3 }} />
+            </Toolbar>
+          </AppBar>
 
-      <Box
-        component="main"
-        sx={{
-          flexShrink: 0,
-          width: open && !isMobile ? `calc(100vw - ${currentDrawerWidth})` : '100vw',
-          ml: open && !isMobile ? currentDrawerWidth : 0,
-          bgcolor: '#f7f8fa',
-          backgroundImage: 'linear-gradient(180deg, #f9fafb 0%, #f1f3f6 100%)',
-          transition: theme =>
-            theme.transitions.create(['margin-left', 'width'], {
-              duration: theme.transitions.duration.shorter,
-            }),
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ p: 2 }}>
-          <CourseRecommendations />
+          <Box sx={{ p: 2, flexGrow: 1 }}>
+            <CourseRecommendations />
+          </Box>
         </Box>
       </Box>
     </Box>
