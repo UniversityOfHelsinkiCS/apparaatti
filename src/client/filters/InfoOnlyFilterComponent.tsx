@@ -16,7 +16,7 @@ const InfoOnlyFilterComponent = ({ extraInfo }: InfoOnlyFilterComponentProps) =>
   }
 
   return (
-    <Box sx={{ py: 1 }}>
+    <Box sx={{ px: 2 }}>
       <AppMarkdown>{extraInfo}</AppMarkdown>
     </Box>
   )

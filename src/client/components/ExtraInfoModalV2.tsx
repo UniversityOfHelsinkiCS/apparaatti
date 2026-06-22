@@ -1,10 +1,10 @@
-import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
-import ActionButtonV2 from './common/ActionButtonV2'
 import AppMarkdown from './common/AppMarkdown'
+import HyButton from './common/hy/HyButton'
+import HyModal from './common/hy/HyModal'
 
 const ExtraInfoModalV2 = ({
   question,
@@ -18,37 +18,22 @@ const ExtraInfoModalV2 = ({
   currentVariant?: string
 }) => {
   const { t } = useTranslation()
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: { xs: '90vw', sm: '70vw', md: '60vw' },
-    bgcolor: 'background.paper',
-    border: '2px solid #545454',
-    borderRadius: '10px',
-    boxShadow: 24,
-    p: 4,
-  }
 
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
 
   return (
-    <Modal
+    <HyModal
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      title={t('question:extrainfo')}
+      footer={
+        <HyButton variant="secondary" colour="black" onClick={handleClose}>
+          {t('question:close')}
+        </HyButton>
+      }
     >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {t('question:extrainfo')}
-        </Typography>
-        <AppMarkdown>{explanationToShow}</AppMarkdown>
-
-        <ActionButtonV2 onClick={handleClose} text={t('question:close')}></ActionButtonV2>
-      </Box>
-    </Modal>
+      <AppMarkdown>{explanationToShow}</AppMarkdown>
+    </HyModal>
   )
 }
 
