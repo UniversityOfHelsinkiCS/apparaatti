@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import type { User } from '../common/types'
-import ActionButtonV2 from './components/common/ActionButtonV2'
+import HyButton from './components/common/hy/HyButton'
 import CourseRecommendations from './components/CourseRecommendations'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
@@ -75,18 +75,24 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+          <Typography variant="h4" noWrap sx={{ flexGrow: 1 }}>
             {t('v2:appTitle')}
           </Typography>
-          <LanguageSelector />
-          <ActionButtonV2
-            visualStyle="app-bar"
-            text={t('v2:feedback.openButton')}
-            onClick={() => setFeedbackModalOpen(true)}
-          />
+          <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
+            {t('v2:feedback.openButton')}
+          </HyButton>
           {user?.isAdmin && (
-            <ActionButtonV2 visualStyle="app-bar" text={t('v2:adminButton')} onClick={() => navigate('/admin')} />
+            <HyButton
+              variant="supplementary"
+              colour="black"
+              size="small"
+              onClick={() => navigate('/admin')}
+              sx={{ ml: 2 }}
+            >
+              {t('v2:adminButton')}
+            </HyButton>
           )}
+          <LanguageSelector sx={{ ml: 3 }} />
         </Toolbar>
       </AppBar>
 
