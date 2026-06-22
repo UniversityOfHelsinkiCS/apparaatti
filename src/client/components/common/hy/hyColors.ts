@@ -9,6 +9,7 @@ export const hy = {
     white: '#fff', // --ds-borderColor-white
     black: '#0c0c0c', // --ds-borderColor-black
     danger: '#bd2828', // --ds-borderColor-danger
+    success: '#257e29', // --ds-borderColor-success (--ds-palette-green-60)
     light: '#ccc', // --ds-borderColor-light (--ds-palette-black-20)
   },
   bgColor: {
@@ -56,6 +57,7 @@ export const hy = {
   textColor: {
     default: '#0c0c0c', // --ds-textColor-default
     primary: '#005a94', // --ds-textColor-primary
+    secondary: '#4d4d4d', // --ds-textColor-secondary (--ds-palette-black-70)
     white: '#fff', // --ds-textColor-white
     disabledOnLight: '#999', // --ds-textColor-disabled-onLight
     disabledOnDark: 'rgb(255 255 255 / 40%)', // --ds-textColor-disabled-onDark
@@ -70,6 +72,7 @@ export const hy = {
   },
   iconColor: {
     danger: '#bd2828', // --ds-iconColor-danger (--ds-palette-red-60)
+    success: '#257e29', // --ds-iconColor-success (--ds-palette-green-60)
     primary: '#005a94', // --ds-iconColor-primary (--ds-palette-mainBlue-70)
   },
   shadow: {
