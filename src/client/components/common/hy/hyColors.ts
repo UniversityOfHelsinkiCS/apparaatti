@@ -66,6 +66,7 @@ export const hy = {
     link: '#005a94', // --ds-textColor-link
     linkHover: '#003152', // --ds-textColor-link-hover
     linkActive: '#001929', // --ds-textColor-link-active
+    linkVisited: '#551a8b', // --ds-textColor-link-visited
   },
   iconColor: {
     danger: '#bd2828', // --ds-iconColor-danger (--ds-palette-red-60)
