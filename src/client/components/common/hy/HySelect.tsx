@@ -2,7 +2,7 @@ import type { MenuItemProps } from '@mui/material/MenuItem'
 import MenuItem from '@mui/material/MenuItem'
 import type { SelectProps } from '@mui/material/Select'
 import Select from '@mui/material/Select'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -190,7 +190,7 @@ const DEFAULT_MENU_PROPS: SelectProps['MenuProps'] = {
 }
 
 export interface HySelectProps<Value = unknown> extends Omit<SelectProps<Value>, 'variant'> {
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 export function HySelect<Value = unknown>({ sx, MenuProps: menuProps, ...props }: HySelectProps<Value>) {

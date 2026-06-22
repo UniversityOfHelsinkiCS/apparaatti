@@ -1,4 +1,4 @@
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 import type { ButtonHTMLAttributes } from 'react'
 
 import { hy } from './hyColors'
@@ -12,7 +12,7 @@ export interface HyButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   colour?: ButtonColour
   size?: ButtonSize
   fullWidth?: boolean
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 interface StyledProps {

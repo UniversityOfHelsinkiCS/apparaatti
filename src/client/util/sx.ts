@@ -1,4 +1,4 @@
-import { SxProps, Theme } from '@mui/material'
+import { SxProps } from '@mui/material'
 
-export const mergeSx = (...args: (SxProps<Theme> | undefined)[]): SxProps<Theme> =>
+export const mergeSx = (...args: (SxProps | undefined)[]): SxProps =>
   args.flatMap(sx => (Array.isArray(sx) ? sx : [sx]))

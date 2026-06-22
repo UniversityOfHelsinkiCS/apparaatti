@@ -27,7 +27,7 @@ All imitation components live in `src/client/components/common/hy/`. Name them `
 
 ## MUI customisation approach
 
-Every component must expose `sx?: SxProps<Theme>` in its props interface and pass it to the root styled element. Import the types as `import { styled, type SxProps, type Theme } from '@mui/material/styles'`.
+Every component must expose `sx?: SxProps` in its props interface and pass it to the root styled element. Import the types as `import { styled, type SxProps } from '@mui/material/styles'`.
 
 For state-driven styling on icon elements, use CSS sibling selectors that target MUI's hidden `<input>` sibling:
 

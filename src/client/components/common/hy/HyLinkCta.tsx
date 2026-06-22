@@ -1,6 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -20,7 +20,7 @@ interface HyLinkCtaProps {
   disabled?: boolean
   'aria-label'?: string
   children: React.ReactNode
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 type OwnerState = { variant: Variant; colour: Colour; size: Size }

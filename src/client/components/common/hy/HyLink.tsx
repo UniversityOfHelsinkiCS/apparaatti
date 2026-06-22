@@ -1,5 +1,5 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -20,7 +20,7 @@ interface HyLinkProps {
   iconPosition?: 'start' | 'end'
   'aria-label'?: string
   children: React.ReactNode
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 type OwnerState = {

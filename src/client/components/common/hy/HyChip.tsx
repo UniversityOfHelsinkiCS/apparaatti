@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -10,7 +10,7 @@ interface HyChipProps {
   ariaLabel?: string
   /** `small` is a custom addition, not part of the hy-ds spec */
   size?: 'medium' | 'small'
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 const ChipRoot = styled('div')<{ ownerState: { size: 'medium' | 'small'; clickable: boolean } }>(({ ownerState }) => ({

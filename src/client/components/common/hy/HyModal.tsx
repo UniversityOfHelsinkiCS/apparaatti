@@ -1,6 +1,6 @@
 import ReportIcon from '@mui/icons-material/Report'
 import MuiModal from '@mui/material/Modal'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import { hy } from './hyColors'
@@ -25,7 +25,7 @@ export interface HyModalProps {
   header?: ReactNode
   footer?: ReactNode
   children?: ReactNode
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 const sizeWidths: Record<Exclude<ModalSize, 'auto' | 'full'>, string> = {

@@ -1,4 +1,4 @@
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -13,7 +13,7 @@ interface HyTagProps {
   suffixIcon?: React.ReactNode
   role?: string
   ariaHidden?: boolean
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 type ColourTokens = {

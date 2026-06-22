@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -16,7 +16,7 @@ interface HyLinkWithArrowProps {
   iconPosition?: HyIconPosition
   fullWidth?: boolean
   children: React.ReactNode
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 const ICON_CLASS = 'HyLinkWithArrow-icon'

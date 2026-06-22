@@ -1,4 +1,4 @@
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
@@ -9,7 +9,7 @@ interface HyBadgeProps {
   ariaLabel?: string
   hiddenAssistiveText?: string
   children?: React.ReactNode
-  sx?: SxProps<Theme>
+  sx?: SxProps
 }
 
 const variantStyles: Record<BadgeVariant, { backgroundColor: string; color: string }> = {

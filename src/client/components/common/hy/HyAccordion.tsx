@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { styled, type SxProps, type Theme } from '@mui/material/styles'
+import { styled, type SxProps } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 import { useId, useState } from 'react'
 
@@ -17,7 +17,7 @@ export interface HyAccordionProps {
   variant?: AccordionVariant
   headingLevel?: number
   id?: string
-  sx?: SxProps<Theme>
+  sx?: SxProps
   /* 200ms opening animation, not part of original hy-ds spec */
   animate?: boolean
   borders?: 'both' | 'top' | 'bottom' | 'none'
