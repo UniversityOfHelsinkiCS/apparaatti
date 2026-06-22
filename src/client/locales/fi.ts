@@ -177,7 +177,7 @@ export default {
       title: 'Anna palautetta',
       textLabel: 'Palaute',
       starsLabel: 'Tähdet',
-      sendMetadata: 'lähetä hakutiedot',
+      sendMetadata: 'Lähetä hakutiedot',
       sendMetadataInfo:
         'valitsemalla tämän lähetät lomakkeen mukana filtterivalintasi ja saamasi hakutulokset, palaute on silti anonyymi',
       viewMetadata: 'Näytä hakutiedot',
