@@ -22,7 +22,6 @@ export const blankFilter = (): FilterConfig => ({
   hideInRecommendationReasons: false,
   hideInFilterSidebar: false,
   showInWelcomeModal: false,
-  isStrictByDefault: true,
   enabled: true,
   variants: [{ name: 'default', question: blankLocalized(), options: [] }],
 })

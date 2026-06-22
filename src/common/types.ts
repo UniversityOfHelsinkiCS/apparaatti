@@ -25,7 +25,6 @@ export type FilterOption = {
   id: string
   name: LocalizedText
   valueOverride?: string | null
-  setStrict?: boolean | null
   selectedByDefault?: boolean | null
 }
 
@@ -51,7 +50,6 @@ export type FilterConfig = {
   hideInFilterSidebar: boolean
   showInWelcomeModal: boolean
   coordinateKey?: string | null
-  isStrictByDefault: boolean
   enabled: boolean
   variants: FilterVariant[]
 }
@@ -60,7 +58,6 @@ export type Option = {
   id: string
   name: string
   valueOverride?: string
-  setStrict?: boolean
   selectedByDefault?: boolean
 }
 
@@ -79,7 +76,6 @@ export type Question = {
   hideInRecommendationReasons?: boolean
   hideInFilterSidebar?: boolean
   coordinateKey?: string | null
-  isStrictByDefault?: boolean
 }
 
 export type Variant = {
@@ -167,8 +163,7 @@ export type CurCuRelation = {
 }
 
 export type FormSubmission = {
-  answerData: AnswerData // choices of the form
-  strictFields: string[] // list of fields of answerData that should be treated as
+  answerData: AnswerData
 }
 
 export type AnswerData = {

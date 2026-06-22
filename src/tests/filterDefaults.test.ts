@@ -17,7 +17,6 @@ describe('multichoice filter defaults', () => {
       hideInFilterSidebar: false,
       showInWelcomeModal: false,
       coordinateKey: 'studyPlace',
-      isStrictByDefault: true,
       enabled: true,
       variants: [
         {
@@ -57,7 +56,6 @@ describe('multichoice filter defaults', () => {
         hideInFilterSidebar: false,
         showInWelcomeModal: false,
         coordinateKey: 'date',
-        isStrictByDefault: false,
         enabled: true,
         variants: [
           {

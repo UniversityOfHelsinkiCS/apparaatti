@@ -14,7 +14,6 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   hideInCurrentFiltersDisplay: cfg.hideInCurrentFiltersDisplay,
   hideInFilterSidebar: cfg.hideInFilterSidebar,
   coordinateKey: cfg.coordinateKey ?? null,
-  isStrictByDefault: cfg.isStrictByDefault,
   variants: cfg.variants.map(v => ({
     name: v.name,
     skipped: v.skipped,
@@ -24,7 +23,6 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
       id: o.id,
       name: localize(o.name, lang),
       valueOverride: o.valueOverride ?? undefined,
-      setStrict: o.setStrict ?? undefined,
       selectedByDefault: o.selectedByDefault ?? undefined,
     })),
   })),

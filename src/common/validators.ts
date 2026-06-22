@@ -14,7 +14,6 @@ const FilterOptionSchema = z.object({
   id: z.string(),
   name: LocalizedTextSchema,
   valueOverride: z.string().nullable().optional(),
-  setStrict: z.boolean().nullable().optional(),
   selectedByDefault: z.boolean().nullable().optional(),
 })
 
@@ -38,7 +37,6 @@ export const FilterUpdateSchema = z.object({
   hideInRecommendationReasons: z.boolean(),
   hideInFilterSidebar: z.boolean(),
   showInWelcomeModal: z.boolean(),
-  isStrictByDefault: z.boolean(),
   enabled: z.boolean(),
   variants: z.array(FilterVariantSchema).min(1),
 })

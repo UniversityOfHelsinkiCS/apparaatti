@@ -52,7 +52,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     coordinateKey: 'org',
     enabled: true,
     variants: [
@@ -77,7 +76,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     enabled: true,
     variants: [
       {
@@ -108,7 +106,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     coordinateKey: 'lang',
     enabled: true,
     variants: [
@@ -137,7 +134,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     enabled: true,
     variants: [
       {
@@ -184,7 +180,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: true,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     enabled: true,
     variants: [
       {
@@ -208,7 +203,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: true,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     enabled: true,
     variants: [
       {
@@ -232,7 +226,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: false,
     coordinateKey: 'date',
     enabled: true,
     variants: [
@@ -271,7 +264,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'multiPeriod',
     enabled: true,
     variants: [
@@ -295,7 +287,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'replacement',
     enabled: true,
     variants: [
@@ -369,7 +360,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'mentoring',
     enabled: true,
     variants: [
@@ -435,7 +425,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'finmu',
     enabled: true,
     variants: [
@@ -465,7 +454,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'challenge',
     enabled: true,
     variants: [
@@ -534,7 +522,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'graduation',
     enabled: true,
     variants: [
@@ -573,7 +560,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'studyPlace',
     enabled: true,
     variants: [
@@ -619,7 +605,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'integrated',
     enabled: true,
     variants: [
@@ -662,7 +647,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'independent',
     enabled: true,
     variants: [
@@ -705,7 +689,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'mooc',
     enabled: true,
     variants: [
@@ -729,7 +712,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'collaboration',
     enabled: true,
     variants: [
@@ -754,7 +736,6 @@ const FILTER_SEEDS: FilterSeed[] = [
     hideInCurrentFiltersDisplay: false,
     hideInRecommendationReasons: false,
     hideInFilterSidebar: false,
-    isStrictByDefault: true,
     coordinateKey: 'flexible',
     enabled: true,
     variants: [

@@ -121,8 +121,6 @@ interface FilterContextType {
   setCollaboration: (s: string) => void
   multiPeriod: string
   setMultiPeriod: (s: string) => void
-  strictFilters: string[]
-  setStrictFilters: (s: string[]) => void
   flexible: string
   setFlexible: (s: string) => void
 
@@ -366,19 +364,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [collaboration, setCollaboration] = useState('')
   const [multiPeriod, setMultiPeriod] = useState('')
   const [flexible, setFlexible] = useState('')
-  const [strictFilters, setStrictFilters] = useState<string[]>([])
-  const [strictFiltersInitialized, setStrictFiltersInitialized] = useState(false)
   const [multichoiceDefaultsInitialized, setMultichoiceDefaultsInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
-
-  const strictByDefaultFilterIds = filters.filter(f => f.isStrictByDefault === true).map(f => f.id)
-
-  useEffect(() => {
-    if (!filtersLoading && filters.length > 0 && !strictFiltersInitialized) {
-      setStrictFilters(strictByDefaultFilterIds)
-      setStrictFiltersInitialized(true)
-    }
-  }, [filters, filtersLoading, strictFiltersInitialized, strictByDefaultFilterIds])
 
   const getDefaultMultichoiceState = useCallback(
     (filterId: string) =>
@@ -569,11 +556,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     })
 
     setUserOrgCode(studyField)
-
-    const preservedWelcomeStrictFilters = strictFilters.filter(filterId => !sidebarFilterIds.has(filterId))
-    const resetNonWelcomeStrictFilters = strictByDefaultFilterIds.filter(filterId => sidebarFilterIds.has(filterId))
-
-    setStrictFilters([...new Set([...preservedWelcomeStrictFilters, ...resetNonWelcomeStrictFilters])])
   }
 
   const { data: user, isLoading: userLoading } = useApi<User>('user', '/api/user', 'GET')
@@ -672,7 +654,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
     const payload = {
       answerData,
-      strictFields: strictFilters,
     }
 
     submitAnswerMutation.mutateAsync(payload, undefined)
@@ -715,7 +696,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     collaboration,
     multiPeriod,
     flexible,
-    strictFilters,
     courseRecommendations,
   ])
 
@@ -775,8 +755,6 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         setMultiPeriod,
         flexible,
         setFlexible,
-        strictFilters,
-        setStrictFilters,
         resetFilters,
         getOptionCount,
         filterState,
