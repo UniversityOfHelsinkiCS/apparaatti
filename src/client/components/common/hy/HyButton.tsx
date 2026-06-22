@@ -1,7 +1,7 @@
 import { styled, type SxProps } from '@mui/material/styles'
 import type { ButtonHTMLAttributes } from 'react'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type ButtonVariant = 'primary' | 'secondary' | 'supplementary'
 type ButtonColour = 'blue' | 'black' | 'white' | 'danger'

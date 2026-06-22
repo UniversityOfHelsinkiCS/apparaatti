@@ -4,7 +4,7 @@ import { styled, type SxProps } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 import { useId, useState } from 'react'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type AccordionVariant = 'default' | 'compact'
 

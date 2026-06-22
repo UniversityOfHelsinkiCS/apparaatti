@@ -4,7 +4,7 @@ import type { SelectProps } from '@mui/material/Select'
 import Select from '@mui/material/Select'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 // 1px border-left + 8px padding + 24px icon + 8px padding
 const ICON_AREA_WIDTH = 41

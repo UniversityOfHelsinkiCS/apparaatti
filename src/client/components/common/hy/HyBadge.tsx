@@ -1,6 +1,6 @@
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type BadgeVariant = 'default' | 'success' | 'attention' | 'danger' | 'info' | 'notification' | 'primary' | 'disabled'
 

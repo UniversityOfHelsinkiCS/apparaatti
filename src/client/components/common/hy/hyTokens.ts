@@ -1,4 +1,4 @@
-// Resolved values of hy-design-system semantic color tokens (from variables.css).
+// Resolved values of hy-design-system semantic theme tokens (from variables.css).
 // Named to mirror the CSS variable hierarchy: hy.<category>.<token>
 export const hy = {
   borderColor: {
@@ -83,5 +83,43 @@ export const hy = {
   },
   palette: {
     red50: '#e13d37', // --ds-palette-red-50 (notification badge)
+  },
+  fontFamily: {
+    heading: "'Open Sans Variable', 'Open Sans', sans-serif", // --ds-fontFamily-heading
+    body: "'Open Sans Variable', 'Open Sans', sans-serif", // --ds-fontFamily-body
+  },
+  fontSize: {
+    12: 12, // --ds-fontSize-12
+    14: 14, // --ds-fontSize-14
+    16: 16, // --ds-fontSize-16
+    18: 18, // --ds-fontSize-18
+    20: 20, // --ds-fontSize-20
+    22: 22, // --ds-fontSize-22
+    24: 24, // --ds-fontSize-24
+    32: 32, // --ds-fontSize-32
+    40: 40, // --ds-fontSize-40
+  },
+  fontWeight: {
+    regular: 400, // --ds-fontWeight-regular
+    semibold: 600, // --ds-fontWeight-semibold
+    semiboldPlus: 650, // --ds-fontWeight-semiboldPlus
+    bold: 700, // --ds-fontWeight-bold
+  },
+  lineHeight: {
+    small: 1, // --ds-lineHeight-small
+    medium: 1.2, // --ds-lineHeight-medium
+    large: 1.5, // --ds-lineHeight-large
+    xLarge: 1.75, // --ds-lineHeight-xLarge
+  },
+  letterSpacing: {
+    xTight: '-2px', // --ds-letterSpacing-xTight
+    tight: '-1.4px', // --ds-letterSpacing-tight
+    normal: '-0.4px', // --ds-letterSpacing-normal
+    wide: '0px', // --ds-letterSpacing-wide
+    xWide: '0.4px', // --ds-letterSpacing-xWide
+  },
+  fontStretch: {
+    normal: '100%', // --ds-fontWidth-normal
+    condense: '90%', // --ds-fontWidth-condense
   },
 } as const

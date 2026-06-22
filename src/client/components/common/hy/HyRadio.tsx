@@ -2,7 +2,7 @@ import type { RadioProps } from '@mui/material/Radio'
 import Radio from '@mui/material/Radio'
 import { styled } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 const RadioIcon = styled('span')({
   boxSizing: 'border-box',

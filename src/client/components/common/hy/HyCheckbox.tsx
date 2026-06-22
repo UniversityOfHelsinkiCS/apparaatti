@@ -2,7 +2,7 @@ import type { CheckboxProps } from '@mui/material/Checkbox'
 import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 const CHECKMARK = `url("data:image/svg+xml;charset=utf-8,<svg width='16' height='13' viewBox='0 0 16 13' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M5.99997 7.87871L13.606 0.272705L15.7273 2.39403L5.99997 12.1214L0.272644 6.39402L2.39396 4.27271L5.99997 7.87871Z' fill='%23ffffff' /></svg>")`
 const CHECKMARK_DISABLED = `url("data:image/svg+xml;charset=utf-8,<svg width='16' height='13' viewBox='0 0 16 13' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M5.99997 7.87871L13.606 0.272705L15.7273 2.39403L5.99997 12.1214L0.272644 6.39402L2.39396 4.27271L5.99997 7.87871Z' fill='%23999999' /></svg>")`

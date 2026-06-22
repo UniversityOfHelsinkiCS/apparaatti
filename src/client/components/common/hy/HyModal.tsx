@@ -3,7 +3,7 @@ import MuiModal from '@mui/material/Modal'
 import { styled, type SxProps } from '@mui/material/styles'
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 const MODAL_IN_DURATION = 220
 const MODAL_OUT_DURATION = 160

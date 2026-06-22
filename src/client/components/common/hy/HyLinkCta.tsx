@@ -2,7 +2,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type Variant = 'primary' | 'secondary' | 'supplementary'
 type Colour = 'blue' | 'black' | 'white'

@@ -1,7 +1,7 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type LinkSize = '2xLarge' | 'xLarge' | 'large' | 'medium' | 'small' | 'xSmall'
 type LinkVariant = 'inline' | 'standalone'

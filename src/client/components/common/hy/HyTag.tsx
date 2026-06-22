@@ -1,6 +1,6 @@
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyColors'
+import { hy } from './hyTokens'
 
 type TagColour = 'default' | 'black' | 'white' | 'info' | 'danger' | 'attention' | 'success'
 
