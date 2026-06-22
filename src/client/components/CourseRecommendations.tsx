@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useFilterContext } from '../contexts/filterContext'
 import { sortCourses } from '../util/courseSort'
-import CourseRecommendationV2 from './CourseRecommendationV2'
+import CourseRecommendation from './CourseRecommendation'
 import CourseSortControls, { type SortDirection, type SortMode } from './CourseSortControls'
 import NoRecommendationsInfo from './NoRecommendationsInfo'
 
@@ -39,7 +39,7 @@ const CourseRecommendations = () => {
           }}
         >
           {sortedCourses.map(course => (
-            <CourseRecommendationV2 key={course.id} course={course} />
+            <CourseRecommendation key={course.id} course={course} />
           ))}
         </Stack>
       </Stack>

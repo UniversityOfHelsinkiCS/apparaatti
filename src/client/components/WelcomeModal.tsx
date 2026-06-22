@@ -15,8 +15,8 @@ import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
-import RadioQuestionV2 from './RadioQuestionV2'
-import StudyPhaseQuestionV2 from './StudyPhaseQuestionV2'
+import RadioQuestion from './RadioQuestion'
+import StudyPhaseQuestion from './StudyPhaseQuestion'
 
 type WelcomeModalProps = {
   open: boolean
@@ -88,11 +88,11 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     const configState = entry.config.state
 
     if (entry.question.id === 'study-field-select') {
-      return <StudyPhaseQuestionV2 question={entry.question} />
+      return <StudyPhaseQuestion question={entry.question} />
     }
 
     if ((entry.question.id === 'primary-language' || entry.question.id === 'lang') && !Array.isArray(configState)) {
-      return <RadioQuestionV2 question={entry.question} value={configState} setValue={entry.config.setState} />
+      return <RadioQuestion question={entry.question} value={configState} setValue={entry.config.setState} />
     }
 
     return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />

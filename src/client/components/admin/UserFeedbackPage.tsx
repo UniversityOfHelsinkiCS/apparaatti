@@ -26,7 +26,7 @@ import type { RecommendationMetadata } from '../../../common/types.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
-import ActionButtonV2 from '../common/ActionButtonV2.tsx'
+import ActionButton from '../common/ActionButton.tsx'
 import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
@@ -223,7 +223,7 @@ const UserFeedbackPage = () => {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <ActionButtonV2
+                    <ActionButton
                       text={t('v2:feedback.admin.readComment')}
                       type="button"
                       onClick={() => setSelectedFeedback(feedback)}

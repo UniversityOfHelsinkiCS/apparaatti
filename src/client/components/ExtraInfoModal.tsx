@@ -6,7 +6,7 @@ import AppMarkdown from './common/AppMarkdown'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 
-const ExtraInfoModalV2 = ({
+const ExtraInfoModal = ({
   question,
   open,
   handleClose,
@@ -37,4 +37,4 @@ const ExtraInfoModalV2 = ({
   )
 }
 
-export default ExtraInfoModalV2
+export default ExtraInfoModal

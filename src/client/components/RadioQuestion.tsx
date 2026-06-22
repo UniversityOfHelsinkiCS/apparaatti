@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
-import SingleChoiceOption from './common/SingleChoiceOption'
-import ExtraInfoModalV2 from './ExtraInfoModalV2.tsx'
-import QuestionTitleV2 from './QuestionTitleV2.tsx'
+import SingleChoiceOption from './common/SingleChoiceOption.tsx'
+import ExtraInfoModal from './ExtraInfoModal.tsx'
+import QuestionTitle from './QuestionTitle.tsx'
 
-const RadioQuestionV2 = ({
+const RadioQuestion = ({
   question,
   value,
   setValue,
@@ -27,9 +27,9 @@ const RadioQuestionV2 = ({
   }
   return (
     <Box>
-      <QuestionTitleV2 handleOpen={handleOpen} title={variant.question} question={question} />
+      <QuestionTitle handleOpen={handleOpen} title={variant.question} question={question} />
 
-      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
       <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)} sx={{ marginTop: 1 }}>
         {variant.options?.map(option => (
@@ -40,4 +40,4 @@ const RadioQuestionV2 = ({
   )
 }
 
-export default RadioQuestionV2
+export default RadioQuestion

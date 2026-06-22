@@ -81,7 +81,7 @@ const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] })
   )
 }
 
-const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
+const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const { t, i18n } = useTranslation()
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
@@ -267,4 +267,4 @@ const CourseRecommendationV2 = ({ course }: { course: CourseData }) => {
   )
 }
 
-export default CourseRecommendationV2
+export default CourseRecommendation

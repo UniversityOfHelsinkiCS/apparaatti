@@ -13,7 +13,7 @@ const MandatoryStatus = ({ question }: { question: Question }) => {
   return <HyTag text={t('question:mandatory')} colour="attention" ariaHidden={false} sx={{ mr: 0.5 }} />
 }
 
-const QuestionTitleV2 = ({
+const QuestionTitle = ({
   handleOpen,
   title,
   question,
@@ -47,4 +47,4 @@ const QuestionTitleV2 = ({
   )
 }
 
-export default QuestionTitleV2
+export default QuestionTitle

@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import { Question, User } from '../../common/types'
 import { useFilterContext } from '../contexts/filterContext'
 import { translateLocalizedString } from '../util/i18n'
-import ExtraInfoModalV2 from './ExtraInfoModalV2'
-import QuestionTitleV2 from './QuestionTitleV2'
+import ExtraInfoModal from './ExtraInfoModal'
+import QuestionTitle from './QuestionTitle'
 
-const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
+const StudyPhaseQuestion = ({ question }: { question: Question }) => {
   const { user, studyData, supportedOrganisations, setUserOrgCode, studyField, setStudyField } = useFilterContext()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -40,9 +40,9 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
 
   return (
     <Box sx={{ minWidth: 200 }}>
-      <QuestionTitleV2 handleOpen={handleOpen} title={t('question:pickStudy')} question={question} />
+      <QuestionTitle handleOpen={handleOpen} title={t('question:pickStudy')} question={question} />
 
-      <ExtraInfoModalV2 question={question} open={open} handleClose={handleClose} />
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
       <Select
         sx={{
@@ -69,4 +69,4 @@ const StudyPhaseQuestionV2 = ({ question }: { question: Question }) => {
     </Box>
   )
 }
-export default StudyPhaseQuestionV2
+export default StudyPhaseQuestion

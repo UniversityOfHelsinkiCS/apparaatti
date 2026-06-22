@@ -3,8 +3,8 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 
 import { Variant } from '../../common/types'
-import ExtraInfoModalV2 from '../components/ExtraInfoModalV2'
-import QuestionTitleV2 from '../components/QuestionTitleV2'
+import ExtraInfoModal from '../components/ExtraInfoModal'
+import QuestionTitle from '../components/QuestionTitle'
 import DropdownFilterComponent from './DropdownFilterComponent'
 import InfoOnlyFilterComponent from './InfoOnlyFilterComponent'
 import MultiChoiceFilterComponent from './MultiChoiceFilterComponent'
@@ -52,13 +52,13 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
     <Box>
       {showAsQuestion && (
         <>
-          <QuestionTitleV2
+          <QuestionTitle
             handleOpen={handleOpen}
             title={variant.question}
             question={filter}
             showMandatoryStatus={false}
           />
-          <ExtraInfoModalV2 question={filter} open={open} handleClose={handleClose} />
+          <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
         </>
       )}
       <Box sx={{ marginTop: 0.5 }}>

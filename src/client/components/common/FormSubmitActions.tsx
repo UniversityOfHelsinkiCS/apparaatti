@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 
-import ActionButtonV2 from './ActionButtonV2'
+import ActionButton from './ActionButton'
 
 type FormSubmitActionsProps = {
   submitLabel: string
@@ -16,8 +16,8 @@ const FormSubmitActions = ({ submitLabel, cancelLabel, actionGroupAriaLabel, onC
       aria-label={actionGroupAriaLabel}
       sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, justifyContent: 'flex-end' }}
     >
-      <ActionButtonV2 text={submitLabel} type="submit" />
-      <ActionButtonV2 text={cancelLabel} type="button" onClick={onCancel} />
+      <ActionButton text={submitLabel} type="submit" />
+      <ActionButton text={cancelLabel} type="button" onClick={onCancel} />
     </Box>
   )
 }
