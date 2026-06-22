@@ -272,7 +272,8 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   const courseLanguageType = languageToStudy(lang, primaryLang)
 
   const filteredForOrg = filterIfIsPrimaryLang(courseData, organisationCode, lang, primaryLang)
-  const sorted = sortCourseData(filteredForOrg, courseLanguageType)
+  const filteredRaj = filteredForOrg.filter(c => !courseHasCustomCodeUrn(c, 'kks-raj'))
+  const sorted = sortCourseData(filteredRaj, courseLanguageType)
 
   return sorted
 }
