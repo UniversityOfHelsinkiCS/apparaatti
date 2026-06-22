@@ -1,8 +1,8 @@
-import { MenuItem, Select, SelectChangeEvent, SxProps } from '@mui/material'
+import { type SelectChangeEvent, type SxProps } from '@mui/material'
 import { useContext } from 'react'
 
 import { LanguageContext } from '../contexts/languageContext'
-import { mergeSx } from '../util/sx'
+import { HyMenuItem, HySelect } from './common/hy/HySelect'
 
 const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
   const { language, setAppLanguage } = useContext(LanguageContext)
@@ -12,32 +12,11 @@ const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
   }
 
   return (
-    <Select
-      value={language}
-      onChange={handleChange}
-      aria-label="Language selector"
-      size="small"
-      sx={mergeSx(
-        {
-          color: 'inherit',
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(0, 0, 0, 0.23)',
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(0, 0, 0, 0.87)',
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.main',
-          },
-          minWidth: 80,
-        },
-        sx
-      )}
-    >
-      <MenuItem value="fi">Suomi</MenuItem>
-      <MenuItem value="en">English</MenuItem>
-      <MenuItem value="sv">Svenska</MenuItem>
-    </Select>
+    <HySelect value={language} onChange={handleChange} aria-label="Language selector" sx={sx}>
+      <HyMenuItem value="fi">Suomi</HyMenuItem>
+      <HyMenuItem value="en">English</HyMenuItem>
+      <HyMenuItem value="sv">Svenska</HyMenuItem>
+    </HySelect>
   )
 }
 

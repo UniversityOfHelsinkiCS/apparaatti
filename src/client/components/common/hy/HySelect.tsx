@@ -1,4 +1,3 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import type { MenuItemProps } from '@mui/material/MenuItem'
 import MenuItem from '@mui/material/MenuItem'
 import type { SelectProps } from '@mui/material/Select'
@@ -7,8 +6,27 @@ import { styled, type SxProps, type Theme } from '@mui/material/styles'
 
 import { hy } from './hyColors'
 
-// Icon area: 1px border-left + 8px pad-left + 24px icon + 8px pad-right = 41px
+// 1px border-left + 8px padding + 24px icon + 8px padding
 const ICON_AREA_WIDTH = 41
+
+// Exact SVG paths from hy-ds ds-icon-keyboard-arrow-{down,up}, viewBox "0 -960 960 960"
+const PATH_CHEVRON_DOWN = 'M480-320 216-584l67-67 197 197 197-197 67 67-264 264Z'
+const PATH_CHEVRON_UP = 'M480-530 283-333l-67-67 264-264 264 264-67 67-197-197Z'
+
+function ChevronIcon({ path }: { path: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      width="24"
+      height="24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={path} />
+    </svg>
+  )
+}
 
 const IconContainer = styled('span')({
   display: 'flex',
@@ -25,55 +43,48 @@ function DropdownIcon({ className }: { className?: string }) {
   const isOpen = className?.includes('iconOpen') ?? false
   return (
     <IconContainer className={className}>
-      <KeyboardArrowDownIcon
-        sx={{
-          fontSize: 24,
-          transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: isOpen ? 'rotate(180deg)' : 'none',
-        }}
-      />
+      <ChevronIcon path={isOpen ? PATH_CHEVRON_UP : PATH_CHEVRON_DOWN} />
     </IconContainer>
   )
 }
 
+// styled() loses Select's generic parameter; cast it back so HySelect can forward Value
 const StyledSelect = styled(Select)({
   height: '2.75rem',
   borderRadius: 0,
   backgroundColor: hy.bgColor.white,
   color: hy.textColor.secondary,
 
+  // !important: MUI's notchedOutline rule shares the same specificity; source order alone is unreliable
   '& .MuiOutlinedInput-notchedOutline': {
-    border: `2px solid ${hy.borderColor.default}`,
+    borderColor: `${hy.borderColor.default} !important`,
+    borderWidth: '2px !important',
+    borderStyle: 'solid',
     borderRadius: 0,
     top: 0,
     '& legend': { display: 'none' },
   },
 
-  // Hover: bg change (only when not disabled/focused)
-  '&:not(.Mui-disabled):not(.Mui-focused):hover': {
+  '&:not(.Mui-disabled):not(:has(.MuiSelect-iconOpen)):hover': {
     backgroundColor: hy.bgColor.whiteHover,
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: hy.borderColor.default,
-    },
   },
 
-  // Focus/open: focus ring + primary border color
-  '&.Mui-focused': {
+  // mirrors hy-ds: show focus ring when open (.--open) or keyboard-focused (:focus-visible)
+  '&:has(.MuiSelect-iconOpen), &:has(.MuiSelect-select:focus-visible)': {
     backgroundColor: hy.bgColor.white,
     boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
     outline: `2px solid ${hy.bgColor.black}`,
     outlineOffset: '2px',
     '& .MuiOutlinedInput-notchedOutline': {
-      border: `2px solid ${hy.borderColor.primary}`,
+      borderColor: `${hy.borderColor.primary} !important`,
     },
   },
 
-  // Disabled
   '&.Mui-disabled': {
     backgroundColor: hy.bgColor.disabledOnLight,
     cursor: 'not-allowed',
     '& .MuiOutlinedInput-notchedOutline': {
-      border: `2px solid ${hy.borderColor.disabledOnLight}`,
+      borderColor: `${hy.borderColor.disabledOnLight} !important`,
     },
     '& .MuiSelect-select': {
       cursor: 'not-allowed',
@@ -84,15 +95,17 @@ const StyledSelect = styled(Select)({
     },
   },
 
-  // Selected text area
+  // flex: 1 ensures the div covers the full width including under the icon, so pointer-events: none
+  // on the icon passes clicks through to onMouseDown here (the only handler that opens the dropdown)
   '& .MuiSelect-select': {
+    flex: 1,
+    alignSelf: 'stretch',
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '10px',
-    paddingRight: `${ICON_AREA_WIDTH}px !important`,
+    paddingRight: `${ICON_AREA_WIDTH + 12}px !important`,
     paddingTop: '0 !important',
     paddingBottom: '0 !important',
-    height: '100%',
     fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
     fontSize: '16px',
     fontWeight: 400,
@@ -101,18 +114,17 @@ const StyledSelect = styled(Select)({
     boxSizing: 'border-box',
   },
 
-  // Icon container: stretch full height, positioned at right edge
+  // position: absolute over .MuiSelect-select; explicit width prevents collapse out of flow
   '& .MuiSelect-icon': {
     position: 'absolute',
     right: 0,
     top: 0,
     bottom: 0,
-    height: 'auto',
-    width: 'auto',
+    width: `${ICON_AREA_WIDTH}px`,
     color: 'inherit',
     transform: 'none !important',
   },
-})
+}) as <V = unknown>(props: SelectProps<V>) => React.JSX.Element
 
 const StyledMenuItem = styled(MenuItem)({
   minHeight: '2.5rem',
@@ -161,12 +173,15 @@ const StyledMenuItem = styled(MenuItem)({
 })
 
 const DEFAULT_MENU_PROPS: SelectProps['MenuProps'] = {
-  PaperProps: {
-    sx: {
-      borderRadius: 0,
-      border: `1px solid ${hy.borderColor.light}`,
-      boxShadow: hy.shadow.overlay,
-      marginTop: 0,
+  transitionDuration: 0,
+  slotProps: {
+    paper: {
+      elevation: 0,
+      style: {
+        border: `1px solid ${hy.borderColor.light}`,
+        borderRadius: 0,
+        boxShadow: hy.shadow.overlay,
+      },
     },
   },
   MenuListProps: {
@@ -174,26 +189,20 @@ const DEFAULT_MENU_PROPS: SelectProps['MenuProps'] = {
   },
 }
 
-export interface HySelectProps extends Omit<SelectProps, 'variant'> {
+export interface HySelectProps<Value = unknown> extends Omit<SelectProps<Value>, 'variant'> {
   sx?: SxProps<Theme>
 }
 
-export function HySelect({ sx, MenuProps: menuProps, ...props }: HySelectProps) {
+export function HySelect<Value = unknown>({ sx, MenuProps: menuProps, ...props }: HySelectProps<Value>) {
   return (
-    <StyledSelect
-      {...props}
-      variant="outlined"
-      IconComponent={DropdownIcon}
-      MenuProps={{ ...DEFAULT_MENU_PROPS, ...menuProps }}
-      sx={[...(Array.isArray(sx) ? sx : [sx])]}
-    />
+    <StyledSelect {...props} IconComponent={DropdownIcon} MenuProps={{ ...DEFAULT_MENU_PROPS, ...menuProps }} sx={sx} />
   )
 }
 
 export type HyMenuItemProps = MenuItemProps
 
 export function HyMenuItem({ sx, ...props }: HyMenuItemProps) {
-  return <StyledMenuItem {...props} disableRipple sx={[...(Array.isArray(sx) ? sx : [sx])]} />
+  return <StyledMenuItem {...props} disableRipple sx={sx} />
 }
 
 export default HySelect
