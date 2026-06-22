@@ -10,7 +10,6 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   extraInfo: cfg.extraInfo ? localize(cfg.extraInfo, lang) : undefined,
   isSubQuestionForQuestionId: cfg.parentFilterId ?? undefined,
   displayType: cfg.displayType ?? undefined,
-  superToggle: cfg.superToggle,
   showInWelcomeModal: cfg.showInWelcomeModal,
   hideInCurrentFiltersDisplay: cfg.hideInCurrentFiltersDisplay,
   hideInFilterSidebar: cfg.hideInFilterSidebar,

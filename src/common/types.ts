@@ -46,7 +46,6 @@ export type FilterConfig = {
   parentFilterId?: string | null
   displayOrder: number
   displayType?: string | null
-  superToggle: boolean
   hideInCurrentFiltersDisplay: boolean
   hideInRecommendationReasons: boolean
   hideInFilterSidebar: boolean
@@ -75,7 +74,6 @@ export type Question = {
   variants: Variant[]
   extraInfo?: string
   displayType?: string | null
-  superToggle?: boolean
   showInWelcomeModal?: boolean
   hideInCurrentFiltersDisplay?: boolean
   hideInRecommendationReasons?: boolean

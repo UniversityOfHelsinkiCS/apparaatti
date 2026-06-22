@@ -38,10 +38,9 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     const state = config.state
     const setState = config.setState
     const displayType = filter.displayType ?? 'singlechoice'
-    const superToggle = filter.superToggle ?? false
     const shortName = filter.shortName ?? filter.id
 
-    return { ...filter, displayType, state, setState, superToggle, shortName }
+    return { ...filter, displayType, state, setState, shortName }
   }
 
   const welcomeFilters = filters

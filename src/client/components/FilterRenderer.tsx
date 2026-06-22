@@ -88,11 +88,10 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
   const state = config ? config.state : ''
   const setState = config ? config.setState : () => {}
   const displayType = filter.displayType ?? 'singlechoice'
-  const superToggle = filter.superToggle ?? false
   const shortName = filter.shortName ?? filter.id
   const skipInSideBar = filter.hideInFilterSidebar ?? false
 
-  const filterToRender = { ...filter, displayType, state, setState, superToggle, shortName }
+  const filterToRender = { ...filter, displayType, state, setState, shortName }
 
   const variantId = updateVariantToDisplayId(
     filters.language,

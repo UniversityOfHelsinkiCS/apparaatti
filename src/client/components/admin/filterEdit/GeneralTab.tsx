@@ -15,11 +15,9 @@ interface GeneralTabProps {
 
 const BOOL_FIELDS = [
   ['mandatory', 'Mandatory'],
-  ['superToggle', 'Super toggle'],
   ['showInWelcomeModal', 'Show in welcome modal'],
   ['hideInCurrentFiltersDisplay', 'Hide in current filters'],
   ['hideInFilterSidebar', 'Hide in sidebar'],
-  ['isStrictByDefault', 'Strict by default'],
   ['enabled', 'Enabled'],
 ] as const
 

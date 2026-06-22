@@ -18,7 +18,6 @@ export const blankFilter = (): FilterConfig => ({
   parentFilterId: null,
   displayOrder: 0,
   displayType: null,
-  superToggle: false,
   hideInCurrentFiltersDisplay: false,
   hideInRecommendationReasons: false,
   hideInFilterSidebar: false,

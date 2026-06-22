@@ -34,7 +34,6 @@ export const FilterUpdateSchema = z.object({
   parentFilterId: z.string().nullable().optional(),
   displayOrder: z.number().int(),
   displayType: z.string().nullable().optional(),
-  superToggle: z.boolean(),
   hideInCurrentFiltersDisplay: z.boolean(),
   hideInRecommendationReasons: z.boolean(),
   hideInFilterSidebar: z.boolean(),

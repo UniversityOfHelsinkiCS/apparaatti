@@ -54,14 +54,6 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
     refetch()
   }
 
-  const handleToggleStrictByDefault = async (filter: FilterConfig) => {
-    await adminFetch('PUT', `/api/admin/filter-config/${filter.id}`, {
-      ...filter,
-      isStrictByDefault: !filter.isStrictByDefault,
-    })
-    refetch()
-  }
-
   const move = async (index: number, direction: 1 | -1) => {
     const a = filterList[index]
     const b = filterList[index + direction]
@@ -180,7 +172,6 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
             <TableCell>Order</TableCell>
             <TableCell>ID</TableCell>
             <TableCell>Short Name (fi)</TableCell>
-            <TableCell>Strict by default</TableCell>
             <TableCell>Enabled</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
@@ -199,16 +190,6 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
               </TableCell>
               <TableCell>{filter.id}</TableCell>
               <TableCell>{filter.shortName.fi}</TableCell>
-              <TableCell>
-                <Switch
-                  checked={filter.isStrictByDefault}
-                  onChange={() => handleToggleStrictByDefault(filter)}
-                  sx={{
-                    '& .MuiSwitch-switchBase.Mui-checked': { color: 'black' },
-                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: 'black' },
-                  }}
-                />
-              </TableCell>
               <TableCell>
                 <Switch
                   checked={filter.enabled}
