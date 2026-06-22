@@ -1,8 +1,8 @@
 import { Box, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
+import AppMarkdown from './common/AppMarkdown'
 import ResetFiltersButton from './ResetFiltersButton'
 
 type UnansweredPromtProps = {
@@ -79,7 +79,7 @@ const NoRecommendationsInfo = () => {
               <>
                 {additionalInfo && (
                   <Box sx={{ mb: 3, textAlign: 'left' }}>
-                    <Markdown>{additionalInfo}</Markdown>
+                    <AppMarkdown>{additionalInfo}</AppMarkdown>
                   </Box>
                 )}
                 <ResetFiltersButton />

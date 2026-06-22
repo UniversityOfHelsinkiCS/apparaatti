@@ -1,10 +1,10 @@
 import { Box, Modal, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 
 import { Question } from '../../common/types'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
 import ActionButtonV2 from './common/ActionButtonV2'
+import AppMarkdown from './common/AppMarkdown'
 
 const ExtraInfoModalV2 = ({
   question,
@@ -44,7 +44,7 @@ const ExtraInfoModalV2 = ({
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {t('question:extrainfo')}
         </Typography>
-        <Markdown>{explanationToShow}</Markdown>
+        <AppMarkdown>{explanationToShow}</AppMarkdown>
 
         <ActionButtonV2 onClick={handleClose} text={t('question:close')}></ActionButtonV2>
       </Box>

@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import Markdown from 'react-markdown'
+
+import AppMarkdown from '../components/common/AppMarkdown'
 
 interface InfoOnlyFilterComponentProps {
   extraInfo?: string
@@ -16,7 +17,7 @@ const InfoOnlyFilterComponent = ({ extraInfo }: InfoOnlyFilterComponentProps) =>
 
   return (
     <Box sx={{ py: 1 }}>
-      <Markdown>{extraInfo}</Markdown>
+      <AppMarkdown>{extraInfo}</AppMarkdown>
     </Box>
   )
 }

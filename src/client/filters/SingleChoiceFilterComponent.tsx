@@ -2,9 +2,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionDetails, AccordionSummary, RadioGroup, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 
 import { Option, Question } from '../../common/types'
+import AppMarkdown from '../components/common/AppMarkdown'
 import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -57,7 +57,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
               <Typography>{t('question:extrainfo')}: </Typography>
             </AccordionSummary>
             <AccordionDetails data-cy={`${filter.id}-extrainfo-accordion-details`}>
-              <Markdown>{extrainfo}</Markdown>
+              <AppMarkdown>{extrainfo}</AppMarkdown>
             </AccordionDetails>
           </Accordion>
         )}
