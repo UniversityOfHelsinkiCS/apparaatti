@@ -114,7 +114,14 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
       borders={isFirst ? 'both' : 'bottom'}
       summary={
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 1 }}>
-          {filter.mandatory && <HyTag text={t('question:mandatory')} colour="attention" ariaHidden={false} />}
+          {filter.mandatory && (
+            <HyTag
+              text={t('question:mandatory')}
+              colour="attention"
+              ariaHidden={false}
+              sx={{ boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)' }}
+            />
+          )}
           {shortName}
           <ActiveFilterChips filterId={filter.id} />
         </Box>
