@@ -83,7 +83,7 @@ export default createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 600,
+      sm: 800,
       md: 1000, // isMobile
       lg: 1200,
       xl: 1536,
