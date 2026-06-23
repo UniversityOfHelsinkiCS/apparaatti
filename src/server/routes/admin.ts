@@ -9,6 +9,8 @@ import requireUser from '../middleware/requireUser.ts'
 import {
   allCurs,
   createOrUpdateCourseAdminReviewEntry,
+  deleteUserFeedbackByIds,
+  deleteUserFeedbackOlderThan,
   getUpdaterRuns,
   getUserFeedbackEntries,
   searchCoursesWithPagination,
@@ -59,6 +61,28 @@ adminRouter.get('/user-feedback', async (req, res) => {
 
   const feedback = await getUserFeedbackEntries(start, end)
   res.send(feedback)
+})
+
+adminRouter.delete('/user-feedback', async (req, res) => {
+  const schema = z.object({ ids: z.array(z.number().int()).min(1) })
+  const parsed = schema.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).json({ message: 'ids must be a non-empty array of integers' })
+    return
+  }
+  const deleted = await deleteUserFeedbackByIds(parsed.data.ids)
+  res.json({ deleted })
+})
+
+adminRouter.delete('/user-feedback/older-than', async (req, res) => {
+  const schema = z.object({ before: z.coerce.date() })
+  const parsed = schema.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).json({ message: 'before must be a valid date string' })
+    return
+  }
+  const deleted = await deleteUserFeedbackOlderThan(parsed.data.before)
+  res.json({ deleted })
 })
 
 adminRouter.get('/users', requireSuperuser, async (req, res) => {

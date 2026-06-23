@@ -1,12 +1,9 @@
 import {
   Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
+  Button,
   MenuItem,
   Paper,
+  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -23,14 +20,18 @@ import { Navigate } from 'react-router-dom'
 
 import { toDayLabel } from '../../../common/datelabels.ts'
 import type { RecommendationMetadata } from '../../../common/types.ts'
+import { useFeedbackDeletion } from '../../hooks/useFeedbackDeletion.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import ActionButton from '../common/ActionButton.tsx'
 import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import HyCheckbox from '../common/hy/HyCheckbox.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
-import FeedbackMetadataDisplay from './FeedbackMetadataDisplay.tsx'
+import DeleteConfirmDialog from './DeleteConfirmDialog.tsx'
+import FeedbackCommentDialog from './FeedbackCommentDialog.tsx'
+import MassActionDialog from './FeedbackDeletionControls.tsx'
 
 type UserFeedback = {
   id: number
@@ -45,10 +46,7 @@ type UserFeedback = {
 type EmailFilterValue = 'all' | 'has-email' | 'no-email'
 
 const truncateFeedback = (text: string, maxLength = 140) => {
-  if (text.length <= maxLength) {
-    return text
-  }
-
+  if (text.length <= maxLength) return text
   return `${text.slice(0, maxLength).trimEnd()}...`
 }
 
@@ -60,49 +58,10 @@ const getDefaultStart = () => {
 
 const getDefaultEnd = () => toDayLabel(new Date())
 
-type FeedbackCommentDialogProps = {
-  feedback: UserFeedback | null
-  onClose: () => void
-}
-
-const FeedbackCommentDialog = ({ feedback, onClose }: FeedbackCommentDialogProps) => {
-  const { t } = useTranslation()
-
-  return (
-    <Dialog open={feedback !== null} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{t('v2:feedback.admin.dialogTitle')}</DialogTitle>
-      <DialogContent dividers>
-        {feedback && (
-          <Stack spacing={3}>
-            <Typography color="text.secondary">
-              {new Date(feedback.date).toLocaleString()} |{' '}
-              {t('v2:feedback.admin.starsValue', { stars: feedback.stars })}
-              {feedback.appVersion && ` | v${feedback.appVersion}`}
-              {feedback.email && ` | ${feedback.email}`}
-            </Typography>
-            <Typography sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.7 }}>
-              {feedback.textFeedback}
-            </Typography>
-
-            {feedback.recommendationMetadata && (
-              <>
-                <Divider />
-                <FeedbackMetadataDisplay metadata={feedback.recommendationMetadata} />
-              </>
-            )}
-          </Stack>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <BlackOutlinedButton onClick={onClose}>{t('v2:feedback.admin.close')}</BlackOutlinedButton>
-      </DialogActions>
-    </Dialog>
-  )
-}
-
 const UserFeedbackPage = () => {
   const { t } = useTranslation()
   const [selectedFeedback, setSelectedFeedback] = useState<UserFeedback | null>(null)
+  const [massActionOpen, setMassActionOpen] = useState(false)
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
   const [emailFilter, setEmailFilter] = useState<EmailFilterValue>('all')
@@ -112,7 +71,7 @@ const UserFeedbackPage = () => {
   const endDateTime = `${end}T23:59:59.999Z`
   const endpoint = `/api/admin/user-feedback?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`
 
-  const { data, isLoading } = useApi<UserFeedback[]>(`admin-user-feedback-${start}-${end}`, endpoint, 'GET')
+  const { data, isLoading, refetch } = useApi<UserFeedback[]>(`admin-user-feedback-${start}-${end}`, endpoint, 'GET')
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -137,6 +96,27 @@ const UserFeedbackPage = () => {
     return true
   })
 
+  const {
+    selectedIds,
+    allFilteredSelected,
+    someFilteredSelected,
+    toggleRow,
+    toggleAll,
+    olderThanDate,
+    setOlderThanDate,
+    deleteTarget,
+    clearDeleteTarget,
+    handleDeleteSelected,
+    handleDeleteOlderThan,
+    handleConfirmDelete,
+    snackbar,
+    closeSnackbar,
+  } = useFeedbackDeletion(feedbackRows, filteredRows, refetch)
+
+  const olderThanCount = olderThanDate
+    ? feedbackRows.filter(f => new Date(f.date) < new Date(`${olderThanDate}T23:59:59.999Z`)).length
+    : null
+
   return (
     <Box sx={{ p: 3 }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
@@ -144,7 +124,18 @@ const UserFeedbackPage = () => {
         {t('v2:feedback.admin.pageTitle')}
       </Typography>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }} flexWrap="wrap">
+      <Stack direction="row" spacing={1} sx={{ mb: 2 }} alignItems="center">
+        <BlackOutlinedButton size="small" onClick={() => setMassActionOpen(true)}>
+          {t('v2:feedback.admin.massAction')}
+        </BlackOutlinedButton>
+        {someFilteredSelected && (
+          <Button variant="outlined" color="error" size="small" onClick={handleDeleteSelected}>
+            {t('v2:feedback.admin.deleteSelected', { count: selectedIds.size })}
+          </Button>
+        )}
+      </Stack>
+
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }} flexWrap="wrap">
         <TextField
           label={t('v2:feedback.admin.start')}
           type="date"
@@ -193,6 +184,15 @@ const UserFeedbackPage = () => {
         />
       </Stack>
 
+      <MassActionDialog
+        open={massActionOpen}
+        onClose={() => setMassActionOpen(false)}
+        olderThanDate={olderThanDate}
+        onOlderThanDateChange={setOlderThanDate}
+        olderThanCount={olderThanCount}
+        onDeleteOlderThan={handleDeleteOlderThan}
+      />
+
       {isLoading ? (
         <Typography>{t('v2:feedback.admin.loading')}</Typography>
       ) : feedbackRows.length === 0 ? (
@@ -202,6 +202,13 @@ const UserFeedbackPage = () => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell padding="checkbox">
+                  <HyCheckbox
+                    indeterminate={someFilteredSelected && !allFilteredSelected}
+                    checked={allFilteredSelected}
+                    onChange={toggleAll}
+                  />
+                </TableCell>
                 <TableCell>{t('v2:feedback.admin.table.date')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.stars')}</TableCell>
                 <TableCell>{t('v2:feedback.admin.table.version')}</TableCell>
@@ -212,7 +219,10 @@ const UserFeedbackPage = () => {
             </TableHead>
             <TableBody>
               {filteredRows.map(feedback => (
-                <TableRow key={feedback.id}>
+                <TableRow key={feedback.id} selected={selectedIds.has(feedback.id)}>
+                  <TableCell padding="checkbox">
+                    <HyCheckbox checked={selectedIds.has(feedback.id)} onChange={() => toggleRow(feedback.id)} />
+                  </TableCell>
                   <TableCell>{new Date(feedback.date).toLocaleString()}</TableCell>
                   <TableCell>{t('v2:feedback.admin.starsValue', { stars: feedback.stars })}</TableCell>
                   <TableCell>{feedback.appVersion ?? '—'}</TableCell>
@@ -237,6 +247,10 @@ const UserFeedbackPage = () => {
       )}
 
       <FeedbackCommentDialog feedback={selectedFeedback} onClose={() => setSelectedFeedback(null)} />
+
+      <DeleteConfirmDialog target={deleteTarget} onClose={clearDeleteTarget} onConfirm={handleConfirmDelete} />
+
+      <Snackbar open={snackbar.open} message={snackbar.message} autoHideDuration={5000} onClose={closeSnackbar} />
     </Box>
   )
 }

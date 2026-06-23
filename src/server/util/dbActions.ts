@@ -486,6 +486,14 @@ export async function getUserFeedbackEntries(start: Date, end: Date): Promise<Us
   })) as UserFeedbackType[]
 }
 
+export async function deleteUserFeedbackByIds(ids: number[]): Promise<number> {
+  return await UserFeedback.destroy({ where: { id: { [Op.in]: ids } } })
+}
+
+export async function deleteUserFeedbackOlderThan(before: Date): Promise<number> {
+  return await UserFeedback.destroy({ where: { date: { [Op.lt]: before } } })
+}
+
 export async function createOrUpdateCourseAdminReviewEntry(curId: string, reviewed: string, comment?: string) {
   const existingReview = await CourseAdminReview.findOne({
     where: { curId },
