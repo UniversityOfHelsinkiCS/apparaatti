@@ -64,6 +64,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           maxWidth: '1200px',
           height: '100%',
           position: 'relative',
+          boxShadow: '0 0 15px rgba(0, 0, 0, 0.15)',
         }}
       >
         <Drawer
@@ -78,24 +79,14 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           sx={{
             zIndex: theme => theme.zIndex.appBar - 1,
             '& .MuiDrawer-paper': {
-              width: isMobile ? mobileDrawerWidth : '100%',
-              maxWidth: isMobile ? 'none' : '400px',
-              boxSizing: 'border-box',
+              width: isMobile ? mobileDrawerWidth : '400px',
+              maxWidth: '500px',
               borderRight: '1px solid',
               borderLeft: '1px solid',
-              borderColor: 'divider',
+              borderColor: hy.borderColor.light,
               position: isMobile ? 'fixed' : 'relative',
               height: '100%',
             },
-            ...(!isMobile && {
-              width: open ? desktopDrawerWidth : 0,
-              maxWidth: open ? '400px' : 0,
-              flexShrink: 0,
-              transition: theme =>
-                theme.transitions.create(['width', 'max-width'], {
-                  duration: theme.transitions.duration.shorter,
-                }),
-            }),
           }}
         >
           <Toolbar />
@@ -117,17 +108,16 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               }),
             overflowY: 'auto',
             borderRight: '1px solid',
-            borderColor: 'divider',
+            borderColor: hy.borderColor.light,
           }}
         >
           <AppBar
             position="sticky"
             elevation={0}
             sx={{
-              bgcolor: 'background.paper',
-              color: 'text.primary',
+              bgcolor: hy.bgColor.white,
               borderBottom: '1px solid',
-              borderColor: 'divider',
+              borderColor: hy.borderColor.light,
             }}
           >
             <Toolbar>
