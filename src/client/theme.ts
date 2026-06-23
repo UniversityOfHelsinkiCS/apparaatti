@@ -80,4 +80,13 @@ export default createTheme({
     background: { default: hy.bgColor.neutralLight },
     text: { primary: hy.textColor.default },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 1000, // isMobile
+      lg: 1200,
+      xl: 1536,
+    },
+  },
 })

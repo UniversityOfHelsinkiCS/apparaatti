@@ -79,7 +79,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             zIndex: theme => theme.zIndex.appBar - 1,
             '& .MuiDrawer-paper': {
               width: isMobile ? mobileDrawerWidth : '100%',
-              maxWidth: isMobile ? 'none' : '456px',
+              maxWidth: isMobile ? 'none' : '400px',
               boxSizing: 'border-box',
               borderRight: '1px solid',
               borderLeft: '1px solid',
@@ -89,7 +89,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             },
             ...(!isMobile && {
               width: open ? desktopDrawerWidth : 0,
-              maxWidth: open ? '456px' : 0,
+              maxWidth: open ? '400px' : 0,
               flexShrink: 0,
               transition: theme =>
                 theme.transitions.create(['width', 'max-width'], {
