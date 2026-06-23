@@ -123,7 +123,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
       }}
     >
       <Stack spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start" justifyContent="space-between">
-        <Typography variant="h3" component="h2" sx={{ fontSize: { xs: 'h4.fontSize', sm: 'h3.fontSize' } }}>
+        <Typography variant="h4" component="h2" sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}>
           {courseTitle}
         </Typography>
 
