@@ -82,7 +82,7 @@ const OpenButton = styled('button', {
   letterSpacing: '0px',
   lineHeight: '1.5',
   padding: 'calc(0.75rem - 1px) 0.75rem',
-  fontSize: $variant === 'compact' ? '14px' : '16px',
+  fontSize: $variant === 'compact' ? '16px' : '18px',
   cursor: 'pointer',
   backgroundColor: $expanded ? hy.bgColor.neutralLight : 'transparent',
 
@@ -91,10 +91,6 @@ const OpenButton = styled('button', {
     outline: `2px solid ${hy.borderColor.black}`,
     outlineOffset: '0px',
     zIndex: 1,
-  },
-
-  '@media (min-width: 60rem)': {
-    fontSize: $variant === 'compact' ? '16px' : '18px',
   },
 }))
 
@@ -114,11 +110,7 @@ const HeaderSlot = styled('span', {
 })<HeaderSlotProps>(({ $variant }) => ({
   display: 'inline-block',
   width: '100%',
-  paddingBlock: $variant === 'compact' ? '0.0625rem' : '0.25rem',
-
-  '@media (min-width: 60rem)': {
-    paddingBlock: $variant === 'compact' ? '0' : '0.125rem',
-  },
+  paddingBlock: $variant === 'compact' ? '0' : '0.125rem',
 }))
 
 interface PanelWrapperProps {
