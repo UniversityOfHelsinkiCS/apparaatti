@@ -1,45 +1,28 @@
-import { Box, Paper, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
 import AppMarkdown from './common/AppMarkdown'
+import HyTag from './common/hy/HyTag'
+import { hy } from './common/hy/hyTokens'
 import ResetFiltersButton from './ResetFiltersButton'
 
-type UnansweredPromtProps = {
+type UnansweredPromptProps = {
   filters: { id: string; shortName?: string }[]
 }
 
-const UnansweredPromt = ({ filters }: UnansweredPromtProps) => {
+const UnansweredPrompt = ({ filters }: UnansweredPromptProps) => {
+  const { t } = useTranslation()
   return (
     <Box sx={{ mb: 3 }}>
       <Typography variant="body1" sx={{ mb: 1.5, fontWeight: 600 }}>
-        Vastaa viela pakolliseen kysymykseen
+        {t('v2:noRecommendations.unansweredMandatory')}:
       </Typography>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: 1,
-        }}
-      >
+      <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75}>
         {filters.map(filter => (
-          <Box
-            key={filter.id}
-            sx={{
-              px: 1.5,
-              py: 0.75,
-              borderRadius: 999,
-              backgroundColor: 'grey.100',
-              border: theme => `1px solid ${theme.palette.divider}`,
-              fontSize: '0.9rem',
-              fontWeight: 500,
-            }}
-          >
-            {filter.shortName ?? filter.id}
-          </Box>
+          <HyTag key={filter.id} text={filter.shortName ?? filter.id} colour="attention" />
         ))}
-      </Box>
+      </Stack>
     </Box>
   )
 }
@@ -55,38 +38,29 @@ const NoRecommendationsInfo = () => {
   const mandatoryFilters = getUnansweredCurrentMandatoryFilters(filters, filterContext)
 
   return (
-    <Box>
-      <Stack>
-        <Paper
-          elevation={2}
-          sx={{
-            padding: 4,
-            margin: 2,
-            textAlign: 'center',
-            backgroundColor: 'background.paper',
-          }}
-        >
-          <Box>
-            <Typography variant="h6" component="h2" gutterBottom>
-              {t('v2:noRecommendations.title')}
-            </Typography>
-            <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
-              {t('v2:noRecommendations.description')}
-            </Typography>
-            {mandatoryFilters.length > 0 ? (
-              <UnansweredPromt filters={mandatoryFilters}></UnansweredPromt>
-            ) : (
-              <>
-                {additionalInfo && (
-                  <Box sx={{ mb: 3, textAlign: 'left' }}>
-                    <AppMarkdown>{additionalInfo}</AppMarkdown>
-                  </Box>
-                )}
-                <ResetFiltersButton />
-              </>
-            )}
-          </Box>
-        </Paper>
+    <Box
+      sx={{
+        padding: { xs: 2, sm: 2.5 },
+        border: '1px solid',
+        borderColor: hy.borderColor.light,
+        backgroundColor: hy.bgColor.white,
+      }}
+    >
+      <Stack spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start">
+        <Typography variant="h3" component="h2" sx={{ fontSize: { xs: 'h4.fontSize', sm: 'h3.fontSize' } }}>
+          {t('v2:noRecommendations.title')}
+        </Typography>
+        <Typography variant="body1" sx={{ color: hy.textColor.secondary }}>
+          {t('v2:noRecommendations.description')}
+        </Typography>
+        {mandatoryFilters.length > 0 ? (
+          <UnansweredPrompt filters={mandatoryFilters} />
+        ) : (
+          <>
+            {additionalInfo && <AppMarkdown>{additionalInfo}</AppMarkdown>}
+            <ResetFiltersButton />
+          </>
+        )}
       </Stack>
     </Box>
   )

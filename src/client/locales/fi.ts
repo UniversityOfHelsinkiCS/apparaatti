@@ -110,6 +110,7 @@ export default {
     noRecommendations: {
       title: 'Kursseja ei löytynyt',
       description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
+      unansweredMandatory: 'Vastaa vielä pakolliseen kysymykseen',
       resetButton: 'Tyhjennä suodattimet',
       resetConfirmationTitle: 'Tyhjennetäänkö suodattimet?',
       resetConfirmationDescription: 'Tämä tyhjentää nykyiset vastauksesi ja palauttaa oletussuodattimet.',

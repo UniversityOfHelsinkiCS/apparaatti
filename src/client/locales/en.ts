@@ -110,6 +110,7 @@ export default {
     noRecommendations: {
       title: 'No courses found',
       description: 'Try changing your selections to see courses.',
+      unansweredMandatory: 'Answer the remaining mandatory question',
       resetButton: 'Reset filters',
       resetConfirmationTitle: 'Reset all selections?',
       resetConfirmationDescription: 'This will clear your current answers and restore the default filters.',
