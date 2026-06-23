@@ -38,12 +38,33 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
 
   if (activeChips.length === 0) return null
 
-  const handleDelete = (valueId: string) => {
-    if (Array.isArray(cfg.state)) {
-      cfg.setState(cfg.state.filter((id: string) => id !== valueId))
-    } else {
-      cfg.setState('')
+  const handleClear = () => {
+    cfg.setState(Array.isArray(cfg.state) ? [] : '')
+  }
+
+  // Format chip label to always fit comfortably in header
+  const MAX_CHARS = 31
+  const labels = activeChips.map(c => c.label)
+  const fullLabel = labels.join(', ')
+  let chipLabel: string
+  if (fullLabel.length <= MAX_CHARS) {
+    chipLabel = fullLabel
+  } else {
+    let acc = ''
+    let shown = 0
+    for (let i = 0; i < labels.length; i++) {
+      const candidate = i === 0 ? labels[i] : `${acc}, ${labels[i]}`
+      const remaining = labels.length - i - 1
+      const withSuffix = remaining > 0 ? `${candidate}... + ${remaining}` : candidate
+      if (withSuffix.length <= MAX_CHARS || i === 0) {
+        acc = candidate
+        shown = i + 1
+      } else {
+        break
+      }
     }
+    const extra = labels.length - shown
+    chipLabel = extra > 0 ? `${acc}... + ${extra}` : acc
   }
 
   return (
@@ -51,24 +72,17 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
       component="span"
       sx={{
         ml: 'auto',
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 0.5,
-        flexWrap: 'wrap',
         zIndex: 2, // render above the mouseover highlight of accordion header
       }}
     >
-      {activeChips.map(chip => (
-        <HyChip
-          key={chip.id}
-          label={chip.label}
-          onClick={e => {
-            e?.stopPropagation()
-            handleDelete(chip.id)
-          }}
-          size="small"
-        />
-      ))}
+      <HyChip
+        label={chipLabel}
+        onClick={e => {
+          e?.stopPropagation()
+          handleClear()
+        }}
+        size="small"
+      />
     </Box>
   )
 }
@@ -114,12 +128,12 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
       borders={isFirst ? 'both' : 'bottom'}
       summary={
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 1 }}>
-          {filter.mandatory && (
+          {filter.mandatory && !state.length && (
             <HyTag
               text={t('question:mandatory')}
               colour="attention"
               ariaHidden={false}
-              sx={{ boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)' }}
+              sx={{ boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.2)' }}
             />
           )}
           {shortName}
