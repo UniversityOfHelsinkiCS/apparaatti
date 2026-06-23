@@ -4,7 +4,7 @@ import LaptopIcon from '@mui/icons-material/LaptopOutlined'
 import PeopleIcon from '@mui/icons-material/PeopleOutlined'
 import PersonIcon from '@mui/icons-material/PersonOutlined'
 import QuizIcon from '@mui/icons-material/QuizOutlined'
-import { Box, Paper, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../common/nameFormatter'
@@ -12,6 +12,8 @@ import type { CourseData } from '../../common/types'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 import { translateLocalizedString } from '../util/i18n'
 import HyLinkCta from './common/hy/HyLinkCta'
+import HyTag from './common/hy/HyTag'
+import { hy } from './common/hy/hyTokens'
 
 const studyPlaceIcons: Record<string, SvgIconComponent> = {
   online: LaptopIcon,
@@ -86,23 +88,11 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.id}`
-  const courseCodes = course.courseCodes.map(code => code).join(', ')
+  const courseCodes = course.courseCodes.join(', ')
   const periodVariant = getFilterVariant(filterContext, 'study-period')
   const studyPlaceVariant = getFilterVariant(filterContext, 'study-place')
-  const badgeStyles = {
-    color: '#334155',
-    fontWeight: 600,
-    px: 1.25,
-    py: 0.5,
-    borderRadius: 1,
-    backgroundColor: '#e8edf2',
-    border: '1px solid #d5dde5',
-    whiteSpace: 'nowrap',
-    minWidth: 164,
-    textAlign: 'center',
-  }
 
-  const creditString: () => string = () => {
+  const creditString = () => {
     if (!course.credits) {
       return ''
     }
@@ -122,7 +112,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     return minCredits + '-' + maxCredits
   }
 
-  const courseDateRange = (course: CourseData) => {
+  const courseDateRange = () => {
     const startDate = new Date(course.startDate)
     const endDate = new Date(course.endDate)
 
@@ -141,17 +131,11 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     return periodName.replace(/_/g, ' ')
   }
 
-  const coursePeriodText = () => {
+  const coursePeriodItems = () => {
     const validPeriodIds = new Set(periodVariant?.options?.map(o => o.id) ?? [])
     const periodNames =
       course.period?.map(period => period.name).filter(periodName => validPeriodIds.has(periodName)) ?? []
-    const uniquePeriodNames = Array.from(new Set(periodNames))
-
-    if (uniquePeriodNames.length === 0) {
-      return null
-    }
-
-    return uniquePeriodNames.map(periodName => prettifyPeriodName(periodName)).join(', ')
+    return Array.from(new Set(periodNames)).map(prettifyPeriodName)
   }
 
   const courseStudyPlaceText = () => {
@@ -170,100 +154,73 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     return configuredLabel
   }
 
-  const periodText = coursePeriodText()
+  const periodItems = coursePeriodItems()
   const studyPlaceText = courseStudyPlaceText()
-  const periodItems = periodText?.split(', ').filter(Boolean) ?? []
+  const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
   const courseTitle =
     getDisplayCourseName(course, i18n.resolvedLanguage ?? i18n.language) ?? translateLocalizedString(course.name)
 
-  if (!course) return null
   return (
-    <Paper
-      elevation={0}
+    <Box
       sx={{
         padding: { xs: 2, sm: 2.5 },
         margin: 1,
-        borderRadius: 2,
         border: '1px solid',
-        borderColor: '#d6dbe1',
-        backgroundColor: '#ffffff',
-        boxShadow: '0 1px 3px rgba(15, 23, 42, 0.06)',
+        borderColor: hy.borderColor.light,
+        backgroundColor: hy.bgColor.white,
       }}
     >
-      <Box>
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={{ xs: 0.75, sm: 1.5 }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-          sx={{ mb: 1.5 }}
+      <Stack spacing={{ xs: 0.75, sm: 1.5 }} alignItems="flex-start" justifyContent="space-between" sx={{ mb: 1.5 }}>
+        <Typography
+          variant="h6"
+          component="h2"
+          sx={{
+            color: '#0f1720',
+            fontWeight: 700,
+            lineHeight: 1.25,
+            flex: 1,
+            fontSize: { xs: '1.2rem', sm: '1.35rem' },
+            letterSpacing: '-0.01em',
+          }}
         >
-          <Typography
-            variant="h6"
-            component="h2"
-            sx={{
-              color: '#0f1720',
-              fontWeight: 700,
-              lineHeight: 1.25,
-              flex: 1,
-              fontSize: { xs: '1.2rem', sm: '1.35rem' },
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {courseTitle}
-          </Typography>
-          <Stack direction="column" spacing={0.75} sx={{ flexShrink: 0 }}>
-            <Typography variant="body2" sx={badgeStyles}>
-              {courseDateRange(course)}
-            </Typography>
-            {studyPlaceText &&
-              (() => {
-                const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
-                return (
-                  <Box
-                    sx={{
-                      ...badgeStyles,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 1,
-                    }}
-                  >
-                    {StudyPlaceIcon && <StudyPlaceIcon sx={{ fontSize: 16, flexShrink: 0 }} />}
-                    <Typography variant="body2" sx={{ fontWeight: 'inherit', color: 'inherit' }}>
-                      {studyPlaceText}
-                    </Typography>
-                  </Box>
-                )
-              })()}
-          </Stack>
-        </Stack>
-        <Stack direction={'column'} spacing={1.5}>
-          <Stack
-            direction="row"
-            spacing={{ xs: 0.5, sm: 1.5 }}
-            useFlexGap
-            sx={{
-              pt: 0.25,
-              flexWrap: 'wrap',
-              alignItems: 'center',
-            }}
-          >
-            <Typography variant="body2" sx={{ color: '#334155', fontWeight: 500 }}>
-              {creditString()} {t('course:credits')}
-            </Typography>
-            <Typography variant="body2" sx={{ color: '#475569' }}>
-              {courseCodes}
-            </Typography>
-          </Stack>
-          {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
-        </Stack>
+          {courseTitle}
+        </Typography>
 
-        <HyLinkCta href={courseUrl} target="_blank" sx={{ mt: 2 }}>
-          {t('course:show')}
-        </HyLinkCta>
-      </Box>
-    </Paper>
+        <Stack direction="row" sx={{ width: '100%' }}>
+          <Stack direction={'column'} spacing={1.5} sx={{ flex: 1, minWidth: 0 }}>
+            <Stack
+              direction="row"
+              spacing={{ xs: 0.5, sm: 1.5 }}
+              useFlexGap
+              sx={{
+                pt: 0.25,
+                flexWrap: 'wrap',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="body2" sx={{ color: '#334155', fontWeight: 500 }}>
+                {creditString()} {t('course:credits')}
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#475569' }}>
+                {courseCodes}
+              </Typography>
+            </Stack>
+            {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
+          </Stack>
+
+          <Stack direction="column" spacing={1.5} alignItems="flex-end" sx={{ flexShrink: 0 }}>
+            <HyTag text={courseDateRange()} colour="info" />
+            {studyPlaceText && (
+              <HyTag text={studyPlaceText} colour="info" prefixIcon={StudyPlaceIcon && <StudyPlaceIcon />} />
+            )}
+          </Stack>
+        </Stack>
+      </Stack>
+
+      <HyLinkCta href={courseUrl} target="_blank">
+        {t('course:show')}
+      </HyLinkCta>
+    </Box>
   )
 }
 
