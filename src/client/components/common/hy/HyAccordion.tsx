@@ -94,12 +94,18 @@ const OpenButton = styled('button', {
   },
 }))
 
-const IconWrapper = styled('span')({
+interface IconWrapperProps {
+  $variant: AccordionVariant
+}
+
+const IconWrapper = styled('span', {
+  shouldForwardProp: p => p !== '$variant',
+})<IconWrapperProps>(({ $variant }) => ({
   display: 'flex',
   alignItems: 'center',
   flexShrink: 0,
-  paddingBlock: '0.25rem',
-})
+  paddingBlock: $variant === 'compact' ? 0 : '0.25rem',
+}))
 
 interface HeaderSlotProps {
   $variant: AccordionVariant
@@ -200,7 +206,7 @@ const HyAccordion = ({
             id={id}
             type="button"
           >
-            <IconWrapper aria-hidden="true">
+            <IconWrapper $variant={variant} aria-hidden="true">
               {isExpanded ? (
                 <KeyboardArrowUpIcon sx={{ fontSize: '1.5rem' }} />
               ) : (
