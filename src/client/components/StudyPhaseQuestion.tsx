@@ -1,10 +1,11 @@
-import { Box, MenuItem, Select } from '@mui/material'
+import { Box, type SelectChangeEvent } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question, User } from '../../common/types'
 import { useFilterContext } from '../contexts/filterContext'
 import { translateLocalizedString } from '../util/i18n'
+import { HyMenuItem, HySelect } from './common/hy/HySelect'
 import ExtraInfoModal from './ExtraInfoModal'
 import QuestionTitle from './QuestionTitle'
 
@@ -28,8 +29,7 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
 
   const { t } = useTranslation()
 
-  const handleChange = (e: any) => {
-    e.preventDefault()
+  const handleChange = (e: SelectChangeEvent) => {
     setStudyField(e.target.value)
     setUserOrgCode(e.target.value)
   }
@@ -44,14 +44,9 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
 
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
-      <Select
-        sx={{
-          padding: '1px',
-          minWidth: 100,
-          border: '1px solid lightgray',
-          marginTop: 1.5,
-        }}
-        disabled={organisations.length < 2 ? true : false}
+      <HySelect
+        sx={{ minWidth: 100, marginTop: 1.5 }}
+        disabled={organisations.length < 2}
         name={question.id}
         labelId="study-field-select-label"
         id="study-field-select"
@@ -60,11 +55,11 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
         onChange={handleChange}
       >
         {organisations?.map((item: any) => (
-          <MenuItem key={item.id} value={item.code}>
+          <HyMenuItem key={item.id} value={item.code}>
             {translateLocalizedString(item.name)}
-          </MenuItem>
+          </HyMenuItem>
         ))}
-      </Select>
+      </HySelect>
       {organisations.length < 2 && <input type="hidden" value={studyField} name={question.id} />}
     </Box>
   )
