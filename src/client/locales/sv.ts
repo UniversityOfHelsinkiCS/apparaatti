@@ -51,7 +51,8 @@ export default {
     summer: 'Sommar',
     intensivePeriod1: 'Intensivperiod 1',
     intensivePeriod2: 'Intensivperiod 2',
-    period: 'period',
+    period: 'Period',
+    periods: 'Perioder',
     mentoringQuestionYes: 'Jag skulle vilja ha lite handledning innan jag avslutar mina studier.',
     mentoringQuestionNo: 'Jag känner inte att jag behöver motion.',
     graduationQuestionYes: 'Ja, inom sex månader.',
@@ -270,6 +271,7 @@ export default {
   },
   filter: {
     period: 'Studieperiod',
+    periods: 'Studieperioder',
     organisation: 'Organisation',
     language: 'Språk',
     graduation: 'Examen inom sex månader',

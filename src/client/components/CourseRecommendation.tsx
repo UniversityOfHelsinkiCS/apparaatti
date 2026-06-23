@@ -25,59 +25,12 @@ const studyPlaceIcons: Record<string, SvgIconComponent> = {
 
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
   return (
-    <Stack
-      direction="row"
-      useFlexGap
-      flexWrap="wrap"
-      spacing={0.75}
-      sx={{
-        alignItems: 'center',
-        mt: 0.25,
-        alignSelf: 'flex-start',
-        px: 1,
-        py: 0.75,
-        borderRadius: 2,
-        backgroundColor: '#dceaf0',
-        border: '1px solid #b7ced8',
-      }}
-    >
-      <Typography
-        variant="caption"
-        sx={{
-          color: '#52606d',
-          fontWeight: 700,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-        }}
-      >
-        {label}
+    <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75} sx={{ alignItems: 'center' }}>
+      <Typography variant="body2" sx={{ color: hy.textColor.secondary }}>
+        {label}:
       </Typography>
-
       {periods.map(period => (
-        <Box
-          key={period}
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            px: 1.25,
-            py: 0.625,
-            borderRadius: 999,
-            backgroundColor: '#ffffff',
-            border: '1px solid #aac1cb',
-            boxShadow: '0 1px 2px rgba(15, 23, 42, 0.08)',
-          }}
-        >
-          <Typography
-            variant="body2"
-            sx={{
-              color: '#1f2937',
-              fontWeight: 600,
-              lineHeight: 1.5,
-            }}
-          >
-            {period}
-          </Typography>
-        </Box>
+        <HyTag key={period} text={period} colour="default" />
       ))}
     </Stack>
   )
@@ -164,25 +117,13 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     <Box
       sx={{
         padding: { xs: 2, sm: 2.5 },
-        margin: 1,
         border: '1px solid',
         borderColor: hy.borderColor.light,
         backgroundColor: hy.bgColor.white,
       }}
     >
-      <Stack spacing={{ xs: 0.75, sm: 1.5 }} alignItems="flex-start" justifyContent="space-between" sx={{ mb: 1.5 }}>
-        <Typography
-          variant="h6"
-          component="h2"
-          sx={{
-            color: '#0f1720',
-            fontWeight: 700,
-            lineHeight: 1.25,
-            flex: 1,
-            fontSize: { xs: '1.2rem', sm: '1.35rem' },
-            letterSpacing: '-0.01em',
-          }}
-        >
+      <Stack spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start" justifyContent="space-between">
+        <Typography variant="h3" component="h2" sx={{ fontSize: { xs: 'h4.fontSize', sm: 'h3.fontSize' } }}>
           {courseTitle}
         </Typography>
 
@@ -198,14 +139,19 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
                 alignItems: 'center',
               }}
             >
-              <Typography variant="body2" sx={{ color: '#334155', fontWeight: 500 }}>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
                 {creditString()} {t('course:credits')}
               </Typography>
-              <Typography variant="body2" sx={{ color: '#475569' }}>
+              <Typography variant="body2" sx={{ color: hy.textColor.secondary }}>
                 {courseCodes}
               </Typography>
             </Stack>
-            {periodItems.length > 0 && <PeriodDisplay label={t('filter:period')} periods={periodItems} />}
+            {periodItems.length > 0 && (
+              <PeriodDisplay
+                label={t(periodItems.length > 1 ? 'filter:periods' : 'filter:period')}
+                periods={periodItems}
+              />
+            )}
           </Stack>
 
           <Stack direction="column" spacing={1.5} alignItems="flex-end" sx={{ flexShrink: 0 }}>
@@ -215,11 +161,11 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
             )}
           </Stack>
         </Stack>
-      </Stack>
 
-      <HyLinkCta href={courseUrl} target="_blank">
-        {t('course:show')}
-      </HyLinkCta>
+        <HyLinkCta href={courseUrl} target="_blank" sx={{ alignSelf: 'flex-start' }}>
+          {t('course:show')}
+        </HyLinkCta>
+      </Stack>
     </Box>
   )
 }

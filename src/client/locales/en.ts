@@ -52,7 +52,8 @@ export default {
     summer: 'Summer',
     intensivePeriod1: 'Intensive Period 1',
     intensivePeriod2: 'Intensive Period 2',
-    period: 'period',
+    period: 'Period',
+    periods: 'Periods',
     mentoringQuestionYes: 'I would like to have a litle bit of training before starting my studies',
     mentoringQuestionNo: 'I dont think that i need training',
     graduationQuestionYes: 'Yes, within half a year.',
@@ -275,6 +276,7 @@ export default {
   },
   filter: {
     period: 'Period',
+    periods: 'Periods',
     organisation: 'Organisation',
     language: 'Language',
     graduation: 'Graduation within six months',
