@@ -22,7 +22,7 @@ jobs:
         run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
 
       - name: Verify safe-chain
-        run: npm safe-chain-verify --delay 1d
+        run: npm safe-chain-verify --delay 7d
 
       - name: Install dependencies
         run: npm ci --include=dev
