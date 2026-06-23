@@ -49,7 +49,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
         justifyContent: 'center',
         width: '100%',
         height: '100vh',
-        bgcolor: hy.bgColor.white,
+        bgcolor: hy.bgColor.neutral,
         overflow: 'hidden',
       }}
     >
@@ -69,7 +69,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
         <Drawer
           variant={isMobile ? 'temporary' : 'persistent'}
           anchor="left"
-          open={open}
+          open={!isMobile || open}
           onClose={toggleDrawer}
           ModalProps={{
             keepMounted: isMobile ? false : true,
@@ -110,7 +110,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             flexGrow: 1,
             width: isMobile ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
             height: '100%',
-            bgcolor: hy.bgColor.neutral,
+            bgcolor: hy.bgColor.neutralLight,
             transition: theme =>
               theme.transitions.create('width', {
                 duration: theme.transitions.duration.shorter,
@@ -131,9 +131,11 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             }}
           >
             <Toolbar>
-              <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
-                <MenuIcon />
-              </IconButton>
+              {isMobile && (
+                <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
+                  <MenuIcon />
+                </IconButton>
+              )}
               <Typography variant="h4" noWrap sx={{ flexGrow: 1 }}>
                 {t('v2:appTitle')}
               </Typography>
