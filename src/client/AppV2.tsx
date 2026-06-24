@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import type { User } from '../common/types'
+import hyLogo from './assets/hy_logo_black.svg'
 import HyButton from './components/common/hy/HyButton'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
@@ -60,6 +61,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       <Box
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           width: '100%',
           maxWidth: '1200px',
           height: '100%',
@@ -67,90 +69,101 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           boxShadow: '0 0 15px rgba(0, 0, 0, 0.15)',
         }}
       >
-        <Drawer
-          variant={isMobile ? 'temporary' : 'persistent'}
-          anchor="left"
-          open={!isMobile || open}
-          onClose={toggleDrawer}
-          ModalProps={{
-            keepMounted: isMobile ? false : true,
-            disablePortal: isMobile ? true : false,
-          }}
+        <AppBar
+          position="relative"
+          elevation={0}
           sx={{
-            zIndex: theme => theme.zIndex.appBar - 1,
-            '& .MuiDrawer-paper': {
-              width: isMobile ? mobileDrawerWidth : '400px',
-              maxWidth: '500px',
-              borderRight: '1px solid',
-              borderLeft: '1px solid',
-              borderColor: hy.borderColor.light,
-              position: isMobile ? 'fixed' : 'relative',
-              height: '100%',
-              scrollbarWidth: 'none',
-              '&::-webkit-scrollbar': { display: 'none' },
-            },
-          }}
-        >
-          <Toolbar />
-          <SidebarContent />
-        </Drawer>
-
-        <Box
-          component="main"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            width: isMobile ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
-            height: '100%',
-            bgcolor: hy.bgColor.neutralLight,
-            transition: theme =>
-              theme.transitions.create('width', {
-                duration: theme.transitions.duration.shorter,
-              }),
-            overflowY: 'auto',
+            bgcolor: hy.bgColor.white,
+            borderBottom: '1px solid',
             borderRight: '1px solid',
+            borderLeft: '1px solid',
             borderColor: hy.borderColor.light,
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
           }}
         >
-          <AppBar
-            position="sticky"
-            elevation={0}
+          <Toolbar>
+            {isMobile && (
+              <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
+                <MenuIcon />
+              </IconButton>
+            )}
+            <Box component="img" src={hyLogo} alt="University of Helsinki" sx={{ height: 32, mr: 2 }} />
+            <Typography
+              variant="h4"
+              noWrap
+              sx={{
+                flexGrow: 1,
+                fontSize: '17px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '0.3px',
+              }}
+            >
+              {t('v2:appTitle')}
+            </Typography>
+            <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
+              {t('v2:feedback.openButton')}
+            </HyButton>
+            {user?.isAdmin && (
+              <HyButton
+                variant="supplementary"
+                colour="black"
+                size="small"
+                onClick={() => navigate('/admin')}
+                sx={{ ml: 2 }}
+              >
+                {t('v2:adminButton')}
+              </HyButton>
+            )}
+            <LanguageSelector sx={{ ml: 3 }} />
+          </Toolbar>
+        </AppBar>
+
+        <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
+          <Drawer
+            variant={isMobile ? 'temporary' : 'persistent'}
+            anchor="left"
+            open={!isMobile || open}
+            onClose={toggleDrawer}
+            ModalProps={{
+              keepMounted: isMobile ? false : true,
+              disablePortal: isMobile ? true : false,
+            }}
             sx={{
-              bgcolor: hy.bgColor.white,
-              borderBottom: '1px solid',
+              zIndex: theme => theme.zIndex.appBar - 1,
+              '& .MuiDrawer-paper': {
+                width: isMobile ? mobileDrawerWidth : '400px',
+                maxWidth: '500px',
+                borderRight: '1px solid',
+                borderLeft: '1px solid',
+                borderColor: hy.borderColor.light,
+                position: isMobile ? 'fixed' : 'relative',
+                height: '100%',
+                scrollbarWidth: 'none',
+                '&::-webkit-scrollbar': { display: 'none' },
+              },
+            }}
+          >
+            <SidebarContent />
+          </Drawer>
+
+          <Box
+            component="main"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              width: isMobile ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
+              height: '100%',
+              bgcolor: hy.bgColor.neutralLight,
+              overflowY: 'auto',
+              borderRight: '1px solid',
               borderColor: hy.borderColor.light,
             }}
           >
-            <Toolbar>
-              {isMobile && (
-                <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
-                  <MenuIcon />
-                </IconButton>
-              )}
-              <Typography variant="h4" noWrap sx={{ flexGrow: 1 }}>
-                {t('v2:appTitle')}
-              </Typography>
-              <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
-                {t('v2:feedback.openButton')}
-              </HyButton>
-              {user?.isAdmin && (
-                <HyButton
-                  variant="supplementary"
-                  colour="black"
-                  size="small"
-                  onClick={() => navigate('/admin')}
-                  sx={{ ml: 2 }}
-                >
-                  {t('v2:adminButton')}
-                </HyButton>
-              )}
-              <LanguageSelector sx={{ ml: 3 }} />
-            </Toolbar>
-          </AppBar>
-
-          <Box sx={{ p: 2, flexGrow: 1 }}>
-            <CourseRecommendations />
+            <Box sx={{ p: 2, flexGrow: 1 }}>
+              <CourseRecommendations />
+            </Box>
           </Box>
         </Box>
       </Box>

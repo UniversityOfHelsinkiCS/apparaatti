@@ -98,15 +98,11 @@ const SidebarContent = () => {
   }
 
   return (
-    <Box
-      sx={{
-        pb: 2,
-        bgcolor: 'transparent',
-      }}
-    >
+    <Box>
       <Box
         sx={{
-          py: 2,
+          pt: 3.5,
+          pb: 2,
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
