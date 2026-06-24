@@ -73,7 +73,6 @@ export default {
     challengeQuestion_fi_primary_spoken:
       'Jag tycker att sociala situationer är skrämmande och jag blir väldigt nervös i olika interaktionssituationer.',
     points: 'accuracy',
-    strictFilter: 'Strikt filtrering',
   },
   question: {
     extrainfo: 'Ytterligare information',
@@ -286,6 +285,7 @@ export default {
     mooc: 'Sök MOOC-kurser',
     finmu: 'FinMU relaterad',
     multiPeriod: 'Kurslängd',
+    allSelected: 'Alla',
   },
   filterShortName: {
     'Opinto-oikeus': 'Studierätt',

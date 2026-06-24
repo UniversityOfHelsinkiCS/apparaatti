@@ -74,7 +74,6 @@ export default {
     challengeQuestion_fi_primary_spoken:
       'I find social situations scary and I get very nervous in different interaction situations.',
     points: 'accuracy',
-    strictFilter: 'Strict filtering',
   },
   question: {
     extrainfo: 'Extra information',
@@ -291,6 +290,7 @@ export default {
     mooc: 'Search for MOOCs',
     finmu: 'FinMU related',
     multiPeriod: 'Course duration',
+    allSelected: 'All',
   },
   filterShortName: {
     'Opinto-oikeus': 'Study Right',

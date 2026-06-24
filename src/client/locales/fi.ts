@@ -74,7 +74,6 @@ export default {
     challengeQuestion_fi_primary_spoken:
       'Sosiaaliset tilanteet ovat minusta pelottavia ja jännitän vahvasti erilaisissa vuorovaikutustilanteissa.',
     points: 'tarkkuus',
-    strictFilter: 'Tiukka suodatus',
   },
   question: {
     extrainfo: 'Lisätietoa',
@@ -112,10 +111,10 @@ export default {
       description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
       unansweredMandatory: 'Vastaa vielä pakolliseen kysymykseen',
       resetButton: 'Tyhjennä valinnat',
-      resetConfirmationTitle: 'Tyhjennetäänkö suodattimet?',
+      resetConfirmationTitle: 'Tyhjennetäänkö valinnat?',
       resetConfirmationDescription: 'Tämä tyhjentää nykyiset vastauksesi ja palauttaa oletussuodattimet.',
       resetConfirmationCancel: 'Peruuta',
-      resetConfirmationConfirm: 'Tyhjennä suodattimet',
+      resetConfirmationConfirm: 'Tyhjennä valinnat',
       'additional-info-no-recommendations-md-H40': 'Additional info Humanistinen',
       'additional-info-no-recommendations-md-H50': 'Additional info Matemaattis-luonnontieteellinen',
       'additional-info-no-recommendations-md-H20': 'Additional info Oikeustieteellinen',
@@ -290,6 +289,7 @@ export default {
     mooc: 'Etsi MOOC-kursseja',
     finmu: 'FinMU liittyvä',
     multiPeriod: 'Kurssin pituus',
+    allSelected: 'Kaikki',
   },
   filterShortName: {
     'Opinto-oikeus': 'Opinto-oikeus',
