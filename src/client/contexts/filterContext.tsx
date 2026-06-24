@@ -548,7 +548,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       }
 
       if (filterId === 'study-year') {
-        config.setState('2025')
+        config.setState('2026')
         return
       }
 
