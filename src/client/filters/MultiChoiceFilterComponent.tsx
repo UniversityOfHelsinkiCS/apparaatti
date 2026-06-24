@@ -4,6 +4,7 @@ import React from 'react'
 import { Option, Question } from '../../common/types'
 import HyBadge from '../components/common/hy/HyBadge.tsx'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
+import ShrinkwrapText from '../components/common/ShrinkwrapText.tsx'
 import { useFilterContext } from '../contexts/filterContext'
 
 interface MultiChoiceFilterComponentProps {
@@ -28,7 +29,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
         const label =
           count != null ? (
             <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              {option.name}
+              <ShrinkwrapText>{option.name}</ShrinkwrapText>
               <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
             </span>
           ) : (

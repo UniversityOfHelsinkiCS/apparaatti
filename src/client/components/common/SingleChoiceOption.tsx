@@ -3,6 +3,7 @@ import { FormControlLabel } from '@mui/material'
 import { Option } from '../../../common/types'
 import HyBadge from './hy/HyBadge'
 import HyRadio from './hy/HyRadio'
+import ShrinkwrapText from './ShrinkwrapText'
 
 interface SingleChoiceOptionProps {
   option: Option
@@ -13,17 +14,12 @@ interface SingleChoiceOptionProps {
 const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps) => {
   const label =
     count != null ? (
-      <span>
-        {option.name}
-        <HyBadge
-          variant={count === 0 ? 'disabled' : 'default'}
-          sx={{ display: 'inline-flex', verticalAlign: 'middle', ml: '10px', mt: '-2px' }}
-        >
-          {count}
-        </HyBadge>
+      <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <ShrinkwrapText>{option.name}</ShrinkwrapText>
+        <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
       </span>
     ) : (
-      option.name
+      <ShrinkwrapText>{option.name}</ShrinkwrapText>
     )
   return (
     <FormControlLabel
