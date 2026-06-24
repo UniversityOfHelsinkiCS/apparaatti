@@ -23,6 +23,20 @@ const studyPlaceIcons: Record<string, SvgIconComponent> = {
   independent: PersonIcon,
 }
 
+const CourseDateRange = ({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  const now = new Date()
+
+  // past courses default, ongoing courses attention, upcoming courses info
+  const colour = end < now ? 'default' : start <= now ? 'attention' : 'info'
+
+  const formatDate = (d: Date) => d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear()
+  const text = formatDate(start) + ' - ' + formatDate(end)
+
+  return <HyTag text={text} colour={colour} />
+}
+
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
   return (
     <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75} sx={{ alignItems: 'center' }}>
@@ -63,16 +77,6 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     }
 
     return minCredits + '-' + maxCredits
-  }
-
-  const courseDateRange = () => {
-    const startDate = new Date(course.startDate)
-    const endDate = new Date(course.endDate)
-
-    const start = startDate.getDate() + '.' + (startDate.getMonth() + 1) + '.' + startDate.getFullYear()
-    const end = endDate.getDate() + '.' + (endDate.getMonth() + 1) + '.' + endDate.getFullYear()
-
-    return start + ' - ' + end
   }
 
   const prettifyPeriodName = (periodName: string) => {
@@ -155,7 +159,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
           </Stack>
 
           <Stack direction="column" spacing={1.5} alignItems="flex-end" sx={{ flexShrink: 0 }}>
-            <HyTag text={courseDateRange()} colour="info" />
+            <CourseDateRange startDate={course.startDate} endDate={course.endDate} />
             {studyPlaceText && (
               <HyTag text={studyPlaceText} colour="info" prefixIcon={StudyPlaceIcon && <StudyPlaceIcon />} />
             )}
