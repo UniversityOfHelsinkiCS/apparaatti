@@ -1,21 +1,12 @@
-import MenuIcon from '@mui/icons-material/Menu'
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
-import AppBar from '@mui/material/AppBar'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
-import IconButton from '@mui/material/IconButton'
-import Toolbar from '@mui/material/Toolbar'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import type { User } from '../common/types'
-import hyLogo from './assets/hy_logo_black.svg'
-import HyButton from './components/common/hy/HyButton'
+import AppHeader from './AppHeader'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
-import FeedbackModal from './components/FeedbackModal'
-import LanguageSelector from './components/LanguageSelector'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
 import { FilterContextProvider, useFilterContext } from './contexts/filterContext'
@@ -31,15 +22,13 @@ type OneThirdDrawerLayoutProps = {
 
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [open, setOpen] = useState(!isMobile)
-  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isNarrow = useMediaQuery(theme.breakpoints.down('md'))
+  const [open, setOpen] = useState(!isNarrow)
   const { modalOpen, setModalOpen } = useFilterContext()
-  const { t } = useTranslation()
-  const navigate = useNavigate()
   useEffect(() => {
-    setOpen(!isMobile)
-  }, [isMobile])
+    setOpen(!isNarrow)
+  }, [isNarrow])
 
   const toggleDrawer = () => setOpen(prev => !prev)
 
@@ -56,7 +45,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
     >
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
-      <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
 
       <Box
         sx={{
@@ -69,75 +57,27 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           boxShadow: '0 0 15px rgba(0, 0, 0, 0.15)',
         }}
       >
-        <AppBar
-          position="relative"
-          elevation={0}
-          sx={{
-            bgcolor: hy.bgColor.white,
-            borderBottom: '1px solid',
-            borderRight: '1px solid',
-            borderLeft: '1px solid',
-            borderColor: hy.borderColor.light,
-            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
-          }}
-        >
-          <Toolbar>
-            {isMobile && (
-              <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 2 }}>
-                <MenuIcon />
-              </IconButton>
-            )}
-            <Box component="img" src={hyLogo} alt="University of Helsinki" sx={{ height: 32, mr: 2 }} />
-            <Typography
-              variant="h4"
-              noWrap
-              sx={{
-                flexGrow: 1,
-                fontSize: '17px',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-                letterSpacing: '0.3px',
-              }}
-            >
-              {t('v2:appTitle')}
-            </Typography>
-            <HyButton variant="supplementary" colour="black" size="small" onClick={() => setFeedbackModalOpen(true)}>
-              {t('v2:feedback.openButton')}
-            </HyButton>
-            {user?.isAdmin && (
-              <HyButton
-                variant="supplementary"
-                colour="black"
-                size="small"
-                onClick={() => navigate('/admin')}
-                sx={{ ml: 2 }}
-              >
-                {t('v2:adminButton')}
-              </HyButton>
-            )}
-            <LanguageSelector sx={{ ml: 3 }} />
-          </Toolbar>
-        </AppBar>
+        <AppHeader isNarrow={isNarrow} isMobile={isMobile} toggleDrawer={toggleDrawer} user={user} />
 
         <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           <Drawer
-            variant={isMobile ? 'temporary' : 'persistent'}
+            variant={isNarrow ? 'temporary' : 'persistent'}
             anchor="left"
-            open={!isMobile || open}
+            open={!isNarrow || open}
             onClose={toggleDrawer}
             ModalProps={{
-              keepMounted: isMobile ? false : true,
-              disablePortal: isMobile ? true : false,
+              keepMounted: isNarrow ? false : true,
+              disablePortal: isNarrow ? true : false,
             }}
             sx={{
               zIndex: theme => theme.zIndex.appBar - 1,
               '& .MuiDrawer-paper': {
-                width: isMobile ? mobileDrawerWidth : '400px',
+                width: isNarrow ? mobileDrawerWidth : '400px',
                 maxWidth: '500px',
                 borderRight: '1px solid',
                 borderLeft: '1px solid',
                 borderColor: hy.borderColor.light,
-                position: isMobile ? 'fixed' : 'relative',
+                position: isNarrow ? 'fixed' : 'relative',
                 height: '100%',
                 scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': { display: 'none' },
@@ -153,7 +93,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
-              width: isMobile ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
+              width: isNarrow ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
               height: '100%',
               bgcolor: hy.bgColor.neutralLight,
               overflowY: 'auto',
