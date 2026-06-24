@@ -128,7 +128,7 @@ const PanelWrapper = styled('div', {
 })<PanelWrapperProps>(({ $expanded }) => ({
   display: 'grid',
   gridTemplateRows: $expanded ? '1fr' : '0fr',
-  transition: 'grid-template-rows 200ms ease',
+  transition: $expanded ? 'grid-template-rows 250ms ease' : 'grid-template-rows 250ms ease, visibility 0s linear 250ms',
   visibility: $expanded ? 'visible' : 'hidden',
 }))
 
