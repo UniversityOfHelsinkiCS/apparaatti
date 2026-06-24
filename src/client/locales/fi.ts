@@ -111,7 +111,7 @@ export default {
       title: 'Kursseja ei löytynyt',
       description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
       unansweredMandatory: 'Vastaa vielä pakolliseen kysymykseen',
-      resetButton: 'Tyhjennä suodattimet',
+      resetButton: 'Tyhjennä valinnat',
       resetConfirmationTitle: 'Tyhjennetäänkö suodattimet?',
       resetConfirmationDescription: 'Tämä tyhjentää nykyiset vastauksesi ja palauttaa oletussuodattimet.',
       resetConfirmationCancel: 'Peruuta',
