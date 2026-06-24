@@ -13,9 +13,14 @@ interface SingleChoiceOptionProps {
 const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps) => {
   const label =
     count != null ? (
-      <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <span>
         {option.name}
-        <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
+        <HyBadge
+          variant={count === 0 ? 'disabled' : 'default'}
+          sx={{ display: 'inline-flex', verticalAlign: 'middle', ml: '10px', mt: '-2px' }}
+        >
+          {count}
+        </HyBadge>
       </span>
     ) : (
       option.name
