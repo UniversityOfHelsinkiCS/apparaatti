@@ -86,6 +86,8 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               borderColor: hy.borderColor.light,
               position: isMobile ? 'fixed' : 'relative',
               height: '100%',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
             },
           }}
         >

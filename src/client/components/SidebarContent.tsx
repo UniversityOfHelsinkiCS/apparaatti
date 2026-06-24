@@ -101,7 +101,6 @@ const SidebarContent = () => {
     <Box
       sx={{
         pb: 2,
-        minHeight: '100%',
         bgcolor: 'transparent',
       }}
     >
