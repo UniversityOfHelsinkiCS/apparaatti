@@ -5,6 +5,7 @@ import type { UniqueUrnResponse } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
 import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { hy } from '../common/hy/hyTokens.ts'
 
 export type ReviewStatusFilterValue = 'all' | 'reviewed' | 'not-reviewed'
 
@@ -79,7 +80,10 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
           onChange={setUrnInput}
           options={urnOptions?.codeUrns ?? []}
           label="Include"
-          sx={{ minWidth: 300 }}
+          sx={{
+            minWidth: 300,
+            ...(urnInput && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.success } }),
+          }}
         />
         <AutoCompleteTextField
           id="course-urn-exclude"
@@ -87,7 +91,10 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
           onChange={setExcludeUrnsInput}
           options={urnOptions?.codeUrns ?? []}
           label="Exclude"
-          sx={{ minWidth: 300 }}
+          sx={{
+            minWidth: 300,
+            ...(excludeUrnsInput && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.danger } }),
+          }}
         />
       </Box>
 
