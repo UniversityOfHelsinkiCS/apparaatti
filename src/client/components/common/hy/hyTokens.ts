@@ -167,3 +167,7 @@ export const hy = {
     condense: '90%', // --ds-fontWidth-condense
   },
 } as const
+
+// Not originally a hy-design-system token.
+// Added locally to fix ':hover' styles sticking after tap on touch devices.
+export const HOVER_MEDIA = '@media (hover: hover) and (pointer: fine)'

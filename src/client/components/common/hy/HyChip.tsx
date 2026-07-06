@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 interface HyChipProps {
   label: string
@@ -29,7 +29,7 @@ const ChipRoot = styled('div')<{ ownerState: { size: 'medium' | 'small'; clickab
   padding: ownerState.size === 'small' ? '1px 6px' : 'calc(0.25rem - 0.03125rem) 0.5rem',
   ...(ownerState.clickable && {
     cursor: 'pointer',
-    '&:hover': { backgroundColor: hy.bgColor.secondaryHover },
+    [HOVER_MEDIA]: { '&:hover': { backgroundColor: hy.bgColor.secondaryHover } },
     '&:active': { backgroundColor: hy.bgColor.secondaryActive },
     '&:focus-visible': {
       boxShadow: `0 0 0 2px ${hy.bgColor.white}`,

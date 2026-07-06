@@ -2,7 +2,7 @@ import type { RadioProps } from '@mui/material/Radio'
 import Radio from '@mui/material/Radio'
 import { styled } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 const RadioIcon = styled('span')({
   boxSizing: 'border-box',
@@ -14,8 +14,10 @@ const RadioIcon = styled('span')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  'input:not(:disabled):hover ~ &': {
-    backgroundColor: hy.bgColor.whiteHover,
+  [HOVER_MEDIA]: {
+    'input:not(:disabled):hover ~ &': {
+      backgroundColor: hy.bgColor.whiteHover,
+    },
   },
   'input:not(:disabled):active ~ &': {
     backgroundColor: hy.bgColor.whiteActive,
@@ -41,11 +43,13 @@ const RadioCheckedIcon = styled(RadioIcon)({
     borderRadius: '50%',
     backgroundColor: hy.bgColor.primary,
   },
-  'input:not(:disabled):hover ~ &': {
-    backgroundColor: hy.bgColor.white,
-    borderColor: hy.bgColor.primaryHover,
-    '&::before': {
-      backgroundColor: hy.bgColor.primaryHover,
+  [HOVER_MEDIA]: {
+    'input:not(:disabled):hover ~ &': {
+      backgroundColor: hy.bgColor.white,
+      borderColor: hy.bgColor.primaryHover,
+      '&::before': {
+        backgroundColor: hy.bgColor.primaryHover,
+      },
     },
   },
   'input:not(:disabled):active ~ &': {

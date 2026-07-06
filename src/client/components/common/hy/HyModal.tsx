@@ -3,7 +3,7 @@ import MuiModal from '@mui/material/Modal'
 import { styled, type SxProps } from '@mui/material/styles'
 import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 const MODAL_IN_DURATION = 220
 const MODAL_OUT_DURATION = 160
@@ -200,8 +200,10 @@ const CloseButton = styled('button')({
     marginBottom: '0.125rem',
   },
 
-  '&:hover': {
-    backgroundColor: hy.bgColor.transparentOnLightHover,
+  [HOVER_MEDIA]: {
+    '&:hover': {
+      backgroundColor: hy.bgColor.transparentOnLightHover,
+    },
   },
   '&:active': {
     backgroundColor: hy.bgColor.transparentOnLightActive,

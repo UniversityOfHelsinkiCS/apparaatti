@@ -2,7 +2,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type Variant = 'primary' | 'secondary' | 'supplementary'
 type Colour = 'blue' | 'black' | 'white'
@@ -68,7 +68,7 @@ function variantColorStyles(variant: Variant, colour: Colour) {
       backgroundColor: bg,
       borderColor: 'transparent',
       color: text,
-      '&:hover': { backgroundColor: hover },
+      [HOVER_MEDIA]: { '&:hover': { backgroundColor: hover } },
       '&:active': { backgroundColor: active },
       ...focus,
     }
@@ -100,7 +100,7 @@ function variantColorStyles(variant: Variant, colour: Colour) {
       backgroundColor: 'transparent',
       borderColor,
       color: text,
-      '&:hover': { backgroundColor: hover },
+      [HOVER_MEDIA]: { '&:hover': { backgroundColor: hover } },
       '&:active': { backgroundColor: active },
       ...focus,
     }
@@ -125,7 +125,7 @@ function variantColorStyles(variant: Variant, colour: Colour) {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     color: text,
-    '&:hover': { backgroundColor: hover },
+    [HOVER_MEDIA]: { '&:hover': { backgroundColor: hover } },
     '&:active': { backgroundColor: active },
     ...focus,
   }

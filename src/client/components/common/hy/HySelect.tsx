@@ -4,7 +4,7 @@ import type { SelectProps } from '@mui/material/Select'
 import Select from '@mui/material/Select'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 // 1px border-left + 8px padding + 24px icon + 8px padding
 const ICON_AREA_WIDTH = 41
@@ -65,8 +65,10 @@ const StyledSelect = styled(Select)({
     '& legend': { display: 'none' },
   },
 
-  '&:not(.Mui-disabled):not(:has(.MuiSelect-iconOpen)):hover': {
-    backgroundColor: hy.bgColor.whiteHover,
+  [HOVER_MEDIA]: {
+    '&:not(.Mui-disabled):not(:has(.MuiSelect-iconOpen)):hover': {
+      backgroundColor: hy.bgColor.whiteHover,
+    },
   },
 
   // mirrors hy-ds: show focus ring when open (.--open) or keyboard-focused (:focus-visible)
@@ -137,8 +139,10 @@ const StyledMenuItem = styled(MenuItem)({
   lineHeight: 1.5,
   borderRadius: 0,
 
-  '&:hover:not(.Mui-disabled)': {
-    backgroundColor: hy.bgColor.whiteHover,
+  [HOVER_MEDIA]: {
+    '&:hover:not(.Mui-disabled)': {
+      backgroundColor: hy.bgColor.whiteHover,
+    },
   },
 
   '&:active:not(.Mui-disabled)': {
@@ -148,8 +152,10 @@ const StyledMenuItem = styled(MenuItem)({
   '&.Mui-selected': {
     backgroundColor: hy.bgColor.primary,
     color: hy.textColor.white,
-    '&:hover': {
-      backgroundColor: hy.bgColor.primaryHover,
+    [HOVER_MEDIA]: {
+      '&:hover': {
+        backgroundColor: hy.bgColor.primaryHover,
+      },
     },
     '&:active': {
       backgroundColor: hy.bgColor.primaryActive,

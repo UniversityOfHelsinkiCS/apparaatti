@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { type ChangeEvent, type FocusEvent, useEffect, useId, useRef, useState } from 'react'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 const FONT = "'Open Sans Variable', 'Open Sans', sans-serif"
 
@@ -92,9 +92,11 @@ const Container = styled('div')<ContainerProps>(({ $disabled, $readonly, $invali
       borderColor: hy.borderColor.danger,
       ...($active && { backgroundColor: hy.bgColor.dangerActive }),
       ...(!$active && {
-        '&:hover:not(:focus-within)': {
-          backgroundColor: hy.bgColor.dangerHover,
-          borderColor: hy.borderColor.danger,
+        [HOVER_MEDIA]: {
+          '&:hover:not(:focus-within)': {
+            backgroundColor: hy.bgColor.dangerHover,
+            borderColor: hy.borderColor.danger,
+          },
         },
       }),
     }),
@@ -106,9 +108,11 @@ const Container = styled('div')<ContainerProps>(({ $disabled, $readonly, $invali
       borderColor: hy.borderColor.success,
       ...($active && { backgroundColor: hy.bgColor.successActive }),
       ...(!$active && {
-        '&:hover:not(:focus-within)': {
-          backgroundColor: hy.bgColor.successHover,
-          borderColor: hy.borderColor.success,
+        [HOVER_MEDIA]: {
+          '&:hover:not(:focus-within)': {
+            backgroundColor: hy.bgColor.successHover,
+            borderColor: hy.borderColor.success,
+          },
         },
       }),
     }),
@@ -119,9 +123,11 @@ const Container = styled('div')<ContainerProps>(({ $disabled, $readonly, $invali
     !$readonly && {
       ...($active && { backgroundColor: hy.bgColor.whiteActive }),
       ...(!$active && {
-        '&:hover:not(:focus-within)': {
-          borderColor: hy.borderColor.default,
-          backgroundColor: hy.bgColor.whiteHover,
+        [HOVER_MEDIA]: {
+          '&:hover:not(:focus-within)': {
+            borderColor: hy.borderColor.default,
+            backgroundColor: hy.bgColor.whiteHover,
+          },
         },
       }),
     }),

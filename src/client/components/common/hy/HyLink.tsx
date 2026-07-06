@@ -1,7 +1,7 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type LinkSize = '2xLarge' | 'xLarge' | 'large' | 'medium' | 'small' | 'xSmall'
 type LinkVariant = 'inline' | 'standalone'
@@ -109,18 +109,20 @@ const Root = styled('a')<{ ownerState: OwnerState }>(({ ownerState }) => {
     textUnderlinePosition: 'from-font',
     ...(size && { fontSize: fontSizeMap[size] }),
 
-    '&:hover, &:active': {
+    '&:active': {
       textDecorationLine: 'underline',
       textDecorationThickness: '13%',
       textUnderlineOffset: '12%',
-    },
-
-    '&:hover': {
-      color: colorHover,
-    },
-
-    '&:active': {
       color: colorActive,
+    },
+
+    [HOVER_MEDIA]: {
+      '&:hover': {
+        textDecorationLine: 'underline',
+        textDecorationThickness: '13%',
+        textUnderlineOffset: '12%',
+        color: colorHover,
+      },
     },
 
     '&:visited': {

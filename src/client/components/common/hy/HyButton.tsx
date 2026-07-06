@@ -1,7 +1,7 @@
 import { styled, type SxProps } from '@mui/material/styles'
 import type { ButtonHTMLAttributes } from 'react'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type ButtonVariant = 'primary' | 'secondary' | 'supplementary'
 type ButtonColour = 'blue' | 'black' | 'white' | 'danger'
@@ -81,7 +81,7 @@ function getVariantColorStyles(variant: ButtonVariant, colour: ButtonColour) {
       backgroundColor: config.bg,
       borderColor: 'transparent',
       color: config.text,
-      '&:hover:not(:disabled)': { backgroundColor: config.hover },
+      [HOVER_MEDIA]: { '&:hover:not(:disabled)': { backgroundColor: config.hover } },
       '&:active:not(:disabled)': { backgroundColor: config.active },
       '&:disabled': { backgroundColor: config.disBg, borderColor: 'transparent', color: config.disText },
       ...focusRing,
@@ -128,7 +128,7 @@ function getVariantColorStyles(variant: ButtonVariant, colour: ButtonColour) {
       backgroundColor: 'transparent',
       borderColor: config.border,
       color: config.text,
-      '&:hover:not(:disabled)': { backgroundColor: config.hover },
+      [HOVER_MEDIA]: { '&:hover:not(:disabled)': { backgroundColor: config.hover } },
       '&:active:not(:disabled)': { backgroundColor: config.active },
       '&:disabled': { backgroundColor: 'transparent', borderColor: config.disBorder, color: config.disText },
       ...focusRing,
@@ -167,7 +167,7 @@ function getVariantColorStyles(variant: ButtonVariant, colour: ButtonColour) {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     color: config.text,
-    '&:hover:not(:disabled)': { backgroundColor: config.hover },
+    [HOVER_MEDIA]: { '&:hover:not(:disabled)': { backgroundColor: config.hover } },
     '&:active:not(:disabled)': { backgroundColor: config.active },
     '&:disabled': { backgroundColor: 'transparent', borderColor: 'transparent', color: config.disText },
     ...focusRing,

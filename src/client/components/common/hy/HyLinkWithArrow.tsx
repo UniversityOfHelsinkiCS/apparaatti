@@ -3,7 +3,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type HyLinkIcon = 'arrow_forward' | 'arrow_back' | 'arrow_outward'
 type HyIconPosition = 'start' | 'end'
@@ -37,24 +37,30 @@ const Root = styled('a')<{ ownerState: { fullWidth: boolean } }>(({ ownerState }
   '@media (min-width: 30rem)': {
     fontSize: 18,
   },
-  '&:hover, &:active': {
+  '&:active': {
     textDecorationLine: 'underline',
     textDecorationStyle: 'solid',
     textDecorationSkipInk: 'auto',
     textDecorationThickness: '7%',
     textUnderlineOffset: '12%',
     textUnderlinePosition: 'from-font',
-  },
-  '&:hover': {
-    color: hy.textColor.linkHover,
-    [`& .${ICON_CLASS}`]: {
-      backgroundColor: hy.bgColor.primaryHover,
-    },
-  },
-  '&:active': {
     color: hy.textColor.linkActive,
     [`& .${ICON_CLASS}`]: {
       backgroundColor: hy.bgColor.primaryActive,
+    },
+  },
+  [HOVER_MEDIA]: {
+    '&:hover': {
+      textDecorationLine: 'underline',
+      textDecorationStyle: 'solid',
+      textDecorationSkipInk: 'auto',
+      textDecorationThickness: '7%',
+      textUnderlineOffset: '12%',
+      textUnderlinePosition: 'from-font',
+      color: hy.textColor.linkHover,
+      [`& .${ICON_CLASS}`]: {
+        backgroundColor: hy.bgColor.primaryHover,
+      },
     },
   },
   '&:focus-visible': {

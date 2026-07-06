@@ -1,6 +1,6 @@
 import { styled, type SxProps } from '@mui/material/styles'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type TagColour = 'default' | 'black' | 'white' | 'info' | 'danger' | 'attention' | 'success'
 
@@ -81,7 +81,7 @@ const TagRoot = styled('div')<{ ownerState: { colour: TagColour; isLink: boolean
     color,
     backgroundColor: bg,
     ...(ownerState.isLink && {
-      '&:has(a:hover)': { backgroundColor: bgHover },
+      [HOVER_MEDIA]: { '&:has(a:hover)': { backgroundColor: bgHover } },
       '&:has(a:active)': { backgroundColor: bgActive },
       '&:focus-within': {
         boxShadow: `0 0 0 2px ${hy.bgColor.white}`,

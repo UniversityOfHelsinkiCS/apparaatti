@@ -4,7 +4,7 @@ import { styled, type SxProps } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 import { useId, useState } from 'react'
 
-import { hy } from './hyTokens'
+import { HOVER_MEDIA, hy } from './hyTokens'
 
 type AccordionVariant = 'default' | 'compact'
 
@@ -46,8 +46,10 @@ const OpenButtonContainer = styled('div')({
     pointerEvents: 'none',
     zIndex: 1,
   },
-  '&:hover::after': {
-    backgroundColor: hy.bgColor.transparentOnLightHover,
+  [HOVER_MEDIA]: {
+    '&:hover::after': {
+      backgroundColor: hy.bgColor.transparentOnLightHover,
+    },
   },
   '&:active::after': {
     backgroundColor: hy.bgColor.transparentOnLightActive,
