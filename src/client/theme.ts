@@ -84,7 +84,7 @@ export default createTheme({
     values: {
       xs: 0,
       sm: 700,
-      md: 1000, // isMobile
+      md: 1000,
       lg: 1200,
       xl: 1536,
     },
