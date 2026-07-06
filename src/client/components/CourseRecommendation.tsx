@@ -4,7 +4,7 @@ import LaptopIcon from '@mui/icons-material/LaptopOutlined'
 import PeopleIcon from '@mui/icons-material/PeopleOutlined'
 import PersonIcon from '@mui/icons-material/PersonOutlined'
 import QuizIcon from '@mui/icons-material/QuizOutlined'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../common/nameFormatter'
@@ -52,6 +52,8 @@ const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] })
 
 const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const { t, i18n } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.id}`
@@ -166,7 +168,12 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
           </Stack>
         </Stack>
 
-        <HyLinkCta href={courseUrl} target="_blank" sx={{ alignSelf: 'flex-start' }}>
+        <HyLinkCta
+          href={courseUrl}
+          target="_blank"
+          sx={{ alignSelf: 'flex-start' }}
+          size={isMobile ? 'small' : 'medium'}
+        >
           {t('course:show')}
         </HyLinkCta>
       </Stack>
