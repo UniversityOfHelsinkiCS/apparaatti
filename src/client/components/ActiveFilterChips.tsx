@@ -87,6 +87,8 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
     <Box
       component="span"
       sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
         zIndex: 2, // render above the mouseover highlight of accordion header
       }}
     >
