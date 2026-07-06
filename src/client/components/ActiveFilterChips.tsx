@@ -6,11 +6,11 @@ import HyChip from './common/hy/HyChip'
 
 const MAX_CHARS = 21
 
-const buildChipLabel = (labels: string[]): string => {
+const buildChipLabel = (labels: string[], maxChars: number = MAX_CHARS): string => {
   if (labels.length === 0) return ''
 
   const full = labels.join(', ')
-  if (full.length <= MAX_CHARS) return full
+  if (full.length <= maxChars) return full
 
   // Fit as many labels as possible left-to-right; append "... + N" for hidden ones.
   // If the first label alone exceeds the limit, truncate it to make it fit.
@@ -21,7 +21,7 @@ const buildChipLabel = (labels: string[]): string => {
     const candidate = i === 0 ? labels[i] : `${visibleText}, ${labels[i]}`
     const hiddenAfterThis = labels.length - i - 1
     const suffix = hiddenAfterThis > 0 ? `... + ${hiddenAfterThis}` : ''
-    const fits = (candidate + suffix).length <= MAX_CHARS
+    const fits = (candidate + suffix).length <= maxChars
 
     if (fits) {
       visibleText = candidate
@@ -32,10 +32,10 @@ const buildChipLabel = (labels: string[]): string => {
     if (i === 0) {
       if (suffix.length > 0) {
         // Suffix provides the "...", so just slice the label to the available space
-        visibleText = labels[i].slice(0, Math.max(0, MAX_CHARS - suffix.length))
+        visibleText = labels[i].slice(0, Math.max(0, maxChars - suffix.length))
       } else {
         // Single item with no suffix — append our own "..."
-        visibleText = `${labels[i].slice(0, MAX_CHARS - 4)}...`
+        visibleText = `${labels[i].slice(0, maxChars - 4)}...`
       }
       visibleCount = 1
     }
@@ -79,7 +79,9 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   const allSelected = totalOptions > 1 && activeChips.length === totalOptions
 
   const labels = activeChips.map(c => c.label)
-  const chipLabel = allSelected ? t('filter:allSelected') : buildChipLabel(labels)
+  // excluding study-period filter from truncation, looks confusing with period numbers
+  const maxChars = filterId === 'study-period' ? Infinity : MAX_CHARS
+  const chipLabel = allSelected ? t('filter:allSelected') : buildChipLabel(labels, maxChars)
 
   return (
     <Box

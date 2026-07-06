@@ -57,7 +57,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
             width: '100%',
             flexWrap: 'wrap',
             gap: 1,
-            '& > *': { height: '25px' },
+            '& > *': { minHeight: '26px' },
           }}
         >
           {filter.mandatory && !state.length && (
