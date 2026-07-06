@@ -41,7 +41,6 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
           borderRight: '1px solid',
           borderLeft: '1px solid',
           borderColor: hy.borderColor.light,
-          boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
         }}
       >
         <Toolbar>
