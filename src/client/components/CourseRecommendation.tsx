@@ -39,13 +39,15 @@ const CourseDateRange = ({ startDate, endDate }: { startDate: Date; endDate: Dat
 
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
   return (
-    <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75} sx={{ alignItems: 'center' }}>
+    <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
       <Typography variant="body2" sx={{ color: hy.textColor.secondary }}>
         {label}:
       </Typography>
-      {periods.map(period => (
-        <HyTag key={period} text={period} colour="default" />
-      ))}
+      <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
+        {periods.map(period => (
+          <HyTag key={period} text={period} colour="default" />
+        ))}
+      </Stack>
     </Stack>
   )
 }
@@ -133,7 +135,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
           {courseTitle}
         </Typography>
 
-        <Stack direction="row" sx={{ width: '100%' }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1.5, sm: 0 }} sx={{ width: '100%' }}>
           <Stack direction={'column'} spacing={1.5} sx={{ flex: 1, minWidth: 0 }}>
             <Stack
               direction="row"
@@ -160,7 +162,12 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
             )}
           </Stack>
 
-          <Stack direction="column" spacing={1.5} alignItems="flex-end" sx={{ flexShrink: 0 }}>
+          <Stack
+            direction="column"
+            spacing={1.5}
+            alignItems={{ xs: 'flex-start', sm: 'flex-end' }}
+            sx={{ flexShrink: 0 }}
+          >
             <CourseDateRange startDate={course.startDate} endDate={course.endDate} />
             {studyPlaceText && (
               <HyTag text={studyPlaceText} colour="info" prefixIcon={StudyPlaceIcon && <StudyPlaceIcon />} />
