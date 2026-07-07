@@ -1,6 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import { Box, Menu, MenuItem, Typography } from '@mui/material'
+import { Box, Menu, Typography } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import type { User } from '../common/types'
 import hyLogo from './assets/hy_logo_black.svg'
 import HyButton from './components/common/hy/HyButton'
+import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
@@ -72,27 +73,43 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
                 <MoreVertIcon />
               </IconButton>
 
-              <Menu anchorEl={moreMenuAnchor} open={Boolean(moreMenuAnchor)} onClose={() => setMoreMenuAnchor(null)}>
-                <MenuItem
+              <Menu
+                anchorEl={moreMenuAnchor}
+                open={Boolean(moreMenuAnchor)}
+                onClose={() => setMoreMenuAnchor(null)}
+                transitionDuration={0}
+                slotProps={{
+                  paper: {
+                    elevation: 0,
+                    style: {
+                      border: `1px solid ${hy.borderColor.light}`,
+                      borderRadius: 0,
+                      boxShadow: hy.shadow.overlay,
+                    },
+                  },
+                  list: { disablePadding: true },
+                }}
+              >
+                <HyMenuItem
                   onClick={() => {
                     setFeedbackModalOpen(true)
                     setMoreMenuAnchor(null)
                   }}
                 >
                   {t('v2:feedback.openButton')}
-                </MenuItem>
+                </HyMenuItem>
                 {user?.isAdmin && (
-                  <MenuItem
+                  <HyMenuItem
                     onClick={() => {
                       navigate('/admin')
                       setMoreMenuAnchor(null)
                     }}
                   >
                     {t('v2:adminButton')}
-                  </MenuItem>
+                  </HyMenuItem>
                 )}
-                <Box sx={{ px: 2, py: 1 }}>
-                  <LanguageSelector />
+                <Box sx={{ px: '12px', py: '10px', borderTop: `1px solid ${hy.borderColor.light}` }}>
+                  <LanguageSelector sx={{ width: '100%' }} />
                 </Box>
               </Menu>
             </>
