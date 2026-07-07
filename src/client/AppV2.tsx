@@ -84,7 +84,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               },
             }}
           >
-            <SidebarContent />
+            <SidebarContent onClose={isNarrow ? toggleDrawer : undefined} />
           </Drawer>
 
           <Box

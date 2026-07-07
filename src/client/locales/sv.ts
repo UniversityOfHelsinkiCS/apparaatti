@@ -102,6 +102,7 @@ export default {
       title: 'Period',
     },
     retakeQuestions: 'Svara på startfrågorna',
+    closeFilters: 'Stäng filter',
     skipQuestions: 'Hoppa över frågorna',
     done: 'Klar',
     welcomeText: 'Svara först på några inledande frågor. Du kan ändra dessa senare.',

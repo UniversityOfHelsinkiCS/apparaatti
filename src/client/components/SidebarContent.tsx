@@ -9,10 +9,15 @@ import {
   useFilterContext,
 } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
+import { CloseButton, CloseIconSvg } from './common/hy/HyModal'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
-const SidebarContent = () => {
+type SidebarContentProps = {
+  onClose?: () => void
+}
+
+const SidebarContent = ({ onClose }: SidebarContentProps) => {
   const filterContext = useFilterContext()
   const { filters, isLoading, setModalOpen } = filterContext
   const { t } = useTranslation()
@@ -99,9 +104,16 @@ const SidebarContent = () => {
 
   return (
     <Box>
+      {onClose && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 1, px: 1 }}>
+          <CloseButton aria-label={t('v2:closeFilters')} onClick={onClose} type="button">
+            <CloseIconSvg />
+          </CloseButton>
+        </Box>
+      )}
       <Box
         sx={{
-          pt: 3.5,
+          pt: onClose ? 0 : 3.5,
           pb: 2,
           display: 'flex',
           alignItems: 'center',

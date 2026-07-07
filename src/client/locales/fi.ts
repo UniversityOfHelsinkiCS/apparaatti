@@ -103,6 +103,7 @@ export default {
       title: 'Periodi',
     },
     retakeQuestions: 'Vastaa alkukysymyksiin',
+    closeFilters: 'Sulje suodattimet',
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',
     welcomeText: 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',
