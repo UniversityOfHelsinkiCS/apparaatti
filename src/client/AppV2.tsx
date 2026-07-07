@@ -66,7 +66,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             open={!isNarrow || open}
             onClose={toggleDrawer}
             ModalProps={{
-              keepMounted: isNarrow ? false : true,
+              keepMounted: true,
               disablePortal: isNarrow ? true : false,
             }}
             sx={{
