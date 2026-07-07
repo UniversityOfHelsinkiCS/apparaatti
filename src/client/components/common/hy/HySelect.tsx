@@ -9,6 +9,8 @@ import { HOVER_MEDIA, hy } from './hyTokens'
 // 1px border-left + 8px padding + 24px icon + 8px padding
 const ICON_AREA_WIDTH = 41
 
+const CONTROL_HEIGHT = '2.75rem'
+
 // Exact SVG paths from hy-ds ds-icon-keyboard-arrow-{down,up}, viewBox "0 -960 960 960"
 const PATH_CHEVRON_DOWN = 'M480-320 216-584l67-67 197 197 197-197 67 67-264 264Z'
 const PATH_CHEVRON_UP = 'M480-530 283-333l-67-67 264-264 264 264-67 67-197-197Z'
@@ -50,7 +52,7 @@ function DropdownIcon({ className }: { className?: string }) {
 
 // styled() loses Select's generic parameter; cast it back so HySelect can forward Value
 const StyledSelect = styled(Select)({
-  height: '2.75rem',
+  height: CONTROL_HEIGHT,
   borderRadius: 0,
   backgroundColor: hy.bgColor.white,
   color: hy.textColor.secondary,
@@ -99,11 +101,13 @@ const StyledSelect = styled(Select)({
 
   // flex: 1 ensures the div covers the full width including under the icon, so pointer-events: none
   // on the icon passes clicks through to onMouseDown here (the only handler that opens the dropdown)
+  //
+  // vertical centering uses lineHeight rather than flex/alignItems: text-overflow ellipsis doesn't
+  // reliably truncate a bare text node that's an anonymous flex item, so this stays a plain block box
   '& .MuiSelect-select': {
     flex: 1,
     alignSelf: 'stretch',
-    display: 'flex',
-    alignItems: 'center',
+    lineHeight: CONTROL_HEIGHT,
     paddingLeft: '10px',
     paddingRight: `${ICON_AREA_WIDTH + 12}px !important`,
     paddingTop: '0 !important',
@@ -114,6 +118,9 @@ const StyledSelect = styled(Select)({
     color: hy.textColor.default,
     minHeight: 'unset !important',
     boxSizing: 'border-box',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 
   // position: absolute over .MuiSelect-select; explicit width prevents collapse out of flow
@@ -178,6 +185,17 @@ const StyledMenuItem = styled(MenuItem)({
   },
 })
 
+// MenuItem's root is display: flex (for icon/text layout), so ellipsis styles have to live on this
+// nested span rather than on StyledMenuItem itself: a bare text node as an anonymous flex item won't
+// truncate reliably. minWidth: 0 lets it shrink below its content size so overflow can kick in.
+const MenuItemLabel = styled('span')({
+  flex: 1,
+  minWidth: 0,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+})
+
 const DEFAULT_MENU_PROPS: SelectProps['MenuProps'] = {
   transitionDuration: 0,
   slotProps: {
@@ -187,6 +205,8 @@ const DEFAULT_MENU_PROPS: SelectProps['MenuProps'] = {
         border: `1px solid ${hy.borderColor.light}`,
         borderRadius: 0,
         boxShadow: hy.shadow.overlay,
+        // caps the popup so long item labels ellipsize instead of growing the menu past the viewport
+        maxWidth: 'calc(100vw - 32px)',
       },
     },
   },
@@ -207,8 +227,12 @@ export function HySelect<Value = unknown>({ sx, MenuProps: menuProps, ...props }
 
 export type HyMenuItemProps = MenuItemProps
 
-export function HyMenuItem({ sx, ...props }: HyMenuItemProps) {
-  return <StyledMenuItem {...props} disableRipple sx={sx} />
+export function HyMenuItem({ sx, children, ...props }: HyMenuItemProps) {
+  return (
+    <StyledMenuItem {...props} disableRipple sx={sx}>
+      <MenuItemLabel>{children}</MenuItemLabel>
+    </StyledMenuItem>
+  )
 }
 
 export default HySelect
