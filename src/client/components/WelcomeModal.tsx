@@ -143,7 +143,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       }
     >
       <Box sx={{ my: 4 }}>
-        <LanguageSelector sx={{ float: 'right' }} />
+        <LanguageSelector sx={{ position: 'absolute', top: '16px', right: '16px' }} />
 
         <Stack spacing={3}>
           {welcomeFilters.map(entry => (

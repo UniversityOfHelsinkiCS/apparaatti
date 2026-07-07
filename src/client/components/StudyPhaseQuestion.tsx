@@ -45,7 +45,7 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
       <HySelect
-        sx={{ minWidth: 100, marginTop: 1.5 }}
+        sx={{ minWidth: 100, maxWidth: '100%', marginTop: 1.5 }}
         disabled={organisations.length < 2}
         name={question.id}
         labelId="study-field-select-label"
