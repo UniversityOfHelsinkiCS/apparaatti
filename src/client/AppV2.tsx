@@ -69,6 +69,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               keepMounted: true,
               disablePortal: isNarrow ? true : false,
             }}
+            slotProps={{ backdrop: { sx: { bgcolor: hy.bgColor.backdrop } } }}
             sx={{
               zIndex: theme => theme.zIndex.appBar - 1,
               '& .MuiDrawer-paper': {
