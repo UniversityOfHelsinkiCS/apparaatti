@@ -130,7 +130,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
         backgroundColor: hy.bgColor.white,
       }}
     >
-      <Stack spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start" justifyContent="space-between">
+      <Stack useFlexGap spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start" justifyContent="space-between">
         <Typography variant="h4" component="h2" sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}>
           {courseTitle}
         </Typography>
@@ -178,7 +178,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
         <HyLinkCta
           href={courseUrl}
           target="_blank"
-          sx={{ alignSelf: 'flex-start' }}
+          sx={{ alignSelf: 'flex-start', mt: isMobile ? '6px' : 0 }}
           size={isMobile ? 'small' : 'medium'}
         >
           {t('course:show')}
