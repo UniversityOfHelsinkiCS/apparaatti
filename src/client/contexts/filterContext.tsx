@@ -83,6 +83,8 @@ interface FilterContextType {
   modalOpen: boolean
   setModalOpen: (open: boolean) => void
   finalRecommendedCourses: CourseData[] | null
+  highlightedFilterId: string | null
+  setHighlightedFilterId: (filterId: string | null) => void
 
   language: string
   setLanguage: (s: string) => void
@@ -344,6 +346,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [courseRecommendations, setCourseRecommendations] = useState<CourseData[] | null>(null)
   const [finalRecommendedCourses, setFinalRecommendedCourses] = useState<CourseData[] | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [highlightedFilterId, setHighlightedFilterId] = useState<string | null>(null)
 
   const shouldUsePrimaryLanguageSpecification = language !== '' && language !== 'en' && language === primaryLanguage
 
@@ -722,6 +725,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
         modalOpen,
         setModalOpen,
         finalRecommendedCourses,
+        highlightedFilterId,
+        setHighlightedFilterId,
 
         studyField,
         setStudyField,

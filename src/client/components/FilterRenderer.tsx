@@ -1,4 +1,6 @@
 import { Box } from '@mui/material'
+import { keyframes } from '@mui/material/styles'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
@@ -10,6 +12,16 @@ import HyAccordion from './common/hy/HyAccordion'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
 
+const flashHighlight = keyframes({
+  '0%': { opacity: 0 },
+  '20%': { opacity: 0.5 },
+  '50%': { opacity: 0 },
+  '70%': { opacity: 0.5 },
+  '100%': { opacity: 0 },
+})
+
+const HIGHLIGHT_DURATION_MS = 1500
+
 interface FilterRendererProps {
   filter: Question
   expanded: boolean
@@ -20,6 +32,17 @@ interface FilterRendererProps {
 const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: FilterRendererProps) => {
   const { t } = useTranslation()
   const filters = useFilterContext()
+  const { highlightedFilterId, setHighlightedFilterId } = filters
+  const isHighlighted = highlightedFilterId === filter.id
+
+  useEffect(() => {
+    if (!isHighlighted) {
+      return undefined
+    }
+
+    const timeout = setTimeout(() => setHighlightedFilterId(null), HIGHLIGHT_DURATION_MS)
+    return () => clearTimeout(timeout)
+  }, [isHighlighted, setHighlightedFilterId])
 
   const config = filterConfigMap(filters).get(filter.id)
   const state = config ? config.state : ''
@@ -43,40 +66,55 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
   }
 
   return (
-    <HyAccordion
-      open={expanded}
-      onChange={onAccordionChange}
-      variant="compact"
-      animate
-      borders={isFirst ? 'both' : 'bottom'}
-      summary={
+    <Box sx={{ position: 'relative' }}>
+      {isHighlighted && (
         <Box
+          aria-hidden
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            width: '100%',
-            flexWrap: 'wrap',
-            gap: 1,
-            '& > *': { minHeight: '26px' },
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2,
+            backgroundColor: hy.bgColor.attention,
+            pointerEvents: 'none',
+            animation: `${flashHighlight} ${HIGHLIGHT_DURATION_MS}ms ease-out forwards`,
           }}
-        >
-          {filter.mandatory && !state.length && (
-            <HyTag
-              text={t('question:mandatory')}
-              colour="attention"
-              ariaHidden={false}
-              sx={{ border: '1px solid', borderColor: hy.borderColor.light }}
-            />
-          )}
-          <Box component="span" sx={{ flexGrow: 1 }}>
-            {shortName}
+        />
+      )}
+      <HyAccordion
+        open={expanded}
+        onChange={onAccordionChange}
+        variant="compact"
+        animate
+        borders={isFirst ? 'both' : 'bottom'}
+        summary={
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              flexWrap: 'wrap',
+              gap: 1,
+              '& > *': { minHeight: '26px' },
+            }}
+          >
+            {filter.mandatory && !state.length && (
+              <HyTag
+                text={t('question:mandatory')}
+                colour="attention"
+                ariaHidden={false}
+                sx={{ border: '1px solid', borderColor: hy.borderColor.light }}
+              />
+            )}
+            <Box component="span" sx={{ flexGrow: 1 }}>
+              {shortName}
+            </Box>
+            <ActiveFilterChips filterId={filter.id} />
           </Box>
-          <ActiveFilterChips filterId={filter.id} />
-        </Box>
-      }
-    >
-      <Filter variant={variant} filter={filterToRender} />
-    </HyAccordion>
+        }
+      >
+        <Filter variant={variant} filter={filterToRender} />
+      </HyAccordion>
+    </Box>
   )
 }
 

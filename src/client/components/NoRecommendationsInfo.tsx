@@ -12,9 +12,10 @@ import ResetFiltersButton from './ResetFiltersButton'
 type UnansweredPromptProps = {
   filters: { id: string; shortName?: string }[]
   onOpenFilters: () => void
+  onHighlightFilter: (filterId: string) => void
 }
 
-const UnansweredPrompt = ({ filters, onOpenFilters }: UnansweredPromptProps) => {
+const UnansweredPrompt = ({ filters, onOpenFilters, onHighlightFilter }: UnansweredPromptProps) => {
   const { t } = useTranslation()
   return (
     <Box sx={{ mb: 3 }}>
@@ -27,7 +28,10 @@ const UnansweredPrompt = ({ filters, onOpenFilters }: UnansweredPromptProps) => 
             key={filter.id}
             text={filter.shortName ?? filter.id}
             colour="attention"
-            onClick={onOpenFilters}
+            onClick={() => {
+              onOpenFilters()
+              onHighlightFilter(filter.id)
+            }}
             ariaLabel={t('v2:openFilters')}
           />
         ))}
@@ -44,7 +48,7 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
   const { t, i18n } = useTranslation()
   const { isDrawerLayout } = useBreakpoints()
   const filterContext = useFilterContext()
-  const { studyField, filters } = filterContext
+  const { studyField, filters, setHighlightedFilterId } = filterContext
 
   const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
   const additionalInfo = i18n.exists(additionalInfoKey) ? t(additionalInfoKey) : null
@@ -68,7 +72,11 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
           {t('v2:noRecommendations.description')}
         </Typography>
         {mandatoryFilters.length > 0 ? (
-          <UnansweredPrompt filters={mandatoryFilters} onOpenFilters={onOpenFilters} />
+          <UnansweredPrompt
+            filters={mandatoryFilters}
+            onOpenFilters={onOpenFilters}
+            onHighlightFilter={setHighlightedFilterId}
+          />
         ) : (
           <>
             {additionalInfo && <AppMarkdown>{additionalInfo}</AppMarkdown>}
