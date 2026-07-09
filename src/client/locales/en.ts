@@ -105,6 +105,7 @@ export default {
     retakeQuestions: 'Answer starting questions',
     openFilters: 'Open filters',
     closeFilters: 'Close filters',
+    moreOptions: 'More options',
     skipQuestions: 'Skip questions',
     done: 'Done',
     welcomeText: 'First, answer a few initial questions. You can modify these later.',

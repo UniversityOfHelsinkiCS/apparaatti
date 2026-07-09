@@ -55,6 +55,11 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           height: '100%',
           position: 'relative',
           boxShadow: '0 0 15px rgba(0, 0, 0, 0.15)',
+          '@media (min-width: 1200px)': {
+            borderRight: '1px solid',
+            borderLeft: '1px solid',
+            borderColor: hy.borderColor.light,
+          },
         }}
       >
         <AppHeader isNarrow={isNarrow} isMobile={isMobile} toggleDrawer={toggleDrawer} user={user} />
@@ -76,7 +81,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
                 width: isNarrow ? mobileDrawerWidth : '400px',
                 maxWidth: '500px',
                 borderRight: '1px solid',
-                borderLeft: '1px solid',
                 borderColor: hy.borderColor.light,
                 position: isNarrow ? 'fixed' : 'relative',
                 height: '100%',
@@ -98,7 +102,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               height: '100%',
               bgcolor: hy.bgColor.neutralLight,
               overflowY: 'auto',
-              borderRight: '1px solid',
               borderColor: hy.borderColor.light,
             }}
           >

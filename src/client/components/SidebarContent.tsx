@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { PanelLeftClose } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +10,7 @@ import {
   useFilterContext,
 } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
+import HyIconButton from './common/hy/HyIconButton'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
@@ -123,15 +124,15 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
         </Box>
         {onClose && (
           <Box sx={{ alignSelf: 'start' }}>
-            <IconButton
+            <HyIconButton
               color="inherit"
               aria-label={t('v2:closeFilters')}
               onClick={onClose}
               // negative margin matching 8px padding on IconButton to keep large hitbox without altering layout
-              sx={{ m: '-8px' }}
+              sx={{ m: '-2px' }}
             >
               <PanelLeftClose size={24} />
-            </IconButton>
+            </HyIconButton>
           </Box>
         )}
       </Stack>

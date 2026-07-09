@@ -1,7 +1,6 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Box, Menu, Typography } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
-import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 import { PanelLeftOpen } from 'lucide-react'
 import { useState } from 'react'
@@ -11,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import type { User } from '../common/types'
 import hyLogo from './assets/hy_logo_black.svg'
 import HyButton from './components/common/hy/HyButton'
+import HyIconButton from './components/common/hy/HyIconButton'
 import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
 import FeedbackModal from './components/FeedbackModal'
@@ -39,22 +39,14 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
         sx={{
           bgcolor: hy.bgColor.white,
           borderBottom: '1px solid',
-          borderRight: '1px solid',
-          borderLeft: '1px solid',
           borderColor: hy.borderColor.light,
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ px: '12x' }}>
           {isNarrow && (
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={toggleDrawer}
-              aria-label={t('v2:openFilters')}
-              sx={{ mr: 1 }}
-            >
+            <HyIconButton onClick={toggleDrawer} aria-label={t('v2:openFilters')} sx={{ mr: '14px' }}>
               <PanelLeftOpen size={24} />
-            </IconButton>
+            </HyIconButton>
           )}
 
           <Box component="img" src={hyLogo} alt="University of Helsinki" sx={{ height: 32, mr: 2 }} />
@@ -75,9 +67,9 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
 
           {isMobile ? (
             <>
-              <IconButton color="inherit" onClick={e => setMoreMenuAnchor(e.currentTarget)} sx={{ mr: '-12px' }}>
+              <HyIconButton onClick={e => setMoreMenuAnchor(e.currentTarget)} aria-label={t('v2:moreOptions')}>
                 <MoreVertIcon />
-              </IconButton>
+              </HyIconButton>
 
               <Menu
                 anchorEl={moreMenuAnchor}

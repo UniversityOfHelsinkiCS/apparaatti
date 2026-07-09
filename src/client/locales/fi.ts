@@ -105,6 +105,7 @@ export default {
     retakeQuestions: 'Vastaa alkukysymyksiin',
     openFilters: 'Avaa suodattimet',
     closeFilters: 'Sulje suodattimet',
+    moreOptions: 'Lisää vaihtoehtoja',
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',
     welcomeText: 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',
