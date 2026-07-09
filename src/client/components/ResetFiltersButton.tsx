@@ -5,7 +5,11 @@ import { useFilterContext } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 
-const ResetFiltersButton = () => {
+type ResetFiltersButtonProps = {
+  onReset?: () => void
+}
+
+const ResetFiltersButton = ({ onReset }: ResetFiltersButtonProps) => {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
   const { resetFilters } = useFilterContext()
@@ -16,6 +20,7 @@ const ResetFiltersButton = () => {
 
   const handleConfirm = () => {
     resetFilters()
+    onReset?.()
     handleClose()
   }
 

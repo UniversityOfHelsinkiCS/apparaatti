@@ -15,19 +15,19 @@ import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
+import useBreakpoints from './hooks/useBreakpoints'
 
 type AppHeaderProps = {
-  isNarrow: boolean
-  isMobile: boolean
   toggleDrawer: () => void
   user: User
 }
 
-const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) => {
+const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   const [moreMenuAnchor, setMoreMenuAnchor] = useState<null | HTMLElement>(null)
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { isMobile, isDrawerLayout } = useBreakpoints()
 
   return (
     <>
@@ -43,7 +43,7 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
         }}
       >
         <Toolbar sx={{ px: '12x' }}>
-          {isNarrow && (
+          {isDrawerLayout && (
             <HyIconButton onClick={toggleDrawer} aria-label={t('v2:openFilters')} sx={{ mr: '14px' }}>
               <PanelLeftOpen size={24} />
             </HyIconButton>

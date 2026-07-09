@@ -2,16 +2,19 @@ import { Box, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
+import useBreakpoints from '../hooks/useBreakpoints'
 import AppMarkdown from './common/AppMarkdown'
+import HyButton from './common/hy/HyButton'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
 import ResetFiltersButton from './ResetFiltersButton'
 
 type UnansweredPromptProps = {
   filters: { id: string; shortName?: string }[]
+  onOpenFilters: () => void
 }
 
-const UnansweredPrompt = ({ filters }: UnansweredPromptProps) => {
+const UnansweredPrompt = ({ filters, onOpenFilters }: UnansweredPromptProps) => {
   const { t } = useTranslation()
   return (
     <Box sx={{ mb: 3 }}>
@@ -20,15 +23,26 @@ const UnansweredPrompt = ({ filters }: UnansweredPromptProps) => {
       </Typography>
       <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75}>
         {filters.map(filter => (
-          <HyTag key={filter.id} text={filter.shortName ?? filter.id} colour="attention" />
+          <HyTag
+            key={filter.id}
+            text={filter.shortName ?? filter.id}
+            colour="attention"
+            onClick={onOpenFilters}
+            ariaLabel={t('v2:openFilters')}
+          />
         ))}
       </Stack>
     </Box>
   )
 }
 
-const NoRecommendationsInfo = () => {
+type NoRecommendationsInfoProps = {
+  onOpenFilters: () => void
+}
+
+const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) => {
   const { t, i18n } = useTranslation()
+  const { isDrawerLayout } = useBreakpoints()
   const filterContext = useFilterContext()
   const { studyField, filters } = filterContext
 
@@ -54,11 +68,18 @@ const NoRecommendationsInfo = () => {
           {t('v2:noRecommendations.description')}
         </Typography>
         {mandatoryFilters.length > 0 ? (
-          <UnansweredPrompt filters={mandatoryFilters} />
+          <UnansweredPrompt filters={mandatoryFilters} onOpenFilters={onOpenFilters} />
         ) : (
           <>
             {additionalInfo && <AppMarkdown>{additionalInfo}</AppMarkdown>}
-            <ResetFiltersButton />
+            <Stack direction="column" spacing={'8px'} flexWrap="wrap">
+              {isDrawerLayout && (
+                <HyButton variant="primary" colour="blue" onClick={onOpenFilters}>
+                  {t('v2:noRecommendations.changeSelectionsButton')}
+                </HyButton>
+              )}
+              <ResetFiltersButton onReset={onOpenFilters} />
+            </Stack>
           </>
         )}
       </Stack>

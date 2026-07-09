@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
 import { useEffect, useRef, useState } from 'react'
@@ -10,6 +10,7 @@ import CourseRecommendations from './components/CourseRecommendations'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
 import { FilterContextProvider, useFilterContext } from './contexts/filterContext'
+import useBreakpoints from './hooks/useBreakpoints'
 import { RedirectToLogin } from './util/redirectToLogin'
 import useRequiredUser from './util/useRequiredUser'
 
@@ -21,15 +22,13 @@ type OneThirdDrawerLayoutProps = {
 }
 
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const isNarrow = useMediaQuery(theme.breakpoints.down('md'))
-  const [open, setOpen] = useState(!isNarrow)
+  const { isDrawerLayout } = useBreakpoints()
+  const [open, setOpen] = useState(!isDrawerLayout)
   const { modalOpen, setModalOpen } = useFilterContext()
   const wasModalOpenRef = useRef(modalOpen)
   useEffect(() => {
-    setOpen(!isNarrow)
-  }, [isNarrow])
+    setOpen(!isDrawerLayout)
+  }, [isDrawerLayout])
 
   // open the drawer once the welcome modal is answered and closed
   useEffect(() => {
@@ -71,34 +70,34 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           },
         }}
       >
-        <AppHeader isNarrow={isNarrow} isMobile={isMobile} toggleDrawer={toggleDrawer} user={user} />
+        <AppHeader toggleDrawer={toggleDrawer} user={user} />
 
         <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           <Drawer
-            variant={isNarrow ? 'temporary' : 'persistent'}
+            variant={isDrawerLayout ? 'temporary' : 'persistent'}
             anchor="left"
-            open={!isNarrow || open}
+            open={!isDrawerLayout || open}
             onClose={toggleDrawer}
             ModalProps={{
               keepMounted: true,
-              disablePortal: isNarrow ? true : false,
+              disablePortal: isDrawerLayout ? true : false,
             }}
             slotProps={{ backdrop: { sx: { bgcolor: hy.bgColor.backdrop } } }}
             sx={{
               zIndex: theme => theme.zIndex.appBar - 1,
               '& .MuiDrawer-paper': {
-                width: isNarrow ? mobileDrawerWidth : '400px',
+                width: isDrawerLayout ? mobileDrawerWidth : '400px',
                 maxWidth: '500px',
                 borderRight: '1px solid',
                 borderColor: hy.borderColor.light,
-                position: isNarrow ? 'fixed' : 'relative',
+                position: isDrawerLayout ? 'fixed' : 'relative',
                 height: '100%',
                 scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': { display: 'none' },
               },
             }}
           >
-            <SidebarContent onClose={isNarrow ? toggleDrawer : undefined} />
+            <SidebarContent onClose={isDrawerLayout ? toggleDrawer : undefined} />
           </Drawer>
 
           <Box
@@ -107,7 +106,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
-              width: isNarrow ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
+              width: isDrawerLayout ? '100%' : open ? `calc(100% - ${desktopDrawerWidth})` : '100%',
               height: '100%',
               bgcolor: hy.bgColor.neutralLight,
               overflowY: 'auto',
@@ -115,7 +114,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
             }}
           >
             <Box sx={{ p: 2, flexGrow: 1 }}>
-              <CourseRecommendations />
+              <CourseRecommendations onOpenFilters={() => setOpen(true)} />
             </Box>
           </Box>
         </Box>

@@ -9,6 +9,8 @@ interface HyTagProps {
   colour?: TagColour
   href?: string
   target?: string
+  onClick?: () => void
+  ariaLabel?: string
   prefixIcon?: React.ReactNode
   suffixIcon?: React.ReactNode
   role?: string
@@ -68,7 +70,7 @@ const COLOUR_TOKENS: Record<TagColour, ColourTokens> = {
   },
 }
 
-const TagRoot = styled('div')<{ ownerState: { colour: TagColour; isLink: boolean } }>(({ ownerState }) => {
+const TagRoot = styled('div')<{ ownerState: { colour: TagColour; isInteractive: boolean } }>(({ ownerState }) => {
   const { color, bg, bgHover, bgActive } = COLOUR_TOKENS[ownerState.colour]
   return {
     boxSizing: 'border-box',
@@ -80,9 +82,9 @@ const TagRoot = styled('div')<{ ownerState: { colour: TagColour; isLink: boolean
     fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
     color,
     backgroundColor: bg,
-    ...(ownerState.isLink && {
-      [HOVER_MEDIA]: { '&:has(a:hover)': { backgroundColor: bgHover } },
-      '&:has(a:active)': { backgroundColor: bgActive },
+    ...(ownerState.isInteractive && {
+      [HOVER_MEDIA]: { '&:has(a:hover), &:has(button:hover)': { backgroundColor: bgHover } },
+      '&:has(a:active), &:has(button:active)': { backgroundColor: bgActive },
       '&:focus-within': {
         boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
         outline: `2px solid ${hy.borderColor.black}`,
@@ -106,11 +108,21 @@ const TagLink = styled('a')({
   '&:focus-visible': { outline: 'none' },
 })
 
+const TagButton = styled('button')({
+  display: 'contents',
+  color: 'inherit',
+  font: 'inherit',
+  cursor: 'pointer',
+  '&:focus-visible': { outline: 'none' },
+})
+
 const HyTag = ({
   text,
   colour = 'default',
   href,
   target,
+  onClick,
+  ariaLabel,
   prefixIcon,
   suffixIcon,
   role,
@@ -118,15 +130,21 @@ const HyTag = ({
   sx,
 }: HyTagProps) => {
   const isLink = !!href
-  const effectiveAriaHidden = ariaHidden ?? !isLink
+  const isButton = !isLink && !!onClick
+  const isInteractive = isLink || isButton
+  const effectiveAriaHidden = ariaHidden ?? !isInteractive
 
   return (
-    <TagRoot ownerState={{ colour, isLink }} aria-hidden={effectiveAriaHidden} role={role} sx={sx}>
+    <TagRoot ownerState={{ colour, isInteractive }} aria-hidden={effectiveAriaHidden} role={role} sx={sx}>
       {prefixIcon}
       {isLink ? (
         <TagLink href={href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
           <TagText>{text}</TagText>
         </TagLink>
+      ) : isButton ? (
+        <TagButton type="button" onClick={onClick} aria-label={ariaLabel}>
+          <TagText>{text}</TagText>
+        </TagButton>
       ) : (
         <TagText>{text}</TagText>
       )}

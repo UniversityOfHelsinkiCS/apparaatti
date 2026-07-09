@@ -112,6 +112,7 @@ export default {
       title: 'Inga kurser hittades',
       description: 'Försök ändra dina val för att se kurser.',
       unansweredMandatory: 'Svara på den obligatoriska frågan',
+      changeSelectionsButton: 'Ändra dina val',
       resetButton: 'Rensa val',
       resetConfirmationTitle: 'Återställ alla val?',
       resetConfirmationDescription: 'Detta rensar dina nuvarande svar och återställer standardfiltren.',
