@@ -18,9 +18,14 @@ const ShrinkwrapText = ({ children, style, ...props }: ShrinkwrapTextProps) => {
     if (!el) return
 
     const measure = () => {
+      // Release any previously applied width before measuring: otherwise new text (e.g. after a
+      // language change) wraps against the old constraint instead of the container's natural width.
+      const prevWidth = el.style.width
+      el.style.width = 'auto'
       const range = document.createRange()
       range.selectNodeContents(el)
       const max = Math.max(0, ...Array.from(range.getClientRects(), r => r.width))
+      el.style.width = prevWidth
       setWidth(max || undefined)
     }
 
