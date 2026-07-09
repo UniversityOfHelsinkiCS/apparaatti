@@ -1,7 +1,7 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { User } from '../common/types'
 import AppHeader from './AppHeader'
@@ -26,9 +26,18 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const isNarrow = useMediaQuery(theme.breakpoints.down('md'))
   const [open, setOpen] = useState(!isNarrow)
   const { modalOpen, setModalOpen } = useFilterContext()
+  const wasModalOpenRef = useRef(modalOpen)
   useEffect(() => {
     setOpen(!isNarrow)
   }, [isNarrow])
+
+  // open the drawer once the welcome modal is answered and closed
+  useEffect(() => {
+    if (wasModalOpenRef.current && !modalOpen) {
+      setOpen(true)
+    }
+    wasModalOpenRef.current = modalOpen
+  }, [modalOpen])
 
   const toggleDrawer = () => setOpen(prev => !prev)
 
