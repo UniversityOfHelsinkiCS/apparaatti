@@ -1,9 +1,9 @@
-import MenuIcon from '@mui/icons-material/Menu'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Box, Menu, Typography } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
+import { PanelLeftOpen } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -46,8 +46,14 @@ const AppHeader = ({ isNarrow, isMobile, toggleDrawer, user }: AppHeaderProps) =
       >
         <Toolbar>
           {isNarrow && (
-            <IconButton color="inherit" edge="start" onClick={toggleDrawer} sx={{ mr: 1 }}>
-              <MenuIcon />
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={toggleDrawer}
+              aria-label={t('v2:openFilters')}
+              sx={{ mr: 1 }}
+            >
+              <PanelLeftOpen size={24} />
             </IconButton>
           )}
 

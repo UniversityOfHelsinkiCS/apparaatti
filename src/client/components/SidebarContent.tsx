@@ -1,4 +1,5 @@
-import { Box } from '@mui/material'
+import { Box, IconButton, Stack } from '@mui/material'
+import { PanelLeftClose } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +10,6 @@ import {
   useFilterContext,
 } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
-import { CloseButton, CloseIconSvg } from './common/hy/HyModal'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
@@ -104,26 +104,37 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
 
   return (
     <Box>
-      {onClose && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', pt: 1, px: 1 }}>
-          <CloseButton aria-label={t('v2:closeFilters')} onClick={onClose} type="button">
-            <CloseIconSvg />
-          </CloseButton>
-        </Box>
-      )}
-      <Box
-        sx={{
-          pt: onClose ? 0 : 3.5,
-          pb: 2,
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
+      <Stack
+        direction="row"
+        spacing="16px"
+        sx={{ justifyContent: 'space-between', alignContent: 'center', p: '16px', pb: '12px' }}
       >
-        <HyButton onClick={() => setModalOpen(true)}>{t('v2:retakeQuestions')}</HyButton>
-        <Box sx={{ height: 12 }} />
-        <ResetFiltersButton />
-      </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
+        >
+          <HyButton onClick={() => setModalOpen(true)}>{t('v2:retakeQuestions')}</HyButton>
+          <Box sx={{ height: 12 }} />
+          <ResetFiltersButton />
+        </Box>
+        {onClose && (
+          <Box sx={{ alignSelf: 'start' }}>
+            <IconButton
+              color="inherit"
+              aria-label={t('v2:closeFilters')}
+              onClick={onClose}
+              // negative margin matching 8px padding on IconButton to keep large hitbox without altering layout
+              sx={{ m: '-8px' }}
+            >
+              <PanelLeftClose size={24} />
+            </IconButton>
+          </Box>
+        )}
+      </Stack>
       {filtersToShow.map((filter, index) => (
         <FilterRenderer
           key={filter.id}

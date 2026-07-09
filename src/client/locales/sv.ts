@@ -102,6 +102,7 @@ export default {
       title: 'Period',
     },
     retakeQuestions: 'Svara på startfrågorna',
+    openFilters: 'Öppna filter',
     closeFilters: 'Stäng filter',
     skipQuestions: 'Hoppa över frågorna',
     done: 'Klar',

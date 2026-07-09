@@ -103,6 +103,7 @@ export default {
       title: 'Periodi',
     },
     retakeQuestions: 'Vastaa alkukysymyksiin',
+    openFilters: 'Avaa suodattimet',
     closeFilters: 'Sulje suodattimet',
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',

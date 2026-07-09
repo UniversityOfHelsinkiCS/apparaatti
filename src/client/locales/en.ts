@@ -103,6 +103,7 @@ export default {
       title: 'Period',
     },
     retakeQuestions: 'Answer starting questions',
+    openFilters: 'Open filters',
     closeFilters: 'Close filters',
     skipQuestions: 'Skip questions',
     done: 'Done',
