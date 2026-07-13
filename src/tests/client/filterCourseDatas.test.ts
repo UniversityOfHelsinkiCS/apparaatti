@@ -156,8 +156,12 @@ describe('filterCourseDatas', () => {
     {
       title: 'multiPeriod',
       filters: createLocalFilters({ multiPeriod: '1' }),
-      matchingCourse: createCourse({ id: 'match', period: [createPeriod('period_1'), createPeriod('period_2')] }),
-      otherCourse: createCourse({ id: 'other', period: [createPeriod('period_1')] }),
+      matchingCourse: createCourse({
+        id: 'match',
+        startDate: new Date(2025, 7, 1),
+        endDate: new Date(2025, 10, 1),
+      }),
+      otherCourse: createCourse({ id: 'other' }),
       expectedIds: ['match'],
     },
     {
