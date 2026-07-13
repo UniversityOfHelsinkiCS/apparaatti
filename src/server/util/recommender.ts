@@ -20,7 +20,7 @@ import {
   readOrganisationRecommendationData,
 } from './organisationCourseRecommmendations.ts'
 import { getCoursePeriod } from './studyPeriods.ts'
-import { getNormalizedStudyPlace } from './studyPlace.ts'
+import { getNormalizedStudyPlace, isExam } from './studyPlace.ts'
 
 export { getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue } from './studyPlace.ts'
 
@@ -240,6 +240,8 @@ export function sortCourseData(courseDatas: CourseData[], courseLanguageType: st
         points = 4 // tier 1: faculty-specific
       else if (isGeneric) points = 3
       else if (isMentoring) points = 2 //numbered courses are usually mentoring courses
+
+      if (isExam(c)) points -= 10 // exam courses always sort to the bottom
 
       return {
         ...c,
