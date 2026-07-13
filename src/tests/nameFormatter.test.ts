@@ -15,7 +15,7 @@ describe('nameFormatter', () => {
     })
 
     expect(formatted).toBe(
-      'FI: AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7 | EN: Online teaching | AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7 | SV: Nätundervisning | AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7'
+      'FI: AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7 | EN: AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7 | SV: Nätundervisning | AY: Academic and Professional Communication in English 1 & 2 (CEFR B2), Group 7'
     )
   })
 
@@ -52,7 +52,7 @@ describe('nameFormatter', () => {
     })
 
     expect(formatted).toBe(
-      'FI: Academic and Professional Communication in English 1 & 2 (CEFR B2), periodi III-IV, r15 (ALMS = Autonomous Learning ModuleS) | EN: Academic and Professional Communication in English 1 & 2 (CEFR B2), periods III-IV, r15 (ALMS = Autonomous Learning ModuleS), Blended teaching | SV: Academic and Professional Communication in English 1 & 2 (CEFR B2), period III-IV, r15 (ALMS = Autonomous Learning ModuleS), Flervägsundervisning'
+      'FI: Academic and Professional Communication in English 1 & 2 (CEFR B2), periodi III-IV, r15 (ALMS = Autonomous Learning ModuleS) | EN: Academic and Professional Communication in English 1 & 2 (CEFR B2), periods III-IV, r15 (ALMS = Autonomous Learning ModuleS) | SV: Academic and Professional Communication in English 1 & 2 (CEFR B2), period III-IV, r15 (ALMS = Autonomous Learning ModuleS), Flervägsundervisning'
     )
   })
 
@@ -68,7 +68,7 @@ describe('nameFormatter', () => {
     })
 
     expect(formatted).toBe(
-      'FI: Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensiiviperiodi | EN: Online teaching | Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensive period, Online teaching | SV: Nätundervisning | Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensivperiod, Nätundervisning'
+      'FI: Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensiiviperiodi | EN: Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensive period | SV: Nätundervisning | Academic and Professional Communication in English 1 & 2 (CEFR B2), r18a, intensivperiod, Nätundervisning'
     )
   })
 
@@ -95,9 +95,7 @@ describe('nameFormatter', () => {
       'fi'
     )
 
-    expect(monimuotoName).toBe(
-      'Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), periodi III, r4'
-    )
+    expect(monimuotoName).toBe('Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), r4')
     expect(etaopetusName).toBe(
       'Toisen kotimaisen kielen suullinen ja kirjallinen taito, ruotsi (CEFR B1), intensiivijakso, r9, Keskustakampus'
     )
