@@ -73,8 +73,8 @@ describe('filterCourseDatas', () => {
     {
       title: 'mentoring',
       filters: createLocalFilters({ mentoring: '1' }),
-      matchingCourse: createCourse({ id: 'match', courseCodes: ['KK-ENG301'] }),
-      otherCourse: createCourse({ id: 'other', courseCodes: ['ENG-201'] }),
+      matchingCourse: createCourse({ id: 'match', customCodeUrns: createCustomCodeUrns('kks-pre') }),
+      otherCourse: createCourse({ id: 'other' }),
       expectedIds: ['match'],
     },
     {
@@ -87,8 +87,8 @@ describe('filterCourseDatas', () => {
     {
       title: 'challenge',
       filters: createLocalFilters({ challenge: '1' }),
-      matchingCourse: createCourse({ id: 'match', courseCodes: ['KK-ENERI'] }),
-      otherCourse: createCourse({ id: 'other', courseCodes: ['ENG-201'] }),
+      matchingCourse: createCourse({ id: 'match', customCodeUrns: createCustomCodeUrns('kks-muk') }),
+      otherCourse: createCourse({ id: 'other' }),
       expectedIds: ['match'],
     },
     {
