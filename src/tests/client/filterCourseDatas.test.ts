@@ -108,8 +108,14 @@ describe('filterCourseDatas', () => {
     {
       title: 'independent',
       filters: createLocalFilters({ independent: '1' }),
-      matchingCourse: createCourse({ id: 'match', name: { fi: 'Itsenäinen verkkokurssi' } }),
-      otherCourse: createCourse({ id: 'other', name: { fi: 'Ohjattu verkkokurssi' } }),
+      matchingCourse: createCourse({
+        id: 'match',
+        courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-independent',
+      }),
+      otherCourse: createCourse({
+        id: 'other',
+        courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
+      }),
       expectedIds: ['match'],
     },
     {

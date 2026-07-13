@@ -33,43 +33,24 @@ const createMinimalCourse = (overrides: Partial<CourseData> = {}): CourseData =>
 })
 
 describe('isIndependentCourse', () => {
-  it('returns true when course has kks-alm custom code URN', () => {
+  it('returns true when courseUnitRealisationTypeUrn includes independent', () => {
     const course = createMinimalCourse({
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': [
-          'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-alm',
-        ],
-      },
+      courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-independent',
     })
 
     expect(isIndependentCourse(course)).toBe(true)
   })
 
-  it('returns true when name includes itsenäinen', () => {
+  it('returns false when courseUnitRealisationTypeUrn does not include independent', () => {
     const course = createMinimalCourse({
-      name: { fi: 'Itsenäinen opiskelu' },
+      courseUnitRealisationTypeUrn: 'urn:code:course-unit-realisation-type:teaching-participation-online',
     })
 
-    expect(isIndependentCourse(course)).toBe(true)
+    expect(isIndependentCourse(course)).toBe(false)
   })
 
-  it('returns true when name includes itsenäinen in any case variation', () => {
-    const course = createMinimalCourse({
-      name: { fi: 'ITSENÄINEN Project Work' },
-    })
-
-    expect(isIndependentCourse(course)).toBe(true)
-  })
-
-  it('returns false when neither kks-alm code nor itsenäinen name present', () => {
-    const course = createMinimalCourse({
-      customCodeUrns: {
-        'urn:code:custom:hy-university-root-id:kk-apparaatti': [
-          'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-mat',
-        ],
-      },
-      name: { fi: 'Regular course' },
-    })
+  it('returns false when courseUnitRealisationTypeUrn is empty', () => {
+    const course = createMinimalCourse({ courseUnitRealisationTypeUrn: '' })
 
     expect(isIndependentCourse(course)).toBe(false)
   })
