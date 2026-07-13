@@ -9,12 +9,12 @@ const createCustomCodeUrns = (...codes: string[]) => ({
   ),
 })
 
-const createPeriod = (name: string): Period => ({
+const createPeriod = (name: string, startYear = '2025'): Period => ({
   name,
   startDate: new Date(2025, 7, 1),
   endDate: new Date(2025, 7, 31),
-  startYear: '2025',
-  endYear: '2025',
+  startYear,
+  endYear: startYear,
 })
 
 const createCourse = (overrides: Partial<CourseData> = {}): CourseData => ({
@@ -128,8 +128,8 @@ describe('filterCourseDatas', () => {
     {
       title: 'studyYear',
       filters: createLocalFilters({ studyYear: '2025' }),
-      matchingCourse: createCourse({ id: 'match', startDate: new Date(2025, 7, 1) }),
-      otherCourse: createCourse({ id: 'other', startDate: new Date(2026, 7, 1) }),
+      matchingCourse: createCourse({ id: 'match', period: [createPeriod('period_1', '2025')] }),
+      otherCourse: createCourse({ id: 'other', period: [createPeriod('period_1', '2026')] }),
       expectedIds: ['match'],
     },
     {
