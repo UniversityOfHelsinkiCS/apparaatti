@@ -1,5 +1,5 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionDetails, AccordionSummary, RadioGroup, Typography } from '@mui/material'
+import { ChevronDown } from 'lucide-react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -53,7 +53,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
             onChange={() => setAccordionOpen(!accordionOpen)}
             data-cy={`${filter.id}-extrainfo-accordion`}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />} data-cy={`${filter.id}-extrainfo-accordion-summary`}>
+            <AccordionSummary expandIcon={<ChevronDown />} data-cy={`${filter.id}-extrainfo-accordion-summary`}>
               <Typography>{t('question:extrainfo')}: </Typography>
             </AccordionSummary>
             <AccordionDetails data-cy={`${filter.id}-extrainfo-accordion-details`}>

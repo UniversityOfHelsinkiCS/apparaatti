@@ -1,10 +1,5 @@
-import type { SvgIconComponent } from '@mui/icons-material'
-import DevicesIcon from '@mui/icons-material/DevicesOutlined'
-import LaptopIcon from '@mui/icons-material/LaptopOutlined'
-import PeopleIcon from '@mui/icons-material/PeopleOutlined'
-import PersonIcon from '@mui/icons-material/PersonOutlined'
-import QuizIcon from '@mui/icons-material/QuizOutlined'
 import { Box, Stack, Typography } from '@mui/material'
+import { ClipboardPenLine, Laptop, type LucideIcon, MonitorSmartphone, User, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../common/nameFormatter'
@@ -16,12 +11,12 @@ import HyLinkCta from './common/hy/HyLinkCta'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
 
-const studyPlaceIcons: Record<string, SvgIconComponent> = {
-  online: LaptopIcon,
-  contact: PeopleIcon,
-  blended: DevicesIcon,
-  exam: QuizIcon,
-  independent: PersonIcon,
+const studyPlaceIcons: Record<string, LucideIcon> = {
+  online: Laptop,
+  contact: Users,
+  blended: MonitorSmartphone,
+  exam: ClipboardPenLine,
+  independent: User,
 }
 
 const CourseDateRange = ({ startDate, endDate }: { startDate: Date; endDate: Date }) => {

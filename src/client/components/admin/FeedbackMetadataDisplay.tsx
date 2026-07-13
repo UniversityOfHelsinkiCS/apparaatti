@@ -1,5 +1,5 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Paper, Stack, Typography } from '@mui/material'
+import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import type { RecommendationMetadata } from '../../../common/types.ts'
@@ -20,7 +20,7 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
       {/* Filter Selections (AnswerData) */}
       {!!metadata.filterState && (
         <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ChevronDown />}>
             <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               {t('v2:feedback.admin.metadata.filterSelections')}
             </Typography>
@@ -58,7 +58,7 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
       {/* Recommendations */}
       {metadata?.courses?.length > 0 && (
         <Accordion defaultExpanded={!metadata.filterState}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<ChevronDown />}>
             <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               {t('v2:feedback.admin.metadata.recommendations')} ({metadata.courses.length})
             </Typography>

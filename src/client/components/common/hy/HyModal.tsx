@@ -1,7 +1,6 @@
-import ReportIcon from '@mui/icons-material/Report'
 import MuiModal from '@mui/material/Modal'
 import { styled, type SxProps } from '@mui/material/styles'
-import { type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { type ReactNode, type SVGProps, useCallback, useEffect, useRef, useState } from 'react'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
 
@@ -170,6 +169,39 @@ const Heading = styled('span')({
   },
 })
 
+// report_fill icon: matches hy-ds Material Symbols "report" (filled) shape
+const ReportFillIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    focusable="false"
+    role="img"
+    className={className}
+    {...props}
+  >
+    <path d="M480-264q19.38 0 32.69-13.31Q526-290.63 526-310q0-19-13.31-33T480-357q-19.37 0-32.69 14Q434-329 434-310t13.31 32.5Q460.63-264 480-264Zm-36-140h72v-298h-72v298ZM320-95 95-319.82V-641l224.82-225H641l225 224.82V-320L641.18-95H320Z" />
+  </svg>
+)
+
+const DangerIcon = styled(ReportFillIcon)({
+  color: hy.iconColor.danger,
+  width: '1.5rem',
+  height: '1.5rem',
+  marginTop: '0.125rem',
+  marginBottom: '0.125rem',
+  marginRight: '0.25rem',
+
+  '@media (min-width: 37.5rem)': {
+    width: '1.75rem',
+    height: '1.75rem',
+  },
+  '@media (min-width: 60rem)': {
+    marginTop: '0.25rem',
+    marginBottom: '0.25rem',
+  },
+})
+
 const HeadingText = styled('span')({
   marginTop: '0.125rem',
   marginBottom: '0.125rem',
@@ -215,10 +247,10 @@ const CloseButton = styled('button')({
   },
 })
 
-// Close icon: simple SVG X matching Google Material "close" icon shape
+// close icon: matches hy-ds Material Symbols "close" shape
 const CloseIconSvg = () => (
-  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+  <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 -960 960 960" fill="currentColor">
+    <path d="m249-183-66-66 231-231-231-231 66-66 231 231 231-231 66 66-231 231 231 231-66 66-231-231-231 231Z" />
   </svg>
 )
 
@@ -412,22 +444,7 @@ const HyModal = ({
             <Header $sticky={scrollable}>
               {title && (
                 <Heading id="hy-modal-title" role="heading" aria-level={headingLevel} tabIndex={-1}>
-                  {variant === 'danger' && (
-                    <ReportIcon
-                      aria-label="Warning"
-                      sx={{
-                        color: hy.iconColor.danger,
-                        fontSize: { xs: '1.5rem', sm: '1.75rem' },
-                        marginTop: '0.125rem',
-                        marginBottom: '0.125rem',
-                        marginRight: '0.25rem',
-                        '@media (min-width: 60rem)': {
-                          marginTop: '0.25rem',
-                          marginBottom: '0.25rem',
-                        },
-                      }}
-                    />
-                  )}
+                  {variant === 'danger' && <DangerIcon aria-label="Warning" />}
                   <HeadingText>{title}</HeadingText>
                 </Heading>
               )}

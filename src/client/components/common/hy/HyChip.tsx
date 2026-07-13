@@ -1,7 +1,21 @@
-import CloseIcon from '@mui/icons-material/Close'
 import { styled, type SxProps } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// close icon: matches hy-ds Material Symbols "close" shape
+const CloseIcon = ({ size }: { size: number }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    width={size}
+    height={size}
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m249-183-66-66 231-231-231-231 66-66 231 231 231-231 66 66-231 231 231 231-66 66-231-231-231 231Z" />
+  </svg>
+)
 
 interface HyChipProps {
   label: string
@@ -65,7 +79,7 @@ const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium', sx }: 
     >
       {prefixIcon}
       <ChipText ownerState={{ size }}>{label}</ChipText>
-      {onClick && <CloseIcon sx={{ fontSize: size === 'small' ? '0.75rem' : '1rem' }} />}
+      {onClick && <CloseIcon size={size === 'small' ? 12 : 16} />}
     </ChipRoot>
   )
 }

@@ -1,8 +1,31 @@
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// arrow_forward / arrow_outward icons: match hy-ds Material Symbols shapes
+const ArrowForwardIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M645-433H135v-94h510L413-759l67-67 346 346-346 345-67-66 232-232Z" />
+  </svg>
+)
+
+const ArrowOutwardIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m250-221-67-67 395-395H224v-94h515v514h-95v-353L250-221Z" />
+  </svg>
+)
 
 type Variant = 'primary' | 'secondary' | 'supplementary'
 type Colour = 'blue' | 'black' | 'white'
@@ -183,8 +206,9 @@ const IconWrapper = styled('span')<{ ownerState: { size: Size; position: 'start'
   ...(ownerState.position === 'end'
     ? { marginLeft: '0.25rem', marginRight: 0 }
     : { marginRight: '0.25rem', marginLeft: 0 }),
-  '& .MuiSvgIcon-root': {
-    fontSize: ownerState.size === 'medium' ? '1.5rem' : '1.25rem',
+  '& svg': {
+    width: ownerState.size === 'medium' ? '1.5rem' : '1.25rem',
+    height: ownerState.size === 'medium' ? '1.5rem' : '1.25rem',
   },
 }))
 

@@ -1,7 +1,19 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { styled, type SxProps } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// open_in_new icon: matches hy-ds Material Symbols "open_in_new" shape
+const OpenInNewIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M95-95v-771h364v95H189v582h582v-270h95v364H95Zm310-244-65-66 366-366H519v-95h347v347h-95v-186L405-339Z" />
+  </svg>
+)
 
 type LinkSize = '2xLarge' | 'xLarge' | 'large' | 'medium' | 'small' | 'xSmall'
 type LinkVariant = 'inline' | 'standalone'
@@ -75,8 +87,9 @@ const IconSpan = styled('span')<{
     display: 'inline-block',
     verticalAlign: '-0.125em',
     ...(isEnd ? { marginLeft: margin } : { marginRight: margin }),
-    '& .MuiSvgIcon-root': {
-      fontSize: iconSize,
+    '& svg': {
+      width: iconSize,
+      height: iconSize,
     },
   }
 })

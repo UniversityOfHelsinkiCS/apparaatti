@@ -1,8 +1,7 @@
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Box, Menu, Typography } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import { PanelLeftOpen } from 'lucide-react'
+import { MoreVertical, PanelLeftOpen } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -68,7 +67,7 @@ const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
           {isMobile ? (
             <>
               <HyIconButton onClick={e => setMoreMenuAnchor(e.currentTarget)} aria-label={t('v2:moreOptions')}>
-                <MoreVertIcon />
+                <MoreVertical size={24} />
               </HyIconButton>
 
               <Menu

@@ -1,5 +1,3 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import {
   Box,
   Button,
@@ -12,6 +10,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 
@@ -181,10 +180,10 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
             <TableRow key={filter.id}>
               <TableCell sx={{ whiteSpace: 'nowrap' }}>
                 <IconButton size="small" disabled={index === 0} onClick={() => move(index, -1)}>
-                  <KeyboardArrowUpIcon />
+                  <ChevronUp />
                 </IconButton>
                 <IconButton size="small" disabled={index === filterList.length - 1} onClick={() => move(index, 1)}>
-                  <KeyboardArrowDownIcon />
+                  <ChevronDown />
                 </IconButton>
                 {filter.displayOrder}
               </TableCell>

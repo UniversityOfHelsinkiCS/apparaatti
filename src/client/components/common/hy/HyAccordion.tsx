@@ -1,10 +1,37 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { styled, type SxProps } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 import { useId, useState } from 'react'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// keyboard_arrow_up / keyboard_arrow_down icons: match hy-ds Material Symbols shapes
+const KeyboardArrowUpIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    width="24"
+    height="24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M480-530 283-333l-67-67 264-264 264 264-67 67-197-197Z" />
+  </svg>
+)
+
+const KeyboardArrowDownIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    width="24"
+    height="24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M480-320 216-584l67-67 197 197 197-197 67 67-264 264Z" />
+  </svg>
+)
 
 type AccordionVariant = 'default' | 'compact'
 
@@ -209,11 +236,7 @@ const HyAccordion = ({
             type="button"
           >
             <IconWrapper $variant={variant} aria-hidden="true">
-              {isExpanded ? (
-                <KeyboardArrowUpIcon sx={{ fontSize: '1.5rem' }} />
-              ) : (
-                <KeyboardArrowDownIcon sx={{ fontSize: '1.5rem' }} />
-              )}
+              {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconWrapper>
             <HeaderSlot $variant={variant}>{summary}</HeaderSlot>
           </OpenButton>

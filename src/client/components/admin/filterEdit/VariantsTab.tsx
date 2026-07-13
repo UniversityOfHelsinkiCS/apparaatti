@@ -1,6 +1,5 @@
-import AddIcon from '@mui/icons-material/Add'
-import DeleteIcon from '@mui/icons-material/Delete'
 import { Box, Button, IconButton, List, ListItemButton, ListItemText } from '@mui/material'
+import { Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
@@ -78,7 +77,7 @@ const VariantsTab = ({
                     onRemoveVariant(vIdx)
                   }}
                 >
-                  <DeleteIcon fontSize="small" />
+                  <Trash2 size={20} />
                 </IconButton>
               )}
             </ListItemButton>
@@ -86,7 +85,7 @@ const VariantsTab = ({
         </List>
         {canAddVariant && (
           <Button
-            startIcon={<AddIcon />}
+            startIcon={<Plus size={20} />}
             size="small"
             onClick={() => {
               onAddVariant()

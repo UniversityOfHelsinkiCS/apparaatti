@@ -1,10 +1,37 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import WarningIcon from '@mui/icons-material/Warning'
 import Box from '@mui/material/Box'
 import { styled, type SxProps, type Theme } from '@mui/material/styles'
 import { type ChangeEvent, type FocusEvent, useEffect, useId, useRef, useState } from 'react'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// warning_fill / check_circle_fill icons: match hy-ds Material Symbols shapes
+const WarningIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    width="24"
+    height="24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m18-107 462-799 462 799H18Zm466.18-132q13.4 0 23.61-10.39Q518-259.78 518-273.18q0-13.4-10.39-23.11-10.39-9.71-23.79-9.71-13.4 0-23.61 9.89Q450-286.22 450-272.82q0 13.4 10.39 23.61Q470.78-239 484.18-239ZM454-348h60v-216h-60v216Z" />
+  </svg>
+)
+
+const CheckCircleIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    width="24"
+    height="24"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m419-283 294-294-66-66-228 228-111-111-65 66 176 177Zm61.14 228Q392-55 314.51-88.08q-77.48-33.09-135.41-91.02-57.93-57.93-91.02-135.27Q55-391.72 55-479.86 55-569 88.08-646.49q33.09-77.48 90.86-134.97 57.77-57.48 135.19-91.01Q391.56-906 479.78-906q89.22 0 166.83 33.45 77.6 33.46 135.01 90.81t90.89 134.87Q906-569.34 906-480q0 88.28-33.53 165.75t-91.01 135.28q-57.49 57.8-134.83 90.89Q569.28-55 480.14-55Z" />
+  </svg>
+)
 
 const FONT = "'Open Sans Variable', 'Open Sans', sans-serif"
 
@@ -371,13 +398,13 @@ function HyTextArea({
               <div>
                 {errorText && (
                   <ValidityMessage $type="error" id={errorTextId}>
-                    <WarningIcon sx={{ fontSize: '1.5rem' }} />
+                    <WarningIcon />
                     <ValidityText>{errorText}</ValidityText>
                   </ValidityMessage>
                 )}
                 {successText && (
                   <ValidityMessage $type="success" id={successTextId}>
-                    <CheckCircleIcon sx={{ fontSize: '1.5rem' }} />
+                    <CheckCircleIcon />
                     <ValidityText>{successText}</ValidityText>
                   </ValidityMessage>
                 )}
@@ -392,13 +419,13 @@ function HyTextArea({
             <>
               {errorText && (
                 <ValidityMessage $type="error" id={errorTextId}>
-                  <WarningIcon sx={{ fontSize: '1.5rem' }} />
+                  <WarningIcon />
                   <ValidityText>{errorText}</ValidityText>
                 </ValidityMessage>
               )}
               {successText && (
                 <ValidityMessage $type="success" id={successTextId}>
-                  <CheckCircleIcon sx={{ fontSize: '1.5rem' }} />
+                  <CheckCircleIcon />
                   <ValidityText>{successText}</ValidityText>
                 </ValidityMessage>
               )}

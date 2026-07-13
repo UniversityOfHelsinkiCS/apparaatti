@@ -1,5 +1,5 @@
-import InfoIcon from '@mui/icons-material/Info'
 import { IconButton, Stack, Typography } from '@mui/material'
+import { Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
@@ -37,7 +37,7 @@ const QuestionTitle = ({
           aria-label="more info"
           sx={{ padding: 0.5, marginRight: 0.5, marginLeft: -0.5, marginY: 'auto' }}
         >
-          <InfoIcon />
+          <Info />
         </IconButton>
         <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
           {title}

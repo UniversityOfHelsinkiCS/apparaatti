@@ -1,5 +1,5 @@
-import AddIcon from '@mui/icons-material/Add'
 import { Box, Button, Divider, FormControlLabel, Switch, TextField, Typography } from '@mui/material'
+import { Plus } from 'lucide-react'
 
 import type { FilterOption, FilterVariant } from '../../../../common/types.ts'
 import { SWITCH_SX } from './filterEditorUtils.ts'
@@ -76,7 +76,12 @@ const VariantEditor = ({
         onRemove={() => onRemoveOption(oIdx)}
       />
     ))}
-    <Button startIcon={<AddIcon />} size="small" onClick={onAddOption} sx={{ color: 'black', alignSelf: 'flex-start' }}>
+    <Button
+      startIcon={<Plus size={20} />}
+      size="small"
+      onClick={onAddOption}
+      sx={{ color: 'black', alignSelf: 'flex-start' }}
+    >
       Add option
     </Button>
   </Box>

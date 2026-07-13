@@ -1,9 +1,43 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { styled, type SxProps } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
+
+// arrow_forward / arrow_back / arrow_outward icons: match hy-ds Material Symbols shapes
+const ArrowForwardIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M645-433H135v-94h510L413-759l67-67 346 346-346 345-67-66 232-232Z" />
+  </svg>
+)
+
+const ArrowBackIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m315-433 232 232-67 66-345-345 345-346 67 67-232 232h511v94H315Z" />
+  </svg>
+)
+
+const ArrowOutwardIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 -960 960 960"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="m250-221-67-67 395-395H224v-94h515v514h-95v-353L250-221Z" />
+  </svg>
+)
 
 type HyLinkIcon = 'arrow_forward' | 'arrow_back' | 'arrow_outward'
 type HyIconPosition = 'start' | 'end'
@@ -86,6 +120,14 @@ const IconBox = styled('span')<{ ownerState: { position: HyIconPosition } }>(({ 
     width: '2.5rem',
     height: '2.5rem',
   },
+  '& svg': {
+    width: '1.5rem',
+    height: '1.5rem',
+    '@media (min-width: 30rem)': {
+      width: '2rem',
+      height: '2rem',
+    },
+  },
 }))
 
 const VisuallyHidden = styled('span')({
@@ -97,15 +139,10 @@ const VisuallyHidden = styled('span')({
   whiteSpace: 'nowrap',
 })
 
-const iconSizeSx = {
-  fontSize: '1.5rem',
-  '@media (min-width: 30rem)': { fontSize: '2rem' },
-}
-
 const iconMap: Record<HyLinkIcon, React.ReactElement> = {
-  arrow_forward: <ArrowForwardIcon sx={iconSizeSx} />,
-  arrow_back: <ArrowBackIcon sx={iconSizeSx} />,
-  arrow_outward: <ArrowOutwardIcon sx={iconSizeSx} />,
+  arrow_forward: <ArrowForwardIcon />,
+  arrow_back: <ArrowBackIcon />,
+  arrow_outward: <ArrowOutwardIcon />,
 }
 
 const HyLinkWithArrow = ({

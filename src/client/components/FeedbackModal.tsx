@@ -1,5 +1,5 @@
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Alert, Box, IconButton, Rating, Snackbar, Stack, Tooltip, Typography } from '@mui/material'
+import { Info } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -150,7 +150,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                       aria-label={t('v2:feedback.viewMetadata')}
                       onClick={() => setMetadataModalOpen(true)}
                     >
-                      <InfoOutlinedIcon fontSize="small" />
+                      <Info size={24} />
                     </IconButton>
                   </Tooltip>
                 </Stack>

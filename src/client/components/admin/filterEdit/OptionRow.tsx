@@ -1,5 +1,5 @@
-import DeleteIcon from '@mui/icons-material/Delete'
 import { Box, IconButton, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Trash2 } from 'lucide-react'
 
 import type { FilterOption } from '../../../../common/types.ts'
 import LocalizedField from './LocalizedField.tsx'
@@ -57,7 +57,7 @@ const OptionRow = ({ option, onUpdate, onUpdateName, onRemove }: OptionRowProps)
         </Select>
       </Box>
       <IconButton color="error" size="small" onClick={onRemove}>
-        <DeleteIcon />
+        <Trash2 />
       </IconButton>
     </Box>
     <LocalizedField values={option.name} onChange={onUpdateName} textFieldLabel="Name" size="small" />
