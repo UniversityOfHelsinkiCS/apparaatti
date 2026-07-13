@@ -10,11 +10,11 @@ vi.mock('../../server/util/dbActions.ts', () => ({
 import type { CourseData } from '../../common/types.ts'
 import { sortCourseData } from '../../server/util/recommender.ts'
 
-function createCourse(id: string, courseCodes: string[]): CourseData {
+function createCourse(id: string, courseCodes: string[], nameFi = id): CourseData {
   const now = new Date()
   return {
     id,
-    name: { fi: id },
+    name: { fi: nameFi },
     startDate: now,
     endDate: now,
     period: null,
@@ -46,5 +46,17 @@ describe('sortCourseData', () => {
     expect(ids[1]).toBe('generic')
     expect(ids[2]).toBe('numbered')
     expect(ids[3]).toBe('eri')
+  })
+
+  it('sorts exam courses to the bottom, below the ERI/challenge tier', () => {
+    const eri = createCourse('eri', ['KK-RUERI'])
+    const exam = createCourse('exam', ['KK-RUO205'], 'Kurssin tentti')
+
+    const ordered = sortCourseData([exam, eri], 'sv-secondary')
+
+    const ids = ordered.map(c => c.id)
+
+    expect(ids[0]).toBe('eri')
+    expect(ids[1]).toBe('exam')
   })
 })

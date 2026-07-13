@@ -1,6 +1,7 @@
 import type { Period } from '../../common/types.ts'
-//source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
-//end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
+// source: https://studies.helsinki.fi/ohjeet/artikkeli/lukuvuosi-ja-opetusperiodit?check_logged_in=1#degree_students and  https://studies.helsinki.fi/ohjeet/node/314
+// end dates of intensive_3 is changed to be the next years period I start date in order to prevent courses falling to 'no period'
+// intensive_3 always ends on 31.7 and intensive_1 always starts on 1.8 as per wishes of PO
 import { getCurrentDate } from './testUtils.ts'
 
 export const dateIsInPeriod = (date: Date, period: { start_date: string; end_date: string }, _debug = false) => {
@@ -103,7 +104,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '26.8.2024',
+          start_date: '1.8.2024',
           end_date: '1.9.2024',
         },
         {
@@ -154,7 +155,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '5.5.2025',
-          end_date: '25.8.2025', //modified to end at the 25 period I boundary
+          end_date: '31.7.2025',
         },
       ],
     },
@@ -164,7 +165,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '25.8.2025',
+          start_date: '1.8.2025',
           end_date: '31.8.2025',
         },
         {
@@ -215,7 +216,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '4.5.2026',
-          end_date: '24.8.2026', //modified to end at the 26 period I boundary
+          end_date: '31.7.2026',
         },
       ],
     },
@@ -225,7 +226,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '24.8.2026',
+          start_date: '1.8.2026',
           end_date: '30.8.2026',
         },
         {
@@ -276,7 +277,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '10.5.2027',
-          end_date: '31.5.2027',
+          end_date: '31.7.2027',
         },
       ],
     },
@@ -286,7 +287,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '30.8.2027',
+          start_date: '1.8.2027',
           end_date: '5.9.2027',
         },
         {
@@ -337,7 +338,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '8.5.2028',
-          end_date: '28.8.2028',
+          end_date: '31.7.2028',
         },
       ],
     },
@@ -347,7 +348,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '28.8.2028',
+          start_date: '1.8.2028',
           end_date: '3.9.2028',
         },
         {
@@ -398,7 +399,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '7.5.2029',
-          end_date: '27.8.2029',
+          end_date: '31.7.2029',
         },
       ],
     },
@@ -408,7 +409,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '27.8.2029',
+          start_date: '1.8.2029',
           end_date: '2.9.2029',
         },
         {
@@ -459,7 +460,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '6.5.2030',
-          end_date: '26.8.2030',
+          end_date: '31.7.2030',
         },
       ],
     },
@@ -469,7 +470,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '26.8.2030',
+          start_date: '1.8.2030',
           end_date: '1.9.2030',
         },
         {
@@ -520,7 +521,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '5.5.2031',
-          end_date: '25.8.2031',
+          end_date: '31.7.2031',
         },
       ],
     },
@@ -530,7 +531,7 @@ const studyPeriodsData = {
       periods: [
         {
           name: 'intensive_1',
-          start_date: '25.8.2031',
+          start_date: '1.8.2031',
           end_date: '31.8.2031',
         },
         {
@@ -581,7 +582,7 @@ const studyPeriodsData = {
         {
           name: 'intensive_3',
           start_date: '10.5.2032',
-          end_date: '31.5.2032',
+          end_date: '31.7.2032',
         },
       ],
     },
