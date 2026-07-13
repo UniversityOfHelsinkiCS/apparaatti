@@ -46,8 +46,9 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             label={label}
             sx={{
               py: '2px',
-              // overriding negative margin because MUI default marginLeft: -11px looks bad
-              marginLeft: '-8px',
+              // overriding weird MUI default negative margin stuff
+              marginLeft: '-4px',
+              marginRight: '4px',
               cursor: 'default',
             }}
           />

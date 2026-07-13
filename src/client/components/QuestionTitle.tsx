@@ -1,9 +1,11 @@
-import { IconButton, Stack, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
+import HyIconButton from './common/hy/HyIconButton'
 import HyTag from './common/hy/HyTag'
+import { hy } from './common/hy/hyTokens'
 
 const MandatoryStatus = ({ question }: { question: Question }) => {
   const { t } = useTranslation()
@@ -32,13 +34,13 @@ const QuestionTitle = ({
         </Stack>
       )}
       <Stack direction="row" sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton
+        <HyIconButton
           onClick={handleOpen}
           aria-label="more info"
-          sx={{ padding: 0.5, marginRight: 0.5, marginLeft: -0.5, marginY: 'auto' }}
+          sx={{ marginRight: '6px', marginY: 'auto', color: hy.iconColor.neutral }}
         >
           <Info />
-        </IconButton>
+        </HyIconButton>
         <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
           {title}
         </Typography>
