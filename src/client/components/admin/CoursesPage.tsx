@@ -27,6 +27,8 @@ interface Course {
   Cus?: CourseUnit[]
   review?: CourseReviewState
   reviewState?: CourseReviewState
+  startDate?: string
+  endDate?: string
 }
 
 interface PaginatedCoursesResponse {
@@ -48,6 +50,8 @@ const CoursesPage = () => {
   const [excludeUrnsSearch, setExcludeUrnsSearch] = useState('')
   const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
   const [reviewStatusSearch, setReviewStatusSearch] = useState<ReviewStatusFilterValue>('all')
+  const [dateFromSearch, setDateFromSearch] = useState('')
+  const [dateToSearch, setDateToSearch] = useState('')
 
   const handleSearch = ({
     nameInput,
@@ -56,6 +60,8 @@ const CoursesPage = () => {
     excludeUrnsInput,
     excludeCourseCodesInput,
     reviewStatusInput,
+    dateFromInput,
+    dateToInput,
   }: CoursesSearchFieldsValues) => {
     setNameSearch(nameInput)
     setUrnSearch(urnInput)
@@ -63,6 +69,8 @@ const CoursesPage = () => {
     setExcludeUrnsSearch(excludeUrnsInput)
     setExcludeCourseCodesSearch(excludeCourseCodesInput)
     setReviewStatusSearch(reviewStatusInput)
+    setDateFromSearch(dateFromInput)
+    setDateToSearch(dateToInput)
     setPage(1)
   }
 
@@ -76,6 +84,8 @@ const CoursesPage = () => {
     if (excludeUrnsSearch) params.append('excludeUrns', excludeUrnsSearch)
     if (excludeCourseCodesSearch) params.append('excludeCourseCodes', excludeCourseCodesSearch)
     if (reviewStatusSearch !== 'all') params.append('reviewStatus', reviewStatusSearch)
+    if (dateFromSearch) params.append('dateFrom', dateFromSearch)
+    if (dateToSearch) params.append('dateTo', dateToSearch)
     return params.toString()
   }
 
@@ -84,7 +94,7 @@ const CoursesPage = () => {
     isLoading: isCoursesLoading,
     refetch,
   } = useApi<PaginatedCoursesResponse>(
-    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}`,
+    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}-${dateFromSearch}-${dateToSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
     undefined
@@ -140,6 +150,16 @@ const CoursesPage = () => {
     return new Date(reviewState.updatedAt).toLocaleString()
   }
 
+  const formatDateRange = (startDate?: string, endDate?: string) => {
+    if (!startDate && !endDate) {
+      return '-'
+    }
+
+    const start = startDate ? new Date(startDate).toLocaleDateString() : '?'
+    const end = endDate ? new Date(endDate).toLocaleDateString() : '?'
+    return `${start} - ${end}`
+  }
+
   const handleVisit = (courseId: string) => {
     window.open(
       `https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/${courseId}/information/basicinfo`,
@@ -169,6 +189,7 @@ const CoursesPage = () => {
               <TableCell>Course Name</TableCell>
               <TableCell>Course Codes</TableCell>
               <TableCell>Custom URNs</TableCell>
+              <TableCell>Dates</TableCell>
               <TableCell>Review</TableCell>
               <TableCell>Review Updated</TableCell>
               <TableCell>Actions</TableCell>
@@ -185,6 +206,7 @@ const CoursesPage = () => {
                       <TableCell>{formatLocalizedCourseName(course)}</TableCell>
                       <TableCell>{formatCourseCodes(course.Cus)}</TableCell>
                       <TableCell>{formatCustomUrns(course.customCodeUrns)}</TableCell>
+                      <TableCell>{formatDateRange(course.startDate, course.endDate)}</TableCell>
                       <TableCell>
                         <ReviewActions
                           key={`${course.id}-${reviewState?.updatedAt ?? 'no-review'}`}

@@ -297,6 +297,18 @@ export interface CourseSearchFilters {
 
   /** Limit results to reviewed or not-reviewed courses. */
   reviewStatus?: string
+
+  // --- Date filters: Curs whose [startDate, endDate] range overlaps [dateFrom, dateTo] ---
+  /** ISO date string; excludes Curs that ended before this date. */
+  dateFrom?: string
+  /** ISO date string; excludes Curs that start after this date (end of day). */
+  dateTo?: string
+}
+
+function endOfDay(dateStr: string): Date {
+  const d = new Date(dateStr)
+  d.setUTCHours(23, 59, 59, 999)
+  return d
 }
 
 function filterCoursesByReviewStatus(courses: any[], reviewStatus?: string) {
@@ -328,7 +340,8 @@ async function populateWithReviews(curs: Cur[]) {
 }
 
 export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
-  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes, reviewStatus } = filters
+  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes, reviewStatus, dateFrom, dateTo } =
+    filters
   const offset = (page - 1) * limit
 
   // Build the where clause for course realizations (name search)
@@ -340,6 +353,14 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
       { 'name.en': { [Op.iLike]: `%${nameSearch}%` } },
       { 'name.sv': { [Op.iLike]: `%${nameSearch}%` } },
     ]
+  }
+
+  // Overlap check: the course's [startDate, endDate] range must intersect the searched [dateFrom, dateTo] range.
+  if (dateFrom) {
+    curWhere.endDate = { [Op.gte]: new Date(dateFrom) }
+  }
+  if (dateTo) {
+    curWhere.startDate = { [Op.lte]: endOfDay(dateTo) }
   }
 
   // Hard filter: only KK- coded courses are surfaced in the admin list.

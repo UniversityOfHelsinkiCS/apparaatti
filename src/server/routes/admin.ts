@@ -125,7 +125,18 @@ adminRouter.get('/users', requireSuperuser, async (req, res) => {
 })
 
 adminRouter.get('/courses', async (req, res) => {
-  const { page = '1', limit = '50', name, urn, courseCode, excludeUrns, excludeCourseCodes, reviewStatus } = req.query
+  const {
+    page = '1',
+    limit = '50',
+    name,
+    urn,
+    courseCode,
+    excludeUrns,
+    excludeCourseCodes,
+    reviewStatus,
+    dateFrom,
+    dateTo,
+  } = req.query
 
   const pageNum = parseInt(page as string, 10)
   const limitNum = parseInt(limit as string, 10)
@@ -138,6 +149,8 @@ adminRouter.get('/courses', async (req, res) => {
       courseCodeSearch: courseCode as string | undefined,
       excludeCourseCodes: excludeCourseCodes as string | undefined,
       reviewStatus: reviewStatus as string | undefined,
+      dateFrom: dateFrom as string | undefined,
+      dateTo: dateTo as string | undefined,
     },
     pageNum,
     limitNum

@@ -16,6 +16,8 @@ export interface CoursesSearchFieldsValues {
   courseCodeInput: string
   excludeCourseCodesInput: string
   reviewStatusInput: ReviewStatusFilterValue
+  dateFromInput: string
+  dateToInput: string
 }
 
 interface CoursesSearchFieldsProps {
@@ -42,9 +44,20 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
   const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
   const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
   const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
+  const [dateFromInput, setDateFromInput] = useState('')
+  const [dateToInput, setDateToInput] = useState('')
 
   const handleSearch = () => {
-    onSearch({ nameInput, urnInput, courseCodeInput, excludeUrnsInput, excludeCourseCodesInput, reviewStatusInput })
+    onSearch({
+      nameInput,
+      urnInput,
+      courseCodeInput,
+      excludeUrnsInput,
+      excludeCourseCodesInput,
+      reviewStatusInput,
+      dateFromInput,
+      dateToInput,
+    })
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -140,6 +153,32 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
           <MenuItem value="reviewed">Reviewed</MenuItem>
           <MenuItem value="not-reviewed">Not reviewed</MenuItem>
         </TextField>
+      </Box>
+
+      <Box component="fieldset" sx={fieldsetSx}>
+        <Typography component="legend" sx={legendSx}>
+          Course date
+        </Typography>
+        <TextField
+          label="From"
+          type="date"
+          variant="outlined"
+          size="small"
+          value={dateFromInput}
+          onChange={e => setDateFromInput(e.target.value)}
+          slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ minWidth: 160 }}
+        />
+        <TextField
+          label="To"
+          type="date"
+          variant="outlined"
+          size="small"
+          value={dateToInput}
+          onChange={e => setDateToInput(e.target.value)}
+          slotProps={{ inputLabel: { shrink: true } }}
+          sx={{ minWidth: 160 }}
+        />
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
