@@ -127,7 +127,7 @@ export const stripPeriodTextFromCourseName = (name: string | null) => {
     return null
   }
   const pieces = name.split(',')
-  const noPeriodPieces = pieces.filter(p => !p.toLowerCase().includes('period'))
+  const noPeriodPieces = pieces.filter(p => !/\bperiod\w*/iu.test(p))
   const result = noPeriodPieces.join(', ')
   return result
 }
