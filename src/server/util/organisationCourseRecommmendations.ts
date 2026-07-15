@@ -30,7 +30,7 @@ export const mentoringCourseCodes = [
   'KK-FIN08',
 ]
 
-export const finmuMentroingCourseCodes = ['KK-FINMU']
+export const finmuMentoringCourseCodes = ['KK-FINMU'] // is this deprecated?
 
 export const challegeCourseCodes: CourseMatchCase[] = [
   {
@@ -75,16 +75,6 @@ export function courseHasAnyOfCodes(course: CourseData, codes: string[] | null) 
   }
   for (const code of course.courseCodes) {
     if (codes.find(co => co === code)) {
-      return true
-    }
-  }
-  return false
-}
-
-export function courseHasAnyRealisationCodeUrn(course: CourseData, search: string[]) {
-  for (const cmpr of search) {
-    const hit = course.courseUnitRealisationTypeUrn.includes(cmpr)
-    if (hit) {
       return true
     }
   }

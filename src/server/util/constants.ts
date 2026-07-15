@@ -32,32 +32,7 @@ export const studyPlaceAliasToCanonicalIds: Record<string, string[]> = {
   blended: ['teaching-participation-blended'],
 }
 
-export function resolveStudyPlaceLookups(studyPlaceSelections: string[]): string[] {
-  const lookups = studyPlaceSelections.flatMap(selection => {
-    if (allowedStudyPlaces.includes(selection)) {
-      return [selection]
-    }
-
-    return studyPlaceAliasToCanonicalIds[selection] ?? []
-  })
-
-  return [...new Set(lookups)]
-}
-
 // Organisation names that indicate collaboration courses
 export const collaborationOrganisationNames: string[] = ['Vaasa']
 
 export const collaborationOrganisationCourseNameIncludes: string[] = ['työväen akatemia', 'laajasalon opisto']
-
-//constants used in the recommender
-export const correctValue = 1
-export const incorrectValue = 0
-export const notAnsweredValue = null
-
-//these are used in point based recommending make sure that pointsForCorrectFilter is > bonuspoint in order for the user filters to work
-export const pointForCorrectFilter = 10
-export const bonusPoint = 1
-export const strictFailurePoint = -1 // if a filter is strict then the points for the course are set to -1 and later filtered out
-
-//used in cases where we want to make a filter extra effective
-export const extraRewardPoints = 5

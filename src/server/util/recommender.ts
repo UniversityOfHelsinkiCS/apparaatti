@@ -24,32 +24,12 @@ import { getNormalizedStudyPlace, isExam } from './studyPlace.ts'
 
 export { getNormalizedStudyPlace, isExam, isIndependentCourse, readArrOrSingleValue } from './studyPlace.ts'
 
-export function commonCoordinateFromAnswerData(
-  value: string,
-  yesValue: number,
-  noValue: number,
-  neutralValue: number | null
-) {
-  switch (value) {
-    case '1':
-      return yesValue
-    case '0':
-      return noValue
-    case 'neutral':
-      return neutralValue
-  }
-}
-
 export function readAnswer(answerData: AnswerData, key: keyof AnswerData): string {
   const value = answerData[key]
   if (!value?.length) {
     return 'neutral'
   }
   return value
-}
-
-export function readAsStringArr(variable: string[] | string): string[] {
-  return Array.isArray(variable) ? variable : [variable]
 }
 
 //generic courses have many cases where they are considered to be for the users organisation

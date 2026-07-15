@@ -614,5 +614,3 @@ const allPeriods = studyPeriodsData.years.flatMap(year =>
 const studyPeriods = {
   periods: allPeriods,
 }
-
-export default studyPeriods
