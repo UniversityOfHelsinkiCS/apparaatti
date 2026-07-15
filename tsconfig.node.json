@@ -7,5 +7,5 @@
     "target": "ES2023",
     "lib": ["ES2023"]
   },
-  "include": ["src/server", "src/common", "vite.config.ts", "eslint.config.mjs"]
+  "include": ["src/server", "src/common", "vite.config.ts", "eslint.config.mjs", "playwright.config.ts"]
 }
