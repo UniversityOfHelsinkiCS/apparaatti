@@ -8,6 +8,7 @@
     "prod": "NODE_ENV=production node --no-warnings --experimental-strip-types src/server/index.ts",
     "dev": "NODE_ENV=development concurrently \"nodemon --verbose --ignore '*cypress*' --exec node --no-warnings --experimental-strip-types src/server/index.ts\" \"vite\"",
     "e2e": "sh ./scripts/run-e2e.sh",
+    "e2e:ui": "sh ./scripts/run-e2e.sh --ui",
     "e2e:up": "docker compose -f compose.e2e.yaml up",
     "e2e:down": "docker compose -f compose.e2e.yaml down",
     "tsc": "tsc --build --noEmit",

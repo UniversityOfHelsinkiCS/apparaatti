@@ -5,7 +5,7 @@ set -e
 if curl -fsS http://localhost:3001/api/ping >/dev/null 2>&1; then
 	echo "E2E environment already running, using existing setup..."
 	echo "Running Playwright tests..."
-	npx playwright test
+	npx playwright test "$@"
 	exit 0
 fi
 
@@ -31,4 +31,4 @@ until curl -fsS http://localhost:3001/api/ping >/dev/null 2>&1; do
 done
 
 echo "Running Playwright tests..."
-npx playwright test
+npx playwright test "$@"
