@@ -1,3 +1,11 @@
+# A distinct project name so `docker compose -f compose.e2e.yaml` and `docker compose`
+# (compose.yaml, i.e. `npm start`) are treated as fully independent stacks. Without this,
+# both files define services named "app"/"db"/"redis" under the same default project
+# ("apparaatti", from the directory name), so Compose treats them as the *same* services -
+# running one after the other doesn't just leave two stacks side by side, it recreates and
+# replaces the other stack's containers with this file's config.
+name: apparaatti_e2e
+
 services:
   app:
     build:
@@ -14,7 +22,7 @@ services:
       - ./:/opt/app-root/src
     ports:
       - 3001:3000
-      - 8000:8000
+      - 8001:8000
     container_name: apparaatti_e2e
     networks:
       - localhost-network
@@ -28,23 +36,23 @@ services:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5433:5432
+      - 5434:5432
     volumes:
       - pg_data_e2e:/data
     container_name: apparaatti_e2e_db
     networks:
-        - localhost-network
-    
+      - localhost-network
+
   redis:
     image: redis:7-alpine
     container_name: apparaatti_e2e_redis
     networks:
-        - localhost-network
+      - localhost-network
 
 networks:
   localhost-network:
     driver: bridge
     driver_opts:
-      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+      com.docker.network.bridge.host_binding_ipv4: '127.0.0.1'
 volumes:
   pg_data_e2e:
