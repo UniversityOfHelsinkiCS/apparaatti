@@ -45,6 +45,17 @@ export const FilterCreateSchema = FilterUpdateSchema.extend({
   id: z.string().regex(/^[a-z0-9-]+$/, 'id must be lowercase alphanumeric with hyphens'),
 })
 
+export const FilterImportItemSchema = FilterUpdateSchema.extend({
+  id: z.string(),
+  coordinateKey: z.string().nullable().optional(),
+})
+
+export const FilterConfigImportSchema = z.object({
+  appVersion: z.string().optional(),
+  exportedAt: z.string().optional(),
+  filters: z.array(FilterImportItemSchema),
+})
+
 export const UserFeedbackSchema = z.object({
   textFeedback: z.string().trim().min(1),
   stars: z.number().int().min(0).max(5),

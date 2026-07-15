@@ -103,7 +103,7 @@ const LOG = {
 }
 
 const TEST_USER = {
-  id: 'e2e-test-user-001',
+  id: 'hy-hlo-135753688',
   username: 'hy-hlo-testuser',
   firstNames: 'Testi',
   lastName: 'Kayttaja',

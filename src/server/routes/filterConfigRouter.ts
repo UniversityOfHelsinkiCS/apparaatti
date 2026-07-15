@@ -2,7 +2,7 @@ import express from 'express'
 import { z } from 'zod'
 
 import type { User } from '../../common/types.ts'
-import { FilterCreateSchema, FilterUpdateSchema } from '../../common/validators.ts'
+import { FilterConfigImportSchema, FilterCreateSchema, FilterUpdateSchema } from '../../common/validators.ts'
 import { seedFilterWithId } from '../db/seedFilters.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
@@ -127,18 +127,7 @@ filterConfigRouter.get('/export', async (req, res) => {
 })
 
 filterConfigRouter.post('/import', async (req, res) => {
-  const FilterImportItemSchema = FilterUpdateSchema.extend({
-    id: z.string(),
-    coordinateKey: z.string().nullable().optional(),
-  })
-
-  const ImportSchema = z.object({
-    appVersion: z.string().optional(),
-    exportedAt: z.string().optional(),
-    filters: z.array(FilterImportItemSchema),
-  })
-
-  const parsed = ImportSchema.safeParse(req.body)
+  const parsed = FilterConfigImportSchema.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).json({ message: 'Invalid import data', errors: parsed.error.flatten() })
     return
