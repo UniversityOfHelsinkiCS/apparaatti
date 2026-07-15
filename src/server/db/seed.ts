@@ -659,11 +659,11 @@ const nameSpecifiers: LocalizedName[] = [
 ]
 
 const semesters = [
-  { name: 'Fall 2025', startDate: new Date('2025-09-01'), endDate: new Date('2025-12-20') },
-  { name: 'Spring 2026', startDate: new Date('2026-01-12'), endDate: new Date('2026-05-31') },
   { name: 'Fall 2026', startDate: new Date('2026-09-01'), endDate: new Date('2026-12-20') },
-  { name: 'Spring 2027', startDate: new Date('2027-01-11'), endDate: new Date('2027-05-31') },
+  { name: 'Spring 2027', startDate: new Date('2027-01-12'), endDate: new Date('2027-05-31') },
   { name: 'Fall 2027', startDate: new Date('2027-09-01'), endDate: new Date('2027-12-20') },
+  { name: 'Spring 2028', startDate: new Date('2028-01-11'), endDate: new Date('2028-05-31') },
+  { name: 'Fall 2028', startDate: new Date('2028-09-01'), endDate: new Date('2028-12-20') },
 ]
 
 async function seedCourseRealizations(courses: any[]) {

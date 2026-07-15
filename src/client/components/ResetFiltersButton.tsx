@@ -7,9 +7,10 @@ import HyModal from './common/hy/HyModal'
 
 type ResetFiltersButtonProps = {
   onReset?: () => void
+  dataTestId?: string
 }
 
-const ResetFiltersButton = ({ onReset }: ResetFiltersButtonProps) => {
+const ResetFiltersButton = ({ onReset, dataTestId }: ResetFiltersButtonProps) => {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
   const { resetFilters } = useFilterContext()
@@ -26,7 +27,7 @@ const ResetFiltersButton = ({ onReset }: ResetFiltersButtonProps) => {
 
   return (
     <>
-      <HyButton variant="supplementary" colour="blue" onClick={() => setOpen(true)}>
+      <HyButton variant="supplementary" colour="blue" onClick={() => setOpen(true)} data-testid={dataTestId}>
         {t('v2:noRecommendations.resetButton')}
       </HyButton>
 

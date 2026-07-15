@@ -65,7 +65,12 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
       }}
     >
       <Stack spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start">
-        <Typography variant="h3" component="h2" sx={{ fontSize: { xs: 'h4.fontSize', sm: 'h3.fontSize' } }}>
+        <Typography
+          variant="h3"
+          component="h2"
+          data-testid="no-recommendations-heading"
+          sx={{ fontSize: { xs: 'h4.fontSize', sm: 'h3.fontSize' } }}
+        >
           {t('v2:noRecommendations.title')}
         </Typography>
         <Typography variant="body1" sx={{ color: hy.textColor.secondary }}>
@@ -86,7 +91,7 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
                   {t('v2:noRecommendations.changeSelectionsButton')}
                 </HyButton>
               )}
-              <ResetFiltersButton onReset={onOpenFilters} />
+              <ResetFiltersButton onReset={onOpenFilters} dataTestId="empty-state-clear-choices" />
             </Stack>
           </>
         )}

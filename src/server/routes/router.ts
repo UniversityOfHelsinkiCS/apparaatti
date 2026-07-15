@@ -16,6 +16,7 @@ import { triggerUpdaterRun } from '../updater/manualRun.ts'
 import {
   GIT_SHA,
   IMAGE_SHA,
+  IN_E2E,
   inDevelopment,
   PACKAGE_VERSION,
   RELEASE_VERSION,
@@ -48,7 +49,7 @@ const router = express.Router({ mergeParams: true })
 router.use(express.json())
 router.use(loginAsMiddleware)
 
-if (inDevelopment) {
+if (inDevelopment || IN_E2E) {
   router.use('/debug', requireUser, debugRouter)
 }
 

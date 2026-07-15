@@ -12,7 +12,13 @@ const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
   }
 
   return (
-    <HySelect value={language} onChange={handleChange} aria-label="Language selector" sx={sx}>
+    <HySelect
+      value={language}
+      onChange={handleChange}
+      aria-label="Language selector"
+      data-testid="language-selector"
+      sx={sx}
+    >
       <HyMenuItem value="fi">Suomi</HyMenuItem>
       <HyMenuItem value="en">English</HyMenuItem>
       <HyMenuItem value="sv">Svenska</HyMenuItem>

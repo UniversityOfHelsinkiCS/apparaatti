@@ -118,6 +118,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
 
   return (
     <Box
+      data-testid="course-recommendation"
       sx={{
         padding: { xs: 2, sm: 2.5 },
         border: '1px solid',

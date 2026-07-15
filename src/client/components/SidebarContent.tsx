@@ -120,7 +120,7 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
         >
           <HyButton onClick={() => setModalOpen(true)}>{t('v2:retakeQuestions')}</HyButton>
           <Box sx={{ height: 12 }} />
-          <ResetFiltersButton />
+          <ResetFiltersButton dataTestId="sidebar-clear-choices" />
         </Box>
         {onClose && (
           <Box sx={{ alignSelf: 'start' }}>
