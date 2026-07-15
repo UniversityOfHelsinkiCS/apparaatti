@@ -25,7 +25,7 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
     <FormControlLabel
       value={option.id}
       disabled={count === 0}
-      data-cy={`${filterId}-option-${option.id}`}
+      data-testid={`${filterId}-option-${option.id}`}
       control={<HyRadio />}
       label={label}
       sx={{

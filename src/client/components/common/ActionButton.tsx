@@ -4,7 +4,7 @@ import type { ButtonProps } from '@mui/material/Button'
 interface ActionButtonV2Props {
   onClick?: () => void
   text?: string
-  dataCy?: string
+  dataTestId?: string
   visualStyle?: 'default' | 'course-show' | 'app-bar'
   type?: ButtonProps['type']
 }
@@ -12,7 +12,7 @@ interface ActionButtonV2Props {
 const ActionButton = ({
   onClick = () => {},
   text = '',
-  dataCy,
+  dataTestId,
   visualStyle = 'default',
   type,
 }: ActionButtonV2Props) => {
@@ -46,7 +46,7 @@ const ActionButton = ({
 
   return (
     <Button
-      data-cy={dataCy}
+      data-testid={dataTestId}
       color={isAppBar ? 'inherit' : undefined}
       variant={visualStyle === 'course-show' ? 'contained' : isAppBar ? 'text' : 'outlined'}
       type={buttonType}

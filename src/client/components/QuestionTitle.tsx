@@ -27,7 +27,7 @@ const QuestionTitle = ({
   showMandatoryStatus?: boolean
 }) => {
   return (
-    <Stack data-cy={`question-title-${question.id}`} sx={{ gap: 0.75 }}>
+    <Stack data-testid={`question-title-${question.id}`} sx={{ gap: 0.75 }}>
       {showMandatoryStatus && (
         <Stack direction="row">
           <MandatoryStatus question={question} />
@@ -41,7 +41,7 @@ const QuestionTitle = ({
         >
           <Info />
         </HyIconButton>
-        <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-cy={`question-text-${question.id}`}>
+        <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-testid={`question-text-${question.id}`}>
           {title}
         </Typography>
       </Stack>

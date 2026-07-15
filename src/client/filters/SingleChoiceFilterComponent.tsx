@@ -51,12 +51,12 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
           <Accordion
             expanded={accordionOpen}
             onChange={() => setAccordionOpen(!accordionOpen)}
-            data-cy={`${filter.id}-extrainfo-accordion`}
+            data-testid={`${filter.id}-extrainfo-accordion`}
           >
-            <AccordionSummary expandIcon={<ChevronDown />} data-cy={`${filter.id}-extrainfo-accordion-summary`}>
+            <AccordionSummary expandIcon={<ChevronDown />} data-testid={`${filter.id}-extrainfo-accordion-summary`}>
               <Typography>{t('question:extrainfo')}: </Typography>
             </AccordionSummary>
-            <AccordionDetails data-cy={`${filter.id}-extrainfo-accordion-details`}>
+            <AccordionDetails data-testid={`${filter.id}-extrainfo-accordion-details`}>
               <AppMarkdown>{extrainfo}</AppMarkdown>
             </AccordionDetails>
           </Accordion>

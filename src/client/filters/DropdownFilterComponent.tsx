@@ -25,7 +25,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
         name={filter.id}
         labelId={`${filter.id}-select-label`}
         id={`${filter.id}-select`}
-        data-cy={`${filter.id}-select`}
+        data-testid={`${filter.id}-select`}
         value={state}
         onChange={handleChange}
       >

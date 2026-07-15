@@ -50,7 +50,7 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
         name={question.id}
         labelId="study-field-select-label"
         id="study-field-select"
-        data-cy="study-field-select"
+        data-testid="study-field-select"
         value={studyField}
         onChange={handleChange}
       >
