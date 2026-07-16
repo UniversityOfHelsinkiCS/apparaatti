@@ -2,7 +2,7 @@
 
 ## Rekisterin nimi
 
-Apparaatti: työkalu kurssien suositteluun
+Polku: työkalu kurssien suositteluun
 
 Tallennamme ja käsittelemme Helsingin yliopiston henkilökunnan ja opiskelijoiden henkilötietoja EU:n tietosuojaasetuksen mukaisesti.
 
@@ -42,9 +42,9 @@ Rekisterinpitäjä tallentaa asiakasrekisteriin ne tiedot, jotka asiakas luovutt
 
 ## Henkilötietojen tallentaminen, säilyttäminen, suojaaminen ja käsittely
 
-Käyttäjän henkilötiedot tallennetaan rekisteriin käyttäjän kirjautuessa Apparaattiin ja hyväksyessään näiden tietojen luovutuksen.
+Käyttäjän henkilötiedot tallennetaan rekisteriin käyttäjän kirjautuessa Polkuun ja hyväksyessään näiden tietojen luovutuksen.
 
-Käyttäjän syöttämää sisältö, eli kurssisuosittelulomake tallennettaan käyttäjän lähettäessä sen. 
+Käyttäjän syöttämää sisältö, eli kurssisuosittelulomake tallennettaan käyttäjän lähettäessä sen.
 
 Henkilötiedot on suojattu asiattomalta pääsyltä ja käsittelemiseltä. Tiedot säilytetään Suomessa. Henkilötietojen käsittelyssä on huomioitu EU:n tietosuoja-asetuksen vaatimukset. Tietosisällöstä tallennetaan varmuuskopioita. Rekisterinpitäjä tallentaa ehyttä ja luotettavaa tietoa, esimerkiksi varmuuskopioiden kautta varmennettuna.
 
@@ -55,7 +55,7 @@ Henkilötietoja ei siirretä EU:n tai ETA alueen ulkopuolelle.
 ## Rekisterin suojauksen periaatteet
 
 Sovelluksen yhteydessä olevaa rekisteriä ylläpidetään teknisenä tallenteena salatun tietoliikenneyhteyden kautta salasanoin ja palomuurein suojattuina.
-Järjestelmään tallennettuihin tietoihin pääsevät ja niitä ovat oikeutettuja käyttämään vain nimetyt Apparaattia työssään käyttävät ja järjestelmän ylläpidosta vastaavat yliopiston henkilökuntaan kuuluvat henkilöt.
+Järjestelmään tallennettuihin tietoihin pääsevät ja niitä ovat oikeutettuja käyttämään vain nimetyt Polkua työssään käyttävät ja järjestelmän ylläpidosta vastaavat yliopiston henkilökuntaan kuuluvat henkilöt.
 
 Rekisteriin sisältyvät henkilötiedot säilytetään luottamuksellisina. Rekisterin käyttö on ohjeistettu ja henkilörekisteriin pääsy on rajattu siten, että järjestelmään tallennettuihin rekisterin sisältämiin tietoihin pääsevät käsiksi ja niitä ovat oikeutettuja käyttämään vain ne henkilöt, joilla on tehtäviensä puolesta siihen oikeus ja jotka tarvitsevat tietoja tehtävässään. Henkilötietoja käsittelevällä henkilöstöllä on vaitiolovelvollisuus.
 

@@ -50,13 +50,14 @@ const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
 
           <Box component="img" src={hyLogo} alt="University of Helsinki" sx={{ height: 32, mr: 2 }} />
           <Typography
+            component="h1"
             variant="h4"
             noWrap
             sx={{
-              fontSize: '17px',
+              fontSize: '22px',
               fontWeight: '700',
               textTransform: 'uppercase',
-              letterSpacing: '0.3px',
+              letterSpacing: '0.5px',
             }}
           >
             {t('v2:appTitle')}

@@ -136,7 +136,7 @@ export default {
       'additional-info-no-recommendations-md-414': 'Additional info psykologia',
       'additional-info-no-recommendations-md-H55': 'Additional info Farmasia',
     },
-    appTitle: 'Course Finder',
+    appTitle: 'Polku',
     adminButton: 'ADMIN',
     adminNav: {
       back: 'Back',
