@@ -1,11 +1,10 @@
-import { Box, CircularProgress, Stack, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
 import { useEffect, useRef, useState } from 'react'
 
 import type { User } from '../common/types'
 import AppHeader from './AppHeader'
-import hyLogo from './assets/hy_logo_black.svg'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
 import SidebarContent from './components/SidebarContent'
@@ -128,32 +127,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
 const App = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
-  if (isUserLoading) {
-    return (
-      <Stack
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        spacing={4}
-        sx={{ width: '100vw', height: '100vh', bgcolor: hy.bgColor.neutral }}
-      >
-        <Box component="img" src={hyLogo} alt="" sx={{ height: 80 }} />
-        <Typography
-          variant="h4"
-          noWrap
-          sx={{
-            fontSize: '32px',
-            fontWeight: '700',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-          }}
-        >
-          Polku
-        </Typography>
-        <CircularProgress size={32} sx={{ color: hy.iconColor.neutral }} />
-      </Stack>
-    )
-  }
+  if (isUserLoading) return null // loads too quickly for loading state to make sense
 
   if (isUnauthorized || !user) {
     return <RedirectToLogin />
