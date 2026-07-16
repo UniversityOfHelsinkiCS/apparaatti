@@ -1,6 +1,7 @@
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import { useFilterContext } from '../contexts/filterContext'
+import HySpinner from './common/hy/HySpinner'
 import CourseRecommendation from './CourseRecommendation'
 import NoRecommendationsInfo from './NoRecommendationsInfo'
 
@@ -9,9 +10,17 @@ type CourseRecommendationsProps = {
 }
 
 const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) => {
-  const { finalRecommendedCourses: recommendations } = useFilterContext()
+  const { finalRecommendedCourses: recommendations, isLoading } = useFilterContext()
 
-  if (!recommendations || recommendations.length === 0) {
+  if (isLoading) {
+    return (
+      <Box sx={{ width: '100%', my: 4, display: 'flex', justifyContent: 'center' }}>
+        <HySpinner size="2xLarge" colour="black" />
+      </Box>
+    )
+  }
+
+  if (!recommendations?.length) {
     return <NoRecommendationsInfo onOpenFilters={onOpenFilters} />
   }
 

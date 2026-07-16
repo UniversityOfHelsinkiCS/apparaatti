@@ -11,6 +11,7 @@ import {
 } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
 import HyIconButton from './common/hy/HyIconButton'
+import HySpinner from './common/hy/HySpinner'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
@@ -99,10 +100,6 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
     return nextExpandedFilterIds
   }
 
-  if (isLoading) {
-    return <p>{t('v2:loadingFilters')}</p>
-  }
-
   return (
     <Box>
       <Stack
@@ -118,9 +115,11 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
             flexGrow: 1,
           }}
         >
-          <HyButton onClick={() => setModalOpen(true)}>{t('v2:retakeQuestions')}</HyButton>
+          <HyButton onClick={() => setModalOpen(true)} disabled={isLoading}>
+            {t('v2:retakeQuestions')}
+          </HyButton>
           <Box sx={{ height: 12 }} />
-          <ResetFiltersButton dataTestId="sidebar-clear-choices" />
+          <ResetFiltersButton dataTestId="sidebar-clear-choices" disabled={isLoading} />
         </Box>
         {onClose && (
           <Box sx={{ alignSelf: 'start' }}>
@@ -136,18 +135,24 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
           </Box>
         )}
       </Stack>
-      {filtersToShow.map((filter, index) => (
-        <FilterRenderer
-          key={filter.id}
-          filter={filter}
-          expanded={expandedFilterIds.has(filter.id)}
-          onAccordionChange={(isExpanded: boolean) => {
-            if (!isExpanded && unansweredMandatoryFilterIds.includes(filter.id)) return
-            setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
-          }}
-          isFirst={index === 0}
-        />
-      ))}
+      {isLoading ? (
+        <Stack alignItems="center" justifyContent="center" spacing={2} sx={{ p: '32px' }}>
+          <HySpinner size="xLarge" colour="black" />
+        </Stack>
+      ) : (
+        filtersToShow.map((filter, index) => (
+          <FilterRenderer
+            key={filter.id}
+            filter={filter}
+            expanded={expandedFilterIds.has(filter.id)}
+            onAccordionChange={(isExpanded: boolean) => {
+              if (!isExpanded && unansweredMandatoryFilterIds.includes(filter.id)) return
+              setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
+            }}
+            isFirst={index === 0}
+          />
+        ))
+      )}
     </Box>
   )
 }
