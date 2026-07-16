@@ -123,7 +123,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   )
 }
 
-const AppV2 = () => {
+const App = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
   if (isUserLoading) {
@@ -147,4 +147,4 @@ const AppV2 = () => {
   )
 }
 
-export default AppV2
+export default App
