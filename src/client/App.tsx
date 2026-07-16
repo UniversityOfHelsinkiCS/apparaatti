@@ -1,10 +1,11 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
 import { useEffect, useRef, useState } from 'react'
 
 import type { User } from '../common/types'
 import AppHeader from './AppHeader'
+import hyLogo from './assets/hy_logo_black.svg'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
 import SidebarContent from './components/SidebarContent'
@@ -26,6 +27,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
   const [open, setOpen] = useState(!isDrawerLayout)
   const { modalOpen, setModalOpen } = useFilterContext()
   const wasModalOpenRef = useRef(modalOpen)
+
   useEffect(() => {
     setOpen(!isDrawerLayout)
   }, [isDrawerLayout])
@@ -128,10 +130,27 @@ const App = () => {
 
   if (isUserLoading) {
     return (
-      <Stack direction="column" sx={{ width: '100vw', height: '100vh' }}>
-        <Typography variant="h2" sx={{ marginLeft: 'auto', marginRight: 'auto' }}>
-          Apparaatti
+      <Stack
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        spacing={4}
+        sx={{ width: '100vw', height: '100vh', bgcolor: hy.bgColor.neutral }}
+      >
+        <Box component="img" src={hyLogo} alt="" sx={{ height: 80 }} />
+        <Typography
+          variant="h4"
+          noWrap
+          sx={{
+            fontSize: '32px',
+            fontWeight: '700',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+          }}
+        >
+          Polku
         </Typography>
+        <CircularProgress size={32} sx={{ color: hy.iconColor.neutral }} />
       </Stack>
     )
   }
