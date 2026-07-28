@@ -87,7 +87,7 @@ jobs:
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
           extra-args: |
             --ulimit nofile=4096:4096
-      - name: Push staging image to quay.io
+      - name: Push staging image to registry.version.helsinki.fi
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ steps.build-staging-image.outputs.image }}
