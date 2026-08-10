@@ -233,12 +233,9 @@ export function sortCourseData(courseDatas: CourseData[], courseLanguageType: st
   return datasWithPoints satisfies CourseData[]
 }
 
-function filterIfIsPrimaryLang(data: CourseData[], organisationCode: string, lang: string, primaryLang: string) {
-  if (lang === primaryLang) {
-    return data.filter(c => courseIsSpesificForUserOrg(c, organisationCode))
-  } else {
-    return data
-  }
+//only courses that are marked with the custom code urn of the users organisation are shown
+function filterIsSpesificForOrganisation(data: CourseData[], organisationCode: string) {
+  return data.filter(c => courseIsSpesificForUserOrg(c, organisationCode))
 }
 
 export async function getCourseData(answerData: AnswerData): Promise<CourseData[]> {
@@ -253,7 +250,8 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific)
   const courseLanguageType = languageToStudy(lang, primaryLang)
 
-  const filteredForOrg = filterIfIsPrimaryLang(courseData, organisationCode, lang, primaryLang)
+  const filteredForOrg = filterIsSpesificForOrganisation(courseData, organisationCode)
+
   const filteredRaj = filteredForOrg.filter(c => !courseHasCustomCodeUrn(c, 'kks-raj'))
   const sorted = sortCourseData(filteredRaj, courseLanguageType)
 
