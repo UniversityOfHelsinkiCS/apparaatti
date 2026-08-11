@@ -1,5 +1,5 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
-import { BarChart } from '@mui/x-charts/BarChart'
+import { LineChart } from '@mui/x-charts/LineChart'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
@@ -37,6 +37,9 @@ const StatsPage = () => {
   const { data, isLoading } = useApi<StatsRow[]>(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET')
 
   const groupedCounts = Array.isArray(data) ? data : []
+
+  const maxCount = groupedCounts.reduce((max, item) => Math.max(max, item.count), 0)
+  const yAxisMax = Math.max(4, maxCount + 1)
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -108,11 +111,19 @@ const StatsPage = () => {
       ) : groupedCounts.length === 0 ? (
         <Typography>No visits in the selected range.</Typography>
       ) : (
-        <BarChart
+        <LineChart
           height={420}
           margin={{ top: 20, right: 20, bottom: 60, left: 50 }}
-          xAxis={[{ scaleType: 'band', data: groupedCounts.map(item => item.label) }]}
-          series={[{ data: groupedCounts.map(item => item.count), label: 'Visits' }]}
+          xAxis={[{ scaleType: 'point', data: groupedCounts.map(item => item.label) }]}
+          yAxis={[{ min: 0, max: yAxisMax, tickMinStep: 1 }]}
+          series={[
+            {
+              data: groupedCounts.map(item => item.count),
+              label: 'Visits',
+              curve: 'linear',
+              showMark: groupedCounts.length <= 60,
+            },
+          ]}
         />
       )}
     </Box>

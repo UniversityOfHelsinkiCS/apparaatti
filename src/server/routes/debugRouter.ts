@@ -11,6 +11,7 @@ import {
   cursWithWhereRaw,
   cusWithIds,
   cusWithWhere,
+  getAllUserVisits,
   organisationWithGroupIdOf,
   updateUserSettings,
 } from '../util/dbActions.ts'
@@ -27,6 +28,33 @@ debugRouter.get('/reset/settings', requireAdmin, async (req: any, res: any) => {
   await updateUserSettings(req.user.id, { educationLanguage: '' })
 
   res.json({ message: 'User settings reset' })
+})
+
+debugRouter.get('/visits', requireAdmin, async (req: any, res: any) => {
+  const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 1000
+  const visits = await getAllUserVisits(limit)
+
+  const byVisitor: Record<string, { count: number; firstSeen: string; lastSeen: string }> = {}
+  for (const visit of visits) {
+    const date = new Date(visit.date).toISOString()
+    const existing = byVisitor[visit.visitorHashHex]
+
+    if (!existing) {
+      byVisitor[visit.visitorHashHex] = { count: 1, firstSeen: date, lastSeen: date }
+      continue
+    }
+
+    existing.count += 1
+    existing.firstSeen = date
+  }
+
+  res.json({
+    total: visits.length,
+    limit,
+    uniqueVisitors: Object.keys(byVisitor).length,
+    byVisitor,
+    visits,
+  })
 })
 
 function getKktTags(customCodeUrns: Record<string, string[]> | null): string[] {

@@ -1,7 +1,7 @@
 import express from 'express'
 import { z } from 'zod'
 
-import { getGroupLabel } from '../../common/datelabels.ts'
+import { getGroupLabel, getGroupLabels } from '../../common/datelabels.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import { getUserVisits } from '../util/dbActions.ts'
 import { localLog } from '../util/dev.ts'
@@ -42,9 +42,7 @@ statsRouter.get('/', async (req, res) => {
     }
   }
 
-  const result = Array.from(counts.entries())
-    .sort(([a], [b]) => a.localeCompare(b)) //sorting time so that it goes from left -> right
-    .map(([label, count]) => ({ label, count })) //now it is [{label: '', count: ''}]
+  const result = getGroupLabels(start, end, groupBy).map(label => ({ label, count: counts.get(label) ?? 0 }))
 
   localLog(result, 'statsrouter')
   res.send(result)

@@ -476,6 +476,16 @@ export async function getUserVisits(start: Date, end: Date) {
   return visits
 }
 
+export async function getAllUserVisits(limit: number) {
+  const visits = await UserVisits.findAll({
+    order: [['date', 'DESC']],
+    limit,
+    raw: true,
+  })
+
+  return visits
+}
+
 export async function createUserFeedbackEntry(
   textFeedback: string,
   stars: number,
