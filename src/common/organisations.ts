@@ -1,0 +1,18 @@
+export const organisationCodeToName: Record<string, string> = {
+  H40: 'Humanistinen',
+  H50: 'Matemaattis-luonnontieteellinen',
+  H20: 'Oikeustieteellinen',
+  H10: 'Teologinen',
+  H74: 'Svenska social- och kommunalhögskolan',
+  H70: 'Valtiotieteellinen',
+  H90: 'Eläinlääketieteellinen',
+  H60: 'Kasvatustieteellinen',
+  H57: 'Bio- ja ympäristö',
+  H80: 'Maatalous-metsä',
+  '4141': 'soveltava psykologia',
+  H305: 'hammaslääke',
+  H30: 'lääketiede',
+  H3456: 'logopedia',
+  '414': 'psykologia',
+  H55: 'Farmasia',
+}

@@ -1,5 +1,10 @@
 import type { User } from '../../common/types.ts'
-import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions.ts'
+import {
+  createUserVisitsEntry,
+  getUserVisitsByUser,
+  organisationsWithIds,
+  studyRightsForPersonId,
+} from './dbActions.ts'
 import { localLog } from './dev.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
@@ -28,6 +33,19 @@ export async function getUserVisitsAtHour(visitorHashHex: string, date: Date) {
   return visits
 }
 
+//the organisation of the users most recently modified study right, null for users without one
+export async function getUserOrganisationCode(user: User): Promise<string | null> {
+  const studyRights = await studyRightsForPersonId(user.id)
+  const organisationId = studyRights.find(studyRight => studyRight.organisationId)?.organisationId
+
+  if (!organisationId) {
+    return null
+  }
+
+  const organisations = await organisationsWithIds([organisationId])
+  return organisations[0]?.code ?? null
+}
+
 export async function saveUserVisitIfUnique(user: User) {
   const time = new Date()
   const visitorHashHex = await hashUser(user)
@@ -39,7 +57,8 @@ export async function saveUserVisitIfUnique(user: User) {
 
   if (userVisits.length === 0) {
     localLog('created entry', 'saveUserVisitIfUnique')
-    await createUserVisitsEntry(visitorHashHex, time)
+    const organisationCode = await getUserOrganisationCode(user)
+    await createUserVisitsEntry(visitorHashHex, time, organisationCode)
   } else {
     localLog('entry exists skipping', 'saveUserVisitIfUnique')
   }

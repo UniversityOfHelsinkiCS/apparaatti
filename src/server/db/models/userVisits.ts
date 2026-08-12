@@ -6,6 +6,7 @@ class UserVisits extends Model<InferAttributes<UserVisits>, InferCreationAttribu
   declare id: CreationOptional<number> // sequelize breaks if the table entries wont have an id
   declare visitorHashHex: string // one way hash of user id
   declare date: Date
+  declare organisationCode: CreationOptional<string | null>
 }
 
 UserVisits.init(
@@ -23,6 +24,11 @@ UserVisits.init(
     date: {
       type: DataTypes.DATE, // in utc
       allowNull: false,
+    },
+    organisationCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {

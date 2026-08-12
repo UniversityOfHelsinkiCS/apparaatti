@@ -1,6 +1,7 @@
 import path from 'path'
 import xlsx from 'xlsx'
 
+import { organisationCodeToName } from '../../common/organisations.ts'
 import type { CourseData } from '../../common/types.ts'
 type Language = {
   name: string
@@ -239,24 +240,7 @@ export function languageSpesificCodes(
   }
 }
 
-export const organisationCodeToName: Record<string, string> = {
-  H40: 'Humanistinen',
-  H50: 'Matemaattis-luonnontieteellinen',
-  H20: 'Oikeustieteellinen',
-  H10: 'Teologinen',
-  H74: 'Svenska social- och kommunalhögskolan',
-  H70: 'Valtiotieteellinen',
-  H90: 'Eläinlääketieteellinen',
-  H60: 'Kasvatustieteellinen', //kasvatustieteel.
-  H57: 'Bio- ja ympäristö',
-  H80: 'Maatalous-metsä', //maa metsa
-  '4141': 'soveltava psykologia', //soveltava spykologia
-  H305: 'hammaslääke',
-  H30: 'lääketiede',
-  H3456: 'logopedia', //logopedia seems to have multiple entries in organisations with the same name
-  '414': 'psykologia',
-  H55: 'Farmasia',
-}
+export { organisationCodeToName }
 
 export function readOrganisationRecommendationData(): OrganisationRecommendation[] {
   const filePath = path.resolve(import.meta.dirname, '../../../data/data.xlsx')

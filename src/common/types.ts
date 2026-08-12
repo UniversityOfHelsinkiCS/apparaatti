@@ -176,6 +176,7 @@ export type AnswerData = {
 export type UserVisit = {
   visitorHashHex: string
   date: Date
+  organisationCode: string | null
 }
 
 export type UserSettings = {

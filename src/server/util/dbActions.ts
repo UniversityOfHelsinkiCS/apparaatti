@@ -429,7 +429,7 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
   }
 }
 
-export async function createUserVisitsEntry(visitorHashHex: string, date: Date) {
+export async function createUserVisitsEntry(visitorHashHex: string, date: Date, organisationCode: string | null) {
   // Normalize to UTC hour start
   const startHour = new Date(date)
   startHour.setUTCHours(startHour.getUTCHours(), 0, 0, 0)
@@ -437,6 +437,7 @@ export async function createUserVisitsEntry(visitorHashHex: string, date: Date) 
   const entry: UserVisit = {
     visitorHashHex,
     date: startHour,
+    organisationCode,
   }
 
   // findOrCreate to avoid duplicates when multiple requests arrive
