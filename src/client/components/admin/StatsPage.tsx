@@ -1,5 +1,6 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
+import type { SeriesLegendItemContext } from '@mui/x-charts/ChartsLegend'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
@@ -90,26 +91,50 @@ const visitsByGroup = (rows: StatsRow[]) => {
   return { countsByGroup, percentagesByGroup }
 }
 
-const organisationSeries = (rows: StatsRow[]) => {
+const organisationSeries = (rows: StatsRow[], hiddenOrganisations: string[]) => {
   const { countsByGroup, percentagesByGroup } = visitsByGroup(rows)
 
   return stackOrder
     .filter(groupKey => countsByGroup.has(groupKey))
-    .map(groupKey => ({
-      data: countsByGroup.get(groupKey),
-      label: groupLabelOf(groupKey),
-      color: organisationColors[groupKey],
-      stack: 'visits',
-      valueFormatter: (value: number | null, { dataIndex }: { dataIndex: number }) => {
-        if (!value) {
-          return null
-        }
+    .map(groupKey => {
+      const counts = countsByGroup.get(groupKey) ?? []
+      const isHidden = hiddenOrganisations.includes(groupKey)
 
-        const percentage = percentagesByGroup.get(groupKey)?.[dataIndex] ?? 0
-        return `${value} (${Number(percentage.toFixed(1))}%)`
-      },
-    }))
+      return {
+        id: groupKey,
+        data: isHidden ? counts.map(() => 0) : counts,
+        label: groupLabelOf(groupKey),
+        color: organisationColors[groupKey],
+        stack: 'visits',
+        valueFormatter: (value: number | null, { dataIndex }: { dataIndex: number }) => {
+          if (!value) {
+            return null
+          }
+
+          const percentage = percentagesByGroup.get(groupKey)?.[dataIndex] ?? 0
+          return `${value} (${Number(percentage.toFixed(1))}%)`
+        },
+      }
+    })
 }
+
+const legendSx = (hiddenOrganisations: string[]) => ({
+  '&& li button': {
+    borderRadius: 1,
+    px: 0.75,
+    py: 0.5,
+    transition: 'background-color 150ms ease, opacity 150ms ease',
+    '&:hover': { backgroundColor: 'action.hover' },
+    '&:active': { backgroundColor: 'action.selected' },
+    '&:focus-visible': { outline: '2px solid', outlineOffset: 2 },
+  },
+  ...Object.fromEntries(
+    hiddenOrganisations.map(groupKey => [
+      `& li[data-series="${groupKey}"]`,
+      { opacity: 0.35, textDecoration: 'line-through', '&:hover': { opacity: 0.6 } },
+    ])
+  ),
+})
 
 const getDefaultStart = () => {
   const date = new Date()
@@ -124,6 +149,12 @@ const StatsPage = () => {
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
   const [groupBy, setGroupBy] = useState<GroupBy>('day')
+  const [hiddenOrganisations, setHiddenOrganisations] = useState<string[]>([])
+
+  const toggleOrganisation = (groupKey: string) =>
+    setHiddenOrganisations(previous =>
+      previous.includes(groupKey) ? previous.filter(key => key !== groupKey) : [...previous, groupKey]
+    )
 
   const startDateTime = `${start}T00:00:00.000Z`
   const endDateTime = `${end}T23:59:59.999Z`
@@ -134,10 +165,20 @@ const StatsPage = () => {
 
   const groupedCounts = Array.isArray(data) ? data : []
 
-  const maxCount = groupedCounts.reduce((max, item) => Math.max(max, item.count), 0)
-  const yAxisMax = Math.max(4, maxCount + 1)
+  const series = organisationSeries(groupedCounts, hiddenOrganisations)
 
-  const series = organisationSeries(groupedCounts)
+  const groupKeys = series.map(item => item.id)
+  const isEverythingHidden = groupKeys.length > 0 && groupKeys.every(groupKey => hiddenOrganisations.includes(groupKey))
+
+  const maxCount = groupedCounts.reduce(
+    (max, _item, index) =>
+      Math.max(
+        max,
+        series.reduce((sum, item) => sum + (item.data[index] ?? 0), 0)
+      ),
+    0
+  )
+  const yAxisMax = Math.max(4, maxCount + 1)
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -204,10 +245,30 @@ const StatsPage = () => {
         </BlackOutlinedButton>
       </Stack>
 
-      {isLoading ? (
-        <Typography>Loading stats...</Typography>
-      ) : groupedCounts.length === 0 ? (
-        <Typography>No visits in the selected range.</Typography>
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1, minHeight: 40 }}>
+        <Typography variant="body2" color="text.secondary" noWrap>
+          Click an organisation in the legend to hide or show it.
+        </Typography>
+        <BlackOutlinedButton
+          size="small"
+          disabled={groupKeys.length === 0 || isEverythingHidden}
+          onClick={() => setHiddenOrganisations(groupKeys)}
+        >
+          Hide all
+        </BlackOutlinedButton>
+        <BlackOutlinedButton
+          size="small"
+          disabled={hiddenOrganisations.length === 0}
+          onClick={() => setHiddenOrganisations([])}
+        >
+          Show all
+        </BlackOutlinedButton>
+      </Stack>
+
+      {isLoading || groupedCounts.length === 0 ? (
+        <Box sx={{ height: 460, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography>{isLoading ? 'Loading stats...' : 'No visits in the selected range.'}</Typography>
+        </Box>
       ) : (
         <BarChart
           height={460}
@@ -217,7 +278,14 @@ const StatsPage = () => {
           ]}
           yAxis={[{ min: 0, max: yAxisMax, tickMinStep: 1 }]}
           series={series}
-          slotProps={{ tooltip: { trigger: 'axis' } }}
+          slotProps={{
+            tooltip: { trigger: 'axis' },
+            legend: {
+              sx: legendSx(hiddenOrganisations),
+              onItemClick: (_event: unknown, legendItem: SeriesLegendItemContext) =>
+                toggleOrganisation(String(legendItem.seriesId)),
+            },
+          }}
         />
       )}
     </Box>
