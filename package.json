@@ -13,6 +13,7 @@
     "e2e:down": "docker compose -f compose.e2e.yaml down",
     "tsc": "tsc --build --noEmit",
     "test": "vitest",
+    "test:run": "vitest run",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:all": "eslint 'src/**/*.{ts,tsx}' && prettier --check 'src/**/*.{ts,tsx,json,css,md}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",

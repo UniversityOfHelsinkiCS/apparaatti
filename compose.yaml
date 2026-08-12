@@ -31,6 +31,19 @@ services:
   #   container_name: apparaatti_dev_updater
 
 
+  # unit tests, runs once on `docker compose up` and exits
+  # no network and no db on purpose, the unit tests must not touch the running app
+  test:
+    build:
+      context: ./
+      dockerfile: dev.Containerfile
+    image: apparaatti_dev
+    volumes:
+      - ./:/opt/app-root/src
+    container_name: apparaatti_test
+    network_mode: none
+    command: npm run test:run
+
   db:
     image: docker.io/postgres:15.8-alpine
     environment:
