@@ -1,6 +1,4 @@
-import path from 'path'
-import xlsx from 'xlsx'
-
+import { organisationRecommendations } from '../../../data/data.ts'
 import { organisationCodeToName } from '../../common/organisations.ts'
 import type { CourseData } from '../../common/types.ts'
 type Language = {
@@ -242,47 +240,7 @@ export function languageSpesificCodes(
 
 export { organisationCodeToName }
 
+//generated from data/data.xlsx, see scripts/generateOrganisationData.ts
 export function readOrganisationRecommendationData(): OrganisationRecommendation[] {
-  const filePath = path.resolve(import.meta.dirname, '../../../data/data.xlsx')
-  const workbook = xlsx.readFile(filePath)
-  const sheetName = workbook.SheetNames[0]
-  const sheet = workbook.Sheets[sheetName]
-  const data = xlsx.utils.sheet_to_json(sheet, { header: 1 }) as string[][]
-
-  if (data.length < 2) return []
-
-  const headers: string[] = data[0]
-
-  const dataRows = data.slice(1)
-
-  const codesWithLanguages = dataRows.map((row: string[]) => {
-    const name = row[0]
-
-    const codes = Object.keys(organisationCodeToName).filter(key => name.includes(organisationCodeToName[key]))
-
-    const languages: Language[] = []
-
-    for (let i = 1; i < headers.length; i++) {
-      const langName = headers[i]
-      const codesRaw = row[i]
-
-      if (codesRaw && codesRaw.trim()) {
-        const codes = codesRaw
-          .split('\n')
-          .map(c => c.trim())
-          .filter(Boolean)
-        languages.push({ name: langName, codes })
-      }
-    }
-
-    return { codes, languages }
-  })
-
-  const codeAndLanguages: OrganisationRecommendation[] = []
-  for (const entry of codesWithLanguages) {
-    for (const code of entry.codes) {
-      codeAndLanguages.push({ name: code, languages: entry.languages })
-    }
-  }
-  return codeAndLanguages
+  return organisationRecommendations
 }
