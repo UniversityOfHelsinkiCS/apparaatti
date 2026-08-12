@@ -1,6 +1,7 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import type { SeriesLegendItemContext } from '@mui/x-charts/ChartsLegend'
+import { PieChart } from '@mui/x-charts/PieChart'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
@@ -22,6 +23,14 @@ type StatsRow = {
   label: string
   count: number
   organisations: StatsOrganisation[]
+}
+
+type StatsResponse = {
+  groups: StatsRow[]
+  total: {
+    count: number
+    organisations: StatsOrganisation[]
+  }
 }
 
 const NO_ORGANISATION = 'none'
@@ -106,16 +115,44 @@ const organisationSeries = (rows: StatsRow[], hiddenOrganisations: string[]) => 
         label: groupLabelOf(groupKey),
         color: organisationColors[groupKey],
         stack: 'visits',
+        highlightScope: { highlight: 'series', fade: 'global' } as const,
         valueFormatter: (value: number | null, { dataIndex }: { dataIndex: number }) => {
           if (!value) {
             return null
           }
 
           const percentage = percentagesByGroup.get(groupKey)?.[dataIndex] ?? 0
-          return `${value} (${Number(percentage.toFixed(1))}%)`
+          return `${value} (${Number(percentage.toFixed(1))}%) — click to hide`
         },
       }
     })
+}
+
+const totalPie = (organisations: StatsOrganisation[], hiddenOrganisations: string[]) => {
+  const countsByGroup = new Map<string, number>()
+
+  for (const organisation of organisations) {
+    const groupKey = groupKeyOf(organisation.organisationCode)
+    countsByGroup.set(groupKey, (countsByGroup.get(groupKey) ?? 0) + organisation.count)
+  }
+
+  const data = stackOrder
+    .filter(groupKey => countsByGroup.has(groupKey) && !hiddenOrganisations.includes(groupKey))
+    .map(groupKey => ({
+      id: groupKey,
+      value: countsByGroup.get(groupKey) ?? 0,
+      label: groupLabelOf(groupKey),
+      color: organisationColors[groupKey],
+    }))
+
+  const total = data.reduce((sum, item) => sum + item.value, 0)
+
+  const valueFormatter = (item: { value: number }) => {
+    const percentage = total === 0 ? 0 : Number(((item.value / total) * 100).toFixed(1))
+    return `${item.value} (${percentage}%) — click to hide`
+  }
+
+  return { data, total, valueFormatter }
 }
 
 const legendSx = (hiddenOrganisations: string[]) => ({
@@ -161,11 +198,13 @@ const StatsPage = () => {
 
   const endpoint = `/api/admin/stats?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}&groupBy=${encodeURIComponent(groupBy)}`
 
-  const { data, isLoading } = useApi<StatsRow[]>(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET')
+  const { data, isLoading } = useApi<StatsResponse>(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET')
 
-  const groupedCounts = Array.isArray(data) ? data : []
+  const groupedCounts = Array.isArray(data?.groups) ? data.groups : []
+  const total = data?.total ?? { count: 0, organisations: [] }
 
   const series = organisationSeries(groupedCounts, hiddenOrganisations)
+  const pie = totalPie(total.organisations, hiddenOrganisations)
 
   const groupKeys = series.map(item => item.id)
   const isEverythingHidden = groupKeys.length > 0 && groupKeys.every(groupKey => hiddenOrganisations.includes(groupKey))
@@ -247,7 +286,7 @@ const StatsPage = () => {
 
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1, minHeight: 40 }}>
         <Typography variant="body2" color="text.secondary" noWrap>
-          Click an organisation in the legend to hide or show it.
+          Click a legend item, a bar or a slice to hide that organisation.
         </Typography>
         <BlackOutlinedButton
           size="small"
@@ -273,6 +312,8 @@ const StatsPage = () => {
         <BarChart
           height={460}
           margin={{ top: 20, right: 20, bottom: 60, left: 50 }}
+          onItemClick={(_event, barItem) => toggleOrganisation(String(barItem.seriesId))}
+          sx={{ '& .MuiBarChart-element': { cursor: 'pointer' } }}
           xAxis={[
             { scaleType: 'band', data: groupedCounts.map(item => item.label), categoryGapRatio: 0.15, barGapRatio: 0 },
           ]}
@@ -288,6 +329,49 @@ const StatsPage = () => {
           }}
         />
       )}
+
+      <Typography variant="h6" align="center" sx={{ mt: 2, mb: 1 }}>
+        Unique users in the range
+      </Typography>
+
+      <Box sx={{ height: 320, position: 'relative' }}>
+        {isLoading || total.count === 0 ? (
+          <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography>{isLoading ? 'Loading stats...' : 'No visits in the selected range.'}</Typography>
+          </Box>
+        ) : (
+          <>
+            <PieChart
+              height={320}
+              hideLegend
+              onItemClick={(_event, _pieItem, item: { id?: string | number }) => toggleOrganisation(String(item.id))}
+              sx={{ '& .MuiPieChart-arc': { cursor: 'pointer' } }}
+              series={[
+                {
+                  data: pie.data,
+                  valueFormatter: pie.valueFormatter,
+                  innerRadius: 70,
+                  highlightScope: { fade: 'global', highlight: 'item' },
+                },
+              ]}
+            />
+            {pie.data.length > 0 && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                }}
+              >
+                <Typography variant="h4">{pie.total}</Typography>
+              </Box>
+            )}
+          </>
+        )}
+      </Box>
     </Box>
   )
 }
