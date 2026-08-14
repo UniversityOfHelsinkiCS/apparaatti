@@ -11,13 +11,19 @@ export default defineConfig({
     timeout: isCi ? 20_000 : 10_000,
   },
   use: {
-    baseURL: 'http://localhost:3001',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3001',
     actionTimeout: isCi ? 20_000 : 10_000,
     navigationTimeout: isCi ? 45_000 : 20_000,
   },
   projects: [
     {
       name: 'chromium',
+      testIgnore: '**/checks/**',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'checks',
+      testDir: './e2e/checks',
       use: { ...devices['Desktop Chrome'] },
     },
   ],
