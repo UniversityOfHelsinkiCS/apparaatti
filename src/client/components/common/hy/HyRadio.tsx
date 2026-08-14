@@ -4,6 +4,12 @@ import { styled } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
 
+// options whose result count is 0 are aria-disabled rather than disabled, so they stay
+// keyboard-reachable; both spellings need the same visuals
+const DISABLED = 'input:disabled ~ &, input[aria-disabled="true"] ~ &'
+const HOVERED = 'input:not(:disabled):not([aria-disabled="true"]):hover ~ &'
+const ACTIVE = 'input:not(:disabled):not([aria-disabled="true"]):active ~ &'
+
 const RadioIcon = styled('span')({
   boxSizing: 'border-box',
   width: 22,
@@ -15,14 +21,14 @@ const RadioIcon = styled('span')({
   alignItems: 'center',
   justifyContent: 'center',
   [HOVER_MEDIA]: {
-    'input:not(:disabled):hover ~ &': {
+    [HOVERED]: {
       backgroundColor: hy.bgColor.whiteHover,
     },
   },
-  'input:not(:disabled):active ~ &': {
+  [ACTIVE]: {
     backgroundColor: hy.bgColor.whiteActive,
   },
-  'input:disabled ~ &': {
+  [DISABLED]: {
     borderColor: hy.borderColor.disabledOnLight,
     backgroundColor: hy.bgColor.disabledOnLight,
   },
@@ -44,7 +50,7 @@ const RadioCheckedIcon = styled(RadioIcon)({
     backgroundColor: hy.bgColor.primary,
   },
   [HOVER_MEDIA]: {
-    'input:not(:disabled):hover ~ &': {
+    [HOVERED]: {
       backgroundColor: hy.bgColor.white,
       borderColor: hy.bgColor.primaryHover,
       '&::before': {
@@ -52,14 +58,14 @@ const RadioCheckedIcon = styled(RadioIcon)({
       },
     },
   },
-  'input:not(:disabled):active ~ &': {
+  [ACTIVE]: {
     backgroundColor: hy.bgColor.white,
     borderColor: hy.bgColor.primaryActive,
     '&::before': {
       backgroundColor: hy.bgColor.primaryActive,
     },
   },
-  'input:disabled ~ &': {
+  [DISABLED]: {
     '&::before': {
       backgroundColor: hy.bgColor.disabledOnLight,
     },

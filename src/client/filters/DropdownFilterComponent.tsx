@@ -14,6 +14,14 @@ interface DropdownFilterComponentProps {
 const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filter, state, handleChange, options }) => {
   const { getOptionCount } = useFilterContext()
 
+  // aria-disabled options stay focusable, so reject the selection here instead
+  const onChange = (event: SelectChangeEvent<string>) => {
+    if (getOptionCount(filter.id, event.target.value) === 0) {
+      return
+    }
+    handleChange(event)
+  }
+
   return (
     <FormControl sx={{ marginBottom: 2, paddingTop: 1 }}>
       <Select
@@ -27,13 +35,18 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
         id={`${filter.id}-select`}
         data-testid={`${filter.id}-select`}
         value={state}
-        onChange={handleChange}
+        onChange={onChange}
       >
         {options.map(option => {
           const count = getOptionCount(filter.id, option.id)
           const label = option.name
           return (
-            <MenuItem key={option.id} value={option.id} disabled={count === 0} sx={{ opacity: count === 0 ? 0.4 : 1 }}>
+            <MenuItem
+              key={option.id}
+              value={option.id}
+              aria-disabled={count === 0}
+              sx={{ opacity: count === 0 ? 0.4 : 1 }}
+            >
               {count != null ? `${label} (${count})` : label}
             </MenuItem>
           )

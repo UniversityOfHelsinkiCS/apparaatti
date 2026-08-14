@@ -24,9 +24,8 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
   return (
     <FormControlLabel
       value={option.id}
-      disabled={count === 0}
       data-testid={`${filterId}-option-${option.id}`}
-      control={<HyRadio />}
+      control={<HyRadio slotProps={{ input: { 'aria-disabled': count === 0 } }} />}
       label={label}
       sx={{
         py: '2px',

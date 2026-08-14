@@ -28,6 +28,10 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   const { getOptionCount } = useFilterContext()
 
   const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // aria-disabled options stay focusable, so reject the selection here instead
+    if (getOptionCount(filter.id, event.target.value) === 0) {
+      return
+    }
     handleRadioChange(event) // Call the passed handler
     // Assuming '1' is the ID for the 'yes' option
     setAccordionOpen(event.target.value === '1' && !!extrainfo)
