@@ -58,7 +58,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
             data-testid={`${filter.id}-extrainfo-accordion`}
           >
             <AccordionSummary expandIcon={<ChevronDown />} data-testid={`${filter.id}-extrainfo-accordion-summary`}>
-              <Typography>{t('question:extrainfo')}: </Typography>
+              <Typography component="span">{t('question:extrainfo')}: </Typography>
             </AccordionSummary>
             <AccordionDetails data-testid={`${filter.id}-extrainfo-accordion-details`}>
               <AppMarkdown>{extrainfo}</AppMarkdown>

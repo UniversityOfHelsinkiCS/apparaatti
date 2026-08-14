@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import type { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
@@ -48,9 +48,10 @@ const buildChipLabel = (labels: string[], maxChars: number = MAX_CHARS): string 
 
 interface ActiveFilterChipsProps {
   filterId: string
+  focusRef?: RefObject<HTMLButtonElement | null>
 }
 
-const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
+const ActiveFilterChips = ({ filterId, focusRef }: ActiveFilterChipsProps) => {
   const { t } = useTranslation()
   const filterContext = useFilterContext()
   const cfg = filterConfigMap(filterContext).get(filterId)
@@ -72,6 +73,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   if (activeChips.length === 0) return null
 
   const handleClear = () => {
+    focusRef?.current?.focus()
     cfg.setState(Array.isArray(cfg.state) ? [] : '')
   }
 
@@ -83,25 +85,7 @@ const ActiveFilterChips = ({ filterId }: ActiveFilterChipsProps) => {
   const maxChars = filterId === 'study-period' ? Infinity : MAX_CHARS
   const chipLabel = allSelected ? t('filter:allSelected') : buildChipLabel(labels, maxChars)
 
-  return (
-    <Box
-      component="span"
-      sx={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        zIndex: 2, // render above the mouseover highlight of accordion header
-      }}
-    >
-      <HyChip
-        label={chipLabel}
-        onClick={e => {
-          e?.stopPropagation()
-          handleClear()
-        }}
-        size="small"
-      />
-    </Box>
-  )
+  return <HyChip label={chipLabel} onClick={handleClear} size="small" />
 }
 
 export default ActiveFilterChips

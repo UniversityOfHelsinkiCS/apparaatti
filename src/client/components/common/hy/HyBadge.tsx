@@ -23,7 +23,7 @@ const variantStyles: Record<BadgeVariant, { backgroundColor: string; color: stri
   disabled: { backgroundColor: hy.overlay.black10, color: hy.textColor.disabledOnLight },
 }
 
-const BadgeRoot = styled('div')<{ ownerState: { variant: BadgeVariant } }>(({ ownerState }) => ({
+const BadgeRoot = styled('span')<{ ownerState: { variant: BadgeVariant } }>(({ ownerState }) => ({
   display: 'flex',
   width: 'fit-content',
   minWidth: 24,
@@ -36,7 +36,7 @@ const BadgeRoot = styled('div')<{ ownerState: { variant: BadgeVariant } }>(({ ow
   ...variantStyles[ownerState.variant],
 }))
 
-const BadgeContent = styled('div')({
+const BadgeContent = styled('span')({
   display: 'flex',
   padding: '0 4px',
   flexDirection: 'column',

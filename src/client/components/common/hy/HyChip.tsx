@@ -1,4 +1,4 @@
-import { styled, type SxProps } from '@mui/material/styles'
+import { type CSSObject, styled, type SxProps } from '@mui/material/styles'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
 
@@ -17,70 +17,80 @@ const CloseIcon = ({ size }: { size: number }) => (
   </svg>
 )
 
+type ChipSize = 'medium' | 'small'
+
 interface HyChipProps {
   label: string
   onClick?: (e?: React.MouseEvent) => void
   prefixIcon?: React.ReactNode
   ariaLabel?: string
   /** `small` is a custom addition, not part of the hy-ds spec */
-  size?: 'medium' | 'small'
+  size?: ChipSize
   sx?: SxProps
 }
 
-const ChipRoot = styled('div')<{ ownerState: { size: 'medium' | 'small'; clickable: boolean } }>(({ ownerState }) => ({
+const chipStyles = (size: ChipSize): CSSObject => ({
   boxSizing: 'border-box',
   display: 'inline-flex',
   alignItems: 'center',
   backgroundColor: hy.bgColor.white,
   color: hy.textColor.primary,
   fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
-  fontWeight: ownerState.size === 'small' ? 500 : 600,
+  fontWeight: size === 'small' ? 500 : 600,
   lineHeight: 1.5,
   letterSpacing: 0,
   borderRadius: '1rem',
-  border: `${ownerState.size === 'small' ? 1 : 2}px solid ${hy.borderColor.primary}`,
-  fontSize: ownerState.size === 'small' ? 12 : 14,
-  padding: ownerState.size === 'small' ? '1px 6px' : 'calc(0.25rem - 0.03125rem) 0.5rem',
-  ...(ownerState.clickable && {
-    cursor: 'pointer',
-    [HOVER_MEDIA]: { '&:hover': { backgroundColor: hy.bgColor.secondaryHover } },
-    '&:active': { backgroundColor: hy.bgColor.secondaryActive },
-    '&:focus-visible': {
-      boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
-      outline: `2px solid ${hy.bgColor.black}`,
-      outlineOffset: 2,
-    },
-  }),
+  border: `${size === 'small' ? 1 : 2}px solid ${hy.borderColor.primary}`,
+  fontSize: size === 'small' ? 12 : 14,
+  padding: size === 'small' ? '1px 6px' : 'calc(0.25rem - 0.03125rem) 0.5rem',
+})
+
+const ChipRoot = styled('span')<{ ownerState: { size: ChipSize } }>(({ ownerState }) => chipStyles(ownerState.size))
+
+const ChipButton = styled('button')<{ ownerState: { size: ChipSize } }>(({ ownerState }) => ({
+  all: 'unset',
+  ...chipStyles(ownerState.size),
+  cursor: 'pointer',
+  [HOVER_MEDIA]: { '&:hover': { backgroundColor: hy.bgColor.secondaryHover } },
+  '&:active': { backgroundColor: hy.bgColor.secondaryActive },
+  '&:focus-visible': {
+    boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
+    outline: `2px solid ${hy.bgColor.black}`,
+    outlineOffset: 2,
+  },
 }))
 
-const ChipText = styled('span')<{ ownerState: { size: 'medium' | 'small' } }>(({ ownerState }) => ({
+const ChipText = styled('span')<{ ownerState: { size: ChipSize } }>(({ ownerState }) => ({
   padding: ownerState.size === 'small' ? '0 3px' : '0 4px',
 }))
 
 const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium', sx }: HyChipProps) => {
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      onClick?.()
-    }
-  }
-
-  return (
-    <ChipRoot
-      ownerState={{ size, clickable: !!onClick }}
-      sx={sx}
-      {...(onClick && {
-        role: 'button',
-        tabIndex: 0,
-        'aria-label': ariaLabel ?? `Remove ${label}`,
-        onClick,
-        onKeyDown: handleKeyDown,
-      })}
-    >
+  const content = (
+    <>
       {prefixIcon}
       <ChipText ownerState={{ size }}>{label}</ChipText>
       {onClick && <CloseIcon size={size === 'small' ? 12 : 16} />}
-    </ChipRoot>
+    </>
+  )
+
+  if (!onClick) {
+    return (
+      <ChipRoot ownerState={{ size }} sx={sx}>
+        {content}
+      </ChipRoot>
+    )
+  }
+
+  return (
+    <ChipButton
+      type="button"
+      ownerState={{ size }}
+      sx={sx}
+      aria-label={ariaLabel ?? `Remove ${label}`}
+      onClick={onClick}
+    >
+      {content}
+    </ChipButton>
   )
 }
 

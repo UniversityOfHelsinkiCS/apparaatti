@@ -1,5 +1,5 @@
 import { styled, type SxProps } from '@mui/material/styles'
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
 import { useId, useState } from 'react'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
@@ -48,6 +48,8 @@ export interface HyAccordionProps {
   /* 200ms opening animation, not part of original hy-ds spec */
   animate?: boolean
   borders?: 'both' | 'top' | 'bottom' | 'none'
+  action?: ReactNode
+  triggerRef?: Ref<HTMLButtonElement>
 }
 
 // --- Styled elements ---
@@ -57,14 +59,21 @@ const Root = styled('div')({
   position: 'relative',
 })
 
-const Title = styled('div')({
+interface HeaderRowProps {
+  $expanded: boolean
+  $showTopBorder: boolean
+  $showBottomBorder: boolean
+}
+
+const HeaderRow = styled('div', {
+  shouldForwardProp: p => p !== '$expanded' && p !== '$showTopBorder' && p !== '$showBottomBorder',
+})<HeaderRowProps>(({ $expanded, $showTopBorder, $showBottomBorder }) => ({
   position: 'relative',
   display: 'flex',
-})
+  borderTop: $showTopBorder ? `1px solid ${hy.borderColor.light}` : 'none',
+  borderBottom: $showBottomBorder && !$expanded ? `1px solid ${hy.borderColor.light}` : 'none',
+  backgroundColor: $expanded ? hy.bgColor.neutralLight : 'transparent',
 
-const OpenButtonContainer = styled('div')({
-  position: 'relative',
-  width: '100%',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -81,18 +90,45 @@ const OpenButtonContainer = styled('div')({
   '&:active::after': {
     backgroundColor: hy.bgColor.transparentOnLightActive,
   },
+
+  '&:has([data-accordion-heading] button:focus-visible)': {
+    boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
+    outline: `2px solid ${hy.borderColor.black}`,
+    outlineOffset: '0px',
+    zIndex: 1,
+  },
+}))
+
+const Title = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  flex: 1,
+  minWidth: 0,
+})
+
+const OpenButtonContainer = styled('div')({
+  position: 'relative',
+  width: '100%',
+})
+
+const ActionSlot = styled('div')({
+  position: 'relative',
+  zIndex: 2,
+  display: 'flex',
+  alignItems: 'center',
+  flexShrink: 0,
+  paddingInlineStart: '0.5rem',
+  paddingInlineEnd: '0.75rem',
+  '&:empty': { display: 'none' },
 })
 
 interface OpenButtonProps {
   $variant: AccordionVariant
-  $expanded: boolean
-  $showTopBorder: boolean
-  $showBottomBorder: boolean
 }
 
 const OpenButton = styled('button', {
-  shouldForwardProp: p => p !== '$variant' && p !== '$expanded' && p !== '$showTopBorder' && p !== '$showBottomBorder',
-})<OpenButtonProps>(({ $variant, $expanded, $showTopBorder, $showBottomBorder }) => ({
+  shouldForwardProp: p => p !== '$variant',
+})<OpenButtonProps>(({ $variant }) => ({
   all: 'unset',
   boxSizing: 'border-box',
   position: 'relative',
@@ -104,8 +140,6 @@ const OpenButton = styled('button', {
   color: hy.textColor.default,
   fill: hy.textColor.default,
   outline: '4px solid transparent',
-  borderTop: $showTopBorder ? `1px solid ${hy.borderColor.light}` : 'none',
-  borderBottom: $showBottomBorder && !$expanded ? `1px solid ${hy.borderColor.light}` : 'none',
   fontFamily: "'Open Sans Variable', 'Open Sans', sans-serif",
   fontWeight: 600,
   letterSpacing: '0px',
@@ -113,14 +147,6 @@ const OpenButton = styled('button', {
   padding: 'calc(0.75rem - 1px) 0.75rem',
   fontSize: $variant === 'compact' ? '16px' : '18px',
   cursor: 'pointer',
-  backgroundColor: $expanded ? hy.bgColor.neutralLight : 'transparent',
-
-  '&:focus-visible': {
-    boxShadow: `0 0 0 2px ${hy.bgColor.white}`,
-    outline: `2px solid ${hy.borderColor.black}`,
-    outlineOffset: '0px',
-    zIndex: 1,
-  },
 }))
 
 interface IconWrapperProps {
@@ -196,6 +222,8 @@ const HyAccordion = ({
   sx,
   animate = false,
   borders = 'both',
+  action,
+  triggerRef,
 }: HyAccordionProps) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
@@ -222,26 +250,27 @@ const HyAccordion = ({
 
   return (
     <Root sx={sx}>
-      <Title role="heading" aria-level={headingLevel}>
-        <OpenButtonContainer>
-          <OpenButton
-            $variant={variant}
-            $expanded={isExpanded}
-            $showTopBorder={showTopBorder}
-            $showBottomBorder={showBottomBorder}
-            onClick={handleClick}
-            aria-expanded={isExpanded}
-            aria-controls={panelId}
-            id={id}
-            type="button"
-          >
-            <IconWrapper $variant={variant} aria-hidden="true">
-              {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconWrapper>
-            <HeaderSlot $variant={variant}>{summary}</HeaderSlot>
-          </OpenButton>
-        </OpenButtonContainer>
-      </Title>
+      <HeaderRow $expanded={isExpanded} $showTopBorder={showTopBorder} $showBottomBorder={showBottomBorder}>
+        <Title role="heading" aria-level={headingLevel} data-accordion-heading="true">
+          <OpenButtonContainer>
+            <OpenButton
+              ref={triggerRef}
+              $variant={variant}
+              onClick={handleClick}
+              aria-expanded={isExpanded}
+              aria-controls={panelId}
+              id={id}
+              type="button"
+            >
+              <IconWrapper $variant={variant} aria-hidden="true">
+                {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconWrapper>
+              <HeaderSlot $variant={variant}>{summary}</HeaderSlot>
+            </OpenButton>
+          </OpenButtonContainer>
+        </Title>
+        {action && <ActionSlot>{action}</ActionSlot>}
+      </HeaderRow>
 
       {animate ? (
         <PanelWrapper $expanded={isExpanded}>

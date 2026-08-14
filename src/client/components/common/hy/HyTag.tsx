@@ -70,7 +70,7 @@ const COLOUR_TOKENS: Record<TagColour, ColourTokens> = {
   },
 }
 
-const TagRoot = styled('div')<{ ownerState: { colour: TagColour; isInteractive: boolean } }>(({ ownerState }) => {
+const TagRoot = styled('span')<{ ownerState: { colour: TagColour; isInteractive: boolean } }>(({ ownerState }) => {
   const { color, bg, bgHover, bgActive } = COLOUR_TOKENS[ownerState.colour]
   return {
     boxSizing: 'border-box',

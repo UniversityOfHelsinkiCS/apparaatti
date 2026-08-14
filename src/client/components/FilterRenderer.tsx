@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
@@ -34,6 +34,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
   const filters = useFilterContext()
   const { highlightedFilterId, setHighlightedFilterId } = filters
   const isHighlighted = highlightedFilterId === filter.id
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (!isHighlighted) {
@@ -86,8 +87,11 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
         variant="compact"
         animate
         borders={isFirst ? 'both' : 'bottom'}
+        triggerRef={triggerRef}
+        action={<ActiveFilterChips filterId={filter.id} focusRef={triggerRef} />}
         summary={
           <Box
+            component="span"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -108,7 +112,6 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
             <Box component="span" sx={{ flexGrow: 1 }}>
               {shortName}
             </Box>
-            <ActiveFilterChips filterId={filter.id} />
           </Box>
         }
       >
