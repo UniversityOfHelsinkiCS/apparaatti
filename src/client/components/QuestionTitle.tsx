@@ -41,7 +41,11 @@ const QuestionTitle = ({
         >
           <Info />
         </HyIconButton>
-        <Typography sx={{ fontSize: '1rem', width: 'auto' }} data-testid={`question-text-${question.id}`}>
+        <Typography
+          sx={{ fontSize: '1rem', width: 'auto' }}
+          id={`question-text-${question.id}`}
+          data-testid={`question-text-${question.id}`}
+        >
           {title}
         </Typography>
       </Stack>

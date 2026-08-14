@@ -31,7 +31,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
           border: '1px solid lightgray',
         }}
         name={filter.id}
-        labelId={`${filter.id}-select-label`}
+        labelId={`question-text-${filter.id}`}
         id={`${filter.id}-select`}
         data-testid={`${filter.id}-select`}
         value={state}

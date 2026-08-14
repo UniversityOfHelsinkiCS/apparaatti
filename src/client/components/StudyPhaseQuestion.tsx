@@ -48,7 +48,7 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
         sx={{ minWidth: 100, maxWidth: '100%', marginTop: 1.5 }}
         disabled={organisations.length < 2}
         name={question.id}
-        labelId="study-field-select-label"
+        labelId="question-text-study-field-select"
         id="study-field-select"
         data-testid="study-field-select"
         value={studyField}

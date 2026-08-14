@@ -1,6 +1,6 @@
 import MuiModal from '@mui/material/Modal'
 import { styled, type SxProps } from '@mui/material/styles'
-import { type ReactNode, type SVGProps, useCallback, useEffect, useRef, useState } from 'react'
+import { type ReactNode, type SVGProps, useCallback, useEffect, useId, useRef, useState } from 'react'
 
 import { HOVER_MEDIA, hy } from './hyTokens'
 
@@ -355,6 +355,7 @@ const HyModal = ({
   children,
   sx,
 }: HyModalProps) => {
+  const titleId = useId()
   const [modalMounted, setModalMounted] = useState(open)
   const [containerOpen, setContainerOpen] = useState(false)
   const [containerIn, setContainerIn] = useState(false)
@@ -437,13 +438,13 @@ const HyModal = ({
           $scrollable={scrollable}
           role={role}
           aria-modal
-          aria-labelledby={title ? 'hy-modal-title' : undefined}
+          aria-labelledby={title ? titleId : undefined}
           sx={sx}
         >
           {header ?? (
             <Header $sticky={scrollable}>
               {title && (
-                <Heading id="hy-modal-title" role="heading" aria-level={headingLevel} tabIndex={-1}>
+                <Heading id={titleId} role="heading" aria-level={headingLevel} tabIndex={-1}>
                   {variant === 'danger' && <DangerIcon aria-label="Warning" />}
                   <HeadingText>{title}</HeadingText>
                 </Heading>
