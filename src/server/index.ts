@@ -1,6 +1,9 @@
+import './util/sentry.ts'
+
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import * as Sentry from '@sentry/node'
 import { RedisStore } from 'connect-redis'
 import express from 'express'
 import session from 'express-session'
@@ -61,6 +64,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(DIST_PATH))
   app.get('/*mint', (_, res) => res.sendFile(INDEX_PATH))
 }
+
+Sentry.setupExpressErrorHandler(app)
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()

@@ -4,6 +4,12 @@ import { configDefaults, defineConfig } from 'vitest/config'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    __RELEASE_VERSION__: JSON.stringify(process.env.RELEASE_VERSION ?? null),
+  },
+  build: {
+    sourcemap: true,
+  },
   test: {
     exclude: [...configDefaults.exclude, 'e2e/**'],
   },

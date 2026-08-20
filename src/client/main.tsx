@@ -1,4 +1,5 @@
 import '@uh-design-system/component-library/dist/fonts/fonts.css'
+import './util/sentry.ts'
 
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
