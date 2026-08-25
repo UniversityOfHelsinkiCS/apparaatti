@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/node'
+
 import type { UpdaterRun } from '../../common/types.ts'
 import {
   createUpdaterRun,
@@ -20,6 +22,10 @@ export const triggerUpdaterRun = async (triggeredBy: string): Promise<UpdaterRun
     .then(() => finishUpdaterRun(runRow.id, 'success'))
     .catch((e: unknown) => {
       const msg = e instanceof Error ? (e.stack ?? e.message) : String(e)
+      Sentry.captureException(e, {
+        tags: { component: 'updater', triggeredBy },
+        extra: { updaterRunId: runRow.id },
+      })
       return finishUpdaterRun(runRow.id, 'failed', msg)
     })
 
