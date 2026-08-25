@@ -15,6 +15,7 @@ import { seedDatabase } from './db/seed.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
 import router from './routes/router.ts'
 import setupCron from './updater/cron.ts'
+import { clearInterruptedUpdaterRuns } from './updater/manualRun.ts'
 import { IN_E2E, inDevelopment, SESSION_SECRET, UPDATER_CRON_ENABLED } from './util/config.ts'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
@@ -79,6 +80,7 @@ app.listen(process.env.PORT, async () => {
   }
 
   if (UPDATER_CRON_ENABLED) {
+    await clearInterruptedUpdaterRuns()
     await setupCron()
   }
 })

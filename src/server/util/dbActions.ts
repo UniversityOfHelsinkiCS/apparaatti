@@ -573,6 +573,14 @@ export async function createUpdaterRun(triggeredBy: string): Promise<UpdaterRunT
   }
 }
 
+export async function failInterruptedUpdaterRuns(): Promise<number> {
+  const [affected] = await UpdaterRun.update(
+    { status: 'failed', finishedAt: new Date(), error: 'Interrupted by pod restart' },
+    { where: { status: 'running' } }
+  )
+  return affected
+}
+
 export async function finishUpdaterRun(id: number, status: 'success' | 'failed', error?: string) {
   await UpdaterRun.update({ status, finishedAt: new Date(), error: error ?? null }, { where: { id } })
 }
