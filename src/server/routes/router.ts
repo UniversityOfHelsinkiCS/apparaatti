@@ -57,6 +57,7 @@ router.use('/admin', requireUser, adminRouter)
 
 if (UPDATER_CRON_ENABLED) {
   router.post('/updater/run', async (_req, res) => {
+    console.log('updater started running')
     const runRow = await triggerUpdaterRun('manual run')
     if (!runRow) {
       res.status(409).json({ message: 'A run is already in progress' })

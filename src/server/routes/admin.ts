@@ -198,9 +198,12 @@ adminRouter.post('/course/review', async (req, res) => {
 
 adminRouter.post('/updater/run', requireSuperuser, async (_req, res) => {
   try {
+    console.log(`Connecting to updater at ${UPDATER_RUN_URL}`)
     const response = await axios.post(UPDATER_RUN_URL, undefined, { timeout: 10_000 })
     res.status(response.status).json(response.data)
   } catch (e) {
+    console.log('backend encountered an error while updater run request was done')
+    console.log(e)
     if (axios.isAxiosError(e) && e.response) {
       res.status(e.response.status).json(e.response.data)
       return
