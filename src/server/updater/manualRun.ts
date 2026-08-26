@@ -13,7 +13,10 @@ import { runWithClear } from './index.ts'
 // Returns the newly created run row, or null if a run is already in progress.
 // The updater executes asynchronously — the response is returned immediately.
 export const triggerUpdaterRun = async (triggeredBy: string): Promise<UpdaterRun | null> => {
-  if (await getRunningUpdaterRun()) return null
+  if (await getRunningUpdaterRun()) {
+    logger.info('[UPDATER] run cancelled due to a existing run operation')
+    return null
+  }
 
   const runRow = await createUpdaterRun(triggeredBy)
 
@@ -26,6 +29,7 @@ export const triggerUpdaterRun = async (triggeredBy: string): Promise<UpdaterRun
         tags: { component: 'updater', triggeredBy },
         extra: { updaterRunId: runRow.id },
       })
+      logger.error(`[UPDATER] encountered and error ${msg}`)
       return finishUpdaterRun(runRow.id, 'failed', msg)
     })
 
