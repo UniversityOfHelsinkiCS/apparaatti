@@ -6,6 +6,7 @@ import type { UniqueUrnResponse } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
+import { UPDATER_RUN_URL } from '../util/config.ts'
 import {
   allCurs,
   createOrUpdateCourseAdminReviewEntry,
@@ -24,8 +25,6 @@ import {
 } from '../util/usersSearchHelper.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import statsRouter from './statsRouter.ts'
-
-const UPDATER_RUN_URL = 'http://apparaatti-updater/api/updater/run'
 
 const USER_FETCH_LIMIT = 100
 

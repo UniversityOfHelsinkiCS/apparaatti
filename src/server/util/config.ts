@@ -31,3 +31,5 @@ export const GIT_SHA = process.env.GIT_SHA || 'unknown'
 export const IMAGE_SHA = process.env.IMAGE_SHA || GIT_SHA
 export const RELEASE_VERSION = process.env.RELEASE_VERSION || undefined
 export const PACKAGE_VERSION = process.env.APP_VERSION || process.env.npm_package_version
+
+export const UPDATER_RUN_URL = process.env.UPDATER_RUN_URL || 'http://apparaatti-updater:8001/api/updater/run'
