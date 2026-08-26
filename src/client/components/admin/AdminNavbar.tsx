@@ -24,6 +24,7 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
   if (isSuperuser) {
     navItems.push({ label: t('v2:adminNav.loginAs'), path: '/admin/login-as' })
     navItems.push({ label: t('v2:adminNav.updater'), path: '/admin/updater' })
+    navItems.push({ label: 'Error test', path: '/admin/error-test' })
   }
 
   return (

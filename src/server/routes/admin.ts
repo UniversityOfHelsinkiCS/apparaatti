@@ -216,6 +216,10 @@ adminRouter.get('/updater/runs', requireSuperuser, async (_req, res) => {
   res.json(runs)
 })
 
+adminRouter.post('/debug/cause-error', requireSuperuser, (req, _res) => {
+  throw new Error(`Test error triggered from the admin error test page by ${req.user?.username ?? 'unknown user'}`)
+})
+
 adminRouter.use('/stats', statsRouter)
 adminRouter.use('/filter-config', filterConfigRouter)
 
