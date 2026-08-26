@@ -232,10 +232,14 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
         </TextField>
       </Box>
 
+      {/* Course date is a containment filter: the course must start on or after
+          "From" and end on or before "To", not merely overlap the range. */}
       <Box component="fieldset" sx={fieldsetSx}>
-        <Typography component="legend" sx={legendSx}>
-          Course date
-        </Typography>
+        <Tooltip title="Keeps only courses that both start and end within the range">
+          <Typography component="legend" sx={legendSx}>
+            Course date
+          </Typography>
+        </Tooltip>
         <TextField
           label="From"
           type="date"

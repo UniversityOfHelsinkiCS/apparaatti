@@ -321,10 +321,10 @@ export interface CourseSearchFilters {
   /** Limit results to reviewed or not-reviewed courses. */
   reviewStatus?: string
 
-  // --- Date filters: Curs whose [startDate, endDate] range overlaps [dateFrom, dateTo] ---
-  /** ISO date string; excludes Curs that ended before this date. */
+  // --- Date filters: Curs whose [startDate, endDate] range fits entirely inside [dateFrom, dateTo] ---
+  /** ISO date string; excludes Curs that start before this date. */
   dateFrom?: string
-  /** ISO date string; excludes Curs that start after this date (end of day). */
+  /** ISO date string; excludes Curs that end after this date (end of day). */
   dateTo?: string
 }
 
@@ -388,12 +388,13 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
     ]
   }
 
-  // Overlap check: the course's [startDate, endDate] range must intersect the searched [dateFrom, dateTo] range.
+  // Containment check: the course's [startDate, endDate] range must fit entirely
+  // inside the searched [dateFrom, dateTo] range. Bounds are inclusive.
   if (dateFrom) {
-    curWhere.endDate = { [Op.gte]: new Date(dateFrom) }
+    curWhere.startDate = { [Op.gte]: new Date(dateFrom) }
   }
   if (dateTo) {
-    curWhere.startDate = { [Op.lte]: endOfDay(dateTo) }
+    curWhere.endDate = { [Op.lte]: endOfDay(dateTo) }
   }
 
   // Hard filter: only KK- coded courses are surfaced in the admin list.
