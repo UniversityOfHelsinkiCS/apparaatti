@@ -122,7 +122,7 @@ const UpdaterPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <AdminNavbar isSuperuser={user.isSuperuser} />
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
 
       <Typography variant="h4" sx={{ mb: 3 }}>
         {t('v2:updater.pageTitle')}
