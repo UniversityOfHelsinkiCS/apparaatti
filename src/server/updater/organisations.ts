@@ -28,7 +28,7 @@ const organisationsHandler = async (organisations: Organisation[]) => {
 }
 
 const fetchOrganisations = async () => {
-  await mangleData('organisations', 3000, organisationsHandler)
+  await mangleData('organisations', 10000, organisationsHandler)
 }
 
 export default fetchOrganisations
