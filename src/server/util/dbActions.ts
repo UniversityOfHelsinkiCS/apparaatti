@@ -4,6 +4,7 @@ import type {
   RecommendationMetadata,
   UpdaterRun as UpdaterRunType,
   UpdaterRunKind,
+  UrnMatchMode,
   UserFeedback as UserFeedbackType,
   UserSettings as UserSettingsType,
   UserVisit,
@@ -199,13 +200,27 @@ function getCurUrnsLowercase(cur: any): string[] {
     .map(u => u.toLowerCase())
 }
 
-function curMatchesUrnFilters(cur: any, urnSearchLower: string | undefined, excludeUrnListLower: string[]): boolean {
+// Include: with mode 'or' the Cur must match at least one of the given URN
+// substrings, with 'and' it must match every one of them. Exclude: with 'or'
+// the Cur is dropped as soon as one exclude substring matches, with 'and' only
+// when every exclude substring matches. Empty lists never filter anything.
+function curMatchesUrnFilters(
+  cur: any,
+  includeUrnListLower: string[],
+  includeMode: UrnMatchMode,
+  excludeUrnListLower: string[],
+  excludeMode: UrnMatchMode
+): boolean {
   const urns = getCurUrnsLowercase(cur)
-  if (urnSearchLower && !urns.some(u => u.includes(urnSearchLower))) {
-    return false
+  const matches = (needle: string) => urns.some(u => u.includes(needle))
+
+  if (includeUrnListLower.length > 0) {
+    const included = includeMode === 'and' ? includeUrnListLower.every(matches) : includeUrnListLower.some(matches)
+    if (!included) return false
   }
-  if (excludeUrnListLower.some(ex => urns.some(u => u.includes(ex)))) {
-    return false
+  if (excludeUrnListLower.length > 0) {
+    const excluded = excludeMode === 'and' ? excludeUrnListLower.every(matches) : excludeUrnListLower.some(matches)
+    if (excluded) return false
   }
   return true
 }
@@ -244,8 +259,10 @@ async function findCurIdsToExcludeByCourseCode(excludeCourseCodes: string[]): Pr
 async function paginateCursWithJsUrnFilter(
   curWhere: any,
   includeOptions: any[],
-  urnSearch: string | undefined,
+  includeUrnListLower: string[],
+  includeMode: UrnMatchMode,
   excludeUrnListLower: string[],
+  excludeMode: UrnMatchMode,
   reviewStatus: string | undefined,
   page: number,
   limit: number,
@@ -258,8 +275,9 @@ async function paginateCursWithJsUrnFilter(
     subQuery: false,
   })
 
-  const urnSearchLower = urnSearch?.toLowerCase()
-  const filtered = allCurs.filter(cur => curMatchesUrnFilters(cur, urnSearchLower, excludeUrnListLower))
+  const filtered = allCurs.filter(cur =>
+    curMatchesUrnFilters(cur, includeUrnListLower, includeMode, excludeUrnListLower, excludeMode)
+  )
 
   const filteredWithReviews = filterCoursesByReviewStatus(await populateWithReviews(filtered), reviewStatus)
   const total = filteredWithReviews.length
@@ -285,10 +303,14 @@ export interface CourseSearchFilters {
   nameSearch?: string
 
   // --- URN filters (operate on Cur.customCodeUrns JSONB) ---
-  /** Include only Curs whose `customCodeUrns` contains this substring. */
+  /** Comma-separated URN substrings; Curs are kept per `urnMode`. */
   urnSearch?: string
-  /** Comma-separated URN substrings; Curs matching ANY are excluded. */
+  /** 'or' (default) keeps Curs matching any `urnSearch` substring, 'and' requires every one. */
+  urnMode?: UrnMatchMode
+  /** Comma-separated URN substrings; Curs are excluded per `excludeUrnsMode`. */
   excludeUrns?: string
+  /** 'or' (default) excludes Curs matching any substring, 'and' only those matching every one. */
+  excludeUrnsMode?: UrnMatchMode
 
   // --- Course code filters (operate on linked Cu.courseCode) ---
   /** Substring against `Cu.courseCode`. AND-combined with the hard 'KK-%' prefix. */
@@ -341,8 +363,18 @@ async function populateWithReviews(curs: Cur[]) {
 }
 
 export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
-  const { nameSearch, urnSearch, excludeUrns, courseCodeSearch, excludeCourseCodes, reviewStatus, dateFrom, dateTo } =
-    filters
+  const {
+    nameSearch,
+    urnSearch,
+    urnMode,
+    excludeUrns,
+    excludeUrnsMode,
+    courseCodeSearch,
+    excludeCourseCodes,
+    reviewStatus,
+    dateFrom,
+    dateTo,
+  } = filters
   const offset = (page - 1) * limit
 
   // Build the where clause for course realizations (name search)
@@ -372,6 +404,7 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
       : { [Op.iLike]: 'KK-%' },
   }
 
+  const includeUrnList = parseCsvList(urnSearch).map(s => s.toLowerCase())
   const excludeUrnList = parseCsvList(excludeUrns).map(s => s.toLowerCase())
   const excludeCourseCodeList = parseCsvList(excludeCourseCodes)
 
@@ -391,14 +424,19 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
   ]
 
   const needsJsFiltering =
-    !!urnSearch || excludeUrnList.length > 0 || reviewStatus === 'reviewed' || reviewStatus === 'not-reviewed'
+    includeUrnList.length > 0 ||
+    excludeUrnList.length > 0 ||
+    reviewStatus === 'reviewed' ||
+    reviewStatus === 'not-reviewed'
 
   if (needsJsFiltering) {
     const jsFilteredResult = await paginateCursWithJsUrnFilter(
       curWhere,
       includeOptions,
-      urnSearch,
+      includeUrnList,
+      urnMode ?? 'or',
       excludeUrnList,
+      excludeUrnsMode ?? 'or',
       reviewStatus,
       page,
       limit,

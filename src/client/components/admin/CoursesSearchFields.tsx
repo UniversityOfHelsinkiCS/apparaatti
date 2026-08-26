@@ -1,18 +1,20 @@
-import { Box, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Divider, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 
-import type { UniqueUrnResponse } from '../../../common/types.ts'
+import type { UniqueUrnResponse, UrnMatchMode } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
-import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import { hy } from '../common/hy/hyTokens.ts'
+import MultiAutoCompleteTextField from '../common/MultiAutoCompleteTextField.tsx'
 
 export type ReviewStatusFilterValue = 'all' | 'reviewed' | 'not-reviewed'
 
 export interface CoursesSearchFieldsValues {
   nameInput: string
-  urnInput: string
-  excludeUrnsInput: string
+  urnInputs: string[]
+  urnMode: UrnMatchMode
+  excludeUrnsInputs: string[]
+  excludeUrnsMode: UrnMatchMode
   courseCodeInput: string
   excludeCourseCodesInput: string
   reviewStatusInput: ReviewStatusFilterValue
@@ -37,11 +39,55 @@ const fieldsetSx = {
 } as const
 const legendSx = { px: 0.5, fontWeight: 600, fontSize: 12 } as const
 
+// A single URN filter (the value field plus its own mode toggle) is grouped in
+// its own bordered box so it is obvious which field the OR/AND toggle controls.
+const urnGroupSx = {
+  display: 'flex',
+  gap: 0.5,
+  alignItems: 'center',
+  border: '1px solid',
+  borderColor: 'rgba(0,0,0,0.23)',
+  borderRadius: 1,
+  px: 1,
+  py: 1,
+  m: 0,
+} as const
+const urnGroupLegendSx = { px: 0.5, fontWeight: 600, fontSize: 11 } as const
+
+interface UrnModeToggleProps {
+  id: string
+  value: UrnMatchMode
+  onChange: (mode: UrnMatchMode) => void
+  orTitle: string
+  andTitle: string
+}
+
+const UrnModeToggle = ({ id, value, onChange, orTitle, andTitle }: UrnModeToggleProps) => (
+  <ToggleButtonGroup
+    id={id}
+    exclusive
+    size="small"
+    value={value}
+    onChange={(_event, newMode: UrnMatchMode | null) => {
+      if (newMode) onChange(newMode)
+    }}
+  >
+    <Tooltip title={orTitle}>
+      <ToggleButton value="or">OR</ToggleButton>
+    </Tooltip>
+    <Tooltip title={andTitle}>
+      <ToggleButton value="and">AND</ToggleButton>
+    </Tooltip>
+  </ToggleButtonGroup>
+)
+
 const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
   const [nameInput, setNameInput] = useState('')
-  const [urnInput, setUrnInput] = useState('')
+  const [urnInputs, setUrnInputs] = useState<string[]>([])
+  const [urnMode, setUrnMode] = useState<UrnMatchMode>('or')
   const [courseCodeInput, setCourseCodeInput] = useState('')
-  const [excludeUrnsInput, setExcludeUrnsInput] = useState('')
+  const [excludeUrnsInputs, setExcludeUrnsInputs] = useState<string[]>([])
+  const [excludeUrnsMode, setExcludeUrnsMode] = useState<UrnMatchMode>('or')
   const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
   const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
   const [dateFromInput, setDateFromInput] = useState('')
@@ -50,9 +96,11 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
   const handleSearch = () => {
     onSearch({
       nameInput,
-      urnInput,
+      urnInputs,
+      urnMode,
       courseCodeInput,
-      excludeUrnsInput,
+      excludeUrnsInputs,
+      excludeUrnsMode,
       excludeCourseCodesInput,
       reviewStatusInput,
       dateFromInput,
@@ -87,28 +135,57 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
         <Typography component="legend" sx={legendSx}>
           URN
         </Typography>
-        <AutoCompleteTextField
-          id="course-urn-include"
-          value={urnInput}
-          onChange={setUrnInput}
-          options={urnOptions?.codeUrns ?? []}
-          label="Include"
-          sx={{
-            minWidth: 300,
-            ...(urnInput && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.success } }),
-          }}
-        />
-        <AutoCompleteTextField
-          id="course-urn-exclude"
-          value={excludeUrnsInput}
-          onChange={setExcludeUrnsInput}
-          options={urnOptions?.codeUrns ?? []}
-          label="Exclude"
-          sx={{
-            minWidth: 300,
-            ...(excludeUrnsInput && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.danger } }),
-          }}
-        />
+        <Box component="fieldset" sx={urnGroupSx}>
+          <Typography component="legend" sx={urnGroupLegendSx}>
+            Include
+          </Typography>
+          <MultiAutoCompleteTextField
+            id="course-urn-include"
+            value={urnInputs}
+            onChange={setUrnInputs}
+            options={urnOptions?.codeUrns ?? []}
+            label="URNs to include"
+            sx={{
+              minWidth: 300,
+              ...(urnInputs.length > 0 && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.success } }),
+            }}
+          />
+          <UrnModeToggle
+            id="course-urn-include-mode"
+            value={urnMode}
+            onChange={setUrnMode}
+            orTitle="Keep courses matching any of the URNs listed to the left"
+            andTitle="Keep only courses matching all of the URNs listed to the left"
+          />
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box component="fieldset" sx={urnGroupSx}>
+          <Typography component="legend" sx={urnGroupLegendSx}>
+            Exclude
+          </Typography>
+          <MultiAutoCompleteTextField
+            id="course-urn-exclude"
+            value={excludeUrnsInputs}
+            onChange={setExcludeUrnsInputs}
+            options={urnOptions?.codeUrns ?? []}
+            label="URNs to exclude"
+            sx={{
+              minWidth: 300,
+              ...(excludeUrnsInputs.length > 0 && {
+                '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.danger },
+              }),
+            }}
+          />
+          <UrnModeToggle
+            id="course-urn-exclude-mode"
+            value={excludeUrnsMode}
+            onChange={setExcludeUrnsMode}
+            orTitle="Drop courses matching any of the URNs listed to the left"
+            andTitle="Drop only courses matching all of the URNs listed to the left"
+          />
+        </Box>
       </Box>
 
       {/* Course code filters (operate on linked Cu.courseCode) */}

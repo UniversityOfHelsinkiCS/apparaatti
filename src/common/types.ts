@@ -1,3 +1,6 @@
+/** How several selected URNs combine when filtering. */
+export type UrnMatchMode = 'or' | 'and'
+
 export type UniqueUrnResponse = {
   codeUrns: string[]
   typeUrns: string[]

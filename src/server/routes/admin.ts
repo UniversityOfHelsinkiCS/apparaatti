@@ -2,7 +2,12 @@ import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
 
-import type { UniqueUrnResponse, UpdaterRunKind, User } from '../../common/types.ts'
+import type {
+  UniqueUrnResponse,
+  UpdaterRunKind,
+  UrnMatchMode,
+  User,
+} from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
@@ -130,8 +135,10 @@ adminRouter.get('/courses', async (req, res) => {
     limit = '50',
     name,
     urn,
+    urnMode,
     courseCode,
     excludeUrns,
+    excludeUrnsMode,
     excludeCourseCodes,
     reviewStatus,
     dateFrom,
@@ -141,11 +148,16 @@ adminRouter.get('/courses', async (req, res) => {
   const pageNum = parseInt(page as string, 10)
   const limitNum = parseInt(limit as string, 10)
 
+  // Anything other than an explicit 'and' means the legacy OR behaviour.
+  const asUrnMatchMode = (value: unknown): UrnMatchMode => (value === 'and' ? 'and' : 'or')
+
   const result = await searchCoursesWithPagination(
     {
       nameSearch: name as string | undefined,
       urnSearch: urn as string | undefined,
+      urnMode: asUrnMatchMode(urnMode),
       excludeUrns: excludeUrns as string | undefined,
+      excludeUrnsMode: asUrnMatchMode(excludeUrnsMode),
       courseCodeSearch: courseCode as string | undefined,
       excludeCourseCodes: excludeCourseCodes as string | undefined,
       reviewStatus: reviewStatus as string | undefined,

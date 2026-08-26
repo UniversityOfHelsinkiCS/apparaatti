@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
 import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
-import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
+import type { CourseReviewState, LocalizedString, UrnMatchMode } from '../../../common/types.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
@@ -45,9 +45,11 @@ const CoursesPage = () => {
 
   // Active search values (what's actually sent to API)
   const [nameSearch, setNameSearch] = useState('')
-  const [urnSearch, setUrnSearch] = useState('')
+  const [urnSearch, setUrnSearch] = useState<string[]>([])
+  const [urnMode, setUrnMode] = useState<UrnMatchMode>('or')
   const [courseCodeSearch, setCourseCodeSearch] = useState('')
-  const [excludeUrnsSearch, setExcludeUrnsSearch] = useState('')
+  const [excludeUrnsSearch, setExcludeUrnsSearch] = useState<string[]>([])
+  const [excludeUrnsMode, setExcludeUrnsMode] = useState<UrnMatchMode>('or')
   const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
   const [reviewStatusSearch, setReviewStatusSearch] = useState<ReviewStatusFilterValue>('all')
   const [dateFromSearch, setDateFromSearch] = useState('')
@@ -55,18 +57,22 @@ const CoursesPage = () => {
 
   const handleSearch = ({
     nameInput,
-    urnInput,
+    urnInputs,
+    urnMode: urnModeInput,
     courseCodeInput,
-    excludeUrnsInput,
+    excludeUrnsInputs,
+    excludeUrnsMode: excludeUrnsModeInput,
     excludeCourseCodesInput,
     reviewStatusInput,
     dateFromInput,
     dateToInput,
   }: CoursesSearchFieldsValues) => {
     setNameSearch(nameInput)
-    setUrnSearch(urnInput)
+    setUrnSearch(urnInputs)
+    setUrnMode(urnModeInput)
     setCourseCodeSearch(courseCodeInput)
-    setExcludeUrnsSearch(excludeUrnsInput)
+    setExcludeUrnsSearch(excludeUrnsInputs)
+    setExcludeUrnsMode(excludeUrnsModeInput)
     setExcludeCourseCodesSearch(excludeCourseCodesInput)
     setReviewStatusSearch(reviewStatusInput)
     setDateFromSearch(dateFromInput)
@@ -79,9 +85,15 @@ const CoursesPage = () => {
     params.append('page', page.toString())
     params.append('limit', '50')
     if (nameSearch) params.append('name', nameSearch)
-    if (urnSearch) params.append('urn', urnSearch)
+    if (urnSearch.length > 0) {
+      params.append('urn', urnSearch.join(','))
+      if (urnMode !== 'or') params.append('urnMode', urnMode)
+    }
     if (courseCodeSearch) params.append('courseCode', courseCodeSearch)
-    if (excludeUrnsSearch) params.append('excludeUrns', excludeUrnsSearch)
+    if (excludeUrnsSearch.length > 0) {
+      params.append('excludeUrns', excludeUrnsSearch.join(','))
+      if (excludeUrnsMode !== 'or') params.append('excludeUrnsMode', excludeUrnsMode)
+    }
     if (excludeCourseCodesSearch) params.append('excludeCourseCodes', excludeCourseCodesSearch)
     if (reviewStatusSearch !== 'all') params.append('reviewStatus', reviewStatusSearch)
     if (dateFromSearch) params.append('dateFrom', dateFromSearch)
@@ -94,7 +106,7 @@ const CoursesPage = () => {
     isLoading: isCoursesLoading,
     refetch,
   } = useApi<PaginatedCoursesResponse>(
-    `admin-courses-${page}-${nameSearch}-${urnSearch}-${courseCodeSearch}-${excludeUrnsSearch}-${excludeCourseCodesSearch}-${reviewStatusSearch}-${dateFromSearch}-${dateToSearch}`,
+    `admin-courses-${page}-${nameSearch}-${urnSearch.join(',')}-${urnMode}-${courseCodeSearch}-${excludeUrnsSearch.join(',')}-${excludeUrnsMode}-${excludeCourseCodesSearch}-${reviewStatusSearch}-${dateFromSearch}-${dateToSearch}`,
     `/api/admin/courses?${buildQueryString()}`,
     'GET',
     undefined
