@@ -2,7 +2,7 @@ import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
 
-import type { UniqueUrnResponse } from '../../common/types.ts'
+import type { UniqueUrnResponse, UpdaterRunKind, User } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
@@ -23,6 +23,7 @@ import {
   getWhereClauseForOneWordSearch,
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
+import { isSuperuser } from '../util/validations.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import statsRouter from './statsRouter.ts'
 
@@ -195,10 +196,19 @@ adminRouter.post('/course/review', async (req, res) => {
   res.json({ status: 'success', reviewState })
 })
 
-adminRouter.post('/updater/run', requireSuperuser, async (_req, res) => {
+adminRouter.post('/updater/run', async (req, res) => {
+  const runtype = (req.body?.runtype ?? 'full') as UpdaterRunKind
+  if (runtype !== 'full' && runtype !== 'courses') {
+    res.status(400).json({ message: 'Invalid runtype' })
+    return
+  }
+  if (runtype === 'full' && !isSuperuser(req.user as User)) {
+    res.status(403).json({ message: 'A full updater run requires superuser rights' })
+    return
+  }
   try {
     console.log(`Connecting to updater at ${UPDATER_RUN_URL}`)
-    const response = await axios.post(UPDATER_RUN_URL, undefined, { timeout: 10_000 })
+    const response = await axios.post(UPDATER_RUN_URL, { runtype }, { timeout: 10_000 })
     res.status(response.status).json(response.data)
   } catch (e) {
     console.log('backend encountered an error while updater run request was done')
@@ -211,7 +221,7 @@ adminRouter.post('/updater/run', requireSuperuser, async (_req, res) => {
   }
 })
 
-adminRouter.get('/updater/runs', requireSuperuser, async (_req, res) => {
+adminRouter.get('/updater/runs', async (_req, res) => {
   const runs = await getUpdaterRuns()
   res.json(runs)
 })

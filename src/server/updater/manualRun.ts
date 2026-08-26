@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node'
 
-import type { UpdaterRun } from '../../common/types.ts'
+import type { UpdaterRun, UpdaterRunKind } from '../../common/types.ts'
 import {
   createUpdaterRun,
   failInterruptedUpdaterRuns,
@@ -12,21 +12,24 @@ import { runWithClear } from './index.ts'
 
 // Returns the newly created run row, or null if a run is already in progress.
 // The updater executes asynchronously — the response is returned immediately.
-export const triggerUpdaterRun = async (triggeredBy: string): Promise<UpdaterRun | null> => {
+export const triggerUpdaterRun = async (
+  triggeredBy: string,
+  runtype: UpdaterRunKind = 'full'
+): Promise<UpdaterRun | null> => {
   if (await getRunningUpdaterRun()) {
     logger.info('[UPDATER] run cancelled due to a existing run operation')
     return null
   }
 
-  const runRow = await createUpdaterRun(triggeredBy)
+  const runRow = await createUpdaterRun(triggeredBy, runtype)
 
   // fire-and-forget: do not await
-  runWithClear(true)
+  runWithClear(true, runtype)
     .then(() => finishUpdaterRun(runRow.id, 'success'))
     .catch((e: unknown) => {
       const msg = e instanceof Error ? (e.stack ?? e.message) : String(e)
       Sentry.captureException(e, {
-        tags: { component: 'updater', triggeredBy },
+        tags: { component: 'updater', triggeredBy, runtype },
         extra: { updaterRunId: runRow.id },
       })
       logger.error(`[UPDATER] encountered and error ${msg}`)

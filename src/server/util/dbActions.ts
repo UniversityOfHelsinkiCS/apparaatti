@@ -3,6 +3,7 @@ import { Op } from 'sequelize'
 import type {
   RecommendationMetadata,
   UpdaterRun as UpdaterRunType,
+  UpdaterRunKind,
   UserFeedback as UserFeedbackType,
   UserSettings as UserSettingsType,
   UserVisit,
@@ -560,12 +561,13 @@ export async function getRunningUpdaterRun() {
   return await UpdaterRun.findOne({ where: { status: 'running' } })
 }
 
-export async function createUpdaterRun(triggeredBy: string): Promise<UpdaterRunType> {
+export async function createUpdaterRun(triggeredBy: string, runtype: UpdaterRunKind): Promise<UpdaterRunType> {
   const startedAt = new Date()
-  const run = await UpdaterRun.create({ status: 'running', triggeredBy, startedAt })
+  const run = await UpdaterRun.create({ status: 'running', runtype, triggeredBy, startedAt })
   return {
     id: run.id,
     status: 'running',
+    runtype,
     triggeredBy: run.triggeredBy ?? null,
     error: run.error ?? null,
     startedAt,
@@ -594,6 +596,7 @@ export async function getUpdaterRuns(limit = 20): Promise<UpdaterRunType[]> {
   return runs.map(r => ({
     id: r.id,
     status: r.status as UpdaterRunType['status'],
+    runtype: r.runtype as UpdaterRunKind,
     triggeredBy: r.triggeredBy ?? null,
     error: r.error ?? null,
     startedAt: r.startedAt,

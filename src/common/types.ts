@@ -5,9 +5,12 @@ export type UniqueUrnResponse = {
 
 export type UpdaterRunStatus = 'running' | 'success' | 'failed'
 
+export type UpdaterRunKind = 'full' | 'courses'
+
 export type UpdaterRun = {
   id: number
   status: UpdaterRunStatus
+  runtype: UpdaterRunKind
   triggeredBy: string | null
   error: string | null
   startedAt: Date

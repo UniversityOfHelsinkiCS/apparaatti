@@ -6,6 +6,7 @@ import { sequelize } from '../connection.ts'
 class UpdaterRun extends Model<InferAttributes<UpdaterRun>, InferCreationAttributes<UpdaterRun>> {
   declare id: CreationOptional<number>
   declare status: string
+  declare runtype: CreationOptional<string>
   declare triggeredBy: CreationOptional<string | null>
   declare error: CreationOptional<string | null>
   declare startedAt: Date
@@ -23,6 +24,11 @@ UpdaterRun.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    runtype: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'full',
     },
     triggeredBy: {
       type: DataTypes.STRING,

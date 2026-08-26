@@ -6,6 +6,7 @@ import type {
   AnswerData,
   CourseData,
   RecommendationMetadata,
+  UpdaterRunKind,
   UserSettings as UserSettingsType,
 } from '../../common/types.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
@@ -56,9 +57,14 @@ if (inDevelopment || IN_E2E) {
 router.use('/admin', requireUser, adminRouter)
 
 if (UPDATER_CRON_ENABLED) {
-  router.post('/updater/run', async (_req, res) => {
-    console.log('updater started running')
-    const runRow = await triggerUpdaterRun('manual run')
+  router.post('/updater/run', async (req, res) => {
+    const runtype = (req.body?.runtype ?? 'full') as UpdaterRunKind
+    if (runtype !== 'full' && runtype !== 'courses') {
+      res.status(400).json({ message: 'Invalid runtype' })
+      return
+    }
+    console.log(`updater started running (${runtype})`)
+    const runRow = await triggerUpdaterRun('manual run', runtype)
     if (!runRow) {
       res.status(409).json({ message: 'A run is already in progress' })
       return

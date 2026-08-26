@@ -19,11 +19,11 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
     { label: t('v2:adminNav.courses'), path: '/admin/courses' },
     { label: t('v2:adminNav.stats'), path: '/admin/stats' },
     { label: t('v2:adminNav.feedback'), path: '/admin/feedback' },
+    { label: t('v2:adminNav.updater'), path: '/admin/updater' },
   ]
 
   if (isSuperuser) {
     navItems.push({ label: t('v2:adminNav.loginAs'), path: '/admin/login-as' })
-    navItems.push({ label: t('v2:adminNav.updater'), path: '/admin/updater' })
     navItems.push({ label: 'Error test', path: '/admin/error-test' })
   }
 

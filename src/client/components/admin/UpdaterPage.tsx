@@ -8,6 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -20,7 +21,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
-import type { UpdaterRun } from '../../../common/types.ts'
+import type { UpdaterRun, UpdaterRunKind } from '../../../common/types.ts'
 import useApiMutation from '../../hooks/useApiMutation.tsx'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
@@ -51,7 +52,7 @@ const statusColor = (status: string): 'default' | 'primary' | 'success' | 'error
 const UpdaterPage = () => {
   const { t } = useTranslation()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
-  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [confirmType, setConfirmType] = useState<UpdaterRunKind | null>(null)
   const [notice, setNotice] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null)
 
   const {
@@ -86,7 +87,7 @@ const UpdaterPage = () => {
     }
   }, [hasRunningRun, refetch])
 
-  const { mutateAsync: triggerRun } = useApiMutation<Record<string, never>>(async res => {
+  const { mutateAsync: triggerRun } = useApiMutation<{ runtype: UpdaterRunKind }>(async res => {
     if (res.status === 409) {
       setNotice({ type: 'warning', message: t('v2:updater.alreadyRunning') })
       return
@@ -111,19 +112,17 @@ const UpdaterPage = () => {
     return <Navigate to={'/'} replace />
   }
 
-  if (!user.isSuperuser) {
-    return <Navigate to={'/admin'} replace />
-  }
-
   const handleConfirm = async () => {
-    setConfirmOpen(false)
+    if (!confirmType) return
+    const runtype = confirmType
+    setConfirmType(null)
     setNotice(null)
-    await triggerRun({})
+    await triggerRun({ runtype })
   }
 
   return (
     <Box sx={{ p: 3 }}>
-      <AdminNavbar isSuperuser />
+      <AdminNavbar isSuperuser={user.isSuperuser} />
 
       <Typography variant="h4" sx={{ mb: 3 }}>
         {t('v2:updater.pageTitle')}
@@ -142,9 +141,16 @@ const UpdaterPage = () => {
         </Alert>
       )}
 
-      <BlackContainedButton onClick={() => setConfirmOpen(true)} disabled={hasRunningRun} sx={{ mb: 4 }}>
-        {t('v2:updater.runButton')}
-      </BlackContainedButton>
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        {user.isSuperuser && (
+          <BlackContainedButton onClick={() => setConfirmType('full')} disabled={hasRunningRun}>
+            {t('v2:updater.runButton')}
+          </BlackContainedButton>
+        )}
+        <BlackContainedButton onClick={() => setConfirmType('courses')} disabled={hasRunningRun}>
+          Update courses
+        </BlackContainedButton>
+      </Stack>
 
       <Typography variant="h6" sx={{ mb: 2 }}>
         {t('v2:updater.historyTitle')}
@@ -161,6 +167,7 @@ const UpdaterPage = () => {
               <TableRow>
                 <TableCell>{t('v2:updater.table.id')}</TableCell>
                 <TableCell>{t('v2:updater.table.status')}</TableCell>
+                <TableCell>Run type</TableCell>
                 <TableCell>{t('v2:updater.table.triggeredBy')}</TableCell>
                 <TableCell>{t('v2:updater.table.started')}</TableCell>
                 <TableCell>{t('v2:updater.table.finished')}</TableCell>
@@ -175,6 +182,7 @@ const UpdaterPage = () => {
                   <TableCell>
                     <Chip label={t(`v2:updater.status.${run.status}`)} color={statusColor(run.status)} size="small" />
                   </TableCell>
+                  <TableCell>{run.runtype ?? 'full'}</TableCell>
                   <TableCell>{run.triggeredBy ?? '—'}</TableCell>
                   <TableCell>{new Date(run.startedAt).toLocaleString()}</TableCell>
                   <TableCell>{run.finishedAt ? new Date(run.finishedAt).toLocaleString() : '—'}</TableCell>
@@ -198,15 +206,17 @@ const UpdaterPage = () => {
         </TableContainer>
       )}
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog open={confirmType !== null} onClose={() => setConfirmType(null)} maxWidth="sm" fullWidth>
         <DialogTitle>{t('v2:updater.confirmTitle')}</DialogTitle>
         <DialogContent>
-          <DialogContentText>{t('v2:updater.confirmBody')}</DialogContentText>
+          <DialogContentText>
+            {confirmType === 'courses'
+              ? 'This updates only the course data. Other updater steps are skipped.'
+              : t('v2:updater.confirmBody')}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <BlackOutlinedButton onClick={() => setConfirmOpen(false)}>
-            {t('v2:updater.cancelButton')}
-          </BlackOutlinedButton>
+          <BlackOutlinedButton onClick={() => setConfirmType(null)}>{t('v2:updater.cancelButton')}</BlackOutlinedButton>
           <BlackContainedButton onClick={() => void handleConfirm()}>
             {t('v2:updater.confirmButton')}
           </BlackContainedButton>

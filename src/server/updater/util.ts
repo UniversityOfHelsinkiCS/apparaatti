@@ -35,8 +35,8 @@ export const safeBulkCreate = async ({
   }
 }
 
-export const clearOffsets = async () => {
-  const keys = await redis.keys('*-offset')
+export const clearOffsets = async (pattern = '*-offset') => {
+  const keys = await redis.keys(pattern)
 
   for (const key of keys) {
     await redis.del(key)
