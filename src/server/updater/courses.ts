@@ -113,7 +113,7 @@ const coursesHandler = async (courseRealizations: SisuCourseWithRealization[]) =
 }
 
 // default 1000, set to 10 for example when debugging
-const BATCH_SIZE = 10000
+const BATCH_SIZE = 1000
 
 export const fetchCoursesAndResponsibilities = async () => {
   await mangleData('courses', BATCH_SIZE, coursesHandler, new Date(2023, 0, 1))

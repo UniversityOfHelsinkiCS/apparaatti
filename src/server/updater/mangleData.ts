@@ -23,7 +23,7 @@ export const mangleData = async (url: string, limit: number, handler: any, since
   let retries = 0
 
   const errorSleepTime = 30 * 1000 //30s
-  const loopSleepTime = 1000 //1s
+  const loopSleepTime = 250 //0.250s
 
   const maxIterations = Math.ceil(maxRecords / limit) + 1
   console.log(`max iterations is ${maxIterations}`)
