@@ -179,10 +179,22 @@ export type AnswerData = {
   'primary-language-specification': string
 }
 
+export type VisitStudyData = {
+  organisationCode: string | null
+  phase1ProgrammeCode: string | null
+  phase1ProgrammeName: LocalizedString | null
+  phase2ProgrammeCode: string | null
+  phase2ProgrammeName: LocalizedString | null
+}
+
 export type UserVisit = {
   visitorHashHex: string
   date: Date
   organisationCode: string | null
+  phase1ProgrammeCode: string | null
+  phase1ProgrammeName: LocalizedString | null
+  phase2ProgrammeCode: string | null
+  phase2ProgrammeName: LocalizedString | null
 }
 
 export type UserSettings = {

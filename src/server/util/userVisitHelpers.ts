@@ -1,4 +1,4 @@
-import type { User } from '../../common/types.ts'
+import type { LocalizedString, User, VisitStudyData } from '../../common/types.ts'
 import {
   createUserVisitsEntry,
   getUserVisitsByUser,
@@ -33,17 +33,39 @@ export async function getUserVisitsAtHour(visitorHashHex: string, date: Date) {
   return visits
 }
 
-//the organisation of the users most recently modified study right, null for users without one
-export async function getUserOrganisationCode(user: User): Promise<string | null> {
-  const studyRights = await studyRightsForPersonId(user.id)
-  const organisationId = studyRights.find(studyRight => studyRight.organisationId)?.organisationId
+type EducationPhase = { code?: unknown; name?: unknown }
 
-  if (!organisationId) {
-    return null
+function programmeOf(phase: EducationPhase | null | undefined) {
+  const code = typeof phase?.code === 'string' ? phase.code : null
+
+  if (!code) {
+    return { code: null, name: null }
   }
 
-  const organisations = await organisationsWithIds([organisationId])
-  return organisations[0]?.code ?? null
+  const name = phase?.name && typeof phase.name === 'object' ? (phase.name as LocalizedString) : null
+  return { code, name }
+}
+
+export async function getUserVisitStudyData(user: User): Promise<VisitStudyData> {
+  const studyRights = await studyRightsForPersonId(user.id)
+
+  const organisationId = studyRights.find(studyRight => studyRight.organisationId)?.organisationId
+  const organisations = organisationId ? await organisationsWithIds([organisationId]) : []
+
+  const phase1 = programmeOf(
+    studyRights.find(studyRight => programmeOf(studyRight.educationPhase1).code)?.educationPhase1
+  )
+  const phase2 = programmeOf(
+    studyRights.find(studyRight => programmeOf(studyRight.educationPhase2).code)?.educationPhase2
+  )
+
+  return {
+    organisationCode: organisations[0]?.code ?? null,
+    phase1ProgrammeCode: phase1.code,
+    phase1ProgrammeName: phase1.name,
+    phase2ProgrammeCode: phase2.code,
+    phase2ProgrammeName: phase2.name,
+  }
 }
 
 export async function saveUserVisitIfUnique(user: User) {
@@ -57,8 +79,8 @@ export async function saveUserVisitIfUnique(user: User) {
 
   if (userVisits.length === 0) {
     localLog('created entry', 'saveUserVisitIfUnique')
-    const organisationCode = await getUserOrganisationCode(user)
-    await createUserVisitsEntry(visitorHashHex, time, organisationCode)
+    const studyData = await getUserVisitStudyData(user)
+    await createUserVisitsEntry(visitorHashHex, time, studyData)
   } else {
     localLog('entry exists skipping', 'saveUserVisitIfUnique')
   }

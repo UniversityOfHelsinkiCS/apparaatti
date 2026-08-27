@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
@@ -9,11 +9,20 @@ import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import AdminNavbar from './AdminNavbar.tsx'
 import OrganisationFilterControls from './stats/OrganisationFilterControls.tsx'
-import type { StatsResponse } from './stats/organisationGroups.ts'
+import {
+  emptyStatsFilters,
+  type StatsFilters,
+  type StatsPhase,
+  type StatsResponse,
+} from './stats/organisationGroups.ts'
+import ProgrammePie from './stats/ProgrammePie.tsx'
 import { organisationGroupKeys } from './stats/statsChartData.ts'
-import StatsFilters, { getDefaultEnd, getDefaultStart } from './stats/StatsFilters.tsx'
+import StatsFiltersControls, { getDefaultEnd, getDefaultStart } from './stats/StatsFilters.tsx'
 import UniqueUsersPie from './stats/UniqueUsersPie.tsx'
 import VisitsBarChart from './stats/VisitsBarChart.tsx'
+
+const toggleKey = (keys: string[], key: string) =>
+  keys.includes(key) ? keys.filter(existing => existing !== key) : [...keys, key]
 
 const StatsPage = () => {
   const { t } = useTranslation()
@@ -21,12 +30,13 @@ const StatsPage = () => {
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
   const [groupBy, setGroupBy] = useState<GroupBy>('day')
-  const [hiddenOrganisations, setHiddenOrganisations] = useState<string[]>([])
+  const [filters, setFilters] = useState<StatsFilters>(emptyStatsFilters)
 
   const toggleOrganisation = (groupKey: string) =>
-    setHiddenOrganisations(previous =>
-      previous.includes(groupKey) ? previous.filter(key => key !== groupKey) : [...previous, groupKey]
-    )
+    setFilters(previous => ({ ...previous, organisations: toggleKey(previous.organisations, groupKey) }))
+
+  const toggleProgramme = (phase: StatsPhase, programmeKey: string) =>
+    setFilters(previous => ({ ...previous, [phase]: toggleKey(previous[phase], programmeKey) }))
 
   const startDateTime = `${start}T00:00:00.000Z`
   const endDateTime = `${end}T23:59:59.999Z`
@@ -36,7 +46,10 @@ const StatsPage = () => {
   const { data, isLoading } = useApi<StatsResponse>(`admin-stats-${start}-${end}-${groupBy}`, endpoint, 'GET')
 
   const groupedCounts = Array.isArray(data?.groups) ? data.groups : []
-  const total = data?.total ?? { count: 0, organisations: [] }
+  const totalVisitors = data?.total?.visitors ?? []
+  const programmeNames = data?.programmeNames ?? {}
+
+  const hasHiddenFilters = filters.organisations.length > 0 || filters.phase1.length > 0 || filters.phase2.length > 0
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -61,7 +74,7 @@ const StatsPage = () => {
         {t('v2:admin.stats.pageTitle')}
       </Typography>
 
-      <StatsFilters
+      <StatsFiltersControls
         start={start}
         end={end}
         groupBy={groupBy}
@@ -76,25 +89,49 @@ const StatsPage = () => {
       />
 
       <OrganisationFilterControls
-        groupKeys={organisationGroupKeys(groupedCounts)}
-        hiddenOrganisations={hiddenOrganisations}
-        onChange={setHiddenOrganisations}
+        groupKeys={organisationGroupKeys(totalVisitors)}
+        hiddenOrganisations={filters.organisations}
+        hasHiddenFilters={hasHiddenFilters}
+        onHideAllOrganisations={() =>
+          setFilters(previous => ({ ...previous, organisations: organisationGroupKeys(totalVisitors) }))
+        }
+        onShowAll={() => setFilters(emptyStatsFilters)}
       />
 
       <VisitsBarChart
         rows={groupedCounts}
-        hiddenOrganisations={hiddenOrganisations}
+        filters={filters}
         isLoading={isLoading}
         onToggleOrganisation={toggleOrganisation}
       />
 
-      <UniqueUsersPie
-        organisations={total.organisations}
-        totalCount={total.count}
-        hiddenOrganisations={hiddenOrganisations}
-        isLoading={isLoading}
-        onToggleOrganisation={toggleOrganisation}
-      />
+      <Divider sx={{ my: 4 }} />
+
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        spacing={4}
+        divider={<Divider orientation="vertical" flexItem />}
+        alignItems="stretch"
+      >
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <UniqueUsersPie
+            visitors={totalVisitors}
+            filters={filters}
+            isLoading={isLoading}
+            onToggleOrganisation={toggleOrganisation}
+          />
+        </Box>
+
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <ProgrammePie
+            visitors={totalVisitors}
+            programmeNames={programmeNames}
+            filters={filters}
+            isLoading={isLoading}
+            onToggleProgramme={toggleProgramme}
+          />
+        </Box>
+      </Stack>
     </Box>
   )
 }

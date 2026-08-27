@@ -1,24 +1,67 @@
 import { organisationCodeToName } from '../../../../common/organisations.ts'
+import type { LocalizedString } from '../../../../common/types.ts'
 
-export type StatsOrganisation = {
+export type StatsVisitorGroup = {
   organisationCode: string | null
+  phase1Code: string | null
+  phase2Code: string | null
   count: number
-  percentage: number
 }
 
 export type StatsRow = {
   label: string
-  count: number
-  organisations: StatsOrganisation[]
+  visitors: StatsVisitorGroup[]
 }
 
 export type StatsResponse = {
   groups: StatsRow[]
-  total: {
-    count: number
-    organisations: StatsOrganisation[]
-  }
+  total: { visitors: StatsVisitorGroup[] }
+  programmeNames: Record<string, LocalizedString>
 }
+
+export type StatsPhase = 'phase1' | 'phase2'
+
+export type StatsFilters = {
+  organisations: string[]
+  phase1: string[]
+  phase2: string[]
+}
+
+export const emptyStatsFilters: StatsFilters = { organisations: [], phase1: [], phase2: [] }
+
+export const UNKNOWN_PROGRAMME = 'unknown'
+
+export const programmeKeyOf = (code: string | null) => code ?? UNKNOWN_PROGRAMME
+
+export const isVisitorVisible = (visitor: StatsVisitorGroup, filters: StatsFilters) =>
+  !filters.organisations.includes(groupKeyOf(visitor.organisationCode)) &&
+  !filters.phase1.includes(programmeKeyOf(visitor.phase1Code)) &&
+  !filters.phase2.includes(programmeKeyOf(visitor.phase2Code))
+
+export const programmeCodeOf = (visitor: StatsVisitorGroup, phase: StatsPhase) =>
+  phase === 'phase1' ? visitor.phase1Code : visitor.phase2Code
+
+//study programme codes are open ended so the palette is cycled by slice order instead of mapped by code
+export const programmePalette = [
+  '#2a78d6',
+  '#eb6834',
+  '#1baf7a',
+  '#eda100',
+  '#e87ba4',
+  '#008300',
+  '#4a3aa7',
+  '#e34948',
+  '#184f95',
+  '#a63f18',
+  '#0e6b4a',
+  '#8a5e00',
+  '#a1436a',
+  '#004d00',
+  '#2c2266',
+  '#8f2b2a',
+]
+
+export const UNKNOWN_PROGRAMME_COLOR = '#898781'
 
 const NO_ORGANISATION = 'none'
 const OTHER_ORGANISATIONS = 'other'

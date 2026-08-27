@@ -226,6 +226,13 @@ export default {
         uniqueUsers: 'Unique users in the range',
         loading: 'Loading stats...',
         noVisits: 'No visits in the selected range.',
+        programmes: {
+          title: 'Study programmes in the range',
+          phase1: "Bachelor's programme",
+          phase2: "Master's programme",
+          unknown: 'Unknown',
+          noData: 'No study programme data in the selected range.',
+        },
       },
       filterConfig: {
         loading: 'Loading filters...',

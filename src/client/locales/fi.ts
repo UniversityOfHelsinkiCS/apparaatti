@@ -226,6 +226,13 @@ export default {
         uniqueUsers: 'Yksittäiset käyttäjät aikavälillä',
         loading: 'Ladataan tilastoja...',
         noVisits: 'Ei käyntejä valitulla aikavälillä.',
+        programmes: {
+          title: 'Koulutusohjelmat aikavälillä',
+          phase1: 'Kandiohjelma',
+          phase2: 'Maisteriohjelma',
+          unknown: 'Ei tiedossa',
+          noData: 'Ei koulutusohjelmatietoja valitulla aikavälillä.',
+        },
       },
       filterConfig: {
         loading: 'Ladataan suodattimia...',

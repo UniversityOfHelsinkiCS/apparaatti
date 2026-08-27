@@ -3,21 +3,21 @@ import { BarChart } from '@mui/x-charts/BarChart'
 import type { SeriesLegendItemContext } from '@mui/x-charts/ChartsLegend'
 import { useTranslation } from 'react-i18next'
 
-import type { StatsRow } from './organisationGroups.ts'
+import type { StatsFilters, StatsRow } from './organisationGroups.ts'
 import { legendSx, organisationSeries } from './statsChartData.ts'
 
 const CHART_HEIGHT = 460
 
 type VisitsBarChartProps = {
   rows: StatsRow[]
-  hiddenOrganisations: string[]
+  filters: StatsFilters
   isLoading: boolean
   onToggleOrganisation: (groupKey: string) => void
 }
 
-const VisitsBarChart = ({ rows, hiddenOrganisations, isLoading, onToggleOrganisation }: VisitsBarChartProps) => {
+const VisitsBarChart = ({ rows, filters, isLoading, onToggleOrganisation }: VisitsBarChartProps) => {
   const { t } = useTranslation()
-  const series = organisationSeries(rows, hiddenOrganisations)
+  const series = organisationSeries(rows, filters)
 
   //the axis follows the visible organisations, not the unfiltered totals
   const maxCount = rows.reduce(
@@ -49,7 +49,7 @@ const VisitsBarChart = ({ rows, hiddenOrganisations, isLoading, onToggleOrganisa
       slotProps={{
         tooltip: { trigger: 'axis' },
         legend: {
-          sx: legendSx(hiddenOrganisations),
+          sx: legendSx(filters.organisations),
           onItemClick: (_event: unknown, legendItem: SeriesLegendItemContext) =>
             onToggleOrganisation(String(legendItem.seriesId)),
         },

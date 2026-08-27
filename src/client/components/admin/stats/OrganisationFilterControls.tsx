@@ -6,10 +6,18 @@ import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 type OrganisationFilterControlsProps = {
   groupKeys: string[]
   hiddenOrganisations: string[]
-  onChange: (hiddenOrganisations: string[]) => void
+  hasHiddenFilters: boolean
+  onHideAllOrganisations: () => void
+  onShowAll: () => void
 }
 
-const OrganisationFilterControls = ({ groupKeys, hiddenOrganisations, onChange }: OrganisationFilterControlsProps) => {
+const OrganisationFilterControls = ({
+  groupKeys,
+  hiddenOrganisations,
+  hasHiddenFilters,
+  onHideAllOrganisations,
+  onShowAll,
+}: OrganisationFilterControlsProps) => {
   const { t } = useTranslation()
   const isEverythingHidden = groupKeys.length > 0 && groupKeys.every(groupKey => hiddenOrganisations.includes(groupKey))
 
@@ -22,11 +30,11 @@ const OrganisationFilterControls = ({ groupKeys, hiddenOrganisations, onChange }
       <BlackOutlinedButton
         size="small"
         disabled={groupKeys.length === 0 || isEverythingHidden}
-        onClick={() => onChange(groupKeys)}
+        onClick={onHideAllOrganisations}
       >
         {t('v2:admin.stats.hideAll')}
       </BlackOutlinedButton>
-      <BlackOutlinedButton size="small" disabled={hiddenOrganisations.length === 0} onClick={() => onChange([])}>
+      <BlackOutlinedButton size="small" disabled={!hasHiddenFilters} onClick={onShowAll}>
         {t('v2:admin.stats.showAll')}
       </BlackOutlinedButton>
     </Stack>

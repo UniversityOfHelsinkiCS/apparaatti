@@ -225,6 +225,13 @@ export default {
         uniqueUsers: 'Unika användare i intervallet',
         loading: 'Laddar statistik...',
         noVisits: 'Inga besök under det valda intervallet.',
+        programmes: {
+          title: 'Utbildningsprogram under intervallet',
+          phase1: 'Kandidatprogram',
+          phase2: 'Magisterprogram',
+          unknown: 'Okänt',
+          noData: 'Inga utbildningsprogramuppgifter under det valda intervallet.',
+        },
       },
       filterConfig: {
         loading: 'Laddar filter...',
