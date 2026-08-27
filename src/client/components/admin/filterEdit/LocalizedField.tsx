@@ -1,5 +1,6 @@
 import { Box, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { useId, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type Lang = 'fi' | 'sv' | 'en'
 
@@ -12,10 +13,10 @@ interface LocalizedFieldProps {
   size?: 'small' | 'medium'
 }
 
-const LANG_OPTIONS: Array<{ value: Lang; label: string }> = [
-  { value: 'fi', label: 'Finnish' },
-  { value: 'sv', label: 'Swedish' },
-  { value: 'en', label: 'English' },
+const LANG_OPTIONS: Array<{ value: Lang; labelKey: string }> = [
+  { value: 'fi', labelKey: 'v2:admin.filterEdit.langFi' },
+  { value: 'sv', labelKey: 'v2:admin.filterEdit.langSv' },
+  { value: 'en', labelKey: 'v2:admin.filterEdit.langEn' },
 ]
 
 const LocalizedField = ({
@@ -26,6 +27,7 @@ const LocalizedField = ({
   minRows,
   size = 'medium',
 }: LocalizedFieldProps) => {
+  const { t } = useTranslation()
   const [selectedLang, setSelectedLang] = useState<Lang>('fi')
   const selectId = useId()
   const inputMinHeight = multiline ? 120 : size === 'small' ? 44 : 52
@@ -34,7 +36,7 @@ const LocalizedField = ({
     <Box sx={{ display: 'flex', gap: 1.25, flexDirection: 'column' }}>
       <Box sx={{ width: { xs: '100%', sm: 220 } }}>
         <Typography variant="caption" color="text.secondary">
-          Language
+          {t('v2:admin.filterEdit.language')}
         </Typography>
         <Select
           fullWidth
@@ -45,7 +47,7 @@ const LocalizedField = ({
         >
           {LANG_OPTIONS.map(option => (
             <MenuItem key={option.value} value={option.value}>
-              {option.label}
+              {t(option.labelKey)}
             </MenuItem>
           ))}
         </Select>

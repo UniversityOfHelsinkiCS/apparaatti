@@ -1,4 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import { type GroupBy, toDayLabel } from '../../../../common/datelabels.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
@@ -29,40 +30,44 @@ const StatsFilters = ({
   onEndChange,
   onGroupByChange,
   onReset,
-}: StatsFiltersProps) => (
-  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
-    <TextField
-      label="Start"
-      type="date"
-      value={start}
-      onChange={event => onStartChange(event.target.value)}
-      InputLabelProps={{ shrink: true }}
-      size="small"
-    />
-    <TextField
-      label="End"
-      type="date"
-      value={end}
-      onChange={event => onEndChange(event.target.value)}
-      InputLabelProps={{ shrink: true }}
-      size="small"
-    />
-    <FormControl size="small" sx={{ minWidth: 140 }}>
-      <InputLabel id="stats-group-by-label">Group by</InputLabel>
-      <Select
-        labelId="stats-group-by-label"
-        value={groupBy}
-        label="Group by"
-        onChange={event => onGroupByChange(event.target.value as GroupBy)}
-      >
-        <MenuItem value="hour">Hour</MenuItem>
-        <MenuItem value="day">Day</MenuItem>
-        <MenuItem value="month">Month</MenuItem>
-        <MenuItem value="year">Year</MenuItem>
-      </Select>
-    </FormControl>
-    <BlackOutlinedButton onClick={onReset}>Last 14 days</BlackOutlinedButton>
-  </Stack>
-)
+}: StatsFiltersProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
+      <TextField
+        label={t('v2:admin.stats.start')}
+        type="date"
+        value={start}
+        onChange={event => onStartChange(event.target.value)}
+        InputLabelProps={{ shrink: true }}
+        size="small"
+      />
+      <TextField
+        label={t('v2:admin.stats.end')}
+        type="date"
+        value={end}
+        onChange={event => onEndChange(event.target.value)}
+        InputLabelProps={{ shrink: true }}
+        size="small"
+      />
+      <FormControl size="small" sx={{ minWidth: 140 }}>
+        <InputLabel id="stats-group-by-label">{t('v2:admin.stats.groupBy')}</InputLabel>
+        <Select
+          labelId="stats-group-by-label"
+          value={groupBy}
+          label={t('v2:admin.stats.groupBy')}
+          onChange={event => onGroupByChange(event.target.value as GroupBy)}
+        >
+          <MenuItem value="hour">{t('v2:admin.stats.hour')}</MenuItem>
+          <MenuItem value="day">{t('v2:admin.stats.day')}</MenuItem>
+          <MenuItem value="month">{t('v2:admin.stats.month')}</MenuItem>
+          <MenuItem value="year">{t('v2:admin.stats.year')}</MenuItem>
+        </Select>
+      </FormControl>
+      <BlackOutlinedButton onClick={onReset}>{t('v2:admin.stats.last14Days')}</BlackOutlinedButton>
+    </Stack>
+  )
+}
 
 export default StatsFilters

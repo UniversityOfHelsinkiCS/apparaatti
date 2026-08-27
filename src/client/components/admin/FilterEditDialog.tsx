@@ -10,6 +10,7 @@ import {
   Tabs,
 } from '@mui/material'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { FilterConfig } from '../../../common/types.ts'
 import { adminFetch, toNullIfEmpty } from './filterEdit/filterEditorUtils.ts'
@@ -25,6 +26,7 @@ interface FilterEditDialogProps {
 }
 
 const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditDialogProps) => {
+  const { t } = useTranslation()
   const isCreate = filter === null
   const {
     draft,
@@ -64,12 +66,12 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}))
-        setError((json as { message?: string }).message ?? 'Unknown error')
+        setError((json as { message?: string }).message ?? t('v2:admin.filterEdit.unknownError'))
       } else {
         onSaved()
       }
     } catch {
-      setError('Network error')
+      setError(t('v2:admin.filterEdit.networkError'))
     } finally {
       setSaving(false)
     }
@@ -77,7 +79,9 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
 
   return (
     <Dialog open fullWidth maxWidth="md" onClose={onClose}>
-      <DialogTitle>{isCreate ? 'Create filter' : `Edit: ${draft.id}`}</DialogTitle>
+      <DialogTitle>
+        {isCreate ? t('v2:admin.filterEdit.createTitle') : t('v2:admin.filterEdit.editTitle', { id: draft.id })}
+      </DialogTitle>
       <DialogContent>
         <Tabs
           value={tab}
@@ -86,8 +90,8 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
           TabIndicatorProps={{ style: { backgroundColor: 'black' } }}
           textColor="inherit"
         >
-          <Tab label="General" />
-          <Tab label={`Variants (${draft.variants.length})`} />
+          <Tab label={t('v2:admin.filterEdit.tabGeneral')} />
+          <Tab label={t('v2:admin.filterEdit.tabVariants', { amount: draft.variants.length })} />
         </Tabs>
 
         {tab === 0 && (
@@ -119,7 +123,7 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} disabled={saving} sx={{ color: 'black' }}>
-          Cancel
+          {t('v2:admin.filterEdit.cancel')}
         </Button>
         <Button
           variant="contained"
@@ -128,7 +132,7 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
           disabled={saving}
           startIcon={saving ? <CircularProgress size={16} /> : null}
         >
-          Save
+          {t('v2:admin.filterEdit.save')}
         </Button>
       </DialogActions>
       <Snackbar open={error !== null} message={error} autoHideDuration={6000} onClose={() => setError(null)} />

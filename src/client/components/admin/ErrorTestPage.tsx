@@ -1,5 +1,6 @@
 import { Alert, Box, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import useApiMutation from '../../hooks/useApiMutation.tsx'
@@ -9,15 +10,16 @@ import BlackContainedButton from '../common/BlackContainedButton.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 
 const ErrorTestPage = () => {
+  const { t } = useTranslation()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const [notice, setNotice] = useState<string | null>(null)
 
   const { mutateAsync: causeBackendError } = useApiMutation<Record<string, never>>(async res => {
     if (res.ok) {
-      setNotice('Backend responded successfully — no error was triggered.')
+      setNotice(t('v2:admin.errorTest.backendOk'))
       return
     }
-    setNotice(`Backend error triggered (status ${res.status}).`)
+    setNotice(t('v2:admin.errorTest.backendTriggered', { status: res.status }))
   }, '/api/admin/debug/cause-error')
 
   if (isUnauthorized) {
@@ -25,7 +27,7 @@ const ErrorTestPage = () => {
   }
 
   if (isUserLoading || !user) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user.isAdmin) {
@@ -37,7 +39,7 @@ const ErrorTestPage = () => {
   }
 
   const handleFrontendError = () => {
-    setNotice('Frontend error thrown.')
+    setNotice(t('v2:admin.errorTest.frontendTriggered'))
     setTimeout(() => {
       throw new Error(`Test error triggered from the admin error test page by ${user.username}`)
     }, 0)
@@ -48,12 +50,10 @@ const ErrorTestPage = () => {
       <AdminNavbar isSuperuser />
 
       <Typography variant="h4" sx={{ mb: 1 }}>
-        Error test
+        {t('v2:admin.errorTest.pageTitle')}
       </Typography>
 
-      <Typography sx={{ mb: 3 }}>
-        Trigger a deliberate error to verify that error reporting works. Errors are only sent to Sentry in production.
-      </Typography>
+      <Typography sx={{ mb: 3 }}>{t('v2:admin.errorTest.description')}</Typography>
 
       {notice && (
         <Alert severity="info" sx={{ mb: 2 }} onClose={() => setNotice(null)}>
@@ -62,8 +62,12 @@ const ErrorTestPage = () => {
       )}
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} useFlexGap>
-        <BlackContainedButton onClick={() => void causeBackendError({})}>Cause error in backend</BlackContainedButton>
-        <BlackContainedButton onClick={handleFrontendError}>Cause error in frontend</BlackContainedButton>
+        <BlackContainedButton onClick={() => void causeBackendError({})}>
+          {t('v2:admin.errorTest.causeBackend')}
+        </BlackContainedButton>
+        <BlackContainedButton onClick={handleFrontendError}>
+          {t('v2:admin.errorTest.causeFrontend')}
+        </BlackContainedButton>
       </Stack>
     </Box>
   )

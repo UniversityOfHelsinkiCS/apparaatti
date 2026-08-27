@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import type { GroupBy } from '../../../common/datelabels.ts'
@@ -15,6 +16,7 @@ import UniqueUsersPie from './stats/UniqueUsersPie.tsx'
 import VisitsBarChart from './stats/VisitsBarChart.tsx'
 
 const StatsPage = () => {
+  const { t } = useTranslation()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
@@ -41,11 +43,11 @@ const StatsPage = () => {
   }
 
   if (isUserLoading) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user.isAdmin) {
@@ -56,7 +58,7 @@ const StatsPage = () => {
     <Box sx={{ p: { xs: 2, md: 4 } }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 2 }}>
-        Usage Stats
+        {t('v2:admin.stats.pageTitle')}
       </Typography>
 
       <StatsFilters

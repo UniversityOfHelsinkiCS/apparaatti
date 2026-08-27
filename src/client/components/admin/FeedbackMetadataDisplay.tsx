@@ -70,7 +70,7 @@ const FeedbackMetadataDisplay = ({ metadata }: FeedbackMetadataDisplayProps) => 
                   <Stack spacing={1}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 600, flex: 1 }}>
-                        {rec.name.fi || rec.name.en || rec.name.sv || 'Unnamed Course'}
+                        {rec.name.fi || rec.name.en || rec.name.sv || t('v2:feedback.admin.metadata.unnamedCourse')}
                       </Typography>
                     </Box>
 

@@ -1,6 +1,7 @@
 import { Box, Button, IconButton, List, ListItemButton, ListItemText } from '@mui/material'
 import { Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
 import VariantEditor from './VariantEditor.tsx'
@@ -32,6 +33,7 @@ const VariantsTab = ({
   onAddVariant,
   onRemoveVariant,
 }: VariantsTabProps) => {
+  const { t } = useTranslation()
   const [selectedIdx, setSelectedIdx] = useState(0)
   const safeIdx = Math.min(selectedIdx, variants.length - 1)
   const selectedVariant = variants[safeIdx]
@@ -62,7 +64,7 @@ const VariantsTab = ({
               }}
             >
               <ListItemText
-                primary={v.name || `Variant ${vIdx + 1}`}
+                primary={v.name || t('v2:admin.filterEdit.variantFallback', { number: vIdx + 1 })}
                 primaryTypographyProps={{ fontSize: 14, noWrap: true }}
               />
               {v.name !== 'default' && (
@@ -93,7 +95,7 @@ const VariantsTab = ({
             }}
             sx={{ color: 'black', mt: 1 }}
           >
-            Add variant
+            {t('v2:admin.filterEdit.addVariant')}
           </Button>
         )}
       </Box>

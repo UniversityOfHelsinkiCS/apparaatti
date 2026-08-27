@@ -148,7 +148,7 @@ const UpdaterPage = () => {
           </BlackContainedButton>
         )}
         <BlackContainedButton onClick={() => setConfirmType('courses')} disabled={hasRunningRun}>
-          Update courses
+          {t('v2:updater.coursesRunButton')}
         </BlackContainedButton>
       </Stack>
 
@@ -167,7 +167,7 @@ const UpdaterPage = () => {
               <TableRow>
                 <TableCell>{t('v2:updater.table.id')}</TableCell>
                 <TableCell>{t('v2:updater.table.status')}</TableCell>
-                <TableCell>Run type</TableCell>
+                <TableCell>{t('v2:updater.table.runtype')}</TableCell>
                 <TableCell>{t('v2:updater.table.triggeredBy')}</TableCell>
                 <TableCell>{t('v2:updater.table.started')}</TableCell>
                 <TableCell>{t('v2:updater.table.finished')}</TableCell>
@@ -210,9 +210,7 @@ const UpdaterPage = () => {
         <DialogTitle>{t('v2:updater.confirmTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {confirmType === 'courses'
-              ? 'This updates only the course data. Other updater steps are skipped.'
-              : t('v2:updater.confirmBody')}
+            {confirmType === 'courses' ? t('v2:updater.coursesConfirmBody') : t('v2:updater.confirmBody')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

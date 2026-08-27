@@ -1,6 +1,7 @@
 import { Alert, Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { CourseReviewState } from '../../../common/types.ts'
 import useApiMutation from '../../hooks/useApiMutation.tsx'
@@ -14,6 +15,7 @@ type ReviewActionsProps = {
 }
 
 const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
+  const { t } = useTranslation()
   const initialReviewed = reviewState?.reviewed === 'yes'
   const initialComment = reviewState?.comment ?? ''
 
@@ -27,7 +29,7 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
   const saveReviewMutation = useApiMutation(async (res: Response) => {
     if (!res.ok) {
       const errorData = await res.json().catch(() => null)
-      throw new Error(errorData?.message ?? 'Failed to save review')
+      throw new Error(errorData?.message ?? t('v2:admin.review.saveFailed'))
     }
   }, '/api/admin/course/review')
 
@@ -56,7 +58,7 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
       }
       setShowSavedMessage(true)
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to save review')
+      setErrorMessage(error instanceof Error ? error.message : t('v2:admin.review.saveFailed'))
     } finally {
       setIsSaving(false)
     }
@@ -87,14 +89,16 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
     <Stack spacing={1} sx={{ minWidth: 300, maxWidth: 360 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <HyCheckbox checked={reviewed} onChange={handleReviewedChange} size="small" sx={{ p: 0.5 }} />
-        <Typography variant="body2">{reviewed ? 'Reviewed' : 'Not reviewed'}</Typography>
+        <Typography variant="body2">
+          {reviewed ? t('v2:admin.review.reviewed') : t('v2:admin.review.notReviewed')}
+        </Typography>
         {isSaving ? <CircularProgress size={16} /> : null}
       </Box>
 
       <TextField
         value={comment}
         onChange={event => setComment(event.target.value)}
-        placeholder="Add comment"
+        placeholder={t('v2:admin.review.commentPlaceholder')}
         size="small"
         multiline
         minRows={2}
@@ -102,11 +106,11 @@ const ReviewActions = ({ curId, reviewState, onSaved }: ReviewActionsProps) => {
       />
 
       {errorMessage ? <Alert severity="error">{errorMessage}</Alert> : null}
-      {showSavedMessage ? <Alert severity="success">Review saved</Alert> : null}
+      {showSavedMessage ? <Alert severity="success">{t('v2:admin.review.saved')}</Alert> : null}
 
       <Box>
         <BlackOutlinedButton size="small" onClick={() => void handleSave()} disabled={!isDirty || isSaving}>
-          Save review
+          {t('v2:admin.review.saveButton')}
         </BlackOutlinedButton>
       </Box>
     </Stack>

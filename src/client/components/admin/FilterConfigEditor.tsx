@@ -13,6 +13,7 @@ import {
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { FilterConfig } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
@@ -31,6 +32,7 @@ const adminFetch = (method: string, path: string, body?: unknown) =>
   })
 
 const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
+  const { t } = useTranslation()
   const {
     data: filters,
     isLoading,
@@ -41,7 +43,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   const [filtersWithoutSeedDefaults, setFiltersWithoutSeedDefaults] = useState<string[]>([])
   const [importFileInputKey, setImportFileInputKey] = useState<number>(0)
 
-  if (isLoading) return <Typography>Loading filters...</Typography>
+  if (isLoading) return <Typography>{t('v2:admin.filterConfig.loading')}</Typography>
 
   const filterList: FilterConfig[] = filters ?? []
 
@@ -64,9 +66,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   }
 
   const handleRestoreDefaults = async (filterId: string) => {
-    const shouldRestore = window.confirm(
-      'Restore this filter to seeded defaults? This will overwrite current settings.'
-    )
+    const shouldRestore = window.confirm(t('v2:admin.filterConfig.restoreConfirm'))
     if (!shouldRestore) {
       return
     }
@@ -80,11 +80,11 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
 
         if (response.status === 404) {
           setFiltersWithoutSeedDefaults(current => (current.includes(filterId) ? current : [...current, filterId]))
-          window.alert(errorData?.message ?? 'This filter has no seeded defaults to restore')
+          window.alert(errorData?.message ?? t('v2:admin.filterConfig.noSeedDefaults'))
           return
         }
 
-        window.alert(errorData?.message ?? 'Failed to restore filter defaults')
+        window.alert(errorData?.message ?? t('v2:admin.filterConfig.restoreFailed'))
         return
       }
 
@@ -99,7 +99,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
     try {
       const response = await adminFetch('GET', '/api/admin/filter-config/export')
       if (!response.ok) {
-        window.alert('Failed to export filter configuration')
+        window.alert(t('v2:admin.filterConfig.exportFailed'))
         return
       }
 
@@ -113,7 +113,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
     } catch (error) {
-      window.alert('Failed to export filter configuration')
+      window.alert(t('v2:admin.filterConfig.exportFailed'))
       console.error(error)
     }
   }
@@ -128,9 +128,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       const text = await file.text()
       const data = JSON.parse(text)
 
-      const shouldImport = window.confirm(
-        `Import filter configuration from ${file.name}?\n\nThis will update existing filters with the imported settings.`
-      )
+      const shouldImport = window.confirm(t('v2:admin.filterConfig.importConfirm', { fileName: file.name }))
       if (!shouldImport) {
         setImportFileInputKey(prev => prev + 1)
         return
@@ -139,7 +137,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       const response = await adminFetch('POST', '/api/admin/filter-config/import', data)
       if (!response.ok) {
         const errorData = await response.json().catch(() => null)
-        window.alert(errorData?.message ?? 'Failed to import filter configuration')
+        window.alert(errorData?.message ?? t('v2:admin.filterConfig.importFailed'))
         return
       }
 
@@ -149,11 +147,15 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       const errorCount = result.results.filter((r: any) => r.status === 'error').length
 
       window.alert(
-        `Import completed:\n${updatedCount} filters updated\n${skippedCount} filters skipped\n${errorCount} errors`
+        t('v2:admin.filterConfig.importCompleted', {
+          updated: updatedCount,
+          skipped: skippedCount,
+          errors: errorCount,
+        })
       )
       refetch()
     } catch (error) {
-      window.alert('Failed to parse or import file')
+      window.alert(t('v2:admin.filterConfig.parseFailed'))
       console.error(error)
     } finally {
       setImportFileInputKey(prev => prev + 1)
@@ -163,16 +165,16 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   return (
     <Box>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        Filter Configuration
+        {t('v2:admin.filterConfig.title')}
       </Typography>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Order</TableCell>
-            <TableCell>ID</TableCell>
-            <TableCell>Short Name (fi)</TableCell>
-            <TableCell>Enabled</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell>{t('v2:admin.filterConfig.table.order')}</TableCell>
+            <TableCell>{t('v2:admin.filterConfig.table.id')}</TableCell>
+            <TableCell>{t('v2:admin.filterConfig.table.shortNameFi')}</TableCell>
+            <TableCell>{t('v2:admin.filterConfig.table.enabled')}</TableCell>
+            <TableCell>{t('v2:admin.filterConfig.table.actions')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -207,7 +209,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
                     onClick={() => setEditTarget(filter)}
                     sx={{ color: 'black', borderColor: 'black' }}
                   >
-                    Edit
+                    {t('v2:admin.filterConfig.edit')}
                   </Button>
                   <Button
                     size="small"
@@ -216,7 +218,9 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
                     disabled={restoringFilterId === filter.id || filtersWithoutSeedDefaults.includes(filter.id)}
                     sx={{ color: 'black', borderColor: 'black' }}
                   >
-                    {restoringFilterId === filter.id ? 'Restoring...' : 'Restore'}
+                    {restoringFilterId === filter.id
+                      ? t('v2:admin.filterConfig.restoring')
+                      : t('v2:admin.filterConfig.restore')}
                   </Button>
                 </Box>
               </TableCell>
@@ -227,12 +231,12 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       <Box sx={{ mt: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         {isSuperuser && (
           <Button variant="contained" color="secondary" onClick={() => setEditTarget('new')}>
-            + Add filter
+            {t('v2:admin.filterConfig.addFilter')}
           </Button>
         )}
-        <BlackOutlinedButton onClick={handleExport}>Export Configuration</BlackOutlinedButton>
+        <BlackOutlinedButton onClick={handleExport}>{t('v2:admin.filterConfig.export')}</BlackOutlinedButton>
         <BlackOutlinedButton component="label">
-          Import Configuration
+          {t('v2:admin.filterConfig.import')}
           <input key={importFileInputKey} type="file" accept=".json" hidden onChange={handleImportFile} />
         </BlackOutlinedButton>
       </Box>

@@ -1,4 +1,5 @@
 import { Box } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
@@ -7,6 +8,7 @@ import AdminNavbar from './AdminNavbar.tsx'
 import FilterConfigEditor from './FilterConfigEditor.tsx'
 
 const AdminPage = () => {
+  const { t } = useTranslation()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
   if (isUnauthorized) {
@@ -14,11 +16,11 @@ const AdminPage = () => {
   }
 
   if (isUserLoading) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user.isAdmin) {

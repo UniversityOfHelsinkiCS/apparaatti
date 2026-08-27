@@ -78,7 +78,7 @@ const UserFeedbackPage = () => {
   }
 
   if (isUserLoading || !user) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user.isAdmin) {

@@ -1,5 +1,6 @@
 import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
@@ -40,6 +41,7 @@ interface PaginatedCoursesResponse {
 }
 
 const CoursesPage = () => {
+  const { t } = useTranslation()
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
   const [page, setPage] = useState(1)
 
@@ -117,11 +119,11 @@ const CoursesPage = () => {
   }
 
   if (isUserLoading) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div>{t('v2:admin.loading')}</div>
   }
 
   if (!user.isAdmin) {
@@ -183,28 +185,28 @@ const CoursesPage = () => {
     <Box sx={{ p: 3 }}>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
       <Typography variant="h4" sx={{ mb: 3 }}>
-        KK- Courses
+        {t('v2:admin.courses.pageTitle')}
       </Typography>
       <Typography variant="body2" sx={{ mb: 2 }}>
-        Showing only realisations whose course code starts with KK-. Total: {totalCourses}
+        {t('v2:admin.courses.total', { total: totalCourses })}
       </Typography>
 
       {/* Search Fields — grouped: Name, then URN (include + exclude), then Course code (include + exclude). */}
       <CoursesSearchFields onSearch={handleSearch} />
 
       {isCoursesLoading ? (
-        <Typography>Loading courses...</Typography>
+        <Typography>{t('v2:admin.courses.loading')}</Typography>
       ) : (
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Course Name</TableCell>
-              <TableCell>Course Codes</TableCell>
-              <TableCell>Custom URNs</TableCell>
-              <TableCell>Dates</TableCell>
-              <TableCell>Review</TableCell>
-              <TableCell>Review Updated</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('v2:admin.courses.table.name')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.codes')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.customUrns')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.dates')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.review')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.reviewUpdated')}</TableCell>
+              <TableCell>{t('v2:admin.courses.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -230,7 +232,7 @@ const CoursesPage = () => {
                       <TableCell>{formatReviewUpdatedAt(reviewState)}</TableCell>
                       <TableCell>
                         <BlackOutlinedButton size="small" onClick={() => handleVisit(course.id)}>
-                          Visit
+                          {t('v2:admin.courses.visit')}
                         </BlackOutlinedButton>
                       </TableCell>
                     </>

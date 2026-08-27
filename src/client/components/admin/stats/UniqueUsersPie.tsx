@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { PieChart } from '@mui/x-charts/PieChart'
+import { useTranslation } from 'react-i18next'
 
 import type { StatsOrganisation } from './organisationGroups.ts'
 import { totalPie } from './statsChartData.ts'
@@ -21,18 +22,19 @@ const UniqueUsersPie = ({
   isLoading,
   onToggleOrganisation,
 }: UniqueUsersPieProps) => {
+  const { t } = useTranslation()
   const pie = totalPie(organisations, hiddenOrganisations)
 
   return (
     <>
       <Typography variant="h6" align="center" sx={{ mt: 2, mb: 1 }}>
-        Unique users in the range
+        {t('v2:admin.stats.uniqueUsers')}
       </Typography>
 
       <Box sx={{ height: CHART_HEIGHT, position: 'relative' }}>
         {isLoading || totalCount === 0 ? (
           <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography>{isLoading ? 'Loading stats...' : 'No visits in the selected range.'}</Typography>
+            <Typography>{isLoading ? t('v2:admin.stats.loading') : t('v2:admin.stats.noVisits')}</Typography>
           </Box>
         ) : (
           <>

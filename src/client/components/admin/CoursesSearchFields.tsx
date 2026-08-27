@@ -1,5 +1,6 @@
 import { Box, Divider, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { UniqueUrnResponse, UrnMatchMode } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
@@ -82,6 +83,7 @@ const UrnModeToggle = ({ id, value, onChange, orTitle, andTitle }: UrnModeToggle
 )
 
 const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
+  const { t } = useTranslation()
   const [nameInput, setNameInput] = useState('')
   const [urnInputs, setUrnInputs] = useState<string[]>([])
   const [urnMode, setUrnMode] = useState<UrnMatchMode>('or')
@@ -117,10 +119,10 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
     <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'stretch' }}>
       <Box component="fieldset" sx={fieldsetSx}>
         <Typography component="legend" sx={legendSx}>
-          Name
+          {t('v2:admin.courses.search.nameLegend')}
         </Typography>
         <TextField
-          label="Search"
+          label={t('v2:admin.courses.search.nameField')}
           variant="outlined"
           size="small"
           value={nameInput}
@@ -133,18 +135,18 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
       {/* URN filters (operate on customCodeUrns) */}
       <Box component="fieldset" sx={fieldsetSx}>
         <Typography component="legend" sx={legendSx}>
-          URN
+          {t('v2:admin.courses.search.urnLegend')}
         </Typography>
         <Box component="fieldset" sx={urnGroupSx}>
           <Typography component="legend" sx={urnGroupLegendSx}>
-            Include
+            {t('v2:admin.courses.search.includeLegend')}
           </Typography>
           <MultiAutoCompleteTextField
             id="course-urn-include"
             value={urnInputs}
             onChange={setUrnInputs}
             options={urnOptions?.codeUrns ?? []}
-            label="URNs to include"
+            label={t('v2:admin.courses.search.urnsToInclude')}
             sx={{
               minWidth: 300,
               ...(urnInputs.length > 0 && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.success } }),
@@ -154,8 +156,8 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
             id="course-urn-include-mode"
             value={urnMode}
             onChange={setUrnMode}
-            orTitle="Keep courses matching any of the URNs listed to the left"
-            andTitle="Keep only courses matching all of the URNs listed to the left"
+            orTitle={t('v2:admin.courses.search.includeOrTitle')}
+            andTitle={t('v2:admin.courses.search.includeAndTitle')}
           />
         </Box>
 
@@ -163,14 +165,14 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
 
         <Box component="fieldset" sx={urnGroupSx}>
           <Typography component="legend" sx={urnGroupLegendSx}>
-            Exclude
+            {t('v2:admin.courses.search.excludeLegend')}
           </Typography>
           <MultiAutoCompleteTextField
             id="course-urn-exclude"
             value={excludeUrnsInputs}
             onChange={setExcludeUrnsInputs}
             options={urnOptions?.codeUrns ?? []}
-            label="URNs to exclude"
+            label={t('v2:admin.courses.search.urnsToExclude')}
             sx={{
               minWidth: 300,
               ...(excludeUrnsInputs.length > 0 && {
@@ -182,8 +184,8 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
             id="course-urn-exclude-mode"
             value={excludeUrnsMode}
             onChange={setExcludeUrnsMode}
-            orTitle="Drop courses matching any of the URNs listed to the left"
-            andTitle="Drop only courses matching all of the URNs listed to the left"
+            orTitle={t('v2:admin.courses.search.excludeOrTitle')}
+            andTitle={t('v2:admin.courses.search.excludeAndTitle')}
           />
         </Box>
       </Box>
@@ -191,10 +193,10 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
       {/* Course code filters (operate on linked Cu.courseCode) */}
       <Box component="fieldset" sx={fieldsetSx}>
         <Typography component="legend" sx={legendSx}>
-          Course code
+          {t('v2:admin.courses.search.courseCodeLegend')}
         </Typography>
         <TextField
-          label="Include"
+          label={t('v2:admin.courses.search.courseCodeInclude')}
           variant="outlined"
           size="small"
           value={courseCodeInput}
@@ -203,7 +205,7 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
           sx={{ minWidth: 180 }}
         />
         <TextField
-          label="Exclude (comma-separated)"
+          label={t('v2:admin.courses.search.courseCodeExclude')}
           variant="outlined"
           size="small"
           value={excludeCourseCodesInput}
@@ -215,33 +217,33 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
 
       <Box component="fieldset" sx={fieldsetSx}>
         <Typography component="legend" sx={legendSx}>
-          Review
+          {t('v2:admin.courses.search.reviewLegend')}
         </Typography>
         <TextField
           select
-          label="Status"
+          label={t('v2:admin.courses.search.statusField')}
           variant="outlined"
           size="small"
           value={reviewStatusInput}
           onChange={e => setReviewStatusInput(e.target.value as ReviewStatusFilterValue)}
           sx={{ minWidth: 180 }}
         >
-          <MenuItem value="all">All</MenuItem>
-          <MenuItem value="reviewed">Reviewed</MenuItem>
-          <MenuItem value="not-reviewed">Not reviewed</MenuItem>
+          <MenuItem value="all">{t('v2:admin.courses.search.statusAll')}</MenuItem>
+          <MenuItem value="reviewed">{t('v2:admin.courses.search.statusReviewed')}</MenuItem>
+          <MenuItem value="not-reviewed">{t('v2:admin.courses.search.statusNotReviewed')}</MenuItem>
         </TextField>
       </Box>
 
       {/* Course date is a containment filter: the course must start on or after
           "From" and end on or before "To", not merely overlap the range. */}
       <Box component="fieldset" sx={fieldsetSx}>
-        <Tooltip title="Keeps only courses that both start and end within the range">
+        <Tooltip title={t('v2:admin.courses.search.courseDateTooltip')}>
           <Typography component="legend" sx={legendSx}>
-            Course date
+            {t('v2:admin.courses.search.courseDateLegend')}
           </Typography>
         </Tooltip>
         <TextField
-          label="From"
+          label={t('v2:admin.courses.search.from')}
           type="date"
           variant="outlined"
           size="small"
@@ -251,7 +253,7 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
           sx={{ minWidth: 160 }}
         />
         <TextField
-          label="To"
+          label={t('v2:admin.courses.search.to')}
           type="date"
           variant="outlined"
           size="small"
@@ -264,7 +266,7 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
 
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <BlackOutlinedButton size="small" onClick={handleSearch}>
-          Search
+          {t('v2:admin.courses.search.submit')}
         </BlackOutlinedButton>
       </Box>
     </Box>

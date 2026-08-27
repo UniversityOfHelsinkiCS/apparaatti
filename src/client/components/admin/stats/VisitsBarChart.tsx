@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import type { SeriesLegendItemContext } from '@mui/x-charts/ChartsLegend'
+import { useTranslation } from 'react-i18next'
 
 import type { StatsRow } from './organisationGroups.ts'
 import { legendSx, organisationSeries } from './statsChartData.ts'
@@ -15,6 +16,7 @@ type VisitsBarChartProps = {
 }
 
 const VisitsBarChart = ({ rows, hiddenOrganisations, isLoading, onToggleOrganisation }: VisitsBarChartProps) => {
+  const { t } = useTranslation()
   const series = organisationSeries(rows, hiddenOrganisations)
 
   //the axis follows the visible organisations, not the unfiltered totals
@@ -30,7 +32,7 @@ const VisitsBarChart = ({ rows, hiddenOrganisations, isLoading, onToggleOrganisa
   if (isLoading || rows.length === 0) {
     return (
       <Box sx={{ height: CHART_HEIGHT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography>{isLoading ? 'Loading stats...' : 'No visits in the selected range.'}</Typography>
+        <Typography>{isLoading ? t('v2:admin.stats.loading') : t('v2:admin.stats.noVisits')}</Typography>
       </Box>
     )
   }
