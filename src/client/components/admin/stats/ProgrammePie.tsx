@@ -29,7 +29,7 @@ const ProgrammePie = ({ visitors, programmeNames, filters, isLoading, onTogglePr
 
   return (
     <>
-      <Typography variant="h6" align="center" sx={{ mb: 1 }}>
+      <Typography variant="subtitle1" align="center" sx={{ mb: 1 }}>
         {t('v2:admin.stats.programmes.title')}
       </Typography>
 

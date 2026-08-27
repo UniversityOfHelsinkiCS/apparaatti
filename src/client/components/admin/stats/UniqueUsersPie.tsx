@@ -25,8 +25,8 @@ const UniqueUsersPie = ({ visitors, filters, isLoading, onToggleOrganisation }: 
 
   return (
     <>
-      <Typography variant="h6" align="center" sx={{ mb: 1 }}>
-        {t('v2:admin.stats.uniqueUsers')}
+      <Typography variant="subtitle1" align="center" sx={{ mb: 1 }}>
+        {t('v2:admin.stats.faculty')}
       </Typography>
 
       <Box sx={{ height: TOGGLE_ROW_HEIGHT, mb: 1 }} />
