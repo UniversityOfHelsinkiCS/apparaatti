@@ -179,6 +179,11 @@ export type AnswerData = {
   'primary-language-specification': string
 }
 
+export type EducationPhase = {
+  code?: string | null
+  name?: LocalizedString | null
+}
+
 export type VisitStudyData = {
   organisationCode: string | null
   phase1ProgrammeCode: string | null

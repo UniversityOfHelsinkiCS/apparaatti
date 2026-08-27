@@ -1,6 +1,7 @@
 import type { CreationOptional, InferAttributes, InferCreationAttributes } from 'sequelize'
 import { BIGINT, DataTypes, DATE, JSONB, Model, STRING } from 'sequelize'
 
+import type { EducationPhase } from '../../../common/types.ts'
 import { sequelize } from '../connection.ts'
 
 class StudyRight extends Model<InferAttributes<StudyRight>, InferCreationAttributes<StudyRight>> {
@@ -27,8 +28,8 @@ class StudyRight extends Model<InferAttributes<StudyRight>, InferCreationAttribu
   declare requestedSelectionPath: object
   declare phase1MinorSelections: object
   declare phase2MinorSelections: object
-  declare educationPhase1: CreationOptional<object>
-  declare educationPhase2: CreationOptional<object>
+  declare educationPhase1: CreationOptional<EducationPhase | null>
+  declare educationPhase2: CreationOptional<EducationPhase | null>
   declare admissionTypeUrn: string
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>

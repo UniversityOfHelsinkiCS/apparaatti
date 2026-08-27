@@ -1,4 +1,4 @@
-import type { LocalizedString, User, VisitStudyData } from '../../common/types.ts'
+import type { EducationPhase, User, VisitStudyData } from '../../common/types.ts'
 import {
   createUserVisitsEntry,
   getUserVisitsByUser,
@@ -34,17 +34,14 @@ export async function getUserVisitsAtHour(visitorHashHex: string, date: Date) {
   return visits
 }
 
-type EducationPhase = { code?: unknown; name?: unknown }
-
 function programmeOf(phase: EducationPhase | null | undefined) {
-  const code = typeof phase?.code === 'string' ? phase.code : null
+  const code = phase?.code ?? null
 
   if (!code) {
     return { code: null, name: null }
   }
 
-  const name = phase?.name && typeof phase.name === 'object' ? (phase.name as LocalizedString) : null
-  return { code, name }
+  return { code, name: phase?.name ?? null }
 }
 
 export async function getUserVisitStudyData(user: User): Promise<VisitStudyData> {
