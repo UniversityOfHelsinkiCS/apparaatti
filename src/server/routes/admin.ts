@@ -2,12 +2,7 @@ import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
 
-import type {
-  UniqueUrnResponse,
-  UpdaterRunKind,
-  UrnMatchMode,
-  User,
-} from '../../common/types.ts'
+import type { UniqueUrnResponse, UpdaterRunKind, UrnMatchMode, User } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
