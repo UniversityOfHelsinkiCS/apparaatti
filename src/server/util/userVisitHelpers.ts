@@ -6,6 +6,7 @@ import {
   studyRightsForPersonId,
 } from './dbActions.ts'
 import { localLog } from './dev.ts'
+import { isAdmin, isSuperuser } from './validations.ts'
 
 //https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 export async function hashUser(user: User): Promise<string> {
@@ -69,6 +70,11 @@ export async function getUserVisitStudyData(user: User): Promise<VisitStudyData>
 }
 
 export async function saveUserVisitIfUnique(user: User) {
+  if (isAdmin(user) || isSuperuser(user)) {
+    localLog('admin or superuser, skipping', 'saveUserVisitIfUnique')
+    return
+  }
+
   const time = new Date()
   const visitorHashHex = await hashUser(user)
   localLog(time, 'saveUserVisitIfUnique')
