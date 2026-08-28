@@ -15,6 +15,8 @@ import HySpinner from './common/hy/HySpinner'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
+export const FILTERS_REGION_ID = 'filters-region'
+
 type SidebarContentProps = {
   onClose?: () => void
 }
@@ -101,7 +103,7 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
   }
 
   return (
-    <Box>
+    <Box component="nav" id={FILTERS_REGION_ID} aria-label={t('v2:filtersRegion')}>
       <Stack
         direction="row"
         spacing="16px"

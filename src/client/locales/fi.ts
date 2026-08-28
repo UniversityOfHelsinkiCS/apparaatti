@@ -106,6 +106,7 @@ export default {
     openFilters: 'Avaa suodattimet',
     closeFilters: 'Sulje suodattimet',
     moreOptions: 'Lisää vaihtoehtoja',
+    filtersRegion: 'Kurssisuodattimet',
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',
     welcomeText: 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',

@@ -105,6 +105,7 @@ export default {
     openFilters: 'Öppna filter',
     closeFilters: 'Stäng filter',
     moreOptions: 'Fler alternativ',
+    filtersRegion: 'Kursfilter',
     skipQuestions: 'Hoppa över frågorna',
     done: 'Klar',
     welcomeText: 'Svara först på några inledande frågor. Du kan ändra dessa senare.',

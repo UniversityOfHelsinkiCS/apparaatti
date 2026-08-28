@@ -106,6 +106,7 @@ export default {
     openFilters: 'Open filters',
     closeFilters: 'Close filters',
     moreOptions: 'More options',
+    filtersRegion: 'Course filters',
     skipQuestions: 'Skip questions',
     done: 'Done',
     welcomeText: 'First, answer a few initial questions. You can modify these later.',
