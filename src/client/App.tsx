@@ -71,7 +71,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
           },
         }}
       >
-        <AppHeader toggleDrawer={toggleDrawer} user={user} />
+        <AppHeader toggleDrawer={toggleDrawer} filtersOpen={open} user={user} />
 
         <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           <Drawer

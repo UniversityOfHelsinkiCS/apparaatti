@@ -107,6 +107,11 @@ export default {
     closeFilters: 'Close filters',
     moreOptions: 'More options',
     filtersRegion: 'Course filters',
+    filter: {
+      noMatches: 'no matching courses',
+      matchCount_one: '{{count}} matching course',
+      matchCount_other: '{{count}} matching courses',
+    },
     languageSelector: 'Language',
     universityLogoAlt: 'University of Helsinki',
     modal: {

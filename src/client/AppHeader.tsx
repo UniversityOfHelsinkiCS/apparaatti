@@ -14,14 +14,16 @@ import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
+import { FILTERS_REGION_ID } from './components/SidebarContent'
 import useBreakpoints from './hooks/useBreakpoints'
 
 type AppHeaderProps = {
   toggleDrawer: () => void
+  filtersOpen: boolean
   user: User
 }
 
-const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
+const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false)
   const [moreMenuAnchor, setMoreMenuAnchor] = useState<null | HTMLElement>(null)
   const { t } = useTranslation()
@@ -43,7 +45,13 @@ const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
       >
         <Toolbar sx={{ px: '12x' }}>
           {isDrawerLayout && (
-            <HyIconButton onClick={toggleDrawer} aria-label={t('v2:openFilters')} sx={{ mr: '14px' }}>
+            <HyIconButton
+              onClick={toggleDrawer}
+              aria-label={filtersOpen ? t('v2:closeFilters') : t('v2:openFilters')}
+              aria-expanded={filtersOpen}
+              aria-controls={FILTERS_REGION_ID}
+              sx={{ mr: '14px' }}
+            >
               <PanelLeftOpen size={24} />
             </HyIconButton>
           )}

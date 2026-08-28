@@ -7,6 +7,7 @@ type BadgeVariant = 'default' | 'success' | 'attention' | 'danger' | 'info' | 'n
 interface HyBadgeProps {
   variant?: BadgeVariant
   ariaLabel?: string
+  ariaHidden?: boolean
   hiddenAssistiveText?: string
   children?: React.ReactNode
   sx?: SxProps
@@ -60,8 +61,8 @@ const VisuallyHidden = styled('span')({
   whiteSpace: 'nowrap',
 })
 
-const HyBadge = ({ variant = 'default', ariaLabel, hiddenAssistiveText, children, sx }: HyBadgeProps) => (
-  <BadgeRoot ownerState={{ variant }} sx={sx}>
+const HyBadge = ({ variant = 'default', ariaLabel, ariaHidden, hiddenAssistiveText, children, sx }: HyBadgeProps) => (
+  <BadgeRoot ownerState={{ variant }} aria-hidden={ariaHidden} sx={sx}>
     <BadgeContent>
       <BadgeText aria-label={ariaLabel}>
         {children}

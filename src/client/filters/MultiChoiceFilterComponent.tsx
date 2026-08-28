@@ -2,8 +2,8 @@ import { FormControlLabel, FormGroup } from '@mui/material'
 import React from 'react'
 
 import { Option, Question } from '../../common/types'
-import HyBadge from '../components/common/hy/HyBadge.tsx'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
+import OptionCountBadge from '../components/common/OptionCountBadge.tsx'
 import ShrinkwrapText from '../components/common/ShrinkwrapText.tsx'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -30,7 +30,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
           count != null ? (
             <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <ShrinkwrapText>{option.name}</ShrinkwrapText>
-              <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
+              <OptionCountBadge count={count} />
             </span>
           ) : (
             option.name

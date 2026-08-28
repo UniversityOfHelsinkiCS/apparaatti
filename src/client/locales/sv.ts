@@ -106,6 +106,11 @@ export default {
     closeFilters: 'Stäng filter',
     moreOptions: 'Fler alternativ',
     filtersRegion: 'Kursfilter',
+    filter: {
+      noMatches: 'inga matchande kurser',
+      matchCount_one: '{{count}} matchande kurs',
+      matchCount_other: '{{count}} matchande kurser',
+    },
     languageSelector: 'Språk',
     universityLogoAlt: 'Helsingfors universitet',
     modal: {

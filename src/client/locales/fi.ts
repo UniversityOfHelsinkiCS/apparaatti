@@ -107,6 +107,11 @@ export default {
     closeFilters: 'Sulje suodattimet',
     moreOptions: 'Lisää vaihtoehtoja',
     filtersRegion: 'Kurssisuodattimet',
+    filter: {
+      noMatches: 'ei osuvia kursseja',
+      matchCount_one: '{{count}} osuva kurssi',
+      matchCount_other: '{{count}} osuvaa kurssia',
+    },
     languageSelector: 'Kieli',
     universityLogoAlt: 'Helsingin yliopisto',
     modal: {

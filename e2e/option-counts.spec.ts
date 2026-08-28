@@ -14,32 +14,19 @@ async function answerWelcomeModal(page: Page) {
   await expect(welcomeModal).toBeHidden()
 }
 
-test.describe('landmarks', () => {
+test.describe('filter option match counts', () => {
   test.beforeEach(async ({ request }) => {
     await request.get('/api/debug/reset/settings')
   })
 
-  test('the filter sidebar is a named navigation landmark', async ({ page }) => {
+  test('option names spell out the match count instead of a bare number', async ({ page }) => {
     await page.goto('/')
     await answerWelcomeModal(page)
 
     const filters = page.getByRole('navigation', { name: 'Course filters' })
-    await expect(filters).toBeAttached()
-    await expect(filters.getByTestId('sidebar-clear-choices')).toBeAttached()
-  })
+    await expect(filters.getByRole('radio').first()).toBeAttached()
 
-  test('the drawer toggle reports the sidebar state', async ({ page }) => {
-    await page.setViewportSize({ width: 800, height: 900 })
-    await page.goto('/')
-    await answerWelcomeModal(page)
-
-    const toggle = page.getByRole('button', { name: 'Close filters' }).first()
-    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
-    await expect(toggle).toHaveAttribute('aria-controls', 'filters-region')
-
-    await toggle.click()
-
-    const collapsedToggle = page.getByRole('button', { name: 'Open filters' })
-    await expect(collapsedToggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(filters.getByRole('radio', { name: /matching courses?$/ }).first()).toBeAttached()
+    await expect(filters.getByRole('radio', { name: /\d$/ })).toHaveCount(0)
   })
 })

@@ -1,8 +1,8 @@
 import { FormControlLabel } from '@mui/material'
 
 import { Option } from '../../../common/types'
-import HyBadge from './hy/HyBadge'
 import HyRadio from './hy/HyRadio'
+import OptionCountBadge from './OptionCountBadge'
 import ShrinkwrapText from './ShrinkwrapText'
 
 interface SingleChoiceOptionProps {
@@ -16,7 +16,7 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
     count != null ? (
       <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <ShrinkwrapText>{option.name}</ShrinkwrapText>
-        <HyBadge variant={count === 0 ? 'disabled' : 'default'}>{count}</HyBadge>
+        <OptionCountBadge count={count} />
       </span>
     ) : (
       <ShrinkwrapText>{option.name}</ShrinkwrapText>
