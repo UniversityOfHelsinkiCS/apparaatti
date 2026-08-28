@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../contexts/filterContext'
+import useModalLabels from '../hooks/useModalLabels'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 
@@ -15,6 +16,7 @@ const ResetFiltersButton = ({ onReset, dataTestId, disabled }: ResetFiltersButto
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
   const { resetFilters } = useFilterContext()
+  const modalLabels = useModalLabels()
 
   const handleClose = () => {
     setOpen(false)
@@ -41,6 +43,7 @@ const ResetFiltersButton = ({ onReset, dataTestId, disabled }: ResetFiltersButto
       <HyModal
         open={open}
         onClose={handleClose}
+        labels={modalLabels}
         size="small"
         title={t('v2:noRecommendations.resetConfirmationTitle')}
         footer={

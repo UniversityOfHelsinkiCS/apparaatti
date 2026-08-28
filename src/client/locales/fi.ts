@@ -107,6 +107,13 @@ export default {
     closeFilters: 'Sulje suodattimet',
     moreOptions: 'Lisää vaihtoehtoja',
     filtersRegion: 'Kurssisuodattimet',
+    languageSelector: 'Kieli',
+    universityLogoAlt: 'Helsingin yliopisto',
+    modal: {
+      close: 'Sulje',
+      warning: 'Varoitus',
+      scrollArea: 'Vieritettävä sisältöalue',
+    },
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',
     welcomeText: 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',

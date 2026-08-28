@@ -106,6 +106,13 @@ export default {
     closeFilters: 'Stäng filter',
     moreOptions: 'Fler alternativ',
     filtersRegion: 'Kursfilter',
+    languageSelector: 'Språk',
+    universityLogoAlt: 'Helsingfors universitet',
+    modal: {
+      close: 'Stäng',
+      warning: 'Varning',
+      scrollArea: 'Rullbart innehållsområde',
+    },
     skipQuestions: 'Hoppa över frågorna',
     done: 'Klar',
     welcomeText: 'Svara först på några inledande frågor. Du kan ändra dessa senare.',

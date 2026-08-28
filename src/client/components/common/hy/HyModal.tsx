@@ -10,7 +10,20 @@ const MODAL_OUT_DURATION = 160
 type ModalSize = 'auto' | 'small' | 'medium' | 'large' | 'full'
 type ModalVariant = 'default' | 'danger'
 
+export interface HyModalLabels {
+  close?: string
+  warning?: string
+  scrollArea?: string
+}
+
+const defaultLabels: Required<HyModalLabels> = {
+  close: 'Close',
+  warning: 'Warning',
+  scrollArea: 'Content scroll area',
+}
+
 export interface HyModalProps {
+  labels?: HyModalLabels
   open: boolean
   onClose: () => void
   title?: string
@@ -350,12 +363,14 @@ const HyModal = ({
   showCloseButton = true,
   scrollable = false,
   headingLevel = 2,
+  labels,
   header,
   footer,
   children,
   sx,
 }: HyModalProps) => {
   const titleId = useId()
+  const label = { ...defaultLabels, ...labels }
   const [modalMounted, setModalMounted] = useState(open)
   const [containerOpen, setContainerOpen] = useState(false)
   const [containerIn, setContainerIn] = useState(false)
@@ -445,12 +460,12 @@ const HyModal = ({
             <Header $sticky={scrollable}>
               {title && (
                 <Heading id={titleId} role="heading" aria-level={headingLevel} tabIndex={-1}>
-                  {variant === 'danger' && <DangerIcon aria-label="Warning" />}
+                  {variant === 'danger' && <DangerIcon aria-label={label.warning} />}
                   <HeadingText>{title}</HeadingText>
                 </Heading>
               )}
               {closeable && showCloseButton && (
-                <CloseButton aria-label="Close" onClick={onClose} type="button">
+                <CloseButton aria-label={label.close} onClick={onClose} type="button">
                   <CloseIconSvg />
                 </CloseButton>
               )}
@@ -465,7 +480,7 @@ const HyModal = ({
                 $hasFooter={footer != null}
                 ref={contentRef}
                 onScroll={calculateScrollState}
-                aria-label="Content scroll area"
+                aria-label={label.scrollArea}
                 tabIndex={0}
               >
                 {children}

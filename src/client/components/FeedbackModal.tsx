@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '../contexts/filterContext'
 import useApiMutation from '../hooks/useApiMutation'
+import useModalLabels from '../hooks/useModalLabels'
 import useApi from '../util/useApi'
 import useRequiredUser from '../util/useRequiredUser'
 import HyButton from './common/hy/HyButton'
@@ -20,6 +21,7 @@ type FeedbackModalProps = {
 
 const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
   const { t } = useTranslation()
+  const modalLabels = useModalLabels()
   const { finalRecommendedCourses, filterState } = useFilterContext()
   const [textFeedback, setTextFeedback] = useState('')
   const [stars, setStars] = useState(0)
@@ -91,6 +93,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
       <HyModal
         open={open}
         onClose={handleClose}
+        labels={modalLabels}
         title={t('v2:feedback.title')}
         size="large"
         scrollable
@@ -182,6 +185,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
       <HyModal
         open={metadataModalOpen}
         onClose={() => setMetadataModalOpen(false)}
+        labels={modalLabels}
         title={t('v2:feedback.metadataDialogTitle')}
         size="medium"
         scrollable

@@ -48,7 +48,7 @@ const AppHeader = ({ toggleDrawer, user }: AppHeaderProps) => {
             </HyIconButton>
           )}
 
-          <Box component="img" src={hyLogo} alt="University of Helsinki" sx={{ height: 32, mr: 2 }} />
+          <Box component="img" src={hyLogo} alt={t('v2:universityLogoAlt')} sx={{ height: 32, mr: 2 }} />
           <Typography
             component="h1"
             variant="h4"

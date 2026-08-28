@@ -107,6 +107,13 @@ export default {
     closeFilters: 'Close filters',
     moreOptions: 'More options',
     filtersRegion: 'Course filters',
+    languageSelector: 'Language',
+    universityLogoAlt: 'University of Helsinki',
+    modal: {
+      close: 'Close',
+      warning: 'Warning',
+      scrollArea: 'Content scroll area',
+    },
     skipQuestions: 'Skip questions',
     done: 'Done',
     welcomeText: 'First, answer a few initial questions. You can modify these later.',

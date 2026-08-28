@@ -26,6 +26,8 @@ const QuestionTitle = ({
   question: Question
   showMandatoryStatus?: boolean
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Stack data-testid={`question-title-${question.id}`} sx={{ gap: 0.75 }}>
       {showMandatoryStatus && (
@@ -36,7 +38,7 @@ const QuestionTitle = ({
       <Stack direction="row" sx={{ display: 'flex', alignItems: 'center' }}>
         <HyIconButton
           onClick={handleOpen}
-          aria-label="more info"
+          aria-label={t('question:extrainfo')}
           sx={{ marginRight: '6px', marginY: 'auto', color: hy.iconColor.neutral }}
         >
           <Info />

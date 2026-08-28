@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { Question } from '../../common/types'
+import useModalLabels from '../hooks/useModalLabels'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
 import AppMarkdown from './common/AppMarkdown'
 import HyButton from './common/hy/HyButton'
@@ -18,6 +19,7 @@ const ExtraInfoModal = ({
   currentVariant?: string
 }) => {
   const { t } = useTranslation()
+  const modalLabels = useModalLabels()
 
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
 
@@ -25,6 +27,7 @@ const ExtraInfoModal = ({
     <HyModal
       open={open}
       onClose={handleClose}
+      labels={modalLabels}
       title={t('question:extrainfo')}
       footer={
         <HyButton variant="secondary" colour="black" onClick={handleClose}>

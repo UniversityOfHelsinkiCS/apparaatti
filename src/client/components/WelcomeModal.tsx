@@ -11,6 +11,7 @@ import {
   useFilterContext,
 } from '../contexts/filterContext'
 import Filter from '../filters/filter'
+import useModalLabels from '../hooks/useModalLabels'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
@@ -30,6 +31,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   const filterContext = useFilterContext()
   const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
   const { t } = useTranslation()
+  const modalLabels = useModalLabels()
   const configMap = filterConfigMap(filterContext)
 
   const variantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
@@ -119,6 +121,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     <HyModal
       open={open}
       onClose={handleCloseIfMandatoryAnswered}
+      labels={modalLabels}
       title={t('v2:welcomeText')}
       size="large"
       scrollable
