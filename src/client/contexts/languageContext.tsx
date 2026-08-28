@@ -32,6 +32,13 @@ export const LanguageContextProvider = ({ children }: { children: React.ReactNod
       i18n.changeLanguage('fi')
     }
   }, [])
+
+  useEffect(() => {
+    if (i18n.language) {
+      document.documentElement.lang = i18n.language
+    }
+  }, [i18n.language])
+
   //Sets language to the wanted value if it is supported and there is no language set yet
   const setDefaultLanguage = (lang: string) => {
     const localLang = readStorage('lang')
