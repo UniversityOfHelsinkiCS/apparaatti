@@ -108,6 +108,13 @@ export default {
     skipQuestions: 'Hoppa över frågorna',
     done: 'Klar',
     welcomeText: 'Svara först på några inledande frågor. Du kan ändra dessa senare.',
+    results: {
+      heading: 'Kursrekommendationer',
+      loading: 'Laddar kursrekommendationer',
+      loadingFilters: 'Laddar filter',
+      count_one: '{{count}} kurs hittades',
+      count_other: '{{count}} kurser hittades',
+    },
     noRecommendations: {
       title: 'Inga kurser hittades',
       description: 'Försök ändra dina val för att se kurser.',

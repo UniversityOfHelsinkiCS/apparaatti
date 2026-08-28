@@ -109,6 +109,13 @@ export default {
     skipQuestions: 'Skip questions',
     done: 'Done',
     welcomeText: 'First, answer a few initial questions. You can modify these later.',
+    results: {
+      heading: 'Course recommendations',
+      loading: 'Loading course recommendations',
+      loadingFilters: 'Loading filters',
+      count_one: '{{count}} course found',
+      count_other: '{{count}} courses found',
+    },
     noRecommendations: {
       title: 'No courses found',
       description: 'Try changing your selections to see courses.',

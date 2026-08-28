@@ -137,7 +137,7 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
       </Stack>
       {isLoading ? (
         <Stack alignItems="center" justifyContent="center" spacing={2} sx={{ p: '32px' }}>
-          <HySpinner size="xLarge" colour="black" />
+          <HySpinner size="xLarge" colour="black" useAriaLive hiddenAssistiveText={t('v2:results.loadingFilters')} />
         </Stack>
       ) : (
         filtersToShow.map((filter, index) => (

@@ -109,6 +109,13 @@ export default {
     skipQuestions: 'Ohita kysymykset',
     done: 'Valmis',
     welcomeText: 'Vastaa ensin muutamaan alkukysymykseen. Voit muokata näitä myöhemmin.',
+    results: {
+      heading: 'Kurssisuositukset',
+      loading: 'Ladataan kurssisuosituksia',
+      loadingFilters: 'Ladataan suodattimia',
+      count_one: '{{count}} kurssi löytyi',
+      count_other: '{{count}} kurssia löytyi',
+    },
     noRecommendations: {
       title: 'Kursseja ei löytynyt',
       description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
