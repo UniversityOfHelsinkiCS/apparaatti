@@ -3,7 +3,7 @@ import React from 'react'
 
 import { Option, Question } from '../../common/types'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
-import OptionCountBadge from '../components/common/OptionCountBadge.tsx'
+import OptionCountBadge, { useOptionCountText } from '../components/common/OptionCountBadge.tsx'
 import ShrinkwrapText from '../components/common/ShrinkwrapText.tsx'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -21,14 +21,16 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
   options,
 }) => {
   const { getOptionCount } = useFilterContext()
+  const optionCountText = useOptionCountText()
 
   return (
     <FormGroup role="group" aria-labelledby={`question-text-${filter.id}`}>
       {options.map(option => {
         const count = getOptionCount(filter.id, option.id)
+        const accessibleName = count != null ? `${option.name}, ${optionCountText(count)}` : option.name
         const label =
           count != null ? (
-            <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span aria-hidden style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <ShrinkwrapText>{option.name}</ShrinkwrapText>
               <OptionCountBadge count={count} />
             </span>
@@ -42,7 +44,9 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
             name={filter.id}
             value={option.id}
             data-testid={`${filter.id}-option-${option.id}`}
-            control={<HyCheckbox onChange={handleCheckboxChange} />}
+            control={
+              <HyCheckbox onChange={handleCheckboxChange} slotProps={{ input: { 'aria-label': accessibleName } }} />
+            }
             label={label}
             sx={{
               py: '2px',

@@ -128,6 +128,8 @@ export default {
       heading: 'Course recommendations',
       loading: 'Loading course recommendations',
       loadingFilters: 'Loading filters',
+      unansweredMandatory_one: 'Answer the remaining mandatory question: {{question}}',
+      unansweredMandatory_other: 'Answer the {{count}} remaining mandatory questions, next: {{question}}',
       count_one: '{{count}} course found',
       count_other: '{{count}} courses found',
     },

@@ -12,10 +12,13 @@ import HyButton from './components/common/hy/HyButton'
 import HyIconButton from './components/common/hy/HyIconButton'
 import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
+import VisuallyHidden from './components/common/VisuallyHidden'
 import FeedbackModal from './components/FeedbackModal'
 import LanguageSelector from './components/LanguageSelector'
 import { FILTERS_REGION_ID } from './components/SidebarContent'
 import useBreakpoints from './hooks/useBreakpoints'
+
+export const APP_DESCRIPTION_ID = 'app-description'
 
 type AppHeaderProps = {
   toggleDrawer: () => void
@@ -62,6 +65,9 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
             component="h1"
             variant="h4"
             noWrap
+            tabIndex={0}
+            aria-describedby={APP_DESCRIPTION_ID}
+            data-testid="app-title"
             sx={{
               fontSize: '22px',
               fontWeight: '700',
@@ -71,6 +77,9 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
           >
             {t('v2:appTitle')}
           </Typography>
+          <VisuallyHidden component="p" id={APP_DESCRIPTION_ID} data-testid="app-description">
+            {t('v2:appDescription')}
+          </VisuallyHidden>
 
           <Box sx={{ flexGrow: 1 }} />
 

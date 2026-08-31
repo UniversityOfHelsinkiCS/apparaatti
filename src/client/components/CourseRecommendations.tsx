@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { useFilterContext } from '../contexts/filterContext'
+import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
 import HySpinner from './common/hy/HySpinner'
 import VisuallyHidden from './common/VisuallyHidden'
 import CourseRecommendation from './CourseRecommendation'
@@ -14,10 +14,25 @@ type CourseRecommendationsProps = {
 }
 
 const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) => {
-  const { finalRecommendedCourses: recommendations, isLoading } = useFilterContext()
+  const filterContext = useFilterContext()
+  const { finalRecommendedCourses: recommendations, isLoading, filters } = filterContext
   const { t } = useTranslation()
 
   const count = recommendations?.length ?? 0
+  const unansweredMandatory = getUnansweredCurrentMandatoryFilters(filters, filterContext)
+
+  const announcement = () => {
+    if (isLoading) {
+      return t('v2:results.loading')
+    }
+    if (count === 0 && unansweredMandatory.length > 0) {
+      return t('v2:results.unansweredMandatory', {
+        count: unansweredMandatory.length,
+        question: unansweredMandatory[0].shortName ?? unansweredMandatory[0].id,
+      })
+    }
+    return t('v2:results.count', { count })
+  }
 
   const content = () => {
     if (isLoading) {
@@ -49,7 +64,7 @@ const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) =>
         {t('v2:results.heading')}
       </VisuallyHidden>
       <VisuallyHidden role="status" aria-live="polite">
-        {isLoading ? t('v2:results.loading') : t('v2:results.count', { count })}
+        {announcement()}
       </VisuallyHidden>
       {content()}
     </Box>

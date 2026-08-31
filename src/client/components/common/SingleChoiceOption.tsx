@@ -2,7 +2,7 @@ import { FormControlLabel } from '@mui/material'
 
 import { Option } from '../../../common/types'
 import HyRadio from './hy/HyRadio'
-import OptionCountBadge from './OptionCountBadge'
+import OptionCountBadge, { useOptionCountText } from './OptionCountBadge'
 import ShrinkwrapText from './ShrinkwrapText'
 
 interface SingleChoiceOptionProps {
@@ -12,9 +12,11 @@ interface SingleChoiceOptionProps {
 }
 
 const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps) => {
+  const optionCountText = useOptionCountText()
+  const accessibleName = count != null ? `${option.name}, ${optionCountText(count)}` : option.name
   const label =
     count != null ? (
-      <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <span aria-hidden style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <ShrinkwrapText>{option.name}</ShrinkwrapText>
         <OptionCountBadge count={count} />
       </span>
@@ -25,7 +27,7 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
     <FormControlLabel
       value={option.id}
       data-testid={`${filterId}-option-${option.id}`}
-      control={<HyRadio slotProps={{ input: { 'aria-disabled': count === 0 } }} />}
+      control={<HyRadio slotProps={{ input: { 'aria-disabled': count === 0, 'aria-label': accessibleName } }} />}
       label={label}
       sx={{
         py: '2px',

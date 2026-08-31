@@ -44,7 +44,6 @@ const QuestionTitle = ({
         >
           {title}
         </Typography>
-        {/* the question is first in the DOM so it is read before the info button, order keeps the icon on the left */}
         <HyIconButton
           onClick={handleOpen}
           aria-label={t('question:extrainfo')}

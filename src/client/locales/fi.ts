@@ -128,6 +128,8 @@ export default {
       heading: 'Kurssisuositukset',
       loading: 'Ladataan kurssisuosituksia',
       loadingFilters: 'Ladataan suodattimia',
+      unansweredMandatory_one: 'Vastaa vielä seuraavaan pakolliseen kysymykseen: {{question}}',
+      unansweredMandatory_other: 'Vastaa vielä {{count}} pakolliseen kysymykseen, seuraava: {{question}}',
       count_one: '{{count}} kurssi löytyi',
       count_other: '{{count}} kurssia löytyi',
     },

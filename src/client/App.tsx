@@ -2,12 +2,10 @@ import { Box } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import Drawer from '@mui/material/Drawer'
 import { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import type { User } from '../common/types'
 import AppHeader from './AppHeader'
 import { hy } from './components/common/hy/hyTokens'
-import VisuallyHidden from './components/common/VisuallyHidden'
 import CourseRecommendations from './components/CourseRecommendations'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
@@ -24,7 +22,6 @@ type OneThirdDrawerLayoutProps = {
 }
 
 const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
-  const { t } = useTranslation()
   const { isDrawerLayout } = useBreakpoints()
   const [open, setOpen] = useState(!isDrawerLayout)
   const { modalOpen, setModalOpen } = useFilterContext()
@@ -56,9 +53,6 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
       }}
     >
       <CssBaseline />
-      <VisuallyHidden component="p" tabIndex={0} data-testid="app-description">
-        {t('v2:appDescription')}
-      </VisuallyHidden>
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
 
       <Box

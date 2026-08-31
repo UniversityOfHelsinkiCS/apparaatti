@@ -35,8 +35,6 @@ test.describe('landmarks', () => {
     await page.goto('/')
     await answerWelcomeModal(page)
 
-    // both icon buttons are located by test id: while the temporary drawer is open it is a
-    // modal, which aria-hides the header, so the toggle cannot be found by role
     const toggle = page.getByTestId('drawer-toggle')
     await expect(toggle).toHaveAttribute('aria-controls', 'filters-region')
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
@@ -73,8 +71,12 @@ test.describe('landmarks', () => {
 
     const description = page.getByTestId('app-description')
     await expect(description).toContainText('Polku is the University of Helsinki Language Centre course recommender.')
+    await expect(description).toHaveAttribute('id', 'app-description')
+
+    const title = page.getByTestId('app-title')
+    await expect(title).toHaveAttribute('aria-describedby', 'app-description')
 
     await page.locator('body').press('Tab')
-    await expect(description).toBeFocused()
+    await expect(title).toBeFocused()
   })
 })

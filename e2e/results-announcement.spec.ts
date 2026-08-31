@@ -43,6 +43,20 @@ test.describe('course recommendation announcements', () => {
     await expect(list.getByRole('listitem')).toHaveCount(10)
   })
 
+  test('the results region asks for the mandatory answers instead of announcing zero courses', async ({ page }) => {
+    await page.goto('/')
+    await answerWelcomeModal(page, FACULTY.science, 'fi')
+
+    const status = resultsRegion(page).getByRole('status')
+    await expect(status).toHaveText(/remaining mandatory question/)
+    const firstPrompt = await status.textContent()
+
+    await page.getByTestId('lang-option-fi').click()
+
+    await expect(status).toHaveText(/remaining mandatory question/)
+    await expect(status).not.toHaveText(firstPrompt ?? '')
+  })
+
   test('the results region announces the empty state', async ({ page }) => {
     await page.goto('/')
     await answerWelcomeModal(page, FACULTY.theology, 'fi')

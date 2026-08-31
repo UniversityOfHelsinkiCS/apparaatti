@@ -127,6 +127,8 @@ export default {
       heading: 'Kursrekommendationer',
       loading: 'Laddar kursrekommendationer',
       loadingFilters: 'Laddar filter',
+      unansweredMandatory_one: 'Svara ännu på den obligatoriska frågan: {{question}}',
+      unansweredMandatory_other: 'Svara ännu på {{count}} obligatoriska frågor, nästa: {{question}}',
       count_one: '{{count}} kurs hittades',
       count_other: '{{count}} kurser hittades',
     },
