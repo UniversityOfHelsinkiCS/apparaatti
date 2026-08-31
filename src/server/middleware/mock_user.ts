@@ -34,8 +34,8 @@ const ensureE2eUserRow = async (id: string) => {
     username: id,
     firstNames: 'Testi',
     lastName: 'Kayttaja',
-    language: mockUser.language,
-    hyGroupCn: mockUser.hyGroupCn,
+    language: mockUser.language ?? undefined,
+    hyGroupCn: mockUser.hyGroupCn ?? undefined,
     studentNumber: '012345678',
   })
   ensuredE2eUserIds.add(id)
