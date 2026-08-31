@@ -460,6 +460,7 @@ export default {
   },
   course: {
     show: 'Kurssisivu',
+    inPeriod: 'periodissa {{periods}}',
     credits: 'op',
     reasons: 'perusteet',
     periodName: 'periodi',

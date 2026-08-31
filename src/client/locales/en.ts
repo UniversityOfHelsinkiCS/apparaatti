@@ -460,6 +460,7 @@ export default {
   },
   course: {
     show: 'Course page',
+    inPeriod: 'in period {{periods}}',
     credits: 'cr',
     reasons: 'reasons',
     periodName: 'period',

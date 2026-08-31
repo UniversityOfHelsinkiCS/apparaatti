@@ -459,6 +459,7 @@ export default {
   },
   course: {
     show: 'Kurssida',
+    inPeriod: 'i period {{periods}}',
     credits: 'sp',
     reasons: 'grundläggande',
     periodName: 'period',

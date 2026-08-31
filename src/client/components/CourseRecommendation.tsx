@@ -19,6 +19,11 @@ const studyPlaceIcons: Record<string, LucideIcon> = {
   independent: User,
 }
 
+const formatDate = (d: Date) => d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear()
+
+const courseDateText = (startDate: Date, endDate: Date) =>
+  formatDate(new Date(startDate)) + ' - ' + formatDate(new Date(endDate))
+
 const CourseDateRange = ({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
   const start = new Date(startDate)
   const end = new Date(endDate)
@@ -27,10 +32,7 @@ const CourseDateRange = ({ startDate, endDate }: { startDate: Date; endDate: Dat
   // past courses default, ongoing courses attention, upcoming courses info
   const colour = end < now ? 'default' : start <= now ? 'attention' : 'info'
 
-  const formatDate = (d: Date) => d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear()
-  const text = formatDate(start) + ' - ' + formatDate(end)
-
-  return <HyTag text={text} colour={colour} />
+  return <HyTag text={courseDateText(startDate, endDate)} colour={colour} />
 }
 
 const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] }) => {
@@ -115,6 +117,17 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
   const courseTitle =
     getDisplayCourseName(course, i18n.resolvedLanguage ?? i18n.language) ?? translateLocalizedString(course.name)
+  const credits = creditString()
+
+  const courseSummary = [
+    t('course:show'),
+    courseTitle,
+    periodItems.length > 0 ? t('course:inPeriod', { periods: periodItems.join(', ') }) : null,
+    studyPlaceText,
+    credits ? `${credits} ${t('course:credits')}` : null,
+  ]
+    .filter(Boolean)
+    .join(', ')
 
   return (
     <Box
@@ -127,11 +140,17 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
       }}
     >
       <Stack useFlexGap spacing={{ xs: 2, sm: 2.25 }} alignItems="flex-start" justifyContent="space-between">
-        <Typography variant="h4" component="h2" sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}>
+        <Typography
+          variant="h4"
+          component="h2"
+          aria-hidden
+          data-testid="course-title"
+          sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}
+        >
           {courseTitle}
         </Typography>
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1.5, sm: 0 }} sx={{ width: '100%' }}>
+        <Stack aria-hidden direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1.5, sm: 0 }} sx={{ width: '100%' }}>
           <Stack direction={'column'} spacing={1.5} sx={{ flex: 1, minWidth: 0 }}>
             <Stack
               direction="row"
@@ -174,6 +193,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
         <HyLinkCta
           href={courseUrl}
           target="_blank"
+          aria-label={courseSummary}
           sx={{ alignSelf: 'flex-start', mt: isMobile ? '4px' : 0 }}
           size={isMobile ? 'small' : 'medium'}
         >
