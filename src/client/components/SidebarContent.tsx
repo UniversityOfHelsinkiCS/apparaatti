@@ -128,6 +128,7 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
             <HyIconButton
               color="inherit"
               aria-label={t('v2:closeFilters')}
+              data-testid="sidebar-close"
               onClick={onClose}
               // negative margin matching 8px padding on IconButton to keep large hitbox without altering layout
               sx={{ m: '-2px' }}

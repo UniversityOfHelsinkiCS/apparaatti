@@ -106,6 +106,8 @@ export default {
     closeFilters: 'Stäng filter',
     moreOptions: 'Fler alternativ',
     filtersRegion: 'Kursfilter',
+    appDescription:
+      'Polku är Helsingfors universitets språkcentrums kursrekommenderare. Den föreslår språk- och kommunikationskurser som passar dina studier. Börja med att svara på startfrågorna om din studierätt och ditt utbildningsspråk, och avgränsa sedan förslagen med frågorna i navigeringen Kursfilter. Förslagen uppdateras så snart du ändrar ett svar, och antalet matchande kurser meddelas i området Kursrekommendationer.',
     filter: {
       noMatches: 'inga matchande kurser',
       matchCount_one: '{{count}} matchande kurs',

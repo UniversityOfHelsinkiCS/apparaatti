@@ -107,6 +107,8 @@ export default {
     closeFilters: 'Close filters',
     moreOptions: 'More options',
     filtersRegion: 'Course filters',
+    appDescription:
+      'Polku is the University of Helsinki Language Centre course recommender. It suggests language and communication courses that fit your studies. Start by answering the initial questions about your study right and language of education, then narrow the suggestions down with the questions in the Course filters navigation. The suggestions update as soon as you change an answer, and the number of matching courses is announced in the Course recommendations region.',
     filter: {
       noMatches: 'no matching courses',
       matchCount_one: '{{count}} matching course',

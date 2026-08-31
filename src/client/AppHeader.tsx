@@ -50,6 +50,7 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
               aria-label={filtersOpen ? t('v2:closeFilters') : t('v2:openFilters')}
               aria-expanded={filtersOpen}
               aria-controls={FILTERS_REGION_ID}
+              data-testid="drawer-toggle"
               sx={{ mr: '14px' }}
             >
               <PanelLeftOpen size={24} />

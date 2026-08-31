@@ -1,4 +1,6 @@
-import { expect, type Page, test } from '@playwright/test'
+import type { Page } from '@playwright/test'
+
+import { expect, test } from './fixtures'
 
 async function answerWelcomeModal(page: Page) {
   const welcomeModal = page.getByRole('dialog')
@@ -33,13 +35,46 @@ test.describe('landmarks', () => {
     await page.goto('/')
     await answerWelcomeModal(page)
 
-    const toggle = page.getByRole('button', { name: 'Close filters' }).first()
-    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    // both icon buttons are located by test id: while the temporary drawer is open it is a
+    // modal, which aria-hides the header, so the toggle cannot be found by role
+    const toggle = page.getByTestId('drawer-toggle')
     await expect(toggle).toHaveAttribute('aria-controls', 'filters-region')
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).toHaveAttribute('aria-label', 'Close filters')
+
+    await page.getByTestId('sidebar-close').click()
+
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(toggle).toHaveAttribute('aria-label', 'Open filters')
 
     await toggle.click()
 
-    const collapsedToggle = page.getByRole('button', { name: 'Open filters' })
-    await expect(collapsedToggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).toHaveAttribute('aria-label', 'Close filters')
+  })
+
+  test('filter questions are announced with their options', async ({ page }) => {
+    await page.goto('/')
+    await answerWelcomeModal(page)
+
+    const filters = page.getByRole('navigation', { name: 'Course filters' })
+    const question = filters.getByTestId('question-text-lang')
+    await expect(question).toHaveText('What language are you looking for?')
+    await expect(question).toHaveAttribute('tabindex', '0')
+
+    await expect(filters.getByRole('radiogroup').first()).toHaveAccessibleName(
+      'What language are you looking for?'
+    )
+  })
+
+  test('the app is described for screen readers', async ({ page }) => {
+    await page.goto('/')
+    await answerWelcomeModal(page)
+
+    const description = page.getByTestId('app-description')
+    await expect(description).toContainText('Polku is the University of Helsinki Language Centre course recommender.')
+
+    await page.locator('body').press('Tab')
+    await expect(description).toBeFocused()
   })
 })

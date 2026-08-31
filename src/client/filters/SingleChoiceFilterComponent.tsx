@@ -39,7 +39,12 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
 
   return (
     <>
-      <RadioGroup name={filter.id} value={state} onChange={onRadioChange}>
+      <RadioGroup
+        name={filter.id}
+        value={state}
+        onChange={onRadioChange}
+        aria-labelledby={`question-text-${filter.id}`}
+      >
         {options.map(option => (
           <SingleChoiceOption
             key={option.id}

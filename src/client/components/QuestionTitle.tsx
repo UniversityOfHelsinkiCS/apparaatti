@@ -36,20 +36,22 @@ const QuestionTitle = ({
         </Stack>
       )}
       <Stack direction="row" sx={{ display: 'flex', alignItems: 'center' }}>
-        <HyIconButton
-          onClick={handleOpen}
-          aria-label={t('question:extrainfo')}
-          sx={{ marginRight: '6px', marginY: 'auto', color: hy.iconColor.neutral }}
-        >
-          <Info />
-        </HyIconButton>
         <Typography
           sx={{ fontSize: '1rem', width: 'auto' }}
           id={`question-text-${question.id}`}
           data-testid={`question-text-${question.id}`}
+          tabIndex={0}
         >
           {title}
         </Typography>
+        {/* the question is first in the DOM so it is read before the info button, order keeps the icon on the left */}
+        <HyIconButton
+          onClick={handleOpen}
+          aria-label={t('question:extrainfo')}
+          sx={{ order: -1, marginRight: '6px', marginY: 'auto', color: hy.iconColor.neutral }}
+        >
+          <Info />
+        </HyIconButton>
       </Stack>
     </Stack>
   )

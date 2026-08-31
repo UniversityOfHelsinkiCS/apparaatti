@@ -107,6 +107,8 @@ export default {
     closeFilters: 'Sulje suodattimet',
     moreOptions: 'Lisää vaihtoehtoja',
     filtersRegion: 'Kurssisuodattimet',
+    appDescription:
+      'Polku on Helsingin yliopiston kielikeskuksen kurssisuosittelija. Se ehdottaa sinulle opintoihisi sopivia kieli- ja viestintäkursseja. Aloita vastaamalla alkukysymyksiin opinto-oikeudestasi ja koulusivistyskielestäsi, ja rajaa sen jälkeen ehdotuksia Kurssisuodattimet-navigaatiossa olevilla kysymyksillä. Ehdotukset päivittyvät heti kun muutat vastausta, ja osuvien kurssien määrä kerrotaan Kurssisuositukset-alueella.',
     filter: {
       noMatches: 'ei osuvia kursseja',
       matchCount_one: '{{count}} osuva kurssi',

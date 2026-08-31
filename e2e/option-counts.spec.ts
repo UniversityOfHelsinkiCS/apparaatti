@@ -1,4 +1,6 @@
-import { expect, type Page, test } from '@playwright/test'
+import type { Page } from '@playwright/test'
+
+import { expect, test } from './fixtures'
 
 async function answerWelcomeModal(page: Page) {
   const welcomeModal = page.getByRole('dialog')
@@ -24,9 +26,16 @@ test.describe('filter option match counts', () => {
     await answerWelcomeModal(page)
 
     const filters = page.getByRole('navigation', { name: 'Course filters' })
-    await expect(filters.getByRole('radio').first()).toBeAttached()
 
-    await expect(filters.getByRole('radio', { name: /matching courses?$/ }).first()).toBeAttached()
-    await expect(filters.getByRole('radio', { name: /\d$/ })).toHaveCount(0)
+    // only the mandatory language question starts expanded, and it is a server side filter
+    // without match counts, so answer it and open a filter that does have counts
+    await page.getByTestId('lang-option-fi').click()
+    await filters.getByRole('button', { name: 'Replacement', exact: true }).click()
+
+    const replacement = filters.getByRole('region', { name: 'Replacement' })
+    await expect(replacement.getByRole('radio').first()).toBeAttached()
+
+    await expect(replacement.getByRole('radio', { name: /matching courses?$/ }).first()).toBeAttached()
+    await expect(replacement.getByRole('radio', { name: /\d$/ })).toHaveCount(0)
   })
 })

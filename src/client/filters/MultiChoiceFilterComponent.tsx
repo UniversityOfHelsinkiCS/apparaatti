@@ -23,7 +23,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
   const { getOptionCount } = useFilterContext()
 
   return (
-    <FormGroup>
+    <FormGroup role="group" aria-labelledby={`question-text-${filter.id}`}>
       {options.map(option => {
         const count = getOptionCount(filter.id, option.id)
         const label =

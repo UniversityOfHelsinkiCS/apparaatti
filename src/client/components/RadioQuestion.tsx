@@ -31,7 +31,13 @@ const RadioQuestion = ({
 
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
-      <RadioGroup name={question.id} value={value} onChange={e => setValue(e.target.value)} sx={{ marginTop: 1 }}>
+      <RadioGroup
+        name={question.id}
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        aria-labelledby={`question-text-${question.id}`}
+        sx={{ marginTop: 1 }}
+      >
         {variant.options?.map(option => (
           <SingleChoiceOption key={option.id} option={option} filterId={question.id} />
         ))}
