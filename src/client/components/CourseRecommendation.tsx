@@ -121,16 +121,6 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
     getDisplayCourseName(course, i18n.resolvedLanguage ?? i18n.language) ?? translateLocalizedString(course.name)
   const credits = creditString()
 
-  const courseSummary = [
-    t('course:show'),
-    courseTitle,
-    periodItems.length > 0 ? t('course:inPeriod', { periods: periodItems.join(', ') }) : null,
-    studyPlaceText,
-    credits ? `${credits} ${t('course:credits')}` : null,
-  ]
-    .filter(Boolean)
-    .join(', ')
-
   return (
     <Box
       data-testid="course-recommendation"
@@ -145,14 +135,13 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
         <Typography
           variant="h4"
           component="h2"
-          aria-hidden
           data-testid="course-title"
           sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}
         >
           {courseTitle}
         </Typography>
 
-        <Stack aria-hidden direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1.5, sm: 0 }} sx={{ width: '100%' }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1.5, sm: 0 }} sx={{ width: '100%' }}>
           <Stack direction={'column'} spacing={1.5} sx={{ flex: 1, minWidth: 0 }}>
             <Stack
               direction="row"
@@ -165,7 +154,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
               }}
             >
               <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                {creditString()} {t('course:credits')}
+                {credits} {t('course:credits')}
               </Typography>
               <Typography variant="body2" sx={{ color: hy.textColor.secondary }}>
                 {courseCodes}
@@ -195,7 +184,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
         <HyLinkCta
           href={courseUrl}
           target="_blank"
-          aria-label={courseSummary}
+          aria-label={t('course:showCourse', { course: courseTitle })}
           opensInNewWindowLabel={opensInNewWindowLabel}
           sx={{ alignSelf: 'flex-start', mt: isMobile ? '4px' : 0 }}
           size={isMobile ? 'small' : 'medium'}

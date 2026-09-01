@@ -169,6 +169,7 @@ const HyLink = ({
 }: HyLinkProps) => {
   const opensNewTab = target === '_blank'
   const effectiveRel = opensNewTab ? (rel ? `${rel} noopener noreferrer` : 'noopener noreferrer') : rel
+  const effectiveAriaLabel = ariaLabel && opensNewTab ? `${ariaLabel}, ${opensInNewWindowLabel}` : ariaLabel
   const ownerState: OwnerState = { variant, weight, size, colour }
 
   const renderIcon = (pos: 'start' | 'end', el: React.ReactElement) => (
@@ -185,11 +186,18 @@ const HyLink = ({
   }
 
   return (
-    <Root ownerState={ownerState} href={href} target={target} rel={effectiveRel} aria-label={ariaLabel} sx={sx}>
+    <Root
+      ownerState={ownerState}
+      href={href}
+      target={target}
+      rel={effectiveRel}
+      aria-label={effectiveAriaLabel}
+      sx={sx}
+    >
       {startIcon}
       {children}
       {endIcon}
-      {opensNewTab && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
+      {opensNewTab && !ariaLabel && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
     </Root>
   )
 }

@@ -447,7 +447,7 @@ export default {
   },
   course: {
     show: 'Course page',
-    inPeriod: 'in period {{periods}}',
+    showCourse: 'Course page: {{course}}',
     credits: 'cr',
     reasons: 'reasons',
     periodName: 'period',

@@ -43,9 +43,12 @@ test.describe('course recommendation announcements', () => {
     await expect(list.getByRole('listitem')).toHaveCount(10)
 
     const firstCourseLink = region.getByTestId('course-recommendation').first().locator('a')
-    await expect(firstCourseLink).toHaveAttribute('aria-label', /^Course page, .+, in period .+, \d+(-\d+)? cr$/)
+    await expect(firstCourseLink).toHaveAttribute('aria-label', /^Course page: .+, opens in a new window$/)
     await expect(firstCourseLink).not.toHaveAttribute('aria-label', /\d+\.\d+\.\d{4}/)
-    await expect(region.getByTestId('course-title').first()).toHaveAttribute('aria-hidden', 'true')
+
+    const firstCourseTitle = region.getByTestId('course-title').first()
+    await expect(firstCourseTitle).not.toHaveAttribute('aria-hidden', 'true')
+    await expect(firstCourseTitle).toHaveRole('heading')
   })
 
   test('the results region asks for the mandatory answers instead of announcing zero courses', async ({ page }) => {

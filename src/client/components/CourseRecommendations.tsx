@@ -60,7 +60,7 @@ const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) =>
     }
 
     return (
-      <Stack component="ul" spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
+      <Stack component="ul" role="list" spacing={2} sx={{ listStyle: 'none', m: 0, p: 0 }}>
         {recommendations?.map(course => (
           <Box component="li" key={course.id}>
             <CourseRecommendation course={course} />

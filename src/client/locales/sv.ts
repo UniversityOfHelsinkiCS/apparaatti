@@ -1,5 +1,7 @@
 export default {
-  common: {},
+  common: {
+    userSearchNoOptions: 'inga träffar',
+  },
   form: {
     replacementQuestion_sv_primary_written:
       'Har du skrivit en laudatur eller eximia i modersmålets (svenska) studentexamen, eller är du i övrigt en skicklig och självstyrd skribent?',
@@ -446,7 +448,7 @@ export default {
   },
   course: {
     show: 'Kurssida',
-    inPeriod: 'i period {{periods}}',
+    showCourse: 'Kurssida: {{course}}',
     credits: 'sp',
     reasons: 'grundläggande',
     periodName: 'period',
@@ -455,6 +457,10 @@ export default {
   },
   opintotarjonta: {
     mooc: 'mooc',
+  },
+  loginAsPage: {
+    title: 'användarsökning',
+    userHeader: 'användare',
   },
   filter: {
     period: 'Studieperiod',

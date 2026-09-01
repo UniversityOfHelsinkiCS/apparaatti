@@ -239,6 +239,7 @@ const HyLinkCta = ({
 }: HyLinkCtaProps) => {
   const opensNewTab = target === '_blank'
   const effectiveRel = opensNewTab ? (rel ? `${rel} noopener noreferrer` : 'noopener noreferrer') : rel
+  const effectiveAriaLabel = ariaLabel && opensNewTab ? `${ariaLabel}, ${opensInNewWindowLabel}` : ariaLabel
   const IconComponent = opensNewTab ? ArrowOutwardIcon : ArrowForwardIcon
 
   const iconEl = !hideIcon && (
@@ -255,12 +256,12 @@ const HyLinkCta = ({
       target={target}
       rel={effectiveRel}
       aria-disabled={disabled ? 'true' : undefined}
-      aria-label={ariaLabel}
+      aria-label={effectiveAriaLabel}
     >
       {iconPosition === 'start' && iconEl}
       <Text>{children}</Text>
       {iconPosition === 'end' && iconEl}
-      {opensNewTab && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
+      {opensNewTab && !ariaLabel && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
     </Root>
   )
 }
