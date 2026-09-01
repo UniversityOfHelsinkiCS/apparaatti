@@ -65,7 +65,6 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
             component="h1"
             variant="h4"
             noWrap
-            tabIndex={0}
             aria-describedby={APP_DESCRIPTION_ID}
             data-testid="app-title"
             sx={{

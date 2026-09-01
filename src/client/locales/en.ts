@@ -105,6 +105,7 @@ export default {
     retakeQuestions: 'Answer starting questions',
     openFilters: 'Open filters',
     closeFilters: 'Close filters',
+    opensInNewWindow: 'opens in a new window',
     moreOptions: 'More options',
     filtersRegion: 'Course filters',
     appDescription:
@@ -138,6 +139,7 @@ export default {
       title: 'No courses found',
       description: 'Try changing your selections to see courses.',
       unansweredMandatory: 'Answer the remaining mandatory question',
+      openFilterQuestion: 'Open filters: {{question}}',
       changeSelectionsButton: 'Change your selections',
       resetButton: 'Clear choices',
       resetConfirmationTitle: 'Reset all selections?',

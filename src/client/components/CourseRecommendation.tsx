@@ -6,6 +6,7 @@ import { getDisplayCourseName } from '../../common/nameFormatter'
 import type { CourseData } from '../../common/types'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 import useBreakpoints from '../hooks/useBreakpoints'
+import useOpensInNewWindowLabel from '../hooks/useOpensInNewWindowLabel'
 import { translateLocalizedString } from '../util/i18n'
 import HyLinkCta from './common/hy/HyLinkCta'
 import HyTag from './common/hy/HyTag'
@@ -53,6 +54,7 @@ const PeriodDisplay = ({ label, periods }: { label: string; periods: string[] })
 const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const { t, i18n } = useTranslation()
   const { isMobile } = useBreakpoints()
+  const opensInNewWindowLabel = useOpensInNewWindowLabel()
   const filterContext = useFilterContext()
   const baseUrl = 'https://studies.helsinki.fi/kurssit/toteutus'
   const courseUrl = `${baseUrl}/${course.id}`
@@ -194,6 +196,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
           href={courseUrl}
           target="_blank"
           aria-label={courseSummary}
+          opensInNewWindowLabel={opensInNewWindowLabel}
           sx={{ alignSelf: 'flex-start', mt: isMobile ? '4px' : 0 }}
           size={isMobile ? 'small' : 'medium'}
         >

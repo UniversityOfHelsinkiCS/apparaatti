@@ -1,4 +1,5 @@
 import { Box, Stack } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
@@ -8,6 +9,9 @@ import CourseRecommendation from './CourseRecommendation'
 import NoRecommendationsInfo from './NoRecommendationsInfo'
 
 const HEADING_ID = 'course-recommendations-heading'
+// Answering a question re-renders with the previous, now stale, results before the refetch is even
+// started, so only a message that outlives that gap describes the results the user actually has.
+const ANNOUNCEMENT_SETTLE_MS = 700
 
 type CourseRecommendationsProps = {
   onOpenFilters: () => void
@@ -33,6 +37,14 @@ const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) =>
     }
     return t('v2:results.count', { count })
   }
+
+  const [settledAnnouncement, setSettledAnnouncement] = useState('')
+  const pendingAnnouncement = announcement()
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSettledAnnouncement(pendingAnnouncement), ANNOUNCEMENT_SETTLE_MS)
+    return () => clearTimeout(timer)
+  }, [pendingAnnouncement])
 
   const content = () => {
     if (isLoading) {
@@ -64,7 +76,7 @@ const CourseRecommendations = ({ onOpenFilters }: CourseRecommendationsProps) =>
         {t('v2:results.heading')}
       </VisuallyHidden>
       <VisuallyHidden role="status" aria-live="polite">
-        {announcement()}
+        {settledAnnouncement}
       </VisuallyHidden>
       {content()}
     </Box>

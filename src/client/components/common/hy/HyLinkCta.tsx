@@ -42,6 +42,7 @@ interface HyLinkCtaProps {
   iconPosition?: 'start' | 'end'
   disabled?: boolean
   'aria-label'?: string
+  opensInNewWindowLabel: string
   children: React.ReactNode
   sx?: SxProps
 }
@@ -232,6 +233,7 @@ const HyLinkCta = ({
   iconPosition = 'end',
   disabled = false,
   'aria-label': ariaLabel,
+  opensInNewWindowLabel,
   children,
   sx,
 }: HyLinkCtaProps) => {
@@ -258,7 +260,7 @@ const HyLinkCta = ({
       {iconPosition === 'start' && iconEl}
       <Text>{children}</Text>
       {iconPosition === 'end' && iconEl}
-      {opensNewTab && <VisuallyHidden>, opens in a new tab</VisuallyHidden>}
+      {opensNewTab && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
     </Root>
   )
 }

@@ -49,6 +49,7 @@ interface HyLinkWithArrowProps {
   icon?: HyLinkIcon
   iconPosition?: HyIconPosition
   fullWidth?: boolean
+  opensInNewWindowLabel: string
   children: React.ReactNode
   sx?: SxProps
 }
@@ -152,6 +153,7 @@ const HyLinkWithArrow = ({
   icon = 'arrow_forward',
   iconPosition = 'start',
   fullWidth = false,
+  opensInNewWindowLabel,
   children,
   sx,
 }: HyLinkWithArrowProps) => {
@@ -170,7 +172,7 @@ const HyLinkWithArrow = ({
       {iconPosition === 'start' && iconEl}
       {children}
       {iconPosition === 'end' && iconEl}
-      {opensNewTab && <VisuallyHidden>, opens in a new tab</VisuallyHidden>}
+      {opensNewTab && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
     </Root>
   )
 }

@@ -31,6 +31,7 @@ interface HyLinkProps {
   icon?: React.ReactElement
   iconPosition?: 'start' | 'end'
   'aria-label'?: string
+  opensInNewWindowLabel: string
   children: React.ReactNode
   sx?: SxProps
 }
@@ -162,6 +163,7 @@ const HyLink = ({
   icon,
   iconPosition = 'end',
   'aria-label': ariaLabel,
+  opensInNewWindowLabel,
   children,
   sx,
 }: HyLinkProps) => {
@@ -187,7 +189,7 @@ const HyLink = ({
       {startIcon}
       {children}
       {endIcon}
-      {opensNewTab && <VisuallyHidden>, opens in a new tab</VisuallyHidden>}
+      {opensNewTab && <VisuallyHidden>, {opensInNewWindowLabel}</VisuallyHidden>}
     </Root>
   )
 }

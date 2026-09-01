@@ -104,6 +104,7 @@ export default {
     retakeQuestions: 'Svara på startfrågorna',
     openFilters: 'Öppna filter',
     closeFilters: 'Stäng filter',
+    opensInNewWindow: 'öppnas i ett nytt fönster',
     moreOptions: 'Fler alternativ',
     filtersRegion: 'Kursfilter',
     appDescription:
@@ -137,6 +138,7 @@ export default {
       title: 'Inga kurser hittades',
       description: 'Försök ändra dina val för att se kurser.',
       unansweredMandatory: 'Svara på den obligatoriska frågan',
+      openFilterQuestion: 'Öppna filter: {{question}}',
       changeSelectionsButton: 'Ändra dina val',
       resetButton: 'Rensa val',
       resetConfirmationTitle: 'Återställ alla val?',

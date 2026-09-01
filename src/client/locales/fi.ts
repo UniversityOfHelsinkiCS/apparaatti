@@ -105,6 +105,7 @@ export default {
     retakeQuestions: 'Vastaa alkukysymyksiin',
     openFilters: 'Avaa suodattimet',
     closeFilters: 'Sulje suodattimet',
+    opensInNewWindow: 'aukeaa uudessa ikkunassa',
     moreOptions: 'Lisää vaihtoehtoja',
     filtersRegion: 'Kurssisuodattimet',
     appDescription:
@@ -138,6 +139,7 @@ export default {
       title: 'Kursseja ei löytynyt',
       description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
       unansweredMandatory: 'Vastaa vielä pakolliseen kysymykseen',
+      openFilterQuestion: 'Avaa suodattimet: {{question}}',
       changeSelectionsButton: 'Muuta valintojasi',
       resetButton: 'Tyhjennä valinnat',
       resetConfirmationTitle: 'Tyhjennetäänkö valinnat?',

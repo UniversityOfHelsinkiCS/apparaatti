@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material'
+import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
@@ -17,12 +18,13 @@ type UnansweredPromptProps = {
 
 const UnansweredPrompt = ({ filters, onOpenFilters, onHighlightFilter }: UnansweredPromptProps) => {
   const { t } = useTranslation()
+  const promptId = useId()
   return (
     <Box sx={{ mb: 3 }}>
-      <Typography variant="body1" sx={{ mb: 1.5, fontWeight: 600 }}>
+      <Typography id={promptId} variant="body1" sx={{ mb: 1.5, fontWeight: 600 }}>
         {t('v2:noRecommendations.unansweredMandatory')}:
       </Typography>
-      <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75}>
+      <Stack direction="row" useFlexGap flexWrap="wrap" spacing={0.75} role="group" aria-labelledby={promptId}>
         {filters.map(filter => (
           <HyTag
             key={filter.id}
@@ -32,7 +34,7 @@ const UnansweredPrompt = ({ filters, onOpenFilters, onHighlightFilter }: Unanswe
               onOpenFilters()
               onHighlightFilter(filter.id)
             }}
-            ariaLabel={t('v2:openFilters')}
+            ariaLabel={t('v2:noRecommendations.openFilterQuestion', { question: filter.shortName ?? filter.id })}
           />
         ))}
       </Stack>
