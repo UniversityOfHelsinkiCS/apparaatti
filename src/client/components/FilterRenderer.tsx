@@ -105,7 +105,6 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
               <HyTag
                 text={t('question:mandatory')}
                 colour="attention"
-                ariaHidden={false}
                 sx={{ border: '1px solid', borderColor: hy.borderColor.light }}
               />
             )}

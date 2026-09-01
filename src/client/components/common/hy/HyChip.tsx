@@ -23,7 +23,7 @@ interface HyChipProps {
   label: string
   onClick?: (e?: React.MouseEvent) => void
   prefixIcon?: React.ReactNode
-  ariaLabel?: string
+  ariaLabel: string
   /** `small` is a custom addition, not part of the hy-ds spec */
   size?: ChipSize
   sx?: SxProps
@@ -82,13 +82,7 @@ const HyChip = ({ label, onClick, prefixIcon, ariaLabel, size = 'medium', sx }: 
   }
 
   return (
-    <ChipButton
-      type="button"
-      ownerState={{ size }}
-      sx={sx}
-      aria-label={ariaLabel ?? `Remove ${label}`}
-      onClick={onClick}
-    >
+    <ChipButton type="button" ownerState={{ size }} sx={sx} aria-label={ariaLabel} onClick={onClick}>
       {content}
     </ChipButton>
   )

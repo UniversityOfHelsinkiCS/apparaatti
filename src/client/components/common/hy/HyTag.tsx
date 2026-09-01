@@ -132,10 +132,8 @@ const HyTag = ({
   const isLink = !!href
   const isButton = !isLink && !!onClick
   const isInteractive = isLink || isButton
-  const effectiveAriaHidden = ariaHidden ?? !isInteractive
-
   return (
-    <TagRoot ownerState={{ colour, isInteractive }} aria-hidden={effectiveAriaHidden} role={role} sx={sx}>
+    <TagRoot ownerState={{ colour, isInteractive }} aria-hidden={ariaHidden} role={role} sx={sx}>
       {prefixIcon}
       {isLink ? (
         <TagLink href={href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>

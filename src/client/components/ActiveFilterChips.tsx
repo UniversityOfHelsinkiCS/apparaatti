@@ -85,7 +85,14 @@ const ActiveFilterChips = ({ filterId, focusRef }: ActiveFilterChipsProps) => {
   const maxChars = filterId === 'study-period' ? Infinity : MAX_CHARS
   const chipLabel = allSelected ? t('filter:allSelected') : buildChipLabel(labels, maxChars)
 
-  return <HyChip label={chipLabel} onClick={handleClear} size="small" />
+  return (
+    <HyChip
+      label={chipLabel}
+      ariaLabel={t('v2:filter.removeSelection', { selection: chipLabel })}
+      onClick={handleClear}
+      size="small"
+    />
+  )
 }
 
 export default ActiveFilterChips
