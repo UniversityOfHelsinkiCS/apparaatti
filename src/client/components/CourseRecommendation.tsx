@@ -2,11 +2,12 @@ import { Box, Stack, Typography } from '@mui/material'
 import { ClipboardPenLine, Laptop, type LucideIcon, MonitorSmartphone, User, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { getDisplayCourseName } from '../../common/nameFormatter'
+import { getDisplayCourseNameWithLanguage } from '../../common/nameFormatter'
 import type { CourseData } from '../../common/types'
 import { getFilterVariant, useFilterContext } from '../contexts/filterContext'
 import useBreakpoints from '../hooks/useBreakpoints'
 import useOpensInNewWindowLabel from '../hooks/useOpensInNewWindowLabel'
+import { foreignLanguage } from '../util/contentLanguage'
 import { translateLocalizedString } from '../util/i18n'
 import HyLinkCta from './common/hy/HyLinkCta'
 import HyTag from './common/hy/HyTag'
@@ -117,8 +118,10 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
   const periodItems = coursePeriodItems()
   const studyPlaceText = courseStudyPlaceText()
   const StudyPlaceIcon = course.normalizedStudyPlace ? studyPlaceIcons[course.normalizedStudyPlace] : null
-  const courseTitle =
-    getDisplayCourseName(course, i18n.resolvedLanguage ?? i18n.language) ?? translateLocalizedString(course.name)
+  const uiLanguage = i18n.resolvedLanguage ?? i18n.language
+  const displayName = getDisplayCourseNameWithLanguage(course, uiLanguage)
+  const courseTitle = displayName.text ?? translateLocalizedString(course.name)
+  const courseTitleLanguage = foreignLanguage(displayName.language, uiLanguage)
   const credits = creditString()
 
   return (
@@ -136,6 +139,7 @@ const CourseRecommendation = ({ course }: { course: CourseData }) => {
           variant="h4"
           component="h2"
           data-testid="course-title"
+          lang={courseTitleLanguage}
           sx={{ fontSize: { xs: 'h5.fontSize', sm: 'h4.fontSize' } }}
         >
           {courseTitle}

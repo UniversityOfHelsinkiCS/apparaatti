@@ -13,7 +13,6 @@ type ModalVariant = 'default' | 'danger'
 export interface HyModalLabels {
   close: string
   warning: string
-  scrollArea: string
 }
 
 export interface HyModalProps {
@@ -468,14 +467,7 @@ const HyModal = ({
           {scrollable ? (
             <>
               <ScrollScrim $position="top" $visible={!atTop} aria-hidden />
-              <Content
-                $scrollable
-                $hasFooter={footer != null}
-                ref={contentRef}
-                onScroll={calculateScrollState}
-                aria-label={labels.scrollArea}
-                tabIndex={0}
-              >
+              <Content $scrollable $hasFooter={footer != null} ref={contentRef} onScroll={calculateScrollState}>
                 {children}
               </Content>
               <ScrollScrim $position="bottom" $visible={!atBottom} aria-hidden />

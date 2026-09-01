@@ -1,6 +1,8 @@
 import { FormControlLabel } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import { Option } from '../../../common/types'
+import { foreignLanguage } from '../../util/contentLanguage'
 import HyRadio from './hy/HyRadio'
 import OptionCountBadge, { useOptionCountText } from './OptionCountBadge'
 import ShrinkwrapText from './ShrinkwrapText'
@@ -13,21 +15,27 @@ interface SingleChoiceOptionProps {
 
 const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps) => {
   const optionCountText = useOptionCountText()
+  const { i18n } = useTranslation()
+  const nameLang = foreignLanguage(option.nameLanguage, i18n.resolvedLanguage ?? i18n.language)
   const accessibleName = count != null ? `${option.name}, ${optionCountText(count)}` : option.name
   const label =
     count != null ? (
       <span aria-hidden style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <ShrinkwrapText>{option.name}</ShrinkwrapText>
+        <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
         <OptionCountBadge count={count} />
       </span>
     ) : (
-      <ShrinkwrapText>{option.name}</ShrinkwrapText>
+      <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
     )
   return (
     <FormControlLabel
       value={option.id}
       data-testid={`${filterId}-option-${option.id}`}
-      control={<HyRadio slotProps={{ input: { 'aria-disabled': count === 0, 'aria-label': accessibleName } }} />}
+      control={
+        <HyRadio
+          slotProps={{ input: { 'aria-disabled': count === 0, 'aria-label': accessibleName, lang: nameLang } }}
+        />
+      }
       label={label}
       sx={{
         py: '2px',

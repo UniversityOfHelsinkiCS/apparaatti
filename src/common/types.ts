@@ -63,6 +63,7 @@ export type FilterConfig = {
 export type Option = {
   id: string
   name: string
+  nameLanguage?: Language
   valueOverride?: string
   selectedByDefault?: boolean
 }
@@ -73,6 +74,7 @@ export type Question = {
   mandatory?: boolean
   value?: string
   shortName?: string
+  shortNameLanguage?: Language
   explanation?: string
   variants: Variant[]
   extraInfo?: string
@@ -89,6 +91,7 @@ export type Variant = {
   skipped?: boolean | undefined
   explanation?: string | undefined
   question: string
+  questionLanguage?: Language
   options?: Option[]
 }
 

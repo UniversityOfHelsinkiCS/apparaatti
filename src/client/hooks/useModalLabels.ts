@@ -8,7 +8,6 @@ const useModalLabels = (): HyModalLabels => {
   return {
     close: t('v2:modal.close'),
     warning: t('v2:modal.warning'),
-    scrollArea: t('v2:modal.scrollArea'),
   }
 }
 

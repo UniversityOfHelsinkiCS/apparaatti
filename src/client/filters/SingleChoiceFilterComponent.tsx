@@ -1,10 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, RadioGroup, Typography } from '@mui/material'
-import { ChevronDown } from 'lucide-react'
+import { RadioGroup } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Option, Question } from '../../common/types'
 import AppMarkdown from '../components/common/AppMarkdown'
+import HyAccordion from '../components/common/hy/HyAccordion'
 import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -55,21 +55,17 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
         ))}
       </RadioGroup>
 
-      {extrainfo &&
-        state === '1' && ( // Conditionally render accordion
-          <Accordion
-            expanded={accordionOpen}
-            onChange={() => setAccordionOpen(!accordionOpen)}
-            data-testid={`${filter.id}-extrainfo-accordion`}
-          >
-            <AccordionSummary expandIcon={<ChevronDown />} data-testid={`${filter.id}-extrainfo-accordion-summary`}>
-              <Typography component="span">{t('question:extrainfo')}: </Typography>
-            </AccordionSummary>
-            <AccordionDetails data-testid={`${filter.id}-extrainfo-accordion-details`}>
-              <AppMarkdown>{extrainfo}</AppMarkdown>
-            </AccordionDetails>
-          </Accordion>
-        )}
+      {extrainfo && state === '1' && (
+        <HyAccordion
+          open={accordionOpen}
+          onChange={setAccordionOpen}
+          variant="compact"
+          headingLevel={3}
+          summary={t('question:extrainfo')}
+        >
+          <AppMarkdown>{extrainfo}</AppMarkdown>
+        </HyAccordion>
+      )}
     </>
   )
 }

@@ -12,10 +12,12 @@ import {
 import HyButton from './common/hy/HyButton'
 import HyIconButton from './common/hy/HyIconButton'
 import HySpinner from './common/hy/HySpinner'
+import VisuallyHidden from './common/VisuallyHidden'
 import FilterRenderer from './FilterRenderer'
 import ResetFiltersButton from './ResetFiltersButton'
 
 export const FILTERS_REGION_ID = 'filters-region'
+const FILTERS_HEADING_ID = 'filters-region-heading'
 
 type SidebarContentProps = {
   onClose?: () => void
@@ -103,7 +105,10 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
   }
 
   return (
-    <Box component="nav" id={FILTERS_REGION_ID} aria-label={t('v2:filtersRegion')}>
+    <Box component="nav" id={FILTERS_REGION_ID} aria-labelledby={FILTERS_HEADING_ID}>
+      <VisuallyHidden component="h2" id={FILTERS_HEADING_ID}>
+        {t('v2:filtersRegion')}
+      </VisuallyHidden>
       <Stack
         direction="row"
         spacing="16px"
@@ -153,6 +158,7 @@ const SidebarContent = ({ onClose }: SidebarContentProps) => {
               setExpandedFilterIds(prev => getNextExpandedFilterIds(filter.id, isExpanded, prev))
             }}
             isFirst={index === 0}
+            lockedOpen={unansweredMandatoryFilterIds.includes(filter.id)}
           />
         ))
       )}

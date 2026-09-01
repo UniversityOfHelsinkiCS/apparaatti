@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import AppMarkdown from '../components/common/AppMarkdown'
 
@@ -7,10 +8,12 @@ interface InfoOnlyFilterComponentProps {
 }
 
 const InfoOnlyFilterComponent = ({ extraInfo }: InfoOnlyFilterComponentProps) => {
+  const { t } = useTranslation()
+
   if (!extraInfo) {
     return (
       <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
-        No information available
+        {t('question:noExtrainfo')}
       </Typography>
     )
   }

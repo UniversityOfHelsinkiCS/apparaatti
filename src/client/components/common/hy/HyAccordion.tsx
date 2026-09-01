@@ -2,6 +2,7 @@ import { styled, type SxProps } from '@mui/material/styles'
 import type { ReactNode, Ref } from 'react'
 import { useId, useState } from 'react'
 
+import VisuallyHidden from '../VisuallyHidden'
 import { HOVER_MEDIA, hy } from './hyTokens'
 
 // keyboard_arrow_up / keyboard_arrow_down icons: match hy-ds Material Symbols shapes
@@ -50,6 +51,7 @@ export interface HyAccordionProps {
   borders?: 'both' | 'top' | 'bottom' | 'none'
   action?: ReactNode
   triggerRef?: Ref<HTMLButtonElement>
+  lockedOpenLabel?: string
 }
 
 // --- Styled elements ---
@@ -224,10 +226,12 @@ const HyAccordion = ({
   borders = 'both',
   action,
   triggerRef,
+  lockedOpenLabel,
 }: HyAccordionProps) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
   const panelId = `${id}-panel`
+  const lockedOpenLabelId = `${id}-locked-open`
 
   const showTopBorder = borders === 'both' || borders === 'top'
   const showBottomBorder = borders === 'both' || borders === 'bottom'
@@ -236,7 +240,10 @@ const HyAccordion = ({
   const isControlled = controlledOpen !== undefined
   const isExpanded = isControlled ? controlledOpen : internalOpen
 
+  const isLockedOpen = lockedOpenLabel != null && isExpanded
+
   const handleClick = () => {
+    if (isLockedOpen) return
     const next = !isExpanded
     if (!isControlled) setInternalOpen(next)
     onChange?.(next)
@@ -259,6 +266,8 @@ const HyAccordion = ({
               onClick={handleClick}
               aria-expanded={isExpanded}
               aria-controls={panelId}
+              aria-disabled={isLockedOpen || undefined}
+              aria-describedby={isLockedOpen ? lockedOpenLabelId : undefined}
               id={id}
               type="button"
             >
@@ -271,6 +280,7 @@ const HyAccordion = ({
         </Title>
         {action && <ActionSlot>{action}</ActionSlot>}
       </HeaderRow>
+      {isLockedOpen && <VisuallyHidden id={lockedOpenLabelId}>{lockedOpenLabel}</VisuallyHidden>}
 
       {animate ? (
         <PanelWrapper $expanded={isExpanded}>

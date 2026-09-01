@@ -35,7 +35,7 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
   }
 
   if (!organisations) {
-    return <p>no organisation found</p>
+    return <p>{t('question:noOrganisation')}</p>
   }
 
   return (

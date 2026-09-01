@@ -1,10 +1,12 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Option, Question } from '../../common/types'
 import { useOptionCountText } from '../components/common/OptionCountBadge'
 import VisuallyHidden from '../components/common/VisuallyHidden'
 import { useFilterContext } from '../contexts/filterContext'
+import { foreignLanguage } from '../util/contentLanguage'
 
 interface DropdownFilterComponentProps {
   filter: Question
@@ -16,6 +18,8 @@ interface DropdownFilterComponentProps {
 const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filter, state, handleChange, options }) => {
   const { getOptionCount } = useFilterContext()
   const optionCountText = useOptionCountText()
+  const { i18n } = useTranslation()
+  const uiLanguage = i18n.resolvedLanguage ?? i18n.language
 
   // aria-disabled options stay focusable, so reject the selection here instead
   const onChange = (event: SelectChangeEvent<string>) => {
@@ -47,6 +51,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
             <MenuItem
               key={option.id}
               value={option.id}
+              lang={foreignLanguage(option.nameLanguage, uiLanguage)}
               aria-disabled={count === 0}
               sx={{ opacity: count === 0 ? 0.4 : 1 }}
             >

@@ -7,6 +7,7 @@ import { Question } from '../../common/types'
 import { filterConfigMap, shouldRenderWelcomeFilter, useFilterContext } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { foreignLanguage } from '../util/contentLanguage'
 import ActiveFilterChips from './ActiveFilterChips'
 import HyAccordion from './common/hy/HyAccordion'
 import HyTag from './common/hy/HyTag'
@@ -27,10 +28,11 @@ interface FilterRendererProps {
   expanded: boolean
   onAccordionChange: (isExpanded: boolean) => void
   isFirst: boolean
+  lockedOpen?: boolean
 }
 
-const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: FilterRendererProps) => {
-  const { t } = useTranslation()
+const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOpen }: FilterRendererProps) => {
+  const { t, i18n } = useTranslation()
   const filters = useFilterContext()
   const { highlightedFilterId, setHighlightedFilterId } = filters
   const isHighlighted = highlightedFilterId === filter.id
@@ -52,6 +54,9 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
   const setState = config ? config.setState : () => {}
   const displayType = filter.displayType ?? 'singlechoice'
   const shortName = filter.shortName ?? filter.id
+  const shortNameLanguage = filter.shortName
+    ? foreignLanguage(filter.shortNameLanguage, i18n.resolvedLanguage ?? i18n.language)
+    : undefined
   const skipInSideBar = filter.hideInFilterSidebar ?? false
 
   const filterToRender = { ...filter, displayType, state, setState, shortName }
@@ -90,6 +95,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
         animate
         borders={isFirst ? 'both' : 'bottom'}
         triggerRef={triggerRef}
+        lockedOpenLabel={lockedOpen ? t('v2:filter.mandatoryStaysOpen') : undefined}
         action={<ActiveFilterChips filterId={filter.id} focusRef={triggerRef} />}
         summary={
           <Box
@@ -103,14 +109,14 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
               '& > *': { minHeight: '26px' },
             }}
           >
-            {filter.mandatory && !state.length && (
+            {filter.mandatory && (
               <HyTag
                 text={t('question:mandatory')}
                 colour="attention"
                 sx={{ border: '1px solid', borderColor: hy.borderColor.light }}
               />
             )}
-            <Box component="span" sx={{ flexGrow: 1 }}>
+            <Box component="span" lang={shortNameLanguage} sx={{ flexGrow: 1 }}>
               {shortName}
             </Box>
           </Box>

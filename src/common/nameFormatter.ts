@@ -48,6 +48,25 @@ const getLanguageValue = (
   return null
 }
 
+export const getLanguageKey = (
+  values: LocalizedString | null | undefined,
+  preferred: Language | string | null | undefined
+): Language | null => {
+  if (!values) {
+    return null
+  }
+
+  if (preferred && preferred in values && values[preferred as Language]) {
+    return preferred as Language
+  }
+
+  for (const lang of fallbackLanguages) {
+    if (values[lang]) return lang
+  }
+
+  return null
+}
+
 const hasSisuLikeNamingConvention = (id: string): boolean => id.startsWith('otm-') || id.startsWith('hy-cur-aili-')
 
 const isOptimeOriginatingId = (id: string): boolean => id.startsWith('hy-opt-cur-')
@@ -147,6 +166,15 @@ export const getDisplayCourseName = (
 
   return cleanName ? cleanUpCourseName(formattedName) : formattedName
 }
+
+export const getDisplayCourseNameWithLanguage = (
+  input: CourseNameInput,
+  lang: Language | string,
+  cleanName = true
+): { text: string | null; language: Language | null } => ({
+  text: getDisplayCourseName(input, lang, cleanName),
+  language: getLanguageKey(input.name, lang) ?? getLanguageKey(input.nameSpecifier, lang),
+})
 
 export const formatLocalizedCourseName = ({
   id,

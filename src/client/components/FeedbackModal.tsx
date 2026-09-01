@@ -14,6 +14,8 @@ import HyModal from './common/hy/HyModal'
 import HyTextArea from './common/hy/HyTextArea'
 import LabeledCheckbox from './common/LabeledCheckbox'
 
+const STARS_LABEL_ID = 'feedback-stars-label'
+
 type FeedbackModalProps = {
   open: boolean
   onClose: () => void
@@ -121,7 +123,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
               />
 
               <Box>
-                <Typography variant="h6" sx={{ mb: 1.25 }}>
+                <Typography variant="h6" component="h3" id={STARS_LABEL_ID} sx={{ mb: 1.25 }}>
                   {t('v2:feedback.starsLabel')}
                 </Typography>
                 <Stack spacing={1.25}>
@@ -130,6 +132,9 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                     value={stars}
                     max={5}
                     size="large"
+                    aria-labelledby={STARS_LABEL_ID}
+                    getLabelText={value => t('v2:feedback.starsValue', { count: value })}
+                    emptyLabelText={t('v2:feedback.starsEmpty')}
                     onChange={(_event, value) => setStars(value ?? 0)}
                   />
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>

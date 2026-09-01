@@ -27,7 +27,12 @@ const RadioQuestion = ({
   }
   return (
     <Box>
-      <QuestionTitle handleOpen={handleOpen} title={variant.question} question={question} />
+      <QuestionTitle
+        handleOpen={handleOpen}
+        title={variant.question}
+        titleLanguage={variant.questionLanguage}
+        question={question}
+      />
 
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 

@@ -55,6 +55,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
           <QuestionTitle
             handleOpen={handleOpen}
             title={variant.question}
+            titleLanguage={variant.questionLanguage}
             question={filter}
             showMandatoryStatus={false}
           />
