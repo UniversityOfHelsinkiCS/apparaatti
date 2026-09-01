@@ -2,7 +2,7 @@ import { Box, Menu, Typography } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import { MoreVertical, PanelLeftOpen } from 'lucide-react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,8 +14,9 @@ import { HyMenuItem } from './components/common/hy/HySelect'
 import { hy } from './components/common/hy/hyTokens'
 import VisuallyHidden from './components/common/VisuallyHidden'
 import FeedbackModal from './components/FeedbackModal'
-import LanguageSelector from './components/LanguageSelector'
+import LanguageSelector, { LANGUAGES } from './components/LanguageSelector'
 import { FILTERS_REGION_ID } from './components/SidebarContent'
+import { LanguageContext } from './contexts/languageContext'
 import useBreakpoints from './hooks/useBreakpoints'
 
 export const APP_DESCRIPTION_ID = 'app-description'
@@ -32,6 +33,7 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { isMobile, isDrawerLayout } = useBreakpoints()
+  const { language, setAppLanguage } = useContext(LanguageContext)
 
   return (
     <>
@@ -123,9 +125,22 @@ const AppHeader = ({ toggleDrawer, filtersOpen, user }: AppHeaderProps) => {
                     {t('v2:adminButton')}
                   </HyMenuItem>
                 )}
-                <Box sx={{ px: '12px', py: '10px', borderTop: `1px solid ${hy.borderColor.light}` }}>
-                  <LanguageSelector sx={{ width: '100%' }} />
-                </Box>
+                {LANGUAGES.map(({ code, name }, index) => (
+                  <HyMenuItem
+                    key={code}
+                    lang={code}
+                    role="menuitemradio"
+                    aria-checked={language === code}
+                    selected={language === code}
+                    onClick={() => {
+                      setAppLanguage(code)
+                      setMoreMenuAnchor(null)
+                    }}
+                    sx={index === 0 ? { borderTop: `1px solid ${hy.borderColor.light}` } : undefined}
+                  >
+                    {name}
+                  </HyMenuItem>
+                ))}
               </Menu>
             </>
           ) : (

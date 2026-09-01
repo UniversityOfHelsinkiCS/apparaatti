@@ -5,6 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { LanguageContext } from '../contexts/languageContext'
 import { HyMenuItem, HySelect } from './common/hy/HySelect'
 
+export const LANGUAGES = [
+  { code: 'fi', name: 'Suomi' },
+  { code: 'en', name: 'English' },
+  { code: 'sv', name: 'Svenska' },
+]
+
 const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
   const { language, setAppLanguage } = useContext(LanguageContext)
   const { t } = useTranslation()
@@ -21,9 +27,11 @@ const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
       data-testid="language-selector"
       sx={sx}
     >
-      <HyMenuItem value="fi">Suomi</HyMenuItem>
-      <HyMenuItem value="en">English</HyMenuItem>
-      <HyMenuItem value="sv">Svenska</HyMenuItem>
+      {LANGUAGES.map(({ code, name }) => (
+        <HyMenuItem key={code} value={code} lang={code}>
+          {name}
+        </HyMenuItem>
+      ))}
     </HySelect>
   )
 }

@@ -41,6 +41,8 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst }: Filter
       return undefined
     }
 
+    triggerRef.current?.focus()
+
     const timeout = setTimeout(() => setHighlightedFilterId(null), HIGHLIGHT_DURATION_MS)
     return () => clearTimeout(timeout)
   }, [isHighlighted, setHighlightedFilterId])
