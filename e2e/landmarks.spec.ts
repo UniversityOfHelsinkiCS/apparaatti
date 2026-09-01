@@ -58,7 +58,7 @@ test.describe('landmarks', () => {
     const filters = page.getByRole('navigation', { name: 'Course filters' })
     const question = filters.getByTestId('question-text-lang')
     await expect(question).toHaveText('What language are you looking for?')
-    await expect(question).toHaveAttribute('tabindex', '0')
+    await expect(question).not.toHaveAttribute('tabindex')
 
     await expect(filters.getByRole('radiogroup').first()).toHaveAccessibleName(
       'What language are you looking for?'
@@ -76,7 +76,9 @@ test.describe('landmarks', () => {
     const title = page.getByTestId('app-title')
     await expect(title).toHaveAttribute('aria-describedby', 'app-description')
 
+    await expect(title).not.toHaveAttribute('tabindex')
+
     await page.locator('body').press('Tab')
-    await expect(title).toBeFocused()
+    await expect(title).not.toBeFocused()
   })
 })
