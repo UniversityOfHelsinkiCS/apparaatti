@@ -24,6 +24,7 @@ import {
   getWhereClauseForTwoWordSearch,
 } from '../util/usersSearchHelper.ts'
 import { isSuperuser } from '../util/validations.ts'
+import backendLocaleRouter from './backendLocaleRouter.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import statsRouter from './statsRouter.ts'
 
@@ -239,5 +240,6 @@ adminRouter.post('/debug/cause-error', requireSuperuser, (req, _res) => {
 
 adminRouter.use('/stats', statsRouter)
 adminRouter.use('/filter-config', filterConfigRouter)
+adminRouter.use('/backend-locales', backendLocaleRouter)
 
 export default adminRouter

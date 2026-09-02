@@ -9,6 +9,7 @@ import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
+import { BackendLocaleProvider } from './contexts/backendLocaleContext'
 import { FilterContextProvider, useFilterContext } from './contexts/filterContext'
 import useBreakpoints from './hooks/useBreakpoints'
 import { RedirectToLogin } from './util/redirectToLogin'
@@ -135,7 +136,9 @@ const App = () => {
 
   return (
     <FilterContextProvider>
-      <OneThirdDrawerLayout user={user} />
+      <BackendLocaleProvider>
+        <OneThirdDrawerLayout user={user} />
+      </BackendLocaleProvider>
     </FilterContextProvider>
   )
 }

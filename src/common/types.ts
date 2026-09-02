@@ -248,3 +248,32 @@ export type UserFeedback = UserFeedbackSubmission & {
   date: Date
   email?: string | null
 }
+
+export type BackendLocaleDimensions = {
+  organisationCode: string | null
+  lang: string | null
+  primaryLanguage: string | null
+  primaryLanguageSpecification: string | null
+}
+
+export type BackendLocaleValue = BackendLocaleDimensions & {
+  id: number
+  key: string
+  text: LocalizedText
+}
+
+export type BackendLocaleKey = {
+  id: number
+  key: string
+  description: string
+  values: BackendLocaleValue[]
+}
+
+export type BackendLocaleContext = {
+  organisationCode: string
+  lang: string
+  primaryLanguage: string
+  primaryLanguageSpecification: string
+}
+
+export type ResolvedBackendLocales = Record<string, LocalizedText | null>

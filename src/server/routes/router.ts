@@ -10,10 +10,16 @@ import type {
   UserSettings as UserSettingsType,
 } from '../../common/types.ts'
 import type { FormSubmission, User } from '../../common/types.ts'
-import { AnswerSchema, UserFeedbackSchema, UserSettingsSchema } from '../../common/validators.ts'
+import {
+  AnswerSchema,
+  BackendLocaleQuerySchema,
+  UserFeedbackSchema,
+  UserSettingsSchema,
+} from '../../common/validators.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import requireUser from '../middleware/requireUser.ts'
 import { triggerUpdaterRun } from '../updater/manualRun.ts'
+import { resolveBackendLocales } from '../util/backendLocales.ts'
 import {
   GIT_SHA,
   IMAGE_SHA,
@@ -25,6 +31,7 @@ import {
 } from '../util/config.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
 import {
+  allBackendLocaleKeys,
   allOrganisations,
   createUserFeedbackEntry,
   enabledOrderedFilterConfigs,
@@ -85,6 +92,24 @@ router.get('/version', requireUser, (req, res) => {
 router.get('/filter-config', requireUser, async (req, res) => {
   const filters = await enabledOrderedFilterConfigs()
   res.json(filters)
+})
+
+router.get('/backend-locales', requireUser, async (req, res) => {
+  const parsed = BackendLocaleQuerySchema.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid query', errors: parsed.error.flatten() })
+    return
+  }
+
+  const keys = await allBackendLocaleKeys()
+  const locales = resolveBackendLocales(keys, {
+    organisationCode: parsed.data.organisation ?? '',
+    lang: parsed.data.lang ?? '',
+    primaryLanguage: parsed.data.primaryLanguage ?? '',
+    primaryLanguageSpecification: parsed.data.primaryLanguageSpecification ?? '',
+  })
+
+  res.json({ locales })
 })
 
 router.get('/organisations/supported', requireUser, async (req, res) => {

@@ -2,9 +2,9 @@ import { Box, Stack, Typography } from '@mui/material'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useBackendLocales } from '../contexts/backendLocaleContext'
 import { getUnansweredCurrentMandatoryFilters, useFilterContext } from '../contexts/filterContext'
 import useBreakpoints from '../hooks/useBreakpoints'
-import AppMarkdown from './common/AppMarkdown'
 import HyButton from './common/hy/HyButton'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
@@ -47,13 +47,11 @@ type NoRecommendationsInfoProps = {
 }
 
 const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { isDrawerLayout } = useBreakpoints()
   const filterContext = useFilterContext()
-  const { studyField, filters, setHighlightedFilterId } = filterContext
-
-  const additionalInfoKey = `v2:noRecommendations.additional-info-no-recommendations-md-${studyField}`
-  const additionalInfo = i18n.exists(additionalInfoKey) ? t(additionalInfoKey) : null
+  const { filters, setHighlightedFilterId } = filterContext
+  const { renderLocale } = useBackendLocales()
 
   const mandatoryFilters = getUnansweredCurrentMandatoryFilters(filters, filterContext)
 
@@ -86,7 +84,7 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
           />
         ) : (
           <>
-            {additionalInfo && <AppMarkdown>{additionalInfo}</AppMarkdown>}
+            {renderLocale('noRecommendations.additionalInfo')}
             <Stack direction="column" spacing={'8px'} flexWrap="wrap">
               {isDrawerLayout && (
                 <HyButton variant="primary" colour="blue" onClick={onOpenFilters}>

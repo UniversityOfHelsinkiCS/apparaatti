@@ -1,6 +1,8 @@
 import { Op } from 'sequelize'
 
 import type {
+  BackendLocaleDimensions,
+  BackendLocaleKey as BackendLocaleKeyType,
   RecommendationMetadata,
   UpdaterRun as UpdaterRunType,
   UpdaterRunKind,
@@ -10,6 +12,8 @@ import type {
   UserVisit,
   VisitStudyData,
 } from '../../common/types.ts'
+import BackendLocaleKey from '../db/models/backendLocaleKey.ts'
+import BackendLocaleValue from '../db/models/backendLocaleValue.ts'
 import CourseAdminReview from '../db/models/CourseAdminReview.ts'
 import Cu from '../db/models/cu.ts'
 import Cur from '../db/models/cur.ts'
@@ -119,6 +123,59 @@ export async function disableFilterConfigById(id: string): Promise<any | null> {
 
 export async function reorderFilterConfigs(entries: Array<{ id: string; displayOrder: number }>) {
   await Promise.all(entries.map(({ id, displayOrder }) => Filter.update({ displayOrder }, { where: { id } })))
+}
+
+export async function allBackendLocaleKeys(): Promise<BackendLocaleKeyType[]> {
+  const keys = await BackendLocaleKey.findAll({
+    include: [{ model: BackendLocaleValue, as: 'values' }],
+    order: [
+      ['key', 'ASC'],
+      [{ model: BackendLocaleValue, as: 'values' }, 'id', 'ASC'],
+    ],
+  })
+  return keys.map(key => key.toJSON() as BackendLocaleKeyType)
+}
+
+export async function backendLocaleKeyByKey(key: string): Promise<BackendLocaleKeyType | null> {
+  const row = await BackendLocaleKey.findOne({
+    where: { key },
+    include: [{ model: BackendLocaleValue, as: 'values' }],
+  })
+  if (!row) return null
+  return row.toJSON() as BackendLocaleKeyType
+}
+
+export async function createBackendLocaleKey(data: object) {
+  return await BackendLocaleKey.create(data as any)
+}
+
+export async function updateBackendLocaleKeyDescription(key: string, description: string): Promise<number> {
+  const [count] = await BackendLocaleKey.update({ description }, { where: { key } })
+  return count
+}
+
+export async function deleteBackendLocaleKey(key: string): Promise<number> {
+  return await BackendLocaleKey.destroy({ where: { key } })
+}
+
+export async function createBackendLocaleValue(key: string, data: object) {
+  return await BackendLocaleValue.create({ ...(data as any), key })
+}
+
+export async function backendLocaleValueByDimensions(
+  key: string,
+  dimensions: BackendLocaleDimensions
+): Promise<any | null> {
+  return await BackendLocaleValue.findOne({ where: { key, ...dimensions }, raw: true })
+}
+
+export async function updateBackendLocaleValueById(id: number, data: object): Promise<number> {
+  const [count] = await BackendLocaleValue.update(data as any, { where: { id } })
+  return count
+}
+
+export async function deleteBackendLocaleValueById(id: number): Promise<number> {
+  return await BackendLocaleValue.destroy({ where: { id } })
 }
 
 export async function organisationsWithSupportedCodes(codes: string[]) {

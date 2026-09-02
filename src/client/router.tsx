@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import App from './App.tsx'
 import AdminMain from './components/admin/AdminMain.tsx'
 import AdminPage from './components/admin/AdminPage.tsx'
+import BackendLocalesPage from './components/admin/BackendLocalesPage.tsx'
 import CoursesPage from './components/admin/CoursesPage.tsx'
 import ErrorTestPage from './components/admin/ErrorTestPage.tsx'
 import StatsPage from './components/admin/StatsPage.tsx'
@@ -25,6 +26,7 @@ const AppRouter = () => {
           <Route path="stats" element={<StatsPage />} />
           <Route path="feedback" element={<UserFeedbackPage />} />
           <Route path="updater" element={<UpdaterPage />} />
+          <Route path="backend-locales" element={<BackendLocalesPage />} />
           <Route path="error-test" element={<ErrorTestPage />} />
         </Route>
       </Routes>

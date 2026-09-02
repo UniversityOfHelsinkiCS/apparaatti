@@ -20,6 +20,7 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
     { label: t('v2:adminNav.stats'), path: '/admin/stats' },
     { label: t('v2:adminNav.feedback'), path: '/admin/feedback' },
     { label: t('v2:adminNav.updater'), path: '/admin/updater' },
+    { label: t('v2:adminNav.backendLocales'), path: '/admin/backend-locales' },
   ]
 
   if (isSuperuser) {
