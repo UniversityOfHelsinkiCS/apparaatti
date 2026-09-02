@@ -11,6 +11,8 @@
     "e2e:ui": "sh ./scripts/run-e2e.sh --ui",
     "markup:test": "sh ./scripts/run-e2e.sh --project=checks --reporter=list",
     "markup:test:dev": "PLAYWRIGHT_BASE_URL=http://localhost:3000 playwright test --project=checks --reporter=list",
+    "axe:scan": "sh ./scripts/run-e2e.sh --project=axe --workers=1 --reporter=list",
+    "axe:scan:dev": "PLAYWRIGHT_BASE_URL=http://localhost:3000 playwright test --project=axe --workers=1 --reporter=list",
     "e2e:up": "docker compose -f compose.e2e.yaml up",
     "e2e:down": "docker compose -f compose.e2e.yaml down",
     "tsc": "tsc --build --noEmit",
@@ -37,6 +39,7 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "^9.39.4",
     "@playwright/test": "1.61.0",
     "@types/express": "^5.0.6",
@@ -49,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^8.57.1",
     "@typescript-eslint/parser": "^8.57.1",
     "@vitejs/plugin-react": "^4.7.0",
+    "axe-core": "4.13.0",
     "browserslist": "4.28.2",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
