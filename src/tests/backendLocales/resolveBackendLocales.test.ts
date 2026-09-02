@@ -8,19 +8,19 @@ import {
   resolveValue,
 } from '../../server/util/backendLocales.ts'
 
-type Dimensions = Partial<
+type Conditions = Partial<
   Pick<BackendLocaleValue, 'organisationCode' | 'lang' | 'primaryLanguage' | 'primaryLanguageSpecification'>
 >
 
 let nextId = 1
 
-const value = (dimensions: Dimensions, text = 'text'): BackendLocaleValue => ({
+const value = (conditions: Conditions, text = 'text'): BackendLocaleValue => ({
   id: nextId++,
   key: 'a.key',
-  organisationCode: dimensions.organisationCode ?? null,
-  lang: dimensions.lang ?? null,
-  primaryLanguage: dimensions.primaryLanguage ?? null,
-  primaryLanguageSpecification: dimensions.primaryLanguageSpecification ?? null,
+  organisationCode: conditions.organisationCode ?? null,
+  lang: conditions.lang ?? null,
+  primaryLanguage: conditions.primaryLanguage ?? null,
+  primaryLanguageSpecification: conditions.primaryLanguageSpecification ?? null,
   text: { fi: text, sv: text, en: text },
 })
 
@@ -40,11 +40,11 @@ const key = (values: BackendLocaleValue[], name = 'a.key'): BackendLocaleKey => 
 })
 
 describe('matchesContext', () => {
-  it('matches a value whose dimensions are all wildcards', () => {
+  it('matches a value whose conditions are all wildcards', () => {
     expect(matchesContext(value({}), context())).toBe(true)
   })
 
-  it('matches a value whose set dimensions all equal the context', () => {
+  it('matches a value whose set conditions all equal the context', () => {
     expect(matchesContext(value({ organisationCode: 'H50', lang: 'sv' }), context())).toBe(true)
   })
 
@@ -56,7 +56,7 @@ describe('matchesContext', () => {
     expect(matchesContext(value({ primaryLanguageSpecification: 'spoken' }), context())).toBe(false)
   })
 
-  it('matches only wildcards when the context dimension is unanswered', () => {
+  it('matches only wildcards when the context condition is unanswered', () => {
     const emptyContext = context({ organisationCode: '' })
     expect(matchesContext(value({}), emptyContext)).toBe(true)
     expect(matchesContext(value({ organisationCode: 'H50' }), emptyContext)).toBe(false)
@@ -65,7 +65,7 @@ describe('matchesContext', () => {
 
 describe('isMoreSpecific', () => {
   const allCombinations = () => {
-    const combinations: Dimensions[] = []
+    const combinations: Conditions[] = []
     for (const organisationCode of [null, 'H50']) {
       for (const lang of [null, 'sv']) {
         for (const primaryLanguage of [null, 'sv']) {
@@ -80,17 +80,17 @@ describe('isMoreSpecific', () => {
         }
       }
     }
-    return combinations.map(dimensions => value(dimensions))
+    return combinations.map(conditions => value(conditions))
   }
 
-  it('ranks an organisation above every combination of the lower dimensions', () => {
+  it('ranks an organisation above every combination of the lower conditions', () => {
     const organisationOnly = value({ organisationCode: 'H50' })
     const everythingElse = value({ lang: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'written' })
     expect(isMoreSpecific(organisationOnly, everythingElse)).toBe(true)
     expect(isMoreSpecific(everythingElse, organisationOnly)).toBe(false)
   })
 
-  it('ranks lang above primaryLanguage when each is the only dimension set', () => {
+  it('ranks lang above primaryLanguage when each is the only condition set', () => {
     expect(isMoreSpecific(value({ lang: 'sv' }), value({ primaryLanguage: 'sv' }))).toBe(true)
     expect(isMoreSpecific(value({ primaryLanguage: 'sv' }), value({ lang: 'sv' }))).toBe(false)
   })

@@ -6,7 +6,7 @@ import type { BackendLocaleKey, BackendLocaleValue, Language } from '../../../..
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import { emptyValueDraft, toPayload, toValueDraft, type ValueDraft } from './backendLocaleUtils.ts'
-import DimensionSelectors from './DimensionSelectors.tsx'
+import ConditionSelectors from './ConditionSelectors.tsx'
 import TextEditorWithPreview from './TextEditorWithPreview.tsx'
 
 type BackendLocaleValueDialogProps = {
@@ -64,7 +64,7 @@ const BackendLocaleValueDialog = ({ localeKey, value, onClose, onSaved }: Backen
           {error && <Alert severity="error">{error}</Alert>}
 
           <Typography variant="subtitle2">{t('v2:admin.backendLocales.whenShown')}</Typography>
-          <DimensionSelectors draft={draft} onChange={patchDraft} />
+          <ConditionSelectors draft={draft} onChange={patchDraft} />
 
           <Typography variant="subtitle2">{t('v2:admin.backendLocales.textToShow')}</Typography>
           <TextEditorWithPreview text={draft.text} onChange={patchText} />

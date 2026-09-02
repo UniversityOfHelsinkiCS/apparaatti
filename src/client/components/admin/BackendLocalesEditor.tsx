@@ -54,7 +54,7 @@ const BackendLocalesEditor = ({ isSuperuser }: BackendLocalesEditorProps) => {
     queryClient.invalidateQueries({ queryKey: ['backendLocales'] })
   }
 
-  const dimensionLabel = (dimension: string | null) => dimension ?? t('v2:admin.backendLocales.anyValue')
+  const conditionLabel = (condition: string | null) => condition ?? t('v2:admin.backendLocales.anyValue')
 
   const handleDeleteKey = async (localeKey: BackendLocaleKey) => {
     const confirmed = window.confirm(
@@ -187,13 +187,15 @@ const BackendLocalesEditor = ({ isSuperuser }: BackendLocalesEditorProps) => {
                   >
                     <Pencil />
                   </IconButton>
-                  <IconButton
-                    size="small"
-                    aria-label={t('v2:admin.backendLocales.deleteKey')}
-                    onClick={() => handleDeleteKey(localeKey)}
-                  >
-                    <Trash2 />
-                  </IconButton>
+                  {isSuperuser && (
+                    <IconButton
+                      size="small"
+                      aria-label={t('v2:admin.backendLocales.deleteKey')}
+                      onClick={() => handleDeleteKey(localeKey)}
+                    >
+                      <Trash2 />
+                    </IconButton>
+                  )}
                 </TableCell>
               </TableRow>
 
@@ -214,10 +216,10 @@ const BackendLocalesEditor = ({ isSuperuser }: BackendLocalesEditorProps) => {
                       <TableBody>
                         {localeKey.values.map(value => (
                           <TableRow key={value.id}>
-                            <TableCell>{dimensionLabel(value.organisationCode)}</TableCell>
-                            <TableCell>{dimensionLabel(value.lang)}</TableCell>
-                            <TableCell>{dimensionLabel(value.primaryLanguage)}</TableCell>
-                            <TableCell>{dimensionLabel(value.primaryLanguageSpecification)}</TableCell>
+                            <TableCell>{conditionLabel(value.organisationCode)}</TableCell>
+                            <TableCell>{conditionLabel(value.lang)}</TableCell>
+                            <TableCell>{conditionLabel(value.primaryLanguage)}</TableCell>
+                            <TableCell>{conditionLabel(value.primaryLanguageSpecification)}</TableCell>
                             <TableCell>{value.text.fi.slice(0, 80)}</TableCell>
                             <TableCell sx={{ whiteSpace: 'nowrap' }}>
                               <IconButton

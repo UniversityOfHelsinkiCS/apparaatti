@@ -249,14 +249,14 @@ export type UserFeedback = UserFeedbackSubmission & {
   email?: string | null
 }
 
-export type BackendLocaleDimensions = {
+export type BackendLocaleConditions = {
   organisationCode: string | null
   lang: string | null
   primaryLanguage: string | null
   primaryLanguageSpecification: string | null
 }
 
-export type BackendLocaleValue = BackendLocaleDimensions & {
+export type BackendLocaleValue = BackendLocaleConditions & {
   id: number
   key: string
   text: LocalizedText

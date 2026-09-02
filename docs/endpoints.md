@@ -30,6 +30,7 @@ All routes are prefixed with `/api`. Routes marked **admin** require the `isAdmi
 | GET | `/organisations` | All organisations in the database |
 | GET | `/organisations/supported` | Organisations that have supported course codes |
 | GET | `/organisations/integrated` | Organisation codes that have integrated-studies courses |
+| GET | `/backend-locales` | Admin-editable texts resolved for the given org and language picks (see [backend-locales.md](backend-locales.md)) |
 | GET | `/version` | App version info (git SHA, package version, release) |
 
 ## Feedback
@@ -58,6 +59,12 @@ All routes are prefixed with `/api`. Routes marked **admin** require the `isAdmi
 | GET | `/admin/filter-config/export` | Download all filter configs as JSON |
 | POST | `/admin/filter-config/import` | Import filter configs from JSON |
 | GET | `/admin/stats` | Unique user visit counts grouped by hour/day/month/year |
+| GET | `/admin/backend-locales` | All backend locale keys with their texts |
+| POST | `/admin/backend-locales` | Create a backend locale key |
+| PUT | `/admin/backend-locales/:key` | Update a key's description |
+| POST | `/admin/backend-locales/:key/values` | Add a text to a key |
+| PUT | `/admin/backend-locales/values/:id` | Update a text |
+| DELETE | `/admin/backend-locales/values/:id` | Delete a text |
 
 ## Superuser
 
@@ -67,6 +74,9 @@ All routes are prefixed with `/api`. Routes marked **admin** require the `isAdmi
 | POST | `/admin/filter-config` | Create a new filter config |
 | POST | `/admin/updater/run` | Trigger updater via the updater service |
 | GET | `/admin/updater/runs` | List updater run history |
+| DELETE | `/admin/backend-locales/:key` | Delete a backend locale key and all its texts |
+| GET | `/admin/backend-locales/export` | Download all backend locale keys and texts as JSON |
+| POST | `/admin/backend-locales/import` | Upsert backend locale keys and texts from JSON |
 
 ## Debug (development only)
 

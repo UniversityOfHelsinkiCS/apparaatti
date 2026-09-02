@@ -13,7 +13,7 @@ import { GIT_SHA } from '../util/config.ts'
 import {
   allBackendLocaleKeys,
   backendLocaleKeyByKey,
-  backendLocaleValueByDimensions,
+  backendLocaleValueByConditions,
   createBackendLocaleKey,
   createBackendLocaleValue,
   deleteBackendLocaleKey,
@@ -94,8 +94,8 @@ backendLocaleRouter.post('/import', requireSuperuser, async (req, res) => {
     }
 
     for (const value of values) {
-      const { text: _text, ...dimensions } = value
-      const existingValue = await backendLocaleValueByDimensions(key, dimensions)
+      const { text: _text, ...conditions } = value
+      const existingValue = await backendLocaleValueByConditions(key, conditions)
       if (existingValue) {
         await updateBackendLocaleValueById(existingValue.id, value)
       } else {
@@ -167,8 +167,8 @@ backendLocaleRouter.put('/:key', async (req, res) => {
   res.json({ status: 'updated' })
 })
 
-backendLocaleRouter.delete('/:key', async (req, res) => {
-  const deleted = await deleteBackendLocaleKey(req.params.key)
+backendLocaleRouter.delete('/:key', requireSuperuser, async (req, res) => {
+  const deleted = await deleteBackendLocaleKey(String(req.params.key))
   if (deleted === 0) {
     res.status(404).json({ message: 'Key not found' })
     return

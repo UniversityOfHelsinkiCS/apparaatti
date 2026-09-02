@@ -19,12 +19,12 @@ type OrganisationOption = {
   name: unknown
 }
 
-type DimensionSelectorsProps = {
+type ConditionSelectorsProps = {
   draft: ValueDraft
   onChange: (patch: Partial<ValueDraft>) => void
 }
 
-const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
+const ConditionSelectors = ({ draft, onChange }: ConditionSelectorsProps) => {
   const { t } = useTranslation()
   const organisationSelectId = useId()
   const langSelectId = useId()
@@ -40,7 +40,7 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
   const anyLabel = t('v2:admin.backendLocales.anyValue')
   const specificationDisabled = !specificationCanBeMatched(draft.lang || null, draft.primaryLanguage || null)
 
-  const changeLanguageDimension = (patch: Partial<ValueDraft>) => {
+  const changeLanguageCondition = (patch: Partial<ValueDraft>) => {
     const lang = patch.lang ?? draft.lang
     const primaryLanguage = patch.primaryLanguage ?? draft.primaryLanguage
     if (specificationCanBeMatched(lang || null, primaryLanguage || null)) {
@@ -83,7 +83,7 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
           value={draft.lang}
           displayEmpty
           renderValue={selected => (selected === '' ? anyLabel : t(`v2:admin.backendLocales.langOption.${selected}`))}
-          onChange={e => changeLanguageDimension({ lang: e.target.value })}
+          onChange={e => changeLanguageCondition({ lang: e.target.value })}
         >
           <MenuItem value="">{anyLabel}</MenuItem>
           {LANGS.map(lang => (
@@ -104,7 +104,7 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
           value={draft.primaryLanguage}
           displayEmpty
           renderValue={selected => (selected === '' ? anyLabel : t(`v2:admin.backendLocales.langOption.${selected}`))}
-          onChange={e => changeLanguageDimension({ primaryLanguage: e.target.value })}
+          onChange={e => changeLanguageCondition({ primaryLanguage: e.target.value })}
         >
           <MenuItem value="">{anyLabel}</MenuItem>
           {PRIMARY_LANGUAGES.map(primaryLanguage => (
@@ -148,4 +148,4 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
   )
 }
 
-export default DimensionSelectors
+export default ConditionSelectors

@@ -49,7 +49,7 @@ describe('specificationCanBeMatched', () => {
 })
 
 describe('BackendLocaleValueSchema', () => {
-  it('defaults every dimension to a wildcard', () => {
+  it('defaults every condition to a wildcard', () => {
     const parsed = BackendLocaleValueSchema.parse({ text })
     expect(parsed.organisationCode).toBeNull()
     expect(parsed.lang).toBeNull()

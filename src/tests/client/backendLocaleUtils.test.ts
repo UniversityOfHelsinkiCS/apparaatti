@@ -11,7 +11,7 @@ import type { BackendLocaleKey, BackendLocaleValue } from '../../common/types.ts
 
 const text = { fi: 'fi', sv: 'sv', en: 'en' }
 
-const value = (dimensions: Partial<BackendLocaleValue> = {}): BackendLocaleValue => ({
+const value = (conditions: Partial<BackendLocaleValue> = {}): BackendLocaleValue => ({
   id: 1,
   key: 'a.key',
   organisationCode: null,
@@ -19,7 +19,7 @@ const value = (dimensions: Partial<BackendLocaleValue> = {}): BackendLocaleValue
   primaryLanguage: null,
   primaryLanguageSpecification: null,
   text,
-  ...dimensions,
+  ...conditions,
 })
 
 const key = (values: BackendLocaleValue[]): BackendLocaleKey => ({
@@ -30,7 +30,7 @@ const key = (values: BackendLocaleValue[]): BackendLocaleKey => ({
 })
 
 describe('toPayload', () => {
-  it('maps every empty dimension to a wildcard', () => {
+  it('maps every empty condition to a wildcard', () => {
     const payload = toPayload(emptyValueDraft())
     expect(payload.organisationCode).toBeNull()
     expect(payload.lang).toBeNull()
@@ -38,7 +38,7 @@ describe('toPayload', () => {
     expect(payload.primaryLanguageSpecification).toBeNull()
   })
 
-  it('preserves the dimensions that are set', () => {
+  it('preserves the conditions that are set', () => {
     const payload = toPayload({
       organisationCode: 'H50',
       lang: 'sv',
@@ -62,11 +62,11 @@ describe('toPayload', () => {
 })
 
 describe('isCatchAll', () => {
-  it('is true only when every dimension is a wildcard', () => {
+  it('is true only when every condition is a wildcard', () => {
     expect(isCatchAll(value())).toBe(true)
   })
 
-  it('is false when any single dimension is set', () => {
+  it('is false when any single condition is set', () => {
     expect(isCatchAll(value({ organisationCode: 'H50' }))).toBe(false)
     expect(isCatchAll(value({ lang: 'sv' }))).toBe(false)
     expect(isCatchAll(value({ primaryLanguage: 'sv' }))).toBe(false)

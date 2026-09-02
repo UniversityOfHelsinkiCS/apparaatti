@@ -1,7 +1,7 @@
 import { Op } from 'sequelize'
 
 import type {
-  BackendLocaleDimensions,
+  BackendLocaleConditions,
   BackendLocaleKey as BackendLocaleKeyType,
   RecommendationMetadata,
   UpdaterRun as UpdaterRunType,
@@ -162,11 +162,11 @@ export async function createBackendLocaleValue(key: string, data: object) {
   return await BackendLocaleValue.create({ ...(data as any), key })
 }
 
-export async function backendLocaleValueByDimensions(
+export async function backendLocaleValueByConditions(
   key: string,
-  dimensions: BackendLocaleDimensions
+  conditions: BackendLocaleConditions
 ): Promise<any | null> {
-  return await BackendLocaleValue.findOne({ where: { key, ...dimensions }, raw: true })
+  return await BackendLocaleValue.findOne({ where: { key, ...conditions }, raw: true })
 }
 
 export async function updateBackendLocaleValueById(id: number, data: object): Promise<number> {

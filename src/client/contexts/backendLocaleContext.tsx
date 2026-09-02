@@ -21,8 +21,8 @@ const errorMessage = (kind: 'unknown-key' | 'no-match', key: string, context: Ba
   if (kind === 'unknown-key') {
     return `Backend locale key "${key}" does not exist. Create it at /admin/backend-locales.`
   }
-  const dimensions = `organisation=${context.organisationCode}, lang=${context.lang}, primaryLanguage=${context.primaryLanguage}, primaryLanguageSpecification=${context.primaryLanguageSpecification}`
-  return `Backend locale key "${key}" has no text matching ${dimensions}. Add a catch-all text (all dimensions "any") at /admin/backend-locales.`
+  const conditions = `organisation=${context.organisationCode}, lang=${context.lang}, primaryLanguage=${context.primaryLanguage}, primaryLanguageSpecification=${context.primaryLanguageSpecification}`
+  return `Backend locale key "${key}" has no text matching ${conditions}. Add a catch-all text (all conditions "any") at /admin/backend-locales.`
 }
 
 const reportBackendLocaleError = (
