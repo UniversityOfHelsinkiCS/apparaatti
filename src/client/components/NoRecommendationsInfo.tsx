@@ -73,9 +73,6 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
         >
           {t('v2:noRecommendations.title')}
         </Typography>
-        <Typography variant="body1" sx={{ color: hy.textColor.secondary }}>
-          {t('v2:noRecommendations.description')}
-        </Typography>
         {mandatoryFilters.length > 0 ? (
           <UnansweredPrompt
             filters={mandatoryFilters}

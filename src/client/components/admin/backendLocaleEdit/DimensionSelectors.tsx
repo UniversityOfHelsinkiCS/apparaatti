@@ -53,11 +53,15 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <FormControl fullWidth size="small">
-        <InputLabel id={organisationSelectId}>{t('v2:admin.backendLocales.organisation')}</InputLabel>
+        <InputLabel shrink id={organisationSelectId}>
+          {t('v2:admin.backendLocales.organisation')}
+        </InputLabel>
         <Select
           labelId={organisationSelectId}
           label={t('v2:admin.backendLocales.organisation')}
           value={draft.organisationCode}
+          displayEmpty
+          renderValue={selected => (selected === '' ? anyLabel : selected)}
           onChange={e => onChange({ organisationCode: e.target.value })}
         >
           <MenuItem value="">{anyLabel}</MenuItem>
@@ -70,11 +74,15 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id={langSelectId}>{t('v2:admin.backendLocales.lang')}</InputLabel>
+        <InputLabel shrink id={langSelectId}>
+          {t('v2:admin.backendLocales.lang')}
+        </InputLabel>
         <Select
           labelId={langSelectId}
           label={t('v2:admin.backendLocales.lang')}
           value={draft.lang}
+          displayEmpty
+          renderValue={selected => (selected === '' ? anyLabel : t(`v2:admin.backendLocales.langOption.${selected}`))}
           onChange={e => changeLanguageDimension({ lang: e.target.value })}
         >
           <MenuItem value="">{anyLabel}</MenuItem>
@@ -87,11 +95,15 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id={primaryLanguageSelectId}>{t('v2:admin.backendLocales.primaryLanguage')}</InputLabel>
+        <InputLabel shrink id={primaryLanguageSelectId}>
+          {t('v2:admin.backendLocales.primaryLanguage')}
+        </InputLabel>
         <Select
           labelId={primaryLanguageSelectId}
           label={t('v2:admin.backendLocales.primaryLanguage')}
           value={draft.primaryLanguage}
+          displayEmpty
+          renderValue={selected => (selected === '' ? anyLabel : t(`v2:admin.backendLocales.langOption.${selected}`))}
           onChange={e => changeLanguageDimension({ primaryLanguage: e.target.value })}
         >
           <MenuItem value="">{anyLabel}</MenuItem>
@@ -105,11 +117,17 @@ const DimensionSelectors = ({ draft, onChange }: DimensionSelectorsProps) => {
 
       <Box>
         <FormControl fullWidth size="small" disabled={specificationDisabled}>
-          <InputLabel id={specificationSelectId}>{t('v2:admin.backendLocales.specification')}</InputLabel>
+          <InputLabel shrink id={specificationSelectId}>
+            {t('v2:admin.backendLocales.specification')}
+          </InputLabel>
           <Select
             labelId={specificationSelectId}
             label={t('v2:admin.backendLocales.specification')}
             value={specificationDisabled ? '' : draft.primaryLanguageSpecification}
+            displayEmpty
+            renderValue={selected =>
+              selected === '' ? anyLabel : t(`v2:admin.backendLocales.specificationOption.${selected}`)
+            }
             onChange={e => onChange({ primaryLanguageSpecification: e.target.value })}
           >
             <MenuItem value="">{anyLabel}</MenuItem>

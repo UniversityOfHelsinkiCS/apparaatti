@@ -138,7 +138,6 @@ export default {
     },
     noRecommendations: {
       title: 'No courses found',
-      description: 'Try changing your selections to see courses.',
       unansweredMandatory: 'Answer the remaining mandatory question',
       openFilterQuestion: 'Open filters: {{question}}',
       changeSelectionsButton: 'Change your selections',

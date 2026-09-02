@@ -94,7 +94,7 @@ export const up: Migration = async ({ context: queryInterface }) => {
   await queryInterface.bulkInsert('backend_locale_keys', [
     {
       key: 'noRecommendations.additionalInfo',
-      description: 'Kursseja ei löytynyt -näkymässä kuvaustekstin alla näytettävä lisäohje. Voi sisältää markdownia.',
+      description: 'Kursseja ei löytynyt -otsikon alla näytettävä ohjeteksti. Voi sisältää markdownia.',
       created_at: new Date(),
       updated_at: new Date(),
     },

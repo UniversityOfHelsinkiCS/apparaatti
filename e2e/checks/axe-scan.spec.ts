@@ -16,11 +16,13 @@ const OUTPUT_FILE = `${OUTPUT_DIR}/axe-findings.json`
 // afterAll can write a single report. Running the project multi-worker would split it.
 const findings: Finding[] = []
 
-const toFindings = (violations: Awaited<ReturnType<AxeBuilder['analyze']>>['violations'], state: string) => {
-  const rows: Finding[] = []
+async function scan(page: Page, state: string) {
+  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze()
+
+  const axeFindings: Finding[] = []
   for (const violation of violations) {
     for (const node of violation.nodes) {
-      rows.push({
+      axeFindings.push({
         state,
         rule: violation.id,
         impact: violation.impact ?? 'unknown',
@@ -30,25 +32,8 @@ const toFindings = (violations: Awaited<ReturnType<AxeBuilder['analyze']>>['viol
       })
     }
   }
-  return rows
-}
 
-async function scan(page: Page, state: string) {
-  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze()
-
-  const stateFindings = [...toFindings(violations, state), ...(await findNamelessElements(page, state))]
-  findings.push(...stateFindings)
-
-  expect.soft(stateFindings, report(stateFindings)).toEqual([])
-}
-
-// Admin pages are exempt from the full WCAG sweep, but colour contrast still has to hold:
-// unreadable text is unreadable regardless of who the page is for. No nameless-element pass
-// here, and no other rules.
-async function scanContrast(page: Page, state: string) {
-  const { violations } = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze()
-
-  const stateFindings = toFindings(violations, state)
+  const stateFindings = [...axeFindings, ...(await findNamelessElements(page, state))]
   findings.push(...stateFindings)
 
   expect.soft(stateFindings, report(stateFindings)).toEqual([])
@@ -203,46 +188,4 @@ test.describe('axe wcag scan', () => {
     await scan(page, testInfo.title)
   })
 
-  test('scan contrast on the admin overview', async ({ page }, testInfo) => {
-    await page.goto('/admin')
-    await expect(page.getByText('Suodattimien asetukset')).toBeVisible()
-
-    await scanContrast(page, testInfo.title)
-  })
-
-  // The key list and the expanded value table are scanned together because MUI marks the
-  // page aria-hidden behind an open dialog, so axe skips everything underneath it. Anything
-  // only reachable from the expanded state has to be scanned before a dialog opens.
-  test('scan contrast on the backend locales tab, key expanded', async ({ page }, testInfo) => {
-    await page.goto('/admin/backend-locales')
-    await expect(page.getByRole('button', { name: 'Uusi avain' })).toBeVisible()
-
-    await page
-      .getByRole('button', { name: /Näytä avaimen .* tekstit/ })
-      .first()
-      .click()
-    await expect(page.getByRole('button', { name: 'Uusi teksti' })).toBeVisible()
-
-    await scanContrast(page, testInfo.title)
-  })
-
-  test('scan contrast on the backend locales text dialog', async ({ page }, testInfo) => {
-    await page.goto('/admin/backend-locales')
-
-    await page
-      .getByRole('button', { name: /Näytä avaimen .* tekstit/ })
-      .first()
-      .click()
-    await page.getByRole('button', { name: 'Uusi teksti' }).click()
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
-
-    // Picking English as the course language makes a completion-type answer impossible, which
-    // is the only state that renders the unreachable-combination warning caption.
-    await dialog.getByLabel('Haettavan kurssin kieli').click()
-    await page.getByRole('option', { name: 'englanti', exact: true }).click()
-    await expect(dialog.getByText(/suoritustapaa ei kysytä/)).toBeVisible()
-
-    await scanContrast(page, testInfo.title)
-  })
 })

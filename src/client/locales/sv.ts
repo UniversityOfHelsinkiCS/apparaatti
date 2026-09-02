@@ -139,7 +139,6 @@ export default {
     },
     noRecommendations: {
       title: 'Inga kurser hittades',
-      description: 'Försök ändra dina val för att se kurser.',
       unansweredMandatory: 'Svara på den obligatoriska frågan',
       openFilterQuestion: 'Öppna filter: {{question}}',
       changeSelectionsButton: 'Ändra dina val',

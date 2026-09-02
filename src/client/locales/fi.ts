@@ -138,7 +138,6 @@ export default {
     },
     noRecommendations: {
       title: 'Kursseja ei löytynyt',
-      description: 'Yritä muuttaa valintojasi nähdäksesi kursseja.',
       unansweredMandatory: 'Vastaa vielä pakolliseen kysymykseen',
       openFilterQuestion: 'Avaa suodattimet: {{question}}',
       changeSelectionsButton: 'Muuta valintojasi',
