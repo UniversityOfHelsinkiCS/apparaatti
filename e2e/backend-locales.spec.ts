@@ -20,8 +20,13 @@ async function answerWelcomeModal(page: Page) {
   await expect(welcomeModal).toBeHidden()
 }
 
-// Faculty of Theology + course language === school language matches zero seeded courses,
-// which is the only state where the additional info text renders.
+const INFO_TEXT = {
+  fi: 'Ota yhteyttä [tiedekuntaan](https://example.com/fi).',
+  sv: 'Kontakta [fakulteten](https://example.com/sv).',
+  en: 'Please contact [the faculty](https://example.com/en).',
+}
+
+// Faculty of Theology + course language === school language matches zero seeded courses.
 async function reachEmptyState(page: Page) {
   await page.goto('/')
   await answerWelcomeModal(page)
@@ -39,17 +44,7 @@ test.describe('backend locales on the empty state', () => {
 
   test('renders the resolved text as markdown under the empty state', async ({ page }) => {
     await page.route('**/api/backend-locales*', route =>
-      route.fulfill({
-        json: {
-          locales: {
-            [ADDITIONAL_INFO_KEY]: {
-              fi: 'Ota yhteyttä [tiedekuntaan](https://example.com/fi).',
-              sv: 'Kontakta [fakulteten](https://example.com/sv).',
-              en: 'Please contact [the faculty](https://example.com/en).',
-            },
-          },
-        },
-      })
+      route.fulfill({ json: { locales: { [ADDITIONAL_INFO_KEY]: INFO_TEXT } } })
     )
 
     await reachEmptyState(page)
@@ -58,6 +53,22 @@ test.describe('backend locales on the empty state', () => {
     const link = page.getByRole('link', { name: /the faculty/ })
     await expect(link).toHaveAttribute('href', 'https://example.com/en')
     await expect(link).toHaveAttribute('target', '_blank')
+  })
+
+  test('shows the text while mandatory questions are still unanswered', async ({ page }) => {
+    await page.route('**/api/backend-locales*', route =>
+      route.fulfill({ json: { locales: { [ADDITIONAL_INFO_KEY]: INFO_TEXT } } })
+    )
+
+    await page.goto('/')
+    await answerWelcomeModal(page)
+
+    // Course language is mandatory and lives in the sidebar, so it is still unanswered here:
+    // the empty state shows the unanswered-question prompt rather than the reset buttons.
+    await expect(page.getByTestId('no-recommendations-heading')).toBeVisible()
+    await expect(page.getByTestId('empty-state-clear-choices')).toHaveCount(0)
+
+    await expect(page.getByRole('link', { name: /the faculty/ })).toBeVisible()
   })
 
   test('issues one request per filter context and reuses the cache', async ({ page }) => {

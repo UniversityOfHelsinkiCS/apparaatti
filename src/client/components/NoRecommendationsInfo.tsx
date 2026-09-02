@@ -73,6 +73,7 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
         >
           {t('v2:noRecommendations.title')}
         </Typography>
+        {renderLocale('noRecommendations.additionalInfo')}
         {mandatoryFilters.length > 0 ? (
           <UnansweredPrompt
             filters={mandatoryFilters}
@@ -80,17 +81,14 @@ const NoRecommendationsInfo = ({ onOpenFilters }: NoRecommendationsInfoProps) =>
             onHighlightFilter={setHighlightedFilterId}
           />
         ) : (
-          <>
-            {renderLocale('noRecommendations.additionalInfo')}
-            <Stack direction="column" spacing={'8px'} flexWrap="wrap">
-              {isDrawerLayout && (
-                <HyButton variant="primary" colour="blue" onClick={onOpenFilters}>
-                  {t('v2:noRecommendations.changeSelectionsButton')}
-                </HyButton>
-              )}
-              <ResetFiltersButton onReset={onOpenFilters} dataTestId="empty-state-clear-choices" />
-            </Stack>
-          </>
+          <Stack direction="column" spacing={'8px'} flexWrap="wrap">
+            {isDrawerLayout && (
+              <HyButton variant="primary" colour="blue" onClick={onOpenFilters}>
+                {t('v2:noRecommendations.changeSelectionsButton')}
+              </HyButton>
+            )}
+            <ResetFiltersButton onReset={onOpenFilters} dataTestId="empty-state-clear-choices" />
+          </Stack>
         )}
       </Stack>
     </Box>
