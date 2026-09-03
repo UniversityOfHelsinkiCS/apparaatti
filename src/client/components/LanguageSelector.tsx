@@ -23,7 +23,7 @@ const LanguageSelector = ({ sx }: { sx?: SxProps }) => {
     <HySelect
       value={language}
       onChange={handleChange}
-      aria-label={t('v2:languageSelector')}
+      inputProps={{ 'aria-label': t('v2:languageSelector') }}
       data-testid="language-selector"
       sx={sx}
     >

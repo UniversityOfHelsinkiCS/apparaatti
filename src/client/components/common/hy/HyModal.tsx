@@ -467,7 +467,15 @@ const HyModal = ({
           {scrollable ? (
             <>
               <ScrollScrim $position="top" $visible={!atTop} aria-hidden />
-              <Content $scrollable $hasFooter={footer != null} ref={contentRef} onScroll={calculateScrollState}>
+              <Content
+                $scrollable
+                $hasFooter={footer != null}
+                ref={contentRef}
+                onScroll={calculateScrollState}
+                tabIndex={0}
+                role="region"
+                aria-labelledby={title ? titleId : undefined}
+              >
                 {children}
               </Content>
               <ScrollScrim $position="bottom" $visible={!atBottom} aria-hidden />
