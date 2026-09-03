@@ -160,10 +160,13 @@ export default {
       loginAs: 'Logga in som',
       updater: 'Uppdaterare',
       errorTest: 'Feltest',
-      backendLocales: 'Texter',
     },
     admin: {
       loading: 'Laddar...',
+      settingsTabs: {
+        texts: 'Textinställningar',
+        filters: 'Filterinställningar',
+      },
       errorTest: {
         pageTitle: 'Feltest',
         description:

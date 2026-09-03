@@ -159,10 +159,13 @@ export default {
       loginAs: 'Login as',
       updater: 'Updater',
       errorTest: 'Error test',
-      backendLocales: 'Texts',
     },
     admin: {
       loading: 'Loading...',
+      settingsTabs: {
+        texts: 'Text settings',
+        filters: 'Filter settings',
+      },
       errorTest: {
         pageTitle: 'Error test',
         description:

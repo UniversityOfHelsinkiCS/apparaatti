@@ -159,10 +159,13 @@ export default {
       loginAs: 'Kirjaudu toisena',
       updater: 'Päivittäjä',
       errorTest: 'Virhetesti',
-      backendLocales: 'Tekstit',
     },
     admin: {
       loading: 'Ladataan...',
+      settingsTabs: {
+        texts: 'Teksti asetukset',
+        filters: 'Filtteri asetukset',
+      },
       errorTest: {
         pageTitle: 'Virhetesti',
         description:
