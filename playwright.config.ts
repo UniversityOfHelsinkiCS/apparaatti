@@ -22,14 +22,6 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      name: 'checks',
-      testDir: './e2e/checks',
-      testIgnore: '**/axe-scan.spec.ts',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    //the axe scan asserts nothing, it only inventories violations, so it is its own
-    //project and stays out of `checks` (i.e. out of npm run markup:test)
-    {
       name: 'axe',
       testDir: './e2e/checks',
       testMatch: '**/axe-scan.spec.ts',

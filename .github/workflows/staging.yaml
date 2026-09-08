@@ -63,8 +63,8 @@ jobs:
       - name: Run e2e tests
         run: npm run e2e
 
-      - name: Run markup checks
-        run: npm run markup:test
+      - name: Run axe accessibility scan
+        run: npm run axe:scan
 
   build-and-push:
     runs-on: ubuntu-latest
