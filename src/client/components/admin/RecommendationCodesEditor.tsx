@@ -53,6 +53,12 @@ const stickyCell = (left: number) => ({
   minWidth: 160,
 })
 
+const stickyHeaderCell = (left: number) => ({
+  ...stickyCell(left),
+  top: 0,
+  zIndex: 3,
+})
+
 const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -347,12 +353,23 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
             {t('v2:admin.recommendationCodes.matrixIntro')}
           </Typography>
 
-          <Box sx={{ overflowX: 'auto', backgroundColor: 'background.paper' }}>
-            <Table size="small" sx={{ width: 'auto' }}>
+          <Box
+            sx={{
+              overflow: 'auto',
+              maxHeight: 'calc(100vh - 400px)',
+              minHeight: 240,
+              backgroundColor: 'background.paper',
+            }}
+          >
+            <Table
+              size="small"
+              stickyHeader
+              sx={{ width: 'auto', '& .MuiTableCell-stickyHeader': { backgroundColor: 'background.paper' } }}
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell sx={stickyCell(0)}>{t('v2:admin.recommendationCodes.courseCode')}</TableCell>
-                  <TableCell sx={stickyCell(160)}>{t('v2:admin.recommendationCodes.language')}</TableCell>
+                  <TableCell sx={stickyHeaderCell(0)}>{t('v2:admin.recommendationCodes.courseCode')}</TableCell>
+                  <TableCell sx={stickyHeaderCell(160)}>{t('v2:admin.recommendationCodes.language')}</TableCell>
                   {facultyCodes.map(organisationCode => (
                     <TableCell key={organisationCode} align="center" title={organisationCodeToName[organisationCode]}>
                       {organisationCode}
