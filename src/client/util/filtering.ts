@@ -31,7 +31,10 @@ export const checkMentoring = (course: CourseData, value: string) => {
 }
 
 export const checkFinmu = (course: CourseData, value: string) => {
-  const result = hasAnyCourseCode(course, ['KK-FINMU']) && !hasApparaattiCodeUrn(course, 'kks-kor')
+  const result =
+    hasAnyCourseCode(course, ['KK-FINMU']) &&
+    !hasApparaattiCodeUrn(course, 'kks-kor') &&
+    !hasApparaattiCodeUrn(course, 'kks-pre')
   return value != '0' ? result : !result
 }
 

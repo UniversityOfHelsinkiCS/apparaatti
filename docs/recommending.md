@@ -17,7 +17,7 @@ The app recommends courses in two phases: the server narrows and sorts the pool 
 |---|---|---|---|
 | `replacement` | Korvaava | `checkReplacement` | course has `kks-kor` |
 | `mentoring` | Valmentava | `checkMentoring` | course has `kks-pre` |
-| `finmu` | Finmu | `checkFinmu` | course code is `KK-FINMU` |
+| `finmu` | Finmu | `checkFinmu` | course code is `KK-FINMU` and course has neither `kks-kor` nor `kks-pre` |
 | `challenge` | Mukautettu | `checkChallenge` | course has `kks-muk` |
 | `graduation` | Valmistuville | `checkGraduation` | course has `kks-val` |
 | `integrated` | Integroitu | `checkIntegrated` | course has `kks-int` |
