@@ -184,6 +184,14 @@ export default {
         courseCodeHelp:
           'Till exempel KK-ENERI. Tillåtna tecken: bokstäver, siffror, bindestreck, snedstreck och punkt.',
         search: 'Sök kurskod',
+        viewMode: 'Vy',
+        viewRows: 'Rader',
+        viewMatrix: 'Matris',
+        matrixIntro:
+          'En rad per kurskod. En bock betyder att koden rekommenderas för den fakulteten. Ett klick lägger till eller tar bort koden direkt, och ett nytt klick på samma ruta återställer läget.',
+        coverage: '{{count}} / {{total}}',
+        coverageHeader: 'Fakulteter',
+        toggleCell: '{{courseCode}} — {{faculty}}',
         allValues: 'Alla',
         anyValue: 'Alla',
         showing: 'Visar {{shown}} av {{total}} koder',

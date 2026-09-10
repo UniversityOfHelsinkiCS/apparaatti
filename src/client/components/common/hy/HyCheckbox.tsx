@@ -99,12 +99,38 @@ const CheckboxIndeterminateIcon = styled(CheckboxIcon)({
   },
 })
 
-const HyCheckbox = ({ sx, ...props }: CheckboxProps) => (
+const CheckboxCheckedIconBlack = styled(CheckboxCheckedIcon)({
+  backgroundColor: hy.bgColor.black,
+  [HOVER_MEDIA]: {
+    'input:hover ~ &': {
+      backgroundColor: hy.bgColor.blackHover,
+    },
+  },
+  'input:active ~ &': {
+    backgroundColor: hy.bgColor.blackActive,
+  },
+})
+
+const CheckboxIndeterminateIconBlack = styled(CheckboxIndeterminateIcon)({
+  backgroundColor: hy.bgColor.black,
+  [HOVER_MEDIA]: {
+    'input:hover ~ &': {
+      backgroundColor: hy.bgColor.blackHover,
+    },
+  },
+  'input:active ~ &': {
+    backgroundColor: hy.bgColor.blackActive,
+  },
+})
+
+type HyCheckboxProps = CheckboxProps & { black?: boolean }
+
+const HyCheckbox = ({ sx, black = false, ...props }: HyCheckboxProps) => (
   <Checkbox
     {...props}
     icon={<CheckboxIcon />}
-    checkedIcon={<CheckboxCheckedIcon />}
-    indeterminateIcon={<CheckboxIndeterminateIcon />}
+    checkedIcon={black ? <CheckboxCheckedIconBlack /> : <CheckboxCheckedIcon />}
+    indeterminateIcon={black ? <CheckboxIndeterminateIconBlack /> : <CheckboxIndeterminateIcon />}
     disableRipple
     sx={[
       {
