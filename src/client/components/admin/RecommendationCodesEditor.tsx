@@ -43,7 +43,7 @@ type MatrixRow = {
   idByOrganisation: Record<string, number>
 }
 
-type MatrixSortColumn = 'courseCode' | 'language' | 'coverage'
+type MatrixSortColumn = 'courseCode' | 'language' | 'coverage' | `faculty:${string}`
 
 const facultyCodes = Object.keys(organisationCodeToName).sort((a, b) =>
   organisationCodeToName[a].localeCompare(organisationCodeToName[b], 'fi')
@@ -116,6 +116,13 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
     if (sortColumn === 'coverage') {
       const byCoverage = Object.keys(a.idByOrganisation).length - Object.keys(b.idByOrganisation).length
       return byCoverage !== 0 ? byCoverage : a.courseCode.localeCompare(b.courseCode, 'fi')
+    }
+
+    if (sortColumn.startsWith('faculty:')) {
+      const organisationCode = sortColumn.slice('faculty:'.length)
+      const aChecked = a.idByOrganisation[organisationCode] !== undefined ? 1 : 0
+      const bChecked = b.idByOrganisation[organisationCode] !== undefined ? 1 : 0
+      return aChecked !== bChecked ? bChecked - aChecked : a.courseCode.localeCompare(b.courseCode, 'fi')
     }
 
     const byLanguage = languageNameOfId(a.languageId).localeCompare(languageNameOfId(b.languageId), 'fi')
@@ -449,9 +456,19 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
                     </TableSortLabel>
                   </TableCell>
                   {facultyCodes.map(organisationCode => (
-                    <TableCell key={organisationCode} align="center">
+                    <TableCell
+                      key={organisationCode}
+                      align="center"
+                      sortDirection={sortColumn === `faculty:${organisationCode}` && sortDirection}
+                    >
                       <Tooltip title={organisationCodeToName[organisationCode]} arrow>
-                        <Box component="span">{organisationCode}</Box>
+                        <TableSortLabel
+                          active={sortColumn === `faculty:${organisationCode}`}
+                          direction={sortColumn === `faculty:${organisationCode}` ? sortDirection : 'asc'}
+                          onClick={() => handleSortClick(`faculty:${organisationCode}`)}
+                        >
+                          {organisationCode}
+                        </TableSortLabel>
                       </Tooltip>
                     </TableCell>
                   ))}
