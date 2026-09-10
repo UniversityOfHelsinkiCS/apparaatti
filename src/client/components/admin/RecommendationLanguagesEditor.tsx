@@ -1,5 +1,5 @@
-import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,6 +8,7 @@ import { translateLocalizedString } from '../../util/i18n.ts'
 import useApi from '../../util/useApi.tsx'
 import { adminFetch } from './filterEdit/filterEditorUtils.ts'
 import RecommendationLanguageDialog from './recommendationCodeEdit/RecommendationLanguageDialog.tsx'
+import RowActionsCell from './RowActionsCell.tsx'
 
 const RecommendationLanguagesEditor = () => {
   const { t } = useTranslation()
@@ -101,22 +102,12 @@ const RecommendationLanguagesEditor = () => {
                   : t(`v2:admin.recommendationCodes.specificationOption.${language.primaryLanguageSpecification}`)}
               </TableCell>
               <TableCell>{codeCountOf(language)}</TableCell>
-              <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                <IconButton
-                  size="small"
-                  aria-label={t('v2:admin.recommendationCodes.editLanguage')}
-                  onClick={() => setDialogTarget(language)}
-                >
-                  <Pencil />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  aria-label={t('v2:admin.recommendationCodes.deleteLanguage')}
-                  onClick={() => handleDelete(language)}
-                >
-                  <Trash2 />
-                </IconButton>
-              </TableCell>
+              <RowActionsCell
+                editLabel={t('v2:admin.recommendationCodes.editLanguage')}
+                deleteLabel={t('v2:admin.recommendationCodes.deleteLanguage')}
+                onEdit={() => setDialogTarget(language)}
+                onDelete={() => handleDelete(language)}
+              />
             </TableRow>
           ))}
         </TableBody>
