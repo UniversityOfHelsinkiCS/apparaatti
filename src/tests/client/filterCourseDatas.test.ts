@@ -85,6 +85,17 @@ describe('filterCourseDatas', () => {
       expectedIds: ['match'],
     },
     {
+      title: 'finmu excludes replacement courses',
+      filters: createLocalFilters({ finmu: '1' }),
+      matchingCourse: createCourse({ id: 'match', courseCodes: ['KK-FINMU'] }),
+      otherCourse: createCourse({
+        id: 'other',
+        courseCodes: ['KK-FINMU'],
+        customCodeUrns: createCustomCodeUrns('kks-kor'),
+      }),
+      expectedIds: ['match'],
+    },
+    {
       title: 'challenge',
       filters: createLocalFilters({ challenge: '1' }),
       matchingCourse: createCourse({ id: 'match', customCodeUrns: createCustomCodeUrns('kks-muk') }),

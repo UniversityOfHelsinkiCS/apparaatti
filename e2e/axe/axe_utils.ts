@@ -19,8 +19,8 @@ export async function scan(page: Page, state: string) {
     runOnly: { type: 'tag', values: AXE_CONFIG.wcagTags },
     rules: Object.fromEntries(AXE_CONFIG.extraRules.map(id => [id, { enabled: true }])),
   })
-  if (AXE_CONFIG.exclude.length > 0) {
-    builder.exclude(AXE_CONFIG.exclude)
+  for (const selector of AXE_CONFIG.exclude) {
+    builder.exclude(selector)
   }
 
   const { violations } = await builder.analyze()
