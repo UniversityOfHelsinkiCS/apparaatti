@@ -1,4 +1,7 @@
 import { z } from 'zod'
+
+import { organisationCodeToName } from './organisations.ts'
+
 export const StringArraySchema = z.array(z.string().min(1))
 export const AnswerSchema = z.record(z.string().min(1), z.union([z.string().min(1), z.array(z.string().min(1))]))
 
@@ -120,4 +123,37 @@ export const BackendLocaleImportSchema = z.object({
   appVersion: z.string().optional(),
   exportedAt: z.string().optional(),
   keys: z.array(BackendLocaleKeySchema.extend({ values: z.array(BackendLocaleValueSchema) })),
+})
+
+export const LANGUAGE_TYPES = ['primary', 'secondary'] as const
+
+export const RecommendationLanguageSchema = z.object({
+  name: LocalizedTextSchema,
+  lang: z.enum(LANGS),
+  languageType: z.enum(LANGUAGE_TYPES).nullable().default(null),
+  primaryLanguageSpecification: z
+    .enum(PRIMARY_LANGUAGE_SPECIFICATIONS)
+    .exclude(['writtenAndSpoken'])
+    .nullable()
+    .default(null),
+})
+
+export const RecommendationCodeSchema = z.object({
+  organisationCode: z
+    .string()
+    .min(1)
+    .refine(code => code in organisationCodeToName, 'Unknown organisation'),
+  languageId: z.number().int().positive(),
+  courseCode: z
+    .string()
+    .trim()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-/.]+$/, 'course code must be alphanumeric with hyphens, slashes or dots'),
+})
+
+export const RecommendationCodeImportSchema = z.object({
+  appVersion: z.string().optional(),
+  exportedAt: z.string().optional(),
+  languages: z.array(RecommendationLanguageSchema.extend({ id: z.number().int().positive() })),
+  codes: z.array(RecommendationCodeSchema),
 })

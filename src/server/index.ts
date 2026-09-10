@@ -18,6 +18,7 @@ import setupCron from './updater/cron.ts'
 import { clearInterruptedUpdaterRuns } from './updater/manualRun.ts'
 import { IN_E2E, inDevelopment, SESSION_SECRET, UPDATER_CRON_ENABLED } from './util/config.ts'
 import setupAuthentication from './util/oidc.ts'
+import { loadRecommendationCodes } from './util/recommendationCodeCache.ts'
 import { redis } from './util/redis.ts'
 
 redis.on('ready', () => {
@@ -74,6 +75,8 @@ app.listen(process.env.PORT, async () => {
   if (IN_E2E) {
     await seedDatabase()
   }
+
+  await loadRecommendationCodes()
 
   if (UPDATER_CRON_ENABLED === false) {
     await setupAuthentication()

@@ -8,6 +8,8 @@ import useRequiredUser from '../../util/useRequiredUser.ts'
 import AdminNavbar from './AdminNavbar.tsx'
 import BackendLocalesEditor from './BackendLocalesEditor.tsx'
 import FilterConfigEditor from './FilterConfigEditor.tsx'
+import RecommendationCodesEditor from './RecommendationCodesEditor.tsx'
+import RecommendationLanguagesEditor from './RecommendationLanguagesEditor.tsx'
 
 const AdminPage = () => {
   const { t } = useTranslation()
@@ -30,9 +32,11 @@ const AdminPage = () => {
     return <Navigate to={'/'} replace />
   }
 
+  const isSuperuser = user.isSuperuser === true
+
   return (
     <Box sx={{ p: 3 }}>
-      <AdminNavbar isSuperuser={user.isSuperuser === true} />
+      <AdminNavbar isSuperuser={isSuperuser} />
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v as number)}
@@ -42,10 +46,14 @@ const AdminPage = () => {
       >
         <Tab label={t('v2:admin.settingsTabs.texts')} />
         <Tab label={t('v2:admin.settingsTabs.filters')} />
+        <Tab label={t('v2:admin.settingsTabs.codes')} />
+        {isSuperuser && <Tab label={t('v2:admin.settingsTabs.languages')} />}
       </Tabs>
 
-      {tab === 0 && <BackendLocalesEditor isSuperuser={user.isSuperuser === true} />}
-      {tab === 1 && <FilterConfigEditor isSuperuser={user.isSuperuser === true} />}
+      {tab === 0 && <BackendLocalesEditor isSuperuser={isSuperuser} />}
+      {tab === 1 && <FilterConfigEditor isSuperuser={isSuperuser} />}
+      {tab === 2 && <RecommendationCodesEditor isSuperuser={isSuperuser} />}
+      {tab === 3 && isSuperuser && <RecommendationLanguagesEditor />}
     </Box>
   )
 }

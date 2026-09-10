@@ -6,19 +6,16 @@ import {
 } from './constants.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
 import { uniqueVals } from './misc.ts'
-import type { OrganisationRecommendation } from './organisationCourseRecommmendations.ts'
 import {
   challegeCourseCodes,
-  codesInOrganisations,
+  codesForAnswers,
   courseHasAnyOfCodes,
   courseHasCustomCodeUrn,
   courseMatches,
-  getUserOrganisationRecommendations,
-  languageSpesificCodes,
   languageToStudy,
   mentoringCourseCodes,
-  readOrganisationRecommendationData,
 } from './organisationCourseRecommmendations.ts'
+import { readRecommendationCodes } from './recommendationCodeCache.ts'
 import { getCoursePeriod } from './studyPeriods.ts'
 import { getNormalizedStudyPlace, isExam } from './studyPlace.ts'
 
@@ -147,53 +144,6 @@ export function courseSpansMultiplePeriods(course: CourseData): boolean {
   return (course.period?.length ?? 0) > 1
 }
 
-type courseCodes = {
-  all: string[]
-  userOrganisation: string[]
-  languageSpesific: string[]
-}
-
-/**
- *
- * @param langCode
- * Language that the user wants a course about
- *
- * @param primaryLanguage
- * Language that is the users primary language in school
- *
- * @returns
- * object that contains lists of course codes:
- *
- * all: all possible course codes that could be recommended
- *
- * userOrganisation: course codes that are in the same organisation as the user
- *
- * languageSpesific: course codes that are in the same organisation AND are correct given the language choices of the user
- */
-function getCourseCodes(
-  langCode: string,
-  primaryLanguage: string,
-  primaryLanguageSpecification: string,
-  organisationRecommendations: OrganisationRecommendation[],
-  userOrganisationCode: string
-): courseCodes {
-  const allCodes = codesInOrganisations(organisationRecommendations)
-  const userOrganisations = getUserOrganisationRecommendations(userOrganisationCode, organisationRecommendations)
-  const organisationCodes = codesInOrganisations(userOrganisations)
-  const languageSpesific = languageSpesificCodes(
-    userOrganisations,
-    langCode,
-    primaryLanguage,
-    primaryLanguageSpecification
-  )
-
-  return {
-    all: allCodes,
-    userOrganisation: organisationCodes,
-    languageSpesific: languageSpesific,
-  }
-}
-
 function isChallengeCourse(course: CourseData, courseLanguageType: string) {
   return courseMatches(course, challegeCourseCodes, courseLanguageType)
 }
@@ -244,10 +194,9 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
   const organisationCode = readAnswer(answerData, 'study-field-select')
 
-  const organisationRecommendations = readOrganisationRecommendationData()
-  const courseCodes = getCourseCodes(lang, primaryLang, primaryLangSpec, organisationRecommendations, organisationCode)
+  const courseCodes = codesForAnswers(readRecommendationCodes(), organisationCode, lang, primaryLang, primaryLangSpec)
 
-  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes.languageSpesific)
+  const courseData = await getRealisationsWithCourseUnitCodes(courseCodes)
   const courseLanguageType = languageToStudy(lang, primaryLang)
 
   const filteredForOrg = filterIsSpesificForOrganisation(courseData, organisationCode)

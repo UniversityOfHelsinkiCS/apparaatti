@@ -1,15 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-// Mock the database layer, the rest (data.xlsx recommendation table, filtering, sorting) runs for real
+// Mock the database layer, the rest (data.ts recommendation table, filtering, sorting) runs for real
 vi.mock('../../server/util/dbActions.ts', () => ({
   cuWithCourseCodeOf: vi.fn(),
   curcusWithUnitIdOf: vi.fn(),
   curWithIdOf: vi.fn(),
   organisationWithGroupIdOf: vi.fn(),
+  allRecommendationCodeRows: vi.fn(),
 }))
 
 import type { AnswerData } from '../../common/types.ts'
-import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from '../../server/util/dbActions.ts'
+import { generatedRecommendationCodeRows } from '../../server/db/recommendationCodeSeeds.ts'
+import {
+  allRecommendationCodeRows,
+  curcusWithUnitIdOf,
+  curWithIdOf,
+  cuWithCourseCodeOf,
+} from '../../server/util/dbActions.ts'
+import { loadRecommendationCodes } from '../../server/util/recommendationCodeCache.ts'
 import { getCourseData } from '../../server/util/recommender.ts'
 
 const PSYKOLOGIA = '414'
@@ -29,7 +37,7 @@ type FakeRealisation = {
   customCodeUrns: Record<string, string[]>
 }
 
-// KK-ENLAAK is listed for both psykologia and hammaslääketiede in data.xlsx, so realisations of it
+// KK-ENLAAK is listed for both psykologia and hammaslääketiede in data.ts, so realisations of it
 // end up in the candidate set for a psychology student and may only be dropped by the organisation filter
 const courseUnits: FakeCourseUnit[] = [
   { id: 'cu-enlaak', courseCode: 'KK-ENLAAK', groupId: 'group-enlaak', credits: { min: 5, max: 5 } },
@@ -87,7 +95,10 @@ const answers = (overrides: Partial<AnswerData> = {}): AnswerData => ({
 
 const courseCodesOf = (courses: { courseCodes: string[] }[]) => courses.flatMap(c => c.courseCodes)
 
-beforeEach(() => {
+beforeEach(async () => {
+  vi.mocked(allRecommendationCodeRows).mockResolvedValue(generatedRecommendationCodeRows())
+  await loadRecommendationCodes()
+
   vi.mocked(cuWithCourseCodeOf).mockImplementation(
     async (courseCodes: string[]) => courseUnits.filter(cu => courseCodes.includes(cu.courseCode)) as any
   )
