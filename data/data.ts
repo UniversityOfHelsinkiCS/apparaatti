@@ -1,6 +1,6 @@
-//GENERATED FILE, do not edit by hand
-//regenerate from data/data.xlsx with: npm run generate:organisation-data
-//seed data for the recommendation_codes table, see src/server/db/seedRecommendationCodes.ts
+//Originally generated from data/data.xlsx, which is no longer kept in the repo.
+//Seed data for the recommendation_codes table, see src/server/db/seedRecommendationCodes.ts
+//Course codes are edited in the admin matrix view, this file only bootstraps an empty database.
 export type OrganisationRecommendation = { name: string; languages: { name: string; codes: string[] }[] }
 
 export const organisationRecommendations: OrganisationRecommendation[] = [
