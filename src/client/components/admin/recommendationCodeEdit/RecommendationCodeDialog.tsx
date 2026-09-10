@@ -27,9 +27,15 @@ type CodeDraft = {
   courseCode: string
 }
 
-const emptyDraft = (languages: RecommendationLanguage[]): CodeDraft => ({
-  organisationCode: Object.keys(organisationCodeToName)[0],
-  languageId: languages.length > 0 ? String(languages[0].id) : '',
+const firstLanguageId = (languages: RecommendationLanguage[]) => (languages.length > 0 ? String(languages[0].id) : '')
+
+const emptyDraft = (
+  languages: RecommendationLanguage[],
+  defaultOrganisationCode: string,
+  defaultLanguageId: string
+): CodeDraft => ({
+  organisationCode: defaultOrganisationCode || Object.keys(organisationCodeToName)[0],
+  languageId: defaultLanguageId || firstLanguageId(languages),
   courseCode: '',
 })
 
@@ -42,13 +48,24 @@ const toDraft = (code: RecommendationCode): CodeDraft => ({
 type RecommendationCodeDialogProps = {
   code: RecommendationCode | 'new'
   languages: RecommendationLanguage[]
+  defaultOrganisationCode: string
+  defaultLanguageId: string
   onClose: () => void
   onSaved: () => void
 }
 
-const RecommendationCodeDialog = ({ code, languages, onClose, onSaved }: RecommendationCodeDialogProps) => {
+const RecommendationCodeDialog = ({
+  code,
+  languages,
+  defaultOrganisationCode,
+  defaultLanguageId,
+  onClose,
+  onSaved,
+}: RecommendationCodeDialogProps) => {
   const { t } = useTranslation()
-  const [draft, setDraft] = useState<CodeDraft>(code === 'new' ? emptyDraft(languages) : toDraft(code))
+  const [draft, setDraft] = useState<CodeDraft>(
+    code === 'new' ? emptyDraft(languages, defaultOrganisationCode, defaultLanguageId) : toDraft(code)
+  )
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const organisationSelectId = useId()

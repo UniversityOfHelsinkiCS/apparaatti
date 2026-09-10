@@ -1,23 +1,21 @@
 import {
   Box,
   Button,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Tabs,
   TextField,
   Typography,
 } from '@mui/material'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import type { ChangeEvent } from 'react'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { organisationCodeToName } from '../../../common/organisations.ts'
@@ -49,8 +47,6 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
   const [search, setSearch] = useState('')
   const [dialogTarget, setDialogTarget] = useState<RecommendationCode | 'new' | null>(null)
   const [importFileInputKey, setImportFileInputKey] = useState(0)
-  const organisationFilterId = useId()
-  const languageFilterId = useId()
 
   if (isLoading) return <Typography>{t('v2:admin.recommendationCodes.loading')}</Typography>
 
@@ -62,6 +58,14 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
     refetch()
     refetchLanguages()
   }
+
+  const codeCountOf = (organisationCode: string) =>
+    codeList.filter(code => code.organisationCode === organisationCode).length
+
+  const languageCountOf = (languageId: number) =>
+    codeList
+      .filter(code => organisationFilter === '' || code.organisationCode === organisationFilter)
+      .filter(code => code.languageId === languageId).length
 
   const languageNameOf = (code: RecommendationCode) => {
     const language = languageList.find(candidate => candidate.id === code.languageId)
@@ -153,53 +157,47 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
         )}
       </Stack>
 
+      <Tabs
+        value={organisationFilter}
+        onChange={(_, value) => setOrganisationFilter(value as string)}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label={t('v2:admin.recommendationCodes.organisation')}
+        sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
+        TabIndicatorProps={{ style: { backgroundColor: 'black' } }}
+        textColor="inherit"
+      >
+        <Tab value="" label={allLabel} />
+        {Object.keys(organisationCodeToName).map(organisationCode => (
+          <Tab
+            key={organisationCode}
+            value={organisationCode}
+            label={`${organisationCodeToName[organisationCode]} (${codeCountOf(organisationCode)})`}
+          />
+        ))}
+      </Tabs>
+
+      <Tabs
+        value={languageFilter}
+        onChange={(_, value) => setLanguageFilter(value as string)}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label={t('v2:admin.recommendationCodes.language')}
+        sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
+        TabIndicatorProps={{ style: { backgroundColor: 'black' } }}
+        textColor="inherit"
+      >
+        <Tab value="" label={allLabel} />
+        {languageList.map(language => (
+          <Tab
+            key={language.id}
+            value={String(language.id)}
+            label={`${translateLocalizedString(language.name)} (${languageCountOf(language.id)})`}
+          />
+        ))}
+      </Tabs>
+
       <Stack direction="row" spacing={2} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
-        <FormControl size="small" sx={{ minWidth: 240 }}>
-          <InputLabel shrink id={organisationFilterId}>
-            {t('v2:admin.recommendationCodes.organisation')}
-          </InputLabel>
-          <Select
-            labelId={organisationFilterId}
-            label={t('v2:admin.recommendationCodes.organisation')}
-            value={organisationFilter}
-            displayEmpty
-            renderValue={selected => (selected === '' ? allLabel : selected)}
-            onChange={e => setOrganisationFilter(e.target.value)}
-          >
-            <MenuItem value="">{allLabel}</MenuItem>
-            {Object.keys(organisationCodeToName).map(organisationCode => (
-              <MenuItem key={organisationCode} value={organisationCode}>
-                {organisationCode} — {organisationCodeToName[organisationCode]}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl size="small" sx={{ minWidth: 240 }}>
-          <InputLabel shrink id={languageFilterId}>
-            {t('v2:admin.recommendationCodes.language')}
-          </InputLabel>
-          <Select
-            labelId={languageFilterId}
-            label={t('v2:admin.recommendationCodes.language')}
-            value={languageFilter}
-            displayEmpty
-            renderValue={selected =>
-              selected === ''
-                ? allLabel
-                : translateLocalizedString(languageList.find(l => String(l.id) === selected)!.name)
-            }
-            onChange={e => setLanguageFilter(e.target.value)}
-          >
-            <MenuItem value="">{allLabel}</MenuItem>
-            {languageList.map(language => (
-              <MenuItem key={language.id} value={String(language.id)}>
-                {translateLocalizedString(language.name)}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
         <TextField
           size="small"
           label={t('v2:admin.recommendationCodes.search')}
@@ -215,8 +213,8 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>{t('v2:admin.recommendationCodes.organisation')}</TableCell>
-            <TableCell>{t('v2:admin.recommendationCodes.language')}</TableCell>
+            {organisationFilter === '' && <TableCell>{t('v2:admin.recommendationCodes.organisation')}</TableCell>}
+            {languageFilter === '' && <TableCell>{t('v2:admin.recommendationCodes.language')}</TableCell>}
             <TableCell>{t('v2:admin.recommendationCodes.courseCode')}</TableCell>
             <TableCell>{t('v2:admin.recommendationCodes.table.actions')}</TableCell>
           </TableRow>
@@ -224,10 +222,12 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
         <TableBody>
           {visibleCodes.map(code => (
             <TableRow key={code.id}>
-              <TableCell>
-                {code.organisationCode} — {organisationCodeToName[code.organisationCode]}
-              </TableCell>
-              <TableCell>{languageNameOf(code)}</TableCell>
+              {organisationFilter === '' && (
+                <TableCell>
+                  {code.organisationCode} — {organisationCodeToName[code.organisationCode]}
+                </TableCell>
+              )}
+              {languageFilter === '' && <TableCell>{languageNameOf(code)}</TableCell>}
               <TableCell>{code.courseCode}</TableCell>
               <TableCell sx={{ whiteSpace: 'nowrap' }}>
                 <IconButton
@@ -254,6 +254,8 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
         <RecommendationCodeDialog
           code={dialogTarget}
           languages={languageList}
+          defaultOrganisationCode={organisationFilter}
+          defaultLanguageId={languageFilter}
           onClose={() => setDialogTarget(null)}
           onSaved={handleSaved}
         />
