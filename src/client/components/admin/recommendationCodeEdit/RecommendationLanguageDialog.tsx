@@ -1,18 +1,5 @@
-import {
-  Alert,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from '@mui/material'
-import { useId, useState } from 'react'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { RecommendationLanguage } from '../../../../common/types.ts'
@@ -20,6 +7,7 @@ import { LANGS, LANGUAGE_TYPES } from '../../../../common/validators.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import LocalizedField from '../filterEdit/LocalizedField.tsx'
+import LabeledSelect from '../LabeledSelect.tsx'
 
 type LanguageDraft = {
   name: { fi: string; sv: string; en: string }
@@ -55,10 +43,6 @@ const RecommendationLanguageDialog = ({ language, onClose, onSaved }: Recommenda
   const [draft, setDraft] = useState<LanguageDraft>(language === 'new' ? emptyDraft() : toDraft(language))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const langSelectId = useId()
-  const languageTypeSelectId = useId()
-  const specificationSelectId = useId()
-
   const anyLabel = t('v2:admin.recommendationCodes.anyValue')
 
   const patchName = (lang: 'fi' | 'sv' | 'en', value: string) =>
@@ -113,69 +97,34 @@ const RecommendationLanguageDialog = ({ language, onClose, onSaved }: Recommenda
             size="small"
           />
 
-          <FormControl fullWidth size="small">
-            <InputLabel shrink id={langSelectId}>
-              {t('v2:admin.recommendationCodes.lang')}
-            </InputLabel>
-            <Select
-              labelId={langSelectId}
-              label={t('v2:admin.recommendationCodes.lang')}
-              value={draft.lang}
-              onChange={e => setDraft(current => ({ ...current, lang: e.target.value }))}
-            >
-              {LANGS.map(lang => (
-                <MenuItem key={lang} value={lang}>
-                  {t(`v2:admin.recommendationCodes.langOption.${lang}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LabeledSelect
+            label={t('v2:admin.recommendationCodes.lang')}
+            value={draft.lang}
+            options={LANGS.map(lang => ({ value: lang, label: t(`v2:admin.recommendationCodes.langOption.${lang}`) }))}
+            onChange={value => setDraft(current => ({ ...current, lang: value }))}
+          />
 
-          <FormControl fullWidth size="small">
-            <InputLabel shrink id={languageTypeSelectId}>
-              {t('v2:admin.recommendationCodes.languageType')}
-            </InputLabel>
-            <Select
-              labelId={languageTypeSelectId}
-              label={t('v2:admin.recommendationCodes.languageType')}
-              value={draft.languageType}
-              displayEmpty
-              renderValue={selected =>
-                selected === '' ? anyLabel : t(`v2:admin.recommendationCodes.languageTypeOption.${selected}`)
-              }
-              onChange={e => setDraft(current => ({ ...current, languageType: e.target.value }))}
-            >
-              <MenuItem value="">{anyLabel}</MenuItem>
-              {LANGUAGE_TYPES.map(languageType => (
-                <MenuItem key={languageType} value={languageType}>
-                  {t(`v2:admin.recommendationCodes.languageTypeOption.${languageType}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LabeledSelect
+            label={t('v2:admin.recommendationCodes.languageType')}
+            value={draft.languageType}
+            options={LANGUAGE_TYPES.map(languageType => ({
+              value: languageType,
+              label: t(`v2:admin.recommendationCodes.languageTypeOption.${languageType}`),
+            }))}
+            onChange={value => setDraft(current => ({ ...current, languageType: value }))}
+            emptyLabel={anyLabel}
+          />
 
-          <FormControl fullWidth size="small">
-            <InputLabel shrink id={specificationSelectId}>
-              {t('v2:admin.recommendationCodes.specification')}
-            </InputLabel>
-            <Select
-              labelId={specificationSelectId}
-              label={t('v2:admin.recommendationCodes.specification')}
-              value={draft.primaryLanguageSpecification}
-              displayEmpty
-              renderValue={selected =>
-                selected === '' ? anyLabel : t(`v2:admin.recommendationCodes.specificationOption.${selected}`)
-              }
-              onChange={e => setDraft(current => ({ ...current, primaryLanguageSpecification: e.target.value }))}
-            >
-              <MenuItem value="">{anyLabel}</MenuItem>
-              {SPECIFICATIONS.map(specification => (
-                <MenuItem key={specification} value={specification}>
-                  {t(`v2:admin.recommendationCodes.specificationOption.${specification}`)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LabeledSelect
+            label={t('v2:admin.recommendationCodes.specification')}
+            value={draft.primaryLanguageSpecification}
+            options={SPECIFICATIONS.map(specification => ({
+              value: specification,
+              label: t(`v2:admin.recommendationCodes.specificationOption.${specification}`),
+            }))}
+            onChange={value => setDraft(current => ({ ...current, primaryLanguageSpecification: value }))}
+            emptyLabel={anyLabel}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>

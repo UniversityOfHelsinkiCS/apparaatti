@@ -1,25 +1,20 @@
 import {
   Box,
   Button,
-  IconButton,
   MenuItem,
   Stack,
-  Tab,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   TableSortLabel,
-  Tabs,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -80,9 +75,8 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
   const [organisationFilter, setOrganisationFilter] = useState('')
   const [languageFilter, setLanguageFilter] = useState('')
   const [search, setSearch] = useState('')
-  const [dialogTarget, setDialogTarget] = useState<RecommendationCode | 'new' | null>(null)
+  const [isNewCodeDialogOpen, setIsNewCodeDialogOpen] = useState(false)
   const [importFileInputKey, setImportFileInputKey] = useState(0)
-  const [viewMode, setViewMode] = useState<'rows' | 'matrix'>('rows')
   const [sortColumn, setSortColumn] = useState<MatrixSortColumn>('language')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
@@ -96,14 +90,6 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
     refetch()
     refetchLanguages()
   }
-
-  const codeCountOf = (organisationCode: string) =>
-    codeList.filter(code => code.organisationCode === organisationCode).length
-
-  const languageCountOf = (languageId: number) =>
-    codeList
-      .filter(code => organisationFilter === '' || code.organisationCode === organisationFilter)
-      .filter(code => code.languageId === languageId).length
 
   const languageNameOfId = (languageId: number) => {
     const language = languageList.find(candidate => candidate.id === languageId)
@@ -185,21 +171,6 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
     setCachedCodes(current => [...current, created])
   }
 
-  const visibleCodes = codeList
-    .filter(code => organisationFilter === '' || code.organisationCode === organisationFilter)
-    .filter(code => languageFilter === '' || String(code.languageId) === languageFilter)
-    .filter(code => search === '' || code.courseCode.toLowerCase().includes(search.toLowerCase()))
-
-  const handleDelete = async (code: RecommendationCode) => {
-    const confirmed = window.confirm(
-      t('v2:admin.recommendationCodes.confirmDeleteCode', { courseCode: code.courseCode })
-    )
-    if (!confirmed) return
-
-    await adminFetch('DELETE', `/api/admin/recommendation-codes/${code.id}`)
-    handleSaved()
-  }
-
   const handleExport = async () => {
     const response = await adminFetch('GET', '/api/admin/recommendation-codes/export')
     if (!response.ok) {
@@ -256,18 +227,7 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
       </Typography>
 
       <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
-        <ToggleButtonGroup
-          exclusive
-          size="small"
-          value={viewMode}
-          onChange={(_, value) => value && setViewMode(value as 'rows' | 'matrix')}
-          aria-label={t('v2:admin.recommendationCodes.viewMode')}
-        >
-          <ToggleButton value="rows">{t('v2:admin.recommendationCodes.viewRows')}</ToggleButton>
-          <ToggleButton value="matrix">{t('v2:admin.recommendationCodes.viewMatrix')}</ToggleButton>
-        </ToggleButtonGroup>
-
-        <Button variant="contained" color="secondary" startIcon={<Plus />} onClick={() => setDialogTarget('new')}>
+        <Button variant="contained" color="secondary" startIcon={<Plus />} onClick={() => setIsNewCodeDialogOpen(true)}>
           {t('v2:admin.recommendationCodes.newCode')}
         </Button>
         {isSuperuser && (
@@ -281,50 +241,6 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
         )}
       </Stack>
 
-      {viewMode === 'rows' && (
-        <>
-          <Tabs
-            value={organisationFilter}
-            onChange={(_, value) => setOrganisationFilter(value as string)}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label={t('v2:admin.recommendationCodes.organisation')}
-            sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
-            TabIndicatorProps={{ style: { backgroundColor: 'black' } }}
-            textColor="inherit"
-          >
-            <Tab value="" label={allLabel} />
-            {facultyCodes.map(organisationCode => (
-              <Tab
-                key={organisationCode}
-                value={organisationCode}
-                label={`${organisationCodeToName[organisationCode]} (${codeCountOf(organisationCode)})`}
-              />
-            ))}
-          </Tabs>
-
-          <Tabs
-            value={languageFilter}
-            onChange={(_, value) => setLanguageFilter(value as string)}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label={t('v2:admin.recommendationCodes.language')}
-            sx={{ mb: 2, borderBottom: 1, borderColor: 'divider' }}
-            TabIndicatorProps={{ style: { backgroundColor: 'black' } }}
-            textColor="inherit"
-          >
-            <Tab value="" label={allLabel} />
-            {languageList.map(language => (
-              <Tab
-                key={language.id}
-                value={String(language.id)}
-                label={`${translateLocalizedString(language.name)} (${languageCountOf(language.id)})`}
-              />
-            ))}
-          </Tabs>
-        </>
-      )}
-
       <Stack direction="row" spacing={2} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
         <TextField
           size="small"
@@ -332,199 +248,143 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        {viewMode === 'matrix' && (
-          <TextField
-            select
-            size="small"
-            sx={{ minWidth: 220 }}
-            label={t('v2:admin.recommendationCodes.organisation')}
-            value={organisationFilter}
-            onChange={e => setOrganisationFilter(e.target.value)}
-          >
-            <MenuItem value="">{allLabel}</MenuItem>
-            {facultyCodes.map(organisationCode => (
-              <MenuItem key={organisationCode} value={organisationCode}>
-                {organisationCode} — {organisationCodeToName[organisationCode]}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
-        {viewMode === 'matrix' && (
-          <TextField
-            select
-            size="small"
-            sx={{ minWidth: 220 }}
-            label={t('v2:admin.recommendationCodes.language')}
-            value={languageFilter}
-            onChange={e => setLanguageFilter(e.target.value)}
-          >
-            <MenuItem value="">{allLabel}</MenuItem>
-            {languageList.map(language => (
-              <MenuItem key={language.id} value={String(language.id)}>
-                {translateLocalizedString(language.name)}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
+        <TextField
+          select
+          size="small"
+          sx={{ minWidth: 220 }}
+          label={t('v2:admin.recommendationCodes.organisation')}
+          value={organisationFilter}
+          onChange={e => setOrganisationFilter(e.target.value)}
+        >
+          <MenuItem value="">{allLabel}</MenuItem>
+          {facultyCodes.map(organisationCode => (
+            <MenuItem key={organisationCode} value={organisationCode}>
+              {organisationCode} — {organisationCodeToName[organisationCode]}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          size="small"
+          sx={{ minWidth: 220 }}
+          label={t('v2:admin.recommendationCodes.language')}
+          value={languageFilter}
+          onChange={e => setLanguageFilter(e.target.value)}
+        >
+          <MenuItem value="">{allLabel}</MenuItem>
+          {languageList.map(language => (
+            <MenuItem key={language.id} value={String(language.id)}>
+              {translateLocalizedString(language.name)}
+            </MenuItem>
+          ))}
+        </TextField>
       </Stack>
 
-      {viewMode === 'rows' && (
-        <>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            {t('v2:admin.recommendationCodes.showing', { shown: visibleCodes.length, total: codeList.length })}
-          </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        {t('v2:admin.recommendationCodes.matrixIntro')}
+      </Typography>
 
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                {organisationFilter === '' && <TableCell>{t('v2:admin.recommendationCodes.organisation')}</TableCell>}
-                {languageFilter === '' && <TableCell>{t('v2:admin.recommendationCodes.language')}</TableCell>}
-                <TableCell>{t('v2:admin.recommendationCodes.courseCode')}</TableCell>
-                <TableCell>{t('v2:admin.recommendationCodes.table.actions')}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {visibleCodes.map(code => (
-                <TableRow key={code.id}>
-                  {organisationFilter === '' && (
-                    <TableCell>
-                      {code.organisationCode} — {organisationCodeToName[code.organisationCode]}
-                    </TableCell>
-                  )}
-                  {languageFilter === '' && <TableCell>{languageNameOfId(code.languageId)}</TableCell>}
-                  <TableCell>{code.courseCode}</TableCell>
-                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                    <IconButton
-                      size="small"
-                      aria-label={t('v2:admin.recommendationCodes.editCode')}
-                      onClick={() => setDialogTarget(code)}
+      <Box
+        sx={{
+          overflow: 'auto',
+          maxHeight: 'calc(100vh - 400px)',
+          minHeight: 240,
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <Table
+          size="small"
+          stickyHeader
+          sx={{ width: 'auto', '& .MuiTableCell-stickyHeader': { backgroundColor: 'background.paper' } }}
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell sx={stickyHeaderCell(0)} sortDirection={sortColumn === 'courseCode' && sortDirection}>
+                <TableSortLabel
+                  active={sortColumn === 'courseCode'}
+                  direction={sortColumn === 'courseCode' ? sortDirection : 'asc'}
+                  onClick={() => handleSortClick('courseCode')}
+                >
+                  {t('v2:admin.recommendationCodes.courseCode')}
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sx={stickyHeaderCell(160)} sortDirection={sortColumn === 'language' && sortDirection}>
+                <TableSortLabel
+                  active={sortColumn === 'language'}
+                  direction={sortColumn === 'language' ? sortDirection : 'asc'}
+                  onClick={() => handleSortClick('language')}
+                >
+                  {t('v2:admin.recommendationCodes.language')}
+                </TableSortLabel>
+              </TableCell>
+              {facultyCodes.map(organisationCode => (
+                <TableCell
+                  key={organisationCode}
+                  align="center"
+                  sortDirection={sortColumn === `faculty:${organisationCode}` && sortDirection}
+                >
+                  <Tooltip title={organisationCodeToName[organisationCode]} arrow>
+                    <TableSortLabel
+                      active={sortColumn === `faculty:${organisationCode}`}
+                      direction={sortColumn === `faculty:${organisationCode}` ? sortDirection : 'asc'}
+                      onClick={() => handleSortClick(`faculty:${organisationCode}`)}
                     >
-                      <Pencil />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      aria-label={t('v2:admin.recommendationCodes.deleteCode')}
-                      onClick={() => handleDelete(code)}
-                    >
-                      <Trash2 />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                      {organisationCode}
+                    </TableSortLabel>
+                  </Tooltip>
+                </TableCell>
               ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
-
-      {viewMode === 'matrix' && (
-        <>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            {t('v2:admin.recommendationCodes.matrixIntro')}
-          </Typography>
-
-          <Box
-            sx={{
-              overflow: 'auto',
-              maxHeight: 'calc(100vh - 400px)',
-              minHeight: 240,
-              backgroundColor: 'background.paper',
-            }}
-          >
-            <Table
-              size="small"
-              stickyHeader
-              sx={{ width: 'auto', '& .MuiTableCell-stickyHeader': { backgroundColor: 'background.paper' } }}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={stickyHeaderCell(0)} sortDirection={sortColumn === 'courseCode' && sortDirection}>
-                    <TableSortLabel
-                      active={sortColumn === 'courseCode'}
-                      direction={sortColumn === 'courseCode' ? sortDirection : 'asc'}
-                      onClick={() => handleSortClick('courseCode')}
-                    >
-                      {t('v2:admin.recommendationCodes.courseCode')}
-                    </TableSortLabel>
+              <TableCell align="center" sortDirection={sortColumn === 'coverage' && sortDirection}>
+                <TableSortLabel
+                  active={sortColumn === 'coverage'}
+                  direction={sortColumn === 'coverage' ? sortDirection : 'asc'}
+                  onClick={() => handleSortClick('coverage')}
+                >
+                  {t('v2:admin.recommendationCodes.coverageHeader')}
+                </TableSortLabel>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {matrixRows().map(row => (
+              <TableRow key={`${row.courseCode}@@${row.languageId}`} hover>
+                <TableCell sx={stickyCell(0)}>{row.courseCode}</TableCell>
+                <TableCell sx={stickyCell(160)}>{languageNameOfId(row.languageId)}</TableCell>
+                {facultyCodes.map(organisationCode => (
+                  <TableCell key={organisationCode} align="center" padding="none">
+                    <HyCheckbox
+                      black
+                      sx={{ p: 0.5 }}
+                      checked={row.idByOrganisation[organisationCode] !== undefined}
+                      onChange={() => handleToggleCell(row, organisationCode)}
+                      inputProps={{
+                        'aria-label': t('v2:admin.recommendationCodes.toggleCell', {
+                          courseCode: row.courseCode,
+                          faculty: organisationCodeToName[organisationCode],
+                        }),
+                      }}
+                    />
                   </TableCell>
-                  <TableCell sx={stickyHeaderCell(160)} sortDirection={sortColumn === 'language' && sortDirection}>
-                    <TableSortLabel
-                      active={sortColumn === 'language'}
-                      direction={sortColumn === 'language' ? sortDirection : 'asc'}
-                      onClick={() => handleSortClick('language')}
-                    >
-                      {t('v2:admin.recommendationCodes.language')}
-                    </TableSortLabel>
-                  </TableCell>
-                  {facultyCodes.map(organisationCode => (
-                    <TableCell
-                      key={organisationCode}
-                      align="center"
-                      sortDirection={sortColumn === `faculty:${organisationCode}` && sortDirection}
-                    >
-                      <Tooltip title={organisationCodeToName[organisationCode]} arrow>
-                        <TableSortLabel
-                          active={sortColumn === `faculty:${organisationCode}`}
-                          direction={sortColumn === `faculty:${organisationCode}` ? sortDirection : 'asc'}
-                          onClick={() => handleSortClick(`faculty:${organisationCode}`)}
-                        >
-                          {organisationCode}
-                        </TableSortLabel>
-                      </Tooltip>
-                    </TableCell>
-                  ))}
-                  <TableCell align="center" sortDirection={sortColumn === 'coverage' && sortDirection}>
-                    <TableSortLabel
-                      active={sortColumn === 'coverage'}
-                      direction={sortColumn === 'coverage' ? sortDirection : 'asc'}
-                      onClick={() => handleSortClick('coverage')}
-                    >
-                      {t('v2:admin.recommendationCodes.coverageHeader')}
-                    </TableSortLabel>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {matrixRows().map(row => (
-                  <TableRow key={`${row.courseCode}@@${row.languageId}`} hover>
-                    <TableCell sx={stickyCell(0)}>{row.courseCode}</TableCell>
-                    <TableCell sx={stickyCell(160)}>{languageNameOfId(row.languageId)}</TableCell>
-                    {facultyCodes.map(organisationCode => (
-                      <TableCell key={organisationCode} align="center" padding="none">
-                        <HyCheckbox
-                          black
-                          sx={{ p: 0.5 }}
-                          checked={row.idByOrganisation[organisationCode] !== undefined}
-                          onChange={() => handleToggleCell(row, organisationCode)}
-                          inputProps={{
-                            'aria-label': t('v2:admin.recommendationCodes.toggleCell', {
-                              courseCode: row.courseCode,
-                              faculty: organisationCodeToName[organisationCode],
-                            }),
-                          }}
-                        />
-                      </TableCell>
-                    ))}
-                    <TableCell align="center" sx={{ whiteSpace: 'nowrap' }}>
-                      {t('v2:admin.recommendationCodes.coverage', {
-                        count: Object.keys(row.idByOrganisation).length,
-                        total: facultyCodes.length,
-                      })}
-                    </TableCell>
-                  </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-          </Box>
-        </>
-      )}
+                <TableCell align="center" sx={{ whiteSpace: 'nowrap' }}>
+                  {t('v2:admin.recommendationCodes.coverage', {
+                    count: Object.keys(row.idByOrganisation).length,
+                    total: facultyCodes.length,
+                  })}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
 
-      {dialogTarget && (
+      {isNewCodeDialogOpen && (
         <RecommendationCodeDialog
-          code={dialogTarget}
+          code="new"
           languages={languageList}
           defaultOrganisationCode={organisationFilter}
           defaultLanguageId={languageFilter}
-          onClose={() => setDialogTarget(null)}
+          onClose={() => setIsNewCodeDialogOpen(false)}
           onSaved={handleSaved}
         />
       )}

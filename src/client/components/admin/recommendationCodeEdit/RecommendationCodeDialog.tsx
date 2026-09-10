@@ -1,18 +1,5 @@
-import {
-  Alert,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-} from '@mui/material'
-import { useId, useState } from 'react'
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField } from '@mui/material'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { organisationCodeToName } from '../../../../common/organisations.ts'
@@ -20,6 +7,7 @@ import type { RecommendationCode, RecommendationLanguage } from '../../../../com
 import { translateLocalizedString } from '../../../util/i18n.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
+import LabeledSelect from '../LabeledSelect.tsx'
 
 type CodeDraft = {
   organisationCode: string
@@ -68,8 +56,6 @@ const RecommendationCodeDialog = ({
   )
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const organisationSelectId = useId()
-  const languageSelectId = useId()
 
   const handleSave = async () => {
     setSaving(true)
@@ -105,41 +91,25 @@ const RecommendationCodeDialog = ({
         <Stack spacing={2.5} sx={{ mt: 1 }}>
           {error && <Alert severity="error">{error}</Alert>}
 
-          <FormControl fullWidth size="small">
-            <InputLabel shrink id={organisationSelectId}>
-              {t('v2:admin.recommendationCodes.organisation')}
-            </InputLabel>
-            <Select
-              labelId={organisationSelectId}
-              label={t('v2:admin.recommendationCodes.organisation')}
-              value={draft.organisationCode}
-              onChange={e => setDraft(current => ({ ...current, organisationCode: e.target.value }))}
-            >
-              {Object.keys(organisationCodeToName).map(organisationCode => (
-                <MenuItem key={organisationCode} value={organisationCode}>
-                  {organisationCode} — {organisationCodeToName[organisationCode]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LabeledSelect
+            label={t('v2:admin.recommendationCodes.organisation')}
+            value={draft.organisationCode}
+            options={Object.keys(organisationCodeToName).map(organisationCode => ({
+              value: organisationCode,
+              label: `${organisationCode} — ${organisationCodeToName[organisationCode]}`,
+            }))}
+            onChange={value => setDraft(current => ({ ...current, organisationCode: value }))}
+          />
 
-          <FormControl fullWidth size="small">
-            <InputLabel shrink id={languageSelectId}>
-              {t('v2:admin.recommendationCodes.language')}
-            </InputLabel>
-            <Select
-              labelId={languageSelectId}
-              label={t('v2:admin.recommendationCodes.language')}
-              value={draft.languageId}
-              onChange={e => setDraft(current => ({ ...current, languageId: e.target.value }))}
-            >
-              {languages.map(language => (
-                <MenuItem key={language.id} value={String(language.id)}>
-                  {translateLocalizedString(language.name)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <LabeledSelect
+            label={t('v2:admin.recommendationCodes.language')}
+            value={draft.languageId}
+            options={languages.map(language => ({
+              value: String(language.id),
+              label: translateLocalizedString(language.name),
+            }))}
+            onChange={value => setDraft(current => ({ ...current, languageId: value }))}
+          />
 
           <TextField
             fullWidth
