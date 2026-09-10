@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   IconButton,
+  MenuItem,
   Stack,
   Tab,
   Table,
@@ -9,10 +10,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TableSortLabel,
   Tabs,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
@@ -39,6 +42,8 @@ type MatrixRow = {
   languageId: number
   idByOrganisation: Record<string, number>
 }
+
+type MatrixSortColumn = 'courseCode' | 'language' | 'coverage'
 
 const facultyCodes = Object.keys(organisationCodeToName).sort((a, b) =>
   organisationCodeToName[a].localeCompare(organisationCodeToName[b], 'fi')
@@ -78,6 +83,8 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
   const [dialogTarget, setDialogTarget] = useState<RecommendationCode | 'new' | null>(null)
   const [importFileInputKey, setImportFileInputKey] = useState(0)
   const [viewMode, setViewMode] = useState<'rows' | 'matrix'>('rows')
+  const [sortColumn, setSortColumn] = useState<MatrixSortColumn>('language')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
   if (isLoading) return <Typography>{t('v2:admin.recommendationCodes.loading')}</Typography>
 
@@ -103,6 +110,18 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
     return language ? translateLocalizedString(language.name) : String(languageId)
   }
 
+  const compareMatrixRows = (a: MatrixRow, b: MatrixRow) => {
+    if (sortColumn === 'courseCode') return a.courseCode.localeCompare(b.courseCode, 'fi')
+
+    if (sortColumn === 'coverage') {
+      const byCoverage = Object.keys(a.idByOrganisation).length - Object.keys(b.idByOrganisation).length
+      return byCoverage !== 0 ? byCoverage : a.courseCode.localeCompare(b.courseCode, 'fi')
+    }
+
+    const byLanguage = languageNameOfId(a.languageId).localeCompare(languageNameOfId(b.languageId), 'fi')
+    return byLanguage !== 0 ? byLanguage : a.courseCode.localeCompare(b.courseCode, 'fi')
+  }
+
   const matrixRows = (): MatrixRow[] => {
     const byKey: Record<string, MatrixRow> = {}
 
@@ -116,10 +135,19 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
 
     return Object.values(byKey)
       .filter(row => search === '' || row.courseCode.toLowerCase().includes(search.toLowerCase()))
-      .sort((a, b) => {
-        const byLanguage = languageNameOfId(a.languageId).localeCompare(languageNameOfId(b.languageId), 'fi')
-        return byLanguage !== 0 ? byLanguage : a.courseCode.localeCompare(b.courseCode)
-      })
+      .filter(row => languageFilter === '' || String(row.languageId) === languageFilter)
+      .filter(row => organisationFilter === '' || row.idByOrganisation[organisationFilter] !== undefined)
+      .sort((a, b) => (sortDirection === 'asc' ? compareMatrixRows(a, b) : compareMatrixRows(b, a)))
+  }
+
+  const handleSortClick = (column: MatrixSortColumn) => {
+    if (column === sortColumn) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+      return
+    }
+
+    setSortColumn(column)
+    setSortDirection('asc')
   }
 
   const setCachedCodes = (update: (current: RecommendationCode[]) => RecommendationCode[]) =>
@@ -297,6 +325,40 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
+        {viewMode === 'matrix' && (
+          <TextField
+            select
+            size="small"
+            sx={{ minWidth: 220 }}
+            label={t('v2:admin.recommendationCodes.organisation')}
+            value={organisationFilter}
+            onChange={e => setOrganisationFilter(e.target.value)}
+          >
+            <MenuItem value="">{allLabel}</MenuItem>
+            {facultyCodes.map(organisationCode => (
+              <MenuItem key={organisationCode} value={organisationCode}>
+                {organisationCode} — {organisationCodeToName[organisationCode]}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
+        {viewMode === 'matrix' && (
+          <TextField
+            select
+            size="small"
+            sx={{ minWidth: 220 }}
+            label={t('v2:admin.recommendationCodes.language')}
+            value={languageFilter}
+            onChange={e => setLanguageFilter(e.target.value)}
+          >
+            <MenuItem value="">{allLabel}</MenuItem>
+            {languageList.map(language => (
+              <MenuItem key={language.id} value={String(language.id)}>
+                {translateLocalizedString(language.name)}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
       </Stack>
 
       {viewMode === 'rows' && (
@@ -368,14 +430,40 @@ const RecommendationCodesEditor = ({ isSuperuser }: RecommendationCodesEditorPro
             >
               <TableHead>
                 <TableRow>
-                  <TableCell sx={stickyHeaderCell(0)}>{t('v2:admin.recommendationCodes.courseCode')}</TableCell>
-                  <TableCell sx={stickyHeaderCell(160)}>{t('v2:admin.recommendationCodes.language')}</TableCell>
+                  <TableCell sx={stickyHeaderCell(0)} sortDirection={sortColumn === 'courseCode' && sortDirection}>
+                    <TableSortLabel
+                      active={sortColumn === 'courseCode'}
+                      direction={sortColumn === 'courseCode' ? sortDirection : 'asc'}
+                      onClick={() => handleSortClick('courseCode')}
+                    >
+                      {t('v2:admin.recommendationCodes.courseCode')}
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sx={stickyHeaderCell(160)} sortDirection={sortColumn === 'language' && sortDirection}>
+                    <TableSortLabel
+                      active={sortColumn === 'language'}
+                      direction={sortColumn === 'language' ? sortDirection : 'asc'}
+                      onClick={() => handleSortClick('language')}
+                    >
+                      {t('v2:admin.recommendationCodes.language')}
+                    </TableSortLabel>
+                  </TableCell>
                   {facultyCodes.map(organisationCode => (
-                    <TableCell key={organisationCode} align="center" title={organisationCodeToName[organisationCode]}>
-                      {organisationCode}
+                    <TableCell key={organisationCode} align="center">
+                      <Tooltip title={organisationCodeToName[organisationCode]} arrow>
+                        <Box component="span">{organisationCode}</Box>
+                      </Tooltip>
                     </TableCell>
                   ))}
-                  <TableCell align="center">{t('v2:admin.recommendationCodes.coverageHeader')}</TableCell>
+                  <TableCell align="center" sortDirection={sortColumn === 'coverage' && sortDirection}>
+                    <TableSortLabel
+                      active={sortColumn === 'coverage'}
+                      direction={sortColumn === 'coverage' ? sortDirection : 'asc'}
+                      onClick={() => handleSortClick('coverage')}
+                    >
+                      {t('v2:admin.recommendationCodes.coverageHeader')}
+                    </TableSortLabel>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
