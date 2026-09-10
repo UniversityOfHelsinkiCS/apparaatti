@@ -739,6 +739,7 @@ async function seedCurCuRelations(realizations: any[]) {
 }
 
 import { seedFilters } from './seedFilters.ts'
+import { seedRecommendationCodes } from './seedRecommendationCodes.ts'
 
 export async function seedDatabase() {
   try {
@@ -757,6 +758,7 @@ export async function seedDatabase() {
     const realizations = await seedCourseRealizations(courses)
     await seedCurCuRelations(realizations)
     await seedFilters()
+    await seedRecommendationCodes()
 
     logger.info(LOG.seedingCompleted)
   } catch (error: any) {

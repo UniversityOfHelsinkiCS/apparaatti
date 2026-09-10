@@ -6,10 +6,18 @@ vi.mock('../../server/util/dbActions.ts', () => ({
   curcusWithUnitIdOf: vi.fn(),
   curWithIdOf: vi.fn(),
   organisationWithGroupIdOf: vi.fn(),
+  allRecommendationCodeRows: vi.fn(),
 }))
 
 import type { AnswerData } from '../../common/types.ts'
-import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from '../../server/util/dbActions.ts'
+import { generatedRecommendationCodeRows } from '../../server/db/recommendationCodeSeeds.ts'
+import {
+  allRecommendationCodeRows,
+  curcusWithUnitIdOf,
+  curWithIdOf,
+  cuWithCourseCodeOf,
+} from '../../server/util/dbActions.ts'
+import { loadRecommendationCodes } from '../../server/util/recommendationCodeCache.ts'
 import { getCourseData } from '../../server/util/recommender.ts'
 
 const PSYKOLOGIA = '414'
@@ -87,7 +95,10 @@ const answers = (overrides: Partial<AnswerData> = {}): AnswerData => ({
 
 const courseCodesOf = (courses: { courseCodes: string[] }[]) => courses.flatMap(c => c.courseCodes)
 
-beforeEach(() => {
+beforeEach(async () => {
+  vi.mocked(allRecommendationCodeRows).mockResolvedValue(generatedRecommendationCodeRows())
+  await loadRecommendationCodes()
+
   vi.mocked(cuWithCourseCodeOf).mockImplementation(
     async (courseCodes: string[]) => courseUnits.filter(cu => courseCodes.includes(cu.courseCode)) as any
   )

@@ -1,6 +1,7 @@
 //GENERATED FILE, do not edit by hand
 //regenerate from data/data.xlsx with: npm run generate:organisation-data
-import type { OrganisationRecommendation } from '../src/server/util/organisationCourseRecommmendations.ts'
+//seed data for the recommendation_codes table, see src/server/db/seedRecommendationCodes.ts
+export type OrganisationRecommendation = { name: string; languages: { name: string; codes: string[] }[] }
 
 export const organisationRecommendations: OrganisationRecommendation[] = [
   {

@@ -9,9 +9,9 @@ import path from 'path'
 import xlsx from 'xlsx'
 
 import { organisationCodeToName } from '../src/common/organisations.ts'
-import type { OrganisationRecommendation } from '../src/server/util/organisationCourseRecommmendations.ts'
 
-type Language = OrganisationRecommendation['languages'][number]
+type Language = { name: string; codes: string[] }
+type OrganisationRecommendation = { name: string; languages: Language[] }
 
 const parseWorkbook = (filePath: string): OrganisationRecommendation[] => {
   const workbook = xlsx.readFile(filePath)
@@ -61,7 +61,8 @@ const recommendations = parseWorkbook(path.resolve(import.meta.dirname, '../data
 
 const fileContents = `//GENERATED FILE, do not edit by hand
 //regenerate from data/data.xlsx with: npm run generate:organisation-data
-import type { OrganisationRecommendation } from '../src/server/util/organisationCourseRecommmendations.ts'
+//seed data for the recommendation_codes table, see src/server/db/seedRecommendationCodes.ts
+export type OrganisationRecommendation = { name: string; languages: { name: string; codes: string[] }[] }
 
 export const organisationRecommendations: OrganisationRecommendation[] = ${JSON.stringify(recommendations, null, 2)}
 `

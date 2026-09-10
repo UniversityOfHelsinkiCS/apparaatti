@@ -39,12 +39,8 @@ import {
   organisationsWithSupportedCodes,
   updateUserSettings,
 } from '../util/dbActions.ts'
-import {
-  codesInOrganisations,
-  courseHasCustomCodeUrn,
-  getUserOrganisationRecommendations,
-  readOrganisationRecommendationData,
-} from '../util/organisationCourseRecommmendations.ts'
+import { codesForOrganisation, courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
+import { readRecommendationCodes } from '../util/recommendationCodeCache.ts'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
@@ -122,9 +118,7 @@ router.get('/organisations/integrated', requireUser, async (req, res) => {
   const organisationsWithIntegratedStudies = []
   const organisationCodes = Object.keys(organisationCodeToUrn)
   for (const code of organisationCodes) {
-    const organisationRecommendations = readOrganisationRecommendationData()
-    const recommendations = getUserOrganisationRecommendations(code, organisationRecommendations)
-    const organisationCourseCodes = codesInOrganisations(recommendations)
+    const organisationCourseCodes = codesForOrganisation(readRecommendationCodes(), code)
     const courseData = await getRealisationsWithCourseUnitCodes(organisationCourseCodes)
     const integratedCourses = courseData.filter(c => courseHasCustomCodeUrn(c, 'kks-int'))
     if (integratedCourses.length > 0) {

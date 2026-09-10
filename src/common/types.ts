@@ -277,3 +277,27 @@ export type BackendLocaleContext = {
 }
 
 export type ResolvedBackendLocales = Record<string, LocalizedText | null>
+
+export type RecommendationLanguage = {
+  id: number
+  name: LocalizedText
+  lang: string
+  languageType: string | null
+  primaryLanguageSpecification: string | null
+}
+
+export type RecommendationCode = {
+  id: number
+  organisationCode: string
+  languageId: number
+  courseCode: string
+  language?: RecommendationLanguage
+}
+
+export type RecommendationCodeRow = {
+  organisationCode: string
+  lang: string
+  languageType: string | null
+  primaryLanguageSpecification: string | null
+  courseCode: string
+}
