@@ -10,7 +10,6 @@ import {
   deleteRecommendationLanguageById,
   updateRecommendationLanguageById,
 } from '../util/dbActions.ts'
-import { loadRecommendationCodes } from '../util/recommendationCodeCache.ts'
 
 const recommendationLanguageRouter = express.Router()
 
@@ -32,7 +31,6 @@ recommendationLanguageRouter.post('/', requireSuperuser, async (req, res) => {
 
   try {
     const created = await createRecommendationLanguage(parsed.data)
-    await loadRecommendationCodes()
     res.status(201).json(created)
   } catch (error) {
     if (!isDuplicateLanguageError(error)) throw error
@@ -59,7 +57,6 @@ recommendationLanguageRouter.put('/:id', requireSuperuser, async (req, res) => {
       res.status(404).json({ message: 'Language not found' })
       return
     }
-    await loadRecommendationCodes()
     res.json({ status: 'updated' })
   } catch (error) {
     if (!isDuplicateLanguageError(error)) throw error
@@ -86,7 +83,6 @@ recommendationLanguageRouter.delete('/:id', requireSuperuser, async (req, res) =
     return
   }
 
-  await loadRecommendationCodes()
   res.json({ status: 'deleted' })
 })
 

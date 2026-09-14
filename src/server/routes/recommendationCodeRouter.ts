@@ -13,7 +13,6 @@ import {
   updateRecommendationCodeById,
   updateRecommendationLanguageById,
 } from '../util/dbActions.ts'
-import { loadRecommendationCodes } from '../util/recommendationCodeCache.ts'
 
 const recommendationCodeRouter = express.Router()
 
@@ -58,7 +57,6 @@ recommendationCodeRouter.post('/', async (req, res) => {
 
   try {
     const created = await createRecommendationCode(parsed.data)
-    await loadRecommendationCodes()
     res.status(201).json(created)
   } catch (error) {
     if (!isDuplicateCodeError(error)) throw error
@@ -94,7 +92,6 @@ recommendationCodeRouter.post('/import', requireSuperuser, async (req, res) => {
     }
   }
 
-  await loadRecommendationCodes()
   res.json({
     message: 'Import completed',
     results: { languages: parsed.data.languages.length, codes: created, skipped: parsed.data.codes.length - created },
@@ -120,7 +117,6 @@ recommendationCodeRouter.put('/:id', async (req, res) => {
       res.status(404).json({ message: 'Course code not found' })
       return
     }
-    await loadRecommendationCodes()
     res.json({ status: 'updated' })
   } catch (error) {
     if (!isDuplicateCodeError(error)) throw error
@@ -141,7 +137,6 @@ recommendationCodeRouter.delete('/:id', async (req, res) => {
     return
   }
 
-  await loadRecommendationCodes()
   res.json({ status: 'deleted' })
 })
 

@@ -17,7 +17,6 @@ import {
   curWithIdOf,
   cuWithCourseCodeOf,
 } from '../../server/util/dbActions.ts'
-import { loadRecommendationCodes } from '../../server/util/recommendationCodeCache.ts'
 import { getCourseData } from '../../server/util/recommender.ts'
 
 const PSYKOLOGIA = '414'
@@ -97,7 +96,6 @@ const courseCodesOf = (courses: { courseCodes: string[] }[]) => courses.flatMap(
 
 beforeEach(async () => {
   vi.mocked(allRecommendationCodeRows).mockResolvedValue(generatedRecommendationCodeRows())
-  await loadRecommendationCodes()
 
   vi.mocked(cuWithCourseCodeOf).mockImplementation(
     async (courseCodes: string[]) => courseUnits.filter(cu => courseCodes.includes(cu.courseCode)) as any

@@ -4,7 +4,13 @@ import {
   collaborationOrganisationNames,
   organisationCodeToUrn,
 } from './constants.ts'
-import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf, organisationWithGroupIdOf } from './dbActions.ts'
+import {
+  allRecommendationCodeRows,
+  curcusWithUnitIdOf,
+  curWithIdOf,
+  cuWithCourseCodeOf,
+  organisationWithGroupIdOf,
+} from './dbActions.ts'
 import { uniqueVals } from './misc.ts'
 import {
   challegeCourseCodes,
@@ -15,7 +21,6 @@ import {
   languageToStudy,
   mentoringCourseCodes,
 } from './organisationCourseRecommmendations.ts'
-import { readRecommendationCodes } from './recommendationCodeCache.ts'
 import { getCoursePeriod } from './studyPeriods.ts'
 import { getNormalizedStudyPlace, isExam } from './studyPlace.ts'
 
@@ -194,7 +199,13 @@ export async function getCourseData(answerData: AnswerData): Promise<CourseData[
   const primaryLangSpec = readAnswer(answerData, 'primary-language-specification')
   const organisationCode = readAnswer(answerData, 'study-field-select')
 
-  const courseCodes = codesForAnswers(readRecommendationCodes(), organisationCode, lang, primaryLang, primaryLangSpec)
+  const courseCodes = codesForAnswers(
+    await allRecommendationCodeRows(),
+    organisationCode,
+    lang,
+    primaryLang,
+    primaryLangSpec
+  )
 
   const courseData = await getRealisationsWithCourseUnitCodes(courseCodes)
   const courseLanguageType = languageToStudy(lang, primaryLang)
