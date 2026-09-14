@@ -21,7 +21,6 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "lint:fix:all": "eslint 'src/**/*.{ts,tsx}' --fix && prettier --write 'src/**/*.{ts,tsx,json,css,md}'",
     "translations": "node scripts/analyzeTranslations.js",
-    "generate:organisation-data": "node --no-warnings --experimental-strip-types scripts/generateOrganisationData.ts",
     "format": "prettier --write '*.{ts,json,css,md}'",
     "build": "vite build",
     "prepare": "husky"
@@ -123,7 +122,6 @@
     "winston": "^3.19.0",
     "winston-gelf-transporter": "^1.0.2",
     "winston-loki": "^6.1.4",
-    "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   }
 }

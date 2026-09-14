@@ -26,6 +26,8 @@ import {
 import { isSuperuser } from '../util/validations.ts'
 import backendLocaleRouter from './backendLocaleRouter.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
+import recommendationCodeRouter from './recommendationCodeRouter.ts'
+import recommendationLanguageRouter from './recommendationLanguageRouter.ts'
 import statsRouter from './statsRouter.ts'
 
 const USER_FETCH_LIMIT = 100
@@ -241,5 +243,7 @@ adminRouter.post('/debug/cause-error', requireSuperuser, (req, _res) => {
 adminRouter.use('/stats', statsRouter)
 adminRouter.use('/filter-config', filterConfigRouter)
 adminRouter.use('/backend-locales', backendLocaleRouter)
+adminRouter.use('/recommendation-codes', recommendationCodeRouter)
+adminRouter.use('/recommendation-languages', recommendationLanguageRouter)
 
 export default adminRouter

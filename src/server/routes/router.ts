@@ -33,18 +33,14 @@ import { organisationCodeToUrn } from '../util/constants.ts'
 import {
   allBackendLocaleKeys,
   allOrganisations,
+  allRecommendationCodeRows,
   createUserFeedbackEntry,
   enabledOrderedFilterConfigs,
   getUserSettings,
   organisationsWithSupportedCodes,
   updateUserSettings,
 } from '../util/dbActions.ts'
-import {
-  codesInOrganisations,
-  courseHasCustomCodeUrn,
-  getUserOrganisationRecommendations,
-  readOrganisationRecommendationData,
-} from '../util/organisationCourseRecommmendations.ts'
+import { codesForOrganisation, courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
 import { saveUserVisitIfUnique } from '../util/userVisitHelpers.ts'
@@ -121,10 +117,9 @@ router.get('/organisations/supported', requireUser, async (req, res) => {
 router.get('/organisations/integrated', requireUser, async (req, res) => {
   const organisationsWithIntegratedStudies = []
   const organisationCodes = Object.keys(organisationCodeToUrn)
+  const recommendationCodes = await allRecommendationCodeRows()
   for (const code of organisationCodes) {
-    const organisationRecommendations = readOrganisationRecommendationData()
-    const recommendations = getUserOrganisationRecommendations(code, organisationRecommendations)
-    const organisationCourseCodes = codesInOrganisations(recommendations)
+    const organisationCourseCodes = codesForOrganisation(recommendationCodes, code)
     const courseData = await getRealisationsWithCourseUnitCodes(organisationCourseCodes)
     const integratedCourses = courseData.filter(c => courseHasCustomCodeUrn(c, 'kks-int'))
     if (integratedCourses.length > 0) {

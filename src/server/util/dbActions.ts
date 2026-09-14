@@ -3,6 +3,9 @@ import { Op } from 'sequelize'
 import type {
   BackendLocaleConditions,
   BackendLocaleKey as BackendLocaleKeyType,
+  RecommendationCode as RecommendationCodeType,
+  RecommendationCodeRow,
+  RecommendationLanguage as RecommendationLanguageType,
   RecommendationMetadata,
   UpdaterRun as UpdaterRunType,
   UpdaterRunKind,
@@ -20,6 +23,8 @@ import Cur from '../db/models/cur.ts'
 import CurCu from '../db/models/curCu.ts'
 import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
+import RecommendationCode from '../db/models/recommendationCode.ts'
+import RecommendationLanguage from '../db/models/recommendationLanguage.ts'
 import StudyRight from '../db/models/studyRight.ts'
 import UpdaterRun from '../db/models/updaterRun.ts'
 import User from '../db/models/user.ts'
@@ -176,6 +181,63 @@ export async function updateBackendLocaleValueById(id: number, data: object): Pr
 
 export async function deleteBackendLocaleValueById(id: number): Promise<number> {
   return await BackendLocaleValue.destroy({ where: { id } })
+}
+
+export async function allRecommendationCodes(): Promise<RecommendationCodeType[]> {
+  const rows = await RecommendationCode.findAll({
+    include: [{ model: RecommendationLanguage, as: 'language' }],
+    order: [
+      ['organisationCode', 'ASC'],
+      ['courseCode', 'ASC'],
+    ],
+  })
+  return rows.map(row => row.toJSON() as RecommendationCodeType)
+}
+
+export async function allRecommendationCodeRows(): Promise<RecommendationCodeRow[]> {
+  const codes = await allRecommendationCodes()
+  return codes.map(code => ({
+    organisationCode: code.organisationCode,
+    lang: code.language!.lang,
+    languageType: code.language!.languageType,
+    primaryLanguageSpecification: code.language!.primaryLanguageSpecification,
+    courseCode: code.courseCode,
+  }))
+}
+
+export async function createRecommendationCode(data: object) {
+  return await RecommendationCode.create(data as any)
+}
+
+export async function updateRecommendationCodeById(id: number, data: object): Promise<number> {
+  const [count] = await RecommendationCode.update(data as any, { where: { id } })
+  return count
+}
+
+export async function deleteRecommendationCodeById(id: number): Promise<number> {
+  return await RecommendationCode.destroy({ where: { id } })
+}
+
+export async function allRecommendationLanguages(): Promise<RecommendationLanguageType[]> {
+  const rows = await RecommendationLanguage.findAll({ order: [['id', 'ASC']] })
+  return rows.map(row => row.toJSON() as RecommendationLanguageType)
+}
+
+export async function createRecommendationLanguage(data: object) {
+  return await RecommendationLanguage.create(data as any)
+}
+
+export async function updateRecommendationLanguageById(id: number, data: object): Promise<number> {
+  const [count] = await RecommendationLanguage.update(data as any, { where: { id } })
+  return count
+}
+
+export async function deleteRecommendationLanguageById(id: number): Promise<number> {
+  return await RecommendationLanguage.destroy({ where: { id } })
+}
+
+export async function countCodesForRecommendationLanguage(languageId: number): Promise<number> {
+  return await RecommendationCode.count({ where: { languageId } })
 }
 
 export async function organisationsWithSupportedCodes(codes: string[]) {

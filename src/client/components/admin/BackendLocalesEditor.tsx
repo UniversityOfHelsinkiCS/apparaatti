@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { ChevronDown, ChevronUp, Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, Plus } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,6 +24,7 @@ import BackendLocaleKeyDialog from './backendLocaleEdit/BackendLocaleKeyDialog.t
 import { hasCatchAllValue } from './backendLocaleEdit/backendLocaleUtils.ts'
 import BackendLocaleValueDialog from './backendLocaleEdit/BackendLocaleValueDialog.tsx'
 import { adminFetch } from './filterEdit/filterEditorUtils.ts'
+import RowActionsCell from './RowActionsCell.tsx'
 
 interface BackendLocalesEditorProps {
   isSuperuser: boolean
@@ -179,24 +180,13 @@ const BackendLocalesEditor = ({ isSuperuser }: BackendLocalesEditorProps) => {
                   )}
                 </TableCell>
                 <TableCell>{localeKey.values.length}</TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  <IconButton
-                    size="small"
-                    aria-label={t('v2:admin.backendLocales.editKey')}
-                    onClick={() => setKeyDialogTarget(localeKey)}
-                  >
-                    <Pencil />
-                  </IconButton>
-                  {isSuperuser && (
-                    <IconButton
-                      size="small"
-                      aria-label={t('v2:admin.backendLocales.deleteKey')}
-                      onClick={() => handleDeleteKey(localeKey)}
-                    >
-                      <Trash2 />
-                    </IconButton>
-                  )}
-                </TableCell>
+                <RowActionsCell
+                  editLabel={t('v2:admin.backendLocales.editKey')}
+                  deleteLabel={t('v2:admin.backendLocales.deleteKey')}
+                  onEdit={() => setKeyDialogTarget(localeKey)}
+                  onDelete={() => handleDeleteKey(localeKey)}
+                  canDelete={isSuperuser}
+                />
               </TableRow>
 
               {expandedKey === localeKey.key && (
@@ -221,22 +211,12 @@ const BackendLocalesEditor = ({ isSuperuser }: BackendLocalesEditorProps) => {
                             <TableCell>{conditionLabel(value.primaryLanguage)}</TableCell>
                             <TableCell>{conditionLabel(value.primaryLanguageSpecification)}</TableCell>
                             <TableCell>{value.text.fi.slice(0, 80)}</TableCell>
-                            <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                              <IconButton
-                                size="small"
-                                aria-label={t('v2:admin.backendLocales.editText')}
-                                onClick={() => setValueDialogTarget({ localeKey, value })}
-                              >
-                                <Pencil />
-                              </IconButton>
-                              <IconButton
-                                size="small"
-                                aria-label={t('v2:admin.backendLocales.deleteText')}
-                                onClick={() => handleDeleteValue(value)}
-                              >
-                                <Trash2 />
-                              </IconButton>
-                            </TableCell>
+                            <RowActionsCell
+                              editLabel={t('v2:admin.backendLocales.editText')}
+                              deleteLabel={t('v2:admin.backendLocales.deleteText')}
+                              onEdit={() => setValueDialogTarget({ localeKey, value })}
+                              onDelete={() => handleDeleteValue(value)}
+                            />
                           </TableRow>
                         ))}
                       </TableBody>

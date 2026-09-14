@@ -1,15 +1,5 @@
-import { organisationRecommendations } from '../../../data/data.ts'
 import { organisationCodeToName } from '../../common/organisations.ts'
-import type { CourseData } from '../../common/types.ts'
-type Language = {
-  name: string
-  codes: string[]
-}
-
-export type OrganisationRecommendation = {
-  name: string
-  languages: Language[]
-}
+import type { CourseData, RecommendationCodeRow } from '../../common/types.ts'
 
 export type CourseMatchCase = {
   language: string
@@ -139,30 +129,6 @@ export function courseMatches(course: CourseData, cases: CourseMatchCase[], lang
   return codesMatch || codeUrnsMatch
 }
 
-export function getUserOrganisationRecommendations(userOrganisationCode: string, data: OrganisationRecommendation[]) {
-  const dataOrganisations = data.filter(org => org.name === userOrganisationCode)
-  return dataOrganisations
-}
-
-export function codesInOrganisations(data: OrganisationRecommendation[]): string[] {
-  return data.map(org => org.languages.map(lang => lang.codes).flat()).flat()
-}
-
-export function codesFromLanguagesContaining(
-  organisationData: OrganisationRecommendation[],
-  nameContains: string
-): string[] {
-  const codes: string[][] = []
-
-  for (const org of organisationData) {
-    const languagesWithCorrectName = org.languages.filter(lang => lang.name.includes(nameContains))
-    const languageCodes = languagesWithCorrectName.map(lang => lang.codes).flat()
-    codes.push(languageCodes)
-  }
-
-  return codes.flat()
-}
-
 //returns a string telling wheter or not the language to be studied is primary or secondary
 //for example: if ('fi', 'fi') -> 'fi-primary' and if ('sve', 'fi') -> 'sve-secondary'
 export function languageToStudy(langCode: string, primaryLanguage: string): string {
@@ -173,74 +139,35 @@ export function languageToStudy(langCode: string, primaryLanguage: string): stri
   }
 }
 
-function codesFromLanguagesWithCorrectSpecification(
-  organisationData: OrganisationRecommendation[],
-  searchStringSpoken: string,
-  searchStringWritten: string,
-  searchStringWrittenAndSpoken: string,
-  primaryLanguageSpecification: string
-) {
-  switch (primaryLanguageSpecification) {
-    case 'written':
-      return codesFromLanguagesContaining(organisationData, searchStringWritten)
-    case 'spoken':
-      return codesFromLanguagesContaining(organisationData, searchStringSpoken)
-    case 'writtenAndSpoken':
-      return codesFromLanguagesContaining(organisationData, searchStringWrittenAndSpoken)
-    default:
-      return []
-  }
+function specificationsToMatch(primaryLanguageSpecification: string): string[] {
+  if (primaryLanguageSpecification === 'spoken') return ['spoken']
+  if (primaryLanguageSpecification === 'written') return ['written']
+  if (primaryLanguageSpecification === 'writtenAndSpoken') return ['spoken', 'written']
+  return []
 }
 
-export function languageSpesificCodes(
-  organisationData: OrganisationRecommendation[],
+export function codesForAnswers(
+  rows: RecommendationCodeRow[],
+  organisationCode: string,
   langCode: string,
   primaryLanguage: string,
   primaryLanguageSpecification: string
-) {
-  //if the user picks the same language as the primary language then we want to return primary language course codes
-  if (langCode === primaryLanguage) {
-    switch (langCode) {
-      case 'fi':
-        return codesFromLanguagesWithCorrectSpecification(
-          organisationData,
-          'Äidinkieli, suomi: puheviestintä',
-          'Äidinkieli, suomi: kirjoitusviestintä',
-          'Äidinkieli, suomi',
-          primaryLanguageSpecification
-        )
-      case 'sv':
-        return codesFromLanguagesWithCorrectSpecification(
-          organisationData,
-          'Äidinkieli, ruotsi: puheviestintä',
-          'Äidinkieli, ruotsi: kirjoitusviestintä',
-          'Äidinkieli, ruotsi',
-          primaryLanguageSpecification
-        )
-      case 'en':
-        return codesFromLanguagesContaining(organisationData, 'Englanti') //english courses do not seem to have primary secodary split?
-      default:
-        return []
-    }
-  }
-  //the codes differ so return secondary language course codes
-  else {
-    switch (langCode) {
-      case 'fi':
-        return codesFromLanguagesContaining(organisationData, 'Toinen kotimainen, suomi')
-      case 'sv':
-        return codesFromLanguagesContaining(organisationData, 'Toinen kotimainen, ruotsi')
-      case 'en':
-        return codesFromLanguagesContaining(organisationData, 'Englanti') //english courses do not seem to have primary secodary split?
-      default:
-        return []
-    }
-  }
+): string[] {
+  const languageType = langCode === primaryLanguage ? 'primary' : 'secondary'
+  const specifications = specificationsToMatch(primaryLanguageSpecification)
+
+  return rows
+    .filter(row => row.organisationCode === organisationCode)
+    .filter(row => row.lang === langCode)
+    .filter(row => row.languageType === null || row.languageType === languageType)
+    .filter(
+      row => row.primaryLanguageSpecification === null || specifications.includes(row.primaryLanguageSpecification)
+    )
+    .map(row => row.courseCode)
+}
+
+export function codesForOrganisation(rows: RecommendationCodeRow[], organisationCode: string): string[] {
+  return rows.filter(row => row.organisationCode === organisationCode).map(row => row.courseCode)
 }
 
 export { organisationCodeToName }
-
-//generated from data/data.xlsx, see scripts/generateOrganisationData.ts
-export function readOrganisationRecommendationData(): OrganisationRecommendation[] {
-  return organisationRecommendations
-}
