@@ -5,9 +5,11 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -17,6 +19,13 @@ import { useTranslation } from 'react-i18next'
 import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import { fetchCuTagStates, saveCuTag } from './courseTagUtils.ts'
+import {
+  matrixContainerSx,
+  stickyCornerCellSx,
+  stickyFirstCellSx,
+  stickyHeaderCellSx,
+  verticalHeaderLabelSx,
+} from './matrixStyles.ts'
 import TagCell from './TagCell.tsx'
 
 const PAGE_SIZE = 50
@@ -92,41 +101,49 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>
       ) : (
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('v2:courseTags.cu.courseUnit')}</TableCell>
-              <TableCell align="right">{t('v2:courseTags.cu.realisations')}</TableCell>
-              {tags.map(tag => (
-                <TableCell key={tag.key} align="center">
-                  {tag.key}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {courseUnits.map(cu => (
-              <TableRow key={cu.id} hover>
-                <TableCell>
-                  {cu.courseCode} {cu.name?.fi ?? ''}
-                </TableCell>
-                <TableCell align="right">
-                  {cuStates?.find(state => state.cuId === cu.id)?.realisationCount ?? 0}
+        <TableContainer sx={matrixContainerSx}>
+          <Table size="small" stickyHeader sx={{ width: 'auto' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={stickyCornerCellSx}>{t('v2:courseTags.cu.courseUnit')}</TableCell>
+                <TableCell align="right" sx={stickyHeaderCellSx}>
+                  {t('v2:courseTags.cu.realisations')}
                 </TableCell>
                 {tags.map(tag => (
-                  <TableCell key={tag.key} align="center">
-                    <TagCell
-                      tagKey={tag.key}
-                      description={tag.description}
-                      state={hasTag(cu.id, tag.key) ? 'added' : 'unset'}
-                      onClick={() => handleToggle(cu.id, tag.key)}
-                    />
+                  <TableCell key={tag.key} align="center" sx={stickyHeaderCellSx}>
+                    <Tooltip title={tag.description ?? tag.key} disableInteractive>
+                      <Box component="span" sx={verticalHeaderLabelSx}>
+                        {tag.key}
+                      </Box>
+                    </Tooltip>
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {courseUnits.map(cu => (
+                <TableRow key={cu.id} hover>
+                  <TableCell sx={stickyFirstCellSx}>
+                    {cu.courseCode} {cu.name?.fi ?? ''}
+                  </TableCell>
+                  <TableCell align="right">
+                    {cuStates?.find(state => state.cuId === cu.id)?.realisationCount ?? 0}
+                  </TableCell>
+                  {tags.map(tag => (
+                    <TableCell key={tag.key} align="center" sx={{ p: 0.25 }}>
+                      <TagCell
+                        tagKey={tag.key}
+                        description={tag.description}
+                        state={hasTag(cu.id, tag.key) ? 'added' : 'unset'}
+                        onClick={() => handleToggle(cu.id, tag.key)}
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Box>
   )

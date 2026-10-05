@@ -153,7 +153,11 @@ export default {
       title: 'Course tags',
       course: 'Course',
       matched: '{{count}} courses match the current search',
-      legend: 'Filled = added, outlined = inherited from course unit, struck through = ignored',
+      legend: '✓ added · ↓ inherited from course unit · ✕ inherited but ignored · empty = not set',
+      columns: 'Tag columns ({{shown}}/{{total}})',
+      columnsAll: 'All',
+      columnsStudy: 'Study tags',
+      columnsFaculty: 'Faculty tags',
       cancel: 'Cancel',
       close: 'Close',
       state: {
@@ -172,9 +176,24 @@ export default {
         open: 'Bulk apply tags',
         title: 'Apply tags to every matching course',
         tags: 'Tags',
-        modeAdd: 'Add',
-        modeIgnore: 'Ignore',
-        modeClear: 'Clear',
+        tagsHint: 'Type to filter, press Enter to pick the highlighted tag',
+        mode: {
+          add: {
+            label: 'Add',
+            description: 'Gives every matching course this tag.',
+          },
+          ignore: {
+            label: 'Ignore',
+            description:
+              'Marks the tag as ignored on every matching course, so a tag inherited from the course unit stops applying to them.',
+          },
+          clear: {
+            label: 'Clear',
+            description:
+              "Removes the course's own add or ignore setting, so the tag is decided by its course unit again.",
+          },
+        },
+        newTagNote: 'Only existing tags can be applied. Create a new tag first in the Tags tab.',
         explanation: 'This applies to every course matching the current search, not only the visible page.',
         previewPending: 'Pick at least one tag to see how many courses would change.',
         previewCount: '{{count}} courses match.',

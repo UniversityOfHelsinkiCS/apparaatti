@@ -153,7 +153,11 @@ export default {
       title: 'Kurssitagit',
       course: 'Kurssi',
       matched: '{{count}} kurssia vastaa nykyistä hakua',
-      legend: 'Täytetty = lisätty, reunustettu = peritty opintojaksolta, yliviivattu = ohitettu',
+      legend: '✓ lisätty · ↓ peritty opintojaksolta · ✕ peritty mutta ohitettu · tyhjä = ei asetettu',
+      columns: 'Tagisarakkeet ({{shown}}/{{total}})',
+      columnsAll: 'Kaikki',
+      columnsStudy: 'Opintotagit',
+      columnsFaculty: 'Tiedekuntatagit',
       cancel: 'Peruuta',
       close: 'Sulje',
       state: {
@@ -172,9 +176,24 @@ export default {
         open: 'Massalisää tageja',
         title: 'Lisää tagit kaikkiin hakua vastaaviin kursseihin',
         tags: 'Tagit',
-        modeAdd: 'Lisää',
-        modeIgnore: 'Ohita',
-        modeClear: 'Tyhjennä',
+        tagsHint: 'Kirjoita suodattaaksesi, Enter valitsee korostetun tagin',
+        mode: {
+          add: {
+            label: 'Lisää',
+            description: 'Antaa tagin kaikille hakua vastaaville kursseille.',
+          },
+          ignore: {
+            label: 'Ohita',
+            description:
+              'Merkitsee tagin ohitetuksi kaikilla hakua vastaavilla kursseilla, jolloin opintojaksolta peritty tagi ei enää päde niihin.',
+          },
+          clear: {
+            label: 'Tyhjennä',
+            description:
+              'Poistaa toteutuksen oman lisäys- tai ohitusasetuksen, jolloin tagi määräytyy taas opintojakson mukaan.',
+          },
+        },
+        newTagNote: 'Vain olemassa olevia tageja voi lisätä. Luo uusi tagi ensin Tagit-välilehdellä.',
         explanation: 'Tämä koskee kaikkia hakua vastaavia kursseja, ei vain näkyvää sivua.',
         previewPending: 'Valitse vähintään yksi tagi nähdäksesi montako kurssia muuttuisi.',
         previewCount: '{{count}} kurssia vastaa hakua.',
@@ -182,7 +201,7 @@ export default {
       },
       cu: {
         explanation:
-          'Tässä asetetut tagit periytyvät opintojakson kaikille toteutuksille. Toteutus voi ohittaa peritun tagin.',
+          'Tässä asetetut tagit periytyvät opintojakson kaikille toteutuksille. Toteutus voi ohittaa perityn tagin.',
         courseCode: 'Kurssikoodi',
         courseUnit: 'Opintojakso',
         realisations: 'Toteutuksia',

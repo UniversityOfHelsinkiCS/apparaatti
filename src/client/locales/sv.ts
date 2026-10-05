@@ -154,7 +154,11 @@ export default {
       title: 'Kurstaggar',
       course: 'Kurs',
       matched: '{{count}} kurser matchar den nuvarande sökningen',
-      legend: 'Fylld = tillagd, konturerad = ärvd från studieavsnittet, överstruken = ignorerad',
+      legend: '✓ tillagd · ↓ ärvd från studieavsnittet · ✕ ärvd men ignorerad · tom = inte satt',
+      columns: 'Taggkolumner ({{shown}}/{{total}})',
+      columnsAll: 'Alla',
+      columnsStudy: 'Studietaggar',
+      columnsFaculty: 'Fakultetstaggar',
       cancel: 'Avbryt',
       close: 'Stäng',
       state: {
@@ -173,9 +177,23 @@ export default {
         open: 'Massapplicera taggar',
         title: 'Applicera taggar på alla matchande kurser',
         tags: 'Taggar',
-        modeAdd: 'Lägg till',
-        modeIgnore: 'Ignorera',
-        modeClear: 'Rensa',
+        tagsHint: 'Skriv för att filtrera, Enter väljer den markerade taggen',
+        mode: {
+          add: {
+            label: 'Lägg till',
+            description: 'Ger alla matchande kurser denna tagg.',
+          },
+          ignore: {
+            label: 'Ignorera',
+            description:
+              'Markerar taggen som ignorerad på alla matchande kurser, så att en tagg som ärvts från studieavsnittet inte längre gäller dem.',
+          },
+          clear: {
+            label: 'Rensa',
+            description: 'Tar bort förverkligandets egna inställning, så att taggen bestäms av studieavsnittet igen.',
+          },
+        },
+        newTagNote: 'Endast befintliga taggar kan läggas till. Skapa en ny tagg först under fliken Taggar.',
         explanation: 'Detta gäller alla kurser som matchar sökningen, inte bara den synliga sidan.',
         previewPending: 'Välj minst en tagg för att se hur många kurser som skulle ändras.',
         previewCount: '{{count}} kurser matchar.',

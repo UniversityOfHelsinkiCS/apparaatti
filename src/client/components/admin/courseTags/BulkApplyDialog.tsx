@@ -1,6 +1,7 @@
 import {
   Alert,
   Autocomplete,
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
@@ -69,20 +70,51 @@ const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApplied }: BulkA
         <Stack spacing={2} sx={{ mt: 1 }}>
           <Autocomplete
             multiple
+            autoHighlight
+            selectOnFocus
+            handleHomeEndKeys
+            disableCloseOnSelect
             options={tags}
             value={selectedTags}
             onChange={(_event, value) => setSelectedTags(value)}
             getOptionLabel={tag => tag.key}
-            renderInput={params => <TextField {...params} label={t('v2:courseTags.bulk.tags')} />}
+            isOptionEqualToValue={(option, value) => option.key === value.key}
+            slotProps={{ listbox: { sx: { maxHeight: 200 } } }}
+            renderInput={params => (
+              <TextField
+                {...params}
+                label={t('v2:courseTags.bulk.tags')}
+                helperText={t('v2:courseTags.bulk.tagsHint')}
+              />
+            )}
           />
 
-          <RadioGroup row value={mode} onChange={event => setMode(event.target.value as CurTagMutationMode)}>
-            <FormControlLabel value="add" control={<Radio />} label={t('v2:courseTags.bulk.modeAdd')} />
-            <FormControlLabel value="ignore" control={<Radio />} label={t('v2:courseTags.bulk.modeIgnore')} />
-            <FormControlLabel value="clear" control={<Radio />} label={t('v2:courseTags.bulk.modeClear')} />
+          <RadioGroup value={mode} onChange={event => setMode(event.target.value as CurTagMutationMode)}>
+            {(['add', 'ignore', 'clear'] as const).map(option => (
+              <FormControlLabel
+                key={option}
+                value={option}
+                control={
+                  <Radio sx={{ color: '#374151', alignSelf: 'flex-start', '&.Mui-checked': { color: '#111827' } }} />
+                }
+                sx={{ alignItems: 'flex-start', mb: 1, mr: 0 }}
+                label={
+                  <Box sx={{ pt: 0.75 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#111827' }}>
+                      {t(`v2:courseTags.bulk.mode.${option}.label`)}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#374151' }}>
+                      {t(`v2:courseTags.bulk.mode.${option}.description`)}
+                    </Typography>
+                  </Box>
+                }
+              />
+            ))}
           </RadioGroup>
 
-          <Alert severity="info">{t('v2:courseTags.bulk.explanation')}</Alert>
+          <Alert severity="info">
+            {t('v2:courseTags.bulk.explanation')} {t('v2:courseTags.bulk.newTagNote')}
+          </Alert>
 
           <Typography variant="body2">
             {matched === null

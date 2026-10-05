@@ -1,4 +1,4 @@
-import { Box, Chip, Tooltip } from '@mui/material'
+import { Box, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type { ResolvedTagSource } from '../../../../common/types.ts'
@@ -12,17 +12,19 @@ interface TagCellProps {
   onClick: () => void
 }
 
-const stateSx = {
-  added: { backgroundColor: '#111827', color: '#fff', borderColor: '#111827' },
-  inherited: { backgroundColor: 'transparent', color: '#111827', borderColor: '#111827' },
-  ignored: {
-    backgroundColor: 'transparent',
-    color: '#9ca3af',
-    borderColor: '#d1d5db',
-    textDecoration: 'line-through',
-  },
-  unset: { backgroundColor: 'transparent', color: '#d1d5db', borderColor: '#e5e7eb' },
-} as const
+const glyph: Record<TagCellState, string> = {
+  added: '✓',
+  inherited: '↓',
+  ignored: '✕',
+  unset: '',
+}
+
+const stateSx: Record<TagCellState, object> = {
+  added: { backgroundColor: '#111827', color: '#ffffff', borderColor: '#111827' },
+  inherited: { backgroundColor: '#ffffff', color: '#111827', borderColor: '#111827', borderWidth: 2 },
+  ignored: { backgroundColor: '#f3f4f6', color: '#374151', borderColor: '#6b7280', borderStyle: 'dashed' },
+  unset: { backgroundColor: '#ffffff', color: 'transparent', borderColor: '#6b7280' },
+}
 
 const TagCell = ({ tagKey, description, state, onClick }: TagCellProps) => {
   const { t } = useTranslation()
@@ -31,16 +33,32 @@ const TagCell = ({ tagKey, description, state, onClick }: TagCellProps) => {
   const title = description ? `${tagKey} — ${description} (${label})` : `${tagKey} (${label})`
 
   return (
-    <Tooltip title={title}>
-      <Box component="span">
-        <Chip
-          label={tagKey}
-          size="small"
-          variant="outlined"
-          onClick={onClick}
-          aria-label={title}
-          sx={{ ...stateSx[state], cursor: 'pointer', fontWeight: state === 'added' ? 600 : 400 }}
-        />
+    <Tooltip title={title} disableInteractive>
+      <Box
+        component="button"
+        type="button"
+        onClick={onClick}
+        aria-label={title}
+        aria-pressed={state !== 'unset'}
+        sx={{
+          width: 26,
+          height: 26,
+          p: 0,
+          borderRadius: 1,
+          borderStyle: 'solid',
+          borderWidth: 1,
+          fontSize: 14,
+          lineHeight: 1,
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          '&:hover': { outline: '2px solid #2563eb', outlineOffset: 1 },
+          '&:focus-visible': { outline: '2px solid #2563eb', outlineOffset: 1 },
+          ...stateSx[state],
+        }}
+      >
+        {glyph[state]}
       </Box>
     </Tooltip>
   )

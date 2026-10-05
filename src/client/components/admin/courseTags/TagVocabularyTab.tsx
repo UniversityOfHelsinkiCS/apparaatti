@@ -1,4 +1,15 @@
-import { Box, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +18,7 @@ import type { CourseTag } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import { COURSE_TAGS_PATH } from './courseTagUtils.ts'
+import { matrixContainerSx } from './matrixStyles.ts'
 
 interface TagVocabularyTabProps {
   tags: CourseTag[]
@@ -74,37 +86,39 @@ const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
 
       {error ? <Typography color="error">{error}</Typography> : null}
 
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>{t('v2:courseTags.vocabulary.key')}</TableCell>
-            <TableCell>{t('v2:courseTags.vocabulary.description')}</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tags.map(tag => (
-            <TableRow key={tag.id}>
-              <TableCell>{tag.key}</TableCell>
-              <TableCell>
-                <TextField
-                  size="small"
-                  fullWidth
-                  defaultValue={tag.description ?? ''}
-                  onBlur={event => handleDescriptionSave(tag, event.target.value)}
-                />
-              </TableCell>
-              <TableCell align="right">
-                {isSuperuser ? (
-                  <BlackOutlinedButton type="button" onClick={() => handleDelete(tag)}>
-                    {t('v2:courseTags.vocabulary.delete')}
-                  </BlackOutlinedButton>
-                ) : null}
-              </TableCell>
+      <TableContainer sx={matrixContainerSx}>
+        <Table size="small" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('v2:courseTags.vocabulary.key')}</TableCell>
+              <TableCell>{t('v2:courseTags.vocabulary.description')}</TableCell>
+              <TableCell />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {tags.map(tag => (
+              <TableRow key={tag.id}>
+                <TableCell>{tag.key}</TableCell>
+                <TableCell>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    defaultValue={tag.description ?? ''}
+                    onBlur={event => handleDescriptionSave(tag, event.target.value)}
+                  />
+                </TableCell>
+                <TableCell align="right">
+                  {isSuperuser ? (
+                    <BlackOutlinedButton type="button" onClick={() => handleDelete(tag)}>
+                      {t('v2:courseTags.vocabulary.delete')}
+                    </BlackOutlinedButton>
+                  ) : null}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   )
 }

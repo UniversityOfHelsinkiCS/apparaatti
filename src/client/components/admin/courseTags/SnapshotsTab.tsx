@@ -1,4 +1,15 @@
-import { Box, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
@@ -15,6 +26,7 @@ import {
   fetchSnapshots,
   restoreSnapshot,
 } from './courseTagUtils.ts'
+import { matrixContainerSx } from './matrixStyles.ts'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 
 interface SnapshotsTabProps {
@@ -122,45 +134,47 @@ const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
         </Stack>
       ) : null}
 
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>{t('v2:courseTags.snapshots.name')}</TableCell>
-            <TableCell>{t('v2:courseTags.snapshots.description')}</TableCell>
-            <TableCell>{t('v2:courseTags.snapshots.createdAt')}</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(snapshots ?? []).map(snapshot => (
-            <TableRow key={snapshot.id}>
-              <TableCell>{snapshot.name}</TableCell>
-              <TableCell>{snapshot.description ?? ''}</TableCell>
-              <TableCell>{new Date(snapshot.createdAt).toLocaleString()}</TableCell>
-              <TableCell align="right">
-                <Stack direction="row" spacing={1} justifyContent="flex-end">
-                  <BlackOutlinedButton
-                    type="button"
-                    onClick={async () => setDiff(await fetchSnapshotDiff(snapshot.id))}
-                  >
-                    {t('v2:courseTags.snapshots.compare')}
-                  </BlackOutlinedButton>
-                  {isSuperuser ? (
-                    <BlackOutlinedButton type="button" onClick={() => handleRestore(snapshot.id, snapshot.name)}>
-                      {t('v2:courseTags.snapshots.restore')}
-                    </BlackOutlinedButton>
-                  ) : null}
-                  {isSuperuser ? (
-                    <BlackOutlinedButton type="button" onClick={() => handleDelete(snapshot.id)}>
-                      {t('v2:courseTags.snapshots.delete')}
-                    </BlackOutlinedButton>
-                  ) : null}
-                </Stack>
-              </TableCell>
+      <TableContainer sx={matrixContainerSx}>
+        <Table size="small" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('v2:courseTags.snapshots.name')}</TableCell>
+              <TableCell>{t('v2:courseTags.snapshots.description')}</TableCell>
+              <TableCell>{t('v2:courseTags.snapshots.createdAt')}</TableCell>
+              <TableCell />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {(snapshots ?? []).map(snapshot => (
+              <TableRow key={snapshot.id}>
+                <TableCell>{snapshot.name}</TableCell>
+                <TableCell>{snapshot.description ?? ''}</TableCell>
+                <TableCell>{new Date(snapshot.createdAt).toLocaleString()}</TableCell>
+                <TableCell align="right">
+                  <Stack direction="row" spacing={1} justifyContent="flex-end">
+                    <BlackOutlinedButton
+                      type="button"
+                      onClick={async () => setDiff(await fetchSnapshotDiff(snapshot.id))}
+                    >
+                      {t('v2:courseTags.snapshots.compare')}
+                    </BlackOutlinedButton>
+                    {isSuperuser ? (
+                      <BlackOutlinedButton type="button" onClick={() => handleRestore(snapshot.id, snapshot.name)}>
+                        {t('v2:courseTags.snapshots.restore')}
+                      </BlackOutlinedButton>
+                    ) : null}
+                    {isSuperuser ? (
+                      <BlackOutlinedButton type="button" onClick={() => handleDelete(snapshot.id)}>
+                        {t('v2:courseTags.snapshots.delete')}
+                      </BlackOutlinedButton>
+                    ) : null}
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {(snapshots ?? []).length === 0 ? (
         <Typography sx={{ mt: 2 }}>{t('v2:courseTags.snapshots.empty')}</Typography>

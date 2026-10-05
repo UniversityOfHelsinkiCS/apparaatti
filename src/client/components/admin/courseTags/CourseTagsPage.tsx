@@ -42,7 +42,19 @@ const CourseTagsPage = () => {
         {t('v2:courseTags.title')}
       </Typography>
 
-      <Tabs value={tab} onChange={(_event, value) => setTab(value)} sx={{ mb: 2 }}>
+      <Tabs
+        value={tab}
+        onChange={(_event, value) => setTab(value)}
+        sx={{
+          mb: 2,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          '& .MuiTab-root': { color: '#374151', fontWeight: 600 },
+          '& .MuiTab-root.Mui-selected': { color: '#111827' },
+          '& .MuiTab-root:focus-visible': { outline: '2px solid #2563eb', outlineOffset: -2 },
+          '& .MuiTabs-indicator': { backgroundColor: '#111827', height: 3 },
+        }}
+      >
         <Tab label={t('v2:courseTags.tabs.realisations')} />
         <Tab label={t('v2:courseTags.tabs.courseUnits')} />
         <Tab label={t('v2:courseTags.tabs.vocabulary')} />
