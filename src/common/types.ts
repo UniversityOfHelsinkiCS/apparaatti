@@ -301,3 +301,59 @@ export type RecommendationCodeRow = {
   primaryLanguageSpecification: string | null
   courseCode: string
 }
+
+export type CourseTagMode = 'add' | 'ignore'
+
+export type CourseTag = {
+  id: number
+  key: string
+  description: string | null
+}
+
+export type CurTagRow = {
+  curId: string
+  tagKey: string
+  mode: CourseTagMode
+}
+
+export type CuTagRow = {
+  cuId: string
+  tagKey: string
+}
+
+export type ResolvedTagSource = 'inherited' | 'added' | 'ignored'
+
+export type ResolvedCurTag = {
+  key: string
+  source: ResolvedTagSource
+}
+
+export type CurTagState = {
+  inheritedByCur: Map<string, string[]>
+  rowsByCur: Map<string, CurTagRow[]>
+}
+
+export type TagSnapshotPayload = {
+  appVersion?: string
+  exportedAt?: string
+  tags: Omit<CourseTag, 'id'>[]
+  cuTags: CuTagRow[]
+  curTags: CurTagRow[]
+}
+
+export type TagSnapshotMeta = {
+  id: number
+  name: string
+  description: string | null
+  createdBy: string | null
+  createdAt: string
+}
+
+export type TagPayloadDiff = {
+  addedTags: string[]
+  removedTags: string[]
+  addedCuTags: CuTagRow[]
+  removedCuTags: CuTagRow[]
+  addedCurTags: CurTagRow[]
+  removedCurTags: CurTagRow[]
+}

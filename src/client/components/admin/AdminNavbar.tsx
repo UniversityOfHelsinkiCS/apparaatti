@@ -17,6 +17,7 @@ const AdminNavbar = ({ isSuperuser }: AdminNavbarProps) => {
   const navItems = [
     { label: t('v2:adminNav.overview'), path: '/admin' },
     { label: t('v2:adminNav.courses'), path: '/admin/courses' },
+    { label: t('v2:adminNav.courseTags'), path: '/admin/course-tags' },
     { label: t('v2:adminNav.stats'), path: '/admin/stats' },
     { label: t('v2:adminNav.feedback'), path: '/admin/feedback' },
     { label: t('v2:adminNav.updater'), path: '/admin/updater' },

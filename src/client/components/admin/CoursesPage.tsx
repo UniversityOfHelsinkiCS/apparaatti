@@ -4,13 +4,20 @@ import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
-import type { CourseReviewState, LocalizedString, UrnMatchMode } from '../../../common/types.ts'
+import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
 import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
 import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
-import type { CoursesSearchFieldsValues, ReviewStatusFilterValue } from './CoursesSearchFields.tsx'
+import type { CourseSearchValues } from './courseSearchQuery.ts'
+import {
+  buildCourseQueryString,
+  courseSearchCacheKey,
+  courseSearchValuesFromFields,
+  emptyCourseSearchValues,
+} from './courseSearchQuery.ts'
+import type { CoursesSearchFieldsValues } from './CoursesSearchFields.tsx'
 import CoursesSearchFields from './CoursesSearchFields.tsx'
 import ReviewActions from './ReviewActions.tsx'
 
@@ -46,61 +53,11 @@ const CoursesPage = () => {
   const [page, setPage] = useState(1)
 
   // Active search values (what's actually sent to API)
-  const [nameSearch, setNameSearch] = useState('')
-  const [urnSearch, setUrnSearch] = useState<string[]>([])
-  const [urnMode, setUrnMode] = useState<UrnMatchMode>('or')
-  const [courseCodeSearch, setCourseCodeSearch] = useState('')
-  const [excludeUrnsSearch, setExcludeUrnsSearch] = useState<string[]>([])
-  const [excludeUrnsMode, setExcludeUrnsMode] = useState<UrnMatchMode>('or')
-  const [excludeCourseCodesSearch, setExcludeCourseCodesSearch] = useState('')
-  const [reviewStatusSearch, setReviewStatusSearch] = useState<ReviewStatusFilterValue>('all')
-  const [dateFromSearch, setDateFromSearch] = useState('')
-  const [dateToSearch, setDateToSearch] = useState('')
+  const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
 
-  const handleSearch = ({
-    nameInput,
-    urnInputs,
-    urnMode: urnModeInput,
-    courseCodeInput,
-    excludeUrnsInputs,
-    excludeUrnsMode: excludeUrnsModeInput,
-    excludeCourseCodesInput,
-    reviewStatusInput,
-    dateFromInput,
-    dateToInput,
-  }: CoursesSearchFieldsValues) => {
-    setNameSearch(nameInput)
-    setUrnSearch(urnInputs)
-    setUrnMode(urnModeInput)
-    setCourseCodeSearch(courseCodeInput)
-    setExcludeUrnsSearch(excludeUrnsInputs)
-    setExcludeUrnsMode(excludeUrnsModeInput)
-    setExcludeCourseCodesSearch(excludeCourseCodesInput)
-    setReviewStatusSearch(reviewStatusInput)
-    setDateFromSearch(dateFromInput)
-    setDateToSearch(dateToInput)
+  const handleSearch = (fields: CoursesSearchFieldsValues) => {
+    setSearchValues(courseSearchValuesFromFields(fields))
     setPage(1)
-  }
-
-  const buildQueryString = () => {
-    const params = new URLSearchParams()
-    params.append('page', page.toString())
-    params.append('limit', '50')
-    if (nameSearch) params.append('name', nameSearch)
-    if (urnSearch.length > 0) {
-      params.append('urn', urnSearch.join(','))
-      if (urnMode !== 'or') params.append('urnMode', urnMode)
-    }
-    if (courseCodeSearch) params.append('courseCode', courseCodeSearch)
-    if (excludeUrnsSearch.length > 0) {
-      params.append('excludeUrns', excludeUrnsSearch.join(','))
-      if (excludeUrnsMode !== 'or') params.append('excludeUrnsMode', excludeUrnsMode)
-    }
-    if (excludeCourseCodesSearch) params.append('excludeCourseCodes', excludeCourseCodesSearch)
-    if (reviewStatusSearch !== 'all') params.append('reviewStatus', reviewStatusSearch)
-    if (dateFromSearch) params.append('dateFrom', dateFromSearch)
-    if (dateToSearch) params.append('dateTo', dateToSearch)
-    return params.toString()
   }
 
   const {
@@ -108,8 +65,8 @@ const CoursesPage = () => {
     isLoading: isCoursesLoading,
     refetch,
   } = useApi<PaginatedCoursesResponse>(
-    `admin-courses-${page}-${nameSearch}-${urnSearch.join(',')}-${urnMode}-${courseCodeSearch}-${excludeUrnsSearch.join(',')}-${excludeUrnsMode}-${excludeCourseCodesSearch}-${reviewStatusSearch}-${dateFromSearch}-${dateToSearch}`,
-    `/api/admin/courses?${buildQueryString()}`,
+    `admin-courses-${courseSearchCacheKey(searchValues, page)}`,
+    `/api/admin/courses?${buildCourseQueryString(searchValues, page, 50)}`,
     'GET',
     undefined
   )

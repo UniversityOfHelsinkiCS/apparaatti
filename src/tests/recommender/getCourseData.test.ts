@@ -7,6 +7,7 @@ vi.mock('../../server/util/dbActions.ts', () => ({
   curWithIdOf: vi.fn(),
   organisationWithGroupIdOf: vi.fn(),
   allRecommendationCodeRows: vi.fn(),
+  tagStateForCurs: vi.fn(async () => ({ inheritedByCur: new Map(), rowsByCur: new Map() })),
 }))
 
 import type { AnswerData } from '../../common/types.ts'

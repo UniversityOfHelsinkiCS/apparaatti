@@ -3,10 +3,17 @@ import { Op } from 'sequelize'
 import type {
   BackendLocaleConditions,
   BackendLocaleKey as BackendLocaleKeyType,
+  CourseTag as CourseTagType,
+  CourseTagMode,
+  CurTagRow,
+  CurTagState,
+  CuTagRow,
   RecommendationCode as RecommendationCodeType,
   RecommendationCodeRow,
   RecommendationLanguage as RecommendationLanguageType,
   RecommendationMetadata,
+  TagSnapshotMeta,
+  TagSnapshotPayload,
   UpdaterRun as UpdaterRunType,
   UpdaterRunKind,
   UrnMatchMode,
@@ -15,17 +22,22 @@ import type {
   UserVisit,
   VisitStudyData,
 } from '../../common/types.ts'
+import { sequelize } from '../db/connection.ts'
 import BackendLocaleKey from '../db/models/backendLocaleKey.ts'
 import BackendLocaleValue from '../db/models/backendLocaleValue.ts'
 import CourseAdminReview from '../db/models/CourseAdminReview.ts'
+import CourseTag from '../db/models/courseTag.ts'
 import Cu from '../db/models/cu.ts'
+import CuCourseTag from '../db/models/cuCourseTag.ts'
 import Cur from '../db/models/cur.ts'
+import CurCourseTag from '../db/models/curCourseTag.ts'
 import CurCu from '../db/models/curCu.ts'
 import Filter from '../db/models/filter.ts'
 import Organisation from '../db/models/organisation.ts'
 import RecommendationCode from '../db/models/recommendationCode.ts'
 import RecommendationLanguage from '../db/models/recommendationLanguage.ts'
 import StudyRight from '../db/models/studyRight.ts'
+import TagSnapshot from '../db/models/tagSnapshot.ts'
 import UpdaterRun from '../db/models/updaterRun.ts'
 import User from '../db/models/user.ts'
 import UserFeedback from '../db/models/userFeedback.ts'
@@ -372,45 +384,6 @@ async function findCurIdsToExcludeByCourseCode(excludeCourseCodes: string[]): Pr
   return excludedCurs.map((c: any) => c.id)
 }
 
-// Fetches all Curs matching the SQL-side filters, then narrows by JSONB
-// customCodeUrns in JavaScript (URN search and/or URN excludes), and finally
-// paginates. Required because Postgres JSONB array contents can't be filtered
-// efficiently with the existing Sequelize where-clause shape.
-async function paginateCursWithJsUrnFilter(
-  curWhere: any,
-  includeOptions: any[],
-  includeUrnListLower: string[],
-  includeMode: UrnMatchMode,
-  excludeUrnListLower: string[],
-  excludeMode: UrnMatchMode,
-  reviewStatus: string | undefined,
-  page: number,
-  limit: number,
-  offset: number
-) {
-  const allCurs = await Cur.findAll({
-    where: curWhere,
-    include: includeOptions,
-    order: [['name', 'ASC']],
-    subQuery: false,
-  })
-
-  const filtered = allCurs.filter(cur =>
-    curMatchesUrnFilters(cur, includeUrnListLower, includeMode, excludeUrnListLower, excludeMode)
-  )
-
-  const filteredWithReviews = filterCoursesByReviewStatus(await populateWithReviews(filtered), reviewStatus)
-  const total = filteredWithReviews.length
-  const paginatedCourses = filteredWithReviews.slice(offset, offset + limit)
-  return {
-    courses: paginatedCourses,
-    total,
-    page,
-    limit,
-    totalPages: Math.ceil(total / limit),
-  }
-}
-
 /**
  * Filters for the admin courses search.
  *
@@ -466,38 +439,35 @@ function filterCoursesByReviewStatus(courses: any[], reviewStatus?: string) {
   return courses
 }
 
-async function populateWithReviews(curs: Cur[]) {
-  const cursWithReviews = await Promise.all(
-    curs.map(async cur => {
-      const plainCur = typeof (cur as any).get === 'function' ? (cur as any).get({ plain: true }) : cur
-
-      const reviewState = await getCourseAdminReviewByCurId(plainCur.id)
-
-      return {
-        ...plainCur,
-        reviewState,
-      }
-    })
-  )
-  return cursWithReviews
+function toPlainCur(cur: any) {
+  return typeof cur.get === 'function' ? cur.get({ plain: true }) : cur
 }
 
-export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
-  const {
-    nameSearch,
-    urnSearch,
-    urnMode,
-    excludeUrns,
-    excludeUrnsMode,
-    courseCodeSearch,
-    excludeCourseCodes,
-    reviewStatus,
-    dateFrom,
-    dateTo,
-  } = filters
-  const offset = (page - 1) * limit
+async function populateWithReviews(curs: Cur[]) {
+  const plainCurs = curs.map(toPlainCur)
+  if (plainCurs.length === 0) return []
 
-  // Build the where clause for course realizations (name search)
+  const reviews = await CourseAdminReview.findAll({
+    where: { curId: plainCurs.map(cur => cur.id) },
+    order: [['updatedAt', 'ASC']],
+    raw: true,
+  })
+  const latestReviewByCurId = new Map(reviews.map((review: any) => [review.curId, review]))
+
+  return plainCurs.map(cur => ({ ...cur, reviewState: latestReviewByCurId.get(cur.id) ?? null }))
+}
+
+export interface CourseSearchQuery {
+  curWhere: any
+  includeOptions: any[]
+  includeUrnList: string[]
+  urnMode: UrnMatchMode
+  excludeUrnList: string[]
+  excludeUrnsMode: UrnMatchMode
+}
+
+async function buildCourseSearchQuery(filters: CourseSearchFilters): Promise<CourseSearchQuery> {
+  const { nameSearch, courseCodeSearch, excludeCourseCodes, dateFrom, dateTo } = filters
   const curWhere: any = {}
 
   if (nameSearch) {
@@ -517,6 +487,11 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
     curWhere.endDate = { [Op.lte]: endOfDay(dateTo) }
   }
 
+  const excludedCurIds = await findCurIdsToExcludeByCourseCode(parseCsvList(excludeCourseCodes))
+  if (excludedCurIds.length > 0) {
+    curWhere.id = { [Op.notIn]: excludedCurIds }
+  }
+
   // Hard filter: only KK- coded courses are surfaced in the admin list.
   // Cu.courseCode must start with 'KK-'. AND-combine with any user-supplied substring.
   const cuWhere: any = {
@@ -525,67 +500,56 @@ export async function searchCoursesWithPagination(filters: CourseSearchFilters, 
       : { [Op.iLike]: 'KK-%' },
   }
 
-  const includeUrnList = parseCsvList(urnSearch).map(s => s.toLowerCase())
-  const excludeUrnList = parseCsvList(excludeUrns).map(s => s.toLowerCase())
-  const excludeCourseCodeList = parseCsvList(excludeCourseCodes)
-
-  const excludedCurIds = await findCurIdsToExcludeByCourseCode(excludeCourseCodeList)
-  if (excludedCurIds.length > 0) {
-    curWhere.id = { [Op.notIn]: excludedCurIds }
+  return {
+    curWhere,
+    includeOptions: [
+      {
+        model: Cu,
+        required: true,
+        attributes: ['id', 'courseCode', 'name'],
+        where: cuWhere,
+        through: { attributes: [] },
+      },
+    ],
+    includeUrnList: parseCsvList(filters.urnSearch).map(s => s.toLowerCase()),
+    urnMode: filters.urnMode ?? 'or',
+    excludeUrnList: parseCsvList(filters.excludeUrns).map(s => s.toLowerCase()),
+    excludeUrnsMode: filters.excludeUrnsMode ?? 'or',
   }
+}
 
-  const includeOptions: any[] = [
-    {
-      model: Cu,
-      required: true,
-      attributes: ['id', 'courseCode', 'name'],
-      where: cuWhere,
-      through: { attributes: [] }, // Don't include join table attributes
-    },
-  ]
+export async function matchingCurs(filters: CourseSearchFilters) {
+  const query = await buildCourseSearchQuery(filters)
 
-  const needsJsFiltering =
-    includeUrnList.length > 0 ||
-    excludeUrnList.length > 0 ||
-    reviewStatus === 'reviewed' ||
-    reviewStatus === 'not-reviewed'
+  const allCurs = await Cur.findAll({
+    where: query.curWhere,
+    include: query.includeOptions,
+    order: [['name', 'ASC']],
+    subQuery: false,
+  })
 
-  if (needsJsFiltering) {
-    const jsFilteredResult = await paginateCursWithJsUrnFilter(
-      curWhere,
-      includeOptions,
-      includeUrnList,
-      urnMode ?? 'or',
-      excludeUrnList,
-      excludeUrnsMode ?? 'or',
-      reviewStatus,
-      page,
-      limit,
-      offset
-    )
-    return jsFilteredResult
-  } else {
-    // No JS-side filtering required - use regular paginated query
-    const { rows: results, count: total } = await Cur.findAndCountAll({
-      where: curWhere,
-      include: includeOptions,
-      limit,
-      offset,
-      order: [['name', 'ASC']],
-      distinct: true,
-      subQuery: false,
-    })
+  const filtered = allCurs.filter(cur =>
+    curMatchesUrnFilters(cur, query.includeUrnList, query.urnMode, query.excludeUrnList, query.excludeUrnsMode)
+  )
 
-    //populating the courses with the reviews
-    const resultsWithReviews = await populateWithReviews(results)
+  return filterCoursesByReviewStatus(await populateWithReviews(filtered), filters.reviewStatus)
+}
 
-    return {
-      courses: resultsWithReviews,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    }
+export async function matchingCurIds(filters: CourseSearchFilters): Promise<string[]> {
+  return (await matchingCurs(filters)).map(cur => cur.id)
+}
+
+export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
+  const offset = (page - 1) * limit
+  const matched = await matchingCurs(filters)
+  const total = matched.length
+
+  return {
+    courses: matched.slice(offset, offset + limit),
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
   }
 }
 
@@ -761,4 +725,213 @@ export async function getUpdaterRuns(limit = 20): Promise<UpdaterRunType[]> {
     startedAt: r.startedAt,
     finishedAt: r.finishedAt ?? null,
   }))
+}
+
+export async function allCourseTags(): Promise<CourseTagType[]> {
+  const rows = await CourseTag.findAll({ order: [['key', 'ASC']] })
+  return rows.map(row => row.toJSON() as CourseTagType)
+}
+
+export async function createCourseTag(data: object): Promise<CourseTagType> {
+  const created = await CourseTag.create(data as any)
+  return created.toJSON() as CourseTagType
+}
+
+export async function updateCourseTagById(id: number, data: object): Promise<number> {
+  const [count] = await CourseTag.update(data as any, { where: { id } })
+  return count
+}
+
+export async function deleteCourseTagById(id: number): Promise<number> {
+  return await CourseTag.destroy({ where: { id } })
+}
+
+async function tagIdsByKey(): Promise<Map<string, number>> {
+  const rows = await CourseTag.findAll({ attributes: ['id', 'key'], raw: true })
+  return new Map(rows.map((row: any) => [row.key, row.id]))
+}
+
+export async function cuTagRowsForCus(cuIds: string[]): Promise<CuTagRow[]> {
+  if (cuIds.length === 0) return []
+  const rows = await CuCourseTag.findAll({
+    where: { cuId: cuIds },
+    include: [{ model: CourseTag, as: 'tag', attributes: ['key'] }],
+    raw: true,
+    nest: true,
+  })
+  return rows.map((row: any) => ({ cuId: row.cuId, tagKey: row.tag.key }))
+}
+
+export async function curTagRowsForCurs(curIds: string[]): Promise<CurTagRow[]> {
+  if (curIds.length === 0) return []
+  const rows = await CurCourseTag.findAll({
+    where: { curId: curIds },
+    include: [{ model: CourseTag, as: 'tag', attributes: ['key'] }],
+    raw: true,
+    nest: true,
+  })
+  return rows.map((row: any) => ({ curId: row.curId, tagKey: row.tag.key, mode: row.mode as CourseTagMode }))
+}
+
+// Three queries regardless of how many Curs are asked for. Never call this per Cur.
+export async function tagStateForCurs(curIds: string[]): Promise<CurTagState> {
+  const inheritedByCur = new Map<string, string[]>()
+  const rowsByCur = new Map<string, CurTagRow[]>()
+  if (curIds.length === 0) return { inheritedByCur, rowsByCur }
+
+  const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
+  const cuTags = await cuTagRowsForCus([...new Set(links.map((link: any) => link.cuId))])
+  const curTags = await curTagRowsForCurs(curIds)
+
+  const keysByCu = new Map<string, string[]>()
+  for (const row of cuTags) {
+    keysByCu.set(row.cuId, [...(keysByCu.get(row.cuId) ?? []), row.tagKey])
+  }
+  for (const link of links as any[]) {
+    const keys = keysByCu.get(link.cuId) ?? []
+    if (keys.length > 0) {
+      inheritedByCur.set(link.curId, [...new Set([...(inheritedByCur.get(link.curId) ?? []), ...keys])])
+    }
+  }
+  for (const row of curTags) {
+    rowsByCur.set(row.curId, [...(rowsByCur.get(row.curId) ?? []), row])
+  }
+
+  return { inheritedByCur, rowsByCur }
+}
+
+export async function setCurTag(curId: string, tagKey: string, mode: CourseTagMode): Promise<void> {
+  await bulkSetCurTags([curId], [tagKey], mode)
+}
+
+export async function clearCurTag(curId: string, tagKey: string): Promise<number> {
+  return await bulkClearCurTags([curId], [tagKey])
+}
+
+export async function bulkSetCurTags(curIds: string[], tagKeys: string[], mode: CourseTagMode): Promise<number> {
+  const tagIds = await tagIdsByKey()
+  const wantedTagIds = tagKeys.map(key => tagIds.get(key)).filter(id => id !== undefined)
+  if (curIds.length === 0 || wantedTagIds.length === 0) return 0
+
+  const rows = curIds.flatMap(curId => wantedTagIds.map(courseTagId => ({ curId, courseTagId, mode })))
+  await CurCourseTag.bulkCreate(rows as any, { updateOnDuplicate: ['mode', 'updatedAt'] })
+  return rows.length
+}
+
+export async function bulkClearCurTags(curIds: string[], tagKeys: string[]): Promise<number> {
+  const tagIds = await tagIdsByKey()
+  const wantedTagIds = tagKeys.map(key => tagIds.get(key)).filter(id => id !== undefined)
+  if (curIds.length === 0 || wantedTagIds.length === 0) return 0
+
+  return await CurCourseTag.destroy({ where: { curId: curIds, courseTagId: wantedTagIds } })
+}
+
+export async function setCuTag(cuId: string, tagKey: string, present: boolean): Promise<void> {
+  const tagIds = await tagIdsByKey()
+  const courseTagId = tagIds.get(tagKey)
+  if (courseTagId === undefined) return
+
+  if (present) {
+    await CuCourseTag.findOrCreate({ where: { cuId, courseTagId } })
+    return
+  }
+  await CuCourseTag.destroy({ where: { cuId, courseTagId } })
+}
+
+export async function countCursForCus(cuIds: string[]): Promise<Map<string, number>> {
+  if (cuIds.length === 0) return new Map()
+  const links = await CurCu.findAll({ where: { cuId: cuIds }, attributes: ['cuId', 'curId'], raw: true })
+  const counts = new Map<string, number>()
+  for (const link of links as any[]) {
+    counts.set(link.cuId, (counts.get(link.cuId) ?? 0) + 1)
+  }
+  return counts
+}
+
+export async function bulkApplyTagsToFilter(
+  filters: CourseSearchFilters,
+  tagKeys: string[],
+  mode: CourseTagMode | 'clear'
+): Promise<{ matched: number; changed: number }> {
+  const curIds = await matchingCurIds(filters)
+  const changed =
+    mode === 'clear' ? await bulkClearCurTags(curIds, tagKeys) : await bulkSetCurTags(curIds, tagKeys, mode)
+  return { matched: curIds.length, changed }
+}
+
+export async function fullTagPayload(): Promise<TagSnapshotPayload> {
+  const tags = await allCourseTags()
+  const cuRows = await CuCourseTag.findAll({
+    include: [{ model: CourseTag, as: 'tag', attributes: ['key'] }],
+    raw: true,
+    nest: true,
+  })
+  const curRows = await CurCourseTag.findAll({
+    include: [{ model: CourseTag, as: 'tag', attributes: ['key'] }],
+    raw: true,
+    nest: true,
+  })
+
+  return {
+    exportedAt: new Date().toISOString(),
+    tags: tags.map(({ key, description }) => ({ key, description })),
+    cuTags: cuRows.map((row: any) => ({ cuId: row.cuId, tagKey: row.tag.key })),
+    curTags: curRows.map((row: any) => ({ curId: row.curId, tagKey: row.tag.key, mode: row.mode as CourseTagMode })),
+  }
+}
+
+export async function replaceTagState(
+  payload: TagSnapshotPayload
+): Promise<{ tags: number; cuTags: number; curTags: number }> {
+  return await sequelize.transaction(async transaction => {
+    await CurCourseTag.destroy({ where: {}, transaction })
+    await CuCourseTag.destroy({ where: {}, transaction })
+
+    for (const tag of payload.tags) {
+      await CourseTag.upsert(tag as any, { transaction })
+    }
+
+    const tagRows = await CourseTag.findAll({ attributes: ['id', 'key'], raw: true, transaction })
+    const idByKey = new Map(tagRows.map((row: any) => [row.key, row.id]))
+
+    const cuRows = payload.cuTags
+      .filter(row => idByKey.has(row.tagKey))
+      .map(row => ({ cuId: row.cuId, courseTagId: idByKey.get(row.tagKey) }))
+    const curRows = payload.curTags
+      .filter(row => idByKey.has(row.tagKey))
+      .map(row => ({ curId: row.curId, courseTagId: idByKey.get(row.tagKey), mode: row.mode }))
+
+    await CuCourseTag.bulkCreate(cuRows as any, { ignoreDuplicates: true, transaction })
+    await CurCourseTag.bulkCreate(curRows as any, { ignoreDuplicates: true, transaction })
+
+    return { tags: payload.tags.length, cuTags: cuRows.length, curTags: curRows.length }
+  })
+}
+
+export async function allTagSnapshots(): Promise<TagSnapshotMeta[]> {
+  const rows = await TagSnapshot.findAll({
+    attributes: ['id', 'name', 'description', 'createdBy', 'createdAt'],
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  })
+  return rows as unknown as TagSnapshotMeta[]
+}
+
+export async function tagSnapshotById(id: number): Promise<TagSnapshotPayload | null> {
+  const row = await TagSnapshot.findByPk(id)
+  return row ? ((row.get('payload') as TagSnapshotPayload) ?? null) : null
+}
+
+export async function createTagSnapshot(
+  name: string,
+  description: string | null,
+  createdBy: string | null
+): Promise<TagSnapshotMeta> {
+  const payload = await fullTagPayload()
+  const created = await TagSnapshot.create({ name, description, createdBy, payload } as any)
+  return created.toJSON() as TagSnapshotMeta
+}
+
+export async function deleteTagSnapshotById(id: number): Promise<number> {
+  return await TagSnapshot.destroy({ where: { id } })
 }
