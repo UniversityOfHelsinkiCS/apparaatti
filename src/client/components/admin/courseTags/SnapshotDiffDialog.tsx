@@ -1,12 +1,13 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
-import type { TagPayloadDiff } from '../../../../common/types.ts'
+import type { CourseUnitGroup, TagPayloadDiff } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
-import type { DiffCourse } from './courseTagUtils.ts'
+import type { CurTagState, DiffCourse } from './courseTagUtils.ts'
 import {
   fetchCoursesForLabels,
   fetchCourseTags,
@@ -91,7 +92,10 @@ const TagListSection = ({ title, added, removed }: { title: string; added: strin
 const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: SnapshotDiffDialogProps) => {
   const { t, i18n } = useTranslation()
 
-  const curIds = [...new Set([...(diff?.addedCurTags ?? []), ...(diff?.removedCurTags ?? [])].map(row => row.curId))]
+  const curIds = useMemo(
+    () => [...new Set([...(diff?.addedCurTags ?? []), ...(diff?.removedCurTags ?? [])].map(row => row.curId))],
+    [diff]
+  )
 
   const { data: courses, isLoading } = useQuery({
     queryKey: ['course-tag-diff-courses'],
@@ -113,16 +117,43 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
 
   const { data: tags } = useQuery({ queryKey: ['course-tags'], queryFn: fetchCourseTags, enabled: diff !== null })
 
-  const courseByCuId = new Map<string, DiffCourse>()
-  const courseByCurId = new Map<string, DiffCourse>()
-  for (const course of courses ?? []) {
-    courseByCurId.set(course.id, course)
-    for (const cu of course.Cus ?? []) {
-      courseByCuId.set(cu.id, course)
+  const { courseByCuId, courseByCurId } = useMemo(() => {
+    const byCuId = new Map<string, DiffCourse>()
+    const byCurId = new Map<string, DiffCourse>()
+    for (const course of courses ?? []) {
+      byCurId.set(course.id, course)
+      for (const cu of course.Cus ?? []) {
+        byCuId.set(cu.id, course)
+      }
     }
-  }
+    return { courseByCuId: byCuId, courseByCurId: byCurId }
+  }, [courses])
 
-  const tagLabel = (tagKey: string) => tags?.find(tag => tag.key === tagKey)?.description || tagKey
+  const groupByCourseCode = useMemo(() => {
+    const index = new Map<string, CourseUnitGroup>()
+    for (const group of groups ?? []) {
+      index.set(group.courseCode, group)
+    }
+    return index
+  }, [groups])
+
+  const curStateById = useMemo(() => {
+    const index = new Map<string, CurTagState>()
+    for (const state of curStates ?? []) {
+      index.set(state.curId, state)
+    }
+    return index
+  }, [curStates])
+
+  const tagLabelByKey = useMemo(() => {
+    const index = new Map<string, string>()
+    for (const tag of tags ?? []) {
+      index.set(tag.key, tag.description || tag.key)
+    }
+    return index
+  }, [tags])
+
+  const tagLabel = (tagKey: string) => tagLabelByKey.get(tagKey) ?? tagKey
 
   const courseCodeOf = (course: DiffCourse | undefined) => course?.Cus?.[0]?.courseCode ?? ''
 
@@ -134,7 +165,7 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
   const beforeTags = (current: string[], added: string[], removed: string[]) =>
     [...new Set([...current.filter(tag => !added.includes(tag)), ...removed])].sort()
 
-  const courseBlocks = (): DiffBlock[] => {
+  const buildCourseBlocks = (): DiffBlock[] => {
     const byCode = new Map<string, { added: string[]; removed: string[]; heading: string }>()
 
     const collect = (cuId: string, tagKey: string, side: 'added' | 'removed') => {
@@ -151,17 +182,13 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
     return [...byCode.entries()].map(([code, entry]) => ({
       id: code,
       heading: entry.heading,
-      before: beforeTags(
-        (groups ?? []).find(group => group.courseCode === code)?.tagKeys.map(tagLabel) ?? [],
-        entry.added,
-        entry.removed
-      ),
+      before: beforeTags(groupByCourseCode.get(code)?.tagKeys.map(tagLabel) ?? [], entry.added, entry.removed),
       added: [...new Set(entry.added)].sort(),
       removed: [...new Set(entry.removed)].sort(),
     }))
   }
 
-  const realisationBlocks = (): DiffBlock[] => {
+  const buildRealisationBlocks = (): DiffBlock[] => {
     const byCur = new Map<string, { added: string[]; removed: string[] }>()
 
     const collect = (curId: string, tagKey: string, mode: string, side: 'added' | 'removed') => {
@@ -178,8 +205,8 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
       const course = courseByCurId.get(curId)
       const starts = course?.startDate ? new Date(course.startDate).toLocaleDateString(i18n.language) : ''
       const current =
-        curStates
-          ?.find(state => state.curId === curId)
+        curStateById
+          .get(curId)
           ?.tags.filter(tag => tag.source !== 'ignored')
           .map(tag => tagLabel(tag.key)) ?? []
 
@@ -192,6 +219,16 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
       }
     })
   }
+
+  const courseBlocks = useMemo(buildCourseBlocks, [diff, courseByCuId, groupByCourseCode, tagLabelByKey, i18n.language])
+
+  const realisationBlocks = useMemo(buildRealisationBlocks, [
+    diff,
+    courseByCurId,
+    curStateById,
+    tagLabelByKey,
+    i18n.language,
+  ])
 
   const isUnchanged =
     diff !== null &&
@@ -217,11 +254,8 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
               added={diff.addedTags.map(tagLabel)}
               removed={diff.removedTags.map(tagLabel)}
             />
-            <DiffBlockSection title={t('v2:courseTags.snapshots.diffCourseChanges')} blocks={courseBlocks()} />
-            <DiffBlockSection
-              title={t('v2:courseTags.snapshots.diffRealisationChanges')}
-              blocks={realisationBlocks()}
-            />
+            <DiffBlockSection title={t('v2:courseTags.snapshots.diffCourseChanges')} blocks={courseBlocks} />
+            <DiffBlockSection title={t('v2:courseTags.snapshots.diffRealisationChanges')} blocks={realisationBlocks} />
           </Stack>
         )}
       </DialogContent>

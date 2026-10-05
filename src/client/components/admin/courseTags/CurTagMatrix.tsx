@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
@@ -92,8 +92,12 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
   const [isBulkOpen, setIsBulkOpen] = useState(false)
   const [storedColumns, setStoredColumns] = useState<string[] | null>(readStoredColumns)
 
-  const visibleKeys = storedColumns ?? tags.map(tag => tag.key)
-  const visibleTags = tags.filter(tag => visibleKeys.includes(tag.key))
+  const visibleKeys = useMemo(() => storedColumns ?? tags.map(tag => tag.key), [storedColumns, tags])
+
+  const visibleTags = useMemo(() => {
+    const keySet = new Set(visibleKeys)
+    return tags.filter(tag => keySet.has(tag.key))
+  }, [tags, visibleKeys])
 
   const handleColumnsChange = (keys: string[]) => {
     setStoredColumns(keys)
@@ -112,8 +116,8 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
     undefined
   )
 
-  const courses = coursesData?.courses ?? []
-  const curIds = courses.map(course => course.id)
+  const courses = useMemo(() => coursesData?.courses ?? [], [coursesData])
+  const curIds = useMemo(() => courses.map(course => course.id), [courses])
 
   const { data: tagStates } = useQuery({
     queryKey: ['course-tag-states', curIds.join(',')],
@@ -121,13 +125,24 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
     enabled: curIds.length > 0,
   })
 
-  const stateFor = (curId: string, tagKey: string): TagCellState =>
-    tagStates?.find(state => state.curId === curId)?.tags.find(entry => entry.key === tagKey)?.source ?? 'unset'
+  const stateByCur = useMemo(() => {
+    const index = new Map<string, Map<string, TagCellState>>()
+    for (const state of tagStates ?? []) {
+      index.set(state.curId, new Map(state.tags.map(entry => [entry.key, entry.source])))
+    }
+    return index
+  }, [tagStates])
 
-  const handleToggle = async (curId: string, tagKey: string) => {
-    await saveCurTag(curId, tagKey, nextMode(stateFor(curId, tagKey)))
-    await invalidateTagQueries(queryClient)
-  }
+  const stateFor = (curId: string, tagKey: string): TagCellState => stateByCur.get(curId)?.get(tagKey) ?? 'unset'
+
+  const handleToggle = useCallback(
+    async (curId: string, tagKey: string) => {
+      const current = stateByCur.get(curId)?.get(tagKey) ?? 'unset'
+      await saveCurTag(curId, tagKey, nextMode(current))
+      await invalidateTagQueries(queryClient)
+    },
+    [stateByCur, queryClient]
+  )
 
   return (
     <Box>
@@ -175,10 +190,11 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
                   {visibleTags.map(tag => (
                     <TableCell key={tag.key} align="center" sx={{ p: 0.25 }}>
                       <TagCell
+                        rowId={course.id}
                         tagKey={tag.key}
                         description={tag.description}
                         state={stateFor(course.id, tag.key)}
-                        onClick={() => handleToggle(course.id, tag.key)}
+                        onToggle={handleToggle}
                       />
                     </TableCell>
                   ))}

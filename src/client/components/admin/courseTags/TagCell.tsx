@@ -1,4 +1,5 @@
 import { Box, Tooltip } from '@mui/material'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { ResolvedTagSource } from '../../../../common/types.ts'
@@ -6,10 +7,11 @@ import type { ResolvedTagSource } from '../../../../common/types.ts'
 export type TagCellState = ResolvedTagSource | 'unset'
 
 interface TagCellProps {
+  rowId: string
   tagKey: string
   description: string | null
   state: TagCellState
-  onClick: () => void
+  onToggle: (rowId: string, tagKey: string) => void
 }
 
 const glyph: Record<TagCellState, string> = {
@@ -26,7 +28,7 @@ const stateSx: Record<TagCellState, object> = {
   unset: { backgroundColor: '#ffffff', color: 'transparent', borderColor: '#6b7280' },
 }
 
-const TagCell = ({ tagKey, description, state, onClick }: TagCellProps) => {
+const TagCell = ({ rowId, tagKey, description, state, onToggle }: TagCellProps) => {
   const { t } = useTranslation()
 
   const label = t(`v2:courseTags.state.${state}`)
@@ -37,7 +39,7 @@ const TagCell = ({ tagKey, description, state, onClick }: TagCellProps) => {
       <Box
         component="button"
         type="button"
-        onClick={onClick}
+        onClick={() => onToggle(rowId, tagKey)}
         aria-label={title}
         aria-pressed={state !== 'unset'}
         sx={{
@@ -64,4 +66,4 @@ const TagCell = ({ tagKey, description, state, onClick }: TagCellProps) => {
   )
 }
 
-export default TagCell
+export default memo(TagCell)

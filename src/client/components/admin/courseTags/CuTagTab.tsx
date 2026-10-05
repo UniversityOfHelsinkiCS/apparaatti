@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { CourseTag, CourseUnitGroup } from '../../../../common/types.ts'
@@ -66,12 +66,24 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
     undefined
   )
 
-  const groups = data?.groups ?? []
+  const groups = useMemo(() => data?.groups ?? [], [data])
 
-  const handleToggle = async (group: CourseUnitGroup, tagKey: string) => {
-    await saveCourseUnitTag(group.courseCode, tagKey, !group.tagKeys.includes(tagKey))
-    await invalidateTagQueries(queryClient)
-  }
+  const tagKeysByCourseCode = useMemo(() => {
+    const index = new Map<string, Set<string>>()
+    for (const group of groups) {
+      index.set(group.courseCode, new Set(group.tagKeys))
+    }
+    return index
+  }, [groups])
+
+  const handleToggle = useCallback(
+    async (courseCode: string, tagKey: string) => {
+      const hasTag = tagKeysByCourseCode.get(courseCode)?.has(tagKey) ?? false
+      await saveCourseUnitTag(courseCode, tagKey, !hasTag)
+      await invalidateTagQueries(queryClient)
+    },
+    [tagKeysByCourseCode, queryClient]
+  )
 
   const localizedName = (group: CourseUnitGroup) =>
     group.name[i18n.language as 'fi' | 'sv' | 'en'] ?? group.name.fi ?? ''
@@ -122,10 +134,11 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
                   {tags.map(tag => (
                     <TableCell key={tag.key} align="center" sx={{ p: 0.25 }}>
                       <TagCell
+                        rowId={group.courseCode}
                         tagKey={tag.key}
                         description={tag.description}
-                        state={group.tagKeys.includes(tag.key) ? 'added' : 'unset'}
-                        onClick={() => handleToggle(group, tag.key)}
+                        state={tagKeysByCourseCode.get(group.courseCode)?.has(tag.key) ? 'added' : 'unset'}
+                        onToggle={handleToggle}
                       />
                     </TableCell>
                   ))}
