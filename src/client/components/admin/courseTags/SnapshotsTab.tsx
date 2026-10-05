@@ -15,10 +15,12 @@ import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { TagPayloadDiff } from '../../../../common/types.ts'
+import type { TagPayloadDiff, TagSnapshotMeta } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
+import type { EditedSnapshot } from './courseTagUtils.ts'
 import {
+  activateSnapshot,
   COURSE_TAGS_PATH,
   createSnapshot,
   deleteSnapshot,
@@ -32,9 +34,11 @@ import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 
 interface SnapshotsTabProps {
   isSuperuser: boolean
+  editedSnapshot: EditedSnapshot | null
+  onEditTagging: (snapshot: EditedSnapshot) => void
 }
 
-const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
+const SnapshotsTab = ({ isSuperuser, editedSnapshot, onEditTagging }: SnapshotsTabProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [name, setName] = useState('')
@@ -51,6 +55,19 @@ const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
     await createSnapshot(name, description || null)
     setName('')
     setDescription('')
+    await refresh()
+  }
+
+  const handleEdit = async (snapshot: TagSnapshotMeta) => {
+    if (!window.confirm(t('v2:courseTags.snapshots.editTaggingConfirm', { name: snapshot.name }))) return
+    await restoreSnapshot(snapshot.id)
+    onEditTagging({ id: snapshot.id, name: snapshot.name })
+    await refresh()
+  }
+
+  const handleActivate = async (id: number, snapshotName: string) => {
+    if (!window.confirm(t('v2:courseTags.snapshots.activateConfirm', { name: snapshotName }))) return
+    await activateSnapshot(id)
     await refresh()
   }
 
@@ -145,7 +162,7 @@ const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
           </TableHead>
           <TableBody>
             {(snapshots ?? []).map(snapshot => (
-              <TableRow key={snapshot.id}>
+              <TableRow key={snapshot.id} selected={editedSnapshot?.id === snapshot.id}>
                 <TableCell>{snapshot.name}</TableCell>
                 <TableCell>{snapshot.description ?? ''}</TableCell>
                 <TableCell>{new Date(snapshot.createdAt).toLocaleString()}</TableCell>
@@ -157,6 +174,16 @@ const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
                     >
                       {t('v2:courseTags.snapshots.compare')}
                     </BlackOutlinedButton>
+                    {isSuperuser ? (
+                      <BlackOutlinedButton type="button" onClick={() => handleEdit(snapshot)}>
+                        {t('v2:courseTags.snapshots.edit')}
+                      </BlackOutlinedButton>
+                    ) : null}
+                    {isSuperuser ? (
+                      <BlackOutlinedButton type="button" onClick={() => handleActivate(snapshot.id, snapshot.name)}>
+                        {t('v2:courseTags.snapshots.activate')}
+                      </BlackOutlinedButton>
+                    ) : null}
                     {isSuperuser ? (
                       <BlackOutlinedButton type="button" onClick={() => handleRestore(snapshot.id, snapshot.name)}>
                         {t('v2:courseTags.snapshots.restore')}

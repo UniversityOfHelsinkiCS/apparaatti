@@ -920,7 +920,10 @@ export async function pendingTagChanges(): Promise<TagPayloadDiff> {
   return diffTagPayloads(await publishedTagPayload(), await fullTagPayload())
 }
 
-export async function publishTagState(publishedBy: string | null): Promise<{ cuTags: number; curTags: number }> {
+export async function publishTagState(
+  publishedBy: string | null,
+  description: string | null = null
+): Promise<{ cuTags: number; curTags: number }> {
   return await sequelize.transaction(async transaction => {
     await PublishedCurCourseTag.destroy({ where: {}, transaction })
     await PublishedCuCourseTag.destroy({ where: {}, transaction })
@@ -935,7 +938,7 @@ export async function publishTagState(publishedBy: string | null): Promise<{ cuT
     await TagSnapshot.create(
       {
         name: `${AUTO_SNAPSHOT_NAME_PREFIX} ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`,
-        description: `${curRows.length} realisation and ${cuRows.length} course unit assignments`,
+        description: description ?? `${curRows.length} realisation and ${cuRows.length} course unit assignments`,
         createdBy: publishedBy,
         payload,
       } as any,
@@ -1015,6 +1018,17 @@ export async function createTagSnapshot(
   const payload = await fullTagPayload()
   const created = await TagSnapshot.create({ name, description, createdBy, payload } as any)
   return created.toJSON() as TagSnapshotMeta
+}
+
+export async function updateTagSnapshotMeta(id: number, name: string, description: string | null): Promise<number> {
+  const [count] = await TagSnapshot.update({ name, description } as any, { where: { id } })
+  return count
+}
+
+export async function overwriteTagSnapshotPayload(id: number): Promise<number> {
+  const payload = await fullTagPayload()
+  const [count] = await TagSnapshot.update({ payload } as any, { where: { id } })
+  return count
 }
 
 export async function deleteTagSnapshotById(id: number): Promise<number> {

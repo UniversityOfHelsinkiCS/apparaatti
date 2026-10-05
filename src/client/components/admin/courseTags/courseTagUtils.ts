@@ -83,13 +83,25 @@ export const createSnapshot = (name: string, description: string | null) =>
 
 export const restoreSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/restore`)
 
+export const activateSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/activate`)
+
+export interface EditedSnapshot {
+  id: number
+  name: string
+}
+
+export const updateSnapshot = (id: number, name: string, description: string | null) =>
+  adminFetch('PATCH', `${COURSE_TAGS_PATH}/snapshots/${id}`, { name, description })
+
+export const overwriteSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/overwrite`)
+
 export const deleteSnapshot = (id: number) => adminFetch('DELETE', `${COURSE_TAGS_PATH}/snapshots/${id}`)
 
 export const fetchPendingChanges = async (): Promise<TagPayloadDiff> =>
   (await adminFetch('GET', `${COURSE_TAGS_PATH}/pending`)).json()
 
-export const publishDraft = async (): Promise<{ cuTags: number; curTags: number }> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`)).json()
+export const publishDraft = async (description: string | null = null): Promise<{ cuTags: number; curTags: number }> =>
+  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`, { description })).json()
 
 export const discardDraft = async (): Promise<{ cuTags: number; curTags: number }> =>
   (await adminFetch('POST', `${COURSE_TAGS_PATH}/discard`)).json()

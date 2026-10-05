@@ -207,6 +207,10 @@ export const TagSnapshotCreateSchema = z.object({
   description: z.string().trim().nullable().default(null),
 })
 
+export const TagPublishSchema = z.object({
+  description: z.string().trim().min(1).nullable().default(null),
+})
+
 export const TagSnapshotPayloadSchema = z.object({
   appVersion: z.string().optional(),
   exportedAt: z.string().optional(),

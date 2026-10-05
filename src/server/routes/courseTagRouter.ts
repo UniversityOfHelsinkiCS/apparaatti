@@ -6,6 +6,7 @@ import {
   CourseTagSchema,
   CurTagMutationSchema,
   CuTagMutationSchema,
+  TagPublishSchema,
   TagSnapshotCreateSchema,
   TagSnapshotPayloadSchema,
 } from '../../common/validators.ts'
@@ -28,6 +29,7 @@ import {
   draftTagStateForCurs,
   fullTagPayload,
   matchingCurIds,
+  overwriteTagSnapshotPayload,
   pendingTagChanges,
   publishTagState,
   replaceTagState,
@@ -35,6 +37,7 @@ import {
   setCurTag,
   tagSnapshotById,
   updateCourseTagById,
+  updateTagSnapshotMeta,
 } from '../util/dbActions.ts'
 
 const courseTagRouter = express.Router()
@@ -168,8 +171,14 @@ courseTagRouter.get('/pending', async (req, res) => {
 })
 
 courseTagRouter.post('/publish', async (req, res) => {
+  const parsed = TagPublishSchema.safeParse(req.body ?? {})
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
+    return
+  }
+
   const publishedBy = (req.user as any)?.id ?? null
-  res.json(await publishTagState(publishedBy))
+  res.json(await publishTagState(publishedBy, parsed.data.description))
 })
 
 courseTagRouter.post('/discard', async (req, res) => {
@@ -222,6 +231,51 @@ courseTagRouter.post('/snapshots/:id/restore', requireSuperuser, async (req, res
   const createdBy = (req.user as any)?.id ?? null
   await createTagSnapshot(`before restore of snapshot ${id}`, 'automatic backup taken before a restore', createdBy)
   res.json({ status: 'restored', results: await replaceTagState(payload) })
+})
+
+courseTagRouter.patch('/snapshots/:id', async (req, res) => {
+  const parsed = TagSnapshotCreateSchema.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
+    return
+  }
+
+  const updated = await updateTagSnapshotMeta(Number(req.params.id), parsed.data.name, parsed.data.description)
+  if (updated === 0) {
+    res.status(404).json({ message: 'Snapshot not found' })
+    return
+  }
+
+  res.json({ status: 'updated' })
+})
+
+courseTagRouter.post('/snapshots/:id/overwrite', requireSuperuser, async (req, res) => {
+  const updated = await overwriteTagSnapshotPayload(Number(req.params.id))
+  if (updated === 0) {
+    res.status(404).json({ message: 'Snapshot not found' })
+    return
+  }
+
+  res.json({ status: 'overwritten' })
+})
+
+courseTagRouter.post('/snapshots/:id/activate', requireSuperuser, async (req, res) => {
+  const id = Number(req.params.id)
+  const snapshot = await tagSnapshotById(id)
+  if (!snapshot) {
+    res.status(404).json({ message: 'Snapshot not found' })
+    return
+  }
+
+  const activatedBy = (req.user as any)?.id ?? null
+  await createTagSnapshot(
+    `before activating snapshot ${id}`,
+    'automatic backup taken before an activation',
+    activatedBy
+  )
+  const results = await replaceTagState(snapshot)
+  await publishTagState(activatedBy, `activated from snapshot ${id}`)
+  res.json({ status: 'activated', results })
 })
 
 courseTagRouter.delete('/snapshots/:id', requireSuperuser, async (req, res) => {

@@ -1,5 +1,5 @@
-import { Box, Tab, Tabs, Typography } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
+import { Box, MenuItem, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
@@ -7,7 +7,8 @@ import { Navigate } from 'react-router-dom'
 import { RedirectToLogin } from '../../../util/redirectToLogin.ts'
 import useRequiredUser from '../../../util/useRequiredUser.ts'
 import AdminNavbar from '../AdminNavbar.tsx'
-import { fetchCourseTags } from './courseTagUtils.ts'
+import type { EditedSnapshot } from './courseTagUtils.ts'
+import { fetchCourseTags, fetchSnapshots, invalidateTagQueries, restoreSnapshot } from './courseTagUtils.ts'
 import CurTagMatrix from './CurTagMatrix.tsx'
 import CuTagTab from './CuTagTab.tsx'
 import PendingChangesBar from './PendingChangesBar.tsx'
@@ -18,8 +19,27 @@ const CourseTagsPage = () => {
   const { t } = useTranslation()
   const { user, isLoading, isUnauthorized } = useRequiredUser()
   const [tab, setTab] = useState(0)
+  const [editedSnapshot, setEditedSnapshot] = useState<EditedSnapshot | null>(null)
+
+  const queryClient = useQueryClient()
 
   const { data: tags } = useQuery({ queryKey: ['course-tags'], queryFn: fetchCourseTags })
+  const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
+
+  const handleEditedChange = async (value: string) => {
+    if (value === 'new') {
+      setEditedSnapshot(null)
+      return
+    }
+
+    const snapshot = (snapshots ?? []).find(row => String(row.id) === value)
+    if (!snapshot) return
+    if (!window.confirm(t('v2:courseTags.snapshots.editTaggingConfirm', { name: snapshot.name }))) return
+
+    await restoreSnapshot(snapshot.id)
+    setEditedSnapshot({ id: snapshot.id, name: snapshot.name })
+    await invalidateTagQueries(queryClient)
+  }
 
   if (isUnauthorized) {
     return <RedirectToLogin />
@@ -43,7 +63,25 @@ const CourseTagsPage = () => {
         {t('v2:courseTags.title')}
       </Typography>
 
-      <PendingChangesBar />
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+        <TextField
+          select
+          size="small"
+          label={t('v2:courseTags.editing.label')}
+          value={editedSnapshot ? String(editedSnapshot.id) : 'new'}
+          onChange={event => handleEditedChange(event.target.value)}
+          sx={{ minWidth: 280 }}
+        >
+          <MenuItem value="new">{t('v2:courseTags.editing.new')}</MenuItem>
+          {(snapshots ?? []).map(snapshot => (
+            <MenuItem key={snapshot.id} value={String(snapshot.id)}>
+              {snapshot.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Stack>
+
+      <PendingChangesBar editedSnapshot={editedSnapshot} onEditingEnd={() => setEditedSnapshot(null)} />
 
       <Tabs
         value={tab}
@@ -67,7 +105,13 @@ const CourseTagsPage = () => {
       {tab === 0 ? <CurTagMatrix tags={courseTags} /> : null}
       {tab === 1 ? <CuTagTab tags={courseTags} /> : null}
       {tab === 2 ? <TagVocabularyTab tags={courseTags} isSuperuser={user.isSuperuser ?? false} /> : null}
-      {tab === 3 ? <SnapshotsTab isSuperuser={user.isSuperuser ?? false} /> : null}
+      {tab === 3 ? (
+        <SnapshotsTab
+          isSuperuser={user.isSuperuser ?? false}
+          editedSnapshot={editedSnapshot}
+          onEditTagging={setEditedSnapshot}
+        />
+      ) : null}
     </Box>
   )
 }

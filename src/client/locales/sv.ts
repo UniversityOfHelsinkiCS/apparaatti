@@ -167,6 +167,10 @@ export default {
         ignored: 'ignorerad på denna förverkligande',
         unset: 'inte satt',
       },
+      editing: {
+        label: 'Redigeras',
+        new: 'Ny version',
+      },
       publish: {
         upToDate: 'Alla taggändringar är tillämpade. Rekommendationen använder exakt det du ser här.',
         pending: '{{count}} otillämpade taggändringar',
@@ -175,6 +179,14 @@ export default {
         apply: 'Granska och tillämpa',
         reviewTitle: 'Granska ändringarna innan de tillämpas',
         confirmApply: 'Tillämpa ändringarna',
+        saveOnly: 'Spara en version',
+        saveAsNew: 'Spara som en ny version',
+        nameLabel: 'Versionens namn',
+        nameHelp: 'Lämnas det tomt namnges versionen efter tidpunkten den sparades.',
+        saveToVersion: 'Spara i {{name}}',
+        editingVersion: 'Redigerar versionen {{name}}. Spara ändringarna i den, som en ny version, eller tillämpa dem.',
+        descriptionLabel: 'Beskrivning (valfri)',
+        descriptionHelp: 'Sparas med versionen. Lämnas den tom används den automatiska beskrivningen.',
         discard: 'Förkasta ändringar',
         discardConfirm: 'Förkasta {{count}} otillämpade ändringar och gå tillbaka till den tillämpade versionen?',
       },
@@ -234,6 +246,12 @@ export default {
         createdAt: 'Sparad',
         save: 'Spara version',
         compare: 'Jämför',
+        edit: 'Redigera',
+        editTaggingConfirm:
+          'Öppna versionen {{name}} för redigering? Det nuvarande utkastet ersätts med dess innehåll.',
+        activate: 'Ta i bruk',
+        activateConfirm:
+          'Ta versionen {{name}} i bruk? Den ersätter den nuvarande taggningen och går direkt till rekommendationen.',
         restore: 'Återställ',
         delete: 'Radera',
         empty: 'Inga sparade versioner ännu.',

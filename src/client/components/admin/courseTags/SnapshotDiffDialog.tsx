@@ -1,5 +1,6 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
@@ -17,9 +18,8 @@ interface SnapshotDiffDialogProps {
   diff: TagPayloadDiff | null
   onClose: () => void
   title?: string
-  confirmLabel?: string
-  onConfirm?: () => void
-  isConfirmDisabled?: boolean
+  content?: ReactNode
+  actions?: ReactNode
 }
 
 interface DiffBlock {
@@ -88,14 +88,7 @@ const TagListSection = ({ title, added, removed }: { title: string; added: strin
   )
 }
 
-const SnapshotDiffDialog = ({
-  diff,
-  onClose,
-  title,
-  confirmLabel,
-  onConfirm,
-  isConfirmDisabled,
-}: SnapshotDiffDialogProps) => {
+const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: SnapshotDiffDialogProps) => {
   const { t, i18n } = useTranslation()
 
   const curIds = [...new Set([...(diff?.addedCurTags ?? []), ...(diff?.removedCurTags ?? [])].map(row => row.curId))]
@@ -217,6 +210,7 @@ const SnapshotDiffDialog = ({
           <Typography>{t('v2:courseTags.snapshots.diffUnchanged')}</Typography>
         ) : (
           <Stack spacing={3}>
+            {content}
             {isLoading ? <Typography>{t('v2:courseTags.snapshots.diffLoading')}</Typography> : null}
             <TagListSection
               title={t('v2:courseTags.snapshots.diffVocabularyChanges')}
@@ -235,11 +229,7 @@ const SnapshotDiffDialog = ({
         <BlackOutlinedButton type="button" onClick={onClose}>
           {t('v2:courseTags.close')}
         </BlackOutlinedButton>
-        {onConfirm ? (
-          <BlackOutlinedButton type="button" onClick={onConfirm} disabled={isConfirmDisabled}>
-            {confirmLabel}
-          </BlackOutlinedButton>
-        ) : null}
+        {actions}
       </DialogActions>
     </Dialog>
   )

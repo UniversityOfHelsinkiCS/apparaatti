@@ -37,6 +37,7 @@ const initializeI18n = () =>
     lng: 'en',
     fallbackLng: 'en',
     defaultNS: 'common',
+    interpolation: { escapeValue: false },
   })
 
 window.__i18n__ = i18n
