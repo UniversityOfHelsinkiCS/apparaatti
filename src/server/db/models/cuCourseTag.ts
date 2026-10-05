@@ -23,6 +23,10 @@ CuCourseTag.init(
     tableName: 'cu_course_tags',
     timestamps: true,
     underscored: true,
+    indexes: [
+      { name: 'cu_course_tags_uniq', unique: true, fields: ['cu_id', 'course_tag_id'] },
+      { name: 'cu_course_tags_tag_idx', fields: ['course_tag_id'] },
+    ],
   }
 )
 

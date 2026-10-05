@@ -24,6 +24,11 @@ CurCourseTag.init(
     tableName: 'cur_course_tags',
     timestamps: true,
     underscored: true,
+    indexes: [
+      { name: 'cur_course_tags_uniq', unique: true, fields: ['cur_id', 'course_tag_id'] },
+      { name: 'cur_course_tags_cur_idx', fields: ['cur_id'] },
+      { name: 'cur_course_tags_tag_idx', fields: ['course_tag_id'] },
+    ],
   }
 )
 

@@ -830,13 +830,19 @@ export async function clearCurTag(curId: string, tagKey: string): Promise<number
   return await bulkClearCurTags([curId], [tagKey])
 }
 
+const BULK_TAG_CHUNK = 100
+
 export async function bulkSetCurTags(curIds: string[], tagKeys: string[], mode: CourseTagMode): Promise<number> {
   const tagIds = await tagIdsByKey()
   const wantedTagIds = tagKeys.map(key => tagIds.get(key)).filter(id => id !== undefined)
   if (curIds.length === 0 || wantedTagIds.length === 0) return 0
 
   const rows = curIds.flatMap(curId => wantedTagIds.map(courseTagId => ({ curId, courseTagId, mode })))
-  await CurCourseTag.bulkCreate(rows as any, { updateOnDuplicate: ['mode', 'updatedAt'] })
+  for (let start = 0; start < rows.length; start += BULK_TAG_CHUNK) {
+    await CurCourseTag.bulkCreate(rows.slice(start, start + BULK_TAG_CHUNK) as any, {
+      updateOnDuplicate: ['mode', 'updatedAt'],
+    })
+  }
   return rows.length
 }
 

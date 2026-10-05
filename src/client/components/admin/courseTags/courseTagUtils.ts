@@ -29,10 +29,21 @@ export interface BulkApplyResult {
 
 export const fetchCourseTags = async (): Promise<CourseTag[]> => (await adminFetch('GET', COURSE_TAGS_PATH)).json()
 
+const CUR_STATE_BATCH = 100
+
 export const fetchCurTagStates = async (curIds: string[]): Promise<CurTagState[]> => {
   if (curIds.length === 0) return []
-  const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/cur-state?curIds=${curIds.join(',')}`)
-  return response.json()
+
+  const batches: string[][] = []
+  for (let start = 0; start < curIds.length; start += CUR_STATE_BATCH) {
+    batches.push(curIds.slice(start, start + CUR_STATE_BATCH))
+  }
+
+  const responses = await Promise.all(
+    batches.map(batch => adminFetch('GET', `${COURSE_TAGS_PATH}/cur-state?curIds=${batch.join(',')}`))
+  )
+
+  return (await Promise.all(responses.map(response => response.json()))).flat()
 }
 
 export const saveCurTag = (curId: string, tagKey: string, mode: CurTagMutationMode) =>
