@@ -214,6 +214,7 @@ export default {
         courseCode: 'Kurssikoodi',
         courseUnit: 'Opintojakso',
         realisations: 'Toteutuksia',
+        matched: '{{count}} opintojaksoa nykyisessä haussa',
       },
       vocabulary: {
         key: 'Avain',

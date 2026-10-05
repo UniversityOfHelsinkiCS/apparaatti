@@ -1,24 +1,32 @@
 import {
   Alert,
   Box,
-  Stack,
+  Pagination,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Tooltip,
   Typography,
 } from '@mui/material'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
+import type { CourseTag, CourseUnitGroup } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
-import { fetchCuTagStates, invalidateTagQueries, saveCuTag } from './courseTagUtils.ts'
+import type { CourseSearchValues } from '../courseSearchQuery.ts'
+import {
+  buildCourseQueryString,
+  courseSearchCacheKey,
+  courseSearchValuesFromFields,
+  emptyCourseSearchValues,
+} from '../courseSearchQuery.ts'
+import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
+import CoursesSearchFields from '../CoursesSearchFields.tsx'
+import { invalidateTagQueries, saveCourseUnitTag } from './courseTagUtils.ts'
 import {
   matrixContainerSx,
   stickyCornerCellSx,
@@ -30,19 +38,10 @@ import TagCell from './TagCell.tsx'
 
 const PAGE_SIZE = 50
 
-interface CourseUnit {
-  id: string
-  courseCode: string
-  name: LocalizedString
-}
-
-interface Course {
-  id: string
-  Cus?: CourseUnit[]
-}
-
-interface PaginatedCoursesResponse {
-  courses: Course[]
+interface CourseUnitsResponse {
+  groups: CourseUnitGroup[]
+  total: number
+  totalPages: number
 }
 
 interface CuTagTabProps {
@@ -50,37 +49,32 @@ interface CuTagTabProps {
 }
 
 const CuTagTab = ({ tags }: CuTagTabProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
-  const [courseCode, setCourseCode] = useState('')
+  const [page, setPage] = useState(1)
+  const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
 
-  const { data: coursesData, isLoading } = useApi<PaginatedCoursesResponse>(
-    `course-tags-cus-${courseCode}`,
-    `/api/admin/courses?page=1&limit=${PAGE_SIZE}${courseCode ? `&courseCode=${courseCode}` : ''}`,
+  const handleSearch = (fields: CoursesSearchFieldsValues) => {
+    setSearchValues(courseSearchValuesFromFields(fields))
+    setPage(1)
+  }
+
+  const { data, isLoading } = useApi<CourseUnitsResponse>(
+    `course-tag-cu-states-${courseSearchCacheKey(searchValues, page)}`,
+    `/api/admin/course-tags/course-units?${buildCourseQueryString(searchValues, page, PAGE_SIZE)}`,
     'GET',
     undefined
   )
 
-  const courseUnits = Object.values(
-    Object.fromEntries(
-      (coursesData?.courses ?? []).flatMap(course => (course.Cus ?? []).map(cu => [cu.id, cu] as const))
-    )
-  ) as CourseUnit[]
-  const cuIds = courseUnits.map(cu => cu.id)
+  const groups = data?.groups ?? []
 
-  const { data: cuStates } = useQuery({
-    queryKey: ['course-tag-cu-states', cuIds.join(',')],
-    queryFn: () => fetchCuTagStates(cuIds),
-    enabled: cuIds.length > 0,
-  })
-
-  const hasTag = (cuId: string, tagKey: string) =>
-    cuStates?.find(state => state.cuId === cuId)?.tagKeys.includes(tagKey) ?? false
-
-  const handleToggle = async (cuId: string, tagKey: string) => {
-    await saveCuTag(cuId, tagKey, !hasTag(cuId, tagKey))
+  const handleToggle = async (group: CourseUnitGroup, tagKey: string) => {
+    await saveCourseUnitTag(group.courseCode, tagKey, !group.tagKeys.includes(tagKey))
     await invalidateTagQueries(queryClient)
   }
+
+  const localizedName = (group: CourseUnitGroup) =>
+    group.name[i18n.language as 'fi' | 'sv' | 'en'] ?? group.name.fi ?? ''
 
   return (
     <Box>
@@ -88,14 +82,11 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
         {t('v2:courseTags.cu.explanation')}
       </Alert>
 
-      <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-        <TextField
-          size="small"
-          label={t('v2:courseTags.cu.courseCode')}
-          value={courseCode}
-          onChange={event => setCourseCode(event.target.value)}
-        />
-      </Stack>
+      <CoursesSearchFields onSearch={handleSearch} autoSearch />
+
+      <Typography variant="body2" sx={{ mb: 1, color: '#374151' }}>
+        {t('v2:courseTags.cu.matched', { count: data?.total ?? 0 })}
+      </Typography>
 
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>
@@ -120,21 +111,21 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courseUnits.map(cu => (
-                <TableRow key={cu.id} hover>
+              {groups.map(group => (
+                <TableRow key={group.courseCode} hover>
                   <TableCell sx={stickyFirstCellSx}>
-                    {cu.courseCode} {cu.name?.fi ?? ''}
+                    <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
+                      {group.courseCode} {localizedName(group)}
+                    </Typography>
                   </TableCell>
-                  <TableCell align="right">
-                    {cuStates?.find(state => state.cuId === cu.id)?.realisationCount ?? 0}
-                  </TableCell>
+                  <TableCell align="right">{group.realisationCount}</TableCell>
                   {tags.map(tag => (
                     <TableCell key={tag.key} align="center" sx={{ p: 0.25 }}>
                       <TagCell
                         tagKey={tag.key}
                         description={tag.description}
-                        state={hasTag(cu.id, tag.key) ? 'added' : 'unset'}
-                        onClick={() => handleToggle(cu.id, tag.key)}
+                        state={group.tagKeys.includes(tag.key) ? 'added' : 'unset'}
+                        onClick={() => handleToggle(group, tag.key)}
                       />
                     </TableCell>
                   ))}
@@ -144,6 +135,18 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
           </Table>
         </TableContainer>
       )}
+
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <Pagination
+          count={data?.totalPages ?? 1}
+          page={page}
+          onChange={(_event, value) => setPage(value)}
+          sx={{
+            '& .MuiPaginationItem-root': { color: '#374151' },
+            '& .Mui-selected': { backgroundColor: '#111827 !important', color: '#ffffff' },
+          }}
+        />
+      </Box>
     </Box>
   )
 }

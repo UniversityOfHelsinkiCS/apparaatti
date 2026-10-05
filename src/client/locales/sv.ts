@@ -178,6 +178,7 @@ export default {
       },
       tabs: {
         realisations: 'Förverkliganden',
+        matched: '{{count}} studieavsnitt i den nuvarande sökningen',
         courseUnits: 'Studieavsnitt',
         vocabulary: 'Taggar',
         snapshots: 'Versioner',

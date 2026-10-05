@@ -20,12 +20,6 @@ export interface CurTagState {
   tags: ResolvedCurTag[]
 }
 
-export interface CuTagState {
-  cuId: string
-  tagKeys: string[]
-  realisationCount: number
-}
-
 export interface BulkApplyResult {
   matched: number
   changed: number
@@ -39,17 +33,11 @@ export const fetchCurTagStates = async (curIds: string[]): Promise<CurTagState[]
   return response.json()
 }
 
-export const fetchCuTagStates = async (cuIds: string[]): Promise<CuTagState[]> => {
-  if (cuIds.length === 0) return []
-  const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/cu-state?cuIds=${cuIds.join(',')}`)
-  return response.json()
-}
-
 export const saveCurTag = (curId: string, tagKey: string, mode: CurTagMutationMode) =>
   adminFetch('PUT', `${COURSE_TAGS_PATH}/cur/${curId}`, { tagKey, mode })
 
-export const saveCuTag = (cuId: string, tagKey: string, present: boolean) =>
-  adminFetch('PUT', `${COURSE_TAGS_PATH}/cu/${cuId}`, { tagKey, present })
+export const saveCourseUnitTag = (courseCode: string, tagKey: string, present: boolean) =>
+  adminFetch('PUT', `${COURSE_TAGS_PATH}/course-unit/${encodeURIComponent(courseCode)}`, { tagKey, present })
 
 const bulkBody = (values: CourseSearchValues, tagKeys: string[], mode: CurTagMutationMode) => ({
   filters: courseSearchFilterParams(values),
@@ -102,5 +90,7 @@ export const TAG_QUERY_KEYS = [
 ]
 
 export const invalidateTagQueries = async (queryClient: QueryClient) => {
-  await Promise.all(TAG_QUERY_KEYS.map(key => queryClient.invalidateQueries({ queryKey: [key] })))
+  await queryClient.invalidateQueries({
+    predicate: query => TAG_QUERY_KEYS.some(key => String(query.queryKey[0]).startsWith(key)),
+  })
 }

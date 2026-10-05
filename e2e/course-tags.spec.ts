@@ -49,25 +49,42 @@ test('a cur tag is added, ignored and cleared again', async ({ request, e2eUserI
   await request.delete(`${TAGS_PATH}/${tag.id}`)
 })
 
-test('a cu tag is inherited by its realisations and can be ignored on one', async ({ request, e2eUserId }) => {
+test('a course unit tag is inherited by its realisations and can be ignored on one', async ({ request, e2eUserId }) => {
   const key = workerTagKey(e2eUserId)
   const tag = await (await request.post(TAGS_PATH, { data: { key, description: null } })).json()
 
-  const courses = await (await request.get('/api/admin/courses?page=1&limit=1')).json()
-  const course = courses.courses[0]
-  const cuId = course.Cus[0].id
+  const units = await (await request.get(`${TAGS_PATH}/course-units?page=1&limit=1`)).json()
+  const courseCode = units.groups[0].courseCode
 
-  await request.put(`${TAGS_PATH}/cu/${cuId}`, { data: { tagKey: key, present: true } })
-  const inherited = await (await request.get(`${TAGS_PATH}/cur-state?curIds=${course.id}`)).json()
+  await request.put(`${TAGS_PATH}/course-unit/${encodeURIComponent(courseCode)}`, {
+    data: { tagKey: key, present: true },
+  })
+
+  const tagged = await (await request.get(`${TAGS_PATH}/course-units?page=1&limit=1`)).json()
+  expect(tagged.groups[0].tagKeys).toContain(key)
+
+  const courses = await (await request.get(`/api/admin/courses?page=1&limit=1&courseCode=${courseCode}`)).json()
+  const curId = courses.courses[0].id
+  const inherited = await (await request.get(`${TAGS_PATH}/cur-state?curIds=${curId}`)).json()
   expect(inherited[0].tags).toContainEqual({ key, source: 'inherited' })
 
-  await request.put(`${TAGS_PATH}/cur/${course.id}`, { data: { tagKey: key, mode: 'ignore' } })
-  const ignored = await (await request.get(`${TAGS_PATH}/cur-state?curIds=${course.id}`)).json()
+  await request.put(`${TAGS_PATH}/cur/${curId}`, { data: { tagKey: key, mode: 'ignore' } })
+  const ignored = await (await request.get(`${TAGS_PATH}/cur-state?curIds=${curId}`)).json()
   expect(ignored[0].tags).toContainEqual({ key, source: 'ignored' })
 
-  await request.put(`${TAGS_PATH}/cur/${course.id}`, { data: { tagKey: key, mode: 'clear' } })
-  await request.put(`${TAGS_PATH}/cu/${cuId}`, { data: { tagKey: key, present: false } })
+  await request.put(`${TAGS_PATH}/cur/${curId}`, { data: { tagKey: key, mode: 'clear' } })
+  await request.put(`${TAGS_PATH}/course-unit/${encodeURIComponent(courseCode)}`, {
+    data: { tagKey: key, present: false },
+  })
   await request.delete(`${TAGS_PATH}/${tag.id}`)
+})
+
+test('each course unit appears exactly once in the course unit matrix', async ({ request }) => {
+  const units = await (await request.get(`${TAGS_PATH}/course-units?page=1&limit=200`)).json()
+  const codes = units.groups.map((group: any) => group.courseCode)
+
+  expect(codes).toHaveLength(new Set(codes).size)
+  expect(units.groups.every((group: any) => group.realisationCount > 0)).toBe(true)
 })
 
 test('the bulk preview count equals the number of courses the listing reports', async ({ request, e2eUserId }) => {

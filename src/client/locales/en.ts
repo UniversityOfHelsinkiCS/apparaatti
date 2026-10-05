@@ -176,6 +176,7 @@ export default {
       },
       tabs: {
         realisations: 'Realisations',
+        matched: '{{count}} course units in the current search',
         courseUnits: 'Course units',
         vocabulary: 'Tags',
         snapshots: 'Versions',
