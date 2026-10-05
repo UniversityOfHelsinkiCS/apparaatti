@@ -3,6 +3,8 @@ import type { QueryClient } from '@tanstack/react-query'
 import type {
   CourseTag,
   CourseTagMode,
+  CourseUnitGroup,
+  LocalizedString,
   ResolvedCurTag,
   TagPayloadDiff,
   TagSnapshotMeta,
@@ -94,3 +96,23 @@ export const invalidateTagQueries = async (queryClient: QueryClient) => {
     predicate: query => TAG_QUERY_KEYS.some(key => String(query.queryKey[0]).startsWith(key)),
   })
 }
+
+export interface DiffCourseUnit {
+  id: string
+  courseCode: string
+  name: LocalizedString
+}
+
+export interface DiffCourse {
+  id: string
+  name: LocalizedString
+  nameSpecifier: LocalizedString
+  startDate?: string
+  Cus?: DiffCourseUnit[]
+}
+
+export const fetchCoursesForLabels = async (): Promise<DiffCourse[]> =>
+  (await (await adminFetch('GET', '/api/admin/courses?page=1&limit=100000')).json()).courses
+
+export const fetchCourseUnitGroupsForLabels = async (): Promise<CourseUnitGroup[]> =>
+  (await (await adminFetch('GET', `${COURSE_TAGS_PATH}/course-units?page=1&limit=100000`)).json()).groups

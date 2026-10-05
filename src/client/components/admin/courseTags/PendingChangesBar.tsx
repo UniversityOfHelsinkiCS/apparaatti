@@ -1,19 +1,28 @@
 import { Alert, Stack, Typography } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { discardDraft, fetchPendingChanges, invalidateTagQueries, publishDraft } from './courseTagUtils.ts'
+import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 
 const PendingChangesBar = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
+  const [isReviewOpen, setIsReviewOpen] = useState(false)
 
   const { data: pending } = useQuery({ queryKey: ['course-tag-pending'], queryFn: fetchPendingChanges })
 
   const refresh = () => invalidateTagQueries(queryClient)
 
-  const publish = useMutation({ mutationFn: publishDraft, onSuccess: refresh })
+  const publish = useMutation({
+    mutationFn: publishDraft,
+    onSuccess: () => {
+      setIsReviewOpen(false)
+      return refresh()
+    },
+  })
   const discard = useMutation({ mutationFn: discardDraft, onSuccess: refresh })
 
   const changeCount = pending
@@ -46,7 +55,7 @@ const PendingChangesBar = () => {
         </Typography>
         <Typography variant="body2">{t('v2:courseTags.publish.explanation')}</Typography>
         <Stack direction="row" spacing={1}>
-          <BlackOutlinedButton type="button" onClick={() => publish.mutate()} disabled={isBusy}>
+          <BlackOutlinedButton type="button" onClick={() => setIsReviewOpen(true)} disabled={isBusy}>
             {t('v2:courseTags.publish.apply')}
           </BlackOutlinedButton>
           <BlackOutlinedButton type="button" onClick={handleDiscard} disabled={isBusy}>
@@ -54,6 +63,15 @@ const PendingChangesBar = () => {
           </BlackOutlinedButton>
         </Stack>
       </Stack>
+
+      <SnapshotDiffDialog
+        diff={isReviewOpen ? (pending ?? null) : null}
+        onClose={() => setIsReviewOpen(false)}
+        title={t('v2:courseTags.publish.reviewTitle')}
+        confirmLabel={t('v2:courseTags.publish.confirmApply')}
+        onConfirm={() => publish.mutate()}
+        isConfirmDisabled={isBusy}
+      />
     </Alert>
   )
 }
