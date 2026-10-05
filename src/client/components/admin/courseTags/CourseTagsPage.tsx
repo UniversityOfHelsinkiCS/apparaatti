@@ -10,6 +10,7 @@ import AdminNavbar from '../AdminNavbar.tsx'
 import { fetchCourseTags } from './courseTagUtils.ts'
 import CurTagMatrix from './CurTagMatrix.tsx'
 import CuTagTab from './CuTagTab.tsx'
+import PendingChangesBar from './PendingChangesBar.tsx'
 import SnapshotsTab from './SnapshotsTab.tsx'
 import TagVocabularyTab from './TagVocabularyTab.tsx'
 
@@ -41,6 +42,8 @@ const CourseTagsPage = () => {
       <Typography variant="h5" sx={{ mb: 2 }}>
         {t('v2:courseTags.title')}
       </Typography>
+
+      <PendingChangesBar />
 
       <Tabs
         value={tab}

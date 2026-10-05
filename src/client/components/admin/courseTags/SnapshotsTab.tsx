@@ -24,6 +24,7 @@ import {
   deleteSnapshot,
   fetchSnapshotDiff,
   fetchSnapshots,
+  invalidateTagQueries,
   restoreSnapshot,
 } from './courseTagUtils.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
@@ -43,9 +44,7 @@ const SnapshotsTab = ({ isSuperuser }: SnapshotsTabProps) => {
   const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
 
   const refresh = async () => {
-    await queryClient.invalidateQueries({ queryKey: ['course-tag-snapshots'] })
-    await queryClient.invalidateQueries({ queryKey: ['course-tag-states'] })
-    await queryClient.invalidateQueries({ queryKey: ['course-tags'] })
+    await invalidateTagQueries(queryClient)
   }
 
   const handleSave = async () => {

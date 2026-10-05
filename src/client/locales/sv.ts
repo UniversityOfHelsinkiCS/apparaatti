@@ -167,6 +167,15 @@ export default {
         ignored: 'ignorerad på denna förverkligande',
         unset: 'inte satt',
       },
+      publish: {
+        upToDate: 'Alla taggändringar är tillämpade. Rekommendationen använder exakt det du ser här.',
+        pending: '{{count}} otillämpade taggändringar',
+        explanation:
+          'Taggändringar är ett utkast tills de tillämpas. Rekommendationen använder den senast tillämpade versionen.',
+        apply: 'Spara och tillämpa',
+        discard: 'Förkasta ändringar',
+        discardConfirm: 'Förkasta {{count}} otillämpade ändringar och gå tillbaka till den tillämpade versionen?',
+      },
       tabs: {
         realisations: 'Förverkliganden',
         courseUnits: 'Studieavsnitt',

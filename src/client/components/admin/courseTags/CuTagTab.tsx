@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 
 import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
-import { fetchCuTagStates, saveCuTag } from './courseTagUtils.ts'
+import { fetchCuTagStates, invalidateTagQueries, saveCuTag } from './courseTagUtils.ts'
 import {
   matrixContainerSx,
   stickyCornerCellSx,
@@ -79,8 +79,7 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
 
   const handleToggle = async (cuId: string, tagKey: string) => {
     await saveCuTag(cuId, tagKey, !hasTag(cuId, tagKey))
-    await queryClient.invalidateQueries({ queryKey: ['course-tag-cu-states'] })
-    await queryClient.invalidateQueries({ queryKey: ['course-tag-states'] })
+    await invalidateTagQueries(queryClient)
   }
 
   return (

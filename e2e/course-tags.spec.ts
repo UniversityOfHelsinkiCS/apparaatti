@@ -122,3 +122,53 @@ test('the tags admin page renders its tabs', async ({ page }) => {
   await expect(page.getByRole('tab', { name: 'Opintojaksot' })).toBeVisible()
   await expect(page.getByRole('tab', { name: 'Versiot' })).toBeVisible()
 })
+
+test('tag edits stay out of the applied version until saved and applied', async ({ request, e2eUserId }) => {
+  const key = workerTagKey(e2eUserId)
+  const tag = await (await request.post(TAGS_PATH, { data: { key, description: null } })).json()
+
+  const courses = await (await request.get('/api/admin/courses?page=1&limit=1')).json()
+  const curId = courses.courses[0].id
+
+  await request.post(`${TAGS_PATH}/publish`)
+  const clean = await (await request.get(`${TAGS_PATH}/pending`)).json()
+  expect(clean.addedCurTags).toHaveLength(0)
+
+  await request.put(`${TAGS_PATH}/cur/${curId}`, { data: { tagKey: key, mode: 'add' } })
+
+  const pending = await (await request.get(`${TAGS_PATH}/pending`)).json()
+  expect(pending.addedCurTags).toContainEqual({ curId, tagKey: key, mode: 'add' })
+
+  const snapshotsBefore = await (await request.get(`${TAGS_PATH}/snapshots`)).json()
+  await request.post(`${TAGS_PATH}/publish`)
+
+  const applied = await (await request.get(`${TAGS_PATH}/pending`)).json()
+  expect(applied.addedCurTags).toHaveLength(0)
+
+  const snapshotsAfter = await (await request.get(`${TAGS_PATH}/snapshots`)).json()
+  expect(snapshotsAfter.length).toBe(snapshotsBefore.length + 1)
+
+  await request.put(`${TAGS_PATH}/cur/${curId}`, { data: { tagKey: key, mode: 'clear' } })
+  await request.post(`${TAGS_PATH}/publish`)
+  await request.delete(`${TAGS_PATH}/${tag.id}`)
+})
+
+test('discarding a draft restores the applied version', async ({ request, e2eUserId }) => {
+  const key = workerTagKey(e2eUserId)
+  const tag = await (await request.post(TAGS_PATH, { data: { key, description: null } })).json()
+
+  const courses = await (await request.get('/api/admin/courses?page=1&limit=1')).json()
+  const curId = courses.courses[0].id
+
+  await request.post(`${TAGS_PATH}/publish`)
+  await request.put(`${TAGS_PATH}/cur/${curId}`, { data: { tagKey: key, mode: 'add' } })
+  expect((await (await request.get(`${TAGS_PATH}/pending`)).json()).addedCurTags).toHaveLength(1)
+
+  await request.post(`${TAGS_PATH}/discard`)
+
+  expect((await (await request.get(`${TAGS_PATH}/pending`)).json()).addedCurTags).toHaveLength(0)
+  const state = await (await request.get(`${TAGS_PATH}/cur-state?curIds=${curId}`)).json()
+  expect(state[0].tags.map((entry: any) => entry.key)).not.toContain(key)
+
+  await request.delete(`${TAGS_PATH}/${tag.id}`)
+})

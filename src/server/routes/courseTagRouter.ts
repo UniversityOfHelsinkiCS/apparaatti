@@ -19,19 +19,21 @@ import {
   allTagSnapshots,
   bulkApplyTagsToFilter,
   clearCurTag,
-  countCursForCus,
+  courseUnitGroupsForFilters,
   createCourseTag,
   createTagSnapshot,
-  cuTagRowsForCus,
   deleteCourseTagById,
   deleteTagSnapshotById,
+  discardTagDraft,
+  draftTagStateForCurs,
   fullTagPayload,
   matchingCurIds,
+  pendingTagChanges,
+  publishTagState,
   replaceTagState,
+  setCourseUnitGroupTag,
   setCurTag,
-  setCuTag,
   tagSnapshotById,
-  tagStateForCurs,
   updateCourseTagById,
 } from '../util/dbActions.ts'
 
@@ -68,7 +70,7 @@ courseTagRouter.post('/', async (req, res) => {
 
 courseTagRouter.get('/cur-state', async (req, res) => {
   const curIds = parseCsvIds(req.query.curIds)
-  const tagging = await tagStateForCurs(curIds)
+  const tagging = await draftTagStateForCurs(curIds)
 
   res.json(
     curIds.map(curId => ({
@@ -95,29 +97,26 @@ courseTagRouter.put('/cur/:curId', async (req, res) => {
   res.json({ status: 'updated' })
 })
 
-courseTagRouter.get('/cu-state', async (req, res) => {
-  const cuIds = parseCsvIds(req.query.cuIds)
-  const rows = await cuTagRowsForCus(cuIds)
-  const curCounts = await countCursForCus(cuIds)
-
-  res.json(
-    cuIds.map(cuId => ({
-      cuId,
-      tagKeys: rows.filter(row => row.cuId === cuId).map(row => row.tagKey),
-      realisationCount: curCounts.get(cuId) ?? 0,
-    }))
+courseTagRouter.get('/course-units', async (req, res) => {
+  const { page = '1', limit = '50' } = req.query
+  const result = await courseUnitGroupsForFilters(
+    courseSearchFiltersFromQuery(req.query as Record<string, unknown>),
+    parseInt(page as string, 10),
+    parseInt(limit as string, 10)
   )
+
+  res.json(result)
 })
 
-courseTagRouter.put('/cu/:cuId', async (req, res) => {
+courseTagRouter.put('/course-unit/:courseCode', async (req, res) => {
   const parsed = CuTagMutationSchema.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
     return
   }
 
-  await setCuTag(req.params.cuId, parsed.data.tagKey, parsed.data.present)
-  res.json({ status: 'updated' })
+  const changed = await setCourseUnitGroupTag(req.params.courseCode, parsed.data.tagKey, parsed.data.present)
+  res.json({ status: 'updated', changed })
 })
 
 courseTagRouter.post('/bulk/preview', async (req, res) => {
@@ -162,6 +161,19 @@ courseTagRouter.post('/import', requireSuperuser, async (req, res) => {
   }
 
   res.json({ message: 'Import completed', results: await replaceTagState(parsed.data) })
+})
+
+courseTagRouter.get('/pending', async (req, res) => {
+  res.json(await pendingTagChanges())
+})
+
+courseTagRouter.post('/publish', async (req, res) => {
+  const publishedBy = (req.user as any)?.id ?? null
+  res.json(await publishTagState(publishedBy))
+})
+
+courseTagRouter.post('/discard', async (req, res) => {
+  res.json(await discardTagDraft())
 })
 
 courseTagRouter.get('/snapshots', async (req, res) => {

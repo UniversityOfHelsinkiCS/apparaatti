@@ -1,3 +1,5 @@
+import type { QueryClient } from '@tanstack/react-query'
+
 import type {
   CourseTag,
   CourseTagMode,
@@ -81,3 +83,24 @@ export const createSnapshot = (name: string, description: string | null) =>
 export const restoreSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/restore`)
 
 export const deleteSnapshot = (id: number) => adminFetch('DELETE', `${COURSE_TAGS_PATH}/snapshots/${id}`)
+
+export const fetchPendingChanges = async (): Promise<TagPayloadDiff> =>
+  (await adminFetch('GET', `${COURSE_TAGS_PATH}/pending`)).json()
+
+export const publishDraft = async (): Promise<{ cuTags: number; curTags: number }> =>
+  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`)).json()
+
+export const discardDraft = async (): Promise<{ cuTags: number; curTags: number }> =>
+  (await adminFetch('POST', `${COURSE_TAGS_PATH}/discard`)).json()
+
+export const TAG_QUERY_KEYS = [
+  'course-tags',
+  'course-tag-states',
+  'course-tag-cu-states',
+  'course-tag-pending',
+  'course-tag-snapshots',
+]
+
+export const invalidateTagQueries = async (queryClient: QueryClient) => {
+  await Promise.all(TAG_QUERY_KEYS.map(key => queryClient.invalidateQueries({ queryKey: [key] })))
+}

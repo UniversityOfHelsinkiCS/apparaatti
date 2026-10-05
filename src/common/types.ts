@@ -357,3 +357,11 @@ export type TagPayloadDiff = {
   addedCurTags: CurTagRow[]
   removedCurTags: CurTagRow[]
 }
+
+export type CourseUnitGroup = {
+  courseCode: string
+  name: LocalizedString
+  cuIds: string[]
+  realisationCount: number
+  tagKeys: string[]
+}

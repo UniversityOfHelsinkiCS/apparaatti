@@ -166,6 +166,14 @@ export default {
         ignored: 'ignored on this realisation',
         unset: 'not set',
       },
+      publish: {
+        upToDate: 'All tag changes are applied. The recommender is using exactly what you see here.',
+        pending: '{{count}} unapplied tag changes',
+        explanation: 'Tag edits are a draft until applied. Recommendations keep using the last applied version.',
+        apply: 'Save and apply',
+        discard: 'Discard changes',
+        discardConfirm: 'Discard {{count}} unapplied changes and go back to the applied version?',
+      },
       tabs: {
         realisations: 'Realisations',
         courseUnits: 'Course units',

@@ -30,7 +30,7 @@ import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import BulkApplyDialog from './BulkApplyDialog.tsx'
 import type { CurTagMutationMode } from './courseTagUtils.ts'
-import { fetchCurTagStates, saveCurTag } from './courseTagUtils.ts'
+import { fetchCurTagStates, invalidateTagQueries, saveCurTag } from './courseTagUtils.ts'
 import {
   matrixContainerSx,
   stickyCornerCellSx,
@@ -126,7 +126,7 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
 
   const handleToggle = async (curId: string, tagKey: string) => {
     await saveCurTag(curId, tagKey, nextMode(stateFor(curId, tagKey)))
-    await queryClient.invalidateQueries({ queryKey: ['course-tag-states'] })
+    await invalidateTagQueries(queryClient)
   }
 
   return (
@@ -206,7 +206,7 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
         tags={tags}
         searchValues={searchValues}
         onClose={() => setIsBulkOpen(false)}
-        onApplied={() => queryClient.invalidateQueries({ queryKey: ['course-tag-states'] })}
+        onApplied={() => invalidateTagQueries(queryClient)}
       />
     </Box>
   )

@@ -166,6 +166,15 @@ export default {
         ignored: 'ohitettu tällä toteutuksella',
         unset: 'ei asetettu',
       },
+      publish: {
+        upToDate: 'Kaikki tagimuutokset on otettu käyttöön. Suosittelu käyttää juuri sitä mitä tässä näkyy.',
+        pending: '{{count}} käyttöönottamatonta tagimuutosta',
+        explanation:
+          'Tagimuokkaukset ovat luonnos, kunnes ne otetaan käyttöön. Suosittelu käyttää viimeksi käyttöönotettua versiota.',
+        apply: 'Tallenna ja ota käyttöön',
+        discard: 'Hylkää muutokset',
+        discardConfirm: 'Hylätäänkö {{count}} käyttöönottamatonta muutosta ja palataan käytössä olevaan versioon?',
+      },
       tabs: {
         realisations: 'Toteutukset',
         courseUnits: 'Opintojaksot',
