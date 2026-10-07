@@ -169,11 +169,15 @@ export default {
       editing: {
         label: 'Editing',
         new: 'New version',
+        published: 'The applied version',
+        switchConfirm: 'Your unsaved local edits are tied to the current version and will be discarded. Continue?',
       },
       publish: {
         upToDate: 'All tag changes are applied. The recommender is using exactly what you see here.',
         pending: '{{count}} unapplied tag changes',
         explanation: 'Tag edits are a draft until applied. Recommendations keep using the last applied version.',
+        localExplanation:
+          'These edits are only in your browser. Nothing is stored until you save a version or apply them.',
         apply: 'Review and apply',
         reviewTitle: 'Review the changes before applying',
         confirmApply: 'Apply these changes',
@@ -220,6 +224,8 @@ export default {
         explanation: 'This applies to every course matching the current search, not only the visible page.',
         previewPending: 'Pick at least one tag to see how many courses would change.',
         previewCount: '{{count}} courses match.',
+        tooLarge:
+          'This would add {{count}} local edits, which is more than the browser can hold. Save or apply your current edits first.',
         confirm: 'Apply to all {{count}} matching courses',
       },
       cu: {

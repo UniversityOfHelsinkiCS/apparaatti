@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { hasApparaattiCodeUrn } from '../../client/util/filtering.ts'
+import { tagsToCustomCodeUrns } from '../../common/courseTags.ts'
 import type { CourseData } from '../../common/types.ts'
-import { tagsToCustomCodeUrns } from '../../server/util/courseTags.ts'
 import { urnInCustomCodeUrns } from '../../server/util/organisationCourseRecommmendations.ts'
 
 const courseWith = (customCodeUrns: Record<string, string[]>) => ({ customCodeUrns }) as CourseData

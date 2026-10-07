@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { describeCurTags, resolveCurTags } from '../../common/courseTags.ts'
 import type { CurTagRow } from '../../common/types.ts'
-import { describeCurTags, resolveCurTags } from '../../server/util/courseTags.ts'
 
 const row = (tagKey: string, mode: CurTagRow['mode']): CurTagRow => ({ curId: 'cur-1', tagKey, mode })
 

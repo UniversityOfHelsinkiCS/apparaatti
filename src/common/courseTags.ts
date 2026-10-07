@@ -1,4 +1,12 @@
-import type { CurTagRow, CuTagRow, ResolvedCurTag, TagPayloadDiff, TagSnapshotPayload } from '../../common/types.ts'
+import type {
+  CourseTag,
+  CurTagRow,
+  CuTagRow,
+  ResolvedCurTag,
+  TagMutations,
+  TagPayloadDiff,
+  TagSnapshotPayload,
+} from './types.ts'
 
 export const TAG_URN_KEY = 'urn:code:custom:hy-university-root-id:kk-apparaatti:tags'
 
@@ -47,6 +55,64 @@ export function describeCurTags(inheritedKeys: string[], curRows: CurTagRow[]): 
 
 export function tagsToCustomCodeUrns(base: Record<string, string[]> | null, keys: string[]): Record<string, string[]> {
   return { ...(base ?? {}), [TAG_URN_KEY]: keys }
+}
+
+function mergedVocabulary(tags: Omit<CourseTag, 'id'>[], mutations: TagMutations): Omit<CourseTag, 'id'>[] {
+  const byKey = new Map(tags.map(tag => [tag.key, tag]))
+
+  for (const mutation of mutations.tags) {
+    if (mutation.op === 'delete') {
+      byKey.delete(mutation.key)
+    } else {
+      byKey.set(mutation.key, { key: mutation.key, description: mutation.description })
+    }
+  }
+
+  return [...byKey.values()]
+}
+
+function mergedCuTags(cuTags: CuTagRow[], mutations: TagMutations): CuTagRow[] {
+  const byId = new Map(cuTags.map(row => [`${row.cuId}::${row.tagKey}`, row]))
+
+  for (const mutation of mutations.cu) {
+    for (const cuId of mutation.cuIds) {
+      const id = `${cuId}::${mutation.tagKey}`
+      if (mutation.present) {
+        byId.set(id, { cuId, tagKey: mutation.tagKey })
+      } else {
+        byId.delete(id)
+      }
+    }
+  }
+
+  return [...byId.values()]
+}
+
+function mergedCurTags(curTags: CurTagRow[], mutations: TagMutations): CurTagRow[] {
+  const byId = new Map(curTags.map(row => [`${row.curId}::${row.tagKey}`, row]))
+
+  for (const mutation of mutations.cur) {
+    const id = `${mutation.curId}::${mutation.tagKey}`
+    if (mutation.mode === 'clear') {
+      byId.delete(id)
+    } else {
+      byId.set(id, { curId: mutation.curId, tagKey: mutation.tagKey, mode: mutation.mode })
+    }
+  }
+
+  return [...byId.values()]
+}
+
+export function mergeTagMutations(base: TagSnapshotPayload, mutations: TagMutations): TagSnapshotPayload {
+  const tags = mergedVocabulary(base.tags, mutations)
+  const known = new Set(tags.map(tag => tag.key))
+
+  return {
+    exportedAt: new Date().toISOString(),
+    tags,
+    cuTags: mergedCuTags(base.cuTags, mutations).filter(row => known.has(row.tagKey)),
+    curTags: mergedCurTags(base.curTags, mutations).filter(row => known.has(row.tagKey)),
+  }
 }
 
 function curTagId(row: CurTagRow): string {

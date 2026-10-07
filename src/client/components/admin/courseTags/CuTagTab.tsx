@@ -1,9 +1,8 @@
 import { Alert, Box, Typography } from '@mui/material'
-import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, CourseUnitGroup } from '../../../../common/types.ts'
+import type { CourseTag, CourseUnitGroup, TagBase, TagMutations } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
 import {
@@ -14,8 +13,8 @@ import {
 } from '../courseSearchQuery.ts'
 import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
-import { invalidateTagQueries, saveCourseUnitTag } from './courseTagUtils.ts'
 import CuTagTable from './CuTagTable.tsx'
+import { baseKey, cuTagKeys } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
 
 const PAGE_SIZE = 50
@@ -28,11 +27,13 @@ interface CourseUnitsResponse {
 
 interface CuTagTabProps {
   tags: CourseTag[]
+  base: TagBase
+  mutations: TagMutations
+  onCuToggle: (courseCode: string, cuIds: string[], tagKey: string, present: boolean) => void
 }
 
-const CuTagTab = ({ tags }: CuTagTabProps) => {
+const CuTagTab = ({ tags, base, mutations, onCuToggle }: CuTagTabProps) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
 
@@ -42,8 +43,8 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
   }
 
   const { data, isLoading } = useApi<CourseUnitsResponse>(
-    `course-tag-cu-states-${courseSearchCacheKey(searchValues, page)}`,
-    `/api/admin/course-tags/course-units?${buildCourseQueryString(searchValues, page, PAGE_SIZE)}`,
+    `course-tag-cu-states-${baseKey(base)}-${courseSearchCacheKey(searchValues, page)}`,
+    `/api/admin/course-tags/course-units?${buildCourseQueryString(searchValues, page, PAGE_SIZE)}&base=${baseKey(base)}`,
     'GET',
     undefined
   )
@@ -53,18 +54,19 @@ const CuTagTab = ({ tags }: CuTagTabProps) => {
   const tagKeysByCourseCode = useMemo(() => {
     const index = new Map<string, Set<string>>()
     for (const group of groups) {
-      index.set(group.courseCode, new Set(group.tagKeys))
+      index.set(group.courseCode, cuTagKeys(group.courseCode, group.tagKeys, mutations))
     }
     return index
-  }, [groups])
+  }, [groups, mutations])
+
+  const cuIdsByCourseCode = useMemo(() => new Map(groups.map(group => [group.courseCode, group.cuIds])), [groups])
 
   const handleToggle = useCallback(
-    async (courseCode: string, tagKey: string) => {
+    (courseCode: string, tagKey: string) => {
       const hasTag = tagKeysByCourseCode.get(courseCode)?.has(tagKey) ?? false
-      await saveCourseUnitTag(courseCode, tagKey, !hasTag)
-      await invalidateTagQueries(queryClient)
+      onCuToggle(courseCode, cuIdsByCourseCode.get(courseCode) ?? [], tagKey, !hasTag)
     },
-    [tagKeysByCourseCode, queryClient]
+    [tagKeysByCourseCode, cuIdsByCourseCode, onCuToggle]
   )
 
   return (

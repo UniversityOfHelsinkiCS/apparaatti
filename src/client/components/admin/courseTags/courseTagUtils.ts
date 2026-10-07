@@ -4,8 +4,10 @@ import type {
   CourseTag,
   CourseTagMode,
   CourseUnitGroup,
+  CurTagPremises,
   LocalizedString,
-  ResolvedCurTag,
+  TagBase,
+  TagMutations,
   TagPayloadDiff,
   TagSnapshotMeta,
 } from '../../../../common/types.ts'
@@ -17,21 +19,11 @@ export const COURSE_TAGS_PATH = '/api/admin/course-tags'
 
 export type CurTagMutationMode = CourseTagMode | 'clear'
 
-export interface CurTagState {
-  curId: string
-  tags: ResolvedCurTag[]
-}
-
-export interface BulkApplyResult {
-  matched: number
-  changed: number
-}
-
 export const fetchCourseTags = async (): Promise<CourseTag[]> => (await adminFetch('GET', COURSE_TAGS_PATH)).json()
 
 const CUR_STATE_BATCH = 100
 
-export const fetchCurTagStates = async (curIds: string[]): Promise<CurTagState[]> => {
+export const fetchCurTagPremises = async (curIds: string[], base: TagBase): Promise<CurTagPremises[]> => {
   if (curIds.length === 0) return []
 
   const batches: string[][] = []
@@ -40,37 +32,24 @@ export const fetchCurTagStates = async (curIds: string[]): Promise<CurTagState[]
   }
 
   const responses = await Promise.all(
-    batches.map(batch => adminFetch('GET', `${COURSE_TAGS_PATH}/cur-state?curIds=${batch.join(',')}`))
+    batches.map(batch => adminFetch('POST', `${COURSE_TAGS_PATH}/cur-state`, { curIds: batch, base }))
   )
 
   return (await Promise.all(responses.map(response => response.json()))).flat()
 }
 
-export const saveCurTag = (curId: string, tagKey: string, mode: CurTagMutationMode) =>
-  adminFetch('PUT', `${COURSE_TAGS_PATH}/cur/${curId}`, { tagKey, mode })
-
-export const saveCourseUnitTag = (courseCode: string, tagKey: string, present: boolean) =>
-  adminFetch('PUT', `${COURSE_TAGS_PATH}/course-unit/${encodeURIComponent(courseCode)}`, { tagKey, present })
-
-const bulkBody = (values: CourseSearchValues, tagKeys: string[], mode: CurTagMutationMode) => ({
-  filters: courseSearchFilterParams(values),
-  tagKeys,
-  mode,
-})
-
 export const previewBulkApply = async (
   values: CourseSearchValues,
   tagKeys: string[],
   mode: CurTagMutationMode
-): Promise<{ matched: number }> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/bulk/preview`, bulkBody(values, tagKeys, mode))).json()
-
-export const applyBulkTags = async (
-  values: CourseSearchValues,
-  tagKeys: string[],
-  mode: CurTagMutationMode
-): Promise<BulkApplyResult> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/bulk`, bulkBody(values, tagKeys, mode))).json()
+): Promise<{ matched: number; curIds: string[] }> =>
+  (
+    await adminFetch('POST', `${COURSE_TAGS_PATH}/bulk/preview`, {
+      filters: courseSearchFilterParams(values),
+      tagKeys,
+      mode,
+    })
+  ).json()
 
 export const fetchSnapshots = async (): Promise<TagSnapshotMeta[]> =>
   (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots`)).json()
@@ -78,10 +57,13 @@ export const fetchSnapshots = async (): Promise<TagSnapshotMeta[]> =>
 export const fetchSnapshotDiff = async (id: number): Promise<TagPayloadDiff> =>
   (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots/${id}/diff`)).json()
 
-export const createSnapshot = (name: string, description: string | null) =>
-  adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots`, { name, description })
+export interface DraftRequest {
+  base: TagBase
+  mutations: TagMutations
+}
 
-export const restoreSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/restore`)
+export const createSnapshot = (name: string, description: string | null, draft: DraftRequest) =>
+  adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots`, { name, description, ...draft })
 
 export const activateSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/activate`)
 
@@ -93,43 +75,18 @@ export interface EditedSnapshot {
 export const updateSnapshot = (id: number, name: string, description: string | null) =>
   adminFetch('PATCH', `${COURSE_TAGS_PATH}/snapshots/${id}`, { name, description })
 
-export const overwriteSnapshot = (id: number) => adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/overwrite`)
+export const overwriteSnapshot = (id: number, name: string, description: string | null, draft: DraftRequest) =>
+  adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/overwrite`, { name, description, ...draft })
 
 export const deleteSnapshot = (id: number) => adminFetch('DELETE', `${COURSE_TAGS_PATH}/snapshots/${id}`)
 
-export const fetchPendingChanges = async (): Promise<TagPayloadDiff> =>
-  (await adminFetch('GET', `${COURSE_TAGS_PATH}/pending`)).json()
+export const publishDraft = async (
+  description: string | null,
+  draft: DraftRequest
+): Promise<{ tags: number; cuTags: number; curTags: number }> =>
+  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`, { description, ...draft })).json()
 
-export const publishDraft = async (description: string | null = null): Promise<{ cuTags: number; curTags: number }> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`, { description })).json()
-
-export const discardDraft = async (): Promise<{ cuTags: number; curTags: number }> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/discard`)).json()
-
-export const TAG_QUERY_KEYS = [
-  'course-tags',
-  'course-tag-states',
-  'course-tag-cu-states',
-  'course-tag-pending',
-  'course-tag-snapshots',
-]
-
-export const applyCurTagMode = (tags: ResolvedCurTag[], tagKey: string, mode: CurTagMutationMode): ResolvedCurTag[] => {
-  const others = tags.filter(tag => tag.key !== tagKey)
-  if (mode === 'add') return [...others, { key: tagKey, source: 'added' }]
-  if (mode === 'ignore') return [...others, { key: tagKey, source: 'ignored' }]
-
-  const wasIgnored = tags.some(tag => tag.key === tagKey && tag.source === 'ignored')
-  return wasIgnored ? [...others, { key: tagKey, source: 'inherited' }] : others
-}
-
-const CUR_TAG_QUERY_KEYS = ['course-tag-states', 'course-tag-pending']
-
-export const invalidateCurTagQueries = async (queryClient: QueryClient) => {
-  await queryClient.invalidateQueries({
-    predicate: query => CUR_TAG_QUERY_KEYS.some(key => String(query.queryKey[0]).startsWith(key)),
-  })
-}
+export const TAG_QUERY_KEYS = ['course-tags', 'course-tag-states', 'course-tag-cu-states', 'course-tag-snapshots']
 
 export const invalidateTagQueries = async (queryClient: QueryClient) => {
   await queryClient.invalidateQueries({

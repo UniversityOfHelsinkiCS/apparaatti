@@ -8,46 +8,50 @@ import type { CourseSearchValues } from '../courseSearchQuery.ts'
 import BulkModeRadioGroup from './BulkModeRadioGroup.tsx'
 import BulkTagSelect from './BulkTagSelect.tsx'
 import type { CurTagMutationMode } from './courseTagUtils.ts'
-import { applyBulkTags, previewBulkApply } from './courseTagUtils.ts'
+import { previewBulkApply } from './courseTagUtils.ts'
+import { MAX_DRAFT_ENTRIES } from './tagDraftBuffer.ts'
 
 interface BulkApplyDialogProps {
   open: boolean
   tags: CourseTag[]
   searchValues: CourseSearchValues
   onClose: () => void
-  onApplied: () => void
+  onApply: (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => void
 }
 
-const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApplied }: BulkApplyDialogProps) => {
+const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApply }: BulkApplyDialogProps) => {
   const { t } = useTranslation()
   const [selectedTags, setSelectedTags] = useState<CourseTag[]>([])
   const [mode, setMode] = useState<CurTagMutationMode>('add')
-  const [matched, setMatched] = useState<number | null>(null)
+  const [preview, setPreview] = useState<{ matched: number; curIds: string[] } | null>(null)
   const [isApplying, setIsApplying] = useState(false)
 
   const tagKeys = selectedTags.map(tag => tag.key)
+  const matched = preview?.matched ?? null
+  const entryCount = (matched ?? 0) * tagKeys.length
+  const isTooLarge = entryCount > MAX_DRAFT_ENTRIES
 
   useEffect(() => {
     if (!open || tagKeys.length === 0) {
-      setMatched(null)
+      setPreview(null)
       return
     }
 
     let cancelled = false
     previewBulkApply(searchValues, tagKeys, mode).then(result => {
-      if (!cancelled) setMatched(result.matched)
+      if (!cancelled) setPreview(result)
     })
     return () => {
       cancelled = true
     }
   }, [open, tagKeys.join(','), mode, searchValues])
 
-  const handleApply = async () => {
+  const handleApply = () => {
+    if (!preview) return
     setIsApplying(true)
-    await applyBulkTags(searchValues, tagKeys, mode)
+    onApply(preview.curIds, tagKeys, mode)
     setIsApplying(false)
     setSelectedTags([])
-    onApplied()
     onClose()
   }
 
@@ -69,6 +73,10 @@ const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApplied }: BulkA
               ? t('v2:courseTags.bulk.previewPending')
               : t('v2:courseTags.bulk.previewCount', { count: matched })}
           </Typography>
+
+          {isTooLarge ? (
+            <Alert severity="warning">{t('v2:courseTags.bulk.tooLarge', { count: entryCount })}</Alert>
+          ) : null}
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -78,7 +86,7 @@ const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApplied }: BulkA
         <BlackOutlinedButton
           type="button"
           onClick={handleApply}
-          disabled={matched === null || matched === 0 || isApplying || tagKeys.length === 0}
+          disabled={matched === null || matched === 0 || isApplying || tagKeys.length === 0 || isTooLarge}
         >
           {t('v2:courseTags.bulk.confirm', { count: matched ?? 0 })}
         </BlackOutlinedButton>

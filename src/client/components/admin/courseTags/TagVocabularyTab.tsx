@@ -1,11 +1,8 @@
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag } from '../../../../common/types.ts'
-import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
-import { COURSE_TAGS_PATH } from './courseTagUtils.ts'
+import type { CourseTag, TagVocabMutation } from '../../../../common/types.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
 import TagVocabularyForm from './TagVocabularyForm.tsx'
 import TagVocabularyRow from './TagVocabularyRow.tsx'
@@ -13,38 +10,31 @@ import TagVocabularyRow from './TagVocabularyRow.tsx'
 interface TagVocabularyTabProps {
   tags: CourseTag[]
   isSuperuser: boolean
+  onTagMutation: (mutation: TagVocabMutation) => void
 }
 
-const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
+const TagVocabularyTab = ({ tags, isSuperuser, onTagMutation }: TagVocabularyTabProps) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [error, setError] = useState('')
 
-  const refresh = () => queryClient.invalidateQueries({ queryKey: ['course-tags'] })
-
   const handleCreate = async (key: string, description: string | null) => {
-    const response = await adminFetch('POST', COURSE_TAGS_PATH, { key, description })
-    if (!response.ok) {
-      setError(
-        response.status === 409 ? t('v2:courseTags.vocabulary.duplicate') : t('v2:courseTags.vocabulary.invalid')
-      )
+    if (tags.some(tag => tag.key === key)) {
+      setError(t('v2:courseTags.vocabulary.duplicate'))
       return false
     }
 
     setError('')
-    await refresh()
+    onTagMutation({ op: 'upsert', key, description })
     return true
   }
 
   const handleDescriptionSave = async (tag: CourseTag, description: string) => {
-    await adminFetch('PUT', `${COURSE_TAGS_PATH}/${tag.id}`, { key: tag.key, description: description || null })
-    await refresh()
+    onTagMutation({ op: 'upsert', key: tag.key, description: description || null })
   }
 
   const handleDelete = async (tag: CourseTag) => {
     if (!window.confirm(t('v2:courseTags.vocabulary.deleteConfirm', { key: tag.key }))) return
-    await adminFetch('DELETE', `${COURSE_TAGS_PATH}/${tag.id}`)
-    await refresh()
+    onTagMutation({ op: 'delete', key: tag.key })
   }
 
   return (
@@ -65,7 +55,7 @@ const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
           <TableBody>
             {tags.map(tag => (
               <TagVocabularyRow
-                key={tag.id}
+                key={tag.key}
                 tag={tag}
                 isSuperuser={isSuperuser}
                 onDescriptionSave={handleDescriptionSave}

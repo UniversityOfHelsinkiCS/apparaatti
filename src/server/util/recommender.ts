@@ -1,10 +1,10 @@
+import { resolveCurTags, tagsToCustomCodeUrns } from '../../common/courseTags.ts'
 import type { AnswerData, CourseData, CurTagState } from '../../common/types.ts'
 import {
   collaborationOrganisationCourseNameIncludes,
   collaborationOrganisationNames,
   organisationCodeToUrn,
 } from './constants.ts'
-import { resolveCurTags, tagsToCustomCodeUrns } from './courseTags.ts'
 import { tagStateForCurs } from './dbActions/courseTags.ts'
 import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions/curs.ts'
 import { organisationWithGroupIdOf } from './dbActions/organisations.ts'

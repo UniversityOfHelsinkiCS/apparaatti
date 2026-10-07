@@ -341,6 +341,35 @@ export type TagSnapshotPayload = {
   curTags: CurTagRow[]
 }
 
+export type TagBase = { kind: 'published' } | { kind: 'snapshot'; id: number }
+
+export type TagVocabMutation = { op: 'upsert'; key: string; description: string | null } | { op: 'delete'; key: string }
+
+export type CurTagMutation = {
+  curId: string
+  tagKey: string
+  mode: CourseTagMode | 'clear'
+}
+
+export type CuTagMutation = {
+  courseCode: string
+  cuIds: string[]
+  tagKey: string
+  present: boolean
+}
+
+export type TagMutations = {
+  tags: TagVocabMutation[]
+  cur: CurTagMutation[]
+  cu: CuTagMutation[]
+}
+
+export type CurTagPremises = {
+  curId: string
+  cus: { cuId: string; tagKeys: string[] }[]
+  rows: Omit<CurTagRow, 'curId'>[]
+}
+
 export type TagSnapshotMeta = {
   id: number
   name: string

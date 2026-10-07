@@ -2,19 +2,22 @@ import { Stack } from '@mui/material'
 import type { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import type { TagBase } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import { COURSE_TAGS_PATH } from './courseTagUtils.ts'
+import { baseKey } from './tagDraftBuffer.ts'
 
 interface SnapshotImportExportProps {
+  base: TagBase
   onImported: () => Promise<void>
 }
 
-const SnapshotImportExport = ({ onImported }: SnapshotImportExportProps) => {
+const SnapshotImportExport = ({ base, onImported }: SnapshotImportExportProps) => {
   const { t } = useTranslation()
 
   const handleExport = async () => {
-    const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/export`)
+    const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/export?base=${baseKey(base)}`)
     if (!response.ok) {
       window.alert(t('v2:courseTags.snapshots.exportFailed'))
       return

@@ -170,12 +170,16 @@ export default {
       editing: {
         label: 'Redigeras',
         new: 'Ny version',
+        published: 'Den tillämpade versionen',
+        switchConfirm: 'Dina osparade lokala ändringar hör till den nuvarande versionen och kastas bort. Fortsätta?',
       },
       publish: {
         upToDate: 'Alla taggändringar är tillämpade. Rekommendationen använder exakt det du ser här.',
         pending: '{{count}} otillämpade taggändringar',
         explanation:
           'Taggändringar är ett utkast tills de tillämpas. Rekommendationen använder den senast tillämpade versionen.',
+        localExplanation:
+          'Dessa ändringar finns bara i din webbläsare. Ingenting sparas förrän du sparar en version eller tillämpar dem.',
         apply: 'Granska och tillämpa',
         reviewTitle: 'Granska ändringarna innan de tillämpas',
         confirmApply: 'Tillämpa ändringarna',
@@ -221,6 +225,8 @@ export default {
         explanation: 'Detta gäller alla kurser som matchar sökningen, inte bara den synliga sidan.',
         previewPending: 'Välj minst en tagg för att se hur många kurser som skulle ändras.',
         previewCount: '{{count}} kurser matchar.',
+        tooLarge:
+          'Detta skulle lägga till {{count}} lokala ändringar, vilket är mer än webbläsaren kan hålla. Spara eller tillämpa dina nuvarande ändringar först.',
         confirm: 'Applicera på alla {{count}} matchande kurser',
       },
       cu: {

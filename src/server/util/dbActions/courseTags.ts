@@ -2,44 +2,23 @@ import type {
   CourseTag as CourseTagType,
   CourseTagMode,
   CourseUnitGroup,
+  CurTagPremises,
   CurTagRow,
   CurTagState,
   CuTagRow,
+  TagSnapshotPayload,
 } from '../../../common/types.ts'
 import CourseTag from '../../db/models/courseTag.ts'
 import Cu from '../../db/models/cu.ts'
-import CuCourseTag from '../../db/models/cuCourseTag.ts'
-import CurCourseTag from '../../db/models/curCourseTag.ts'
 import CurCu from '../../db/models/curCu.ts'
 import PublishedCuCourseTag from '../../db/models/publishedCuCourseTag.ts'
 import PublishedCurCourseTag from '../../db/models/publishedCurCourseTag.ts'
 import type { CourseSearchFilters } from './courseSearch.ts'
 import { matchingCurIds } from './courseSearch.ts'
 
-const BULK_TAG_CHUNK = 100
-
 export async function allCourseTags(): Promise<CourseTagType[]> {
   const rows = await CourseTag.findAll({ order: [['key', 'ASC']] })
   return rows.map(row => row.toJSON() as CourseTagType)
-}
-
-export async function createCourseTag(data: object): Promise<CourseTagType> {
-  const created = await CourseTag.create(data as any)
-  return created.toJSON() as CourseTagType
-}
-
-export async function updateCourseTagById(id: number, data: object): Promise<number> {
-  const [count] = await CourseTag.update(data as any, { where: { id } })
-  return count
-}
-
-export async function deleteCourseTagById(id: number): Promise<number> {
-  return await CourseTag.destroy({ where: { id } })
-}
-
-async function tagIdsByKey(): Promise<Map<string, number>> {
-  const rows = await CourseTag.findAll({ attributes: ['id', 'key'], raw: true })
-  return new Map(rows.map((row: any) => [row.key, row.id]))
 }
 
 async function cuTagRowsFrom(model: any, cuIds: string[]): Promise<CuTagRow[]> {
@@ -62,14 +41,6 @@ async function curTagRowsFrom(model: any, curIds: string[]): Promise<CurTagRow[]
     nest: true,
   })
   return rows.map((row: any) => ({ curId: row.curId, tagKey: row.tag.key, mode: row.mode as CourseTagMode }))
-}
-
-export async function cuTagRowsForCus(cuIds: string[]): Promise<CuTagRow[]> {
-  return await cuTagRowsFrom(CuCourseTag, cuIds)
-}
-
-export async function curTagRowsForCurs(curIds: string[]): Promise<CurTagRow[]> {
-  return await curTagRowsFrom(CurCourseTag, curIds)
 }
 
 async function tagStateFrom(curModel: any, cuModel: any, curIds: string[]): Promise<CurTagState> {
@@ -102,73 +73,44 @@ export async function tagStateForCurs(curIds: string[]): Promise<CurTagState> {
   return await tagStateFrom(PublishedCurCourseTag, PublishedCuCourseTag, curIds)
 }
 
-export async function draftTagStateForCurs(curIds: string[]): Promise<CurTagState> {
-  return await tagStateFrom(CurCourseTag, CuCourseTag, curIds)
-}
+export async function curTagPremises(payload: TagSnapshotPayload, curIds: string[]): Promise<CurTagPremises[]> {
+  if (curIds.length === 0) return []
 
-export async function setCurTag(curId: string, tagKey: string, mode: CourseTagMode): Promise<void> {
-  await bulkSetCurTags([curId], [tagKey], mode)
-}
+  const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
 
-export async function clearCurTag(curId: string, tagKey: string): Promise<number> {
-  return await bulkClearCurTags([curId], [tagKey])
-}
-
-export async function bulkSetCurTags(curIds: string[], tagKeys: string[], mode: CourseTagMode): Promise<number> {
-  const tagIds = await tagIdsByKey()
-  const wantedTagIds = tagKeys.map(key => tagIds.get(key)).filter(id => id !== undefined)
-  if (curIds.length === 0 || wantedTagIds.length === 0) return 0
-
-  const rows = curIds.flatMap(curId => wantedTagIds.map(courseTagId => ({ curId, courseTagId, mode })))
-  for (let start = 0; start < rows.length; start += BULK_TAG_CHUNK) {
-    await CurCourseTag.bulkCreate(rows.slice(start, start + BULK_TAG_CHUNK) as any, {
-      updateOnDuplicate: ['mode', 'updatedAt'],
-    })
+  const keysByCu = new Map<string, string[]>()
+  for (const row of payload.cuTags) {
+    keysByCu.set(row.cuId, [...(keysByCu.get(row.cuId) ?? []), row.tagKey])
   }
-  return rows.length
-}
 
-export async function bulkClearCurTags(curIds: string[], tagKeys: string[]): Promise<number> {
-  const tagIds = await tagIdsByKey()
-  const wantedTagIds = tagKeys.map(key => tagIds.get(key)).filter(id => id !== undefined)
-  if (curIds.length === 0 || wantedTagIds.length === 0) return 0
-
-  return await CurCourseTag.destroy({ where: { curId: curIds, courseTagId: wantedTagIds } })
-}
-
-export async function setCuTag(cuId: string, tagKey: string, present: boolean): Promise<void> {
-  const tagIds = await tagIdsByKey()
-  const courseTagId = tagIds.get(tagKey)
-  if (courseTagId === undefined) return
-
-  if (present) {
-    await CuCourseTag.findOrCreate({ where: { cuId, courseTagId } })
-    return
+  const cuIdsByCur = new Map<string, string[]>()
+  for (const link of links as any[]) {
+    cuIdsByCur.set(link.curId, [...(cuIdsByCur.get(link.curId) ?? []), link.cuId])
   }
-  await CuCourseTag.destroy({ where: { cuId, courseTagId } })
-}
 
-export async function bulkApplyTagsToFilter(
-  filters: CourseSearchFilters,
-  tagKeys: string[],
-  mode: CourseTagMode | 'clear'
-): Promise<{ matched: number; changed: number }> {
-  const curIds = await matchingCurIds(filters)
-  const changed =
-    mode === 'clear' ? await bulkClearCurTags(curIds, tagKeys) : await bulkSetCurTags(curIds, tagKeys, mode)
-  return { matched: curIds.length, changed }
+  const rowsByCur = new Map<string, Omit<CurTagRow, 'curId'>[]>()
+  for (const row of payload.curTags) {
+    rowsByCur.set(row.curId, [...(rowsByCur.get(row.curId) ?? []), { tagKey: row.tagKey, mode: row.mode }])
+  }
+
+  return curIds.map(curId => ({
+    curId,
+    cus: (cuIdsByCur.get(curId) ?? []).map(cuId => ({ cuId, tagKeys: keysByCu.get(cuId) ?? [] })),
+    rows: rowsByCur.get(curId) ?? [],
+  }))
 }
 
 export async function courseUnitGroupsForFilters(
   filters: CourseSearchFilters,
   page: number,
-  limit: number
+  limit: number,
+  payload: TagSnapshotPayload
 ): Promise<{ groups: CourseUnitGroup[]; total: number; page: number; limit: number; totalPages: number }> {
   const curIds = await matchingCurIds(filters)
   const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
-  const cuIds = [...new Set(links.map((link: any) => link.cuId))]
-  const cus = await Cu.findAll({ where: { id: cuIds }, attributes: ['id', 'courseCode', 'name'], raw: true })
-  const tagRows = await cuTagRowsForCus(cuIds)
+  const cuIds = new Set(links.map((link: any) => link.cuId))
+  const cus = await Cu.findAll({ where: { id: [...cuIds] }, attributes: ['id', 'courseCode', 'name'], raw: true })
+  const tagRows = payload.cuTags.filter(row => cuIds.has(row.cuId))
 
   const codeByCuId = new Map(cus.map((cu: any) => [cu.id, cu.courseCode]))
   const groups = new Map<string, CourseUnitGroup>()
@@ -216,21 +158,4 @@ export async function courseUnitGroupsForFilters(
     limit,
     totalPages: Math.ceil(ordered.length / limit),
   }
-}
-
-export async function setCourseUnitGroupTag(courseCode: string, tagKey: string, present: boolean): Promise<number> {
-  const tagIds = await tagIdsByKey()
-  const courseTagId = tagIds.get(tagKey)
-  if (courseTagId === undefined) return 0
-
-  const cus = await Cu.findAll({ where: { courseCode }, attributes: ['id'], raw: true })
-  const cuIds = cus.map((cu: any) => cu.id)
-  if (cuIds.length === 0) return 0
-
-  if (!present) {
-    return await CuCourseTag.destroy({ where: { cuId: cuIds, courseTagId } })
-  }
-
-  await CuCourseTag.bulkCreate(cuIds.map(cuId => ({ cuId, courseTagId })) as any, { ignoreDuplicates: true })
-  return cuIds.length
 }

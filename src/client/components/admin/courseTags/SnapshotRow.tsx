@@ -11,7 +11,6 @@ interface SnapshotRowProps {
   onCompare: (snapshot: TagSnapshotMeta) => void
   onEdit: (snapshot: TagSnapshotMeta) => void
   onActivate: (snapshot: TagSnapshotMeta) => void
-  onRestore: (snapshot: TagSnapshotMeta) => void
   onDelete: (snapshot: TagSnapshotMeta) => void
 }
 
@@ -22,7 +21,6 @@ const SnapshotRow = ({
   onCompare,
   onEdit,
   onActivate,
-  onRestore,
   onDelete,
 }: SnapshotRowProps) => {
   const { t } = useTranslation()
@@ -44,9 +42,6 @@ const SnapshotRow = ({
               </BlackOutlinedButton>
               <BlackOutlinedButton type="button" onClick={() => onActivate(snapshot)}>
                 {t('v2:courseTags.snapshots.activate')}
-              </BlackOutlinedButton>
-              <BlackOutlinedButton type="button" onClick={() => onRestore(snapshot)}>
-                {t('v2:courseTags.snapshots.restore')}
               </BlackOutlinedButton>
               <BlackOutlinedButton type="button" onClick={() => onDelete(snapshot)}>
                 {t('v2:courseTags.snapshots.delete')}

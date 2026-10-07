@@ -169,12 +169,16 @@ export default {
       editing: {
         label: 'Muokattavana',
         new: 'Uusi versio',
+        published: 'Käytössä oleva versio',
+        switchConfirm: 'Tallentamattomat paikalliset muutoksesi liittyvät nykyiseen versioon ja hylätään. Jatketaanko?',
       },
       publish: {
         upToDate: 'Kaikki tagimuutokset on otettu käyttöön. Suosittelu käyttää juuri sitä mitä tässä näkyy.',
         pending: '{{count}} käyttöönottamatonta tagimuutosta',
         explanation:
           'Tagimuokkaukset ovat luonnos, kunnes ne otetaan käyttöön. Suosittelu käyttää viimeksi käyttöönotettua versiota.',
+        localExplanation:
+          'Nämä muutokset ovat vain selaimessasi. Mitään ei tallenneta ennen kuin tallennat version tai otat ne käyttöön.',
         apply: 'Tarkista ja ota käyttöön',
         reviewTitle: 'Tarkista muutokset ennen käyttöönottoa',
         confirmApply: 'Ota muutokset käyttöön',
@@ -220,6 +224,8 @@ export default {
         explanation: 'Tämä koskee kaikkia hakua vastaavia kursseja, ei vain näkyvää sivua.',
         previewPending: 'Valitse vähintään yksi tagi nähdäksesi montako kurssia muuttuisi.',
         previewCount: '{{count}} kurssia vastaa hakua.',
+        tooLarge:
+          'Tämä lisäisi {{count}} paikallista muutosta, mikä on enemmän kuin selain pystyy säilyttämään. Tallenna tai ota nykyiset muutoksesi ensin käyttöön.',
         confirm: 'Lisää kaikkiin {{count}} kurssiin',
       },
       cu: {

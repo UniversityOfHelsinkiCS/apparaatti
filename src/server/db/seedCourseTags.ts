@@ -4,10 +4,10 @@ import logger from '../util/logger.ts'
 import { sequelize } from './connection.ts'
 import { COURSE_TAG_SEEDS } from './courseTagSeeds.ts'
 import CourseTag from './models/courseTag.ts'
-import CurCourseTag from './models/curCourseTag.ts'
+import PublishedCurCourseTag from './models/publishedCurCourseTag.ts'
 
 const BACKFILL_SQL = `
-  INSERT INTO cur_course_tags (cur_id, course_tag_id, mode, created_at, updated_at)
+  INSERT INTO published_cur_course_tags (cur_id, course_tag_id, mode, created_at, updated_at)
   SELECT c.id, t.id, 'add', now(), now()
   FROM curs c
   CROSS JOIN LATERAL jsonb_each(COALESCE(c.custom_code_urns, '{}'::jsonb)) AS e(k, v)
@@ -27,6 +27,6 @@ export async function seedCourseTags(transaction?: Transaction) {
 
   await CourseTag.bulkCreate(COURSE_TAG_SEEDS as any, { ignoreDuplicates: true, transaction })
   await sequelize.query(BACKFILL_SQL, { transaction })
-  const inserted = await CurCourseTag.count({ transaction })
+  const inserted = await PublishedCurCourseTag.count({ transaction })
   logger.info(`Seeded ${COURSE_TAG_SEEDS.length} course tags and backfilled ${inserted} cur tag rows`)
 }

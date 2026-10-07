@@ -1,44 +1,36 @@
 import { Alert, Stack, Typography } from '@mui/material'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
-import type { EditedSnapshot } from './courseTagUtils.ts'
-import {
-  createSnapshot,
-  discardDraft,
-  fetchPendingChanges,
-  invalidateTagQueries,
-  overwriteSnapshot,
-  publishDraft,
-  updateSnapshot,
-} from './courseTagUtils.ts'
+import { createSnapshot, invalidateTagQueries, publishDraft } from './courseTagUtils.ts'
 import PendingChangesActions from './PendingChangesActions.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 import SnapshotMetaFields from './SnapshotMetaFields.tsx'
+import type { TagDraft } from './tagDraftBuffer.ts'
+import { draftDiff, draftSize } from './tagDraftBuffer.ts'
 
 interface PendingChangesBarProps {
-  editedSnapshot: EditedSnapshot | null
-  onEditingEnd: () => void
+  draft: TagDraft
+  onSaved: () => void
+  onDiscard: () => void
 }
 
-const PendingChangesBar = ({ editedSnapshot, onEditingEnd }: PendingChangesBarProps) => {
+const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isReviewOpen, setIsReviewOpen] = useState(false)
   const metaRef = useRef({ name: '', description: '' })
 
-  const { data: pending } = useQuery({ queryKey: ['course-tag-pending'], queryFn: fetchPendingChanges })
-
-  const refresh = () => invalidateTagQueries(queryClient)
+  const changeCount = draftSize(draft)
 
   const handleMetaChange = useCallback((meta: { name: string; description: string }) => {
     metaRef.current = meta
   }, [])
 
   const openReview = () => {
-    metaRef.current = { name: editedSnapshot?.name ?? '', description: '' }
+    metaRef.current = { name: '', description: '' }
     setIsReviewOpen(true)
   }
 
@@ -52,56 +44,27 @@ const PendingChangesBar = ({ editedSnapshot, onEditingEnd }: PendingChangesBarPr
   const versionName = () =>
     metaRef.current.name.trim() || `Saved ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`
 
-  const publish = useMutation({
-    mutationFn: () => publishDraft(description()),
-    onSuccess: () => {
-      closeReview()
-      onEditingEnd()
-      return refresh()
-    },
-  })
+  const finish = async () => {
+    closeReview()
+    await invalidateTagQueries(queryClient)
+    onSaved()
+  }
 
-  const saveToVersion = useMutation({
-    mutationFn: async () => {
-      if (!editedSnapshot) return
-      await overwriteSnapshot(editedSnapshot.id)
-      await updateSnapshot(editedSnapshot.id, versionName(), description())
-    },
-    onSuccess: () => {
-      closeReview()
-      onEditingEnd()
-      return refresh()
-    },
+  const publish = useMutation({
+    mutationFn: () => publishDraft(description(), draft),
+    onSuccess: finish,
   })
 
   const save = useMutation({
-    mutationFn: () => createSnapshot(versionName(), description()),
-    onSuccess: () => {
-      closeReview()
-      return refresh()
-    },
+    mutationFn: () => createSnapshot(versionName(), description(), draft),
+    onSuccess: finish,
   })
 
-  const discard = useMutation({
-    mutationFn: discardDraft,
-    onSuccess: () => {
-      onEditingEnd()
-      return refresh()
-    },
-  })
-
-  const changeCount = pending
-    ? pending.addedCurTags.length +
-      pending.removedCurTags.length +
-      pending.addedCuTags.length +
-      pending.removedCuTags.length
-    : 0
-
-  const isBusy = publish.isPending || save.isPending || saveToVersion.isPending || discard.isPending
+  const isBusy = publish.isPending || save.isPending
 
   const handleDiscard = () => {
     if (!window.confirm(t('v2:courseTags.publish.discardConfirm', { count: changeCount }))) return
-    discard.mutate()
+    onDiscard()
   }
 
   if (changeCount === 0) {
@@ -118,11 +81,7 @@ const PendingChangesBar = ({ editedSnapshot, onEditingEnd }: PendingChangesBarPr
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
           {t('v2:courseTags.publish.pending', { count: changeCount })}
         </Typography>
-        <Typography variant="body2">
-          {editedSnapshot
-            ? t('v2:courseTags.publish.editingVersion', { name: editedSnapshot.name })
-            : t('v2:courseTags.publish.explanation')}
-        </Typography>
+        <Typography variant="body2">{t('v2:courseTags.publish.localExplanation')}</Typography>
         <Stack direction="row" spacing={1}>
           <BlackOutlinedButton type="button" onClick={openReview} disabled={isBusy}>
             {t('v2:courseTags.publish.apply')}
@@ -134,24 +93,15 @@ const PendingChangesBar = ({ editedSnapshot, onEditingEnd }: PendingChangesBarPr
       </Stack>
 
       <SnapshotDiffDialog
-        diff={isReviewOpen ? (pending ?? null) : null}
+        diff={isReviewOpen ? draftDiff(draft.mutations) : null}
+        base={draft.base}
         onClose={closeReview}
         title={t('v2:courseTags.publish.reviewTitle')}
         content={
-          <SnapshotMetaFields
-            key={isReviewOpen ? 'open' : 'closed'}
-            initialName={editedSnapshot?.name ?? ''}
-            onChange={handleMetaChange}
-          />
+          <SnapshotMetaFields key={isReviewOpen ? 'open' : 'closed'} initialName="" onChange={handleMetaChange} />
         }
         actions={
-          <PendingChangesActions
-            editedSnapshot={editedSnapshot}
-            isBusy={isBusy}
-            onSaveToVersion={() => saveToVersion.mutate()}
-            onSave={() => save.mutate()}
-            onPublish={() => publish.mutate()}
-          />
+          <PendingChangesActions isBusy={isBusy} onSave={() => save.mutate()} onPublish={() => publish.mutate()} />
         }
       />
     </Alert>

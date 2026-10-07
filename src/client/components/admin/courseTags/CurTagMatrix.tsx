@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material'
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
+import type { CourseTag, LocalizedString, TagBase, TagMutations } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
@@ -16,17 +16,12 @@ import {
 import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import BulkApplyDialog from './BulkApplyDialog.tsx'
-import type { CurTagMutationMode, CurTagState } from './courseTagUtils.ts'
-import {
-  applyCurTagMode,
-  fetchCurTagStates,
-  invalidateCurTagQueries,
-  invalidateTagQueries,
-  saveCurTag,
-} from './courseTagUtils.ts'
+import type { CurTagMutationMode } from './courseTagUtils.ts'
+import { fetchCurTagPremises } from './courseTagUtils.ts'
 import CurTagTable from './CurTagTable.tsx'
 import type { TagCellState } from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
+import { baseKey, curTagStates } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
 
 const PAGE_SIZE = 50
@@ -69,11 +64,14 @@ const storeColumns = (keys: string[]) => {
 
 interface CurTagMatrixProps {
   tags: CourseTag[]
+  base: TagBase
+  mutations: TagMutations
+  onCurToggle: (curId: string, tagKey: string, mode: CurTagMutationMode) => void
+  onBulkApply: (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => void
 }
 
-const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
+const CurTagMatrix = ({ tags, base, mutations, onCurToggle, onBulkApply }: CurTagMatrixProps) => {
   const { t } = useTranslation()
-  const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
   const [isBulkOpen, setIsBulkOpen] = useState(false)
@@ -105,45 +103,28 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
 
   const courses = useMemo(() => coursesData?.courses ?? [], [coursesData])
   const curIds = useMemo(() => courses.map(course => course.id), [courses])
-  const statesKey = useMemo(() => ['course-tag-states', curIds.join(',')], [curIds])
 
-  const { data: tagStates } = useQuery({
-    queryKey: statesKey,
-    queryFn: () => fetchCurTagStates(curIds),
+  const { data: premises } = useQuery({
+    queryKey: ['course-tag-states', baseKey(base), curIds.join(',')],
+    queryFn: () => fetchCurTagPremises(curIds, base),
     enabled: curIds.length > 0,
     placeholderData: keepPreviousData,
   })
 
   const stateByCur = useMemo(() => {
     const index = new Map<string, Map<string, TagCellState>>()
-    for (const state of tagStates ?? []) {
-      index.set(state.curId, new Map(state.tags.map(entry => [entry.key, entry.source])))
+    for (const entry of premises ?? []) {
+      index.set(entry.curId, curTagStates(entry, mutations))
     }
     return index
-  }, [tagStates])
-
-  const toggle = useMutation({
-    mutationFn: ({ curId, tagKey, mode }: { curId: string; tagKey: string; mode: CurTagMutationMode }) =>
-      saveCurTag(curId, tagKey, mode),
-    onMutate: ({ curId, tagKey, mode }) => {
-      queryClient.setQueryData<CurTagState[]>(statesKey, previous =>
-        previous?.map(state =>
-          state.curId === curId ? { curId, tags: applyCurTagMode(state.tags, tagKey, mode) } : state
-        )
-      )
-    },
-    onSettled: () => invalidateCurTagQueries(queryClient),
-  })
-
-  const toggleMutate = toggle.mutate
+  }, [premises, mutations])
 
   const handleToggle = useCallback(
     (curId: string, tagKey: string) => {
-      const states = queryClient.getQueryData<CurTagState[]>(statesKey)
-      const current = states?.find(state => state.curId === curId)?.tags.find(tag => tag.key === tagKey)?.source
-      toggleMutate({ curId, tagKey, mode: nextMode(current ?? 'unset') })
+      const current = stateByCur.get(curId)?.get(tagKey) ?? 'unset'
+      onCurToggle(curId, tagKey, nextMode(current))
     },
-    [queryClient, statesKey, toggleMutate]
+    [stateByCur, onCurToggle]
   )
 
   return (
@@ -175,7 +156,7 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
         tags={tags}
         searchValues={searchValues}
         onClose={() => setIsBulkOpen(false)}
-        onApplied={() => invalidateTagQueries(queryClient)}
+        onApply={onBulkApply}
       />
     </Box>
   )

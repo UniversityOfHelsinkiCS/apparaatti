@@ -5,18 +5,22 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
-import type { CourseUnitGroup, TagPayloadDiff } from '../../../../common/types.ts'
+import type { CourseUnitGroup, CurTagPremises, TagBase, TagPayloadDiff } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
-import type { CurTagState, DiffCourse } from './courseTagUtils.ts'
+import type { DiffCourse } from './courseTagUtils.ts'
 import {
   fetchCoursesForLabels,
   fetchCourseTags,
   fetchCourseUnitGroupsForLabels,
-  fetchCurTagStates,
+  fetchCurTagPremises,
 } from './courseTagUtils.ts'
+import { baseKey, curTagStates } from './tagDraftBuffer.ts'
+
+const NO_MUTATIONS = { tags: [], cur: [], cu: [] }
 
 interface SnapshotDiffDialogProps {
   diff: TagPayloadDiff | null
+  base: TagBase
   onClose: () => void
   title?: string
   content?: ReactNode
@@ -89,7 +93,7 @@ const TagListSection = ({ title, added, removed }: { title: string; added: strin
   )
 }
 
-const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: SnapshotDiffDialogProps) => {
+const SnapshotDiffDialog = ({ diff, base, onClose, title, content, actions }: SnapshotDiffDialogProps) => {
   const { t, i18n } = useTranslation()
 
   const curIds = useMemo(
@@ -110,8 +114,8 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
   })
 
   const { data: curStates } = useQuery({
-    queryKey: ['course-tag-states', curIds.join(',')],
-    queryFn: () => fetchCurTagStates(curIds),
+    queryKey: ['course-tag-states', baseKey(base), curIds.join(',')],
+    queryFn: () => fetchCurTagPremises(curIds, base),
     enabled: diff !== null && curIds.length > 0,
   })
 
@@ -138,7 +142,7 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
   }, [groups])
 
   const curStateById = useMemo(() => {
-    const index = new Map<string, CurTagState>()
+    const index = new Map<string, CurTagPremises>()
     for (const state of curStates ?? []) {
       index.set(state.curId, state)
     }
@@ -204,11 +208,12 @@ const SnapshotDiffDialog = ({ diff, onClose, title, content, actions }: Snapshot
     return [...byCur.entries()].map(([curId, entry]) => {
       const course = courseByCurId.get(curId)
       const starts = course?.startDate ? new Date(course.startDate).toLocaleDateString(i18n.language) : ''
-      const current =
-        curStateById
-          .get(curId)
-          ?.tags.filter(tag => tag.source !== 'ignored')
-          .map(tag => tagLabel(tag.key)) ?? []
+      const premises = curStateById.get(curId)
+      const current = premises
+        ? [...curTagStates(premises, NO_MUTATIONS)]
+            .filter(([, source]) => source !== 'ignored')
+            .map(([key]) => tagLabel(key))
+        : []
 
       return {
         id: curId,
