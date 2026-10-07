@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CurTagMutation, TagBase, TagVocabMutation } from '../../../../common/types.ts'
+import type { TagBase, TagVocabMutation } from '../../../../common/types.ts'
 import { useAdminUser } from '../AdminMain.tsx'
 import AdminNavbar from '../AdminNavbar.tsx'
 import CourseTagsTabs from './CourseTagsTabs.tsx'
@@ -22,11 +22,14 @@ import {
   mergedVocabulary,
   readDraft,
   storeDraft,
+  withBulkCurMutations,
   withCuMutation,
-  withCurMutations,
+  withCurMutation,
   withTagMutation,
 } from './tagDraftBuffer.ts'
 import TagVocabularyTab from './TagVocabularyTab.tsx'
+
+const PERSIST_DELAY_MS = 400
 
 const CourseTagsPage = () => {
   const { t } = useTranslation()
@@ -37,65 +40,47 @@ const CourseTagsPage = () => {
   const { data: tags } = useQuery({ queryKey: ['course-tags'], queryFn: fetchCourseTags })
   const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
 
-  const resetDraft = useCallback(
-    (base: TagBase) => {
-      clearStoredDraft()
-      setDraft(emptyDraft(base))
-    },
-    [setDraft]
-  )
+  const pendingDraft = useRef(draft)
+  pendingDraft.current = draft
+
+  useEffect(() => {
+    const flush = () => storeDraft(pendingDraft.current)
+    const timeout = window.setTimeout(flush, PERSIST_DELAY_MS)
+    window.addEventListener('beforeunload', flush)
+
+    return () => {
+      window.clearTimeout(timeout)
+      window.removeEventListener('beforeunload', flush)
+    }
+  }, [draft])
+
+  const resetDraft = useCallback((base: TagBase) => {
+    clearStoredDraft()
+    setDraft(emptyDraft(base))
+  }, [])
 
   const handleBaseChange = (base: TagBase) => {
     if (draftSize(draft) > 0 && !window.confirm(t('v2:courseTags.editing.switchConfirm'))) return
     resetDraft(base)
   }
 
-  const handleCurToggle = useCallback(
-    (curId: string, tagKey: string, mode: CurTagMutationMode) => {
-      setDraft(current => {
-        const next = withCurMutations(current, [{ curId, tagKey, mode }])
-        storeDraft(next)
-        return next
-      })
-    },
-    [setDraft]
-  )
+  const handleCurToggle = useCallback((curId: string, tagKey: string, mode: CurTagMutationMode) => {
+    setDraft(current => withCurMutation(current, curId, tagKey, mode))
+  }, [])
 
-  const handleBulkApply = useCallback(
-    (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => {
-      const entries: CurTagMutation[] = curIds.flatMap(curId => tagKeys.map(tagKey => ({ curId, tagKey, mode })))
-      setDraft(current => {
-        const next = withCurMutations(current, entries)
-        storeDraft(next)
-        return next
-      })
-    },
-    [setDraft]
-  )
+  const handleBulkApply = useCallback((curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => {
+    setDraft(current => withBulkCurMutations(current, curIds, tagKeys, mode))
+  }, [])
 
-  const handleCuToggle = useCallback(
-    (courseCode: string, cuIds: string[], tagKey: string, present: boolean) => {
-      setDraft(current => {
-        const next = withCuMutation(current, { courseCode, cuIds, tagKey, present })
-        storeDraft(next)
-        return next
-      })
-    },
-    [setDraft]
-  )
+  const handleCuToggle = useCallback((courseCode: string, cuIds: string[], tagKey: string, present: boolean) => {
+    setDraft(current => withCuMutation(current, { courseCode, cuIds, tagKey, present }))
+  }, [])
 
-  const handleTagMutation = useCallback(
-    (mutation: TagVocabMutation) => {
-      setDraft(current => {
-        const next = withTagMutation(current, mutation)
-        storeDraft(next)
-        return next
-      })
-    },
-    [setDraft]
-  )
+  const handleTagMutation = useCallback((mutation: TagVocabMutation) => {
+    setDraft(current => withTagMutation(current, mutation))
+  }, [])
 
-  const courseTags = useMemo(() => mergedVocabulary(tags ?? [], draft.mutations), [tags, draft.mutations])
+  const courseTags = useMemo(() => mergedVocabulary(tags ?? [], draft.tags), [tags, draft.tags])
 
   return (
     <Box>
@@ -119,13 +104,14 @@ const CourseTagsPage = () => {
         <CurTagMatrix
           tags={courseTags}
           base={draft.base}
-          mutations={draft.mutations}
+          curMutations={draft.cur}
+          cuMutations={draft.cu}
           onCurToggle={handleCurToggle}
           onBulkApply={handleBulkApply}
         />
       ) : null}
       {tab === 1 ? (
-        <CuTagTab tags={courseTags} base={draft.base} mutations={draft.mutations} onCuToggle={handleCuToggle} />
+        <CuTagTab tags={courseTags} base={draft.base} cuMutations={draft.cu} onCuToggle={handleCuToggle} />
       ) : null}
       {tab === 2 ? (
         <TagVocabularyTab tags={courseTags} isSuperuser={user.isSuperuser === true} onTagMutation={handleTagMutation} />

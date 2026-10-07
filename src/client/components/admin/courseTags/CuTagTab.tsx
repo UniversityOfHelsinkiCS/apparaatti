@@ -2,7 +2,7 @@ import { Alert, Box, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, CourseUnitGroup, TagBase, TagMutations } from '../../../../common/types.ts'
+import type { CourseTag, CourseUnitGroup, TagBase } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
 import {
@@ -14,10 +14,11 @@ import {
 import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import CuTagTable from './CuTagTable.tsx'
+import type { TagDraft } from './tagDraftBuffer.ts'
 import { baseKey, cuTagKeys } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = 15
 
 interface CourseUnitsResponse {
   groups: CourseUnitGroup[]
@@ -28,11 +29,11 @@ interface CourseUnitsResponse {
 interface CuTagTabProps {
   tags: CourseTag[]
   base: TagBase
-  mutations: TagMutations
+  cuMutations: TagDraft['cu']
   onCuToggle: (courseCode: string, cuIds: string[], tagKey: string, present: boolean) => void
 }
 
-const CuTagTab = ({ tags, base, mutations, onCuToggle }: CuTagTabProps) => {
+const CuTagTab = ({ tags, base, cuMutations, onCuToggle }: CuTagTabProps) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
@@ -54,10 +55,10 @@ const CuTagTab = ({ tags, base, mutations, onCuToggle }: CuTagTabProps) => {
   const tagKeysByCourseCode = useMemo(() => {
     const index = new Map<string, Set<string>>()
     for (const group of groups) {
-      index.set(group.courseCode, cuTagKeys(group.courseCode, group.tagKeys, mutations))
+      index.set(group.courseCode, cuTagKeys(group.courseCode, group.tagKeys, cuMutations))
     }
     return index
-  }, [groups, mutations])
+  }, [groups, cuMutations])
 
   const cuIdsByCourseCode = useMemo(() => new Map(groups.map(group => [group.courseCode, group.cuIds])), [groups])
 

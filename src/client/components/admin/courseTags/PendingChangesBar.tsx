@@ -9,7 +9,7 @@ import PendingChangesActions from './PendingChangesActions.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 import SnapshotMetaFields from './SnapshotMetaFields.tsx'
 import type { TagDraft } from './tagDraftBuffer.ts'
-import { draftDiff, draftSize } from './tagDraftBuffer.ts'
+import { draftDiff, draftSize, toMutations } from './tagDraftBuffer.ts'
 
 interface PendingChangesBarProps {
   draft: TagDraft
@@ -50,13 +50,15 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
     onSaved()
   }
 
+  const request = () => ({ base: draft.base, mutations: toMutations(draft) })
+
   const publish = useMutation({
-    mutationFn: () => publishDraft(description(), draft),
+    mutationFn: () => publishDraft(description(), request()),
     onSuccess: finish,
   })
 
   const save = useMutation({
-    mutationFn: () => createSnapshot(versionName(), description(), draft),
+    mutationFn: () => createSnapshot(versionName(), description(), request()),
     onSuccess: finish,
   })
 
@@ -93,7 +95,7 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
       </Stack>
 
       <SnapshotDiffDialog
-        diff={isReviewOpen ? draftDiff(draft.mutations) : null}
+        diff={isReviewOpen ? draftDiff(draft) : null}
         base={draft.base}
         onClose={closeReview}
         title={t('v2:courseTags.publish.reviewTitle')}

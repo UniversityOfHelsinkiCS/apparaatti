@@ -2,7 +2,6 @@ import { describeCurTags } from '../../../../common/courseTags.ts'
 import type {
   CourseTag,
   CourseTagMode,
-  CurTagMutation,
   CurTagPremises,
   CuTagMutation,
   ResolvedTagSource,
@@ -16,20 +15,41 @@ const STORAGE_KEY = 'apparaatti-course-tag-draft'
 
 export const MAX_DRAFT_ENTRIES = 20000
 
+export type CurTagModeOrClear = CourseTagMode | 'clear'
+
+export type CurMutationsByCur = Record<string, Record<string, CurTagModeOrClear>>
+
 export interface TagDraft {
   base: TagBase
-  mutations: TagMutations
+  tags: Record<string, TagVocabMutation>
+  cur: CurMutationsByCur
+  cu: Record<string, CuTagMutation>
 }
 
 export const emptyDraft = (base: TagBase = { kind: 'published' }): TagDraft => ({
   base,
-  mutations: { tags: [], cur: [], cu: [] },
+  tags: {},
+  cur: {},
+  cu: {},
 })
+
+const isRecord = (value: unknown): boolean => typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const isTagDraft = (value: any): value is TagDraft =>
+  isRecord(value) &&
+  isRecord(value.base) &&
+  (value.base.kind === 'published' || value.base.kind === 'snapshot') &&
+  isRecord(value.tags) &&
+  isRecord(value.cur) &&
+  isRecord(value.cu)
 
 export const readDraft = (): TagDraft => {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY)
-    return stored ? (JSON.parse(stored) as TagDraft) : emptyDraft()
+    if (!stored) return emptyDraft()
+
+    const parsed = JSON.parse(stored)
+    return isTagDraft(parsed) ? parsed : emptyDraft()
   } catch {
     return emptyDraft()
   }
@@ -52,46 +72,56 @@ export const clearStoredDraft = () => {
 }
 
 export const draftSize = (draft: TagDraft): number =>
-  draft.mutations.tags.length + draft.mutations.cur.length + draft.mutations.cu.length
+  Object.keys(draft.tags).length +
+  Object.values(draft.cur).reduce((total, byTag) => total + Object.keys(byTag).length, 0) +
+  Object.keys(draft.cu).length
 
 export const baseKey = (base: TagBase): string => (base.kind === 'published' ? 'published' : `snapshot:${base.id}`)
 
-const replaceBy = <T>(list: T[], entries: T[], identity: (entry: T) => string): T[] => {
-  const byId = new Map(list.map(entry => [identity(entry), entry]))
-  for (const entry of entries) {
-    byId.set(identity(entry), entry)
-  }
-  return [...byId.values()]
-}
-
-export const withCurMutations = (draft: TagDraft, entries: CurTagMutation[]): TagDraft => ({
-  ...draft,
-  mutations: {
-    ...draft.mutations,
-    cur: replaceBy(draft.mutations.cur, entries, entry => `${entry.curId}::${entry.tagKey}`),
-  },
+export const toMutations = (draft: TagDraft): TagMutations => ({
+  tags: Object.values(draft.tags),
+  cur: Object.entries(draft.cur).flatMap(([curId, byTag]) =>
+    Object.entries(byTag).map(([tagKey, mode]) => ({ curId, tagKey, mode }))
+  ),
+  cu: Object.values(draft.cu),
 })
+
+export const withCurMutation = (draft: TagDraft, curId: string, tagKey: string, mode: CurTagModeOrClear): TagDraft => ({
+  ...draft,
+  cur: { ...draft.cur, [curId]: { ...draft.cur[curId], [tagKey]: mode } },
+})
+
+export const withBulkCurMutations = (
+  draft: TagDraft,
+  curIds: string[],
+  tagKeys: string[],
+  mode: CurTagModeOrClear
+): TagDraft => {
+  const cur = { ...draft.cur }
+  for (const curId of curIds) {
+    const byTag = { ...cur[curId] }
+    for (const tagKey of tagKeys) {
+      byTag[tagKey] = mode
+    }
+    cur[curId] = byTag
+  }
+  return { ...draft, cur }
+}
 
 export const withCuMutation = (draft: TagDraft, entry: CuTagMutation): TagDraft => ({
   ...draft,
-  mutations: {
-    ...draft.mutations,
-    cu: replaceBy(draft.mutations.cu, [entry], mutation => `${mutation.courseCode}::${mutation.tagKey}`),
-  },
+  cu: { ...draft.cu, [`${entry.courseCode}::${entry.tagKey}`]: entry },
 })
 
 export const withTagMutation = (draft: TagDraft, entry: TagVocabMutation): TagDraft => ({
   ...draft,
-  mutations: {
-    ...draft.mutations,
-    tags: replaceBy(draft.mutations.tags, [entry], mutation => mutation.key),
-  },
+  tags: { ...draft.tags, [entry.key]: entry },
 })
 
-export const mergedVocabulary = (base: CourseTag[], mutations: TagMutations): CourseTag[] => {
+export const mergedVocabulary = (base: CourseTag[], tags: TagDraft['tags']): CourseTag[] => {
   const byKey = new Map(base.map(tag => [tag.key, tag]))
 
-  for (const mutation of mutations.tags) {
+  for (const mutation of Object.values(tags)) {
     if (mutation.op === 'delete') {
       byKey.delete(mutation.key)
     } else {
@@ -102,23 +132,46 @@ export const mergedVocabulary = (base: CourseTag[], mutations: TagMutations): Co
   return [...byKey.values()].sort((a, b) => a.key.localeCompare(b.key))
 }
 
-export const curTagStates = (premises: CurTagPremises, mutations: TagMutations): Map<string, ResolvedTagSource> => {
+export type CuTagIndex = Map<string, Map<string, boolean>>
+
+export const cuMutationIndex = (cu: TagDraft['cu']): CuTagIndex => {
+  const index: CuTagIndex = new Map()
+
+  for (const mutation of Object.values(cu)) {
+    for (const cuId of mutation.cuIds) {
+      const byTag = index.get(cuId) ?? new Map<string, boolean>()
+      byTag.set(mutation.tagKey, mutation.present)
+      index.set(cuId, byTag)
+    }
+  }
+
+  return index
+}
+
+const NO_CUR_MUTATIONS: Record<string, CurTagModeOrClear> = {}
+
+export const curTagStates = (
+  premises: CurTagPremises,
+  curMutations: Record<string, CurTagModeOrClear> = NO_CUR_MUTATIONS,
+  cuIndex: CuTagIndex = new Map()
+): Map<string, ResolvedTagSource> => {
   const inherited = new Set<string>()
   for (const cu of premises.cus) {
-    const keys = new Set(cu.tagKeys)
-    for (const mutation of mutations.cu) {
-      if (!mutation.cuIds.includes(cu.cuId)) continue
-      if (mutation.present) keys.add(mutation.tagKey)
-      else keys.delete(mutation.tagKey)
+    const byTag = cuIndex.get(cu.cuId)
+    for (const key of cu.tagKeys) {
+      if (byTag?.get(key) !== false) inherited.add(key)
     }
-    for (const key of keys) inherited.add(key)
+    if (byTag) {
+      for (const [key, present] of byTag) {
+        if (present) inherited.add(key)
+      }
+    }
   }
 
   const rows = new Map(premises.rows.map(row => [row.tagKey, row.mode]))
-  for (const mutation of mutations.cur) {
-    if (mutation.curId !== premises.curId) continue
-    if (mutation.mode === 'clear') rows.delete(mutation.tagKey)
-    else rows.set(mutation.tagKey, mutation.mode)
+  for (const [tagKey, mode] of Object.entries(curMutations)) {
+    if (mode === 'clear') rows.delete(tagKey)
+    else rows.set(tagKey, mode)
   }
 
   const described = describeCurTags(
@@ -129,29 +182,35 @@ export const curTagStates = (premises: CurTagPremises, mutations: TagMutations):
   return new Map(described.map(tag => [tag.key, tag.source]))
 }
 
-export const draftDiff = (mutations: TagMutations): TagPayloadDiff => ({
-  addedTags: mutations.tags.filter(tag => tag.op === 'upsert').map(tag => tag.key),
-  removedTags: mutations.tags.filter(tag => tag.op === 'delete').map(tag => tag.key),
-  addedCuTags: mutations.cu
-    .filter(entry => entry.present)
-    .flatMap(entry => entry.cuIds.map(cuId => ({ cuId, tagKey: entry.tagKey }))),
-  removedCuTags: mutations.cu
-    .filter(entry => !entry.present)
-    .flatMap(entry => entry.cuIds.map(cuId => ({ cuId, tagKey: entry.tagKey }))),
-  addedCurTags: mutations.cur
-    .filter(entry => entry.mode !== 'clear')
-    .map(entry => ({ curId: entry.curId, tagKey: entry.tagKey, mode: entry.mode as CourseTagMode })),
-  removedCurTags: mutations.cur
-    .filter(entry => entry.mode === 'clear')
-    .map(entry => ({ curId: entry.curId, tagKey: entry.tagKey, mode: 'add' as CourseTagMode })),
-})
+export const draftDiff = (draft: TagDraft): TagPayloadDiff => {
+  const mutations = toMutations(draft)
 
-export const cuTagKeys = (courseCode: string, baseKeys: string[], mutations: TagMutations): Set<string> => {
+  return {
+    addedTags: mutations.tags.filter(tag => tag.op === 'upsert').map(tag => tag.key),
+    removedTags: mutations.tags.filter(tag => tag.op === 'delete').map(tag => tag.key),
+    addedCuTags: mutations.cu
+      .filter(entry => entry.present)
+      .flatMap(entry => entry.cuIds.map(cuId => ({ cuId, tagKey: entry.tagKey }))),
+    removedCuTags: mutations.cu
+      .filter(entry => !entry.present)
+      .flatMap(entry => entry.cuIds.map(cuId => ({ cuId, tagKey: entry.tagKey }))),
+    addedCurTags: mutations.cur
+      .filter(entry => entry.mode !== 'clear')
+      .map(entry => ({ curId: entry.curId, tagKey: entry.tagKey, mode: entry.mode as CourseTagMode })),
+    removedCurTags: mutations.cur
+      .filter(entry => entry.mode === 'clear')
+      .map(entry => ({ curId: entry.curId, tagKey: entry.tagKey, mode: 'add' as CourseTagMode })),
+  }
+}
+
+export const cuTagKeys = (courseCode: string, baseKeys: string[], cu: TagDraft['cu']): Set<string> => {
   const keys = new Set(baseKeys)
-  for (const mutation of mutations.cu) {
+
+  for (const mutation of Object.values(cu)) {
     if (mutation.courseCode !== courseCode) continue
     if (mutation.present) keys.add(mutation.tagKey)
     else keys.delete(mutation.tagKey)
   }
+
   return keys
 }

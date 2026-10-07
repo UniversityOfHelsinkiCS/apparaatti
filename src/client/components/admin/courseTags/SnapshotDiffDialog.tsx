@@ -16,8 +16,6 @@ import {
 } from './courseTagUtils.ts'
 import { baseKey, curTagStates } from './tagDraftBuffer.ts'
 
-const NO_MUTATIONS = { tags: [], cur: [], cu: [] }
-
 interface SnapshotDiffDialogProps {
   diff: TagPayloadDiff | null
   base: TagBase
@@ -210,9 +208,7 @@ const SnapshotDiffDialog = ({ diff, base, onClose, title, content, actions }: Sn
       const starts = course?.startDate ? new Date(course.startDate).toLocaleDateString(i18n.language) : ''
       const premises = curStateById.get(curId)
       const current = premises
-        ? [...curTagStates(premises, NO_MUTATIONS)]
-            .filter(([, source]) => source !== 'ignored')
-            .map(([key]) => tagLabel(key))
+        ? [...curTagStates(premises)].filter(([, source]) => source !== 'ignored').map(([key]) => tagLabel(key))
         : []
 
       return {

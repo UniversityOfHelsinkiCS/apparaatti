@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, LocalizedString, TagBase, TagMutations } from '../../../../common/types.ts'
+import type { CourseTag, CurTagPremises, LocalizedString, TagBase } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
@@ -21,10 +21,11 @@ import { fetchCurTagPremises } from './courseTagUtils.ts'
 import CurTagTable from './CurTagTable.tsx'
 import type { TagCellState } from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
-import { baseKey, curTagStates } from './tagDraftBuffer.ts'
+import type { CurMutationsByCur, CurTagModeOrClear, TagDraft } from './tagDraftBuffer.ts'
+import { baseKey, cuMutationIndex, curTagStates } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = 15
 const VISIBLE_COLUMNS_STORAGE_KEY = 'apparaatti-course-tag-columns'
 
 interface Course {
@@ -65,12 +66,20 @@ const storeColumns = (keys: string[]) => {
 interface CurTagMatrixProps {
   tags: CourseTag[]
   base: TagBase
-  mutations: TagMutations
+  curMutations: CurMutationsByCur
+  cuMutations: TagDraft['cu']
   onCurToggle: (curId: string, tagKey: string, mode: CurTagMutationMode) => void
   onBulkApply: (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => void
 }
 
-const CurTagMatrix = ({ tags, base, mutations, onCurToggle, onBulkApply }: CurTagMatrixProps) => {
+interface RowCacheEntry {
+  premises: CurTagPremises
+  curMutations: Record<string, CurTagModeOrClear> | undefined
+  cuIndex: ReturnType<typeof cuMutationIndex>
+  state: Map<string, TagCellState>
+}
+
+const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBulkApply }: CurTagMatrixProps) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
@@ -111,20 +120,37 @@ const CurTagMatrix = ({ tags, base, mutations, onCurToggle, onBulkApply }: CurTa
     placeholderData: keepPreviousData,
   })
 
+  const cuIndex = useMemo(() => cuMutationIndex(cuMutations), [cuMutations])
+
+  const rowCache = useRef(new Map<string, RowCacheEntry>())
+
   const stateByCur = useMemo(() => {
     const index = new Map<string, Map<string, TagCellState>>()
+    const nextCache = new Map<string, RowCacheEntry>()
+
     for (const entry of premises ?? []) {
-      index.set(entry.curId, curTagStates(entry, mutations))
+      const muts = curMutations[entry.curId]
+      const cached = rowCache.current.get(entry.curId)
+      const isUnchanged = cached?.premises === entry && cached.curMutations === muts && cached.cuIndex === cuIndex
+      const state = isUnchanged ? cached.state : curTagStates(entry, muts, cuIndex)
+
+      nextCache.set(entry.curId, { premises: entry, curMutations: muts, cuIndex, state })
+      index.set(entry.curId, state)
     }
+
+    rowCache.current = nextCache
     return index
-  }, [premises, mutations])
+  }, [premises, curMutations, cuIndex])
+
+  const stateRef = useRef(stateByCur)
+  stateRef.current = stateByCur
 
   const handleToggle = useCallback(
     (curId: string, tagKey: string) => {
-      const current = stateByCur.get(curId)?.get(tagKey) ?? 'unset'
+      const current = stateRef.current.get(curId)?.get(tagKey) ?? 'unset'
       onCurToggle(curId, tagKey, nextMode(current))
     },
-    [stateByCur, onCurToggle]
+    [onCurToggle]
   )
 
   return (
