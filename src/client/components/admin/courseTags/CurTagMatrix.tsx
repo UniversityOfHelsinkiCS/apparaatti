@@ -1,21 +1,8 @@
-import {
-  Box,
-  Pagination,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
 import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
@@ -31,16 +18,10 @@ import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import BulkApplyDialog from './BulkApplyDialog.tsx'
 import type { CurTagMutationMode } from './courseTagUtils.ts'
 import { fetchCurTagStates, invalidateTagQueries, saveCurTag } from './courseTagUtils.ts'
-import {
-  matrixContainerSx,
-  stickyCornerCellSx,
-  stickyFirstCellSx,
-  stickyHeaderCellSx,
-  verticalHeaderLabelSx,
-} from './matrixStyles.ts'
+import CurTagTable from './CurTagTable.tsx'
 import type { TagCellState } from './TagCell.tsx'
-import TagCell from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
+import TagMatrixPagination from './TagMatrixPagination.tsx'
 
 const PAGE_SIZE = 50
 const VISIBLE_COLUMNS_STORAGE_KEY = 'apparaatti-course-tag-columns'
@@ -85,7 +66,7 @@ interface CurTagMatrixProps {
 }
 
 const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
@@ -133,8 +114,6 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
     return index
   }, [tagStates])
 
-  const stateFor = (curId: string, tagKey: string): TagCellState => stateByCur.get(curId)?.get(tagKey) ?? 'unset'
-
   const handleToggle = useCallback(
     async (curId: string, tagKey: string) => {
       const current = stateByCur.get(curId)?.get(tagKey) ?? 'unset'
@@ -163,59 +142,10 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>
       ) : (
-        <TableContainer sx={matrixContainerSx}>
-          <Table size="small" stickyHeader sx={{ width: 'auto' }}>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={stickyCornerCellSx}>{t('v2:courseTags.course')}</TableCell>
-                {visibleTags.map(tag => (
-                  <TableCell key={tag.key} align="center" sx={stickyHeaderCellSx}>
-                    <Tooltip title={tag.description ?? tag.key} disableInteractive>
-                      <Box component="span" sx={verticalHeaderLabelSx}>
-                        {tag.key}
-                      </Box>
-                    </Tooltip>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {courses.map(course => (
-                <TableRow key={course.id} hover>
-                  <TableCell sx={stickyFirstCellSx}>
-                    <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
-                      {getDisplayCourseName(course, i18n.language)}
-                    </Typography>
-                  </TableCell>
-                  {visibleTags.map(tag => (
-                    <TableCell key={tag.key} align="center" sx={{ p: 0.25 }}>
-                      <TagCell
-                        rowId={course.id}
-                        tagKey={tag.key}
-                        description={tag.description}
-                        state={stateFor(course.id, tag.key)}
-                        onToggle={handleToggle}
-                      />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <CurTagTable courses={courses} tags={visibleTags} stateByCur={stateByCur} onToggle={handleToggle} />
       )}
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <Pagination
-          count={coursesData?.totalPages ?? 1}
-          page={page}
-          onChange={(_event, value) => setPage(value)}
-          sx={{
-            '& .MuiPaginationItem-root': { color: '#374151' },
-            '& .Mui-selected': { backgroundColor: '#111827 !important', color: '#ffffff' },
-          }}
-        />
-      </Box>
+      <TagMatrixPagination count={coursesData?.totalPages ?? 1} page={page} onChange={setPage} />
 
       <BulkApplyDialog
         open={isBulkOpen}

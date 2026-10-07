@@ -134,8 +134,14 @@ export interface DiffCourse {
   Cus?: DiffCourseUnit[]
 }
 
-export const fetchCoursesForLabels = async (): Promise<DiffCourse[]> =>
-  (await (await adminFetch('GET', '/api/admin/courses?page=1&limit=100000')).json()).courses
+export const fetchCoursesForLabels = async (): Promise<DiffCourse[]> => {
+  const response = await adminFetch('GET', '/api/admin/courses?page=1&limit=100000')
+  const body = await response.json()
+  return body.courses
+}
 
-export const fetchCourseUnitGroupsForLabels = async (): Promise<CourseUnitGroup[]> =>
-  (await (await adminFetch('GET', `${COURSE_TAGS_PATH}/course-units?page=1&limit=100000`)).json()).groups
+export const fetchCourseUnitGroupsForLabels = async (): Promise<CourseUnitGroup[]> => {
+  const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/course-units?page=1&limit=100000`)
+  const body = await response.json()
+  return body.groups
+}

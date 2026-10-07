@@ -1,27 +1,12 @@
-import {
-  Box,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { TagPayloadDiff, TagSnapshotMeta } from '../../../../common/types.ts'
-import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
-import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import type { EditedSnapshot } from './courseTagUtils.ts'
 import {
   activateSnapshot,
-  COURSE_TAGS_PATH,
   createSnapshot,
   deleteSnapshot,
   fetchSnapshotDiff,
@@ -30,7 +15,10 @@ import {
   restoreSnapshot,
 } from './courseTagUtils.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
+import SnapshotCreateForm from './SnapshotCreateForm.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
+import SnapshotImportExport from './SnapshotImportExport.tsx'
+import SnapshotRow from './SnapshotRow.tsx'
 
 interface SnapshotsTabProps {
   isSuperuser: boolean
@@ -41,8 +29,6 @@ interface SnapshotsTabProps {
 const SnapshotsTab = ({ isSuperuser, editedSnapshot, onEditTagging }: SnapshotsTabProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
   const [diff, setDiff] = useState<TagPayloadDiff | null>(null)
 
   const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
@@ -51,11 +37,13 @@ const SnapshotsTab = ({ isSuperuser, editedSnapshot, onEditTagging }: SnapshotsT
     await invalidateTagQueries(queryClient)
   }
 
-  const handleSave = async () => {
-    await createSnapshot(name, description || null)
-    setName('')
-    setDescription('')
+  const handleSave = async (name: string, description: string | null) => {
+    await createSnapshot(name, description)
     await refresh()
+  }
+
+  const handleCompare = async (snapshot: TagSnapshotMeta) => {
+    setDiff(await fetchSnapshotDiff(snapshot.id))
   }
 
   const handleEdit = async (snapshot: TagSnapshotMeta) => {
@@ -65,90 +53,31 @@ const SnapshotsTab = ({ isSuperuser, editedSnapshot, onEditTagging }: SnapshotsT
     await refresh()
   }
 
-  const handleActivate = async (id: number, snapshotName: string) => {
-    if (!window.confirm(t('v2:courseTags.snapshots.activateConfirm', { name: snapshotName }))) return
-    await activateSnapshot(id)
+  const handleActivate = async (snapshot: TagSnapshotMeta) => {
+    if (!window.confirm(t('v2:courseTags.snapshots.activateConfirm', { name: snapshot.name }))) return
+    await activateSnapshot(snapshot.id)
     await refresh()
   }
 
-  const handleRestore = async (id: number, snapshotName: string) => {
-    if (!window.confirm(t('v2:courseTags.snapshots.restoreConfirm', { name: snapshotName }))) return
-    await restoreSnapshot(id)
+  const handleRestore = async (snapshot: TagSnapshotMeta) => {
+    if (!window.confirm(t('v2:courseTags.snapshots.restoreConfirm', { name: snapshot.name }))) return
+    await restoreSnapshot(snapshot.id)
     await refresh()
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (snapshot: TagSnapshotMeta) => {
     if (!window.confirm(t('v2:courseTags.snapshots.deleteConfirm'))) return
-    await deleteSnapshot(id)
+    await deleteSnapshot(snapshot.id)
     await refresh()
   }
 
-  const handleExport = async () => {
-    const response = await adminFetch('GET', `${COURSE_TAGS_PATH}/export`)
-    if (!response.ok) {
-      window.alert(t('v2:courseTags.snapshots.exportFailed'))
-      return
-    }
-
-    const url = window.URL.createObjectURL(await response.blob())
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `course-tags-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
-  }
-
-  const handleImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const data = JSON.parse(await file.text())
-    if (!window.confirm(t('v2:courseTags.snapshots.importConfirm', { fileName: file.name }))) return
-
-    const response = await adminFetch('POST', `${COURSE_TAGS_PATH}/import`, data)
-    if (!response.ok) {
-      window.alert(t('v2:courseTags.snapshots.importFailed'))
-      return
-    }
-
-    event.target.value = ''
-    await refresh()
-  }
+  const snapshotRows = snapshots ?? []
 
   return (
     <Box>
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-        <TextField
-          size="small"
-          label={t('v2:courseTags.snapshots.name')}
-          value={name}
-          onChange={event => setName(event.target.value)}
-        />
-        <TextField
-          size="small"
-          fullWidth
-          label={t('v2:courseTags.snapshots.description')}
-          value={description}
-          onChange={event => setDescription(event.target.value)}
-        />
-        <BlackOutlinedButton type="button" onClick={handleSave} disabled={name.trim().length === 0}>
-          {t('v2:courseTags.snapshots.save')}
-        </BlackOutlinedButton>
-      </Stack>
+      <SnapshotCreateForm onSave={handleSave} />
 
-      {isSuperuser ? (
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-          <BlackOutlinedButton type="button" onClick={handleExport}>
-            {t('v2:courseTags.snapshots.export')}
-          </BlackOutlinedButton>
-          <BlackOutlinedButton type="button" component="label">
-            {t('v2:courseTags.snapshots.import')}
-            <input type="file" accept="application/json" hidden onChange={handleImportFile} />
-          </BlackOutlinedButton>
-        </Stack>
-      ) : null}
+      {isSuperuser ? <SnapshotImportExport onImported={refresh} /> : null}
 
       <TableContainer sx={matrixContainerSx}>
         <Table size="small" stickyHeader>
@@ -161,50 +90,24 @@ const SnapshotsTab = ({ isSuperuser, editedSnapshot, onEditTagging }: SnapshotsT
             </TableRow>
           </TableHead>
           <TableBody>
-            {(snapshots ?? []).map(snapshot => (
-              <TableRow key={snapshot.id} selected={editedSnapshot?.id === snapshot.id}>
-                <TableCell>{snapshot.name}</TableCell>
-                <TableCell>{snapshot.description ?? ''}</TableCell>
-                <TableCell>{new Date(snapshot.createdAt).toLocaleString()}</TableCell>
-                <TableCell align="right">
-                  <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    <BlackOutlinedButton
-                      type="button"
-                      onClick={async () => setDiff(await fetchSnapshotDiff(snapshot.id))}
-                    >
-                      {t('v2:courseTags.snapshots.compare')}
-                    </BlackOutlinedButton>
-                    {isSuperuser ? (
-                      <BlackOutlinedButton type="button" onClick={() => handleEdit(snapshot)}>
-                        {t('v2:courseTags.snapshots.edit')}
-                      </BlackOutlinedButton>
-                    ) : null}
-                    {isSuperuser ? (
-                      <BlackOutlinedButton type="button" onClick={() => handleActivate(snapshot.id, snapshot.name)}>
-                        {t('v2:courseTags.snapshots.activate')}
-                      </BlackOutlinedButton>
-                    ) : null}
-                    {isSuperuser ? (
-                      <BlackOutlinedButton type="button" onClick={() => handleRestore(snapshot.id, snapshot.name)}>
-                        {t('v2:courseTags.snapshots.restore')}
-                      </BlackOutlinedButton>
-                    ) : null}
-                    {isSuperuser ? (
-                      <BlackOutlinedButton type="button" onClick={() => handleDelete(snapshot.id)}>
-                        {t('v2:courseTags.snapshots.delete')}
-                      </BlackOutlinedButton>
-                    ) : null}
-                  </Stack>
-                </TableCell>
-              </TableRow>
+            {snapshotRows.map(snapshot => (
+              <SnapshotRow
+                key={snapshot.id}
+                snapshot={snapshot}
+                isSuperuser={isSuperuser}
+                isEdited={editedSnapshot?.id === snapshot.id}
+                onCompare={handleCompare}
+                onEdit={handleEdit}
+                onActivate={handleActivate}
+                onRestore={handleRestore}
+                onDelete={handleDelete}
+              />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {(snapshots ?? []).length === 0 ? (
-        <Typography sx={{ mt: 2 }}>{t('v2:courseTags.snapshots.empty')}</Typography>
-      ) : null}
+      {snapshotRows.length === 0 ? <Typography sx={{ mt: 2 }}>{t('v2:courseTags.snapshots.empty')}</Typography> : null}
 
       <SnapshotDiffDialog diff={diff} onClose={() => setDiff(null)} />
     </Box>

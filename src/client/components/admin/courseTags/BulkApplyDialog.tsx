@@ -1,24 +1,12 @@
-import {
-  Alert,
-  Autocomplete,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Alert, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { CourseTag } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
+import BulkModeRadioGroup from './BulkModeRadioGroup.tsx'
+import BulkTagSelect from './BulkTagSelect.tsx'
 import type { CurTagMutationMode } from './courseTagUtils.ts'
 import { applyBulkTags, previewBulkApply } from './courseTagUtils.ts'
 
@@ -68,49 +56,9 @@ const BulkApplyDialog = ({ open, tags, searchValues, onClose, onApplied }: BulkA
       <DialogTitle>{t('v2:courseTags.bulk.title')}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
-          <Autocomplete
-            multiple
-            autoHighlight
-            selectOnFocus
-            handleHomeEndKeys
-            disableCloseOnSelect
-            options={tags}
-            value={selectedTags}
-            onChange={(_event, value) => setSelectedTags(value)}
-            getOptionLabel={tag => tag.key}
-            isOptionEqualToValue={(option, value) => option.key === value.key}
-            slotProps={{ listbox: { sx: { maxHeight: 200 } } }}
-            renderInput={params => (
-              <TextField
-                {...params}
-                label={t('v2:courseTags.bulk.tags')}
-                helperText={t('v2:courseTags.bulk.tagsHint')}
-              />
-            )}
-          />
+          <BulkTagSelect tags={tags} selectedTags={selectedTags} onChange={setSelectedTags} />
 
-          <RadioGroup value={mode} onChange={event => setMode(event.target.value as CurTagMutationMode)}>
-            {(['add', 'ignore', 'clear'] as const).map(option => (
-              <FormControlLabel
-                key={option}
-                value={option}
-                control={
-                  <Radio sx={{ color: '#374151', alignSelf: 'flex-start', '&.Mui-checked': { color: '#111827' } }} />
-                }
-                sx={{ alignItems: 'flex-start', mb: 1, mr: 0 }}
-                label={
-                  <Box sx={{ pt: 0.75 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#111827' }}>
-                      {t(`v2:courseTags.bulk.mode.${option}.label`)}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: '#374151' }}>
-                      {t(`v2:courseTags.bulk.mode.${option}.description`)}
-                    </Typography>
-                  </Box>
-                }
-              />
-            ))}
-          </RadioGroup>
+          <BulkModeRadioGroup mode={mode} onChange={setMode} />
 
           <Alert severity="info">
             {t('v2:courseTags.bulk.explanation')} {t('v2:courseTags.bulk.newTagNote')}

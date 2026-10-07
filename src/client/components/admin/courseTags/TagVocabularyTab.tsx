@@ -1,24 +1,14 @@
-import {
-  Box,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { CourseTag } from '../../../../common/types.ts'
-import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import { COURSE_TAGS_PATH } from './courseTagUtils.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
+import TagVocabularyForm from './TagVocabularyForm.tsx'
+import TagVocabularyRow from './TagVocabularyRow.tsx'
 
 interface TagVocabularyTabProps {
   tags: CourseTag[]
@@ -28,28 +18,22 @@ interface TagVocabularyTabProps {
 const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const [newKey, setNewKey] = useState('')
-  const [newDescription, setNewDescription] = useState('')
   const [error, setError] = useState('')
 
   const refresh = () => queryClient.invalidateQueries({ queryKey: ['course-tags'] })
 
-  const handleCreate = async () => {
-    const response = await adminFetch('POST', COURSE_TAGS_PATH, {
-      key: newKey,
-      description: newDescription || null,
-    })
+  const handleCreate = async (key: string, description: string | null) => {
+    const response = await adminFetch('POST', COURSE_TAGS_PATH, { key, description })
     if (!response.ok) {
       setError(
         response.status === 409 ? t('v2:courseTags.vocabulary.duplicate') : t('v2:courseTags.vocabulary.invalid')
       )
-      return
+      return false
     }
 
     setError('')
-    setNewKey('')
-    setNewDescription('')
     await refresh()
+    return true
   }
 
   const handleDescriptionSave = async (tag: CourseTag, description: string) => {
@@ -65,24 +49,7 @@ const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
 
   return (
     <Box>
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-        <TextField
-          size="small"
-          label={t('v2:courseTags.vocabulary.key')}
-          value={newKey}
-          onChange={event => setNewKey(event.target.value)}
-        />
-        <TextField
-          size="small"
-          fullWidth
-          label={t('v2:courseTags.vocabulary.description')}
-          value={newDescription}
-          onChange={event => setNewDescription(event.target.value)}
-        />
-        <BlackOutlinedButton type="button" onClick={handleCreate} disabled={newKey.trim().length === 0}>
-          {t('v2:courseTags.vocabulary.add')}
-        </BlackOutlinedButton>
-      </Stack>
+      <TagVocabularyForm onCreate={handleCreate} />
 
       {error ? <Typography color="error">{error}</Typography> : null}
 
@@ -97,24 +64,13 @@ const TagVocabularyTab = ({ tags, isSuperuser }: TagVocabularyTabProps) => {
           </TableHead>
           <TableBody>
             {tags.map(tag => (
-              <TableRow key={tag.id}>
-                <TableCell>{tag.key}</TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    defaultValue={tag.description ?? ''}
-                    onBlur={event => handleDescriptionSave(tag, event.target.value)}
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  {isSuperuser ? (
-                    <BlackOutlinedButton type="button" onClick={() => handleDelete(tag)}>
-                      {t('v2:courseTags.vocabulary.delete')}
-                    </BlackOutlinedButton>
-                  ) : null}
-                </TableCell>
-              </TableRow>
+              <TagVocabularyRow
+                key={tag.id}
+                tag={tag}
+                isSuperuser={isSuperuser}
+                onDescriptionSave={handleDescriptionSave}
+                onDelete={handleDelete}
+              />
             ))}
           </TableBody>
         </Table>

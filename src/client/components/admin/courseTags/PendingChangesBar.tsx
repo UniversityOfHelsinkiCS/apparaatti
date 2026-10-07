@@ -14,6 +14,7 @@ import {
   publishDraft,
   updateSnapshot,
 } from './courseTagUtils.ts'
+import PendingChangesActions from './PendingChangesActions.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 import SnapshotMetaFields from './SnapshotMetaFields.tsx'
 
@@ -144,19 +145,13 @@ const PendingChangesBar = ({ editedSnapshot, onEditingEnd }: PendingChangesBarPr
           />
         }
         actions={
-          <>
-            {editedSnapshot ? (
-              <BlackOutlinedButton type="button" onClick={() => saveToVersion.mutate()} disabled={isBusy}>
-                {t('v2:courseTags.publish.saveToVersion', { name: editedSnapshot.name })}
-              </BlackOutlinedButton>
-            ) : null}
-            <BlackOutlinedButton type="button" onClick={() => save.mutate()} disabled={isBusy}>
-              {editedSnapshot ? t('v2:courseTags.publish.saveAsNew') : t('v2:courseTags.publish.saveOnly')}
-            </BlackOutlinedButton>
-            <BlackOutlinedButton type="button" onClick={() => publish.mutate()} disabled={isBusy}>
-              {t('v2:courseTags.publish.confirmApply')}
-            </BlackOutlinedButton>
-          </>
+          <PendingChangesActions
+            editedSnapshot={editedSnapshot}
+            isBusy={isBusy}
+            onSaveToVersion={() => saveToVersion.mutate()}
+            onSave={() => save.mutate()}
+            onPublish={() => publish.mutate()}
+          />
         }
       />
     </Alert>
