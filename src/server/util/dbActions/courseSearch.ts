@@ -1,9 +1,11 @@
 import { Op } from 'sequelize'
 
+import { resolveCurTags, tagsToCustomCodeUrns } from '../../../common/courseTags.ts'
 import type { UrnMatchMode } from '../../../common/types.ts'
 import Cu from '../../db/models/cu.ts'
 import Cur from '../../db/models/cur.ts'
 import { reviewsForCurIds } from './courseAdminReview.ts'
+import { tagStateForCurs } from './courseTags.ts'
 
 function parseCsvList(value: string | undefined): string[] {
   if (!value) return []
@@ -13,12 +15,30 @@ function parseCsvList(value: string | undefined): string[] {
     .filter(s => s.length > 0)
 }
 
-function getCurUrnsLowercase(cur: any): string[] {
+function getCurUrnsLowercase(cur: any, resolvedTagKeys: string[]): string[] {
   const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
-  if (!customCodeUrns) return []
-  return Object.values(customCodeUrns)
+  const withTags = resolvedTagKeys.length > 0 ? tagsToCustomCodeUrns(customCodeUrns, resolvedTagKeys) : customCodeUrns
+  if (!withTags) return []
+  return Object.values(withTags)
     .flat()
     .map(u => u.toLowerCase())
+}
+
+// The admin tag matrix and the recommender both treat the published tagging as
+// the course's codes, so the URN filters have to see them too. A tag applied
+// through the tagging UI never reaches the Sisu-sourced `customCodeUrns`
+// column, and filtering on that column alone would silently ignore it.
+async function resolvedTagKeysByCur(curIds: string[]): Promise<Map<string, string[]>> {
+  const tagging = await tagStateForCurs(curIds)
+  const byCur = new Map<string, string[]>()
+
+  for (const curId of curIds) {
+    const inherited = tagging.inheritedByCur.get(curId) ?? []
+    const rows = tagging.rowsByCur.get(curId) ?? []
+    if (inherited.length > 0 || rows.length > 0) byCur.set(curId, resolveCurTags(inherited, rows))
+  }
+
+  return byCur
 }
 
 // Include: with mode 'or' the Cur must match at least one of the given URN
@@ -27,12 +47,13 @@ function getCurUrnsLowercase(cur: any): string[] {
 // when every exclude substring matches. Empty lists never filter anything.
 function curMatchesUrnFilters(
   cur: any,
+  resolvedTagKeys: string[],
   includeUrnListLower: string[],
   includeMode: UrnMatchMode,
   excludeUrnListLower: string[],
   excludeMode: UrnMatchMode
 ): boolean {
-  const urns = getCurUrnsLowercase(cur)
+  const urns = getCurUrnsLowercase(cur, resolvedTagKeys)
   const matches = (needle: string) => urns.some(u => u.includes(needle))
 
   if (includeUrnListLower.length > 0) {
@@ -213,8 +234,20 @@ export async function matchingCurs(filters: CourseSearchFilters) {
     subQuery: false,
   })
 
+  const hasUrnFilter = query.includeUrnList.length > 0 || query.excludeUrnList.length > 0
+  const tagKeysByCur = hasUrnFilter
+    ? await resolvedTagKeysByCur(allCurs.map((cur: any) => cur.id))
+    : new Map<string, string[]>()
+
   const filtered = allCurs.filter(cur =>
-    curMatchesUrnFilters(cur, query.includeUrnList, query.urnMode, query.excludeUrnList, query.excludeUrnsMode)
+    curMatchesUrnFilters(
+      cur,
+      tagKeysByCur.get(cur.id) ?? [],
+      query.includeUrnList,
+      query.urnMode,
+      query.excludeUrnList,
+      query.excludeUrnsMode
+    )
   )
 
   return filterCoursesByReviewStatus(await populateWithReviews(filtered), filters.reviewStatus)

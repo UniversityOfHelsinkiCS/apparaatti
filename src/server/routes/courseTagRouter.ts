@@ -209,12 +209,14 @@ courseTagRouter.post('/snapshots/:id/overwrite', requireSuperuser, async (req, r
   const merged = await resolveMerged(res, parsed.data.base, parsed.data.mutations)
   if (!merged) return
 
-  const updated = await overwriteTagSnapshotPayload(Number(req.params.id), merged)
+  const id = Number(req.params.id)
+  const updated = await overwriteTagSnapshotPayload(id, merged)
   if (updated === 0) {
     res.status(404).json({ message: 'Snapshot not found' })
     return
   }
 
+  await updateTagSnapshotMeta(id, parsed.data.name, parsed.data.description)
   res.json({ status: 'overwritten' })
 })
 

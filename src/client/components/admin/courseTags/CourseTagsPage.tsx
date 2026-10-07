@@ -82,6 +82,11 @@ const CourseTagsPage = () => {
 
   const courseTags = useMemo(() => mergedVocabulary(tags ?? [], draft.tags), [tags, draft.tags])
 
+  const editedVersionName =
+    draft.base.kind === 'snapshot'
+      ? ((snapshots ?? []).find(snapshot => snapshot.id === (draft.base as { id: number }).id)?.name ?? null)
+      : null
+
   return (
     <Box>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
@@ -94,6 +99,7 @@ const CourseTagsPage = () => {
 
       <PendingChangesBar
         draft={draft}
+        editedVersionName={editedVersionName}
         onSaved={() => resetDraft(draft.base)}
         onDiscard={() => resetDraft(draft.base)}
       />

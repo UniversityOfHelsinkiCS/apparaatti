@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
-import { createSnapshot, invalidateTagQueries, publishDraft } from './courseTagUtils.ts'
+import { createSnapshot, invalidateTagQueries, overwriteSnapshot, publishDraft } from './courseTagUtils.ts'
 import PendingChangesActions from './PendingChangesActions.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 import SnapshotMetaFields from './SnapshotMetaFields.tsx'
@@ -13,11 +13,12 @@ import { draftDiff, draftSize, toMutations } from './tagDraftBuffer.ts'
 
 interface PendingChangesBarProps {
   draft: TagDraft
+  editedVersionName: string | null
   onSaved: () => void
   onDiscard: () => void
 }
 
-const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps) => {
+const PendingChangesBar = ({ draft, editedVersionName, onSaved, onDiscard }: PendingChangesBarProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isReviewOpen, setIsReviewOpen] = useState(false)
@@ -30,7 +31,7 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
   }, [])
 
   const openReview = () => {
-    metaRef.current = { name: '', description: '' }
+    metaRef.current = { name: editedVersionName ?? '', description: '' }
     setIsReviewOpen(true)
   }
 
@@ -42,7 +43,11 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
   const description = () => metaRef.current.description.trim() || null
 
   const versionName = () =>
-    metaRef.current.name.trim() || `Saved ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`
+    metaRef.current.name.trim() ||
+    editedVersionName ||
+    `Saved ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`
+
+  const editedVersionId = draft.base.kind === 'snapshot' ? draft.base.id : null
 
   const finish = async () => {
     closeReview()
@@ -62,7 +67,12 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
     onSuccess: finish,
   })
 
-  const isBusy = publish.isPending || save.isPending
+  const saveToVersion = useMutation({
+    mutationFn: () => overwriteSnapshot(editedVersionId as number, versionName(), description(), request()),
+    onSuccess: finish,
+  })
+
+  const isBusy = publish.isPending || save.isPending || saveToVersion.isPending
 
   const handleDiscard = () => {
     if (!window.confirm(t('v2:courseTags.publish.discardConfirm', { count: changeCount }))) return
@@ -100,10 +110,20 @@ const PendingChangesBar = ({ draft, onSaved, onDiscard }: PendingChangesBarProps
         onClose={closeReview}
         title={t('v2:courseTags.publish.reviewTitle')}
         content={
-          <SnapshotMetaFields key={isReviewOpen ? 'open' : 'closed'} initialName="" onChange={handleMetaChange} />
+          <SnapshotMetaFields
+            key={isReviewOpen ? 'open' : 'closed'}
+            initialName={editedVersionName ?? ''}
+            onChange={handleMetaChange}
+          />
         }
         actions={
-          <PendingChangesActions isBusy={isBusy} onSave={() => save.mutate()} onPublish={() => publish.mutate()} />
+          <PendingChangesActions
+            editedVersionName={editedVersionId !== null ? editedVersionName : null}
+            isBusy={isBusy}
+            onSaveToVersion={() => saveToVersion.mutate()}
+            onSave={() => save.mutate()}
+            onPublish={() => publish.mutate()}
+          />
         }
       />
     </Alert>

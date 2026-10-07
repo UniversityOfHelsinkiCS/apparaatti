@@ -104,6 +104,45 @@ test('saving a version leaves the applied tagging untouched', async ({ request, 
   expect((await request.delete(`${TAGS_PATH}/snapshots/${snapshot.id}`)).status()).toBe(200)
 })
 
+test('saving into the version being edited overwrites it instead of creating a new one', async ({
+  request,
+  e2eUserId,
+}) => {
+  const key = workerTagKey(e2eUserId)
+  const curId = await firstCurId(request)
+
+  const version = await (
+    await request.post(`${TAGS_PATH}/snapshots`, {
+      data: { name: `syksyn versio ${e2eUserId}`, description: 'e2e', ...draft({}) },
+    })
+  ).json()
+
+  const countBefore = (await (await request.get(`${TAGS_PATH}/snapshots`)).json()).length
+
+  const overwritten = await request.post(`${TAGS_PATH}/snapshots/${version.id}/overwrite`, {
+    data: {
+      name: `syksyn versio ${e2eUserId}`,
+      description: 'edited in place',
+      base: { kind: 'snapshot', id: version.id },
+      mutations: {
+        tags: [{ op: 'upsert', key, description: null }],
+        cur: [{ curId, tagKey: key, mode: 'add' }],
+        cu: [],
+      },
+    },
+  })
+  expect(overwritten.status()).toBe(200)
+
+  const snapshots = await (await request.get(`${TAGS_PATH}/snapshots`)).json()
+  expect(snapshots).toHaveLength(countBefore)
+  expect(snapshots.find((row: any) => row.id === version.id).description).toBe('edited in place')
+
+  const payload = await (await request.get(`${TAGS_PATH}/snapshots/${version.id}`)).json()
+  expect(payload.curTags).toContainEqual({ curId, tagKey: key, mode: 'add' })
+
+  await request.delete(`${TAGS_PATH}/snapshots/${version.id}`)
+})
+
 test('a course unit tag applied in a draft is inherited by its realisations', async ({ request, e2eUserId }) => {
   const key = workerTagKey(e2eUserId)
   const units = await (await request.get(`${TAGS_PATH}/course-units?page=1&limit=1`)).json()
