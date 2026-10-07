@@ -14,11 +14,18 @@ import { draftDiff, draftSize, toMutations } from './tagDraftBuffer.ts'
 interface PendingChangesBarProps {
   draft: TagDraft
   editedVersionName: string | null
+  activeVersionName: string | null
   onSaved: () => void
   onDiscard: () => void
 }
 
-const PendingChangesBar = ({ draft, editedVersionName, onSaved, onDiscard }: PendingChangesBarProps) => {
+const PendingChangesBar = ({
+  draft,
+  editedVersionName,
+  activeVersionName,
+  onSaved,
+  onDiscard,
+}: PendingChangesBarProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isReviewOpen, setIsReviewOpen] = useState(false)
@@ -79,10 +86,14 @@ const PendingChangesBar = ({ draft, editedVersionName, onSaved, onDiscard }: Pen
     onDiscard()
   }
 
+  const liveLine = activeVersionName
+    ? t('v2:courseTags.publish.liveVersion', { name: activeVersionName })
+    : t('v2:courseTags.publish.liveUnknown')
+
   if (changeCount === 0) {
     return (
       <Alert severity="success" sx={{ mb: 2 }}>
-        {t('v2:courseTags.publish.upToDate')}
+        {t('v2:courseTags.publish.upToDate')} {liveLine}
       </Alert>
     )
   }
@@ -93,7 +104,9 @@ const PendingChangesBar = ({ draft, editedVersionName, onSaved, onDiscard }: Pen
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
           {t('v2:courseTags.publish.pending', { count: changeCount })}
         </Typography>
-        <Typography variant="body2">{t('v2:courseTags.publish.localExplanation')}</Typography>
+        <Typography variant="body2">
+          {t('v2:courseTags.publish.localExplanation')} {liveLine}
+        </Typography>
         <Stack direction="row" spacing={1}>
           <BlackOutlinedButton type="button" onClick={openReview} disabled={isBusy}>
             {t('v2:courseTags.publish.apply')}

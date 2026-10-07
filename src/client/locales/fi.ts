@@ -174,6 +174,8 @@ export default {
       },
       publish: {
         upToDate: 'Kaikki tagimuutokset on otettu käyttöön. Suosittelu käyttää juuri sitä mitä tässä näkyy.',
+        liveVersion: 'Käytössä on versio ”{{name}}”.',
+        liveUnknown: 'Käytössä olevaa tagitystä ei ole tallennettu versioksi.',
         pending: '{{count}} käyttöönottamatonta tagimuutosta',
         explanation:
           'Tagimuokkaukset ovat luonnos, kunnes ne otetaan käyttöön. Suosittelu käyttää viimeksi käyttöönotettua versiota.',
@@ -254,6 +256,9 @@ export default {
         edit: 'Muokkaa',
         editTaggingConfirm: 'Avataanko versio {{name}} muokattavaksi? Nykyinen luonnos korvataan sen sisällöllä.',
         activate: 'Ota käyttöön',
+        activeShort: 'Käytössä',
+        activeIs: 'Käytössä: {{name}}',
+        activeUnknown: 'Käytössä: tagitys, jota ei ole tallennettu versioksi',
         activateConfirm:
           'Otetaanko versio {{name}} käyttöön? Se korvaa nykyisen tagituksen ja menee heti suositteluun.',
         restore: 'Palauta',

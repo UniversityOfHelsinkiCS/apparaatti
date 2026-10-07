@@ -1,4 +1,4 @@
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Chip, MenuItem, Stack, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type { TagBase, TagSnapshotMeta } from '../../../../common/types.ts'
@@ -16,8 +16,10 @@ const EditedSnapshotSelect = ({ snapshots, base, onChange }: EditedSnapshotSelec
   const handleChange = (value: string) =>
     onChange(value === 'published' ? { kind: 'published' } : { kind: 'snapshot', id: Number(value) })
 
+  const active = snapshots.find(snapshot => snapshot.isActive) ?? null
+
   return (
-    <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+    <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }} useFlexGap flexWrap="wrap">
       <TextField
         select
         size="small"
@@ -29,10 +31,20 @@ const EditedSnapshotSelect = ({ snapshots, base, onChange }: EditedSnapshotSelec
         <MenuItem value="published">{t('v2:courseTags.editing.published')}</MenuItem>
         {snapshots.map(snapshot => (
           <MenuItem key={snapshot.id} value={String(snapshot.id)}>
-            {snapshot.name}
+            {snapshot.isActive ? `${snapshot.name} — ${t('v2:courseTags.snapshots.activeShort')}` : snapshot.name}
           </MenuItem>
         ))}
       </TextField>
+
+      <Chip
+        size="small"
+        label={
+          active
+            ? t('v2:courseTags.snapshots.activeIs', { name: active.name })
+            : t('v2:courseTags.snapshots.activeUnknown')
+        }
+        sx={{ backgroundColor: '#111827', color: '#ffffff', fontWeight: 600 }}
+      />
     </Stack>
   )
 }

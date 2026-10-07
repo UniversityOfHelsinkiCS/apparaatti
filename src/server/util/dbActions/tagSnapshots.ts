@@ -15,8 +15,6 @@ import PublishedCurCourseTag from '../../db/models/publishedCurCourseTag.ts'
 import TagSnapshot from '../../db/models/tagSnapshot.ts'
 import { allCourseTags } from './courseTags.ts'
 
-const AUTO_SNAPSHOT_NAME_PREFIX = 'Applied'
-
 async function tagPayloadFrom(curModel: any, cuModel: any): Promise<TagSnapshotPayload> {
   const tags = await allCourseTags()
   const cuRows = await cuModel.findAll({
@@ -52,10 +50,11 @@ export async function mergedPayload(base: TagBase, mutations: TagMutations): Pro
   return payload ? mergeTagMutations(payload, mutations) : null
 }
 
+// `activeSnapshotId` is the version this payload came from, and becomes the one the
+// UI reports as live. Passing null means the live tagging matches no saved version.
 export async function publishTagPayload(
   payload: TagSnapshotPayload,
-  publishedBy: string | null,
-  description: string | null = null
+  activeSnapshotId: number | null
 ): Promise<{ tags: number; cuTags: number; curTags: number }> {
   return await sequelize.transaction(async transaction => {
     for (const tag of payload.tags) {
@@ -84,15 +83,10 @@ export async function publishTagPayload(
     await PublishedCuCourseTag.bulkCreate(cuRows as any, { ignoreDuplicates: true, transaction })
     await PublishedCurCourseTag.bulkCreate(curRows as any, { ignoreDuplicates: true, transaction })
 
-    await TagSnapshot.create(
-      {
-        name: `${AUTO_SNAPSHOT_NAME_PREFIX} ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`,
-        description: description ?? `${curRows.length} realisation and ${cuRows.length} course unit assignments`,
-        createdBy: publishedBy,
-        payload,
-      } as any,
-      { transaction }
-    )
+    await TagSnapshot.update({ isActive: false } as any, { where: { isActive: true }, transaction })
+    if (activeSnapshotId !== null) {
+      await TagSnapshot.update({ isActive: true } as any, { where: { id: activeSnapshotId }, transaction })
+    }
 
     return { tags: payload.tags.length, cuTags: cuRows.length, curTags: curRows.length }
   })
@@ -100,7 +94,7 @@ export async function publishTagPayload(
 
 export async function allTagSnapshots(): Promise<TagSnapshotMeta[]> {
   const rows = await TagSnapshot.findAll({
-    attributes: ['id', 'name', 'description', 'createdBy', 'createdAt'],
+    attributes: ['id', 'name', 'description', 'createdBy', 'createdAt', 'isActive'],
     order: [['createdAt', 'DESC']],
     raw: true,
   })
@@ -127,8 +121,10 @@ export async function updateTagSnapshotMeta(id: number, name: string, descriptio
   return count
 }
 
+// Overwriting drops the active flag: the version's payload no longer matches what is
+// live, so claiming it is the active version would be a lie.
 export async function overwriteTagSnapshotPayload(id: number, payload: TagSnapshotPayload): Promise<number> {
-  const [count] = await TagSnapshot.update({ payload } as any, { where: { id } })
+  const [count] = await TagSnapshot.update({ payload, isActive: false } as any, { where: { id } })
   return count
 }
 

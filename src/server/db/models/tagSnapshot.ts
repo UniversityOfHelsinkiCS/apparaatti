@@ -16,6 +16,7 @@ TagSnapshot.init(
     description: { type: DataTypes.STRING, allowNull: true },
     payload: { type: DataTypes.JSONB, allowNull: false },
     createdBy: { type: DataTypes.STRING, allowNull: true },
+    isActive: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
   },
   {
     sequelize,

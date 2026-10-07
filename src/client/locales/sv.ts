@@ -175,6 +175,8 @@ export default {
       },
       publish: {
         upToDate: 'Alla taggändringar är tillämpade. Rekommendationen använder exakt det du ser här.',
+        liveVersion: 'Versionen i bruk är ”{{name}}”.',
+        liveUnknown: 'Taggningen i bruk är inte sparad som någon version.',
         pending: '{{count}} otillämpade taggändringar',
         explanation:
           'Taggändringar är ett utkast tills de tillämpas. Rekommendationen använder den senast tillämpade versionen.',
@@ -256,6 +258,9 @@ export default {
         editTaggingConfirm:
           'Öppna versionen {{name}} för redigering? Det nuvarande utkastet ersätts med dess innehåll.',
         activate: 'Ta i bruk',
+        activeShort: 'I bruk',
+        activeIs: 'I bruk: {{name}}',
+        activeUnknown: 'I bruk: taggning som inte är sparad som någon version',
         activateConfirm:
           'Ta versionen {{name}} i bruk? Den ersätter den nuvarande taggningen och går direkt till rekommendationen.',
         restore: 'Återställ',

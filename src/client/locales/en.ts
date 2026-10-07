@@ -174,6 +174,8 @@ export default {
       },
       publish: {
         upToDate: 'All tag changes are applied. The recommender is using exactly what you see here.',
+        liveVersion: 'The version in use is "{{name}}".',
+        liveUnknown: 'The tagging in use is not saved as any version.',
         pending: '{{count}} unapplied tag changes',
         explanation: 'Tag edits are a draft until applied. Recommendations keep using the last applied version.',
         localExplanation:
@@ -253,6 +255,9 @@ export default {
         edit: 'Edit',
         editTaggingConfirm: 'Open version {{name}} for editing? The current draft is replaced by its contents.',
         activate: 'Put in use',
+        activeShort: 'In use',
+        activeIs: 'In use: {{name}}',
+        activeUnknown: 'In use: tagging that is not saved as any version',
         activateConfirm:
           'Put the version {{name}} in use? It replaces the current tagging and goes straight into recommendations.',
         restore: 'Restore',

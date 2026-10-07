@@ -87,6 +87,8 @@ const CourseTagsPage = () => {
       ? ((snapshots ?? []).find(snapshot => snapshot.id === (draft.base as { id: number }).id)?.name ?? null)
       : null
 
+  const activeVersionName = (snapshots ?? []).find(snapshot => snapshot.isActive)?.name ?? null
+
   return (
     <Box>
       <AdminNavbar isSuperuser={user.isSuperuser === true} />
@@ -100,6 +102,7 @@ const CourseTagsPage = () => {
       <PendingChangesBar
         draft={draft}
         editedVersionName={editedVersionName}
+        activeVersionName={activeVersionName}
         onSaved={() => resetDraft(draft.base)}
         onDiscard={() => resetDraft(draft.base)}
       />

@@ -142,7 +142,14 @@ courseTagRouter.post('/publish', async (req, res) => {
   if (!merged) return
 
   const publishedBy = (req.user as any)?.id ?? null
-  res.json(await publishTagPayload(merged, publishedBy, parsed.data.description))
+  const applied = await createTagSnapshotFromPayload(
+    `Applied ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`,
+    parsed.data.description ?? `${merged.curTags.length} realisation and ${merged.cuTags.length} course unit tags`,
+    publishedBy,
+    merged
+  )
+
+  res.json({ ...(await publishTagPayload(merged, applied.id)), activeSnapshotId: applied.id })
 })
 
 courseTagRouter.get('/snapshots', async (req, res) => {
@@ -228,8 +235,7 @@ courseTagRouter.post('/snapshots/:id/activate', requireSuperuser, async (req, re
     return
   }
 
-  const activatedBy = (req.user as any)?.id ?? null
-  res.json({ status: 'activated', results: await publishTagPayload(snapshot, activatedBy, `activated version ${id}`) })
+  res.json({ status: 'activated', results: await publishTagPayload(snapshot, id) })
 })
 
 courseTagRouter.delete('/snapshots/:id', requireSuperuser, async (req, res) => {

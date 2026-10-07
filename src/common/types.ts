@@ -376,6 +376,7 @@ export type TagSnapshotMeta = {
   description: string | null
   createdBy: string | null
   createdAt: string
+  isActive: boolean
 }
 
 export type TagPayloadDiff = {

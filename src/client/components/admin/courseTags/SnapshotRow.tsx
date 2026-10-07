@@ -1,4 +1,4 @@
-import { Stack, TableCell, TableRow } from '@mui/material'
+import { Chip, Stack, TableCell, TableRow } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type { TagSnapshotMeta } from '../../../../common/types.ts'
@@ -27,7 +27,18 @@ const SnapshotRow = ({
 
   return (
     <TableRow selected={isEdited}>
-      <TableCell>{snapshot.name}</TableCell>
+      <TableCell>
+        <Stack direction="row" spacing={1} alignItems="center" useFlexGap flexWrap="wrap">
+          <span>{snapshot.name}</span>
+          {snapshot.isActive ? (
+            <Chip
+              size="small"
+              label={t('v2:courseTags.snapshots.activeShort')}
+              sx={{ backgroundColor: '#111827', color: '#ffffff', fontWeight: 600 }}
+            />
+          ) : null}
+        </Stack>
+      </TableCell>
       <TableCell>{snapshot.description ?? ''}</TableCell>
       <TableCell>{new Date(snapshot.createdAt).toLocaleString()}</TableCell>
       <TableCell align="right">

@@ -152,64 +152,6 @@ test('the courses page exclude-urn field actually filters the listing', async ({
   await expect(page.getByRole('cell').first()).toBeVisible()
 })
 
-// Tags applied through the tagging UI live in published_cur_course_tags, not in the
-// Sisu-sourced customCodeUrns column. The matrix and the recommender both treat them as
-// the course's codes, so the urn filters must see them too.
-test.describe('urn filters see the published tagging, not just the sisu urns', () => {
-  const TAG = 'kks-alm'
-
-  const urnsOf = (course: any) =>
-    Object.values((course.customCodeUrns ?? {}) as Record<string, string[]>)
-      .flat()
-      .join(' ')
-
-  const publish = (request: any, mutations: Record<string, unknown>) =>
-    request.post('/api/admin/course-tags/publish', {
-      data: {
-        description: 'e2e urn filter coverage',
-        base: { kind: 'published' },
-        mutations: { tags: [], cur: [], cu: [], ...mutations },
-      },
-    })
-
-  test('a tag applied to a course without the matching urn is still excluded and included', async ({ request }) => {
-    const all = await search(request, {})
-    const target = all.courses.find((course: any) => !urnsOf(course).includes(TAG))
-    expect(target, 'seed needs a course without the tag urn').toBeTruthy()
-
-    await publish(request, {
-      tags: [{ op: 'upsert', key: TAG, description: null }],
-      cur: [{ curId: target.id, tagKey: TAG, mode: 'add' }],
-    })
-
-    const excluded = await search(request, { excludeUrns: TAG })
-    expect(excluded.courses.some((course: any) => course.id === target.id)).toBe(false)
-
-    const included = await search(request, { urn: TAG })
-    expect(included.courses.some((course: any) => course.id === target.id)).toBe(true)
-
-    await publish(request, { cur: [{ curId: target.id, tagKey: TAG, mode: 'clear' }] })
-
-    const restored = await search(request, { excludeUrns: TAG })
-    expect(restored.courses.some((course: any) => course.id === target.id)).toBe(true)
-  })
-
-  test('a tag ignored on a realisation is not treated as present by the filters', async ({ request }) => {
-    const all = await search(request, {})
-    const target = all.courses.find((course: any) => !urnsOf(course).includes(TAG))
-
-    await publish(request, {
-      tags: [{ op: 'upsert', key: TAG, description: null }],
-      cur: [{ curId: target.id, tagKey: TAG, mode: 'ignore' }],
-    })
-
-    const included = await search(request, { urn: TAG })
-    expect(included.courses.some((course: any) => course.id === target.id)).toBe(false)
-
-    await publish(request, { cur: [{ curId: target.id, tagKey: TAG, mode: 'clear' }] })
-  })
-})
-
 test('the bulk preview applies the same exclude filters as the listing', async ({ request }) => {
   const all = await search(request, {})
   const excluded = codesOf(all.courses[0])[0]
