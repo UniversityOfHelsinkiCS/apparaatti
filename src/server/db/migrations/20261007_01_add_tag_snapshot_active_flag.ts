@@ -2,9 +2,6 @@ import { DataTypes } from 'sequelize'
 
 import type { Migration } from '../connection.ts'
 
-// Before this column the live tagging was only implied by the newest "Applied …"
-// snapshot, which stops being true as soon as one is renamed or deleted. Backfill
-// makes that old implication explicit once, for existing data.
 const BACKFILL_SQL = `
   UPDATE tag_snapshots
   SET is_active = true

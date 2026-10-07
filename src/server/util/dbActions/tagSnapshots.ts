@@ -50,8 +50,6 @@ export async function mergedPayload(base: TagBase, mutations: TagMutations): Pro
   return payload ? mergeTagMutations(payload, mutations) : null
 }
 
-// `activeSnapshotId` is the version this payload came from, and becomes the one the
-// UI reports as live. Passing null means the live tagging matches no saved version.
 export async function publishTagPayload(
   payload: TagSnapshotPayload,
   activeSnapshotId: number | null
@@ -121,8 +119,6 @@ export async function updateTagSnapshotMeta(id: number, name: string, descriptio
   return count
 }
 
-// Overwriting drops the active flag: the version's payload no longer matches what is
-// live, so claiming it is the active version would be a lie.
 export async function overwriteTagSnapshotPayload(id: number, payload: TagSnapshotPayload): Promise<number> {
   const [count] = await TagSnapshot.update({ payload, isActive: false } as any, { where: { id } })
   return count
