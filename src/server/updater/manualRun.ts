@@ -6,7 +6,7 @@ import {
   failInterruptedUpdaterRuns,
   finishUpdaterRun,
   getRunningUpdaterRun,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/updaterRuns.ts'
 import logger from '../util/logger.ts'
 import { runWithClear } from './index.ts'
 

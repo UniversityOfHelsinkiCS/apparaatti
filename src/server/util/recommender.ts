@@ -1,16 +1,14 @@
-import type { AnswerData, CourseData } from '../../common/types.ts'
+import { resolveCurTags, tagsToCustomCodeUrns } from '../../common/courseTags.ts'
+import type { AnswerData, CourseData, CurTagState } from '../../common/types.ts'
 import {
   collaborationOrganisationCourseNameIncludes,
   collaborationOrganisationNames,
   organisationCodeToUrn,
 } from './constants.ts'
-import {
-  allRecommendationCodeRows,
-  curcusWithUnitIdOf,
-  curWithIdOf,
-  cuWithCourseCodeOf,
-  organisationWithGroupIdOf,
-} from './dbActions.ts'
+import { tagStateForCurs } from './dbActions/courseTags.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions/curs.ts'
+import { organisationWithGroupIdOf } from './dbActions/organisations.ts'
+import { allRecommendationCodeRows } from './dbActions/recommendationCodes.ts'
 import { uniqueVals } from './misc.ts'
 import {
   challegeCourseCodes,
@@ -142,7 +140,21 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
     }
   })
 
-  return courseRealisationsWithCodes
+  const tagging = await tagStateForCurs(wantedIds)
+  return courseRealisationsWithCodes.map(course => withResolvedTagUrns(course, tagging))
+}
+
+function withResolvedTagUrns(course: CourseData, tagging: CurTagState): CourseData {
+  const inherited = tagging.inheritedByCur.get(course.id) ?? []
+  const rows = tagging.rowsByCur.get(course.id) ?? []
+  if (inherited.length === 0 && rows.length === 0) {
+    return course
+  }
+
+  return {
+    ...course,
+    customCodeUrns: tagsToCustomCodeUrns(course.customCodeUrns, resolveCurTags(inherited, rows)),
+  }
 }
 
 export function courseSpansMultiplePeriods(course: CourseData): boolean {

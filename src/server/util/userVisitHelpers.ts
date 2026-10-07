@@ -1,10 +1,7 @@
 import type { EducationPhase, User, VisitStudyData } from '../../common/types.ts'
-import {
-  createUserVisitsEntry,
-  getUserVisitsByUser,
-  organisationsWithIds,
-  studyRightsForPersonId,
-} from './dbActions.ts'
+import { organisationsWithIds } from './dbActions/organisations.ts'
+import { studyRightsForPersonId } from './dbActions/studyRights.ts'
+import { createUserVisitsEntry, getUserVisitsByUser } from './dbActions/userVisits.ts'
 import { localLog } from './dev.ts'
 import { isAdmin, isSuperuser } from './validations.ts'
 

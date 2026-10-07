@@ -2,21 +2,22 @@ import axios from 'axios'
 import express from 'express'
 import { z } from 'zod'
 
-import type { UniqueUrnResponse, UpdaterRunKind, UrnMatchMode, User } from '../../common/types.ts'
+import type { UniqueUrnResponse, UpdaterRunKind, User } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
 import { UPDATER_RUN_URL } from '../util/config.ts'
+import { courseSearchFiltersFromQuery } from '../util/courseSearchFilters.ts'
+import { createOrUpdateCourseAdminReviewEntry } from '../util/dbActions/courseAdminReview.ts'
+import { searchCoursesWithPagination } from '../util/dbActions/courseSearch.ts'
+import { allCurs } from '../util/dbActions/curs.ts'
+import { getUpdaterRuns } from '../util/dbActions/updaterRuns.ts'
 import {
-  allCurs,
-  createOrUpdateCourseAdminReviewEntry,
   deleteUserFeedbackByIds,
   deleteUserFeedbackOlderThan,
-  getUpdaterRuns,
   getUserFeedbackEntries,
-  searchCoursesWithPagination,
-  usersWithWhere,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/userFeedback.ts'
+import { usersWithWhere } from '../util/dbActions/users.ts'
 import { uniqueVals } from '../util/misc.ts'
 import {
   getWhereClauseForManyWordSearch,
@@ -25,6 +26,7 @@ import {
 } from '../util/usersSearchHelper.ts'
 import { isSuperuser } from '../util/validations.ts'
 import backendLocaleRouter from './backendLocaleRouter.ts'
+import courseTagRouter from './courseTagRouter.ts'
 import filterConfigRouter from './filterConfigRouter.ts'
 import recommendationCodeRouter from './recommendationCodeRouter.ts'
 import recommendationLanguageRouter from './recommendationLanguageRouter.ts'
@@ -128,42 +130,12 @@ adminRouter.get('/users', requireSuperuser, async (req, res) => {
 })
 
 adminRouter.get('/courses', async (req, res) => {
-  const {
-    page = '1',
-    limit = '50',
-    name,
-    urn,
-    urnMode,
-    courseCode,
-    excludeUrns,
-    excludeUrnsMode,
-    excludeCourseCodes,
-    reviewStatus,
-    dateFrom,
-    dateTo,
-  } = req.query
-
-  const pageNum = parseInt(page as string, 10)
-  const limitNum = parseInt(limit as string, 10)
-
-  // Anything other than an explicit 'and' means the legacy OR behaviour.
-  const asUrnMatchMode = (value: unknown): UrnMatchMode => (value === 'and' ? 'and' : 'or')
+  const { page = '1', limit = '50' } = req.query
 
   const result = await searchCoursesWithPagination(
-    {
-      nameSearch: name as string | undefined,
-      urnSearch: urn as string | undefined,
-      urnMode: asUrnMatchMode(urnMode),
-      excludeUrns: excludeUrns as string | undefined,
-      excludeUrnsMode: asUrnMatchMode(excludeUrnsMode),
-      courseCodeSearch: courseCode as string | undefined,
-      excludeCourseCodes: excludeCourseCodes as string | undefined,
-      reviewStatus: reviewStatus as string | undefined,
-      dateFrom: dateFrom as string | undefined,
-      dateTo: dateTo as string | undefined,
-    },
-    pageNum,
-    limitNum
+    courseSearchFiltersFromQuery(req.query as Record<string, unknown>),
+    parseInt(page as string, 10),
+    parseInt(limit as string, 10)
   )
 
   res.send(result)
@@ -245,5 +217,6 @@ adminRouter.use('/filter-config', filterConfigRouter)
 adminRouter.use('/backend-locales', backendLocaleRouter)
 adminRouter.use('/recommendation-codes', recommendationCodeRouter)
 adminRouter.use('/recommendation-languages', recommendationLanguageRouter)
+adminRouter.use('/course-tags', courseTagRouter)
 
 export default adminRouter

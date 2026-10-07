@@ -1,5 +1,5 @@
 import { Box, Divider, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { UniqueUrnResponse, UrnMatchMode } from '../../../common/types.ts'
@@ -25,7 +25,10 @@ export interface CoursesSearchFieldsValues {
 
 interface CoursesSearchFieldsProps {
   onSearch: (values: CoursesSearchFieldsValues) => void
+  autoSearch?: boolean
 }
+
+const AUTO_SEARCH_DEBOUNCE_MS = 300
 
 const fieldsetSx = {
   display: 'flex',
@@ -82,7 +85,7 @@ const UrnModeToggle = ({ id, value, onChange, orTitle, andTitle }: UrnModeToggle
   </ToggleButtonGroup>
 )
 
-const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
+const CoursesSearchFields = ({ onSearch, autoSearch = false }: CoursesSearchFieldsProps) => {
   const { t } = useTranslation()
   const [nameInput, setNameInput] = useState('')
   const [urnInputs, setUrnInputs] = useState<string[]>([])
@@ -113,6 +116,44 @@ const CoursesSearchFields = ({ onSearch }: CoursesSearchFieldsProps) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSearch()
   }
+
+  const onSearchRef = useRef(onSearch)
+  onSearchRef.current = onSearch
+
+  useEffect(() => {
+    if (!autoSearch) return
+
+    const timer = setTimeout(
+      () =>
+        onSearchRef.current({
+          nameInput,
+          urnInputs,
+          urnMode,
+          courseCodeInput,
+          excludeUrnsInputs,
+          excludeUrnsMode,
+          excludeCourseCodesInput,
+          reviewStatusInput,
+          dateFromInput,
+          dateToInput,
+        }),
+      AUTO_SEARCH_DEBOUNCE_MS
+    )
+
+    return () => clearTimeout(timer)
+  }, [
+    autoSearch,
+    nameInput,
+    urnInputs,
+    urnMode,
+    courseCodeInput,
+    excludeUrnsInputs,
+    excludeUrnsMode,
+    excludeCourseCodesInput,
+    reviewStatusInput,
+    dateFromInput,
+    dateToInput,
+  ])
 
   const { data: urnOptions } = useApi<UniqueUrnResponse>('urns', '/api/admin/courses/urns', 'GET')
   return (

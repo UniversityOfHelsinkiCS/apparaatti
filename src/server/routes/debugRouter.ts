@@ -11,10 +11,10 @@ import {
   cursWithWhereRaw,
   cusWithIds,
   cusWithWhere,
-  getAllUserVisits,
-  organisationWithGroupIdOf,
-  updateUserSettings,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/curs.ts'
+import { organisationWithGroupIdOf } from '../util/dbActions/organisations.ts'
+import { updateUserSettings } from '../util/dbActions/users.ts'
+import { getAllUserVisits } from '../util/dbActions/userVisits.ts'
 import { uniqueVals } from '../util/misc.ts'
 import { urnInCustomCodeUrns } from '../util/organisationCourseRecommmendations.ts'
 

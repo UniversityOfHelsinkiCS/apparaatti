@@ -19,15 +19,13 @@ import {
 } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
 import type { UpdaterRun, UpdaterRunKind } from '../../../common/types.ts'
 import useApiMutation from '../../hooks/useApiMutation.tsx'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackContainedButton from '../common/BlackContainedButton.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 
 const POLL_INTERVAL_MS = 5000
@@ -51,7 +49,7 @@ const statusColor = (status: string): 'default' | 'primary' | 'success' | 'error
 
 const UpdaterPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [confirmType, setConfirmType] = useState<UpdaterRunKind | null>(null)
   const [notice, setNotice] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null)
 
@@ -100,18 +98,6 @@ const UpdaterPage = () => {
     void refetch()
   }, '/api/admin/updater/run')
 
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading || !user) {
-    return <div>{t('v2:updater.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
-
   const handleConfirm = async () => {
     if (!confirmType) return
     const runtype = confirmType
@@ -142,7 +128,7 @@ const UpdaterPage = () => {
       )}
 
       <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-        {user.isSuperuser && (
+        {user.isSuperuser === true && (
           <BlackContainedButton onClick={() => setConfirmType('full')} disabled={hasRunningRun}>
             {t('v2:updater.runButton')}
           </BlackContainedButton>

@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router-dom'
 
 import useApiMutation from '../../hooks/useApiMutation.tsx'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
-import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackContainedButton from '../common/BlackContainedButton.tsx'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 
 const ErrorTestPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [notice, setNotice] = useState<string | null>(null)
 
   const { mutateAsync: causeBackendError } = useApiMutation<Record<string, never>>(async res => {
@@ -22,19 +21,7 @@ const ErrorTestPage = () => {
     setNotice(t('v2:admin.errorTest.backendTriggered', { status: res.status }))
   }, '/api/admin/debug/cause-error')
 
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading || !user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
-
-  if (!user.isSuperuser) {
+  if (user.isSuperuser !== true) {
     return <Navigate to={'/admin'} replace />
   }
 

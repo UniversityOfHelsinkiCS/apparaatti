@@ -157,3 +157,101 @@ export const RecommendationCodeImportSchema = z.object({
   languages: z.array(RecommendationLanguageSchema.extend({ id: z.number().int().positive() })),
   codes: z.array(RecommendationCodeSchema),
 })
+
+export const COURSE_TAG_MODES = ['add', 'ignore'] as const
+
+export const MAX_TAG_IMPORT_ROWS = 200000
+
+export const CourseTagModeSchema = z.enum(COURSE_TAG_MODES)
+
+export const CourseTagSchema = z.object({
+  key: z
+    .string()
+    .trim()
+    .min(1)
+    .regex(/^[A-Za-z0-9\-:_.]+$/, 'tag key must be alphanumeric with hyphens, colons, underscores or dots'),
+  description: z.string().trim().nullable().default(null),
+})
+
+export const TagBaseSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('published') }),
+  z.object({ kind: z.literal('snapshot'), id: z.number().int().positive() }),
+])
+
+export const TagMutationsSchema = z.object({
+  tags: z
+    .array(
+      z.discriminatedUnion('op', [
+        z.object({ op: z.literal('upsert'), key: z.string().trim().min(1), description: z.string().trim().nullable() }),
+        z.object({ op: z.literal('delete'), key: z.string().trim().min(1) }),
+      ])
+    )
+    .max(MAX_TAG_IMPORT_ROWS),
+  cur: z
+    .array(
+      z.object({
+        curId: z.string().min(1),
+        tagKey: z.string().trim().min(1),
+        mode: z.enum([...COURSE_TAG_MODES, 'clear']),
+      })
+    )
+    .max(MAX_TAG_IMPORT_ROWS),
+  cu: z
+    .array(
+      z.object({
+        courseCode: z.string().min(1),
+        cuIds: z.array(z.string().min(1)),
+        tagKey: z.string().trim().min(1),
+        present: z.boolean(),
+      })
+    )
+    .max(MAX_TAG_IMPORT_ROWS),
+})
+
+const WithDraftSchema = { base: TagBaseSchema, mutations: TagMutationsSchema }
+
+export const CourseSearchFilterSchema = z.object({
+  name: z.string().optional(),
+  urn: z.string().optional(),
+  urnMode: z.enum(['or', 'and']).optional(),
+  excludeUrns: z.string().optional(),
+  excludeUrnsMode: z.enum(['or', 'and']).optional(),
+  courseCode: z.string().optional(),
+  excludeCourseCodes: z.string().optional(),
+  reviewStatus: z.string().optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+})
+
+export const BulkApplyTagsSchema = z.object({
+  filters: CourseSearchFilterSchema,
+  tagKeys: z.array(z.string().trim().min(1)).min(1),
+  mode: z.enum([...COURSE_TAG_MODES, 'clear']),
+})
+
+export const TagSnapshotMetaSchema = z.object({
+  name: z.string().trim().min(1),
+  description: z.string().trim().nullable().default(null),
+})
+
+export const TagSnapshotCreateSchema = TagSnapshotMetaSchema.extend(WithDraftSchema)
+
+export const TagPublishSchema = z.object({
+  description: z.string().trim().min(1).nullable().default(null),
+  ...WithDraftSchema,
+})
+
+export const TagCurStateSchema = z.object({
+  curIds: z.array(z.string().min(1)),
+  base: TagBaseSchema,
+})
+
+export const TagSnapshotPayloadSchema = z.object({
+  appVersion: z.string().optional(),
+  exportedAt: z.string().optional(),
+  tags: z.array(CourseTagSchema).max(MAX_TAG_IMPORT_ROWS),
+  cuTags: z.array(z.object({ cuId: z.string().min(1), tagKey: z.string().min(1) })).max(MAX_TAG_IMPORT_ROWS),
+  curTags: z
+    .array(z.object({ curId: z.string().min(1), tagKey: z.string().min(1), mode: CourseTagModeSchema }))
+    .max(MAX_TAG_IMPORT_ROWS),
+})

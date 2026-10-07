@@ -1,13 +1,11 @@
 import { Box, Divider, Stack, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
 import type { GroupBy } from '../../../common/datelabels.ts'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import OrganisationFilterControls from './stats/OrganisationFilterControls.tsx'
 import {
@@ -42,7 +40,7 @@ const toggleKey = (keys: string[], key: string) =>
 
 const StatsPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [start, setStart] = useState(getDefaultStart)
   const [end, setEnd] = useState(getDefaultEnd)
   const [groupBy, setGroupBy] = useState<GroupBy>('day')
@@ -79,22 +77,6 @@ const StatsPage = () => {
     const csv = statsCsv(groupedCounts, filters, programmeNames, headers, t('v2:admin.stats.programmes.unknown'))
 
     downloadCsv(`stats-${start}-${end}-${groupBy}.csv`, csv)
-  }
-
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
   }
 
   return (

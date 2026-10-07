@@ -1,12 +1,23 @@
 import { describe, expect, it, vi } from 'vitest'
 
 // Mock to prevent database initialization when importing recommender.ts
-vi.mock('../../server/util/dbActions.ts', () => ({
+vi.mock('../../server/util/dbActions/organisations.ts', () => ({
   organisationWithGroupIdOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/curs.ts', () => ({
+  curcusWithUnitIdOf: vi.fn(),
+  curWithIdOf: vi.fn(),
+  cuWithCourseCodeOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/recommendationCodes.ts', () => ({
+  allRecommendationCodeRows: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/courseTags.ts', () => ({
+  tagStateForCurs: vi.fn(async () => ({ inheritedByCur: new Map(), rowsByCur: new Map() })),
 }))
 
 import type { CourseData } from '../../common/types.ts'
-import { organisationWithGroupIdOf } from '../../server/util/dbActions.ts'
+import { organisationWithGroupIdOf } from '../../server/util/dbActions/organisations.ts'
 import { courseInSameOrganisationAsUser, courseIsSpesificForUserOrg } from '../../server/util/recommender.ts'
 
 const mockOrganisationWithGroupIdOf = organisationWithGroupIdOf as any

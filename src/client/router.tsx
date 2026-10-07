@@ -4,6 +4,7 @@ import App from './App.tsx'
 import AdminMain from './components/admin/AdminMain.tsx'
 import AdminPage from './components/admin/AdminPage.tsx'
 import CoursesPage from './components/admin/CoursesPage.tsx'
+import CourseTagsPage from './components/admin/courseTags/CourseTagsPage.tsx'
 import ErrorTestPage from './components/admin/ErrorTestPage.tsx'
 import StatsPage from './components/admin/StatsPage.tsx'
 import UpdaterPage from './components/admin/UpdaterPage.tsx'
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path="/admin" element={<AdminMain />}>
           <Route index element={<AdminPage />} />
           <Route path="courses" element={<CoursesPage />} />
+          <Route path="course-tags" element={<CourseTagsPage />} />
           <Route path="login-as" element={<LoginAsPage />} />
           <Route path="stats" element={<StatsPage />} />
           <Route path="feedback" element={<UserFeedbackPage />} />

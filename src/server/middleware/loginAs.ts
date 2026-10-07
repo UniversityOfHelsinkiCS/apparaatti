@@ -1,4 +1,4 @@
-import { userWithId } from '../util/dbActions.ts'
+import { userWithId } from '../util/dbActions/users.ts'
 import { isSuperuser } from '../util/validations.ts'
 
 const loginAsMiddleware = async (req: any, _: any, next: any) => {

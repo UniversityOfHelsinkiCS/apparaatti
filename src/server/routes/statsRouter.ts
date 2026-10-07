@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { getGroupLabel, getGroupLabels } from '../../common/datelabels.ts'
 import type { LocalizedString } from '../../common/types.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
-import { getUserVisits } from '../util/dbActions.ts'
+import { getUserVisits } from '../util/dbActions/userVisits.ts'
 import { localLog } from '../util/dev.ts'
 
 const statsRouter = express.Router()

@@ -301,3 +301,97 @@ export type RecommendationCodeRow = {
   primaryLanguageSpecification: string | null
   courseCode: string
 }
+
+export type CourseTagMode = 'add' | 'ignore'
+
+export type CourseTag = {
+  id: number
+  key: string
+  description: string | null
+}
+
+export type CurTagRow = {
+  curId: string
+  tagKey: string
+  mode: CourseTagMode
+}
+
+export type CuTagRow = {
+  cuId: string
+  tagKey: string
+}
+
+export type ResolvedTagSource = 'inherited' | 'added' | 'ignored'
+
+export type ResolvedCurTag = {
+  key: string
+  source: ResolvedTagSource
+}
+
+export type CurTagState = {
+  inheritedByCur: Map<string, string[]>
+  rowsByCur: Map<string, CurTagRow[]>
+}
+
+export type TagSnapshotPayload = {
+  appVersion?: string
+  exportedAt?: string
+  tags: Omit<CourseTag, 'id'>[]
+  cuTags: CuTagRow[]
+  curTags: CurTagRow[]
+}
+
+export type TagBase = { kind: 'published' } | { kind: 'snapshot'; id: number }
+
+export type TagVocabMutation = { op: 'upsert'; key: string; description: string | null } | { op: 'delete'; key: string }
+
+export type CurTagMutation = {
+  curId: string
+  tagKey: string
+  mode: CourseTagMode | 'clear'
+}
+
+export type CuTagMutation = {
+  courseCode: string
+  cuIds: string[]
+  tagKey: string
+  present: boolean
+}
+
+export type TagMutations = {
+  tags: TagVocabMutation[]
+  cur: CurTagMutation[]
+  cu: CuTagMutation[]
+}
+
+export type CurTagPremises = {
+  curId: string
+  cus: { cuId: string; tagKeys: string[] }[]
+  rows: Omit<CurTagRow, 'curId'>[]
+}
+
+export type TagSnapshotMeta = {
+  id: number
+  name: string
+  description: string | null
+  createdBy: string | null
+  createdAt: string
+  isActive: boolean
+}
+
+export type TagPayloadDiff = {
+  addedTags: string[]
+  removedTags: string[]
+  addedCuTags: CuTagRow[]
+  removedCuTags: CuTagRow[]
+  addedCurTags: CurTagRow[]
+  removedCurTags: CurTagRow[]
+}
+
+export type CourseUnitGroup = {
+  courseCode: string
+  name: LocalizedString
+  cuIds: string[]
+  realisationCount: number
+  tagKeys: string[]
+}

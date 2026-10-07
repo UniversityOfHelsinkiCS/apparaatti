@@ -1,25 +1,12 @@
 import { Box } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 
-import { RedirectToLogin } from '../util/redirectToLogin.ts'
-import useRequiredUser from '../util/useRequiredUser.ts'
+import { useAdminUser } from './admin/AdminMain.tsx'
 import AdminNavbar from './admin/AdminNavbar.tsx'
 import LoginAs from './LoginAs.tsx'
 
 const LoginAsPage = () => {
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
-
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (!user) {
-    return <div>Loading...</div>
-  }
+  const user = useAdminUser()
 
   const loginAs = localStorage.getItem('loginAsUser')
   if (loginAs) {
@@ -28,7 +15,7 @@ const LoginAsPage = () => {
     }
   }
 
-  if (!user.isSuperuser) {
+  if (user.isSuperuser !== true) {
     return <Navigate to={'/'} replace />
   }
 

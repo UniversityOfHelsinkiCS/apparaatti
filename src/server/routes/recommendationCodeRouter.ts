@@ -6,13 +6,15 @@ import requireSuperuser from '../middleware/requireSuperuser.ts'
 import { GIT_SHA } from '../util/config.ts'
 import {
   allRecommendationCodes,
-  allRecommendationLanguages,
   createRecommendationCode,
-  createRecommendationLanguage,
   deleteRecommendationCodeById,
   updateRecommendationCodeById,
+} from '../util/dbActions/recommendationCodes.ts'
+import {
+  allRecommendationLanguages,
+  createRecommendationLanguage,
   updateRecommendationLanguageById,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/recommendationLanguages.ts'
 
 const recommendationCodeRouter = express.Router()
 

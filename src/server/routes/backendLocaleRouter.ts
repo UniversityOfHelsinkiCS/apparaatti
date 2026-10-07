@@ -20,7 +20,7 @@ import {
   deleteBackendLocaleValueById,
   updateBackendLocaleKeyDescription,
   updateBackendLocaleValueById,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/backendLocales.ts'
 
 const backendLocaleRouter = express.Router()
 
