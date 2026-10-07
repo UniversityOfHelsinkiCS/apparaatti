@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,8 +16,14 @@ import {
 import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import BulkApplyDialog from './BulkApplyDialog.tsx'
-import type { CurTagMutationMode } from './courseTagUtils.ts'
-import { fetchCurTagStates, invalidateTagQueries, saveCurTag } from './courseTagUtils.ts'
+import type { CurTagMutationMode, CurTagState } from './courseTagUtils.ts'
+import {
+  applyCurTagMode,
+  fetchCurTagStates,
+  invalidateCurTagQueries,
+  invalidateTagQueries,
+  saveCurTag,
+} from './courseTagUtils.ts'
 import CurTagTable from './CurTagTable.tsx'
 import type { TagCellState } from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
@@ -99,11 +105,13 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
 
   const courses = useMemo(() => coursesData?.courses ?? [], [coursesData])
   const curIds = useMemo(() => courses.map(course => course.id), [courses])
+  const statesKey = useMemo(() => ['course-tag-states', curIds.join(',')], [curIds])
 
   const { data: tagStates } = useQuery({
-    queryKey: ['course-tag-states', curIds.join(',')],
+    queryKey: statesKey,
     queryFn: () => fetchCurTagStates(curIds),
     enabled: curIds.length > 0,
+    placeholderData: keepPreviousData,
   })
 
   const stateByCur = useMemo(() => {
@@ -114,13 +122,28 @@ const CurTagMatrix = ({ tags }: CurTagMatrixProps) => {
     return index
   }, [tagStates])
 
-  const handleToggle = useCallback(
-    async (curId: string, tagKey: string) => {
-      const current = stateByCur.get(curId)?.get(tagKey) ?? 'unset'
-      await saveCurTag(curId, tagKey, nextMode(current))
-      await invalidateTagQueries(queryClient)
+  const toggle = useMutation({
+    mutationFn: ({ curId, tagKey, mode }: { curId: string; tagKey: string; mode: CurTagMutationMode }) =>
+      saveCurTag(curId, tagKey, mode),
+    onMutate: ({ curId, tagKey, mode }) => {
+      queryClient.setQueryData<CurTagState[]>(statesKey, previous =>
+        previous?.map(state =>
+          state.curId === curId ? { curId, tags: applyCurTagMode(state.tags, tagKey, mode) } : state
+        )
+      )
     },
-    [stateByCur, queryClient]
+    onSettled: () => invalidateCurTagQueries(queryClient),
+  })
+
+  const toggleMutate = toggle.mutate
+
+  const handleToggle = useCallback(
+    (curId: string, tagKey: string) => {
+      const states = queryClient.getQueryData<CurTagState[]>(statesKey)
+      const current = states?.find(state => state.curId === curId)?.tags.find(tag => tag.key === tagKey)?.source
+      toggleMutate({ curId, tagKey, mode: nextMode(current ?? 'unset') })
+    },
+    [queryClient, statesKey, toggleMutate]
   )
 
   return (

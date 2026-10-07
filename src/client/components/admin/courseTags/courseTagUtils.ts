@@ -114,6 +114,23 @@ export const TAG_QUERY_KEYS = [
   'course-tag-snapshots',
 ]
 
+export const applyCurTagMode = (tags: ResolvedCurTag[], tagKey: string, mode: CurTagMutationMode): ResolvedCurTag[] => {
+  const others = tags.filter(tag => tag.key !== tagKey)
+  if (mode === 'add') return [...others, { key: tagKey, source: 'added' }]
+  if (mode === 'ignore') return [...others, { key: tagKey, source: 'ignored' }]
+
+  const wasIgnored = tags.some(tag => tag.key === tagKey && tag.source === 'ignored')
+  return wasIgnored ? [...others, { key: tagKey, source: 'inherited' }] : others
+}
+
+const CUR_TAG_QUERY_KEYS = ['course-tag-states', 'course-tag-pending']
+
+export const invalidateCurTagQueries = async (queryClient: QueryClient) => {
+  await queryClient.invalidateQueries({
+    predicate: query => CUR_TAG_QUERY_KEYS.some(key => String(query.queryKey[0]).startsWith(key)),
+  })
+}
+
 export const invalidateTagQueries = async (queryClient: QueryClient) => {
   await queryClient.invalidateQueries({
     predicate: query => TAG_QUERY_KEYS.some(key => String(query.queryKey[0]).startsWith(key)),
