@@ -8,16 +8,16 @@ import requireSuperuser from '../middleware/requireSuperuser.ts'
 import requireUser from '../middleware/requireUser.ts'
 import { UPDATER_RUN_URL } from '../util/config.ts'
 import { courseSearchFiltersFromQuery } from '../util/courseSearchFilters.ts'
+import { createOrUpdateCourseAdminReviewEntry } from '../util/dbActions/courseAdminReview.ts'
+import { searchCoursesWithPagination } from '../util/dbActions/courseSearch.ts'
+import { allCurs } from '../util/dbActions/curs.ts'
+import { getUpdaterRuns } from '../util/dbActions/updaterRuns.ts'
 import {
-  allCurs,
-  createOrUpdateCourseAdminReviewEntry,
   deleteUserFeedbackByIds,
   deleteUserFeedbackOlderThan,
-  getUpdaterRuns,
   getUserFeedbackEntries,
-  searchCoursesWithPagination,
-  usersWithWhere,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/userFeedback.ts'
+import { usersWithWhere } from '../util/dbActions/users.ts'
 import { uniqueVals } from '../util/misc.ts'
 import {
   getWhereClauseForManyWordSearch,

@@ -5,14 +5,10 @@ import {
   organisationCodeToUrn,
 } from './constants.ts'
 import { resolveCurTags, tagsToCustomCodeUrns } from './courseTags.ts'
-import {
-  allRecommendationCodeRows,
-  curcusWithUnitIdOf,
-  curWithIdOf,
-  cuWithCourseCodeOf,
-  organisationWithGroupIdOf,
-  tagStateForCurs,
-} from './dbActions.ts'
+import { tagStateForCurs } from './dbActions/courseTags.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from './dbActions/curs.ts'
+import { organisationWithGroupIdOf } from './dbActions/organisations.ts'
+import { allRecommendationCodeRows } from './dbActions/recommendationCodes.ts'
 import { uniqueVals } from './misc.ts'
 import {
   challegeCourseCodes,

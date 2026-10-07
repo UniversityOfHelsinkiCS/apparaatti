@@ -9,7 +9,7 @@ import {
   createRecommendationLanguage,
   deleteRecommendationLanguageById,
   updateRecommendationLanguageById,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/recommendationLanguages.ts'
 
 const recommendationLanguageRouter = express.Router()
 

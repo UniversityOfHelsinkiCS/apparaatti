@@ -1,5 +1,5 @@
 import type { UrnMatchMode } from '../../common/types.ts'
-import type { CourseSearchFilters } from './dbActions.ts'
+import type { CourseSearchFilters } from './dbActions/courseSearch.ts'
 
 function asUrnMatchMode(value: unknown): UrnMatchMode {
   return value === 'and' ? 'and' : 'or'

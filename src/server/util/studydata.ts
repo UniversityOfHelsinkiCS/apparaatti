@@ -1,4 +1,5 @@
-import { organisationsWithIds, studyRightsForPersonId } from './dbActions.ts'
+import { organisationsWithIds } from './dbActions/organisations.ts'
+import { studyRightsForPersonId } from './dbActions/studyRights.ts'
 
 const studyRightsForUser = async (user: any) => {
   const studyRights = await studyRightsForPersonId(user.id)

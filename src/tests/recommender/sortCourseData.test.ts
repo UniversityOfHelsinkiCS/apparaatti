@@ -1,10 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('../../server/util/dbActions.ts', () => ({
+vi.mock('../../server/util/dbActions/curs.ts', () => ({
   curcusWithUnitIdOf: vi.fn(),
   curWithIdOf: vi.fn(),
   cuWithCourseCodeOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/organisations.ts', () => ({
   organisationWithGroupIdOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/recommendationCodes.ts', () => ({
+  allRecommendationCodeRows: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/courseTags.ts', () => ({
+  tagStateForCurs: vi.fn(async () => ({ inheritedByCur: new Map(), rowsByCur: new Map() })),
 }))
 
 import type { CourseData } from '../../common/types.ts'

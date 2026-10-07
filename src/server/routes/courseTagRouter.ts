@@ -15,30 +15,32 @@ import requireSuperuser from '../middleware/requireSuperuser.ts'
 import { GIT_SHA } from '../util/config.ts'
 import { courseSearchFiltersFromQuery } from '../util/courseSearchFilters.ts'
 import { describeCurTags, diffTagPayloads } from '../util/courseTags.ts'
+import { matchingCurIds } from '../util/dbActions/courseSearch.ts'
 import {
   allCourseTags,
-  allTagSnapshots,
   bulkApplyTagsToFilter,
   clearCurTag,
   courseUnitGroupsForFilters,
   createCourseTag,
-  createTagSnapshot,
   deleteCourseTagById,
+  draftTagStateForCurs,
+  setCourseUnitGroupTag,
+  setCurTag,
+  updateCourseTagById,
+} from '../util/dbActions/courseTags.ts'
+import {
+  allTagSnapshots,
+  createTagSnapshot,
   deleteTagSnapshotById,
   discardTagDraft,
-  draftTagStateForCurs,
   fullTagPayload,
-  matchingCurIds,
   overwriteTagSnapshotPayload,
   pendingTagChanges,
   publishTagState,
   replaceTagState,
-  setCourseUnitGroupTag,
-  setCurTag,
   tagSnapshotById,
-  updateCourseTagById,
   updateTagSnapshotMeta,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/tagSnapshots.ts'
 
 const courseTagRouter = express.Router()
 

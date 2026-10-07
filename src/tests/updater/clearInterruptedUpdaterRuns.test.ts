@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock to prevent database initialization when importing manualRun.ts
-vi.mock('../../server/util/dbActions.ts', () => ({
+vi.mock('../../server/util/dbActions/updaterRuns.ts', () => ({
   createUpdaterRun: vi.fn(),
   failInterruptedUpdaterRuns: vi.fn(),
   finishUpdaterRun: vi.fn(),
@@ -17,7 +17,7 @@ vi.mock('../../server/util/logger.ts', () => ({
 }))
 
 import { clearInterruptedUpdaterRuns } from '../../server/updater/manualRun.ts'
-import { failInterruptedUpdaterRuns } from '../../server/util/dbActions.ts'
+import { failInterruptedUpdaterRuns } from '../../server/util/dbActions/updaterRuns.ts'
 import logger from '../../server/util/logger.ts'
 
 describe('clearInterruptedUpdaterRuns', () => {

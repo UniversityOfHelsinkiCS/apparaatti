@@ -1,23 +1,25 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock the database layer, the rest (data.ts recommendation table, filtering, sorting) runs for real
-vi.mock('../../server/util/dbActions.ts', () => ({
+vi.mock('../../server/util/dbActions/curs.ts', () => ({
   cuWithCourseCodeOf: vi.fn(),
   curcusWithUnitIdOf: vi.fn(),
   curWithIdOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/organisations.ts', () => ({
   organisationWithGroupIdOf: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/recommendationCodes.ts', () => ({
   allRecommendationCodeRows: vi.fn(),
+}))
+vi.mock('../../server/util/dbActions/courseTags.ts', () => ({
   tagStateForCurs: vi.fn(async () => ({ inheritedByCur: new Map(), rowsByCur: new Map() })),
 }))
 
 import type { AnswerData } from '../../common/types.ts'
 import { generatedRecommendationCodeRows } from '../../server/db/recommendationCodeSeeds.ts'
-import {
-  allRecommendationCodeRows,
-  curcusWithUnitIdOf,
-  curWithIdOf,
-  cuWithCourseCodeOf,
-} from '../../server/util/dbActions.ts'
+import { curcusWithUnitIdOf, curWithIdOf, cuWithCourseCodeOf } from '../../server/util/dbActions/curs.ts'
+import { allRecommendationCodeRows } from '../../server/util/dbActions/recommendationCodes.ts'
 import { getCourseData } from '../../server/util/recommender.ts'
 
 const PSYKOLOGIA = '414'

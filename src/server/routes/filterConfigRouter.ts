@@ -13,7 +13,7 @@ import {
   orderedFilterConfigs,
   reorderFilterConfigs,
   updateFilterConfigById,
-} from '../util/dbActions.ts'
+} from '../util/dbActions/filterConfigs.ts'
 import { isSuperuser } from '../util/validations.ts'
 
 const filterConfigRouter = express.Router()

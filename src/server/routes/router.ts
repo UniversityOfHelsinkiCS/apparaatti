@@ -30,16 +30,12 @@ import {
   UPDATER_CRON_ENABLED,
 } from '../util/config.ts'
 import { organisationCodeToUrn } from '../util/constants.ts'
-import {
-  allBackendLocaleKeys,
-  allOrganisations,
-  allRecommendationCodeRows,
-  createUserFeedbackEntry,
-  enabledOrderedFilterConfigs,
-  getUserSettings,
-  organisationsWithSupportedCodes,
-  updateUserSettings,
-} from '../util/dbActions.ts'
+import { allBackendLocaleKeys } from '../util/dbActions/backendLocales.ts'
+import { enabledOrderedFilterConfigs } from '../util/dbActions/filterConfigs.ts'
+import { allOrganisations, organisationsWithSupportedCodes } from '../util/dbActions/organisations.ts'
+import { allRecommendationCodeRows } from '../util/dbActions/recommendationCodes.ts'
+import { createUserFeedbackEntry } from '../util/dbActions/userFeedback.ts'
+import { getUserSettings, updateUserSettings } from '../util/dbActions/users.ts'
 import { codesForOrganisation, courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
