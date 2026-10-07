@@ -41,21 +41,61 @@ export const courseSearchValuesFromFields = (fields: CoursesSearchFieldsValues):
 })
 
 export const courseSearchFilterParams = (values: CourseSearchValues): Record<string, string> => {
+  const {
+    nameSearch,
+    urnSearch,
+    urnMode,
+    courseCodeSearch,
+    excludeUrnsSearch,
+    excludeUrnsMode,
+    excludeCourseCodesSearch,
+    reviewStatusSearch,
+    dateFromSearch,
+    dateToSearch,
+  } = values
+
   const params: Record<string, string> = {}
-  if (values.nameSearch) params.name = values.nameSearch
-  if (values.urnSearch.length > 0) {
-    params.urn = values.urnSearch.join(',')
-    if (values.urnMode !== 'or') params.urnMode = values.urnMode
+
+  if (nameSearch) {
+    params.name = nameSearch
   }
-  if (values.courseCodeSearch) params.courseCode = values.courseCodeSearch
-  if (values.excludeUrnsSearch.length > 0) {
-    params.excludeUrns = values.excludeUrnsSearch.join(',')
-    if (values.excludeUrnsMode !== 'or') params.excludeUrnsMode = values.excludeUrnsMode
+
+  if (urnSearch.length > 0) {
+    params.urn = urnSearch.join(',')
+
+    if (urnMode !== 'or') {
+      params.urnMode = urnMode
+    }
   }
-  if (values.excludeCourseCodesSearch) params.excludeCourseCodes = values.excludeCourseCodesSearch
-  if (values.reviewStatusSearch !== 'all') params.reviewStatus = values.reviewStatusSearch
-  if (values.dateFromSearch) params.dateFrom = values.dateFromSearch
-  if (values.dateToSearch) params.dateTo = values.dateToSearch
+
+  if (courseCodeSearch) {
+    params.courseCode = courseCodeSearch
+  }
+
+  if (excludeUrnsSearch.length > 0) {
+    params.excludeUrns = excludeUrnsSearch.join(',')
+
+    if (excludeUrnsMode !== 'or') {
+      params.excludeUrnsMode = excludeUrnsMode
+    }
+  }
+
+  if (excludeCourseCodesSearch) {
+    params.excludeCourseCodes = excludeCourseCodesSearch
+  }
+
+  if (reviewStatusSearch !== 'all') {
+    params.reviewStatus = reviewStatusSearch
+  }
+
+  if (dateFromSearch) {
+    params.dateFrom = dateFromSearch
+  }
+
+  if (dateToSearch) {
+    params.dateTo = dateToSearch
+  }
+
   return params
 }
 
