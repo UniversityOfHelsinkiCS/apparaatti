@@ -20,7 +20,7 @@ echo "Starting E2E Docker Compose services..."
 docker compose -f compose.e2e.yaml up -d --build app db redis
 
 echo "Waiting for app readiness at http://localhost:3001/api/ping..."
-retries=60
+retries=90
 until curl -fsS http://localhost:3001/api/ping >/dev/null 2>&1; do
 	retries=$((retries - 1))
 	if [ "$retries" -le 0 ]; then

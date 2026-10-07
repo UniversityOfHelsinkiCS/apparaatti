@@ -28,6 +28,8 @@ redis.on('error', err => {
   console.error('Redis connection error:', err)
 })
 
+let isReady = false
+
 const app = express()
 app.use(
   session({
@@ -53,6 +55,10 @@ if (inDevelopment || IN_E2E) {
 
 app.use('/api', router)
 app.use('/api/ping', (_req, res) => {
+  if (!isReady) {
+    res.sendStatus(503)
+    return
+  }
   res.send('pong')
 })
 app.use('/api', (_, res) => {
@@ -83,4 +89,6 @@ app.listen(process.env.PORT, async () => {
     await clearInterruptedUpdaterRuns()
     await setupCron()
   }
+
+  isReady = true
 })

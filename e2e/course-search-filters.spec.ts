@@ -7,6 +7,13 @@ const search = async (request: any, params: Record<string, string>) => {
   return (await request.get(`${COURSES_PATH}?${query}`)).json()
 }
 
+let baseline: any = null
+
+const unfiltered = async (request: any) => {
+  if (!baseline) baseline = await search(request, {})
+  return baseline
+}
+
 const codesOf = (course: any): string[] => (course.Cus ?? []).map((cu: any) => cu.courseCode)
 
 const urnsOf = (course: any): string[] =>
@@ -15,14 +22,14 @@ const urnsOf = (course: any): string[] =>
 test.describe.configure({ mode: 'serial' })
 
 test('the admin course listing only surfaces KK- coded courses', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
 
   expect(all.total).toBeGreaterThan(0)
   expect(all.courses.every((course: any) => codesOf(course).some(code => code.startsWith('KK-')))).toBe(true)
 })
 
 test('excludeCourseCodes drops every course that has a matching course unit', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const excluded = codesOf(all.courses[0])[0]
   expect(excluded).toBeTruthy()
 
@@ -33,7 +40,7 @@ test('excludeCourseCodes drops every course that has a matching course unit', as
 })
 
 test('excludeCourseCodes matches as a case-insensitive substring', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const lower = await search(request, { excludeCourseCodes: 'kk-' })
   const upper = await search(request, { excludeCourseCodes: 'KK-' })
 
@@ -43,7 +50,7 @@ test('excludeCourseCodes matches as a case-insensitive substring', async ({ requ
 })
 
 test('excludeCourseCodes removes a course even when only one of its units matches', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const multiUnit = all.courses.find((course: any) => codesOf(course).length > 1)
   test.skip(!multiUnit, 'seed data has no course with several course units')
 
@@ -54,7 +61,7 @@ test('excludeCourseCodes removes a course even when only one of its units matche
 })
 
 test('excludeUrns drops courses carrying the urn', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const withUrns = all.courses.find((course: any) => urnsOf(course).length > 0)
   test.skip(!withUrns, 'seed data has no course with custom code urns')
 
@@ -66,7 +73,7 @@ test('excludeUrns drops courses carrying the urn', async ({ request }) => {
 })
 
 test('excludeUrns is the exact complement of the include filter', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const withUrns = all.courses.find((course: any) => urnsOf(course).length > 0)
   test.skip(!withUrns, 'seed data has no course with custom code urns')
 
@@ -78,7 +85,7 @@ test('excludeUrns is the exact complement of the include filter', async ({ reque
 })
 
 test('excludeUrns with mode=and only drops courses carrying every listed urn', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const withTwo = all.courses.find((course: any) => new Set(urnsOf(course)).size > 1)
   test.skip(!withTwo, 'seed data has no course with two distinct urns')
 
@@ -95,7 +102,7 @@ test('excludeUrns with mode=and only drops courses carrying every listed urn', a
 })
 
 test('an exclude filter beats an include filter naming the same urn', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const withUrns = all.courses.find((course: any) => urnsOf(course).length > 0)
   test.skip(!withUrns, 'seed data has no course with custom code urns')
 
@@ -106,7 +113,7 @@ test('an exclude filter beats an include filter naming the same urn', async ({ r
 })
 
 test('an empty exclude value filters nothing', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const emptyUrns = await search(request, { excludeUrns: '' })
   const emptyCodes = await search(request, { excludeCourseCodes: '' })
   const onlyCommas = await search(request, { excludeCourseCodes: ' , , ' })
@@ -117,7 +124,7 @@ test('an empty exclude value filters nothing', async ({ request }) => {
 })
 
 test('the courses page exclude-code field actually filters the listing', async ({ page, request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const excluded = codesOf(all.courses[0])[0]
 
   await page.goto('/admin/courses')
@@ -131,7 +138,7 @@ test('the courses page exclude-code field actually filters the listing', async (
 })
 
 test('the courses page exclude-urn field actually filters the listing', async ({ page, request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const withUrns = all.courses.find((course: any) => urnsOf(course).length > 0)
   test.skip(!withUrns, 'seed data has no course with custom code urns')
 
@@ -153,7 +160,7 @@ test('the courses page exclude-urn field actually filters the listing', async ({
 })
 
 test('the bulk preview applies the same exclude filters as the listing', async ({ request }) => {
-  const all = await search(request, {})
+  const all = await unfiltered(request)
   const excluded = codesOf(all.courses[0])[0]
   const filtered = await search(request, { excludeCourseCodes: excluded })
 

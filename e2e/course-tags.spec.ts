@@ -262,11 +262,6 @@ test('the tags admin page renders its tabs', async ({ page }) => {
   await expect(page.getByRole('tab', { name: 'Versiot' })).toBeVisible()
 })
 
-// Tags applied through the tagging UI live in published_cur_course_tags, not in the
-// Sisu-sourced customCodeUrns column. The matrix and the recommender both treat them as
-// the course's codes, so the admin urn filters must see them too. These live here rather
-// than with the other search-filter tests because they publish, and publishing is global
-// state that must stay inside this serial file.
 test.describe('urn filters see the published tagging, not just the sisu urns', () => {
   const TAG = 'kks-alm'
 

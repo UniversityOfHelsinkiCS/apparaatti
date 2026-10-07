@@ -24,10 +24,6 @@ function getCurUrnsLowercase(cur: any, resolvedTagKeys: string[]): string[] {
     .map(u => u.toLowerCase())
 }
 
-// The admin tag matrix and the recommender both treat the published tagging as
-// the course's codes, so the URN filters have to see them too. A tag applied
-// through the tagging UI never reaches the Sisu-sourced `customCodeUrns`
-// column, and filtering on that column alone would silently ignore it.
 async function resolvedTagKeysByCur(curIds: string[]): Promise<Map<string, string[]>> {
   const tagging = await tagStateForCurs(curIds)
   const byCur = new Map<string, string[]>()
