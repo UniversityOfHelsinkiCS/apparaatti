@@ -1,10 +1,8 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
-import useRequiredUser from '../../util/useRequiredUser.ts'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import BackendLocalesEditor from './BackendLocalesEditor.tsx'
 import FilterConfigEditor from './FilterConfigEditor.tsx'
@@ -13,24 +11,8 @@ import RecommendationLanguagesEditor from './RecommendationLanguagesEditor.tsx'
 
 const AdminPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [tab, setTab] = useState(0)
-
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
 
   const isSuperuser = user.isSuperuser === true
 

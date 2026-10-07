@@ -16,18 +16,16 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
 import { toDayLabel } from '../../../common/datelabels.ts'
 import type { RecommendationMetadata } from '../../../common/types.ts'
 import { useFeedbackDeletion } from '../../hooks/useFeedbackDeletion.ts'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
 import ActionButton from '../common/ActionButton.tsx'
 import AutoCompleteTextField from '../common/AutoCompleteTextField.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import HyCheckbox from '../common/hy/HyCheckbox.tsx'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import DeleteConfirmDialog from './DeleteConfirmDialog.tsx'
 import FeedbackCommentDialog from './FeedbackCommentDialog.tsx'
@@ -66,24 +64,12 @@ const UserFeedbackPage = () => {
   const [end, setEnd] = useState(getDefaultEnd)
   const [emailFilter, setEmailFilter] = useState<EmailFilterValue>('all')
   const [emailSearch, setEmailSearch] = useState('')
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const startDateTime = `${start}T00:00:00.000Z`
   const endDateTime = `${end}T23:59:59.999Z`
   const endpoint = `/api/admin/user-feedback?start=${encodeURIComponent(startDateTime)}&end=${encodeURIComponent(endDateTime)}`
 
   const { data, isLoading, refetch } = useApi<UserFeedback[]>(`admin-user-feedback-${start}-${end}`, endpoint, 'GET')
-
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading || !user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
 
   const feedbackRows = Array.isArray(data) ? data : []
 

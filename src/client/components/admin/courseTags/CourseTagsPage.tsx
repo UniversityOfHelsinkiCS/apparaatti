@@ -2,10 +2,8 @@ import { Box, MenuItem, Stack, Tab, Tabs, TextField, Typography } from '@mui/mat
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
-import { RedirectToLogin } from '../../../util/redirectToLogin.ts'
-import useRequiredUser from '../../../util/useRequiredUser.ts'
+import { useAdminUser } from '../AdminMain.tsx'
 import AdminNavbar from '../AdminNavbar.tsx'
 import type { EditedSnapshot } from './courseTagUtils.ts'
 import { fetchCourseTags, fetchSnapshots, invalidateTagQueries, restoreSnapshot } from './courseTagUtils.ts'
@@ -17,7 +15,7 @@ import TagVocabularyTab from './TagVocabularyTab.tsx'
 
 const CourseTagsPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [tab, setTab] = useState(0)
   const [editedSnapshot, setEditedSnapshot] = useState<EditedSnapshot | null>(null)
 
@@ -41,23 +39,11 @@ const CourseTagsPage = () => {
     await invalidateTagQueries(queryClient)
   }
 
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isLoading || !user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
-
   const courseTags = tags ?? []
 
   return (
     <Box>
-      <AdminNavbar isSuperuser={user.isSuperuser ?? false} />
+      <AdminNavbar isSuperuser={user.isSuperuser === true} />
 
       <Typography variant="h5" sx={{ mb: 2 }}>
         {t('v2:courseTags.title')}
@@ -104,10 +90,10 @@ const CourseTagsPage = () => {
 
       {tab === 0 ? <CurTagMatrix tags={courseTags} /> : null}
       {tab === 1 ? <CuTagTab tags={courseTags} /> : null}
-      {tab === 2 ? <TagVocabularyTab tags={courseTags} isSuperuser={user.isSuperuser ?? false} /> : null}
+      {tab === 2 ? <TagVocabularyTab tags={courseTags} isSuperuser={user.isSuperuser === true} /> : null}
       {tab === 3 ? (
         <SnapshotsTab
-          isSuperuser={user.isSuperuser ?? false}
+          isSuperuser={user.isSuperuser === true}
           editedSnapshot={editedSnapshot}
           onEditTagging={setEditedSnapshot}
         />

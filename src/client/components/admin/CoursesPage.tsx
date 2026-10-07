@@ -1,14 +1,12 @@
 import { Box, Pagination, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router-dom'
 
 import { formatLocalizedCourseName } from '../../../common/nameFormatter.ts'
 import type { CourseReviewState, LocalizedString } from '../../../common/types.ts'
-import { RedirectToLogin } from '../../util/redirectToLogin.ts'
 import useApi from '../../util/useApi.tsx'
-import useRequiredUser from '../../util/useRequiredUser.ts'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import type { CourseSearchValues } from './courseSearchQuery.ts'
 import {
@@ -49,7 +47,7 @@ interface PaginatedCoursesResponse {
 
 const CoursesPage = () => {
   const { t } = useTranslation()
-  const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
+  const user = useAdminUser()
   const [page, setPage] = useState(1)
 
   // Active search values (what's actually sent to API)
@@ -70,22 +68,6 @@ const CoursesPage = () => {
     'GET',
     undefined
   )
-
-  if (isUnauthorized) {
-    return <RedirectToLogin />
-  }
-
-  if (isUserLoading) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user) {
-    return <div>{t('v2:admin.loading')}</div>
-  }
-
-  if (!user.isAdmin) {
-    return <Navigate to={'/'} replace />
-  }
 
   const courseList: Course[] = coursesData?.courses ?? []
   const totalPages = coursesData?.totalPages ?? 1
