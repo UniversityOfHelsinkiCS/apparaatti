@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 
 interface TagVocabularyFormProps {
+  isEditable: boolean
   onCreate: (key: string, description: string | null) => Promise<boolean>
 }
 
-const TagVocabularyForm = ({ onCreate }: TagVocabularyFormProps) => {
+const TagVocabularyForm = ({ isEditable, onCreate }: TagVocabularyFormProps) => {
   const { t } = useTranslation()
   const [newKey, setNewKey] = useState('')
   const [newDescription, setNewDescription] = useState('')
@@ -36,7 +37,7 @@ const TagVocabularyForm = ({ onCreate }: TagVocabularyFormProps) => {
         value={newDescription}
         onChange={event => setNewDescription(event.target.value)}
       />
-      <BlackOutlinedButton type="button" onClick={handleCreate} disabled={newKey.trim().length === 0}>
+      <BlackOutlinedButton type="button" onClick={handleCreate} disabled={!isEditable || newKey.trim().length === 0}>
         {t('v2:courseTags.vocabulary.add')}
       </BlackOutlinedButton>
     </Stack>

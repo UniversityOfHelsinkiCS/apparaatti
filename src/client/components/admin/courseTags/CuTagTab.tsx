@@ -14,9 +14,9 @@ import {
 import type { CoursesSearchFieldsValues } from '../CoursesSearchFields.tsx'
 import CoursesSearchFields from '../CoursesSearchFields.tsx'
 import CuTagTable from './CuTagTable.tsx'
-import type { TagDraft } from './tagDraftBuffer.ts'
-import { baseKey, cuTagKeys } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
+import { baseKey } from './tagVersionState.ts'
+import { useTagMutation } from './useTagMutation.ts'
 
 const PAGE_SIZE = 15
 
@@ -29,14 +29,14 @@ interface CourseUnitsResponse {
 interface CuTagTabProps {
   tags: CourseTag[]
   base: TagBase
-  cuMutations: TagDraft['cu']
-  onCuToggle: (courseCode: string, cuIds: string[], tagKey: string, present: boolean) => void
+  isEditable: boolean
 }
 
-const CuTagTab = ({ tags, base, cuMutations, onCuToggle }: CuTagTabProps) => {
+const CuTagTab = ({ tags, base, isEditable }: CuTagTabProps) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
+  const mutate = useTagMutation(base)
 
   const handleSearch = (fields: CoursesSearchFieldsValues) => {
     setSearchValues(courseSearchValuesFromFields(fields))
@@ -52,22 +52,20 @@ const CuTagTab = ({ tags, base, cuMutations, onCuToggle }: CuTagTabProps) => {
 
   const groups = useMemo(() => data?.groups ?? [], [data])
 
-  const tagKeysByCourseCode = useMemo(() => {
-    const index = new Map<string, Set<string>>()
-    for (const group of groups) {
-      index.set(group.courseCode, cuTagKeys(group.courseCode, group.tagKeys, cuMutations))
-    }
-    return index
-  }, [groups, cuMutations])
+  const tagKeysByCourseCode = useMemo(
+    () => new Map(groups.map(group => [group.courseCode, new Set(group.tagKeys)])),
+    [groups]
+  )
 
   const cuIdsByCourseCode = useMemo(() => new Map(groups.map(group => [group.courseCode, group.cuIds])), [groups])
 
   const handleToggle = useCallback(
     (courseCode: string, tagKey: string) => {
       const hasTag = tagKeysByCourseCode.get(courseCode)?.has(tagKey) ?? false
-      onCuToggle(courseCode, cuIdsByCourseCode.get(courseCode) ?? [], tagKey, !hasTag)
+      const cuIds = cuIdsByCourseCode.get(courseCode) ?? []
+      mutate.mutate({ tags: [], cur: [], cu: [{ courseCode, cuIds, tagKey, present: !hasTag }] })
     },
-    [tagKeysByCourseCode, cuIdsByCourseCode, onCuToggle]
+    [tagKeysByCourseCode, cuIdsByCourseCode, mutate]
   )
 
   return (
@@ -76,7 +74,7 @@ const CuTagTab = ({ tags, base, cuMutations, onCuToggle }: CuTagTabProps) => {
         {t('v2:courseTags.cu.explanation')}
       </Alert>
 
-      <CoursesSearchFields onSearch={handleSearch} autoSearch />
+      <CoursesSearchFields onSearch={handleSearch} autoSearch filterBy="tags" tagKeys={tags.map(tag => tag.key)} />
 
       <Typography variant="body2" sx={{ mb: 1, color: '#374151' }}>
         {t('v2:courseTags.cu.matched', { count: data?.total ?? 0 })}
@@ -85,7 +83,13 @@ const CuTagTab = ({ tags, base, cuMutations, onCuToggle }: CuTagTabProps) => {
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>
       ) : (
-        <CuTagTable groups={groups} tags={tags} tagKeysByCourseCode={tagKeysByCourseCode} onToggle={handleToggle} />
+        <CuTagTable
+          groups={groups}
+          tags={tags}
+          tagKeysByCourseCode={tagKeysByCourseCode}
+          isEditable={isEditable}
+          onToggle={handleToggle}
+        />
       )}
 
       <TagMatrixPagination count={data?.totalPages ?? 1} page={page} onChange={setPage} />

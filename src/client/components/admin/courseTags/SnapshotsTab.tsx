@@ -4,14 +4,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { TagBase, TagPayloadDiff, TagSnapshotMeta } from '../../../../common/types.ts'
-import {
-  activateSnapshot,
-  deleteSnapshot,
-  fetchSnapshotDiff,
-  fetchSnapshots,
-  invalidateTagQueries,
-} from './courseTagUtils.ts'
+import { deleteSnapshot, fetchSnapshotDiff, fetchSnapshots, invalidateTagQueries } from './courseTagUtils.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
+import PublishReviewDialog from './PublishReviewDialog.tsx'
 import SnapshotDiffDialog from './SnapshotDiffDialog.tsx'
 import SnapshotImportExport from './SnapshotImportExport.tsx'
 import SnapshotRow from './SnapshotRow.tsx'
@@ -26,6 +21,7 @@ const SnapshotsTab = ({ isSuperuser, base, onEditBase }: SnapshotsTabProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [diff, setDiff] = useState<TagPayloadDiff | null>(null)
+  const [published, setPublished] = useState<TagSnapshotMeta | null>(null)
 
   const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
 
@@ -42,9 +38,7 @@ const SnapshotsTab = ({ isSuperuser, base, onEditBase }: SnapshotsTabProps) => {
   }
 
   const handleActivate = async (snapshot: TagSnapshotMeta) => {
-    if (!window.confirm(t('v2:courseTags.snapshots.activateConfirm', { name: snapshot.name }))) return
-    await activateSnapshot(snapshot.id)
-    await refresh()
+    setPublished(snapshot)
   }
 
   const handleDelete = async (snapshot: TagSnapshotMeta) => {
@@ -90,6 +84,8 @@ const SnapshotsTab = ({ isSuperuser, base, onEditBase }: SnapshotsTabProps) => {
       {snapshotRows.length === 0 ? <Typography sx={{ mt: 2 }}>{t('v2:courseTags.snapshots.empty')}</Typography> : null}
 
       <SnapshotDiffDialog diff={diff} base={base} onClose={() => setDiff(null)} />
+
+      <PublishReviewDialog snapshot={published} onClose={() => setPublished(null)} />
     </Box>
   )
 }

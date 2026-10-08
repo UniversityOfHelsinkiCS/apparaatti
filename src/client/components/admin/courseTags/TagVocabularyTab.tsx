@@ -2,20 +2,25 @@ import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, TagVocabMutation } from '../../../../common/types.ts'
+import type { CourseTag, TagBase, TagVocabMutation } from '../../../../common/types.ts'
 import { matrixContainerSx } from './matrixStyles.ts'
 import TagVocabularyForm from './TagVocabularyForm.tsx'
 import TagVocabularyRow from './TagVocabularyRow.tsx'
+import { useTagMutation } from './useTagMutation.ts'
 
 interface TagVocabularyTabProps {
   tags: CourseTag[]
+  base: TagBase
+  isEditable: boolean
   isSuperuser: boolean
-  onTagMutation: (mutation: TagVocabMutation) => void
 }
 
-const TagVocabularyTab = ({ tags, isSuperuser, onTagMutation }: TagVocabularyTabProps) => {
+const TagVocabularyTab = ({ tags, base, isEditable, isSuperuser }: TagVocabularyTabProps) => {
   const { t } = useTranslation()
   const [error, setError] = useState('')
+  const mutate = useTagMutation(base)
+
+  const onTagMutation = (mutation: TagVocabMutation) => mutate.mutate({ tags: [mutation], cur: [], cu: [] })
 
   const handleCreate = async (key: string, description: string | null) => {
     if (tags.some(tag => tag.key === key)) {
@@ -29,7 +34,10 @@ const TagVocabularyTab = ({ tags, isSuperuser, onTagMutation }: TagVocabularyTab
   }
 
   const handleDescriptionSave = async (tag: CourseTag, description: string) => {
-    onTagMutation({ op: 'upsert', key: tag.key, description: description || null })
+    const next = description || null
+    if (next === tag.description) return
+
+    onTagMutation({ op: 'upsert', key: tag.key, description: next })
   }
 
   const handleDelete = async (tag: CourseTag) => {
@@ -39,7 +47,7 @@ const TagVocabularyTab = ({ tags, isSuperuser, onTagMutation }: TagVocabularyTab
 
   return (
     <Box>
-      <TagVocabularyForm onCreate={handleCreate} />
+      <TagVocabularyForm isEditable={isEditable} onCreate={handleCreate} />
 
       {error ? <Typography color="error">{error}</Typography> : null}
 
@@ -57,6 +65,7 @@ const TagVocabularyTab = ({ tags, isSuperuser, onTagMutation }: TagVocabularyTab
               <TagVocabularyRow
                 key={tag.key}
                 tag={tag}
+                isEditable={isEditable}
                 isSuperuser={isSuperuser}
                 onDescriptionSave={handleDescriptionSave}
                 onDelete={handleDelete}

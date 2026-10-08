@@ -63,6 +63,29 @@ function curMatchesUrnFilters(
   return true
 }
 
+// Matches against the resolved tag keys only, never against customCodeUrns.
+// Include/exclude mode semantics are the same as for the URN filters above.
+function curMatchesTagFilters(
+  resolvedTagKeys: string[],
+  includeTagListLower: string[],
+  includeMode: UrnMatchMode,
+  excludeTagListLower: string[],
+  excludeMode: UrnMatchMode
+): boolean {
+  const keys = resolvedTagKeys.map(key => key.toLowerCase())
+  const matches = (needle: string) => keys.some(key => key.includes(needle))
+
+  if (includeTagListLower.length > 0) {
+    const included = includeMode === 'and' ? includeTagListLower.every(matches) : includeTagListLower.some(matches)
+    if (!included) return false
+  }
+  if (excludeTagListLower.length > 0) {
+    const excluded = excludeMode === 'and' ? excludeTagListLower.every(matches) : excludeTagListLower.some(matches)
+    if (excluded) return false
+  }
+  return true
+}
+
 // Returns the ids of Curs that have ANY linked Cu whose courseCode matches
 // (case-insensitive substring) any of the given exclude codes. These Curs
 // should be removed from the main query entirely; filtering inside the include
@@ -110,6 +133,16 @@ export interface CourseSearchFilters {
   excludeUrns?: string
   /** 'or' (default) excludes Curs matching any substring, 'and' only those matching every one. */
   excludeUrnsMode?: UrnMatchMode
+
+  // --- Tag filters (operate on the resolved tag keys of the searched version) ---
+  /** Comma-separated tag-key substrings; Curs are kept per `tagMode`. */
+  tagSearch?: string
+  /** 'or' (default) keeps Curs matching any `tagSearch` substring, 'and' requires every one. */
+  tagMode?: UrnMatchMode
+  /** Comma-separated tag-key substrings; Curs are excluded per `excludeTagsMode`. */
+  excludeTags?: string
+  /** 'or' (default) excludes Curs matching any substring, 'and' only those matching every one. */
+  excludeTagsMode?: UrnMatchMode
 
   // --- Course code filters (operate on linked Cu.courseCode) ---
   /** Substring against `Cu.courseCode`. AND-combined with the hard 'KK-%' prefix. */
@@ -166,7 +199,14 @@ interface CourseSearchQuery {
   urnMode: UrnMatchMode
   excludeUrnList: string[]
   excludeUrnsMode: UrnMatchMode
+  includeTagList: string[]
+  tagMode: UrnMatchMode
+  excludeTagList: string[]
+  excludeTagsMode: UrnMatchMode
 }
+
+/** Resolves the tag keys that apply to each of the given Curs. */
+export type TagKeyResolver = (curIds: string[]) => Promise<Map<string, string[]>>
 
 async function buildCourseSearchQuery(filters: CourseSearchFilters): Promise<CourseSearchQuery> {
   const { nameSearch, courseCodeSearch, excludeCourseCodes, dateFrom, dateTo } = filters
@@ -217,10 +257,17 @@ async function buildCourseSearchQuery(filters: CourseSearchFilters): Promise<Cou
     urnMode: filters.urnMode ?? 'or',
     excludeUrnList: parseCsvList(filters.excludeUrns).map(s => s.toLowerCase()),
     excludeUrnsMode: filters.excludeUrnsMode ?? 'or',
+    includeTagList: parseCsvList(filters.tagSearch).map(s => s.toLowerCase()),
+    tagMode: filters.tagMode ?? 'or',
+    excludeTagList: parseCsvList(filters.excludeTags).map(s => s.toLowerCase()),
+    excludeTagsMode: filters.excludeTagsMode ?? 'or',
   }
 }
 
-export async function matchingCurs(filters: CourseSearchFilters) {
+export async function matchingCurs(
+  filters: CourseSearchFilters,
+  resolveTagKeys: TagKeyResolver = resolvedTagKeysByCur
+) {
   const query = await buildCourseSearchQuery(filters)
 
   const allCurs = await Cur.findAll({
@@ -230,32 +277,51 @@ export async function matchingCurs(filters: CourseSearchFilters) {
     subQuery: false,
   })
 
-  const hasUrnFilter = query.includeUrnList.length > 0 || query.excludeUrnList.length > 0
-  const tagKeysByCur = hasUrnFilter
-    ? await resolvedTagKeysByCur(allCurs.map((cur: any) => cur.id))
+  const needsTagKeys =
+    query.includeUrnList.length > 0 ||
+    query.excludeUrnList.length > 0 ||
+    query.includeTagList.length > 0 ||
+    query.excludeTagList.length > 0
+  const tagKeysByCur = needsTagKeys
+    ? await resolveTagKeys(allCurs.map((cur: any) => cur.id))
     : new Map<string, string[]>()
 
-  const filtered = allCurs.filter(cur =>
-    curMatchesUrnFilters(
+  const filtered = allCurs.filter(cur => {
+    const tagKeys = tagKeysByCur.get(cur.id) ?? []
+    const tagsMatch = curMatchesTagFilters(
+      tagKeys,
+      query.includeTagList,
+      query.tagMode,
+      query.excludeTagList,
+      query.excludeTagsMode
+    )
+    if (!tagsMatch) return false
+
+    return curMatchesUrnFilters(
       cur,
-      tagKeysByCur.get(cur.id) ?? [],
+      tagKeys,
       query.includeUrnList,
       query.urnMode,
       query.excludeUrnList,
       query.excludeUrnsMode
     )
-  )
+  })
 
   return filterCoursesByReviewStatus(await populateWithReviews(filtered), filters.reviewStatus)
 }
 
-export async function matchingCurIds(filters: CourseSearchFilters): Promise<string[]> {
-  return (await matchingCurs(filters)).map(cur => cur.id)
+export async function matchingCurIds(filters: CourseSearchFilters, resolveTagKeys?: TagKeyResolver): Promise<string[]> {
+  return (await matchingCurs(filters, resolveTagKeys)).map(cur => cur.id)
 }
 
-export async function searchCoursesWithPagination(filters: CourseSearchFilters, page: number, limit: number) {
+export async function searchCoursesWithPagination(
+  filters: CourseSearchFilters,
+  page: number,
+  limit: number,
+  resolveTagKeys?: TagKeyResolver
+) {
   const offset = (page - 1) * limit
-  const matched = await matchingCurs(filters)
+  const matched = await matchingCurs(filters, resolveTagKeys)
   const total = matched.length
 
   return {

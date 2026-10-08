@@ -14,12 +14,13 @@ import {
   fetchCourseUnitGroupsForLabels,
   fetchCurTagPremises,
 } from './courseTagUtils.ts'
-import { baseKey, curTagStates } from './tagDraftBuffer.ts'
+import { baseKey, curTagStates } from './tagVersionState.ts'
 
 interface SnapshotDiffDialogProps {
   diff: TagPayloadDiff | null
   base: TagBase
   onClose: () => void
+  open?: boolean
   title?: string
   content?: ReactNode
   actions?: ReactNode
@@ -91,7 +92,7 @@ const TagListSection = ({ title, added, removed }: { title: string; added: strin
   )
 }
 
-const SnapshotDiffDialog = ({ diff, base, onClose, title, content, actions }: SnapshotDiffDialogProps) => {
+const SnapshotDiffDialog = ({ diff, base, onClose, open, title, content, actions }: SnapshotDiffDialogProps) => {
   const { t, i18n } = useTranslation()
 
   const curIds = useMemo(
@@ -241,12 +242,17 @@ const SnapshotDiffDialog = ({ diff, base, onClose, title, content, actions }: Sn
     diff.removedCurTags.length === 0
 
   return (
-    <Dialog open={diff !== null} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog open={open ?? diff !== null} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{title ?? t('v2:courseTags.snapshots.diffTitle')}</DialogTitle>
       <DialogContent>
-        {diff === null || isUnchanged ? (
-          <Typography>{t('v2:courseTags.snapshots.diffUnchanged')}</Typography>
-        ) : (
+        {diff === null ? <Typography>{t('v2:courseTags.snapshots.diffLoading')}</Typography> : null}
+        {diff !== null && isUnchanged ? (
+          <Stack spacing={3}>
+            {content}
+            <Typography>{t('v2:courseTags.snapshots.diffUnchanged')}</Typography>
+          </Stack>
+        ) : null}
+        {diff !== null && !isUnchanged ? (
           <Stack spacing={3}>
             {content}
             {isLoading ? <Typography>{t('v2:courseTags.snapshots.diffLoading')}</Typography> : null}
@@ -258,7 +264,7 @@ const SnapshotDiffDialog = ({ diff, base, onClose, title, content, actions }: Sn
             <DiffBlockSection title={t('v2:courseTags.snapshots.diffCourseChanges')} blocks={courseBlocks} />
             <DiffBlockSection title={t('v2:courseTags.snapshots.diffRealisationChanges')} blocks={realisationBlocks} />
           </Stack>
-        )}
+        ) : null}
       </DialogContent>
       <DialogActions>
         <BlackOutlinedButton type="button" onClick={onClose}>

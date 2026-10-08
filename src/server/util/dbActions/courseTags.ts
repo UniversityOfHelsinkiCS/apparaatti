@@ -1,3 +1,4 @@
+import { resolveCurTags } from '../../../common/courseTags.ts'
 import type {
   CourseTag as CourseTagType,
   CourseTagMode,
@@ -13,7 +14,7 @@ import Cu from '../../db/models/cu.ts'
 import CurCu from '../../db/models/curCu.ts'
 import PublishedCuCourseTag from '../../db/models/publishedCuCourseTag.ts'
 import PublishedCurCourseTag from '../../db/models/publishedCurCourseTag.ts'
-import type { CourseSearchFilters } from './courseSearch.ts'
+import type { CourseSearchFilters, TagKeyResolver } from './courseSearch.ts'
 import { matchingCurIds } from './courseSearch.ts'
 
 export async function allCourseTags(): Promise<CourseTagType[]> {
@@ -100,13 +101,28 @@ export async function curTagPremises(payload: TagSnapshotPayload, curIds: string
   }))
 }
 
+export function payloadTagKeyResolver(payload: TagSnapshotPayload): TagKeyResolver {
+  return async (curIds: string[]) => {
+    const premises = await curTagPremises(payload, curIds)
+    const byCur = new Map<string, string[]>()
+
+    for (const entry of premises) {
+      const inherited = [...new Set(entry.cus.flatMap(cu => cu.tagKeys))]
+      const rows = entry.rows.map(row => ({ curId: entry.curId, ...row }))
+      byCur.set(entry.curId, resolveCurTags(inherited, rows))
+    }
+
+    return byCur
+  }
+}
+
 export async function courseUnitGroupsForFilters(
   filters: CourseSearchFilters,
   page: number,
   limit: number,
   payload: TagSnapshotPayload
 ): Promise<{ groups: CourseUnitGroup[]; total: number; page: number; limit: number; totalPages: number }> {
-  const curIds = await matchingCurIds(filters)
+  const curIds = await matchingCurIds(filters, payloadTagKeyResolver(payload))
   const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
   const cuIds = new Set(links.map((link: any) => link.cuId))
   const cus = await Cu.findAll({ where: { id: [...cuIds] }, attributes: ['id', 'courseCode', 'name'], raw: true })

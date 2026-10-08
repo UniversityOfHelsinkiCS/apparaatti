@@ -6,7 +6,7 @@ import type { TagBase } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import { adminFetch } from '../filterEdit/filterEditorUtils.ts'
 import { COURSE_TAGS_PATH } from './courseTagUtils.ts'
-import { baseKey } from './tagDraftBuffer.ts'
+import { baseKey } from './tagVersionState.ts'
 
 interface SnapshotImportExportProps {
   base: TagBase

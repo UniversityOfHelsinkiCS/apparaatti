@@ -10,10 +10,11 @@ interface CuTagRowProps {
   group: CourseUnitGroup
   tags: CourseTag[]
   tagKeys: Set<string>
+  isEditable: boolean
   onToggle: (courseCode: string, tagKey: string) => void
 }
 
-const CuTagRow = ({ group, tags, tagKeys, onToggle }: CuTagRowProps) => (
+const CuTagRow = ({ group, tags, tagKeys, isEditable, onToggle }: CuTagRowProps) => (
   <TableRow hover>
     <TableCell sx={stickyFirstCellSx}>
       <Typography variant="body2" sx={{ lineHeight: 1.3 }}>
@@ -28,6 +29,7 @@ const CuTagRow = ({ group, tags, tagKeys, onToggle }: CuTagRowProps) => (
           tagKey={tag.key}
           description={tag.description}
           state={tagKeys.has(tag.key) ? 'added' : 'unset'}
+          disabled={!isEditable}
           onToggle={onToggle}
         />
       </TableCell>

@@ -216,6 +216,10 @@ export const CourseSearchFilterSchema = z.object({
   urnMode: z.enum(['or', 'and']).optional(),
   excludeUrns: z.string().optional(),
   excludeUrnsMode: z.enum(['or', 'and']).optional(),
+  tags: z.string().optional(),
+  tagsMode: z.enum(['or', 'and']).optional(),
+  excludeTags: z.string().optional(),
+  excludeTagsMode: z.enum(['or', 'and']).optional(),
   courseCode: z.string().optional(),
   excludeCourseCodes: z.string().optional(),
   reviewStatus: z.string().optional(),
@@ -225,9 +229,12 @@ export const CourseSearchFilterSchema = z.object({
 
 export const BulkApplyTagsSchema = z.object({
   filters: CourseSearchFilterSchema,
+  base: TagBaseSchema,
   tagKeys: z.array(z.string().trim().min(1)).min(1),
   mode: z.enum([...COURSE_TAG_MODES, 'clear']),
 })
+
+export const TagSnapshotMutateSchema = z.object({ mutations: TagMutationsSchema })
 
 export const TagSnapshotMetaSchema = z.object({
   name: z.string().trim().min(1),
@@ -235,11 +242,6 @@ export const TagSnapshotMetaSchema = z.object({
 })
 
 export const TagSnapshotCreateSchema = TagSnapshotMetaSchema.extend(WithDraftSchema)
-
-export const TagPublishSchema = z.object({
-  description: z.string().trim().min(1).nullable().default(null),
-  ...WithDraftSchema,
-})
 
 export const TagCurStateSchema = z.object({
   curIds: z.array(z.string().min(1)),

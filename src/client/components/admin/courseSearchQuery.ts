@@ -8,6 +8,10 @@ export interface CourseSearchValues {
   courseCodeSearch: string
   excludeUrnsSearch: string[]
   excludeUrnsMode: UrnMatchMode
+  tagSearch: string[]
+  tagMode: UrnMatchMode
+  excludeTagsSearch: string[]
+  excludeTagsMode: UrnMatchMode
   excludeCourseCodesSearch: string
   reviewStatusSearch: ReviewStatusFilterValue
   dateFromSearch: string
@@ -21,6 +25,10 @@ export const emptyCourseSearchValues: CourseSearchValues = {
   courseCodeSearch: '',
   excludeUrnsSearch: [],
   excludeUrnsMode: 'or',
+  tagSearch: [],
+  tagMode: 'or',
+  excludeTagsSearch: [],
+  excludeTagsMode: 'or',
   excludeCourseCodesSearch: '',
   reviewStatusSearch: 'all',
   dateFromSearch: '',
@@ -34,6 +42,10 @@ export const courseSearchValuesFromFields = (fields: CoursesSearchFieldsValues):
   courseCodeSearch: fields.courseCodeInput,
   excludeUrnsSearch: fields.excludeUrnsInputs,
   excludeUrnsMode: fields.excludeUrnsMode,
+  tagSearch: fields.tagInputs,
+  tagMode: fields.tagMode,
+  excludeTagsSearch: fields.excludeTagsInputs,
+  excludeTagsMode: fields.excludeTagsMode,
   excludeCourseCodesSearch: fields.excludeCourseCodesInput,
   reviewStatusSearch: fields.reviewStatusInput,
   dateFromSearch: fields.dateFromInput,
@@ -48,6 +60,10 @@ export const courseSearchFilterParams = (values: CourseSearchValues): Record<str
     courseCodeSearch,
     excludeUrnsSearch,
     excludeUrnsMode,
+    tagSearch,
+    tagMode,
+    excludeTagsSearch,
+    excludeTagsMode,
     excludeCourseCodesSearch,
     reviewStatusSearch,
     dateFromSearch,
@@ -77,6 +93,22 @@ export const courseSearchFilterParams = (values: CourseSearchValues): Record<str
 
     if (excludeUrnsMode !== 'or') {
       params.excludeUrnsMode = excludeUrnsMode
+    }
+  }
+
+  if (tagSearch.length > 0) {
+    params.tags = tagSearch.join(',')
+
+    if (tagMode !== 'or') {
+      params.tagsMode = tagMode
+    }
+  }
+
+  if (excludeTagsSearch.length > 0) {
+    params.excludeTags = excludeTagsSearch.join(',')
+
+    if (excludeTagsMode !== 'or') {
+      params.excludeTagsMode = excludeTagsMode
     }
   }
 

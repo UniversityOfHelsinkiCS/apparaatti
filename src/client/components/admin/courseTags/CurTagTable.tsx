@@ -12,12 +12,13 @@ interface CurTagTableProps {
   courses: CurTagRowCourse[]
   tags: CourseTag[]
   stateByCur: Map<string, Map<string, TagCellState>>
+  isEditable: boolean
   onToggle: (curId: string, tagKey: string) => void
 }
 
 const emptyTagStates = new Map<string, TagCellState>()
 
-const CurTagTable = ({ courses, tags, stateByCur, onToggle }: CurTagTableProps) => {
+const CurTagTable = ({ courses, tags, stateByCur, isEditable, onToggle }: CurTagTableProps) => {
   const { t } = useTranslation()
 
   return (
@@ -38,6 +39,7 @@ const CurTagTable = ({ courses, tags, stateByCur, onToggle }: CurTagTableProps) 
               course={course}
               tags={tags}
               tagStates={stateByCur.get(course.id) ?? emptyTagStates}
+              isEditable={isEditable}
               onToggle={onToggle}
             />
           ))}

@@ -1,12 +1,11 @@
-import { Box, Divider, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
+import { Box, MenuItem, TextField, Tooltip, Typography } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { UniqueUrnResponse, UrnMatchMode } from '../../../common/types.ts'
-import useApi from '../../util/useApi.tsx'
+import type { UrnMatchMode } from '../../../common/types.ts'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
-import { hy } from '../common/hy/hyTokens.ts'
-import MultiAutoCompleteTextField from '../common/MultiAutoCompleteTextField.tsx'
+import TagFilterFieldset from './TagFilterFieldset.tsx'
+import UrnFilterFieldset from './UrnFilterFieldset.tsx'
 
 export type ReviewStatusFilterValue = 'all' | 'reviewed' | 'not-reviewed'
 
@@ -16,6 +15,10 @@ export interface CoursesSearchFieldsValues {
   urnMode: UrnMatchMode
   excludeUrnsInputs: string[]
   excludeUrnsMode: UrnMatchMode
+  tagInputs: string[]
+  tagMode: UrnMatchMode
+  excludeTagsInputs: string[]
+  excludeTagsMode: UrnMatchMode
   courseCodeInput: string
   excludeCourseCodesInput: string
   reviewStatusInput: ReviewStatusFilterValue
@@ -26,6 +29,8 @@ export interface CoursesSearchFieldsValues {
 interface CoursesSearchFieldsProps {
   onSearch: (values: CoursesSearchFieldsValues) => void
   autoSearch?: boolean
+  filterBy?: 'urns' | 'tags'
+  tagKeys?: string[]
 }
 
 const AUTO_SEARCH_DEBOUNCE_MS = 300
@@ -43,74 +48,47 @@ const fieldsetSx = {
 } as const
 const legendSx = { px: 0.5, fontWeight: 600, fontSize: 12 } as const
 
-// A single URN filter (the value field plus its own mode toggle) is grouped in
-// its own bordered box so it is obvious which field the OR/AND toggle controls.
-const urnGroupSx = {
-  display: 'flex',
-  gap: 0.5,
-  alignItems: 'center',
-  border: '1px solid',
-  borderColor: 'rgba(0,0,0,0.23)',
-  borderRadius: 1,
-  px: 1,
-  py: 1,
-  m: 0,
-} as const
-const urnGroupLegendSx = { px: 0.5, fontWeight: 600, fontSize: 11 } as const
-
-interface UrnModeToggleProps {
-  id: string
-  value: UrnMatchMode
-  onChange: (mode: UrnMatchMode) => void
-  orTitle: string
-  andTitle: string
-}
-
-const UrnModeToggle = ({ id, value, onChange, orTitle, andTitle }: UrnModeToggleProps) => (
-  <ToggleButtonGroup
-    id={id}
-    exclusive
-    size="small"
-    value={value}
-    onChange={(_event, newMode: UrnMatchMode | null) => {
-      if (newMode) onChange(newMode)
-    }}
-  >
-    <Tooltip title={orTitle}>
-      <ToggleButton value="or">OR</ToggleButton>
-    </Tooltip>
-    <Tooltip title={andTitle}>
-      <ToggleButton value="and">AND</ToggleButton>
-    </Tooltip>
-  </ToggleButtonGroup>
-)
-
-const CoursesSearchFields = ({ onSearch, autoSearch = false }: CoursesSearchFieldsProps) => {
+const CoursesSearchFields = ({
+  onSearch,
+  autoSearch = false,
+  filterBy = 'urns',
+  tagKeys,
+}: CoursesSearchFieldsProps) => {
   const { t } = useTranslation()
   const [nameInput, setNameInput] = useState('')
   const [urnInputs, setUrnInputs] = useState<string[]>([])
   const [urnMode, setUrnMode] = useState<UrnMatchMode>('or')
-  const [courseCodeInput, setCourseCodeInput] = useState('')
   const [excludeUrnsInputs, setExcludeUrnsInputs] = useState<string[]>([])
   const [excludeUrnsMode, setExcludeUrnsMode] = useState<UrnMatchMode>('or')
+  const [tagInputs, setTagInputs] = useState<string[]>([])
+  const [tagMode, setTagMode] = useState<UrnMatchMode>('or')
+  const [excludeTagsInputs, setExcludeTagsInputs] = useState<string[]>([])
+  const [excludeTagsMode, setExcludeTagsMode] = useState<UrnMatchMode>('or')
+  const [courseCodeInput, setCourseCodeInput] = useState('')
   const [excludeCourseCodesInput, setExcludeCourseCodesInput] = useState('')
   const [reviewStatusInput, setReviewStatusInput] = useState<ReviewStatusFilterValue>('all')
   const [dateFromInput, setDateFromInput] = useState('')
   const [dateToInput, setDateToInput] = useState('')
 
+  const values: CoursesSearchFieldsValues = {
+    nameInput,
+    urnInputs,
+    urnMode,
+    excludeUrnsInputs,
+    excludeUrnsMode,
+    tagInputs,
+    tagMode,
+    excludeTagsInputs,
+    excludeTagsMode,
+    courseCodeInput,
+    excludeCourseCodesInput,
+    reviewStatusInput,
+    dateFromInput,
+    dateToInput,
+  }
+
   const handleSearch = () => {
-    onSearch({
-      nameInput,
-      urnInputs,
-      urnMode,
-      courseCodeInput,
-      excludeUrnsInputs,
-      excludeUrnsMode,
-      excludeCourseCodesInput,
-      reviewStatusInput,
-      dateFromInput,
-      dateToInput,
-    })
+    onSearch(values)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -120,25 +98,13 @@ const CoursesSearchFields = ({ onSearch, autoSearch = false }: CoursesSearchFiel
   const onSearchRef = useRef(onSearch)
   onSearchRef.current = onSearch
 
+  const valuesRef = useRef(values)
+  valuesRef.current = values
+
   useEffect(() => {
     if (!autoSearch) return
 
-    const timer = setTimeout(
-      () =>
-        onSearchRef.current({
-          nameInput,
-          urnInputs,
-          urnMode,
-          courseCodeInput,
-          excludeUrnsInputs,
-          excludeUrnsMode,
-          excludeCourseCodesInput,
-          reviewStatusInput,
-          dateFromInput,
-          dateToInput,
-        }),
-      AUTO_SEARCH_DEBOUNCE_MS
-    )
+    const timer = setTimeout(() => onSearchRef.current(valuesRef.current), AUTO_SEARCH_DEBOUNCE_MS)
 
     return () => clearTimeout(timer)
   }, [
@@ -146,16 +112,19 @@ const CoursesSearchFields = ({ onSearch, autoSearch = false }: CoursesSearchFiel
     nameInput,
     urnInputs,
     urnMode,
-    courseCodeInput,
     excludeUrnsInputs,
     excludeUrnsMode,
+    tagInputs,
+    tagMode,
+    excludeTagsInputs,
+    excludeTagsMode,
+    courseCodeInput,
     excludeCourseCodesInput,
     reviewStatusInput,
     dateFromInput,
     dateToInput,
   ])
 
-  const { data: urnOptions } = useApi<UniqueUrnResponse>('urns', '/api/admin/courses/urns', 'GET')
   return (
     <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'stretch' }}>
       <Box component="fieldset" sx={fieldsetSx}>
@@ -173,63 +142,30 @@ const CoursesSearchFields = ({ onSearch, autoSearch = false }: CoursesSearchFiel
         />
       </Box>
 
-      {/* URN filters (operate on customCodeUrns) */}
-      <Box component="fieldset" sx={fieldsetSx}>
-        <Typography component="legend" sx={legendSx}>
-          {t('v2:admin.courses.search.urnLegend')}
-        </Typography>
-        <Box component="fieldset" sx={urnGroupSx}>
-          <Typography component="legend" sx={urnGroupLegendSx}>
-            {t('v2:admin.courses.search.includeLegend')}
-          </Typography>
-          <MultiAutoCompleteTextField
-            id="course-urn-include"
-            value={urnInputs}
-            onChange={setUrnInputs}
-            options={urnOptions?.codeUrns ?? []}
-            label={t('v2:admin.courses.search.urnsToInclude')}
-            sx={{
-              minWidth: 300,
-              ...(urnInputs.length > 0 && { '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.success } }),
-            }}
-          />
-          <UrnModeToggle
-            id="course-urn-include-mode"
-            value={urnMode}
-            onChange={setUrnMode}
-            orTitle={t('v2:admin.courses.search.includeOrTitle')}
-            andTitle={t('v2:admin.courses.search.includeAndTitle')}
-          />
-        </Box>
-
-        <Divider orientation="vertical" flexItem />
-
-        <Box component="fieldset" sx={urnGroupSx}>
-          <Typography component="legend" sx={urnGroupLegendSx}>
-            {t('v2:admin.courses.search.excludeLegend')}
-          </Typography>
-          <MultiAutoCompleteTextField
-            id="course-urn-exclude"
-            value={excludeUrnsInputs}
-            onChange={setExcludeUrnsInputs}
-            options={urnOptions?.codeUrns ?? []}
-            label={t('v2:admin.courses.search.urnsToExclude')}
-            sx={{
-              minWidth: 300,
-              ...(excludeUrnsInputs.length > 0 && {
-                '& .MuiOutlinedInput-root': { backgroundColor: hy.bgColor.danger },
-              }),
-            }}
-          />
-          <UrnModeToggle
-            id="course-urn-exclude-mode"
-            value={excludeUrnsMode}
-            onChange={setExcludeUrnsMode}
-            orTitle={t('v2:admin.courses.search.excludeOrTitle')}
-            andTitle={t('v2:admin.courses.search.excludeAndTitle')}
-          />
-        </Box>
-      </Box>
+      {filterBy === 'tags' ? (
+        <TagFilterFieldset
+          tagKeys={tagKeys ?? []}
+          includeValues={tagInputs}
+          includeMode={tagMode}
+          excludeValues={excludeTagsInputs}
+          excludeMode={excludeTagsMode}
+          onIncludeChange={setTagInputs}
+          onIncludeModeChange={setTagMode}
+          onExcludeChange={setExcludeTagsInputs}
+          onExcludeModeChange={setExcludeTagsMode}
+        />
+      ) : (
+        <UrnFilterFieldset
+          includeValues={urnInputs}
+          includeMode={urnMode}
+          excludeValues={excludeUrnsInputs}
+          excludeMode={excludeUrnsMode}
+          onIncludeChange={setUrnInputs}
+          onIncludeModeChange={setUrnMode}
+          onExcludeChange={setExcludeUrnsInputs}
+          onExcludeModeChange={setExcludeUrnsMode}
+        />
+      )}
 
       {/* Course code filters (operate on linked Cu.courseCode) */}
       <Box component="fieldset" sx={fieldsetSx}>

@@ -114,6 +114,19 @@ export async function createTagSnapshotFromPayload(
   return created.toJSON() as TagSnapshotMeta
 }
 
+export async function applyMutationsToSnapshot(id: number, mutations: TagMutations): Promise<boolean> {
+  return await sequelize.transaction(async transaction => {
+    const row = await TagSnapshot.findByPk(id, { transaction, lock: transaction.LOCK.UPDATE })
+    if (!row) return false
+
+    const payload = (row.get('payload') as TagSnapshotPayload) ?? null
+    if (!payload) return false
+
+    await row.update({ payload: mergeTagMutations(payload, mutations), isActive: false } as any, { transaction })
+    return true
+  })
+}
+
 export async function updateTagSnapshotMeta(id: number, name: string, description: string | null): Promise<number> {
   const [count] = await TagSnapshot.update({ name, description } as any, { where: { id } })
   return count

@@ -6,12 +6,13 @@ import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 
 interface TagVocabularyRowProps {
   tag: CourseTag
+  isEditable: boolean
   isSuperuser: boolean
   onDescriptionSave: (tag: CourseTag, description: string) => void
   onDelete: (tag: CourseTag) => void
 }
 
-const TagVocabularyRow = ({ tag, isSuperuser, onDescriptionSave, onDelete }: TagVocabularyRowProps) => {
+const TagVocabularyRow = ({ tag, isEditable, isSuperuser, onDescriptionSave, onDelete }: TagVocabularyRowProps) => {
   const { t } = useTranslation()
 
   return (
@@ -22,11 +23,12 @@ const TagVocabularyRow = ({ tag, isSuperuser, onDescriptionSave, onDelete }: Tag
           size="small"
           fullWidth
           defaultValue={tag.description ?? ''}
+          disabled={!isEditable}
           onBlur={event => onDescriptionSave(tag, event.target.value)}
         />
       </TableCell>
       <TableCell align="right">
-        {isSuperuser ? (
+        {isSuperuser && isEditable ? (
           <BlackOutlinedButton type="button" onClick={() => onDelete(tag)}>
             {t('v2:courseTags.vocabulary.delete')}
           </BlackOutlinedButton>

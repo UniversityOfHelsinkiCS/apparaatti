@@ -166,7 +166,12 @@ test('the bulk preview applies the same exclude filters as the listing', async (
 
   const preview = await (
     await request.post('/api/admin/course-tags/bulk/preview', {
-      data: { filters: { excludeCourseCodes: excluded }, tagKeys: ['kks-kor'], mode: 'add' },
+      data: {
+        filters: { excludeCourseCodes: excluded },
+        base: { kind: 'published' },
+        tagKeys: ['kks-kor'],
+        mode: 'add',
+      },
     })
   ).json()
 

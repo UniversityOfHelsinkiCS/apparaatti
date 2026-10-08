@@ -18,10 +18,11 @@ interface CurTagRowProps {
   course: CurTagRowCourse
   tags: CourseTag[]
   tagStates: Map<string, TagCellState>
+  isEditable: boolean
   onToggle: (curId: string, tagKey: string) => void
 }
 
-const CurTagRow = ({ course, tags, tagStates, onToggle }: CurTagRowProps) => {
+const CurTagRow = ({ course, tags, tagStates, isEditable, onToggle }: CurTagRowProps) => {
   const { i18n } = useTranslation()
 
   return (
@@ -38,6 +39,7 @@ const CurTagRow = ({ course, tags, tagStates, onToggle }: CurTagRowProps) => {
             tagKey={tag.key}
             description={tag.description}
             state={tagStates.get(tag.key) ?? 'unset'}
+            disabled={!isEditable}
             onToggle={onToggle}
           />
         </TableCell>

@@ -10,12 +10,13 @@ interface CuTagTableProps {
   groups: CourseUnitGroup[]
   tags: CourseTag[]
   tagKeysByCourseCode: Map<string, Set<string>>
+  isEditable: boolean
   onToggle: (courseCode: string, tagKey: string) => void
 }
 
 const emptyTagKeys = new Set<string>()
 
-const CuTagTable = ({ groups, tags, tagKeysByCourseCode, onToggle }: CuTagTableProps) => {
+const CuTagTable = ({ groups, tags, tagKeysByCourseCode, isEditable, onToggle }: CuTagTableProps) => {
   const { t } = useTranslation()
 
   return (
@@ -39,6 +40,7 @@ const CuTagTable = ({ groups, tags, tagKeysByCourseCode, onToggle }: CuTagTableP
               group={group}
               tags={tags}
               tagKeys={tagKeysByCourseCode.get(group.courseCode) ?? emptyTagKeys}
+              isEditable={isEditable}
               onToggle={onToggle}
             />
           ))}

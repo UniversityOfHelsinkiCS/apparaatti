@@ -10,6 +10,7 @@ import type {
   TagMutations,
   TagPayloadDiff,
   TagSnapshotMeta,
+  TagSnapshotPayload,
 } from '../../../../common/types.ts'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
 import { courseSearchFilterParams } from '../courseSearchQuery.ts'
@@ -19,7 +20,24 @@ export const COURSE_TAGS_PATH = '/api/admin/course-tags'
 
 export type CurTagMutationMode = CourseTagMode | 'clear'
 
+export const emptyMutations: TagMutations = { tags: [], cur: [], cu: [] }
+
 export const fetchCourseTags = async (): Promise<CourseTag[]> => (await adminFetch('GET', COURSE_TAGS_PATH)).json()
+
+export const fetchVocabulary = async (base: TagBase): Promise<CourseTag[]> => {
+  if (base.kind === 'published') return await fetchCourseTags()
+
+  const payload: TagSnapshotPayload = await (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots/${base.id}`)).json()
+  return payload.tags
+    .map(tag => ({ id: -1, key: tag.key, description: tag.description }))
+    .sort((a, b) => a.key.localeCompare(b.key))
+}
+
+export const mutateSnapshot = async (id: number, mutations: TagMutations) => {
+  const response = await adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/mutate`, { mutations })
+  if (!response.ok) throw new Error(`tag mutation failed with ${response.status}`)
+  return await response.json()
+}
 
 const CUR_STATE_BATCH = 100
 
@@ -43,12 +61,14 @@ export const fetchCurTagPremises = async (curIds: string[], base: TagBase): Prom
 
 export const previewBulkApply = async (
   values: CourseSearchValues,
+  base: TagBase,
   tagKeys: string[],
   mode: CurTagMutationMode
 ): Promise<{ matched: number; curIds: string[] }> =>
   (
     await adminFetch('POST', `${COURSE_TAGS_PATH}/bulk/preview`, {
       filters: courseSearchFilterParams(values),
+      base,
       tagKeys,
       mode,
     })
@@ -78,16 +98,7 @@ export interface EditedSnapshot {
 export const updateSnapshot = (id: number, name: string, description: string | null) =>
   adminFetch('PATCH', `${COURSE_TAGS_PATH}/snapshots/${id}`, { name, description })
 
-export const overwriteSnapshot = (id: number, name: string, description: string | null, draft: DraftRequest) =>
-  adminFetch('POST', `${COURSE_TAGS_PATH}/snapshots/${id}/overwrite`, { name, description, ...draft })
-
 export const deleteSnapshot = (id: number) => adminFetch('DELETE', `${COURSE_TAGS_PATH}/snapshots/${id}`)
-
-export const publishDraft = async (
-  description: string | null,
-  draft: DraftRequest
-): Promise<{ tags: number; cuTags: number; curTags: number }> =>
-  (await adminFetch('POST', `${COURSE_TAGS_PATH}/publish`, { description, ...draft })).json()
 
 export const TAG_QUERY_KEYS = ['course-tags', 'course-tag-states', 'course-tag-cu-states', 'course-tag-snapshots']
 

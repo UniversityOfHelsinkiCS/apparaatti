@@ -11,6 +11,7 @@ interface TagCellProps {
   tagKey: string
   description: string | null
   state: TagCellState
+  disabled: boolean
   onToggle: (rowId: string, tagKey: string) => void
 }
 
@@ -28,7 +29,7 @@ const stateSx: Record<TagCellState, object> = {
   unset: { backgroundColor: '#ffffff', color: 'transparent', borderColor: '#6b7280' },
 }
 
-const TagCell = ({ rowId, tagKey, description, state, onToggle }: TagCellProps) => {
+const TagCell = ({ rowId, tagKey, description, state, disabled, onToggle }: TagCellProps) => {
   const { t } = useTranslation()
 
   const label = t(`v2:courseTags.state.${state}`)
@@ -40,6 +41,7 @@ const TagCell = ({ rowId, tagKey, description, state, onToggle }: TagCellProps) 
         component="button"
         type="button"
         onClick={() => onToggle(rowId, tagKey)}
+        disabled={disabled}
         aria-label={title}
         aria-pressed={state !== 'unset'}
         sx={{
@@ -51,11 +53,11 @@ const TagCell = ({ rowId, tagKey, description, state, onToggle }: TagCellProps) 
           borderWidth: 1,
           fontSize: 14,
           lineHeight: 1,
-          cursor: 'pointer',
+          cursor: disabled ? 'default' : 'pointer',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          '&:hover': { outline: '2px solid #2563eb', outlineOffset: 1 },
+          '&:hover:enabled': { outline: '2px solid #2563eb', outlineOffset: 1 },
           '&:focus-visible': { outline: '2px solid #2563eb', outlineOffset: 1 },
           ...stateSx[state],
         }}

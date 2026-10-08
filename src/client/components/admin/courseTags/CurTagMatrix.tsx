@@ -3,7 +3,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, CurTagPremises, LocalizedString, TagBase } from '../../../../common/types.ts'
+import type { CourseTag, LocalizedString, TagBase } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
@@ -21,9 +21,9 @@ import { fetchCurTagPremises } from './courseTagUtils.ts'
 import CurTagTable from './CurTagTable.tsx'
 import type { TagCellState } from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
-import type { CurMutationsByCur, CurTagModeOrClear, TagDraft } from './tagDraftBuffer.ts'
-import { baseKey, cuMutationIndex, curTagStates } from './tagDraftBuffer.ts'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
+import { baseKey, curTagStates } from './tagVersionState.ts'
+import { useTagMutation } from './useTagMutation.ts'
 
 const PAGE_SIZE = 15
 const VISIBLE_COLUMNS_STORAGE_KEY = 'apparaatti-course-tag-columns'
@@ -66,25 +66,16 @@ const storeColumns = (keys: string[]) => {
 interface CurTagMatrixProps {
   tags: CourseTag[]
   base: TagBase
-  curMutations: CurMutationsByCur
-  cuMutations: TagDraft['cu']
-  onCurToggle: (curId: string, tagKey: string, mode: CurTagMutationMode) => void
-  onBulkApply: (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => void
+  isEditable: boolean
 }
 
-interface RowCacheEntry {
-  premises: CurTagPremises
-  curMutations: Record<string, CurTagModeOrClear> | undefined
-  cuIndex: ReturnType<typeof cuMutationIndex>
-  state: Map<string, TagCellState>
-}
-
-const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBulkApply }: CurTagMatrixProps) => {
+const CurTagMatrix = ({ tags, base, isEditable }: CurTagMatrixProps) => {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [searchValues, setSearchValues] = useState<CourseSearchValues>(emptyCourseSearchValues)
   const [isBulkOpen, setIsBulkOpen] = useState(false)
   const [storedColumns, setStoredColumns] = useState<string[] | null>(readStoredColumns)
+  const mutate = useTagMutation(base)
 
   const visibleKeys = useMemo(() => storedColumns ?? tags.map(tag => tag.key), [storedColumns, tags])
 
@@ -104,8 +95,8 @@ const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBu
   }
 
   const { data: coursesData, isLoading } = useApi<PaginatedCoursesResponse>(
-    `course-tags-courses-${courseSearchCacheKey(searchValues, page)}`,
-    `/api/admin/courses?${buildCourseQueryString(searchValues, page, PAGE_SIZE)}`,
+    `course-tags-courses-${baseKey(base)}-${courseSearchCacheKey(searchValues, page)}`,
+    `/api/admin/course-tags/courses?${buildCourseQueryString(searchValues, page, PAGE_SIZE)}&base=${baseKey(base)}`,
     'GET',
     undefined
   )
@@ -120,27 +111,10 @@ const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBu
     placeholderData: keepPreviousData,
   })
 
-  const cuIndex = useMemo(() => cuMutationIndex(cuMutations), [cuMutations])
-
-  const rowCache = useRef(new Map<string, RowCacheEntry>())
-
-  const stateByCur = useMemo(() => {
-    const index = new Map<string, Map<string, TagCellState>>()
-    const nextCache = new Map<string, RowCacheEntry>()
-
-    for (const entry of premises ?? []) {
-      const muts = curMutations[entry.curId]
-      const cached = rowCache.current.get(entry.curId)
-      const isUnchanged = cached?.premises === entry && cached.curMutations === muts && cached.cuIndex === cuIndex
-      const state = isUnchanged ? cached.state : curTagStates(entry, muts, cuIndex)
-
-      nextCache.set(entry.curId, { premises: entry, curMutations: muts, cuIndex, state })
-      index.set(entry.curId, state)
-    }
-
-    rowCache.current = nextCache
-    return index
-  }, [premises, curMutations, cuIndex])
+  const stateByCur = useMemo(
+    () => new Map((premises ?? []).map(entry => [entry.curId, curTagStates(entry)])),
+    [premises]
+  )
 
   const stateRef = useRef(stateByCur)
   stateRef.current = stateByCur
@@ -148,18 +122,26 @@ const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBu
   const handleToggle = useCallback(
     (curId: string, tagKey: string) => {
       const current = stateRef.current.get(curId)?.get(tagKey) ?? 'unset'
-      onCurToggle(curId, tagKey, nextMode(current))
+      mutate.mutate({ tags: [], cu: [], cur: [{ curId, tagKey, mode: nextMode(current) }] })
     },
-    [onCurToggle]
+    [mutate]
+  )
+
+  const handleBulkApply = useCallback(
+    (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => {
+      const cur = curIds.flatMap(curId => tagKeys.map(tagKey => ({ curId, tagKey, mode })))
+      mutate.mutate({ tags: [], cu: [], cur })
+    },
+    [mutate]
   )
 
   return (
     <Box>
-      <CoursesSearchFields onSearch={handleSearch} autoSearch />
+      <CoursesSearchFields onSearch={handleSearch} autoSearch filterBy="tags" tagKeys={tags.map(tag => tag.key)} />
 
       <Stack direction="row" spacing={2} alignItems="center" sx={{ my: 2 }} useFlexGap flexWrap="wrap">
         <TagColumnPicker tags={tags} visibleKeys={visibleKeys} onChange={handleColumnsChange} />
-        <BlackOutlinedButton type="button" onClick={() => setIsBulkOpen(true)}>
+        <BlackOutlinedButton type="button" onClick={() => setIsBulkOpen(true)} disabled={!isEditable}>
           {t('v2:courseTags.bulk.open')}
         </BlackOutlinedButton>
         <Typography variant="body2">{t('v2:courseTags.matched', { count: coursesData?.total ?? 0 })}</Typography>
@@ -172,7 +154,13 @@ const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBu
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>
       ) : (
-        <CurTagTable courses={courses} tags={visibleTags} stateByCur={stateByCur} onToggle={handleToggle} />
+        <CurTagTable
+          courses={courses}
+          tags={visibleTags}
+          stateByCur={stateByCur}
+          isEditable={isEditable}
+          onToggle={handleToggle}
+        />
       )}
 
       <TagMatrixPagination count={coursesData?.totalPages ?? 1} page={page} onChange={setPage} />
@@ -180,9 +168,10 @@ const CurTagMatrix = ({ tags, base, curMutations, cuMutations, onCurToggle, onBu
       <BulkApplyDialog
         open={isBulkOpen}
         tags={tags}
+        base={base}
         searchValues={searchValues}
         onClose={() => setIsBulkOpen(false)}
-        onApply={onBulkApply}
+        onApply={handleBulkApply}
       />
     </Box>
   )

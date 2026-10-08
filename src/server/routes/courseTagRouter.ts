@@ -5,19 +5,25 @@ import type { TagBase, TagMutations, TagSnapshotPayload } from '../../common/typ
 import {
   BulkApplyTagsSchema,
   TagCurStateSchema,
-  TagPublishSchema,
   TagSnapshotCreateSchema,
   TagSnapshotMetaSchema,
+  TagSnapshotMutateSchema,
   TagSnapshotPayloadSchema,
 } from '../../common/validators.ts'
 import requireAdmin from '../middleware/requireAdmin.ts'
 import requireSuperuser from '../middleware/requireSuperuser.ts'
 import { GIT_SHA } from '../util/config.ts'
 import { courseSearchFiltersFromQuery } from '../util/courseSearchFilters.ts'
-import { matchingCurIds } from '../util/dbActions/courseSearch.ts'
-import { allCourseTags, courseUnitGroupsForFilters, curTagPremises } from '../util/dbActions/courseTags.ts'
+import { matchingCurIds, searchCoursesWithPagination } from '../util/dbActions/courseSearch.ts'
+import {
+  allCourseTags,
+  courseUnitGroupsForFilters,
+  curTagPremises,
+  payloadTagKeyResolver,
+} from '../util/dbActions/courseTags.ts'
 import {
   allTagSnapshots,
+  applyMutationsToSnapshot,
   basePayload,
   createTagSnapshotFromPayload,
   deleteTagSnapshotById,
@@ -69,6 +75,24 @@ courseTagRouter.post('/cur-state', async (req, res) => {
   res.json(await curTagPremises(payload, parsed.data.curIds))
 })
 
+courseTagRouter.get('/courses', async (req, res) => {
+  const { page = '1', limit = '50' } = req.query
+  const payload = await basePayload(baseFromQuery(req.query.base))
+  if (!payload) {
+    res.status(404).json({ message: 'Base version not found' })
+    return
+  }
+
+  res.json(
+    await searchCoursesWithPagination(
+      courseSearchFiltersFromQuery(req.query as Record<string, unknown>),
+      parseInt(page as string, 10),
+      parseInt(limit as string, 10),
+      payloadTagKeyResolver(payload)
+    )
+  )
+})
+
 courseTagRouter.get('/course-units', async (req, res) => {
   const { page = '1', limit = '50' } = req.query
   const payload = await basePayload(baseFromQuery(req.query.base))
@@ -94,7 +118,13 @@ courseTagRouter.post('/bulk/preview', async (req, res) => {
     return
   }
 
-  const curIds = await matchingCurIds(courseSearchFiltersFromQuery(parsed.data.filters))
+  const payload = await basePayload(parsed.data.base)
+  if (!payload) {
+    res.status(404).json({ message: 'Base version not found' })
+    return
+  }
+
+  const curIds = await matchingCurIds(courseSearchFiltersFromQuery(parsed.data.filters), payloadTagKeyResolver(payload))
   res.json({ matched: curIds.length, curIds })
 })
 
@@ -129,27 +159,6 @@ courseTagRouter.post('/import', requireSuperuser, async (req, res) => {
   )
 
   res.json({ message: 'Import completed', snapshot: created })
-})
-
-courseTagRouter.post('/publish', async (req, res) => {
-  const parsed = TagPublishSchema.safeParse(req.body ?? {})
-  if (!parsed.success) {
-    res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
-    return
-  }
-
-  const merged = await resolveMerged(res, parsed.data.base, parsed.data.mutations)
-  if (!merged) return
-
-  const publishedBy = (req.user as any)?.id ?? null
-  const applied = await createTagSnapshotFromPayload(
-    `Applied ${new Date().toISOString().replace('T', ' ').slice(0, 16)}`,
-    parsed.data.description ?? `${merged.curTags.length} realisation and ${merged.cuTags.length} course unit tags`,
-    publishedBy,
-    merged
-  )
-
-  res.json({ ...(await publishTagPayload(merged, applied.id)), activeSnapshotId: applied.id })
 })
 
 courseTagRouter.get('/snapshots', async (req, res) => {
@@ -225,6 +234,22 @@ courseTagRouter.post('/snapshots/:id/overwrite', requireSuperuser, async (req, r
 
   await updateTagSnapshotMeta(id, parsed.data.name, parsed.data.description)
   res.json({ status: 'overwritten' })
+})
+
+courseTagRouter.post('/snapshots/:id/mutate', async (req, res) => {
+  const parsed = TagSnapshotMutateSchema.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
+    return
+  }
+
+  const updated = await applyMutationsToSnapshot(Number(req.params.id), parsed.data.mutations)
+  if (!updated) {
+    res.status(404).json({ message: 'Snapshot not found' })
+    return
+  }
+
+  res.json({ status: 'mutated' })
 })
 
 courseTagRouter.post('/snapshots/:id/activate', requireSuperuser, async (req, res) => {

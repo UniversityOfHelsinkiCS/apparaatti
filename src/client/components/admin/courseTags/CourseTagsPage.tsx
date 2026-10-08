@@ -1,108 +1,53 @@
-import { Alert, Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { TagBase, TagVocabMutation } from '../../../../common/types.ts'
+import type { TagBase } from '../../../../common/types.ts'
 import { useAdminUser } from '../AdminMain.tsx'
 import AdminNavbar from '../AdminNavbar.tsx'
 import CourseTagsTabs from './CourseTagsTabs.tsx'
-import type { CurTagMutationMode } from './courseTagUtils.ts'
-import { fetchCourseTags, fetchSnapshots } from './courseTagUtils.ts'
+import { fetchSnapshots, fetchVocabulary } from './courseTagUtils.ts'
 import CurTagMatrix from './CurTagMatrix.tsx'
 import CuTagTab from './CuTagTab.tsx'
-import EditedSnapshotSelect from './EditedSnapshotSelect.tsx'
-import PendingChangesBar from './PendingChangesBar.tsx'
+import EditingVersionBar from './EditingVersionBar.tsx'
 import SnapshotsTab from './SnapshotsTab.tsx'
-import type { TagDraft } from './tagDraftBuffer.ts'
-import {
-  clearStoredDraft,
-  draftSize,
-  emptyDraft,
-  mergedVocabulary,
-  readDraft,
-  storeDraft,
-  withBulkCurMutations,
-  withCuMutation,
-  withCurMutation,
-  withTagMutation,
-} from './tagDraftBuffer.ts'
+import { baseKey, readEditingVersionId, storeEditingVersionId } from './tagVersionState.ts'
 import TagVocabularyTab from './TagVocabularyTab.tsx'
-
-const PERSIST_DELAY_MS = 400
 
 const CourseTagsPage = () => {
   const { t } = useTranslation()
   const user = useAdminUser()
   const [tab, setTab] = useState(0)
-  const [draft, setDraft] = useState<TagDraft>(readDraft)
-  const [didFallBackToPublished, setDidFallBackToPublished] = useState(false)
+  const [editingVersionId, setEditingVersionId] = useState<number | null>(readEditingVersionId)
 
-  const { data: tags } = useQuery({ queryKey: ['course-tags'], queryFn: fetchCourseTags })
   const { data: snapshots, isSuccess: snapshotsLoaded } = useQuery({
     queryKey: ['course-tag-snapshots'],
     queryFn: fetchSnapshots,
   })
 
-  const pendingDraft = useRef(draft)
-  pendingDraft.current = draft
+  const base: TagBase = editingVersionId === null ? { kind: 'published' } : { kind: 'snapshot', id: editingVersionId }
+  const isEditable = editingVersionId !== null
 
-  useEffect(() => {
-    const flush = () => storeDraft(pendingDraft.current)
-    const timeout = window.setTimeout(flush, PERSIST_DELAY_MS)
-    window.addEventListener('beforeunload', flush)
-
-    return () => {
-      window.clearTimeout(timeout)
-      window.removeEventListener('beforeunload', flush)
-    }
-  }, [draft])
-
-  const resetDraft = useCallback((base: TagBase) => {
-    clearStoredDraft()
-    setDraft(emptyDraft(base))
-  }, [])
-
-  useEffect(() => {
-    if (!snapshotsLoaded || draft.base.kind !== 'snapshot') return
-
-    const baseId = draft.base.id
-    if ((snapshots ?? []).some(snapshot => snapshot.id === baseId)) return
-
-    setDidFallBackToPublished(true)
-    resetDraft({ kind: 'published' })
-  }, [snapshotsLoaded, snapshots, draft.base, resetDraft])
-
-  const handleBaseChange = (base: TagBase) => {
-    if (draftSize(draft) > 0 && !window.confirm(t('v2:courseTags.editing.switchConfirm'))) return
-    setDidFallBackToPublished(false)
-    resetDraft(base)
+  const handleVersionChange = (id: number | null) => {
+    setEditingVersionId(id)
+    storeEditingVersionId(id)
   }
 
-  const handleCurToggle = useCallback((curId: string, tagKey: string, mode: CurTagMutationMode) => {
-    setDraft(current => withCurMutation(current, curId, tagKey, mode))
-  }, [])
+  useEffect(() => {
+    if (!snapshotsLoaded || editingVersionId === null) return
+    if ((snapshots ?? []).some(snapshot => snapshot.id === editingVersionId)) return
 
-  const handleBulkApply = useCallback((curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => {
-    setDraft(current => withBulkCurMutations(current, curIds, tagKeys, mode))
-  }, [])
+    setEditingVersionId(null)
+    storeEditingVersionId(null)
+  }, [snapshotsLoaded, snapshots, editingVersionId])
 
-  const handleCuToggle = useCallback((courseCode: string, cuIds: string[], tagKey: string, present: boolean) => {
-    setDraft(current => withCuMutation(current, { courseCode, cuIds, tagKey, present }))
-  }, [])
+  const { data: tags } = useQuery({
+    queryKey: ['course-tags', baseKey(base)],
+    queryFn: () => fetchVocabulary(base),
+  })
 
-  const handleTagMutation = useCallback((mutation: TagVocabMutation) => {
-    setDraft(current => withTagMutation(current, mutation))
-  }, [])
-
-  const courseTags = useMemo(() => mergedVocabulary(tags ?? [], draft.tags), [tags, draft.tags])
-
-  const editedVersionName =
-    draft.base.kind === 'snapshot'
-      ? ((snapshots ?? []).find(snapshot => snapshot.id === (draft.base as { id: number }).id)?.name ?? null)
-      : null
-
-  const activeVersionName = (snapshots ?? []).find(snapshot => snapshot.isActive)?.name ?? null
+  const courseTags = tags ?? []
 
   return (
     <Box>
@@ -112,45 +57,31 @@ const CourseTagsPage = () => {
         {t('v2:courseTags.title')}
       </Typography>
 
-      {didFallBackToPublished ? (
-        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setDidFallBackToPublished(false)}>
-          {t('v2:courseTags.editing.missingBase')}
-        </Alert>
-      ) : null}
-
-      <EditedSnapshotSelect snapshots={snapshots ?? []} base={draft.base} onChange={handleBaseChange} />
-
-      <PendingChangesBar
-        draft={draft}
-        editedVersionName={editedVersionName}
-        activeVersionName={activeVersionName}
-        onSaved={() => resetDraft(draft.base)}
-        onDiscard={() => resetDraft(draft.base)}
+      <EditingVersionBar
+        snapshots={snapshots ?? []}
+        base={base}
+        editingVersionId={editingVersionId}
+        isSuperuser={user.isSuperuser === true}
+        onChange={handleVersionChange}
       />
 
       <CourseTagsTabs value={tab} onChange={setTab} />
 
-      {tab === 0 ? (
-        <CurTagMatrix
-          tags={courseTags}
-          base={draft.base}
-          curMutations={draft.cur}
-          cuMutations={draft.cu}
-          onCurToggle={handleCurToggle}
-          onBulkApply={handleBulkApply}
-        />
-      ) : null}
-      {tab === 1 ? (
-        <CuTagTab tags={courseTags} base={draft.base} cuMutations={draft.cu} onCuToggle={handleCuToggle} />
-      ) : null}
+      {tab === 0 ? <CurTagMatrix tags={courseTags} base={base} isEditable={isEditable} /> : null}
+      {tab === 1 ? <CuTagTab tags={courseTags} base={base} isEditable={isEditable} /> : null}
       {tab === 2 ? (
-        <TagVocabularyTab tags={courseTags} isSuperuser={user.isSuperuser === true} onTagMutation={handleTagMutation} />
+        <TagVocabularyTab
+          tags={courseTags}
+          base={base}
+          isEditable={isEditable}
+          isSuperuser={user.isSuperuser === true}
+        />
       ) : null}
       {tab === 3 ? (
         <SnapshotsTab
           isSuperuser={user.isSuperuser === true}
-          base={draft.base}
-          onEditBase={base => handleBaseChange(base)}
+          base={base}
+          onEditBase={snapshotBase => handleVersionChange(snapshotBase.kind === 'snapshot' ? snapshotBase.id : null)}
         />
       ) : null}
     </Box>
