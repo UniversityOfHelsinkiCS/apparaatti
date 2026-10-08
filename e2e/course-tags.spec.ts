@@ -22,9 +22,6 @@ const createVersion = async (request: any, name: string, mutations: Record<strin
     await request.post(`${TAGS_PATH}/snapshots`, { data: { name, description: 'e2e', ...draft(mutations) } })
   ).json()
 
-// Editing always happens on a version; publishing is activating that version.
-// The version is removed afterwards so the suite leaves no bookkeeping behind,
-// which does not undo what activating it wrote into the published tables.
 const applyAsVersion = async (request: any, name: string, mutations: Record<string, unknown>) => {
   const created = await createVersion(request, name, mutations)
   expect((await request.post(`${TAGS_PATH}/snapshots/${created.id}/activate`)).status()).toBe(200)
@@ -237,6 +234,11 @@ test('a version cannot be published without the diff review on screen', async ({
   const isActive = async () =>
     (await (await request.get(`${TAGS_PATH}/snapshots`)).json()).find((row: any) => row.id === version.id).isActive
 
+  const publishDiff = await (await request.get(`${TAGS_PATH}/snapshots/${version.id}/publish-diff`)).json()
+  expect(publishDiff.addedTags).toContain(key)
+  expect(publishDiff.addedCurTags).toContainEqual({ curId, tagKey: key, mode: 'add' })
+  expect(publishDiff.removedCurTags).not.toContainEqual({ curId, tagKey: key, mode: 'add' })
+
   await page.goto('/admin/course-tags')
   await page.getByLabel('Muokattavana').click()
   await page.getByRole('option', { name: `e2e review ${e2eUserId}` }).click()
@@ -332,7 +334,6 @@ test.describe('the tag search matches tags, the urn filter matches sisu urns', (
     const excluded = await tagListing(request, { excludeTags: TAG })
     expect(excluded.courses.some((course: any) => course.id === target.id)).toBe(false)
 
-    // The same sisu urn still matches the urn filter on the courses page.
     const onCoursesPage = await listing(request, { urn: sisuUrn })
     expect(onCoursesPage.courses.some((course: any) => course.id === target.id)).toBe(true)
 

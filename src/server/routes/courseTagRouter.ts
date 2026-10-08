@@ -199,6 +199,16 @@ courseTagRouter.get('/snapshots/:id/diff', async (req, res) => {
   res.json(diffTagPayloads(snapshot, await publishedTagPayload()))
 })
 
+courseTagRouter.get('/snapshots/:id/publish-diff', async (req, res) => {
+  const snapshot = await tagSnapshotById(Number(req.params.id))
+  if (!snapshot) {
+    res.status(404).json({ message: 'Snapshot not found' })
+    return
+  }
+
+  res.json(diffTagPayloads(await publishedTagPayload(), snapshot))
+})
+
 courseTagRouter.patch('/snapshots/:id', async (req, res) => {
   const parsed = TagSnapshotMetaSchema.safeParse(req.body)
   if (!parsed.success) {

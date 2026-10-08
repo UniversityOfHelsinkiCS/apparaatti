@@ -18,8 +18,6 @@ const fieldsetSx = {
 } as const
 const legendSx = { px: 0.5, fontWeight: 600, fontSize: 12 } as const
 
-// A single filter (the value field plus its own mode toggle) is grouped in
-// its own bordered box so it is obvious which field the OR/AND toggle controls.
 const groupSx = {
   display: 'flex',
   gap: 0.5,

@@ -80,6 +80,9 @@ export const fetchSnapshots = async (): Promise<TagSnapshotMeta[]> =>
 export const fetchSnapshotDiff = async (id: number): Promise<TagPayloadDiff> =>
   (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots/${id}/diff`)).json()
 
+export const fetchPublishDiff = async (id: number): Promise<TagPayloadDiff> =>
+  (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots/${id}/publish-diff`)).json()
+
 export interface DraftRequest {
   base: TagBase
   mutations: TagMutations

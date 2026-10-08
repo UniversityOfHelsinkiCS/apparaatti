@@ -63,8 +63,6 @@ function curMatchesUrnFilters(
   return true
 }
 
-// Matches against the resolved tag keys only, never against customCodeUrns.
-// Include/exclude mode semantics are the same as for the URN filters above.
 function curMatchesTagFilters(
   resolvedTagKeys: string[],
   includeTagListLower: string[],
@@ -134,14 +132,9 @@ export interface CourseSearchFilters {
   /** 'or' (default) excludes Curs matching any substring, 'and' only those matching every one. */
   excludeUrnsMode?: UrnMatchMode
 
-  // --- Tag filters (operate on the resolved tag keys of the searched version) ---
-  /** Comma-separated tag-key substrings; Curs are kept per `tagMode`. */
   tagSearch?: string
-  /** 'or' (default) keeps Curs matching any `tagSearch` substring, 'and' requires every one. */
   tagMode?: UrnMatchMode
-  /** Comma-separated tag-key substrings; Curs are excluded per `excludeTagsMode`. */
   excludeTags?: string
-  /** 'or' (default) excludes Curs matching any substring, 'and' only those matching every one. */
   excludeTagsMode?: UrnMatchMode
 
   // --- Course code filters (operate on linked Cu.courseCode) ---
@@ -205,7 +198,6 @@ interface CourseSearchQuery {
   excludeTagsMode: UrnMatchMode
 }
 
-/** Resolves the tag keys that apply to each of the given Curs. */
 export type TagKeyResolver = (curIds: string[]) => Promise<Map<string, string[]>>
 
 async function buildCourseSearchQuery(filters: CourseSearchFilters): Promise<CourseSearchQuery> {
