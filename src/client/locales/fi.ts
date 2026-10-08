@@ -171,6 +171,8 @@ export default {
         new: 'Uusi versio',
         published: 'Käytössä oleva versio',
         switchConfirm: 'Tallentamattomat paikalliset muutoksesi liittyvät nykyiseen versioon ja hylätään. Jatketaanko?',
+        missingBase:
+          'Muokkaamaasi versiota ei enää ole. Tallentamattomat paikalliset muutoksesi hylättiin ja muokkaus vaihdettiin käytössä olevaan versioon.',
       },
       publish: {
         upToDate: 'Kaikki tagimuutokset on otettu käyttöön. Suosittelu käyttää juuri sitä mitä tässä näkyy.',

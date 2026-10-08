@@ -172,6 +172,8 @@ export default {
         new: 'Ny version',
         published: 'Den tillämpade versionen',
         switchConfirm: 'Dina osparade lokala ändringar hör till den nuvarande versionen och kastas bort. Fortsätta?',
+        missingBase:
+          'Versionen du redigerade finns inte längre. Dina osparade lokala ändringar kastades bort och redigeringen växlade till den tillämpade versionen.',
       },
       publish: {
         upToDate: 'Alla taggändringar är tillämpade. Rekommendationen använder exakt det du ser här.',

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Alert, Box, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,9 +36,13 @@ const CourseTagsPage = () => {
   const user = useAdminUser()
   const [tab, setTab] = useState(0)
   const [draft, setDraft] = useState<TagDraft>(readDraft)
+  const [didFallBackToPublished, setDidFallBackToPublished] = useState(false)
 
   const { data: tags } = useQuery({ queryKey: ['course-tags'], queryFn: fetchCourseTags })
-  const { data: snapshots } = useQuery({ queryKey: ['course-tag-snapshots'], queryFn: fetchSnapshots })
+  const { data: snapshots, isSuccess: snapshotsLoaded } = useQuery({
+    queryKey: ['course-tag-snapshots'],
+    queryFn: fetchSnapshots,
+  })
 
   const pendingDraft = useRef(draft)
   pendingDraft.current = draft
@@ -59,8 +63,19 @@ const CourseTagsPage = () => {
     setDraft(emptyDraft(base))
   }, [])
 
+  useEffect(() => {
+    if (!snapshotsLoaded || draft.base.kind !== 'snapshot') return
+
+    const baseId = draft.base.id
+    if ((snapshots ?? []).some(snapshot => snapshot.id === baseId)) return
+
+    setDidFallBackToPublished(true)
+    resetDraft({ kind: 'published' })
+  }, [snapshotsLoaded, snapshots, draft.base, resetDraft])
+
   const handleBaseChange = (base: TagBase) => {
     if (draftSize(draft) > 0 && !window.confirm(t('v2:courseTags.editing.switchConfirm'))) return
+    setDidFallBackToPublished(false)
     resetDraft(base)
   }
 
@@ -96,6 +111,12 @@ const CourseTagsPage = () => {
       <Typography variant="h5" sx={{ mb: 2 }}>
         {t('v2:courseTags.title')}
       </Typography>
+
+      {didFallBackToPublished ? (
+        <Alert severity="warning" sx={{ mb: 2 }} onClose={() => setDidFallBackToPublished(false)}>
+          {t('v2:courseTags.editing.missingBase')}
+        </Alert>
+      ) : null}
 
       <EditedSnapshotSelect snapshots={snapshots ?? []} base={draft.base} onChange={handleBaseChange} />
 

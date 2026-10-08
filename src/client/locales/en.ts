@@ -171,6 +171,8 @@ export default {
         new: 'New version',
         published: 'The applied version',
         switchConfirm: 'Your unsaved local edits are tied to the current version and will be discarded. Continue?',
+        missingBase:
+          'The version you were editing no longer exists. Your unsaved local edits were discarded and editing switched to the applied version.',
       },
       publish: {
         upToDate: 'All tag changes are applied. The recommender is using exactly what you see here.',

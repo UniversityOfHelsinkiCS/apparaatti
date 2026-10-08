@@ -35,6 +35,9 @@ export const fetchCurTagPremises = async (curIds: string[], base: TagBase): Prom
     batches.map(batch => adminFetch('POST', `${COURSE_TAGS_PATH}/cur-state`, { curIds: batch, base }))
   )
 
+  const failed = responses.find(response => !response.ok)
+  if (failed) throw new Error(`cur-state request failed with ${failed.status}`)
+
   return (await Promise.all(responses.map(response => response.json()))).flat()
 }
 
