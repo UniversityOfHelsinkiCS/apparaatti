@@ -2,7 +2,7 @@
 
 Kielikeskuksen apparaatti recommendation system :rocket:
 
-## terminologia
+## Terminologia
 
 courseUnitRealisation = cur
 course unit = cu
