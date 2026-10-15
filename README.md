@@ -1,6 +1,6 @@
 # apparaatti
 
-kielikeskuksen apparaatti recommendation system :rocket:
+Kielikeskuksen apparaatti recommendation system :rocket:
 
 ## terminologia
 
