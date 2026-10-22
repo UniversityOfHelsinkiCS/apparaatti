@@ -64,7 +64,7 @@
     "prettier": "3.8.3",
     "typescript": "^5.9.3",
     "vite": "^6.4.1",
-    "vitest": "^3.2.4"
+    "vitest": "5.0.4"
   },
   "nodemonConfig": {
     "ignore": [
@@ -120,7 +120,6 @@
     "sequelize": "^6.37.8",
     "umzug": "^3.8.2",
     "winston": "^3.19.0",
-    "winston-gelf-transporter": "^1.0.2",
     "winston-loki": "^6.1.4",
     "zod": "^4.3.6"
   }
