@@ -6,6 +6,7 @@ import { Option, Question } from '../../common/types'
 import AppMarkdown from '../components/common/AppMarkdown'
 import HyAccordion from '../components/common/hy/HyAccordion'
 import SingleChoiceOption from '../components/common/SingleChoiceOption'
+import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 
 interface SingleChoiceFilterComponentProps {
@@ -14,6 +15,7 @@ interface SingleChoiceFilterComponentProps {
   handleRadioChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   options: Option[]
   extrainfo?: string
+  scope?: string
 }
 
 const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = ({
@@ -22,6 +24,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   handleRadioChange,
   options,
   extrainfo, // Destructure extrainfo
+  scope,
 }) => {
   const { t } = useTranslation()
   const [accordionOpen, setAccordionOpen] = useState(false)
@@ -40,10 +43,10 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   return (
     <>
       <RadioGroup
-        name={filter.id}
+        name={questionGroupName(filter.id, scope)}
         value={state}
         onChange={onRadioChange}
-        aria-labelledby={`question-text-${filter.id}`}
+        aria-labelledby={questionTextId(filter.id, scope)}
       >
         {options.map(option => (
           <SingleChoiceOption

@@ -12,6 +12,7 @@ import ActiveFilterChips from './ActiveFilterChips'
 import HyAccordion from './common/hy/HyAccordion'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
+import StudyPhaseQuestion from './StudyPhaseQuestion'
 
 const flashHighlight = keyframes({
   '0%': { opacity: 0 },
@@ -122,7 +123,11 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
           </Box>
         }
       >
-        <Filter variant={variant} filter={filterToRender} />
+        {filter.id === 'study-field-select' ? (
+          <StudyPhaseQuestion question={filter} />
+        ) : (
+          <Filter variant={variant} filter={filterToRender} />
+        )}
       </HyAccordion>
     </Box>
   )

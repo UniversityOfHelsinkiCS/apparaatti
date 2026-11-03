@@ -20,9 +20,10 @@ async function answerWelcomeModal(page: Page, faculty: string, primaryLanguage: 
   await welcomeModal.getByTestId('study-field-select').click()
   await page.getByRole('option', { name: faculty, exact: true }).click()
 
-  // School language is the last mandatory welcome-modal question, so answering it closes
-  // the modal - course language is mandatory too, but only lives in the sidebar.
+  // School language is the last mandatory welcome-modal question - course language is
+  // mandatory too, but only lives in the sidebar.
   await welcomeModal.getByTestId(`primary-language-option-${primaryLanguage}`).click()
+  await welcomeModal.getByRole('button', { name: 'Done' }).click()
   await expect(welcomeModal).toBeHidden()
 }
 

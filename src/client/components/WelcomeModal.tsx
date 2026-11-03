@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import { FC, Fragment, useEffect, useRef } from 'react'
+import { FC, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question, Variant } from '../../common/types'
@@ -26,8 +26,6 @@ type WelcomeModalProps = {
 }
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
-  const prevOpenRef = useRef(false)
-  const autoCloseEnabledRef = useRef(false)
   const filterContext = useFilterContext()
   const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
   const { t } = useTranslation()
@@ -66,10 +64,6 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     })
     .filter(entry => entry !== null)
 
-  const allWelcomeQuestionsAnswered = welcomeFilters.every(entry => {
-    return isFilterStateAnswered(entry.config.state)
-  })
-
   const mandatoryQuestionsAnswered = welcomeFilters.every(entry => {
     if (!entry.question.mandatory) {
       return true
@@ -90,32 +84,17 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     const configState = entry.config.state
 
     if (entry.question.id === 'study-field-select') {
-      return <StudyPhaseQuestion question={entry.question} />
+      return <StudyPhaseQuestion question={entry.question} scope="welcome" />
     }
 
     if ((entry.question.id === 'primary-language' || entry.question.id === 'lang') && !Array.isArray(configState)) {
-      return <RadioQuestion question={entry.question} value={configState} setValue={entry.config.setState} />
+      return (
+        <RadioQuestion question={entry.question} value={configState} setValue={entry.config.setState} scope="welcome" />
+      )
     }
 
-    return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} />
+    return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} scope="welcome" />
   }
-
-  // autoclose when questions have been answered to, but not if modal opened with questions already answered
-  useEffect(() => {
-    const wasOpen = prevOpenRef.current
-    prevOpenRef.current = open
-
-    if (!wasOpen && open) {
-      autoCloseEnabledRef.current = !allWelcomeQuestionsAnswered
-    } else if (!open) {
-      autoCloseEnabledRef.current = false
-    }
-
-    if (open && welcomeFilters.length > 0 && allWelcomeQuestionsAnswered && autoCloseEnabledRef.current) {
-      autoCloseEnabledRef.current = false
-      onClose()
-    }
-  }, [allWelcomeQuestionsAnswered, onClose, open, welcomeFilters.length])
 
   return (
     <HyModal

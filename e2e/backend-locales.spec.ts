@@ -17,6 +17,7 @@ async function answerWelcomeModal(page: Page) {
   await page.getByRole('option', { name: THEOLOGY, exact: true }).click()
 
   await welcomeModal.getByTestId('primary-language-option-fi').click()
+  await welcomeModal.getByRole('button', { name: 'Done' }).click()
   await expect(welcomeModal).toBeHidden()
 }
 

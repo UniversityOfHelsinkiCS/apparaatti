@@ -6,6 +6,7 @@ import { Option, Question } from '../../common/types'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
 import OptionCountBadge, { useOptionCountText } from '../components/common/OptionCountBadge.tsx'
 import ShrinkwrapText from '../components/common/ShrinkwrapText.tsx'
+import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 import { foreignLanguage } from '../util/contentLanguage'
 
@@ -14,6 +15,7 @@ interface MultiChoiceFilterComponentProps {
   state: string[]
   handleCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   options: Option[]
+  scope?: string
 }
 
 const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
@@ -21,6 +23,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
   state,
   handleCheckboxChange,
   options,
+  scope,
 }) => {
   const { getOptionCount } = useFilterContext()
   const optionCountText = useOptionCountText()
@@ -28,7 +31,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
   const uiLanguage = i18n.resolvedLanguage ?? i18n.language
 
   return (
-    <FormGroup role="group" aria-labelledby={`question-text-${filter.id}`}>
+    <FormGroup role="group" aria-labelledby={questionTextId(filter.id, scope)}>
       {options.map(option => {
         const count = getOptionCount(filter.id, option.id)
         const nameLang = foreignLanguage(option.nameLanguage, uiLanguage)
@@ -46,7 +49,7 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
           <FormControlLabel
             checked={state.includes(option.id)}
             key={option.id}
-            name={filter.id}
+            name={questionGroupName(filter.id, scope)}
             value={option.id}
             data-testid={`${filter.id}-option-${option.id}`}
             control={

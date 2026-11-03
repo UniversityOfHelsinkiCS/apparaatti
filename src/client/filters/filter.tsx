@@ -13,7 +13,7 @@ import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 /**
  * A filter can be multichoice, single choice, or a drop down menu it can be read from the filter object
  */
-const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
+const Filter = ({ variant, filter, scope }: { variant: Variant; filter: any; scope?: string }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -58,6 +58,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
             titleLanguage={variant.questionLanguage}
             question={filter}
             showMandatoryStatus={false}
+            scope={scope}
           />
           <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
         </>
@@ -74,6 +75,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
                   state={state}
                   handleCheckboxChange={handleCheckboxChange}
                   options={variant.options || []}
+                  scope={scope}
                 />
               )
             case 'dropdownselect':
@@ -83,6 +85,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
                   state={state}
                   handleChange={handleDropdownChange}
                   options={variant.options || []}
+                  scope={scope}
                 />
               )
             case 'singlechoice':
@@ -94,6 +97,7 @@ const Filter = ({ variant, filter }: { variant: Variant; filter: any }) => {
                   handleRadioChange={handleRadioChange}
                   options={variant.options || []}
                   extrainfo={filter.extraInfo}
+                  scope={scope}
                 />
               )
           }

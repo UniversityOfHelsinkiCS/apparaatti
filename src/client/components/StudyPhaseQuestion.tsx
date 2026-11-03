@@ -7,9 +7,9 @@ import { useFilterContext } from '../contexts/filterContext'
 import { translateLocalizedString } from '../util/i18n'
 import { HyMenuItem, HySelect } from './common/hy/HySelect'
 import ExtraInfoModal from './ExtraInfoModal'
-import QuestionTitle from './QuestionTitle'
+import QuestionTitle, { questionGroupName, questionTextId } from './QuestionTitle'
 
-const StudyPhaseQuestion = ({ question }: { question: Question }) => {
+const StudyPhaseQuestion = ({ question, scope }: { question: Question; scope?: string }) => {
   const { user, studyData, supportedOrganisations, setUserOrgCode, studyField, setStudyField } = useFilterContext()
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -40,16 +40,16 @@ const StudyPhaseQuestion = ({ question }: { question: Question }) => {
 
   return (
     <Box sx={{ minWidth: 200 }}>
-      <QuestionTitle handleOpen={handleOpen} title={t('question:pickStudy')} question={question} />
+      <QuestionTitle handleOpen={handleOpen} title={t('question:pickStudy')} question={question} scope={scope} />
 
       <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
 
       <HySelect
         sx={{ minWidth: 100, maxWidth: '100%', marginTop: 1.5 }}
         disabled={organisations.length < 2}
-        name={question.id}
-        labelId="question-text-study-field-select"
-        id="study-field-select"
+        name={questionGroupName(question.id, scope)}
+        labelId={questionTextId(question.id, scope)}
+        id={questionGroupName(question.id, scope)}
         data-testid="study-field-select"
         value={studyField}
         onChange={handleChange}

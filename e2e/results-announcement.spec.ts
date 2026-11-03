@@ -18,6 +18,7 @@ async function answerWelcomeModal(page: Page, faculty: string, primaryLanguage: 
   await page.getByRole('option', { name: faculty, exact: true }).click()
 
   await welcomeModal.getByTestId(`primary-language-option-${primaryLanguage}`).click()
+  await welcomeModal.getByRole('button', { name: 'Done' }).click()
   await expect(welcomeModal).toBeHidden()
 }
 

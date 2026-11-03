@@ -287,9 +287,11 @@ export const shouldRenderWelcomeFilter = (
  * Mandatory filters that are being displayed in the app,
  * taking into account the cases where the user searches for main language courses
  */
-export const getUnansweredCurrentMandatoryFilters = (filters: Question[], filterContext: FilterContextType) => {
-  const configMap = filterConfigMap(filterContext)
-  const { variantToDisplayId, language, primaryLanguage } = filterContext
+type MandatoryCheckState = FilterStateType & { variantToDisplayId: string }
+
+export const getUnansweredCurrentMandatoryFilters = (filters: Question[], state: MandatoryCheckState) => {
+  const configMap = filterConfigMap(state)
+  const { variantToDisplayId, language, primaryLanguage } = state
 
   return filters.filter(filter => {
     if (!filter.mandatory) {
@@ -310,7 +312,11 @@ export const getUnansweredCurrentMandatoryFilters = (filters: Question[], filter
   })
 }
 
-export const shouldShowFilterInSidebar = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
+export const shouldShowFilterInSidebar = (filter: Pick<Question, 'hideInFilterSidebar'>) => {
+  return !filter.hideInFilterSidebar
+}
+
+export const shouldResetFilter = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
   return !filter.showInWelcomeModal || filter.id === 'primary-language-specification'
 }
 
@@ -492,51 +498,8 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     return optionCountMap.get(`${filterId}:${optionId}`) ?? null
   }
 
-  const checkWelcomeQuestionsAnswered = () => {
-    const configMap = filterConfigMap(filterState)
-
-    const welcomeQuestions = filters.filter(q => q.showInWelcomeModal)
-    return welcomeQuestions.every(question => {
-      const config = configMap.get(question.id)
-      if (!config) return true
-      if (!question.mandatory) return true
-
-      const variant = pickVariant(question, variantToDisplayId)
-      if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) return true
-
-      return isFilterStateAnswered(config.state)
-    })
-  }
-
-  useEffect(() => {
-    if (isLoading) {
-      return
-    }
-
-    const hasVisited = sessionStorage.getItem('hasVisitedV2')
-    if (!hasVisited || !checkWelcomeQuestionsAnswered()) {
-      sessionStorage.setItem('hasVisitedV2', 'true')
-      //preventing the modal from automatically opening if the user already has a first language
-      if (userSettings?.educationLanguage == '' || !userSettings?.educationLanguage) {
-        setModalOpen(true)
-      }
-    }
-  }, [
-    filtersLoading,
-    filters,
-    studyField,
-    primaryLanguage,
-    language,
-    primaryLanguageSpecification,
-    replacement,
-    mentoring,
-    variantToDisplayId,
-  ])
-
   const resetFilters = () => {
-    const sidebarFilterIds = new Set(
-      filters.filter(filter => shouldShowFilterInSidebar(filter)).map(filter => filter.id)
-    )
+    const sidebarFilterIds = new Set(filters.filter(filter => shouldResetFilter(filter)).map(filter => filter.id))
     const configMap = filterConfigMap(filterState)
 
     sidebarFilterIds.forEach(filterId => {
@@ -590,6 +553,34 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const isLoading =
     userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading || userSettingsLoading
+
+  const unansweredModalMandatoryKey = getUnansweredCurrentMandatoryFilters(
+    filters.filter(filter => filter.showInWelcomeModal),
+    { ...filterState, variantToDisplayId }
+  )
+    .map(filter => filter.id)
+    .join(',')
+
+  useEffect(() => {
+    if (isLoading) {
+      return
+    }
+
+    if (unansweredModalMandatoryKey !== '') {
+      sessionStorage.setItem('hasVisitedV2', 'true')
+      setModalOpen(true)
+      return
+    }
+
+    const hasVisited = sessionStorage.getItem('hasVisitedV2')
+    if (!hasVisited) {
+      sessionStorage.setItem('hasVisitedV2', 'true')
+      //preventing the modal from automatically opening if the user already has a first language
+      if (!userSettings?.educationLanguage) {
+        setModalOpen(true)
+      }
+    }
+  }, [isLoading, unansweredModalMandatoryKey, userSettings])
 
   const submitAnswerMutation = useApiMutation(async (res: Response) => {
     const recommendations = await res.json()

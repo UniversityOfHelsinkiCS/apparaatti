@@ -13,6 +13,7 @@ async function answerWelcomeModal(page: Page) {
   await page.getByRole('option', { name: 'Faculty of Science', exact: true }).click()
 
   await welcomeModal.getByTestId('primary-language-option-fi').click()
+  await welcomeModal.getByRole('button', { name: 'Done' }).click()
   await expect(welcomeModal).toBeHidden()
 }
 

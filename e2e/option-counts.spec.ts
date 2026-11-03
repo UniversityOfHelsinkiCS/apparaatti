@@ -13,6 +13,7 @@ async function answerWelcomeModal(page: Page) {
   await page.getByRole('option', { name: 'Faculty of Science', exact: true }).click()
 
   await welcomeModal.getByTestId('primary-language-option-fi').click()
+  await welcomeModal.getByRole('button', { name: 'Done' }).click()
   await expect(welcomeModal).toBeHidden()
 }
 
@@ -27,8 +28,8 @@ test.describe('filter option match counts', () => {
 
     const filters = page.getByRole('navigation', { name: 'Course filters' })
 
-    // only the mandatory language question starts expanded, and it is a server side filter
-    // without match counts, so answer it and open a filter that does have counts
+    // the mandatory questions start expanded, and they are server side filters
+    // without match counts, so answer the course language and open a filter that does have counts
     await page.getByTestId('lang-option-fi').click()
     await filters.getByRole('button', { name: 'Replacement', exact: true }).click()
 

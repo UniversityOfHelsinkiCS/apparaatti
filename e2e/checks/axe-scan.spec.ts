@@ -18,6 +18,7 @@ async function answerWelcomeModal(page: Page) {
   await page.getByRole('option').first().click()
 
   await modal.locator('[data-testid^="primary-language-option-"]').first().click()
+  await modal.getByRole('button', { name: 'Done' }).click()
   await expect(modal).toBeHidden()
 }
 

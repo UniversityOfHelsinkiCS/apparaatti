@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Option, Question } from '../../common/types'
 import { useOptionCountText } from '../components/common/OptionCountBadge'
 import VisuallyHidden from '../components/common/VisuallyHidden'
+import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 import { foreignLanguage } from '../util/contentLanguage'
 
@@ -13,9 +14,16 @@ interface DropdownFilterComponentProps {
   state: string
   handleChange: (event: SelectChangeEvent<string>) => void
   options: Option[]
+  scope?: string
 }
 
-const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filter, state, handleChange, options }) => {
+const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
+  filter,
+  state,
+  handleChange,
+  options,
+  scope,
+}) => {
   const { getOptionCount } = useFilterContext()
   const optionCountText = useOptionCountText()
   const { i18n } = useTranslation()
@@ -37,9 +45,9 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({ filte
           minWidth: 100,
           border: '1px solid lightgray',
         }}
-        name={filter.id}
-        labelId={`question-text-${filter.id}`}
-        id={`${filter.id}-select`}
+        name={questionGroupName(filter.id, scope)}
+        labelId={questionTextId(filter.id, scope)}
+        id={`${questionGroupName(filter.id, scope)}-select`}
         data-testid={`${filter.id}-select`}
         value={state}
         onChange={onChange}

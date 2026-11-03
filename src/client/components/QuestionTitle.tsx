@@ -8,6 +8,11 @@ import HyIconButton from './common/hy/HyIconButton'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
 
+export const questionTextId = (questionId: string, scope?: string) =>
+  scope ? `question-text-${scope}-${questionId}` : `question-text-${questionId}`
+
+export const questionGroupName = (questionId: string, scope?: string) => (scope ? `${scope}-${questionId}` : questionId)
+
 const MandatoryStatus = ({ question }: { question: Question }) => {
   const { t } = useTranslation()
   if (!question.mandatory) {
@@ -22,12 +27,14 @@ const QuestionTitle = ({
   titleLanguage,
   question,
   showMandatoryStatus = true,
+  scope,
 }: {
   handleOpen: () => void
   title: string | undefined
   titleLanguage?: Language
   question: Question
   showMandatoryStatus?: boolean
+  scope?: string
 }) => {
   const { t, i18n } = useTranslation()
   const titleLang = foreignLanguage(titleLanguage, i18n.resolvedLanguage ?? i18n.language)
@@ -42,7 +49,7 @@ const QuestionTitle = ({
       <Stack direction="row" sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography
           sx={{ fontSize: '1rem', width: 'auto' }}
-          id={`question-text-${question.id}`}
+          id={questionTextId(question.id, scope)}
           data-testid={`question-text-${question.id}`}
           lang={titleLang}
         >
