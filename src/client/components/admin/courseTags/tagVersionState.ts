@@ -1,5 +1,6 @@
 import { describeCurTags } from '../../../../common/courseTags.ts'
-import type { CurTagPremises, ResolvedTagSource, TagBase, TagMutations } from '../../../../common/types.ts'
+import type { CurTagPremises, TagBase, TagMutations } from '../../../../common/types.ts'
+import type { TagCellState } from './TagMark.tsx'
 
 const EDITING_VERSION_KEY = 'apparaatti-course-tag-version'
 
@@ -26,14 +27,24 @@ export const storeEditingVersionId = (id: number | null) => {
 
 export const baseKey = (base: TagBase): string => (base.kind === 'published' ? 'published' : `snapshot:${base.id}`)
 
-export const curTagStates = (premises: CurTagPremises): Map<string, ResolvedTagSource> => {
+export const unsetCell: TagCellState = { apparaatti: null, fromCustomCodeUrn: false, ignored: false }
+
+export const addedCell: TagCellState = { apparaatti: 'added', fromCustomCodeUrn: false, ignored: false }
+
+export const curTagStates = (premises: CurTagPremises): Map<string, TagCellState> => {
   const inherited = [...new Set(premises.cus.flatMap(cu => cu.tagKeys))]
   const described = describeCurTags(
     inherited,
-    premises.rows.map(row => ({ curId: premises.curId, tagKey: row.tagKey, mode: row.mode }))
+    premises.rows.map(row => ({ curId: premises.curId, tagKey: row.tagKey, mode: row.mode })),
+    premises.customCodeUrnKeys
   )
 
-  return new Map(described.map(tag => [tag.key, tag.source]))
+  return new Map(
+    described.map(tag => [
+      tag.key,
+      { apparaatti: tag.apparaatti, fromCustomCodeUrn: tag.fromCustomCodeUrn, ignored: tag.ignored },
+    ])
+  )
 }
 
 const withCuMutations = (premises: CurTagPremises, mutations: TagMutations): CurTagPremises['cus'] =>
@@ -69,5 +80,6 @@ export const applyMutationsToPremises = (entries: CurTagPremises[], mutations: T
       tagKeys: cu.tagKeys.filter(key => !deletedKeys.has(key)),
     })),
     rows: withCurMutations(entry, mutations).filter(row => !deletedKeys.has(row.tagKey)),
+    customCodeUrnKeys: entry.customCodeUrnKeys.filter(key => !deletedKeys.has(key)),
   }))
 }

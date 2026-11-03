@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { getDisplayCourseName } from '../../../../common/nameFormatter.ts'
 import type { CourseTag, LocalizedString } from '../../../../common/types.ts'
 import { stickyFirstCellSx } from './matrixStyles.ts'
-import type { TagCellState } from './TagCell.tsx'
 import TagCell from './TagCell.tsx'
+import type { TagCellState } from './TagMark.tsx'
+import { unsetCell } from './tagVersionState.ts'
 
 export interface CurTagRowCourse {
   id: string
@@ -38,7 +39,7 @@ const CurTagRow = ({ course, tags, tagStates, isEditable, onToggle }: CurTagRowP
             rowId={course.id}
             tagKey={tag.key}
             description={tag.description}
-            state={tagStates.get(tag.key) ?? 'unset'}
+            state={tagStates.get(tag.key) ?? unsetCell}
             disabled={!isEditable}
             onToggle={onToggle}
           />

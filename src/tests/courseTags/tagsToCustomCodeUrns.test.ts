@@ -29,4 +29,17 @@ describe('tagsToCustomCodeUrns', () => {
     expect(urnInCustomCodeUrns(urns, 'kks-kor')).toBe(true)
     expect(urnInCustomCodeUrns(urns, 'kks-val')).toBe(true)
   })
+
+  it('strips the sisu urn of a key the cur ignores', () => {
+    const sisu = {
+      'urn:code:custom:hy-university-root-id:kk-apparaatti': [
+        'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-kor',
+        'urn:code:custom:hy-university-root-id:kk-apparaatti:kks-val',
+      ],
+    }
+    const urns = tagsToCustomCodeUrns(sisu, ['kks-val'], ['kks-kor'])
+
+    expect(urnInCustomCodeUrns(urns, 'kks-kor')).toBe(false)
+    expect(urnInCustomCodeUrns(urns, 'kks-val')).toBe(true)
+  })
 })

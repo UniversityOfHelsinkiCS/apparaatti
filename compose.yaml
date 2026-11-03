@@ -7,11 +7,14 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - PORT=8000
+      - HOST_APP_PORT=3910
+      - HOST_API_PORT=3911
+      - HOST_DB_PORT=3912
     volumes:
       - ./:/opt/app-root/src
     ports:
-      - 3000:3000
-      - 8000:8000
+      - 3910:3000
+      - 3911:8000
     container_name: apparaatti_dev
     networks:
       - localhost-network
@@ -50,7 +53,7 @@ services:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5433:5432
+      - 3912:5432
     volumes:
       - pg_data:/data
     container_name: apparaatti_db

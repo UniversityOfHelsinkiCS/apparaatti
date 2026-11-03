@@ -5,8 +5,8 @@ import type { CourseTag } from '../../../../common/types.ts'
 import type { CurTagRowCourse } from './CurTagRow.tsx'
 import CurTagRow from './CurTagRow.tsx'
 import { matrixContainerSx, stickyCornerCellSx } from './matrixStyles.ts'
-import type { TagCellState } from './TagCell.tsx'
 import TagHeaderCell from './TagHeaderCell.tsx'
+import type { TagCellState } from './TagMark.tsx'
 
 interface CurTagTableProps {
   courses: CurTagRowCourse[]

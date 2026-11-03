@@ -11,7 +11,7 @@ export default defineConfig({
     timeout: isCi ? 20_000 : 10_000,
   },
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3001',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3920',
     actionTimeout: isCi ? 20_000 : 10_000,
     navigationTimeout: isCi ? 45_000 : 20_000,
   },

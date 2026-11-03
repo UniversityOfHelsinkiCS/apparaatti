@@ -3,7 +3,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { CourseTag, LocalizedString, TagBase } from '../../../../common/types.ts'
+import type { CourseTag, LocalizedString, TagBase, TagVocabMutation } from '../../../../common/types.ts'
 import useApi from '../../../util/useApi.tsx'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import type { CourseSearchValues } from '../courseSearchQuery.ts'
@@ -19,10 +19,11 @@ import BulkApplyDialog from './BulkApplyDialog.tsx'
 import type { CurTagMutationMode } from './courseTagUtils.ts'
 import { fetchCurTagPremises } from './courseTagUtils.ts'
 import CurTagTable from './CurTagTable.tsx'
-import type { TagCellState } from './TagCell.tsx'
 import TagColumnPicker from './TagColumnPicker.tsx'
+import TagLegend from './TagLegend.tsx'
+import type { TagCellState } from './TagMark.tsx'
 import TagMatrixPagination from './TagMatrixPagination.tsx'
-import { baseKey, curTagStates } from './tagVersionState.ts'
+import { baseKey, curTagStates, unsetCell } from './tagVersionState.ts'
 import { useTagMutation } from './useTagMutation.ts'
 
 const PAGE_SIZE = 15
@@ -41,8 +42,10 @@ interface PaginatedCoursesResponse {
 }
 
 const nextMode = (state: TagCellState): CurTagMutationMode => {
-  if (state === 'inherited') return 'ignore'
-  if (state === 'added' || state === 'ignored') return 'clear'
+  if (state.ignored) return 'clear'
+  if (state.apparaatti === 'added') return 'clear'
+  if (state.apparaatti === 'inherited') return 'ignore'
+  if (state.fromCustomCodeUrn) return 'ignore'
   return 'add'
 }
 
@@ -119,10 +122,17 @@ const CurTagMatrix = ({ tags, base, isEditable }: CurTagMatrixProps) => {
   const stateRef = useRef(stateByCur)
   stateRef.current = stateByCur
 
+  const derivedKeys = useMemo(() => new Set(tags.filter(tag => tag.id === null).map(tag => tag.key)), [tags])
+
+  const vocabUpsertsRef = useRef<(keys: string[]) => TagVocabMutation[]>(() => [])
+  vocabUpsertsRef.current = keys =>
+    keys.filter(key => derivedKeys.has(key)).map(key => ({ op: 'upsert', key, description: null }))
+
   const handleToggle = useCallback(
     (curId: string, tagKey: string) => {
-      const current = stateRef.current.get(curId)?.get(tagKey) ?? 'unset'
-      mutate.mutate({ tags: [], cu: [], cur: [{ curId, tagKey, mode: nextMode(current) }] })
+      const current = stateRef.current.get(curId)?.get(tagKey) ?? unsetCell
+      const cur = [{ curId, tagKey, mode: nextMode(current) }]
+      mutate.mutate({ tags: vocabUpsertsRef.current([tagKey]), cu: [], cur })
     },
     [mutate]
   )
@@ -130,7 +140,7 @@ const CurTagMatrix = ({ tags, base, isEditable }: CurTagMatrixProps) => {
   const handleBulkApply = useCallback(
     (curIds: string[], tagKeys: string[], mode: CurTagMutationMode) => {
       const cur = curIds.flatMap(curId => tagKeys.map(tagKey => ({ curId, tagKey, mode })))
-      mutate.mutate({ tags: [], cu: [], cur })
+      mutate.mutate({ tags: vocabUpsertsRef.current(tagKeys), cu: [], cur })
     },
     [mutate]
   )
@@ -147,9 +157,7 @@ const CurTagMatrix = ({ tags, base, isEditable }: CurTagMatrixProps) => {
         <Typography variant="body2">{t('v2:courseTags.matched', { count: coursesData?.total ?? 0 })}</Typography>
       </Stack>
 
-      <Typography variant="body2" sx={{ mb: 1, color: '#374151' }}>
-        {t('v2:courseTags.legend')}
-      </Typography>
+      <TagLegend />
 
       {isLoading ? (
         <Typography>{t('v2:admin.loading')}</Typography>

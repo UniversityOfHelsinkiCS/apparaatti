@@ -147,13 +147,16 @@ export async function getRealisationsWithCourseUnitCodes(courseCodeStrings: stri
 function withResolvedTagUrns(course: CourseData, tagging: CurTagState): CourseData {
   const inherited = tagging.inheritedByCur.get(course.id) ?? []
   const rows = tagging.rowsByCur.get(course.id) ?? []
-  if (inherited.length === 0 && rows.length === 0) {
+  const fromUrns = tagging.customCodeUrnKeysByCur.get(course.id) ?? []
+  if (inherited.length === 0 && rows.length === 0 && fromUrns.length === 0) {
     return course
   }
 
+  const ignored = rows.filter(row => row.mode === 'ignore').map(row => row.tagKey)
+
   return {
     ...course,
-    customCodeUrns: tagsToCustomCodeUrns(course.customCodeUrns, resolveCurTags(inherited, rows)),
+    customCodeUrns: tagsToCustomCodeUrns(course.customCodeUrns, resolveCurTags(inherited, rows, fromUrns), ignored),
   }
 }
 

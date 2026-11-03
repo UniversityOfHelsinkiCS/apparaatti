@@ -209,7 +209,9 @@ const SnapshotDiffDialog = ({ diff, base, onClose, open, title, content, actions
       const starts = course?.startDate ? new Date(course.startDate).toLocaleDateString(i18n.language) : ''
       const premises = curStateById.get(curId)
       const current = premises
-        ? [...curTagStates(premises)].filter(([, source]) => source !== 'ignored').map(([key]) => tagLabel(key))
+        ? [...curTagStates(premises)]
+            .filter(([, state]) => !state.ignored && (state.apparaatti !== null || state.fromCustomCodeUrn))
+            .map(([key]) => tagLabel(key))
         : []
 
       return {

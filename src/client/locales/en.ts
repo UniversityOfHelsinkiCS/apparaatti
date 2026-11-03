@@ -153,7 +153,6 @@ export default {
       title: 'Course tags',
       course: 'Course',
       matched: '{{count}} courses match the current search',
-      legend: '✓ added · ↓ inherited from course unit · ✕ inherited but ignored · empty = not set',
       columns: 'Tag columns ({{shown}}/{{total}})',
       columnsAll: 'All',
       columnsStudy: 'Study tags',
@@ -162,7 +161,9 @@ export default {
       close: 'Close',
       state: {
         inherited: 'inherited from course unit',
+        customCodeUrn: 'from a Sisu custom code urn',
         added: 'added on this realisation',
+        both: 'in both apparaatti and Sisu',
         ignored: 'ignored on this realisation',
         unset: 'not set',
       },

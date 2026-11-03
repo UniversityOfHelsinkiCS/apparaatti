@@ -16,7 +16,15 @@ import mockUserMiddleware from './middleware/mock_user.ts'
 import router from './routes/router.ts'
 import setupCron from './updater/cron.ts'
 import { clearInterruptedUpdaterRuns } from './updater/manualRun.ts'
-import { IN_E2E, inDevelopment, SESSION_SECRET, UPDATER_CRON_ENABLED } from './util/config.ts'
+import {
+  HOST_API_PORT,
+  HOST_APP_PORT,
+  HOST_DB_PORT,
+  IN_E2E,
+  inDevelopment,
+  SESSION_SECRET,
+  UPDATER_CRON_ENABLED,
+} from './util/config.ts'
 import setupAuthentication from './util/oidc.ts'
 import { redis } from './util/redis.ts'
 
@@ -91,4 +99,13 @@ app.listen(process.env.PORT, async () => {
   }
 
   isReady = true
+
+  if (HOST_APP_PORT) {
+    const lines = [
+      `  app       http://localhost:${HOST_APP_PORT}`,
+      `  api       http://localhost:${HOST_API_PORT}/api`,
+      `  postgres  postgres://postgres:postgres@localhost:${HOST_DB_PORT}/postgres`,
+    ]
+    console.log(`Ports on your machine:\n${lines.join('\n')}`)
+  }
 })

@@ -2,7 +2,7 @@
 set -e
 
 # Check if E2E environment is already running
-if curl -fsS http://localhost:3001/api/ping >/dev/null 2>&1; then
+if curl -fsS http://localhost:3920/api/ping >/dev/null 2>&1; then
 	echo "E2E environment already running, using existing setup..."
 	echo "Running Playwright tests..."
 	npx playwright test "$@"
@@ -19,9 +19,9 @@ trap cleanup EXIT INT TERM
 echo "Starting E2E Docker Compose services..."
 docker compose -f compose.e2e.yaml up -d --build app db redis
 
-echo "Waiting for app readiness at http://localhost:3001/api/ping..."
+echo "Waiting for app readiness at http://localhost:3920/api/ping..."
 retries=90
-until curl -fsS http://localhost:3001/api/ping >/dev/null 2>&1; do
+until curl -fsS http://localhost:3920/api/ping >/dev/null 2>&1; do
 	retries=$((retries - 1))
 	if [ "$retries" -le 0 ]; then
 		echo "App did not become ready in time"

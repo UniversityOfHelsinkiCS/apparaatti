@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 
-import { resolveCurTags, tagsToCustomCodeUrns } from '../../../common/courseTags.ts'
+import { customCodeUrnTagKeys, resolveCurTags, tagsToCustomCodeUrns } from '../../../common/courseTags.ts'
 import type { UrnMatchMode } from '../../../common/types.ts'
 import Cu from '../../db/models/cu.ts'
 import Cur from '../../db/models/cur.ts'
@@ -17,7 +17,9 @@ function parseCsvList(value: string | undefined): string[] {
 
 function getCurUrnsLowercase(cur: any, resolvedTagKeys: string[]): string[] {
   const customCodeUrns = cur.customCodeUrns as Record<string, string[]> | null
-  const withTags = resolvedTagKeys.length > 0 ? tagsToCustomCodeUrns(customCodeUrns, resolvedTagKeys) : customCodeUrns
+  const suppressed = customCodeUrnTagKeys(customCodeUrns).filter(key => !resolvedTagKeys.includes(key))
+  const withTags =
+    resolvedTagKeys.length > 0 ? tagsToCustomCodeUrns(customCodeUrns, resolvedTagKeys, suppressed) : customCodeUrns
   if (!withTags) return []
   return Object.values(withTags)
     .flat()
@@ -31,7 +33,9 @@ async function resolvedTagKeysByCur(curIds: string[]): Promise<Map<string, strin
   for (const curId of curIds) {
     const inherited = tagging.inheritedByCur.get(curId) ?? []
     const rows = tagging.rowsByCur.get(curId) ?? []
-    if (inherited.length > 0 || rows.length > 0) byCur.set(curId, resolveCurTags(inherited, rows))
+    const fromUrns = tagging.customCodeUrnKeysByCur.get(curId) ?? []
+    if (inherited.length > 0 || rows.length > 0 || fromUrns.length > 0)
+      byCur.set(curId, resolveCurTags(inherited, rows, fromUrns))
   }
 
   return byCur
@@ -265,7 +269,10 @@ export async function matchingCurs(
   const allCurs = await Cur.findAll({
     where: query.curWhere,
     include: query.includeOptions,
-    order: [['name', 'ASC']],
+    order: [
+      ['name', 'ASC'],
+      ['id', 'ASC'],
+    ],
     subQuery: false,
   })
 

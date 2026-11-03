@@ -28,9 +28,16 @@ export const fetchVocabulary = async (base: TagBase): Promise<CourseTag[]> => {
   if (base.kind === 'published') return await fetchCourseTags()
 
   const payload: TagSnapshotPayload = await (await adminFetch('GET', `${COURSE_TAGS_PATH}/snapshots/${base.id}`)).json()
-  return payload.tags
-    .map(tag => ({ id: -1, key: tag.key, description: tag.description }))
-    .sort((a, b) => a.key.localeCompare(b.key))
+  const known = new Set(payload.tags.map(tag => tag.key))
+  const vocabulary: CourseTag[] = payload.tags.map(tag => ({
+    id: -1,
+    key: tag.key,
+    description: tag.description,
+    origin: 'apparaatti',
+  }))
+  const derived = (await fetchCourseTags()).filter(tag => tag.origin === 'customCodeUrn' && !known.has(tag.key))
+
+  return [...vocabulary, ...derived].sort((a, b) => a.key.localeCompare(b.key))
 }
 
 export const mutateSnapshot = async (id: number, mutations: TagMutations) => {

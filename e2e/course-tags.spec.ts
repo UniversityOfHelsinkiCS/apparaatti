@@ -360,4 +360,36 @@ test.describe('the tag search matches tags, the urn filter matches sisu urns', (
 
     await request.delete(`${TAGS_PATH}/snapshots/${version.id}`)
   })
+
+  test('a tag carried only by a sisu custom code urn resolves, and an ignore row suppresses it', async ({
+    request,
+  }) => {
+    const sisuTag = 'kks-int'
+    const all = await listing(request, {})
+    const target = all.courses.find((course: any) => urnsOf(course).includes(`kk-apparaatti:${sisuTag}`))
+    expect(target, 'seed needs a course carrying the sisu tag urn').toBeTruthy()
+
+    const [premises] = await curState(request, target.id)
+    expect(premises.customCodeUrnKeys).toContain(sisuTag)
+    expect(premises.rows.map((row: any) => row.tagKey)).not.toContain(sisuTag)
+
+    const found = await tagListing(request, { tags: sisuTag })
+    expect(found.courses.some((course: any) => course.id === target.id)).toBe(true)
+
+    await applyTag(request, {
+      tags: [{ op: 'upsert', key: sisuTag, description: null }],
+      cur: [{ curId: target.id, tagKey: sisuTag, mode: 'ignore' }],
+    })
+
+    const afterIgnore = await tagListing(request, { tags: sisuTag })
+    expect(afterIgnore.courses.some((course: any) => course.id === target.id)).toBe(false)
+
+    const byUrn = await listing(request, { urn: `kk-apparaatti:${sisuTag}` })
+    expect(byUrn.courses.some((course: any) => course.id === target.id)).toBe(false)
+
+    await applyTag(request, { cur: [{ curId: target.id, tagKey: sisuTag, mode: 'clear' }] })
+
+    const restored = await tagListing(request, { tags: sisuTag })
+    expect(restored.courses.some((course: any) => course.id === target.id)).toBe(true)
+  })
 })

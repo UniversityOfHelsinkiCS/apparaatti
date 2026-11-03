@@ -28,7 +28,7 @@ const TagVocabularyRow = ({ tag, isEditable, isSuperuser, onDescriptionSave, onD
         />
       </TableCell>
       <TableCell align="right">
-        {isSuperuser && isEditable ? (
+        {isSuperuser && isEditable && tag.id !== null ? (
           <BlackOutlinedButton type="button" onClick={() => onDelete(tag)}>
             {t('v2:courseTags.vocabulary.delete')}
           </BlackOutlinedButton>

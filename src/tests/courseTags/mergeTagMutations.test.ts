@@ -74,8 +74,13 @@ describe('mergeTagMutations', () => {
 
 describe('applyMutationsToPremises', () => {
   const premises: CurTagPremises[] = [
-    { curId: 'cur-1', cus: [{ cuId: 'cu-1', tagKeys: ['kks-kor'] }], rows: [{ tagKey: 'kks-val', mode: 'add' }] },
-    { curId: 'cur-2', cus: [{ cuId: 'cu-1', tagKeys: ['kks-kor'] }], rows: [] },
+    {
+      curId: 'cur-1',
+      cus: [{ cuId: 'cu-1', tagKeys: ['kks-kor'] }],
+      rows: [{ tagKey: 'kks-val', mode: 'add' }],
+      customCodeUrnKeys: [],
+    },
+    { curId: 'cur-2', cus: [{ cuId: 'cu-1', tagKeys: ['kks-kor'] }], rows: [], customCodeUrnKeys: [] },
   ]
 
   it('predicts the same state the server will merge', () => {

@@ -15,14 +15,17 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - PORT=8000
+      - HOST_APP_PORT=3920
+      - HOST_API_PORT=3921
+      - HOST_DB_PORT=3922
       - IN_E2E=true
       - TEST_CURRENT_DATE=2026-02-20
       - NODE_ENV=test
     volumes:
       - ./:/opt/app-root/src
     ports:
-      - 3001:3000
-      - 8001:8000
+      - 3920:3000
+      - 3921:8000
     container_name: apparaatti_e2e
     networks:
       - localhost-network
@@ -36,7 +39,7 @@ services:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 5434:5432
+      - 3922:5432
     volumes:
       - pg_data_e2e:/data
     container_name: apparaatti_e2e_db

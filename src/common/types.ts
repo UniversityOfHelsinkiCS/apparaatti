@@ -304,10 +304,13 @@ export type RecommendationCodeRow = {
 
 export type CourseTagMode = 'add' | 'ignore'
 
+export type CourseTagOrigin = 'apparaatti' | 'customCodeUrn'
+
 export type CourseTag = {
-  id: number
+  id: number | null
   key: string
   description: string | null
+  origin: CourseTagOrigin
 }
 
 export type CurTagRow = {
@@ -321,22 +324,25 @@ export type CuTagRow = {
   tagKey: string
 }
 
-export type ResolvedTagSource = 'inherited' | 'added' | 'ignored'
+export type ApparaattiTagSource = 'added' | 'inherited'
 
 export type ResolvedCurTag = {
   key: string
-  source: ResolvedTagSource
+  apparaatti: ApparaattiTagSource | null
+  fromCustomCodeUrn: boolean
+  ignored: boolean
 }
 
 export type CurTagState = {
   inheritedByCur: Map<string, string[]>
   rowsByCur: Map<string, CurTagRow[]>
+  customCodeUrnKeysByCur: Map<string, string[]>
 }
 
 export type TagSnapshotPayload = {
   appVersion?: string
   exportedAt?: string
-  tags: Omit<CourseTag, 'id'>[]
+  tags: Pick<CourseTag, 'key' | 'description'>[]
   cuTags: CuTagRow[]
   curTags: CurTagRow[]
 }
@@ -368,6 +374,7 @@ export type CurTagPremises = {
   curId: string
   cus: { cuId: string; tagKeys: string[] }[]
   rows: Omit<CurTagRow, 'curId'>[]
+  customCodeUrnKeys: string[]
 }
 
 export type TagSnapshotMeta = {

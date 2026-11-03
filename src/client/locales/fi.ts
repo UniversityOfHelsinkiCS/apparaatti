@@ -153,7 +153,6 @@ export default {
       title: 'Kurssitagit',
       course: 'Kurssi',
       matched: '{{count}} kurssia vastaa nykyistä hakua',
-      legend: '✓ lisätty · ↓ peritty opintojaksolta · ✕ peritty mutta ohitettu · tyhjä = ei asetettu',
       columns: 'Tagisarakkeet ({{shown}}/{{total}})',
       columnsAll: 'Kaikki',
       columnsStudy: 'Opintotagit',
@@ -162,7 +161,9 @@ export default {
       close: 'Sulje',
       state: {
         inherited: 'peritty opintojaksolta',
+        customCodeUrn: 'Sisun custom code urn -tagi',
         added: 'lisätty tälle toteutukselle',
+        both: 'sekä apparaatissa että Sisussa',
         ignored: 'ohitettu tällä toteutuksella',
         unset: 'ei asetettu',
       },

@@ -35,16 +35,28 @@ describe('resolveCurTags', () => {
   it('dedupes keys inherited from several course units', () => {
     expect(resolveCurTags(['kks-kor', 'kks-kor', 'kks-val'], [])).toEqual(['kks-kor', 'kks-val'])
   })
+
+  it('resolves a key that only the custom code urns carry', () => {
+    expect(resolveCurTags([], [], ['kks-kor'])).toEqual(['kks-kor'])
+  })
+
+  it('drops a custom code urn key that the cur ignores', () => {
+    expect(resolveCurTags([], [row('kks-kor', 'ignore')], ['kks-kor', 'kks-val'])).toEqual(['kks-val'])
+  })
+
+  it('does not duplicate a key that both the custom code urns and the course unit carry', () => {
+    expect(resolveCurTags(['kks-kor'], [], ['kks-kor'])).toEqual(['kks-kor'])
+  })
 })
 
 describe('describeCurTags', () => {
   it('labels inherited, added and ignored keys exactly once each', () => {
     const described = describeCurTags(['kks-kor', 'kks-pre'], [row('kks-val', 'add'), row('kks-pre', 'ignore')])
 
-    expect(described).toEqual([
-      { key: 'kks-kor', source: 'inherited' },
-      { key: 'kks-pre', source: 'ignored' },
-      { key: 'kks-val', source: 'added' },
+    expect([...described].sort((a, b) => a.key.localeCompare(b.key))).toEqual([
+      { key: 'kks-kor', apparaatti: 'inherited', fromCustomCodeUrn: false, ignored: false },
+      { key: 'kks-pre', apparaatti: 'inherited', fromCustomCodeUrn: false, ignored: true },
+      { key: 'kks-val', apparaatti: 'added', fromCustomCodeUrn: false, ignored: false },
     ])
   })
 
@@ -54,5 +66,15 @@ describe('describeCurTags', () => {
 
     expect(describeCurTags(inherited, rows).map(tag => tag.key)).toContain('kks-pre')
     expect(resolveCurTags(inherited, rows)).not.toContain('kks-pre')
+  })
+
+  it('reports both sources of a key separately', () => {
+    const described = describeCurTags(['kks-kor'], [row('kks-val', 'ignore')], ['kks-kor', 'kks-pre', 'kks-val'])
+
+    expect([...described].sort((a, b) => a.key.localeCompare(b.key))).toEqual([
+      { key: 'kks-kor', apparaatti: 'inherited', fromCustomCodeUrn: true, ignored: false },
+      { key: 'kks-pre', apparaatti: null, fromCustomCodeUrn: true, ignored: false },
+      { key: 'kks-val', apparaatti: null, fromCustomCodeUrn: true, ignored: true },
+    ])
   })
 })

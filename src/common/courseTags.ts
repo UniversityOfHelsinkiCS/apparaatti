@@ -1,4 +1,5 @@
 import type {
+  ApparaattiTagSource,
   CourseTag,
   CurTagRow,
   CuTagRow,
@@ -10,6 +11,23 @@ import type {
 
 export const TAG_URN_KEY = 'urn:code:custom:hy-university-root-id:kk-apparaatti:tags'
 
+export const CUSTOM_CODE_URN_TAG_PREFIX = 'urn:code:custom:hy-university-root-id:kk-apparaatti:'
+
+export function customCodeUrnTagKeys(customCodeUrns: Record<string, string[]> | null): string[] {
+  const keys = new Set<string>()
+
+  for (const [mapKey, urns] of Object.entries(customCodeUrns ?? {})) {
+    if (mapKey === TAG_URN_KEY) continue
+    for (const urn of urns) {
+      if (!urn.startsWith(CUSTOM_CODE_URN_TAG_PREFIX)) continue
+      const key = urn.slice(CUSTOM_CODE_URN_TAG_PREFIX.length)
+      if (key.length > 0 && !key.includes(':')) keys.add(key)
+    }
+  }
+
+  return [...keys]
+}
+
 function addedKeys(curRows: CurTagRow[]): string[] {
   return curRows.filter(row => row.mode === 'add').map(row => row.tagKey)
 }
@@ -18,10 +36,19 @@ function ignoredKeys(curRows: CurTagRow[]): string[] {
   return curRows.filter(row => row.mode === 'ignore').map(row => row.tagKey)
 }
 
-export function resolveCurTags(inheritedKeys: string[], curRows: CurTagRow[]): string[] {
+export function resolveCurTags(
+  inheritedKeys: string[],
+  curRows: CurTagRow[],
+  customCodeUrnKeys: string[] = []
+): string[] {
   const ignored = new Set(ignoredKeys(curRows))
   const resolved = new Set<string>()
 
+  for (const key of customCodeUrnKeys) {
+    if (!ignored.has(key)) {
+      resolved.add(key)
+    }
+  }
   for (const key of inheritedKeys) {
     if (!ignored.has(key)) {
       resolved.add(key)
@@ -36,28 +63,54 @@ export function resolveCurTags(inheritedKeys: string[], curRows: CurTagRow[]): s
   return [...resolved]
 }
 
-export function describeCurTags(inheritedKeys: string[], curRows: CurTagRow[]): ResolvedCurTag[] {
+export function describeCurTags(
+  inheritedKeys: string[],
+  curRows: CurTagRow[],
+  customCodeUrnKeys: string[] = []
+): ResolvedCurTag[] {
   const inherited = new Set(inheritedKeys)
+  const fromUrns = new Set(customCodeUrnKeys)
   const ignored = new Set(ignoredKeys(curRows))
-  const described = new Map<string, ResolvedCurTag>()
+  const added = new Set(addedKeys(curRows))
 
-  for (const key of inherited) {
-    described.set(key, { key, source: ignored.has(key) ? 'ignored' : 'inherited' })
+  const apparaattiSource = (key: string): ApparaattiTagSource | null => {
+    if (added.has(key)) return 'added'
+    if (inherited.has(key)) return 'inherited'
+    return null
   }
-  for (const key of addedKeys(curRows)) {
-    if (!inherited.has(key)) {
-      described.set(key, { key, source: ignored.has(key) ? 'ignored' : 'added' })
-    }
+
+  const described = new Map<string, ResolvedCurTag>()
+  for (const key of [...fromUrns, ...inherited, ...added, ...ignored]) {
+    described.set(key, {
+      key,
+      apparaatti: apparaattiSource(key),
+      fromCustomCodeUrn: fromUrns.has(key),
+      ignored: ignored.has(key),
+    })
   }
 
   return [...described.values()]
 }
 
-export function tagsToCustomCodeUrns(base: Record<string, string[]> | null, keys: string[]): Record<string, string[]> {
-  return { ...(base ?? {}), [TAG_URN_KEY]: keys }
+export function tagsToCustomCodeUrns(
+  base: Record<string, string[]> | null,
+  keys: string[],
+  ignoredKeys: string[] = []
+): Record<string, string[]> {
+  const ignored = new Set(ignoredKeys.map(key => `${CUSTOM_CODE_URN_TAG_PREFIX}${key}`))
+  const kept: Record<string, string[]> = {}
+
+  for (const [mapKey, urns] of Object.entries(base ?? {})) {
+    kept[mapKey] = urns.filter(urn => !ignored.has(urn))
+  }
+
+  return { ...kept, [TAG_URN_KEY]: keys }
 }
 
-function mergedVocabulary(tags: Omit<CourseTag, 'id'>[], mutations: TagMutations): Omit<CourseTag, 'id'>[] {
+function mergedVocabulary(
+  tags: Pick<CourseTag, 'key' | 'description'>[],
+  mutations: TagMutations
+): Pick<CourseTag, 'key' | 'description'>[] {
   const byKey = new Map(tags.map(tag => [tag.key, tag]))
 
   for (const mutation of mutations.tags) {

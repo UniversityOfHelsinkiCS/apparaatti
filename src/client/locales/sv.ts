@@ -154,7 +154,6 @@ export default {
       title: 'Kurstaggar',
       course: 'Kurs',
       matched: '{{count}} kurser matchar den nuvarande sökningen',
-      legend: '✓ tillagd · ↓ ärvd från studieavsnittet · ✕ ärvd men ignorerad · tom = inte satt',
       columns: 'Taggkolumner ({{shown}}/{{total}})',
       columnsAll: 'Alla',
       columnsStudy: 'Studietaggar',
@@ -163,7 +162,9 @@ export default {
       close: 'Stäng',
       state: {
         inherited: 'ärvd från studieavsnittet',
+        customCodeUrn: 'från en custom code urn i Sisu',
         added: 'tillagd på denna förverkligande',
+        both: 'både i apparaatti och i Sisu',
         ignored: 'ignorerad på denna förverkligande',
         unset: 'inte satt',
       },

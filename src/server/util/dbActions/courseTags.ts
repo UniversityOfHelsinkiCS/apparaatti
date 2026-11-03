@@ -1,4 +1,4 @@
-import { resolveCurTags } from '../../../common/courseTags.ts'
+import { customCodeUrnTagKeys, resolveCurTags } from '../../../common/courseTags.ts'
 import type {
   CourseTag as CourseTagType,
   CourseTagMode,
@@ -11,15 +11,50 @@ import type {
 } from '../../../common/types.ts'
 import CourseTag from '../../db/models/courseTag.ts'
 import Cu from '../../db/models/cu.ts'
+import Cur from '../../db/models/cur.ts'
 import CurCu from '../../db/models/curCu.ts'
 import PublishedCuCourseTag from '../../db/models/publishedCuCourseTag.ts'
 import PublishedCurCourseTag from '../../db/models/publishedCurCourseTag.ts'
 import type { CourseSearchFilters, TagKeyResolver } from './courseSearch.ts'
 import { matchingCurIds } from './courseSearch.ts'
 
+async function customCodeUrnKeysByCurId(curIds: string[]): Promise<Map<string, string[]>> {
+  const byCur = new Map<string, string[]>()
+  if (curIds.length === 0) return byCur
+
+  const curs = await Cur.findAll({ where: { id: curIds }, attributes: ['id', 'customCodeUrns'], raw: true })
+  for (const cur of curs as any[]) {
+    const keys = customCodeUrnTagKeys(cur.customCodeUrns)
+    if (keys.length > 0) byCur.set(cur.id, keys)
+  }
+
+  return byCur
+}
+
 export async function allCourseTags(): Promise<CourseTagType[]> {
   const rows = await CourseTag.findAll({ order: [['key', 'ASC']] })
-  return rows.map(row => row.toJSON() as CourseTagType)
+  const vocabulary: CourseTagType[] = rows.map(row => ({
+    ...(row.toJSON() as { id: number; key: string; description: string | null }),
+    origin: 'apparaatti',
+  }))
+
+  const known = new Set(vocabulary.map(tag => tag.key))
+  const curs = await Cur.findAll({ attributes: ['customCodeUrns'], raw: true })
+  const derived = new Set<string>()
+  for (const cur of curs as any[]) {
+    for (const key of customCodeUrnTagKeys(cur.customCodeUrns)) {
+      if (!known.has(key)) derived.add(key)
+    }
+  }
+
+  const fromUrns: CourseTagType[] = [...derived].map(key => ({
+    id: null,
+    key,
+    description: null,
+    origin: 'customCodeUrn',
+  }))
+
+  return [...vocabulary, ...fromUrns].sort((a, b) => a.key.localeCompare(b.key))
 }
 
 async function cuTagRowsFrom(model: any, cuIds: string[]): Promise<CuTagRow[]> {
@@ -47,11 +82,12 @@ async function curTagRowsFrom(model: any, curIds: string[]): Promise<CurTagRow[]
 async function tagStateFrom(curModel: any, cuModel: any, curIds: string[]): Promise<CurTagState> {
   const inheritedByCur = new Map<string, string[]>()
   const rowsByCur = new Map<string, CurTagRow[]>()
-  if (curIds.length === 0) return { inheritedByCur, rowsByCur }
+  if (curIds.length === 0) return { inheritedByCur, rowsByCur, customCodeUrnKeysByCur: new Map() }
 
   const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
   const cuTags = await cuTagRowsFrom(cuModel, [...new Set(links.map((link: any) => link.cuId))])
   const curTags = await curTagRowsFrom(curModel, curIds)
+  const customCodeUrnKeysByCur = await customCodeUrnKeysByCurId(curIds)
 
   const keysByCu = new Map<string, string[]>()
   for (const row of cuTags) {
@@ -67,7 +103,7 @@ async function tagStateFrom(curModel: any, cuModel: any, curIds: string[]): Prom
     rowsByCur.set(row.curId, [...(rowsByCur.get(row.curId) ?? []), row])
   }
 
-  return { inheritedByCur, rowsByCur }
+  return { inheritedByCur, rowsByCur, customCodeUrnKeysByCur }
 }
 
 export async function tagStateForCurs(curIds: string[]): Promise<CurTagState> {
@@ -78,6 +114,7 @@ export async function curTagPremises(payload: TagSnapshotPayload, curIds: string
   if (curIds.length === 0) return []
 
   const links = await CurCu.findAll({ where: { curId: curIds }, attributes: ['curId', 'cuId'], raw: true })
+  const customCodeUrnKeysByCur = await customCodeUrnKeysByCurId(curIds)
 
   const keysByCu = new Map<string, string[]>()
   for (const row of payload.cuTags) {
@@ -98,6 +135,7 @@ export async function curTagPremises(payload: TagSnapshotPayload, curIds: string
     curId,
     cus: (cuIdsByCur.get(curId) ?? []).map(cuId => ({ cuId, tagKeys: keysByCu.get(cuId) ?? [] })),
     rows: rowsByCur.get(curId) ?? [],
+    customCodeUrnKeys: customCodeUrnKeysByCur.get(curId) ?? [],
   }))
 }
 
@@ -109,7 +147,7 @@ export function payloadTagKeyResolver(payload: TagSnapshotPayload): TagKeyResolv
     for (const entry of premises) {
       const inherited = [...new Set(entry.cus.flatMap(cu => cu.tagKeys))]
       const rows = entry.rows.map(row => ({ curId: entry.curId, ...row }))
-      byCur.set(entry.curId, resolveCurTags(inherited, rows))
+      byCur.set(entry.curId, resolveCurTags(inherited, rows, entry.customCodeUrnKeys))
     }
 
     return byCur

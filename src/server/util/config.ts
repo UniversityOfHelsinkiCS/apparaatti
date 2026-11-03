@@ -7,6 +7,10 @@ export const TEST_CURRENT_DATE = process.env.TEST_CURRENT_DATE || null
 
 export const SESSION_SECRET = process.env.SESSION_SECRET || '1234'
 
+export const HOST_APP_PORT = process.env.HOST_APP_PORT || null
+export const HOST_API_PORT = process.env.HOST_API_PORT || null
+export const HOST_DB_PORT = process.env.HOST_DB_PORT || null
+
 export const OIDC_ISSUER = inProduction
   ? 'https://login.helsinki.fi/.well-known/openid-configuration'
   : 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'

@@ -13,7 +13,11 @@ vi.mock('../../server/util/dbActions/recommendationCodes.ts', () => ({
   allRecommendationCodeRows: vi.fn(),
 }))
 vi.mock('../../server/util/dbActions/courseTags.ts', () => ({
-  tagStateForCurs: vi.fn(async () => ({ inheritedByCur: new Map(), rowsByCur: new Map() })),
+  tagStateForCurs: vi.fn(async () => ({
+    inheritedByCur: new Map(),
+    rowsByCur: new Map(),
+    customCodeUrnKeysByCur: new Map(),
+  })),
 }))
 
 import type { AnswerData } from '../../common/types.ts'

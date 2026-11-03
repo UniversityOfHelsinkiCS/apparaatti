@@ -5,6 +5,7 @@ import type { CourseTag, CourseUnitGroup } from '../../../../common/types.ts'
 import { translateLocalizedString } from '../../../util/i18n.ts'
 import { stickyFirstCellSx } from './matrixStyles.ts'
 import TagCell from './TagCell.tsx'
+import { addedCell, unsetCell } from './tagVersionState.ts'
 
 interface CuTagRowProps {
   group: CourseUnitGroup
@@ -28,7 +29,7 @@ const CuTagRow = ({ group, tags, tagKeys, isEditable, onToggle }: CuTagRowProps)
           rowId={group.courseCode}
           tagKey={tag.key}
           description={tag.description}
-          state={tagKeys.has(tag.key) ? 'added' : 'unset'}
+          state={tagKeys.has(tag.key) ? addedCell : unsetCell}
           disabled={!isEditable}
           onToggle={onToggle}
         />

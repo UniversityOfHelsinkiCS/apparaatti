@@ -2,9 +2,8 @@ import { Box, Tooltip } from '@mui/material'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { ResolvedTagSource } from '../../../../common/types.ts'
-
-export type TagCellState = ResolvedTagSource | 'unset'
+import type { TagCellState } from './TagMark.tsx'
+import TagMark, { markSx } from './TagMark.tsx'
 
 interface TagCellProps {
   rowId: string
@@ -15,24 +14,20 @@ interface TagCellProps {
   onToggle: (rowId: string, tagKey: string) => void
 }
 
-const glyph: Record<TagCellState, string> = {
-  added: '✓',
-  inherited: '↓',
-  ignored: '✕',
-  unset: '',
-}
-
-const stateSx: Record<TagCellState, object> = {
-  added: { backgroundColor: '#111827', color: '#ffffff', borderColor: '#111827' },
-  inherited: { backgroundColor: '#ffffff', color: '#111827', borderColor: '#111827', borderWidth: 2 },
-  ignored: { backgroundColor: '#f3f4f6', color: '#374151', borderColor: '#6b7280', borderStyle: 'dashed' },
-  unset: { backgroundColor: '#ffffff', color: 'transparent', borderColor: '#6b7280' },
+export const tagStateLabels = (state: TagCellState, t: (key: string) => string): string[] => {
+  const parts: string[] = []
+  if (state.apparaatti === 'added') parts.push(t('v2:courseTags.state.added'))
+  if (state.apparaatti === 'inherited') parts.push(t('v2:courseTags.state.inherited'))
+  if (state.fromCustomCodeUrn) parts.push(t('v2:courseTags.state.customCodeUrn'))
+  if (state.ignored) parts.push(t('v2:courseTags.state.ignored'))
+  return parts
 }
 
 const TagCell = ({ rowId, tagKey, description, state, disabled, onToggle }: TagCellProps) => {
   const { t } = useTranslation()
 
-  const label = t(`v2:courseTags.state.${state}`)
+  const parts = tagStateLabels(state, t)
+  const label = parts.length > 0 ? parts.join(', ') : t('v2:courseTags.state.unset')
   const title = description ? `${tagKey} — ${description} (${label})` : `${tagKey} (${label})`
 
   return (
@@ -43,26 +38,15 @@ const TagCell = ({ rowId, tagKey, description, state, disabled, onToggle }: TagC
         onClick={() => onToggle(rowId, tagKey)}
         disabled={disabled}
         aria-label={title}
-        aria-pressed={state !== 'unset'}
+        aria-pressed={parts.length > 0}
         sx={{
-          width: 26,
-          height: 26,
-          p: 0,
-          borderRadius: 1,
-          borderStyle: 'solid',
-          borderWidth: 1,
-          fontSize: 14,
-          lineHeight: 1,
+          ...markSx,
           cursor: disabled ? 'default' : 'pointer',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           '&:hover:enabled': { outline: '2px solid #2563eb', outlineOffset: 1 },
           '&:focus-visible': { outline: '2px solid #2563eb', outlineOffset: 1 },
-          ...stateSx[state],
         }}
       >
-        {glyph[state]}
+        <TagMark state={state} />
       </Box>
     </Tooltip>
   )
