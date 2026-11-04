@@ -57,7 +57,7 @@ const Filter = ({ variant, filter, scope }: { variant: Variant; filter: any; sco
             title={variant.question}
             titleLanguage={variant.questionLanguage}
             question={filter}
-            showMandatoryStatus={false}
+            showMandatoryStatus={scope === 'welcome'}
             scope={scope}
           />
           <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
