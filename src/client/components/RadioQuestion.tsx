@@ -1,6 +1,7 @@
 import { Box, RadioGroup } from '@mui/material'
 import { useState } from 'react'
 
+import { ANY_VARIANT_QUERY } from '../../common/conditionMatching.ts'
 import { Question } from '../../common/types.ts'
 import { pickVariant } from '../hooks/useQuestions.tsx'
 import SingleChoiceOption from './common/SingleChoiceOption.tsx'
@@ -22,7 +23,7 @@ const RadioQuestion = ({
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const variant = pickVariant(question, 'default')
+  const variant = pickVariant(question, ANY_VARIANT_QUERY)
 
   if (!variant || variant?.skipped) {
     return null

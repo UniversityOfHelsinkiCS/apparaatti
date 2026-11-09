@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useMemo } from 'react'
 
+import type { VariantQuery } from '../../../common/conditionMatching'
 import type { FilterConfig, FilterVariant } from '../../../common/types'
 
 type EditScope = {
   filterId: string
   variantName: string
   isFallbackVariant: boolean
+  variantQuery: VariantQuery
   rawFilter?: FilterConfig
   rawVariant?: FilterVariant
 }
@@ -19,13 +21,14 @@ export const EditScopeProvider = ({
   filterId,
   variantName,
   isFallbackVariant,
+  variantQuery,
   rawFilter,
   rawVariant,
   children,
 }: EditScope & { children: ReactNode }) => {
   const value = useMemo<EditScope>(
-    () => ({ filterId, variantName, isFallbackVariant, rawFilter, rawVariant }),
-    [filterId, variantName, isFallbackVariant, rawFilter, rawVariant]
+    () => ({ filterId, variantName, isFallbackVariant, variantQuery, rawFilter, rawVariant }),
+    [filterId, variantName, isFallbackVariant, variantQuery, rawFilter, rawVariant]
   )
 
   return <EditScopeContext.Provider value={value}>{children}</EditScopeContext.Provider>

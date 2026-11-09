@@ -18,6 +18,10 @@ const baseFilter: FilterConfig = {
   variants: [
     {
       name: 'default',
+      organisationCode: null,
+      lang: null,
+      primaryLanguage: null,
+      primaryLanguageSpecification: null,
       question: { fi: 'Mikä kieli?', sv: 'Vilket språk?', en: 'Which language?' },
       options: [
         { id: 'fi', name: { fi: 'Suomi', sv: 'Finska', en: 'Finnish' } },
@@ -27,13 +31,33 @@ const baseFilter: FilterConfig = {
   ],
 }
 
+const fiPrimaryWrittenConditions = {
+  organisationCode: null,
+  lang: 'fi',
+  primaryLanguage: 'fi',
+  primaryLanguageSpecification: 'written',
+}
+
+const svUnknownConditions = {
+  organisationCode: null,
+  lang: 'sv',
+  primaryLanguage: 'sv',
+  primaryLanguageSpecification: null,
+}
+
 const payload = (): FilterSnapshotPayload => ({ filters: [structuredClone(baseFilter)] })
 
 describe('mergeFilterMutations', () => {
   it('creates a variant from default without touching default', () => {
     const merged = mergeFilterMutations(payload(), {
       wordings: [
-        { op: 'createVariant', filterId: 'lang', variantName: 'fi_primary_written', fromVariantName: 'default' },
+        {
+          op: 'createVariant',
+          filterId: 'lang',
+          variantName: 'fi_primary_written',
+          fromVariantName: 'default',
+          ...fiPrimaryWrittenConditions,
+        },
         {
           op: 'variantQuestion',
           filterId: 'lang',
@@ -101,7 +125,15 @@ describe('diffFilterPayloads', () => {
 
   it('reports an added variant as added and not as a text change', () => {
     const changed = mergeFilterMutations(payload(), {
-      wordings: [{ op: 'createVariant', filterId: 'lang', variantName: 'sv_unknown', fromVariantName: 'default' }],
+      wordings: [
+        {
+          op: 'createVariant',
+          filterId: 'lang',
+          variantName: 'sv_unknown',
+          fromVariantName: 'default',
+          ...svUnknownConditions,
+        },
+      ],
     })
 
     const diff = diffFilterPayloads(payload(), changed)

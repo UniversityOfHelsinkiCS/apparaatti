@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext, useMemo, useState } from 'react'
 
+import type { VariantQuery } from '../../common/conditionMatching'
 import type { FilterWordingField, LocalizedText } from '../../common/types'
 import {
   readEditingFilterVersionId,
@@ -13,6 +14,7 @@ export type EditTarget = {
   optionId: string | null
   variantName: string
   isFallbackVariant: boolean
+  variantQuery: VariantQuery
   current: LocalizedText
   anchor: HTMLElement
 }

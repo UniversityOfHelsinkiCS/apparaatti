@@ -2,7 +2,15 @@ import { describe, expect, it } from 'vitest'
 
 import { toQuestion } from '../client/util/filterConfigAdapter'
 import { getDefaultSelectedOptionIds } from '../client/util/filterDefaults'
+import { ANY_VARIANT_QUERY } from '../common/conditionMatching'
 import type { FilterConfig } from '../common/types'
+
+const catchAllConditions = {
+  organisationCode: null,
+  lang: null,
+  primaryLanguage: null,
+  primaryLanguageSpecification: null,
+}
 
 describe('multichoice filter defaults', () => {
   it('preserves option selectedByDefault when adapting filter config for the frontend', () => {
@@ -21,6 +29,7 @@ describe('multichoice filter defaults', () => {
       variants: [
         {
           name: 'default',
+          ...catchAllConditions,
           question: { fi: 'Q', sv: 'Q', en: 'Q' },
           options: [
             {
@@ -60,6 +69,7 @@ describe('multichoice filter defaults', () => {
         variants: [
           {
             name: 'default',
+            ...catchAllConditions,
             question: { fi: 'Q', sv: 'Q', en: 'Q' },
             options: [
               {
@@ -83,6 +93,6 @@ describe('multichoice filter defaults', () => {
       'fi'
     )
 
-    expect(getDefaultSelectedOptionIds(question, 'default')).toEqual(['period_1'])
+    expect(getDefaultSelectedOptionIds(question, ANY_VARIANT_QUERY)).toEqual(['period_1'])
   })
 })

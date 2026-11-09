@@ -2,58 +2,42 @@ import { TFunction } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { isCatchAll, resolveBest, type VariantQuery } from '../../common/conditionMatching'
 import { FilterConfig, Question, Variant } from '../../common/types'
 import { useFilterEditMode } from '../contexts/filterEditModeContext'
 import { toQuestion } from '../util/filterConfigAdapter'
 import useApi from '../util/useApi'
 
-export const resolveVariant = (
-  question: Question,
-  variantId: string
-): { variant: Variant | undefined; isFallback: boolean } => {
-  const hit = question.variants.find(v => v.name === variantId)
-  if (hit) {
-    return { variant: hit, isFallback: false }
-  }
+export type { VariantQuery }
 
-  return { variant: question.variants.find(v => v.name === 'default'), isFallback: true }
-}
-
-export const pickVariant = (question: Question, variantId: string) => resolveVariant(question, variantId).variant
-
+// organisationCode: the student's faculty ("tiedekunta")
 // lang: the language taught in the course ("mikä kieli kurssilla opetetaan")
 // primaryLanguage: school lang
 // primaryLanguageSpecification: what communication the course trains
-export const variantLookUp: Map<
-  { language: string; primaryLanguage: string; primaryLanguageSpecification: string },
-  string
-> = new Map([
-  //finnish variants
-  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'fi_unknown'],
-  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'written' }, 'fi_primary_written'],
-  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'spoken' }, 'fi_primary_spoken'],
-  [{ language: 'fi', primaryLanguage: 'fi', primaryLanguageSpecification: 'writtenAndSpoken' }, 'fi_primary_any'],
-  [{ language: 'fi', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'fi_secondary_any'],
+export const toVariantQuery = (
+  organisationCode: string,
+  lang: string,
+  primaryLanguage: string,
+  primaryLanguageSpecification: string
+): VariantQuery => ({ organisationCode, lang, primaryLanguage, primaryLanguageSpecification })
 
-  //english as a secondary
-  [{ language: 'en', primaryLanguage: '', primaryLanguageSpecification: '' }, 'en_secondary_any'],
+export const resolveVariant = (
+  question: Question,
+  context: VariantQuery
+): { variant: Variant | undefined; isFallback: boolean } => {
+  const hit = resolveBest(question.variants, context)
+  if (hit) {
+    return { variant: hit, isFallback: isCatchAll(hit) }
+  }
 
-  //svedish variants
-  [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_unknown'],
-  [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'spoken' }, 'sv_primary_spoken'],
-  [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: 'written' }, 'sv_primary_written'],
-  [{ language: 'sv', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_primary_any'],
-  [{ language: 'sv', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
-  [{ language: 'sv', primaryLanguage: 'en', primaryLanguageSpecification: '' }, 'sv_secondary_any'],
+  return { variant: question.variants.find(isCatchAll), isFallback: true }
+}
 
-  //this allows to specifically change the language variant
-  [{ language: '', primaryLanguage: 'fi', primaryLanguageSpecification: '' }, 'fi_unknown'],
-  [{ language: '', primaryLanguage: 'sv', primaryLanguageSpecification: '' }, 'sv_unknown'],
-])
+export const pickVariant = (question: Question, context: VariantQuery) => resolveVariant(question, context).variant
 
-export const pickQuestionExplanation = (variantId: string | undefined, question: Question, t: TFunction) => {
-  if (variantId) {
-    const explanationVariant = question.variants.find(v => v.name === variantId)
+export const pickQuestionExplanation = (context: VariantQuery | undefined, question: Question, t: TFunction) => {
+  if (context) {
+    const explanationVariant = resolveBest(question.variants, context)
     if (explanationVariant?.explanation) {
       return explanationVariant.explanation
     }
@@ -62,12 +46,6 @@ export const pickQuestionExplanation = (variantId: string | undefined, question:
   return question.explanation || t('question:noExtrainfo')
 }
 
-const checkVarianLookUpParam = (cmpr: string, shouldBe: string) => {
-  if (shouldBe === '') {
-    return true
-  }
-  return cmpr === shouldBe
-}
 export const getOptionDisplayTexts = (variant: Variant | null, valueId: string | string[]): string[] => {
   const values = Array.isArray(valueId) == true ? valueId : [valueId]
   const options = variant?.options
@@ -89,23 +67,6 @@ export const getOptionDisplayTexts = (variant: Variant | null, valueId: string |
 
   return texts
 }
-export const updateVariantToDisplayId = (
-  language: string,
-  primaryLanguage: string,
-  primaryLanguageSpecification: string
-): string => {
-  for (const key of variantLookUp.keys()) {
-    if (
-      checkVarianLookUpParam(language, key.language) &&
-      checkVarianLookUpParam(primaryLanguage, key.primaryLanguage) &&
-      checkVarianLookUpParam(primaryLanguageSpecification, key.primaryLanguageSpecification)
-    ) {
-      return variantLookUp.get(key) || 'default'
-    }
-  }
-  return 'default'
-}
-
 const useQuestions = (): { filters: Question[]; isLoading: boolean } => {
   const { i18n } = useTranslation()
   const lang = i18n.language || 'fi'

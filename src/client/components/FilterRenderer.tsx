@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
 import { filterConfigMap, shouldRenderWelcomeFilter, useFilterContext } from '../contexts/filterContext'
 import Filter from '../filters/filter'
-import { resolveVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { resolveVariant } from '../hooks/useQuestions'
 import { foreignLanguage } from '../util/contentLanguage'
 import ActiveFilterChips from './ActiveFilterChips'
 import HyAccordion from './common/hy/HyAccordion'
@@ -63,12 +63,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
 
   const filterToRender = { ...filter, displayType, state, setState, shortName }
 
-  const variantId = updateVariantToDisplayId(
-    filters.language,
-    filters.primaryLanguage,
-    filters.primaryLanguageSpecification
-  )
-  const { variant, isFallback } = resolveVariant(filter, variantId)
+  const { variant, isFallback } = resolveVariant(filter, filters.variantQuery)
   const shouldRenderFilter = shouldRenderWelcomeFilter(filter.id, variant, filters.language, filters.primaryLanguage)
 
   if (!variant || !shouldRenderFilter || skipInSideBar) {
@@ -129,7 +124,13 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
         {filter.id === 'study-field-select' ? (
           <StudyPhaseQuestion question={filter} />
         ) : (
-          <Filter variant={variant} filter={filterToRender} variantName={variantId} isFallbackVariant={isFallback} />
+          <Filter
+            variant={variant}
+            filter={filterToRender}
+            variantName={variant.name}
+            isFallbackVariant={isFallback}
+            variantQuery={filters.variantQuery}
+          />
         )}
       </HyAccordion>
     </Box>

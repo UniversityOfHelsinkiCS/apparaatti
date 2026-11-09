@@ -12,7 +12,12 @@ import type {
 
 export const emptyFilterMutations: FilterMutations = { wordings: [] }
 
-const withVariant = (config: FilterConfig, variantName: string, fromVariantName: string): FilterConfig => {
+const withVariant = (
+  config: FilterConfig,
+  variantName: string,
+  fromVariantName: string,
+  conditions: Pick<FilterVariant, 'organisationCode' | 'lang' | 'primaryLanguage' | 'primaryLanguageSpecification'>
+): FilterConfig => {
   if (config.variants.some(variant => variant.name === variantName)) {
     return config
   }
@@ -28,6 +33,7 @@ const withVariant = (config: FilterConfig, variantName: string, fromVariantName:
 
   const created: FilterVariant = {
     ...source,
+    ...conditions,
     name: variantName,
     options: source.options ? source.options.map(option => ({ ...option })) : undefined,
   }
@@ -51,7 +57,12 @@ const patchOptionName = (variant: FilterVariant, optionId: string, text: Localiz
 
 const applyWording = (config: FilterConfig, mutation: FilterWordingMutation): FilterConfig => {
   if (mutation.op === 'createVariant') {
-    return withVariant(config, mutation.variantName, mutation.fromVariantName)
+    return withVariant(config, mutation.variantName, mutation.fromVariantName, {
+      organisationCode: mutation.organisationCode,
+      lang: mutation.lang,
+      primaryLanguage: mutation.primaryLanguage,
+      primaryLanguageSpecification: mutation.primaryLanguageSpecification,
+    })
   }
 
   if (mutation.op === 'shortName') {

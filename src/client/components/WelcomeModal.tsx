@@ -12,7 +12,7 @@ import {
 } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import useModalLabels from '../hooks/useModalLabels'
-import { resolveVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { resolveVariant } from '../hooks/useQuestions'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
@@ -27,12 +27,10 @@ type WelcomeModalProps = {
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
-  const { filters, language, primaryLanguage, primaryLanguageSpecification } = filterContext
+  const { filters, language, primaryLanguage, variantQuery } = filterContext
   const { t } = useTranslation()
   const modalLabels = useModalLabels()
   const configMap = filterConfigMap(filterContext)
-
-  const variantId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
 
   const buildFilter = (filter: Question, config: FilterConfigMapType) => {
     const state = config.state
@@ -50,7 +48,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         return null
       }
 
-      const { variant, isFallback } = resolveVariant(question, variantId)
+      const { variant, isFallback } = resolveVariant(question, variantQuery)
 
       if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
         return null
@@ -103,8 +101,9 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         variant={entry.variant}
         filter={buildFilter(entry.question, entry.config)}
         scope="welcome"
-        variantName={variantId}
+        variantName={entry.variant.name}
         isFallbackVariant={entry.isFallback}
+        variantQuery={variantQuery}
       />
     )
 

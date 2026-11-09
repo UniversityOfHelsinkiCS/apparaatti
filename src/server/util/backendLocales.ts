@@ -1,3 +1,8 @@
+import {
+  isMoreSpecific as isMoreSpecificConditions,
+  matchesContext as matchesContextConditions,
+  resolveBest,
+} from '../../common/conditionMatching.ts'
 import type {
   BackendLocaleContext,
   BackendLocaleKey,
@@ -6,29 +11,15 @@ import type {
 } from '../../common/types.ts'
 
 export function matchesContext(value: BackendLocaleValue, context: BackendLocaleContext) {
-  if (value.organisationCode !== null && value.organisationCode !== context.organisationCode) return false
-  if (value.lang !== null && value.lang !== context.lang) return false
-  if (value.primaryLanguage !== null && value.primaryLanguage !== context.primaryLanguage) return false
-  if (
-    value.primaryLanguageSpecification !== null &&
-    value.primaryLanguageSpecification !== context.primaryLanguageSpecification
-  ) {
-    return false
-  }
-  return true
+  return matchesContextConditions(value, context)
 }
 
 export function isMoreSpecific(value: BackendLocaleValue, than: BackendLocaleValue) {
-  if ((value.organisationCode === null) !== (than.organisationCode === null)) return than.organisationCode === null
-  if ((value.lang === null) !== (than.lang === null)) return than.lang === null
-  if ((value.primaryLanguage === null) !== (than.primaryLanguage === null)) return than.primaryLanguage === null
-  return than.primaryLanguageSpecification === null && value.primaryLanguageSpecification !== null
+  return isMoreSpecificConditions(value, than)
 }
 
 export function resolveValue(values: BackendLocaleValue[], context: BackendLocaleContext) {
-  const matching = values.filter(value => matchesContext(value, context))
-  if (matching.length === 0) return null
-  return matching.reduce((best, value) => (isMoreSpecific(value, best) ? value : best))
+  return resolveBest(values, context)
 }
 
 export function resolveBackendLocales(keys: BackendLocaleKey[], context: BackendLocaleContext) {

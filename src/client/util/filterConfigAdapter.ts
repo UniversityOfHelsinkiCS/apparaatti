@@ -29,6 +29,10 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   variants: cfg.variants.map(v => ({
     raw: v,
     name: v.name,
+    organisationCode: v.organisationCode,
+    lang: v.lang,
+    primaryLanguage: v.primaryLanguage,
+    primaryLanguageSpecification: v.primaryLanguageSpecification,
     skipped: v.skipped,
     question: localize(v.question, lang),
     questionLanguage: resolveLanguage(v.question, lang),

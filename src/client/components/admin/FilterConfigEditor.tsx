@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import type { FilterConfig } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import VariantsOverview from './filterEdit/VariantsOverview.tsx'
 import FilterEditDialog from './FilterEditDialog.tsx'
 import FilterEditingVersionBar from './filterVersions/FilterEditingVersionBar.tsx'
 import FilterVersionsTable from './filterVersions/FilterVersionsTable.tsx'
@@ -244,6 +245,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
         </BlackOutlinedButton>
       </Box>
       <FilterVersionsTable isSuperuser={isSuperuser} />
+      <VariantsOverview filters={filterList} onEditFilter={filter => setEditTarget(filter)} />
       {editTarget !== null && (
         <FilterEditDialog
           filter={editTarget === 'new' ? null : editTarget}

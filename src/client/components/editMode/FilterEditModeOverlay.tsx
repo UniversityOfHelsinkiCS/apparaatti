@@ -3,10 +3,10 @@ import { Settings } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { describeVariantQuery } from '../../../common/conditionMatching'
 import type { FilterSnapshotMeta } from '../../../common/types'
 import { useFilterContext } from '../../contexts/filterContext'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
-import { updateVariantToDisplayId } from '../../hooks/useQuestions'
 import useApi from '../../util/useApi'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
 import HyIconButton from '../common/hy/HyIconButton'
@@ -31,11 +31,7 @@ const FilterEditModeOverlay = () => {
   }
 
   const version = (snapshots ?? []).find(snapshot => snapshot.id === editingVersionId)
-  const variantId = updateVariantToDisplayId(
-    filterContext.language,
-    filterContext.primaryLanguage,
-    filterContext.primaryLanguageSpecification
-  )
+  const variantId = describeVariantQuery(filterContext.variantQuery)
 
   const overlay = (
     <>

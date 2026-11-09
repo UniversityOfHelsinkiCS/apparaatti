@@ -23,7 +23,17 @@ export const blankFilter = (): FilterConfig => ({
   hideInFilterSidebar: false,
   showInWelcomeModal: false,
   enabled: true,
-  variants: [{ name: 'default', question: blankLocalized(), options: [] }],
+  variants: [
+    {
+      name: 'default',
+      organisationCode: null,
+      lang: null,
+      primaryLanguage: null,
+      primaryLanguageSpecification: null,
+      question: blankLocalized(),
+      options: [],
+    },
+  ],
 })
 
 export const normalizeDraft = (f: FilterConfig): FilterConfig => ({
@@ -32,6 +42,10 @@ export const normalizeDraft = (f: FilterConfig): FilterConfig => ({
   extraInfo: f.extraInfo ?? blankLocalized(),
   variants: (f.variants ?? []).map(v => ({
     ...v,
+    organisationCode: v.organisationCode ?? null,
+    lang: v.lang ?? null,
+    primaryLanguage: v.primaryLanguage ?? null,
+    primaryLanguageSpecification: v.primaryLanguageSpecification ?? null,
     options: v.options ?? [],
   })),
 })

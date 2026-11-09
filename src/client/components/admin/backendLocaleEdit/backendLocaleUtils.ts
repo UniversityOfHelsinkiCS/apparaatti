@@ -1,3 +1,4 @@
+import { isCatchAll as isCatchAllConditions } from '../../../../common/conditionMatching.ts'
 import type { BackendLocaleKey, BackendLocaleValue, LocalizedText } from '../../../../common/types.ts'
 
 export type ValueDraft = {
@@ -34,12 +35,6 @@ export const toPayload = (draft: ValueDraft) => ({
   text: draft.text,
 })
 
-export const isCatchAll = (value: BackendLocaleValue) => {
-  if (value.organisationCode !== null) return false
-  if (value.lang !== null) return false
-  if (value.primaryLanguage !== null) return false
-  if (value.primaryLanguageSpecification !== null) return false
-  return true
-}
+export const isCatchAll = (value: BackendLocaleValue) => isCatchAllConditions(value)
 
 export const hasCatchAllValue = (key: BackendLocaleKey) => key.values.some(isCatchAll)

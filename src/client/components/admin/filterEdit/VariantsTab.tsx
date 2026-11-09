@@ -1,10 +1,12 @@
-import { Box, Button, IconButton, List, ListItemButton, ListItemText } from '@mui/material'
-import { Plus, Trash2 } from 'lucide-react'
+import { Box, Button, Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { isCatchAll } from '../../../../common/conditionMatching.ts'
 import type { FilterConfig, FilterOption, FilterVariant } from '../../../../common/types.ts'
-import VariantEditor from './VariantEditor.tsx'
+import RowActionsCell from '../RowActionsCell.tsx'
+import VariantDialog from './VariantDialog.tsx'
 
 interface VariantsTabProps {
   variants: FilterConfig['variants']
@@ -16,8 +18,17 @@ interface VariantsTabProps {
   onUpdateOptionName: (vIdx: number, oIdx: number, lang: 'fi' | 'sv' | 'en', val: string) => void
   onAddOption: (vIdx: number) => void
   onRemoveOption: (vIdx: number, oIdx: number) => void
-  onAddVariant: () => void
+  onAddVariant: (
+    conditions: Pick<FilterVariant, 'organisationCode' | 'lang' | 'primaryLanguage' | 'primaryLanguageSpecification'>
+  ) => void
   onRemoveVariant: (vIdx: number) => void
+}
+
+const blankConditions = {
+  organisationCode: null,
+  lang: null,
+  primaryLanguage: null,
+  primaryLanguageSpecification: null,
 }
 
 const VariantsTab = ({
@@ -34,84 +45,85 @@ const VariantsTab = ({
   onRemoveVariant,
 }: VariantsTabProps) => {
   const { t } = useTranslation()
-  const [selectedIdx, setSelectedIdx] = useState(0)
-  const safeIdx = Math.min(selectedIdx, variants.length - 1)
-  const selectedVariant = variants[safeIdx]
+  const [editingIdx, setEditingIdx] = useState<number | null>(null)
+  const anyLabel = t('v2:admin.backendLocales.anyValue')
+
+  const conditionLabel = (value: string | null) => (value === null ? anyLabel : value)
+  const hasCatchAll = variants.some(isCatchAll)
+
+  const editingVariant = editingIdx !== null ? variants[editingIdx] : null
 
   return (
-    <Box sx={{ display: 'flex', gap: 2, pt: 1, minHeight: 400 }}>
-      {/* Left: variant list */}
-      <Box
-        sx={{
-          width: 180,
-          flexShrink: 0,
-          borderRight: 1,
-          borderColor: 'divider',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <List dense disablePadding sx={{ flexGrow: 1 }}>
-          {variants.map((v, vIdx) => (
-            <ListItemButton
-              key={vIdx}
-              selected={vIdx === safeIdx}
-              onClick={() => setSelectedIdx(vIdx)}
-              sx={{
-                borderRadius: 1,
-                mb: 0.5,
-                '&.Mui-selected': { backgroundColor: 'rgba(0,0,0,0.08)' },
-              }}
-            >
-              <ListItemText
-                primary={v.name || t('v2:admin.filterEdit.variantFallback', { number: vIdx + 1 })}
-                primaryTypographyProps={{ fontSize: 14, noWrap: true }}
-              />
-              {v.name !== 'default' && (
-                <IconButton
-                  size="small"
-                  edge="end"
-                  color="error"
-                  onClick={e => {
-                    e.stopPropagation()
-                    const newIdx = vIdx <= safeIdx && safeIdx > 0 ? safeIdx - 1 : safeIdx
-                    setSelectedIdx(newIdx)
+    <Box sx={{ pt: 1 }}>
+      {!hasCatchAll && (
+        <Chip
+          size="small"
+          sx={{ mb: 1, backgroundColor: '#fff4e5', color: '#663c00' }}
+          label={t('v2:admin.filterEdit.noCatchAllWarning')}
+        />
+      )}
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>{t('v2:admin.backendLocales.organisation')}</TableCell>
+            <TableCell>{t('v2:admin.backendLocales.lang')}</TableCell>
+            <TableCell>{t('v2:admin.backendLocales.primaryLanguage')}</TableCell>
+            <TableCell>{t('v2:admin.backendLocales.specification')}</TableCell>
+            <TableCell>{t('v2:admin.filterEdit.questionText')}</TableCell>
+            <TableCell>{t('v2:admin.filterEdit.skipped')}</TableCell>
+            <TableCell>{t('v2:admin.filterEdit.tableActions')}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {variants.map((variant, vIdx) => (
+            <TableRow key={vIdx}>
+              <TableCell>{conditionLabel(variant.organisationCode)}</TableCell>
+              <TableCell>{conditionLabel(variant.lang)}</TableCell>
+              <TableCell>{conditionLabel(variant.primaryLanguage)}</TableCell>
+              <TableCell>{conditionLabel(variant.primaryLanguageSpecification)}</TableCell>
+              <TableCell>{variant.question.fi.slice(0, 60)}</TableCell>
+              <TableCell>{variant.skipped ? t('v2:admin.filterEdit.yes') : ''}</TableCell>
+              <RowActionsCell
+                editLabel={t('v2:admin.filterEdit.editVariant')}
+                deleteLabel={t('v2:admin.filterEdit.deleteVariant')}
+                onEdit={() => setEditingIdx(vIdx)}
+                onDelete={() => {
+                  if (window.confirm(t('v2:admin.filterEdit.confirmDeleteVariant'))) {
                     onRemoveVariant(vIdx)
-                  }}
-                >
-                  <Trash2 size={20} />
-                </IconButton>
-              )}
-            </ListItemButton>
+                  }
+                }}
+                canDelete={!isCatchAll(variant)}
+              />
+            </TableRow>
           ))}
-        </List>
-        {canAddVariant && (
-          <Button
-            startIcon={<Plus size={20} />}
-            size="small"
-            onClick={() => {
-              onAddVariant()
-              setSelectedIdx(variants.length)
-            }}
-            sx={{ color: 'black', mt: 1 }}
-          >
-            {t('v2:admin.filterEdit.addVariant')}
-          </Button>
-        )}
-      </Box>
+        </TableBody>
+      </Table>
 
-      {/* Right: selected variant editor */}
-      {selectedVariant && (
-        <VariantEditor
-          variant={selectedVariant}
-          variantIdx={safeIdx}
-          onPatchVariant={fields => onPatchVariant(safeIdx, fields)}
-          onPatchQuestion={(lang, val) => onPatchVariantQuestion(safeIdx, lang, val)}
-          onPatchExplanation={(lang, val) => onPatchVariantExplanation(safeIdx, lang, val)}
-          onUpdateOption={(oIdx, fields) => onUpdateOption(safeIdx, oIdx, fields)}
-          onUpdateOptionName={(oIdx, lang, val) => onUpdateOptionName(safeIdx, oIdx, lang, val)}
-          onAddOption={() => onAddOption(safeIdx)}
-          onRemoveOption={oIdx => onRemoveOption(safeIdx, oIdx)}
+      {canAddVariant && (
+        <Button
+          startIcon={<Plus size={20} />}
+          size="small"
+          onClick={() => {
+            onAddVariant(blankConditions)
+            setEditingIdx(variants.length)
+          }}
+          sx={{ color: 'black', mt: 1 }}
+        >
+          {t('v2:admin.filterEdit.addVariant')}
+        </Button>
+      )}
+
+      {editingVariant && editingIdx !== null && (
+        <VariantDialog
+          variant={editingVariant}
+          onClose={() => setEditingIdx(null)}
+          onPatchVariant={fields => onPatchVariant(editingIdx, fields)}
+          onPatchQuestion={(lang, val) => onPatchVariantQuestion(editingIdx, lang, val)}
+          onPatchExplanation={(lang, val) => onPatchVariantExplanation(editingIdx, lang, val)}
+          onUpdateOption={(oIdx, fields) => onUpdateOption(editingIdx, oIdx, fields)}
+          onUpdateOptionName={(oIdx, lang, val) => onUpdateOptionName(editingIdx, oIdx, lang, val)}
+          onAddOption={() => onAddOption(editingIdx)}
+          onRemoveOption={oIdx => onRemoveOption(editingIdx, oIdx)}
         />
       )}
     </Box>

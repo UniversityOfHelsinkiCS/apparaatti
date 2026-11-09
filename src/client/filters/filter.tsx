@@ -2,6 +2,7 @@ import { SelectChangeEvent } from '@mui/material'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 
+import { ANY_VARIANT_QUERY, type VariantQuery } from '../../common/conditionMatching'
 import { Variant } from '../../common/types'
 import { EditScopeProvider } from '../components/editMode/editScope'
 import ExtraInfoModal from '../components/ExtraInfoModal'
@@ -20,12 +21,14 @@ const Filter = ({
   scope,
   variantName,
   isFallbackVariant = false,
+  variantQuery,
 }: {
   variant: Variant
   filter: any
   scope?: string
   variantName?: string
   isFallbackVariant?: boolean
+  variantQuery?: VariantQuery
 }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
@@ -66,6 +69,7 @@ const Filter = ({
       filterId={filter.id}
       variantName={variantName ?? variant.name}
       isFallbackVariant={isFallbackVariant}
+      variantQuery={variantQuery ?? ANY_VARIANT_QUERY}
       rawFilter={filter.raw}
       rawVariant={variant.raw}
     >

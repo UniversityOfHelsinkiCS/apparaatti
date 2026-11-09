@@ -1,9 +1,10 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { describeVariantQuery } from '../../../common/conditionMatching'
 import type { Question } from '../../../common/types'
 import { useFilterContext } from '../../contexts/filterContext'
-import { resolveVariant, updateVariantToDisplayId } from '../../hooks/useQuestions'
+import { resolveVariant } from '../../hooks/useQuestions'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
 import HiddenFilterWordingRow from './HiddenFilterWordingRow'
 
@@ -25,15 +26,12 @@ interface HiddenFilterWordingsDialogProps {
 const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialogProps) => {
   const { t } = useTranslation()
   const filterContext = useFilterContext()
-  const variantId = updateVariantToDisplayId(
-    filterContext.language,
-    filterContext.primaryLanguage,
-    filterContext.primaryLanguageSpecification
-  )
+  const { variantQuery } = filterContext
+  const variantId = describeVariantQuery(variantQuery)
 
   const hidden = filterContext.filters
     .map((filter: Question) => {
-      const { variant, isFallback } = resolveVariant(filter, variantId)
+      const { variant, isFallback } = resolveVariant(filter, variantQuery)
       const reason = hiddenReason(filter, Boolean(variant?.skipped), Boolean(variant))
       return { filter, variant, isFallback, reason }
     })
@@ -53,8 +51,9 @@ const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialo
               key={entry.filter.id}
               filter={entry.filter}
               variant={entry.variant}
-              variantName={variantId}
+              variantName={entry.variant?.name ?? variantId}
               isFallbackVariant={entry.isFallback}
+              variantQuery={variantQuery}
               reason={entry.reason as HiddenReason}
             />
           ))}

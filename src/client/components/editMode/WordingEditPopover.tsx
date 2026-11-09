@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { describeVariantQuery } from '../../../common/conditionMatching'
 import type { FilterMutations, FilterWordingMutation, Language, LocalizedText } from '../../../common/types'
 import type { EditTarget } from '../../contexts/filterEditModeContext'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
@@ -17,15 +18,20 @@ const isVariantField = (target: EditTarget) =>
   target.field === 'question' || target.field === 'explanation' || target.field === 'option'
 
 export const wordingMutations = (target: EditTarget, text: LocalizedText, createVariant: boolean): FilterMutations => {
-  const variantName = createVariant ? target.variantName : target.isFallbackVariant ? 'default' : target.variantName
+  const newVariantName = describeVariantQuery(target.variantQuery)
+  const variantName = createVariant ? newVariantName : target.variantName
   const wordings: FilterWordingMutation[] = []
 
   if (createVariant) {
     wordings.push({
       op: 'createVariant',
       filterId: target.filterId,
-      variantName: target.variantName,
-      fromVariantName: 'default',
+      variantName: newVariantName,
+      fromVariantName: target.variantName,
+      organisationCode: target.variantQuery.organisationCode || null,
+      lang: target.variantQuery.lang || null,
+      primaryLanguage: target.variantQuery.primaryLanguage || null,
+      primaryLanguageSpecification: target.variantQuery.primaryLanguageSpecification || null,
     })
   }
 
@@ -103,7 +109,7 @@ const WordingEditPopover = () => {
         </Typography>
 
         {createVariant === null ? (
-          <VariantTargetChoice variantName={target.variantName} onPick={setCreateVariant} />
+          <VariantTargetChoice variantName={describeVariantQuery(target.variantQuery)} onPick={setCreateVariant} />
         ) : (
           <Box>
             {createVariant === false && isVariantField(target) && target.isFallbackVariant && (

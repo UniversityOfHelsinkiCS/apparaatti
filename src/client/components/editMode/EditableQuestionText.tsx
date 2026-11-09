@@ -16,6 +16,7 @@ const EditableQuestionText = ({ children }: { children: ReactNode }) => {
       field="question"
       variantName={scope.variantName}
       isFallbackVariant={scope.isFallbackVariant}
+      variantQuery={scope.variantQuery}
       current={scope.rawVariant?.question}
     >
       {children}

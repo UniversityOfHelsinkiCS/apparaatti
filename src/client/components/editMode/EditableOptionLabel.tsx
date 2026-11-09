@@ -22,6 +22,7 @@ const EditableOptionLabel = ({ optionId, children }: EditableOptionLabelProps) =
       optionId={optionId}
       variantName={scope.variantName}
       isFallbackVariant={scope.isFallbackVariant}
+      variantQuery={scope.variantQuery}
       current={scope.rawVariant?.options?.find(option => option.id === optionId)?.name}
     >
       {children}

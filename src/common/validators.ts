@@ -20,13 +20,35 @@ const FilterOptionSchema = z.object({
   selectedByDefault: z.boolean().nullable().optional(),
 })
 
-const FilterVariantSchema = z.object({
+export const LANGS = ['fi', 'sv', 'en'] as const
+export const PRIMARY_LANGUAGES = ['fi', 'sv'] as const
+export const PRIMARY_LANGUAGE_SPECIFICATIONS = ['writtenAndSpoken', 'written', 'spoken'] as const
+
+export function specificationCanBeMatched(lang: string | null, primaryLanguage: string | null) {
+  if (lang === 'en') return false
+  if (lang !== null && primaryLanguage !== null && lang !== primaryLanguage) return false
+  return true
+}
+
+const FilterVariantFields = z.object({
   name: z.string(),
+  organisationCode: z.string().min(1).nullable().default(null),
+  lang: z.enum(LANGS).nullable().default(null),
+  primaryLanguage: z.enum(PRIMARY_LANGUAGES).nullable().default(null),
+  primaryLanguageSpecification: z.enum(PRIMARY_LANGUAGE_SPECIFICATIONS).nullable().default(null),
   skipped: z.boolean().optional(),
   question: LocalizedTextSchema,
   explanation: LocalizedTextSchema.optional(),
   options: z.array(FilterOptionSchema).optional(),
 })
+
+const FilterVariantSchema = FilterVariantFields.refine(
+  value => value.primaryLanguageSpecification === null || specificationCanBeMatched(value.lang, value.primaryLanguage),
+  {
+    message: 'This combination can never be matched',
+    path: ['primaryLanguageSpecification'],
+  }
+)
 
 export const FilterUpdateSchema = z.object({
   mandatory: z.boolean(),
@@ -76,10 +98,6 @@ export const UserSettingsSchema = z.object({
   educationLanguage: z.string().min(1),
 })
 
-export const LANGS = ['fi', 'sv', 'en'] as const
-export const PRIMARY_LANGUAGES = ['fi', 'sv'] as const
-export const PRIMARY_LANGUAGE_SPECIFICATIONS = ['writtenAndSpoken', 'written', 'spoken'] as const
-
 export const BackendLocaleKeySchema = z.object({
   key: z
     .string()
@@ -97,12 +115,6 @@ const BackendLocaleValueFields = z.object({
   primaryLanguageSpecification: z.enum(PRIMARY_LANGUAGE_SPECIFICATIONS).nullable().default(null),
   text: LocalizedTextSchema,
 })
-
-export function specificationCanBeMatched(lang: string | null, primaryLanguage: string | null) {
-  if (lang === 'en') return false
-  if (lang !== null && primaryLanguage !== null && lang !== primaryLanguage) return false
-  return true
-}
 
 export const BackendLocaleValueSchema = BackendLocaleValueFields.refine(
   value => value.primaryLanguageSpecification === null || specificationCanBeMatched(value.lang, value.primaryLanguage),
@@ -259,6 +271,10 @@ const FilterWordingMutationSchema = z.discriminatedUnion('op', [
     filterId: z.string().min(1),
     variantName: z.string().trim().min(1),
     fromVariantName: z.string().trim().min(1),
+    organisationCode: z.string().min(1).nullable().default(null),
+    lang: z.enum(LANGS).nullable().default(null),
+    primaryLanguage: z.enum(PRIMARY_LANGUAGES).nullable().default(null),
+    primaryLanguageSpecification: z.enum(PRIMARY_LANGUAGE_SPECIFICATIONS).nullable().default(null),
   }),
   z.object({
     op: z.literal('variantQuestion'),

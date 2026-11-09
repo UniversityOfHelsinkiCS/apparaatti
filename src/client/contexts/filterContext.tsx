@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
+import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
 import { CourseData, Question, User, UserSettings, Variant } from '../../common/types'
 import useApiMutation from '../hooks/useApiMutation'
-import useQuestions, { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import useQuestions, { pickVariant, toVariantQuery, type VariantQuery } from '../hooks/useQuestions'
 import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
 import {
   checkChallenge,
@@ -71,7 +72,7 @@ type StudyDataResponse = {
 }
 
 interface FilterContextType {
-  variantToDisplayId: string
+  variantQuery: VariantQuery
 
   filters: Question[]
   user: User | undefined
@@ -287,18 +288,18 @@ export const shouldRenderWelcomeFilter = (
  * Mandatory filters that are being displayed in the app,
  * taking into account the cases where the user searches for main language courses
  */
-type MandatoryCheckState = FilterStateType & { variantToDisplayId: string }
+type MandatoryCheckState = FilterStateType & { variantQuery: VariantQuery }
 
 export const getUnansweredCurrentMandatoryFilters = (filters: Question[], state: MandatoryCheckState) => {
   const configMap = filterConfigMap(state)
-  const { variantToDisplayId, language, primaryLanguage } = state
+  const { variantQuery, language, primaryLanguage } = state
 
   return filters.filter(filter => {
     if (!filter.mandatory) {
       return false
     }
 
-    const variant = pickVariant(filter, variantToDisplayId)
+    const variant = pickVariant(filter, variantQuery)
     if (!shouldRenderWelcomeFilter(filter.id, variant, language, primaryLanguage)) {
       return false
     }
@@ -327,13 +328,14 @@ export const getCoordinateDisplayName = (coordinateKey: string, filterContext: a
 
 export const getFilterVariant = (filterContext: FilterContextType, filterId: string) => {
   const question = filterContext.filters.find((q: any) => q.id === filterId)
-  const variantId = updateVariantToDisplayId(
+  const context = toVariantQuery(
+    filterContext.studyField,
     filterContext.language,
     filterContext.primaryLanguage,
     filterContext.primaryLanguageSpecification
   )
 
-  const variant = question != undefined ? pickVariant(question, variantId) : null
+  const variant = question != undefined ? pickVariant(question, context) : null
   if (variant) {
     return variant
   } else {
@@ -356,7 +358,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const shouldUsePrimaryLanguageSpecification = language !== '' && language !== 'en' && language === primaryLanguage
 
-  const variantToDisplayId = updateVariantToDisplayId(language, primaryLanguage, primaryLanguageSpecification)
+  const variantQuery = toVariantQuery(studyField, language, primaryLanguage, primaryLanguageSpecification)
 
   const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
   const [replacement, setReplacement] = useState('')
@@ -380,7 +382,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     (filterId: string) =>
       getDefaultSelectedOptionIds(
         filters.find(filter => filter.id === filterId),
-        'default'
+        ANY_VARIANT_QUERY
       ),
     [filters]
   )
@@ -452,7 +454,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       const stateKey = localFilterStateKeys[question.id]
       if (!stateKey) continue
 
-      const variant = pickVariant(question, variantToDisplayId)
+      const variant = pickVariant(question, variantQuery)
       if (!variant || variant.skipped || !variant.options) continue
 
       for (const option of variant.options) {
@@ -476,7 +478,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   }, [
     courseRecommendations,
     filters,
-    variantToDisplayId,
+    variantQuery,
     replacement,
     mentoring,
     finmu,
@@ -556,7 +558,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
 
   const unansweredModalMandatoryKey = getUnansweredCurrentMandatoryFilters(
     filters.filter(filter => filter.showInWelcomeModal),
-    { ...filterState, variantToDisplayId }
+    { ...filterState, variantQuery }
   )
     .map(filter => filter.id)
     .join(',')
@@ -616,7 +618,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
       return filterOptionId
     }
 
-    const variant = pickVariant(filter, variantToDisplayId)
+    const variant = pickVariant(filter, variantQuery)
     if (!variant || !variant.options) {
       return filterOptionId
     }
@@ -696,7 +698,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   return (
     <FilterContext.Provider
       value={{
-        variantToDisplayId,
+        variantQuery,
         language,
         setLanguage,
 

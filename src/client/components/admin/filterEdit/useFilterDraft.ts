@@ -85,10 +85,12 @@ export const useFilterDraft = (filter: FilterConfig | null) => {
       return { ...prev, variants }
     })
 
-  const addVariant = () =>
+  const addVariant = (
+    conditions: Pick<FilterVariant, 'organisationCode' | 'lang' | 'primaryLanguage' | 'primaryLanguageSpecification'>
+  ) =>
     setDraft(prev => ({
       ...prev,
-      variants: [...prev.variants, { name: '', question: blankLocalized(), options: [] }],
+      variants: [...prev.variants, { name: '', ...conditions, question: blankLocalized(), options: [] }],
     }))
 
   const removeVariant = (vIdx: number) =>

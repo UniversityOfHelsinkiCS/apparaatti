@@ -2,6 +2,7 @@ import { Box } from '@mui/material'
 import type { ReactNode } from 'react'
 import { useRef } from 'react'
 
+import { ANY_VARIANT_QUERY, type VariantQuery } from '../../../common/conditionMatching'
 import type { FilterWordingField, LocalizedText } from '../../../common/types'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
 import { hy } from '../common/hy/hyTokens'
@@ -14,6 +15,7 @@ interface EditableTextProps {
   optionId?: string | null
   variantName?: string
   isFallbackVariant?: boolean
+  variantQuery?: VariantQuery
   current: LocalizedText | null | undefined
   children: ReactNode
 }
@@ -24,6 +26,7 @@ const EditableText = ({
   optionId = null,
   variantName = '',
   isFallbackVariant = false,
+  variantQuery = ANY_VARIANT_QUERY,
   current,
   children,
 }: EditableTextProps) => {
@@ -45,6 +48,7 @@ const EditableText = ({
       optionId,
       variantName,
       isFallbackVariant,
+      variantQuery,
       current: current ?? emptyLocalized,
       anchor: ref.current,
     })

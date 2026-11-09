@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
+import type { VariantQuery } from '../../common/conditionMatching'
 import { Question } from '../../common/types'
 import useModalLabels from '../hooks/useModalLabels'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
@@ -17,7 +18,7 @@ const ExtraInfoModal = ({
   question: Question
   open: boolean
   handleClose: () => void
-  currentVariant?: string
+  currentVariant?: VariantQuery
 }) => {
   const { t } = useTranslation()
   const modalLabels = useModalLabels()

@@ -36,6 +36,10 @@ export type FilterOption = {
 
 export type FilterVariant = {
   name: string
+  organisationCode: string | null
+  lang: string | null
+  primaryLanguage: string | null
+  primaryLanguageSpecification: string | null
   skipped?: boolean
   question: LocalizedText
   explanation?: LocalizedText
@@ -89,6 +93,10 @@ export type Question = {
 
 export type Variant = {
   name: string
+  organisationCode: string | null
+  lang: string | null
+  primaryLanguage: string | null
+  primaryLanguageSpecification: string | null
   skipped?: boolean | undefined
   explanation?: string | undefined
   question: string
@@ -424,7 +432,16 @@ export type FilterBase = { kind: 'published' } | { kind: 'snapshot'; id: number 
 export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo'
 
 export type FilterWordingMutation =
-  | { op: 'createVariant'; filterId: string; variantName: string; fromVariantName: string }
+  | {
+      op: 'createVariant'
+      filterId: string
+      variantName: string
+      fromVariantName: string
+      organisationCode: string | null
+      lang: string | null
+      primaryLanguage: string | null
+      primaryLanguageSpecification: string | null
+    }
   | { op: 'variantQuestion'; filterId: string; variantName: string; text: LocalizedText }
   | { op: 'variantExplanation'; filterId: string; variantName: string; text: LocalizedText | null }
   | { op: 'optionName'; filterId: string; variantName: string; optionId: string; text: LocalizedText }

@@ -1,6 +1,7 @@
 import { Chip, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import type { VariantQuery } from '../../../common/conditionMatching'
 import type { Question, Variant } from '../../../common/types'
 import EditableText from './EditableText'
 
@@ -9,6 +10,7 @@ interface HiddenFilterWordingRowProps {
   variant: Variant | undefined
   variantName: string
   isFallbackVariant: boolean
+  variantQuery: VariantQuery
   reason: 'hiddenInSidebar' | 'welcomeModalOnly' | 'variantSkipped' | 'noVariant'
 }
 
@@ -17,6 +19,7 @@ const HiddenFilterWordingRow = ({
   variant,
   variantName,
   isFallbackVariant,
+  variantQuery,
   reason,
 }: HiddenFilterWordingRowProps) => {
   const { t } = useTranslation()
@@ -38,6 +41,7 @@ const HiddenFilterWordingRow = ({
             field="question"
             variantName={variantName}
             isFallbackVariant={isFallbackVariant}
+            variantQuery={variantQuery}
             current={variant.raw?.question}
           >
             {variant.question}
@@ -53,6 +57,7 @@ const HiddenFilterWordingRow = ({
             optionId={option.id}
             variantName={variantName}
             isFallbackVariant={isFallbackVariant}
+            variantQuery={variantQuery}
             current={variant?.raw?.options?.find(candidate => candidate.id === option.id)?.name}
           >
             {option.name}
