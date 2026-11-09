@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 import * as Sentry from '@sentry/node'
 import { RedisStore } from 'connect-redis'
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
@@ -55,6 +56,7 @@ app.use(
   })
 )
 
+app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(express.json({ limit: '10mb' }))

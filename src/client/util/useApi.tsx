@@ -1,6 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 
-export const generateSettings = (method: string, jsonBody?: any) => {
+let cachedCsrfToken: string | null = null
+
+const fetchCsrfToken = async () => {
+  if (cachedCsrfToken) return cachedCsrfToken
+
+  const res = await fetch('/api/csrf-token')
+  const { csrfToken } = (await res.json()) as { csrfToken: string }
+  cachedCsrfToken = csrfToken
+  return cachedCsrfToken
+}
+
+export const generateSettings = async (method: string, jsonBody?: any) => {
   const settings: Record<string, any> = {}
   settings.method = method
   if (jsonBody) {
@@ -20,6 +31,13 @@ export const generateSettings = (method: string, jsonBody?: any) => {
     }
   }
 
+  if (method !== 'GET') {
+    settings.headers = {
+      ...settings.headers,
+      'x-csrf-token': await fetchCsrfToken(),
+    }
+  }
+
   return settings
 }
 
@@ -32,7 +50,7 @@ const useApi = <T = unknown,>(
   const { data, isLoading, refetch } = useQuery<T>({
     queryKey: [queryKey],
     queryFn: async () => {
-      const settings = generateSettings(method, jsonBody)
+      const settings = await generateSettings(method, jsonBody)
       const res = await fetch(endPoint, settings)
       return res.json() as Promise<T>
     },

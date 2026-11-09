@@ -16,6 +16,7 @@ import {
   UserFeedbackSchema,
   UserSettingsSchema,
 } from '../../common/validators.ts'
+import { csrfProtection, generateCsrfToken } from '../middleware/csrf.ts'
 import loginAsMiddleware from '../middleware/loginAs.ts'
 import requireUser from '../middleware/requireUser.ts'
 import { triggerUpdaterRun } from '../updater/manualRun.ts'
@@ -48,6 +49,11 @@ const router = express.Router({ mergeParams: true })
 
 router.use(express.json())
 router.use(loginAsMiddleware)
+router.use(csrfProtection)
+
+router.get('/csrf-token', (req, res) => {
+  res.json({ csrfToken: generateCsrfToken(req, res) })
+})
 
 if (inDevelopment || IN_E2E) {
   router.use('/debug', requireUser, debugRouter)

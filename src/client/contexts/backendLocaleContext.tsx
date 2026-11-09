@@ -65,7 +65,7 @@ export const BackendLocaleProvider = ({ children }: { children: ReactNode }) => 
     staleTime: Infinity,
     gcTime: Infinity,
     queryFn: async () => {
-      const res = await fetch(`/api/backend-locales?${queryString}`, generateSettings('GET'))
+      const res = await fetch(`/api/backend-locales?${queryString}`, await generateSettings('GET'))
       if (!res.ok) return { locales: {} }
       return res.json()
     },
