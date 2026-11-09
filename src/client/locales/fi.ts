@@ -186,9 +186,10 @@ export default {
         saveFailed: 'Tallennus epäonnistui',
       },
       choice: {
-        description: 'Tälle yhdistelmälle ({{variant}}) ei ole omaa varianttia, joten näkyvissä on oletusteksti.',
-        editDefault: 'Muokkaa oletustekstiä',
-        createVariant: 'Luo variantti {{variant}}',
+        pickTarget: 'Valitse, mitä varianttia muokkaat.',
+        default: 'Yleinen oletusteksti',
+        createNew: 'Luo uusi variantti',
+        continue: 'Jatka',
       },
       hidden: {
         open: 'Näytä piilotetut suodattimet',

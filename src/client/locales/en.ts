@@ -186,9 +186,10 @@ export default {
         saveFailed: 'Saving failed',
       },
       choice: {
-        description: 'This combination ({{variant}}) has no variant of its own, so the default wording is shown.',
-        editDefault: 'Edit the default wording',
-        createVariant: 'Create variant {{variant}}',
+        pickTarget: 'Choose which variant you are editing.',
+        default: 'General default wording',
+        createNew: 'Create a new variant',
+        continue: 'Continue',
       },
       hidden: {
         open: 'Show hidden filters',

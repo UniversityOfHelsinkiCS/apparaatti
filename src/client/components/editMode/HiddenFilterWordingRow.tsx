@@ -42,6 +42,7 @@ const HiddenFilterWordingRow = ({
             variantName={variantName}
             isFallbackVariant={isFallbackVariant}
             variantQuery={variantQuery}
+            filterVariants={filter.raw?.variants ?? []}
             current={variant.raw?.question}
           >
             {variant.question}
@@ -58,6 +59,7 @@ const HiddenFilterWordingRow = ({
             variantName={variantName}
             isFallbackVariant={isFallbackVariant}
             variantQuery={variantQuery}
+            filterVariants={filter.raw?.variants ?? []}
             current={variant?.raw?.options?.find(candidate => candidate.id === option.id)?.name}
           >
             {option.name}

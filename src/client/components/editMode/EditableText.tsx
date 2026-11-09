@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useRef } from 'react'
 
 import { ANY_VARIANT_QUERY, type VariantQuery } from '../../../common/conditionMatching'
-import type { FilterWordingField, LocalizedText } from '../../../common/types'
+import type { FilterVariant, FilterWordingField, LocalizedText } from '../../../common/types'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
 import { hy } from '../common/hy/hyTokens'
 
@@ -16,6 +16,7 @@ interface EditableTextProps {
   variantName?: string
   isFallbackVariant?: boolean
   variantQuery?: VariantQuery
+  filterVariants?: FilterVariant[]
   current: LocalizedText | null | undefined
   children: ReactNode
 }
@@ -27,6 +28,7 @@ const EditableText = ({
   variantName = '',
   isFallbackVariant = false,
   variantQuery = ANY_VARIANT_QUERY,
+  filterVariants = [],
   current,
   children,
 }: EditableTextProps) => {
@@ -49,6 +51,7 @@ const EditableText = ({
       variantName,
       isFallbackVariant,
       variantQuery,
+      filterVariants,
       current: current ?? emptyLocalized,
       anchor: ref.current,
     })

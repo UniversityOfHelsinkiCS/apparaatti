@@ -59,3 +59,18 @@ export function describeVariantQuery(context: VariantQuery): string {
   const label = parts.filter(part => part !== '').join('-')
   return label || 'default'
 }
+
+// Like describeVariantQuery, but for an existing variant's own (nullable) conditions, where
+// null means "any" rather than being an unset string.
+export function describeConditions(conditions: MatchConditions): string {
+  if (isCatchAll(conditions)) {
+    return 'default'
+  }
+  const parts = [
+    conditions.lang,
+    conditions.primaryLanguage,
+    conditions.primaryLanguageSpecification,
+    conditions.organisationCode,
+  ]
+  return parts.filter((part): part is string => part !== null).join('-')
+}

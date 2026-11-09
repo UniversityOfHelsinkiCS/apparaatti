@@ -3,36 +3,68 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { describeVariantQuery } from '../../../common/conditionMatching'
-import type { FilterMutations, FilterWordingMutation, Language, LocalizedText } from '../../../common/types'
+import { describeConditions, isCatchAll } from '../../../common/conditionMatching'
+import type {
+  FilterMutations,
+  FilterVariant,
+  FilterWordingMutation,
+  Language,
+  LocalizedText,
+} from '../../../common/types'
 import type { EditTarget } from '../../contexts/filterEditModeContext'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
 import { invalidateFilterVersionQueries, mutateFilterSnapshot } from '../admin/filterVersions/filterSnapshotApi'
 import BlackContainedButton from '../common/BlackContainedButton'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
-import VariantTargetChoice from './VariantTargetChoice'
+import VariantTargetChoice, { type PickedTarget } from './VariantTargetChoice'
 
 const LANGUAGES: Language[] = ['fi', 'sv', 'en']
+const emptyLocalized: LocalizedText = { fi: '', sv: '', en: '' }
 
 const isVariantField = (target: EditTarget) =>
   target.field === 'question' || target.field === 'explanation' || target.field === 'option'
 
-export const wordingMutations = (target: EditTarget, text: LocalizedText, createVariant: boolean): FilterMutations => {
-  const newVariantName = describeVariantQuery(target.variantQuery)
-  const variantName = createVariant ? newVariantName : target.variantName
-  const wordings: FilterWordingMutation[] = []
+const describeVariant = (variant: FilterVariant, t: (key: string) => string): string =>
+  isCatchAll(variant) ? t('v2:filterWordings.choice.default') : describeConditions(variant)
 
-  if (createVariant) {
+const textForVariant = (target: EditTarget, variant: FilterVariant | undefined): LocalizedText => {
+  if (!variant) {
+    return emptyLocalized
+  }
+  if (target.field === 'question') {
+    return variant.question
+  }
+  if (target.field === 'explanation') {
+    return variant.explanation ?? emptyLocalized
+  }
+  if (target.field === 'option') {
+    return variant.options?.find(option => option.id === target.optionId)?.name ?? emptyLocalized
+  }
+  return emptyLocalized
+}
+
+export const wordingMutations = (
+  target: EditTarget,
+  text: LocalizedText,
+  picked: PickedTarget | null
+): FilterMutations => {
+  const wordings: FilterWordingMutation[] = []
+  let variantName = target.variantName
+
+  if (picked?.mode === 'new') {
+    variantName = describeConditions(picked.conditions)
     wordings.push({
       op: 'createVariant',
       filterId: target.filterId,
-      variantName: newVariantName,
+      variantName,
       fromVariantName: target.variantName,
-      organisationCode: target.variantQuery.organisationCode || null,
-      lang: target.variantQuery.lang || null,
-      primaryLanguage: target.variantQuery.primaryLanguage || null,
-      primaryLanguageSpecification: target.variantQuery.primaryLanguageSpecification || null,
+      organisationCode: picked.conditions.organisationCode,
+      lang: picked.conditions.lang,
+      primaryLanguage: picked.conditions.primaryLanguage,
+      primaryLanguageSpecification: picked.conditions.primaryLanguageSpecification,
     })
+  } else if (picked?.mode === 'existing') {
+    variantName = picked.variantName
   }
 
   if (target.field === 'shortName') {
@@ -60,8 +92,8 @@ const WordingEditPopover = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const { target, closeTarget, editingVersionId, notifySaved } = useFilterEditMode()
-  const [text, setText] = useState<LocalizedText>({ fi: '', sv: '', en: '' })
-  const [createVariant, setCreateVariant] = useState<boolean | null>(null)
+  const [text, setText] = useState<LocalizedText>(emptyLocalized)
+  const [picked, setPicked] = useState<PickedTarget | null>(null)
 
   useEffect(() => {
     if (!target) {
@@ -69,15 +101,28 @@ const WordingEditPopover = () => {
     }
 
     setText(target.current)
-    setCreateVariant(isVariantField(target) && target.isFallbackVariant ? null : false)
+    setPicked(isVariantField(target) ? null : { mode: 'existing', variantName: target.variantName })
   }, [target])
+
+  const pickTarget = (next: PickedTarget) => {
+    if (!target) {
+      return
+    }
+    setPicked(next)
+    if (next.mode === 'existing') {
+      const variant = target.filterVariants.find(candidate => candidate.name === next.variantName)
+      setText(textForVariant(target, variant))
+    } else {
+      setText(target.current)
+    }
+  }
 
   const save = useMutation({
     mutationFn: async () => {
       if (!target || editingVersionId === null) {
         return
       }
-      await mutateFilterSnapshot(editingVersionId, wordingMutations(target, text, createVariant === true))
+      await mutateFilterSnapshot(editingVersionId, wordingMutations(target, text, picked))
     },
     onSuccess: async () => {
       await invalidateFilterVersionQueries(queryClient)
@@ -92,6 +137,11 @@ const WordingEditPopover = () => {
     return null
   }
 
+  const currentVariant = target.filterVariants.find(variant => variant.name === target.variantName)
+  const currentVariantLabel = currentVariant ? describeVariant(currentVariant, t) : target.variantName
+  const pickedVariant =
+    picked?.mode === 'existing' ? target.filterVariants.find(variant => variant.name === picked.variantName) : undefined
+
   const popover = (
     <Popover
       open
@@ -104,15 +154,20 @@ const WordingEditPopover = () => {
         <Typography variant="subtitle2">{t(`v2:filterWordings.field.${target.field}`)}</Typography>
         <Typography variant="caption">
           {isVariantField(target)
-            ? t('v2:filterWordings.popover.variantScope', { variant: target.variantName })
+            ? t('v2:filterWordings.popover.variantScope', { variant: currentVariantLabel })
             : t('v2:filterWordings.popover.filterScope')}
         </Typography>
 
-        {createVariant === null ? (
-          <VariantTargetChoice variantName={describeVariantQuery(target.variantQuery)} onPick={setCreateVariant} />
+        {picked === null ? (
+          <VariantTargetChoice
+            filterVariants={target.filterVariants}
+            currentVariantName={target.variantName}
+            variantQuery={target.variantQuery}
+            onPick={pickTarget}
+          />
         ) : (
           <Box>
-            {createVariant === false && isVariantField(target) && target.isFallbackVariant && (
+            {pickedVariant && isCatchAll(pickedVariant) && (
               <Alert severity="warning" sx={{ mb: 1.5 }}>
                 {t('v2:filterWordings.popover.defaultWarning')}
               </Alert>

@@ -187,9 +187,10 @@ export default {
         saveFailed: 'Sparandet misslyckades',
       },
       choice: {
-        description: 'Den här kombinationen ({{variant}}) har ingen egen variant, så standardtexten visas.',
-        editDefault: 'Redigera standardtexten',
-        createVariant: 'Skapa varianten {{variant}}',
+        pickTarget: 'Välj vilken variant du redigerar.',
+        default: 'Allmän standardtext',
+        createNew: 'Skapa en ny variant',
+        continue: 'Fortsätt',
       },
       hidden: {
         open: 'Visa dolda filter',
