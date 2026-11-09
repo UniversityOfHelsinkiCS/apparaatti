@@ -1,5 +1,5 @@
 export const DATABASE_URL = process.env.DATABASE_URL || ''
-export const inProduction = process.env.IN_PRODUCTION || false
+export const inProduction = Boolean(process.env.IN_PRODUCTION)
 export const inDevelopment = process.env.NODE_ENV === 'development'
 export const inStaging = process.env.STAGING === 'true'
 export const IN_E2E = process.env.IN_E2E === 'true'
