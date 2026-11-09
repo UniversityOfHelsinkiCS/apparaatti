@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { Question } from '../../common/types'
 import { filterConfigMap, shouldRenderWelcomeFilter, useFilterContext } from '../contexts/filterContext'
 import Filter from '../filters/filter'
-import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { resolveVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import { foreignLanguage } from '../util/contentLanguage'
 import ActiveFilterChips from './ActiveFilterChips'
 import HyAccordion from './common/hy/HyAccordion'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
+import EditableText from './editMode/EditableText'
 import StudyPhaseQuestion from './StudyPhaseQuestion'
 
 const flashHighlight = keyframes({
@@ -67,7 +68,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
     filters.primaryLanguage,
     filters.primaryLanguageSpecification
   )
-  const variant = pickVariant(filter, variantId)
+  const { variant, isFallback } = resolveVariant(filter, variantId)
   const shouldRenderFilter = shouldRenderWelcomeFilter(filter.id, variant, filters.language, filters.primaryLanguage)
 
   if (!variant || !shouldRenderFilter || skipInSideBar) {
@@ -118,7 +119,9 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
               />
             )}
             <Box component="span" lang={shortNameLanguage} sx={{ flexGrow: 1 }}>
-              {shortName}
+              <EditableText filterId={filter.id} field="shortName" current={filter.raw?.shortName}>
+                {shortName}
+              </EditableText>
             </Box>
           </Box>
         }
@@ -126,7 +129,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
         {filter.id === 'study-field-select' ? (
           <StudyPhaseQuestion question={filter} />
         ) : (
-          <Filter variant={variant} filter={filterToRender} />
+          <Filter variant={variant} filter={filterToRender} variantName={variantId} isFallbackVariant={isFallback} />
         )}
       </HyAccordion>
     </Box>

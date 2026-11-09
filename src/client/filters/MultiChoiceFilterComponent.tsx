@@ -6,6 +6,7 @@ import { Option, Question } from '../../common/types'
 import HyCheckbox from '../components/common/hy/HyCheckbox.tsx'
 import OptionCountBadge, { useOptionCountText } from '../components/common/OptionCountBadge.tsx'
 import ShrinkwrapText from '../components/common/ShrinkwrapText.tsx'
+import EditableOptionLabel from '../components/editMode/EditableOptionLabel.tsx'
 import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 import { foreignLanguage } from '../util/contentLanguage'
@@ -39,11 +40,15 @@ const MultiChoiceFilterComponent: React.FC<MultiChoiceFilterComponentProps> = ({
         const label =
           count != null ? (
             <span aria-hidden style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+              <EditableOptionLabel optionId={option.id}>
+                <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+              </EditableOptionLabel>
               <OptionCountBadge count={count} />
             </span>
           ) : (
-            <span lang={nameLang}>{option.name}</span>
+            <EditableOptionLabel optionId={option.id}>
+              <span lang={nameLang}>{option.name}</span>
+            </EditableOptionLabel>
           )
         return (
           <FormControlLabel

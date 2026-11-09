@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 
 import { Variant } from '../../common/types'
+import { EditScopeProvider } from '../components/editMode/editScope'
 import ExtraInfoModal from '../components/ExtraInfoModal'
 import QuestionTitle from '../components/QuestionTitle'
 import DropdownFilterComponent from './DropdownFilterComponent'
@@ -13,7 +14,19 @@ import SingleChoiceFilterComponent from './SingleChoiceFilterComponent'
 /**
  * A filter can be multichoice, single choice, or a drop down menu it can be read from the filter object
  */
-const Filter = ({ variant, filter, scope }: { variant: Variant; filter: any; scope?: string }) => {
+const Filter = ({
+  variant,
+  filter,
+  scope,
+  variantName,
+  isFallbackVariant = false,
+}: {
+  variant: Variant
+  filter: any
+  scope?: string
+  variantName?: string
+  isFallbackVariant?: boolean
+}) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -48,63 +61,73 @@ const Filter = ({ variant, filter, scope }: { variant: Variant; filter: any; sco
 
   const showAsQuestion = filter.displayType !== 'info-only'
 
-  return (
-    <Box>
-      {showAsQuestion && (
-        <>
-          <QuestionTitle
-            handleOpen={handleOpen}
-            title={variant.question}
-            titleLanguage={variant.questionLanguage}
-            question={filter}
-            showMandatoryStatus={scope === 'welcome'}
-            scope={scope}
-          />
-          <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
-        </>
-      )}
-      <Box sx={{ marginTop: 0.5 }}>
-        {(() => {
-          switch (filter.displayType) {
-            case 'info-only':
-              return <InfoOnlyFilterComponent extraInfo={filter.extraInfo} />
-            case 'multichoice':
-              return (
-                <MultiChoiceFilterComponent
-                  filter={filter}
-                  state={state}
-                  handleCheckboxChange={handleCheckboxChange}
-                  options={variant.options || []}
-                  scope={scope}
-                />
-              )
-            case 'dropdownselect':
-              return (
-                <DropdownFilterComponent
-                  filter={filter}
-                  state={state}
-                  handleChange={handleDropdownChange}
-                  options={variant.options || []}
-                  scope={scope}
-                />
-              )
-            case 'singlechoice':
-            default:
-              return (
-                <SingleChoiceFilterComponent
-                  filter={filter}
-                  state={state}
-                  handleRadioChange={handleRadioChange}
-                  options={variant.options || []}
-                  extrainfo={filter.extraInfo}
-                  scope={scope}
-                />
-              )
-          }
-        })()}
+  const rendered = (
+    <EditScopeProvider
+      filterId={filter.id}
+      variantName={variantName ?? variant.name}
+      isFallbackVariant={isFallbackVariant}
+      rawFilter={filter.raw}
+      rawVariant={variant.raw}
+    >
+      <Box>
+        {showAsQuestion && (
+          <>
+            <QuestionTitle
+              handleOpen={handleOpen}
+              title={variant.question}
+              titleLanguage={variant.questionLanguage}
+              question={filter}
+              showMandatoryStatus={scope === 'welcome'}
+              scope={scope}
+            />
+            <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
+          </>
+        )}
+        <Box sx={{ marginTop: 0.5 }}>
+          {(() => {
+            switch (filter.displayType) {
+              case 'info-only':
+                return <InfoOnlyFilterComponent extraInfo={filter.extraInfo} />
+              case 'multichoice':
+                return (
+                  <MultiChoiceFilterComponent
+                    filter={filter}
+                    state={state}
+                    handleCheckboxChange={handleCheckboxChange}
+                    options={variant.options || []}
+                    scope={scope}
+                  />
+                )
+              case 'dropdownselect':
+                return (
+                  <DropdownFilterComponent
+                    filter={filter}
+                    state={state}
+                    handleChange={handleDropdownChange}
+                    options={variant.options || []}
+                    scope={scope}
+                  />
+                )
+              case 'singlechoice':
+              default:
+                return (
+                  <SingleChoiceFilterComponent
+                    filter={filter}
+                    state={state}
+                    handleRadioChange={handleRadioChange}
+                    options={variant.options || []}
+                    extrainfo={filter.extraInfo}
+                    scope={scope}
+                  />
+                )
+            }
+          })()}
+        </Box>
       </Box>
-    </Box>
+    </EditScopeProvider>
   )
+
+  return rendered
 }
 
 export default Filter

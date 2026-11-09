@@ -19,6 +19,8 @@ import type { FilterConfig } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
 import FilterEditDialog from './FilterEditDialog.tsx'
+import FilterEditingVersionBar from './filterVersions/FilterEditingVersionBar.tsx'
+import FilterVersionsTable from './filterVersions/FilterVersionsTable.tsx'
 
 interface FilterConfigEditorProps {
   isSuperuser: boolean
@@ -167,6 +169,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
       <Typography variant="h6" sx={{ mb: 2 }}>
         {t('v2:admin.filterConfig.title')}
       </Typography>
+      <FilterEditingVersionBar isSuperuser={isSuperuser} />
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -240,6 +243,7 @@ const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
           <input key={importFileInputKey} type="file" accept=".json" hidden onChange={handleImportFile} />
         </BlackOutlinedButton>
       </Box>
+      <FilterVersionsTable isSuperuser={isSuperuser} />
       {editTarget !== null && (
         <FilterEditDialog
           filter={editTarget === 'new' ? null : editTarget}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Option } from '../../../common/types'
 import { foreignLanguage } from '../../util/contentLanguage'
+import EditableOptionLabel from '../editMode/EditableOptionLabel'
 import HyRadio from './hy/HyRadio'
 import OptionCountBadge, { useOptionCountText } from './OptionCountBadge'
 import ShrinkwrapText from './ShrinkwrapText'
@@ -21,11 +22,15 @@ const SingleChoiceOption = ({ option, filterId, count }: SingleChoiceOptionProps
   const label =
     count != null ? (
       <span aria-hidden style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+        <EditableOptionLabel optionId={option.id}>
+          <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+        </EditableOptionLabel>
         <OptionCountBadge count={count} />
       </span>
     ) : (
-      <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+      <EditableOptionLabel optionId={option.id}>
+        <ShrinkwrapText lang={nameLang}>{option.name}</ShrinkwrapText>
+      </EditableOptionLabel>
     )
   return (
     <FormControlLabel

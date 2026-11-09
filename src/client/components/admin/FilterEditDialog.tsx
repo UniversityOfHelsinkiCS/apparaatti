@@ -91,7 +91,9 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
           textColor="inherit"
         >
           <Tab label={t('v2:admin.filterEdit.tabGeneral')} />
-          <Tab label={t('v2:admin.filterEdit.tabVariants', { amount: draft.variants.length })} />
+          {isSuperuser && (
+            <Tab label={t('v2:admin.filterEdit.tabVariantsAdvanced', { amount: draft.variants.length })} />
+          )}
         </Tabs>
 
         {tab === 0 && (
@@ -105,7 +107,7 @@ const FilterEditDialog = ({ filter, isSuperuser, onClose, onSaved }: FilterEditD
           />
         )}
 
-        {tab === 1 && (
+        {tab === 1 && isSuperuser && (
           <VariantsTab
             variants={draft.variants}
             canAddVariant={isSuperuser}

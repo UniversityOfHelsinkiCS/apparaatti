@@ -12,7 +12,7 @@ import {
 } from '../contexts/filterContext'
 import Filter from '../filters/filter'
 import useModalLabels from '../hooks/useModalLabels'
-import { pickVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
+import { resolveVariant, updateVariantToDisplayId } from '../hooks/useQuestions'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
@@ -50,7 +50,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         return null
       }
 
-      const variant = pickVariant(question, variantId)
+      const { variant, isFallback } = resolveVariant(question, variantId)
 
       if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
         return null
@@ -60,7 +60,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         return null
       }
 
-      return { question, config, variant }
+      return { question, config, variant, isFallback }
     })
     .filter(entry => entry !== null)
 
@@ -80,7 +80,12 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     onClose()
   }
 
-  const renderWelcomeFilter = (entry: { question: Question; config: FilterConfigMapType; variant: Variant }) => {
+  const renderWelcomeFilter = (entry: {
+    question: Question
+    config: FilterConfigMapType
+    variant: Variant
+    isFallback: boolean
+  }) => {
     const configState = entry.config.state
 
     if (entry.question.id === 'study-field-select') {
@@ -93,7 +98,17 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       )
     }
 
-    return <Filter variant={entry.variant} filter={buildFilter(entry.question, entry.config)} scope="welcome" />
+    const rendered = (
+      <Filter
+        variant={entry.variant}
+        filter={buildFilter(entry.question, entry.config)}
+        scope="welcome"
+        variantName={variantId}
+        isFallbackVariant={entry.isFallback}
+      />
+    )
+
+    return rendered
   }
 
   return (

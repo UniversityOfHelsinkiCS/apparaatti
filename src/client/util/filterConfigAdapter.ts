@@ -25,7 +25,9 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   hideInCurrentFiltersDisplay: cfg.hideInCurrentFiltersDisplay,
   hideInFilterSidebar: cfg.hideInFilterSidebar,
   coordinateKey: cfg.coordinateKey ?? null,
+  raw: cfg,
   variants: cfg.variants.map(v => ({
+    raw: v,
     name: v.name,
     skipped: v.skipped,
     question: localize(v.question, lang),

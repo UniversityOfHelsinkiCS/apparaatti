@@ -7,6 +7,7 @@ import { foreignLanguage } from '../util/contentLanguage'
 import HyIconButton from './common/hy/HyIconButton'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
+import EditableQuestionText from './editMode/EditableQuestionText'
 
 export const questionTextId = (questionId: string, scope?: string) =>
   scope ? `question-text-${scope}-${questionId}` : `question-text-${questionId}`
@@ -53,7 +54,7 @@ const QuestionTitle = ({
           data-testid={`question-text-${question.id}`}
           lang={titleLang}
         >
-          {title}
+          <EditableQuestionText>{title}</EditableQuestionText>
         </Typography>
         <HyIconButton
           onClick={handleOpen}

@@ -248,6 +248,63 @@ export const TagCurStateSchema = z.object({
   base: TagBaseSchema,
 })
 
+export const FilterBaseSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('published') }),
+  z.object({ kind: z.literal('snapshot'), id: z.number().int().positive() }),
+])
+
+const FilterWordingMutationSchema = z.discriminatedUnion('op', [
+  z.object({
+    op: z.literal('createVariant'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    fromVariantName: z.string().trim().min(1),
+  }),
+  z.object({
+    op: z.literal('variantQuestion'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    text: LocalizedTextSchema,
+  }),
+  z.object({
+    op: z.literal('variantExplanation'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    text: LocalizedTextSchema.nullable(),
+  }),
+  z.object({
+    op: z.literal('optionName'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    optionId: z.string().min(1),
+    text: LocalizedTextSchema,
+  }),
+  z.object({ op: z.literal('shortName'), filterId: z.string().min(1), text: LocalizedTextSchema }),
+  z.object({ op: z.literal('extraInfo'), filterId: z.string().min(1), text: LocalizedTextSchema.nullable() }),
+])
+
+export const FilterMutationsSchema = z.object({
+  wordings: z.array(FilterWordingMutationSchema),
+})
+
+export const FilterSnapshotMutateSchema = z.object({ mutations: FilterMutationsSchema })
+
+export const FilterSnapshotMetaSchema = z.object({
+  name: z.string().trim().min(1),
+  description: z.string().trim().nullable().default(null),
+})
+
+export const FilterSnapshotCreateSchema = FilterSnapshotMetaSchema.extend({
+  base: FilterBaseSchema,
+  mutations: FilterMutationsSchema,
+})
+
+export const FilterSnapshotPayloadSchema = z.object({
+  appVersion: z.string().optional(),
+  exportedAt: z.string().optional(),
+  filters: z.array(FilterImportItemSchema),
+})
+
 export const TagSnapshotPayloadSchema = z.object({
   appVersion: z.string().optional(),
   exportedAt: z.string().optional(),

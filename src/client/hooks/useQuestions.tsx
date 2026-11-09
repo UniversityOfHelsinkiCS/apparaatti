@@ -3,18 +3,23 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FilterConfig, Question, Variant } from '../../common/types'
+import { useFilterEditMode } from '../contexts/filterEditModeContext'
 import { toQuestion } from '../util/filterConfigAdapter'
 import useApi from '../util/useApi'
 
-export const pickVariant = (question: Question, variantId: string) => {
+export const resolveVariant = (
+  question: Question,
+  variantId: string
+): { variant: Variant | undefined; isFallback: boolean } => {
   const hit = question.variants.find(v => v.name === variantId)
   if (hit) {
-    return hit
+    return { variant: hit, isFallback: false }
   }
 
-  const fallback = question.variants.find(v => v.name === 'default')
-  return fallback
+  return { variant: question.variants.find(v => v.name === 'default'), isFallback: true }
 }
+
+export const pickVariant = (question: Question, variantId: string) => resolveVariant(question, variantId).variant
 
 // lang: the language taught in the course ("mikä kieli kurssilla opetetaan")
 // primaryLanguage: school lang
@@ -104,8 +109,14 @@ export const updateVariantToDisplayId = (
 const useQuestions = (): { filters: Question[]; isLoading: boolean } => {
   const { i18n } = useTranslation()
   const lang = i18n.language || 'fi'
+  const { editingVersionId } = useFilterEditMode()
 
-  const { data, isLoading } = useApi('filter-config', '/api/filter-config', 'GET', undefined)
+  const endPoint = editingVersionId
+    ? `/api/admin/filter-config/snapshots/${editingVersionId}/config`
+    : '/api/filter-config'
+  const queryKey = editingVersionId ? `filter-config-draft-${editingVersionId}` : 'filter-config'
+
+  const { data, isLoading } = useApi(queryKey, endPoint, 'GET', undefined)
 
   const filters = useMemo<Question[]>(
     () => (data ? (data as FilterConfig[]).map(cfg => toQuestion(cfg, lang)) : []),

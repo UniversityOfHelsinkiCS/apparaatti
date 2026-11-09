@@ -6,6 +6,7 @@ import { pickQuestionExplanation } from '../hooks/useQuestions'
 import AppMarkdown from './common/AppMarkdown'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
+import EditableText from './editMode/EditableText'
 
 const ExtraInfoModal = ({
   question,
@@ -35,7 +36,9 @@ const ExtraInfoModal = ({
         </HyButton>
       }
     >
-      <AppMarkdown>{explanationToShow}</AppMarkdown>
+      <EditableText filterId={question.id} field="extraInfo" current={question.raw?.extraInfo}>
+        <AppMarkdown>{explanationToShow}</AppMarkdown>
+      </EditableText>
     </HyModal>
   )
 }

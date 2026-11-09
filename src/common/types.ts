@@ -84,6 +84,7 @@ export type Question = {
   hideInRecommendationReasons?: boolean
   hideInFilterSidebar?: boolean
   coordinateKey?: string | null
+  raw?: FilterConfig
 }
 
 export type Variant = {
@@ -93,6 +94,7 @@ export type Variant = {
   question: string
   questionLanguage?: Language
   options?: Option[]
+  raw?: FilterVariant
 }
 
 export type Form = {
@@ -401,4 +403,48 @@ export type CourseUnitGroup = {
   cuIds: string[]
   realisationCount: number
   tagKeys: string[]
+}
+
+export type FilterSnapshotPayload = {
+  appVersion?: string
+  exportedAt?: string
+  filters: FilterConfig[]
+}
+
+export type FilterSnapshotMeta = {
+  id: number
+  name: string
+  description: string | null
+  createdAt: string
+  isActive: boolean
+}
+
+export type FilterBase = { kind: 'published' } | { kind: 'snapshot'; id: number }
+
+export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo'
+
+export type FilterWordingMutation =
+  | { op: 'createVariant'; filterId: string; variantName: string; fromVariantName: string }
+  | { op: 'variantQuestion'; filterId: string; variantName: string; text: LocalizedText }
+  | { op: 'variantExplanation'; filterId: string; variantName: string; text: LocalizedText | null }
+  | { op: 'optionName'; filterId: string; variantName: string; optionId: string; text: LocalizedText }
+  | { op: 'shortName'; filterId: string; text: LocalizedText }
+  | { op: 'extraInfo'; filterId: string; text: LocalizedText | null }
+
+export type FilterMutations = {
+  wordings: FilterWordingMutation[]
+}
+
+export type FilterTextChange = {
+  filterId: string
+  variantName: string | null
+  field: FilterWordingField
+  optionId: string | null
+  from: LocalizedText | null
+  to: LocalizedText | null
+}
+
+export type FilterPayloadDiff = {
+  addedVariants: { filterId: string; variantName: string }[]
+  changedTexts: FilterTextChange[]
 }

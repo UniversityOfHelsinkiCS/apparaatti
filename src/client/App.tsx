@@ -7,10 +7,12 @@ import type { User } from '../common/types'
 import AppHeader from './AppHeader'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
+import FilterEditModeOverlay from './components/editMode/FilterEditModeOverlay'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
 import { BackendLocaleProvider } from './contexts/backendLocaleContext'
 import { FilterContextProvider, useFilterContext } from './contexts/filterContext'
+import { FilterEditModeProvider } from './contexts/filterEditModeContext'
 import useBreakpoints from './hooks/useBreakpoints'
 import { RedirectToLogin } from './util/redirectToLogin'
 import useRequiredUser from './util/useRequiredUser'
@@ -55,6 +57,7 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
     >
       <CssBaseline />
       <WelcomeModal open={modalOpen} onClose={() => setModalOpen(false)} isAdmin={user?.isAdmin} />
+      <FilterEditModeOverlay />
 
       <Box
         sx={{
@@ -135,11 +138,13 @@ const App = () => {
   }
 
   return (
-    <FilterContextProvider>
-      <BackendLocaleProvider>
-        <OneThirdDrawerLayout user={user} />
-      </BackendLocaleProvider>
-    </FilterContextProvider>
+    <FilterEditModeProvider isAdmin={Boolean(user.isAdmin)}>
+      <FilterContextProvider>
+        <BackendLocaleProvider>
+          <OneThirdDrawerLayout user={user} />
+        </BackendLocaleProvider>
+      </FilterContextProvider>
+    </FilterEditModeProvider>
   )
 }
 
