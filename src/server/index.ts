@@ -22,6 +22,7 @@ import {
   HOST_DB_PORT,
   IN_E2E,
   inDevelopment,
+  inProduction,
   SESSION_SECRET,
   UPDATER_CRON_ENABLED,
 } from './util/config.ts'
@@ -39,12 +40,18 @@ redis.on('error', err => {
 let isReady = false
 
 const app = express()
+
 app.use(
   session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: new RedisStore({ client: redis }),
+    cookie: {
+      httpOnly: true,
+      secure: inProduction,
+      sameSite: 'lax',
+    },
   })
 )
 
