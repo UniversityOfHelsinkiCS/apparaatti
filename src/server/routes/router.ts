@@ -26,6 +26,7 @@ import {
   IMAGE_SHA,
   IN_E2E,
   inDevelopment,
+  inProduction,
   PACKAGE_VERSION,
   RELEASE_VERSION,
   UPDATER_CRON_ENABLED,
@@ -161,7 +162,18 @@ const MISSING_SESSION_STATE = 'did not find expected authorization request detai
 const isMissingSessionState = (error: unknown): boolean =>
   error instanceof Error && error.message.includes(MISSING_SESSION_STATE)
 
-router.get('/login', passport.authenticate('oidc'))
+router.get('/login', (req, res, next) => {
+  if (inProduction && !req.secure) {
+    logger.error('Session cookie cannot be set: secure cookies are on but the request is not secure', {
+      path: req.path,
+      protocol: req.protocol,
+      forwardedProto: req.get('x-forwarded-proto') ?? null,
+      trustProxy: req.app.get('trust proxy'),
+    })
+  }
+
+  passport.authenticate('oidc')(req, res, next)
+})
 
 router.get('/login/callback', (req, res, next) => {
   const authenticate = passport.authenticate('oidc', (error: unknown, user: Express.User | false) => {
