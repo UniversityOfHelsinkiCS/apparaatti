@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import type { FilterConfig } from '../../../common/types.ts'
 import useApi from '../../util/useApi.tsx'
 import BlackOutlinedButton from '../common/BlackOutlinedButton.tsx'
+import { adminFetch } from './filterEdit/filterEditorUtils.ts'
 import VariantsOverview from './filterEdit/VariantsOverview.tsx'
 import FilterEditDialog from './FilterEditDialog.tsx'
 import FilterEditingVersionBar from './filterVersions/FilterEditingVersionBar.tsx'
@@ -26,13 +27,6 @@ import FilterVersionsTable from './filterVersions/FilterVersionsTable.tsx'
 interface FilterConfigEditorProps {
   isSuperuser: boolean
 }
-
-const adminFetch = (method: string, path: string, body?: unknown) =>
-  fetch(path, {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  })
 
 const FilterConfigEditor = ({ isSuperuser }: FilterConfigEditorProps) => {
   const { t } = useTranslation()

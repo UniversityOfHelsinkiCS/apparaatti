@@ -1,4 +1,5 @@
 import type { FilterConfig } from '../../../../common/types.ts'
+import { apiFetch } from '../../../util/useApi.tsx'
 
 export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlechoice', 'info-only']
 
@@ -56,9 +57,4 @@ export const toNullIfEmpty = (loc: { fi: string; sv: string; en: string } | null
   return loc
 }
 
-export const adminFetch = (method: string, path: string, body?: unknown) =>
-  fetch(path, {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  })
+export const adminFetch = (method: string, path: string, body?: unknown) => apiFetch(path, method, body)

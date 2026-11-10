@@ -11,6 +11,8 @@ const fetchCsrfToken = async () => {
   return cachedCsrfToken
 }
 
+const isCsrfRejection = (response: Response) => response.status === 403
+
 export const generateSettings = async (method: string, jsonBody?: any) => {
   const settings: Record<string, any> = {}
   settings.method = method
@@ -39,6 +41,17 @@ export const generateSettings = async (method: string, jsonBody?: any) => {
   }
 
   return settings
+}
+
+export const apiFetch = async (endPoint: string, method: string, jsonBody?: unknown): Promise<Response> => {
+  const response = await fetch(endPoint, await generateSettings(method, jsonBody))
+
+  if (method === 'GET' || !isCsrfRejection(response)) {
+    return response
+  }
+
+  cachedCsrfToken = null
+  return await fetch(endPoint, await generateSettings(method, jsonBody))
 }
 
 const useApi = <T = unknown,>(
