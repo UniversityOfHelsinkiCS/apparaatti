@@ -25,7 +25,7 @@ const NewFilterVersionDialog = ({ open, isBusy, onClose, onCreate }: NewFilterVe
     onCreate(name, metaRef.current.description.trim() || null)
   }
 
-  const dialog = (
+  return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>{t('v2:filterVersions.newTitle')}</DialogTitle>
       <DialogContent>
@@ -41,8 +41,6 @@ const NewFilterVersionDialog = ({ open, isBusy, onClose, onCreate }: NewFilterVe
       </DialogActions>
     </Dialog>
   )
-
-  return dialog
 }
 
 export default NewFilterVersionDialog

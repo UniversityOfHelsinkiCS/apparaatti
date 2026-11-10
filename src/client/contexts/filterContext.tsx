@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
 import { CourseData, Question, User, UserSettings, Variant } from '../../common/types'
@@ -351,6 +351,9 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   const [language, setLanguage] = useState('')
   const [studyField, setStudyField] = useState('')
   const [userOrgCode, setUserOrgCode] = useState('')
+  // Prefill the organisation once on load (and again after a reset), so it can otherwise be cleared
+  // on purpose, e.g. "mikä tahansa" when picking the edited variant in edit mode.
+  const organisationInitialized = useRef(false)
   const [courseRecommendations, setCourseRecommendations] = useState<CourseData[] | null>(null)
   const [finalRecommendedCourses, setFinalRecommendedCourses] = useState<CourseData[] | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -524,6 +527,7 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
     })
 
     setUserOrgCode(studyField)
+    organisationInitialized.current = false
   }
 
   const { data: user, isLoading: userLoading } = useApi<User>('user', '/api/user', 'GET')
@@ -544,12 +548,18 @@ export const FilterContextProvider = ({ children }: { children: ReactNode }) => 
   )
 
   useEffect(() => {
+    if (organisationInitialized.current) {
+      return
+    }
     const organisations = user?.isAdmin ? supportedOrganisations : studyData?.organisations
 
-    if (organisations && organisations.length > 0 && !studyField) {
-      const initialValue = organisations[0].code
-      setStudyField(initialValue)
-      setUserOrgCode(initialValue)
+    if (organisations && organisations.length > 0) {
+      organisationInitialized.current = true
+      if (!studyField) {
+        const initialValue = organisations[0].code
+        setStudyField(initialValue)
+        setUserOrgCode(initialValue)
+      }
     }
   }, [user, supportedOrganisations, studyData, studyField])
 

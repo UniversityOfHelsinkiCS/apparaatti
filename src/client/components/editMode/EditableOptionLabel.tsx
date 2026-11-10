@@ -15,7 +15,7 @@ const EditableOptionLabel = ({ optionId, children }: EditableOptionLabelProps) =
     return <>{children}</>
   }
 
-  const label = (
+  return (
     <EditableText
       filterId={scope.filterId}
       field="option"
@@ -29,8 +29,6 @@ const EditableOptionLabel = ({ optionId, children }: EditableOptionLabelProps) =
       {children}
     </EditableText>
   )
-
-  return label
 }
 
 export default EditableOptionLabel

@@ -17,7 +17,7 @@ const FilterVersionMetaFields = ({ initialName, initialDescription = '', onChang
     onChange({ name, description })
   }, [name, description, onChange])
 
-  const fields = (
+  return (
     <Stack spacing={2} sx={{ pt: 1 }}>
       <TextField
         size="small"
@@ -35,8 +35,6 @@ const FilterVersionMetaFields = ({ initialName, initialDescription = '', onChang
       />
     </Stack>
   )
-
-  return fields
 }
 
 export default FilterVersionMetaFields

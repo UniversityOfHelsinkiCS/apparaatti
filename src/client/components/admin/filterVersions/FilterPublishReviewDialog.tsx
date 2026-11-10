@@ -30,7 +30,7 @@ const FilterPublishReviewDialog = ({ snapshot, onClose }: FilterPublishReviewDia
     },
   })
 
-  const dialog = (
+  return (
     <Dialog open={snapshot !== null} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{t('v2:filterVersions.publish.reviewTitle')}</DialogTitle>
       <DialogContent>
@@ -49,8 +49,6 @@ const FilterPublishReviewDialog = ({ snapshot, onClose }: FilterPublishReviewDia
       </DialogActions>
     </Dialog>
   )
-
-  return dialog
 }
 
 export default FilterPublishReviewDialog

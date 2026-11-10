@@ -64,7 +64,7 @@ const Filter = ({
 
   const showAsQuestion = filter.displayType !== 'info-only'
 
-  const rendered = (
+  return (
     <EditScopeProvider
       filterId={filter.id}
       variantName={variantName ?? variant.name}
@@ -130,8 +130,6 @@ const Filter = ({
       </Box>
     </EditScopeProvider>
   )
-
-  return rendered
 }
 
 export default Filter

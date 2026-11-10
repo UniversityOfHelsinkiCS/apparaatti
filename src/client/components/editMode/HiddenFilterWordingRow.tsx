@@ -82,7 +82,7 @@ const HiddenFilterWordingRow = ({
     </Stack>
   )
 
-  const row = (
+  return (
     <Paper variant="outlined" sx={{ p: 2 }}>
       <Stack spacing={1}>
         <Stack direction="row" spacing={1} alignItems="center" useFlexGap flexWrap="wrap">
@@ -94,8 +94,6 @@ const HiddenFilterWordingRow = ({
       </Stack>
     </Paper>
   )
-
-  return row
 }
 
 export default HiddenFilterWordingRow

@@ -12,7 +12,7 @@ const ChangeRow = ({ change }: { change: FilterTextChange }) => {
     language => (change.from?.[language] ?? '') !== (change.to?.[language] ?? '')
   )
 
-  const row = (
+  return (
     <Stack spacing={0.5} sx={{ py: 1 }}>
       <Stack direction="row" spacing={1} alignItems="center" useFlexGap flexWrap="wrap">
         <Typography variant="subtitle2">{change.filterId}</Typography>
@@ -27,8 +27,6 @@ const ChangeRow = ({ change }: { change: FilterTextChange }) => {
       ))}
     </Stack>
   )
-
-  return row
 }
 
 const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
@@ -42,7 +40,7 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
     return <Typography variant="body2">{t('v2:filterVersions.diff.empty')}</Typography>
   }
 
-  const list = (
+  return (
     <Stack divider={<span />}>
       {diff.addedVariants.map(added => (
         <Typography variant="body2" key={`${added.filterId}-${added.variantName}`}>
@@ -57,8 +55,6 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
       ))}
     </Stack>
   )
-
-  return list
 }
 
 export default FilterDiffList

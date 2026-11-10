@@ -48,7 +48,7 @@ const FilterEditingVersionBar = ({ isSuperuser }: { isSuperuser: boolean }) => {
     ? t('v2:filterVersions.liveVersion', { name: activeVersionName })
     : t('v2:filterVersions.liveUnknown')
 
-  const bar = (
+  return (
     <Stack spacing={1} sx={{ mb: 3 }}>
       <Stack direction="row" spacing={2} alignItems="center" useFlexGap flexWrap="wrap">
         <TextField
@@ -98,8 +98,6 @@ const FilterEditingVersionBar = ({ isSuperuser }: { isSuperuser: boolean }) => {
       <FilterPublishReviewDialog snapshot={reviewed} onClose={() => setReviewed(null)} />
     </Stack>
   )
-
-  return bar
 }
 
 export default FilterEditingVersionBar

@@ -83,7 +83,7 @@ const FilterVersionsTable = ({ isSuperuser }: { isSuperuser: boolean }) => {
     importPayload.mutate({ id: version.id, payload: JSON.parse(await file.text()) })
   }
 
-  const table = (
+  return (
     <Box sx={{ mt: 4 }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
         {t('v2:filterVersions.tableTitle')}
@@ -138,8 +138,6 @@ const FilterVersionsTable = ({ isSuperuser }: { isSuperuser: boolean }) => {
       </Table>
     </Box>
   )
-
-  return table
 }
 
 export default FilterVersionsTable

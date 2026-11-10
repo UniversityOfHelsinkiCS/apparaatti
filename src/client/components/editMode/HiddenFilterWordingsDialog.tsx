@@ -37,7 +37,7 @@ const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialo
     })
     .filter(entry => entry.reason !== null)
 
-  const dialog = (
+  return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{t('v2:filterWordings.hidden.title')}</DialogTitle>
       <DialogContent>
@@ -66,8 +66,6 @@ const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialo
       </DialogActions>
     </Dialog>
   )
-
-  return dialog
 }
 
 export default HiddenFilterWordingsDialog

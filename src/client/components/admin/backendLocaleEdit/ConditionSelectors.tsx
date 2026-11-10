@@ -11,7 +11,7 @@ import {
 import { translateLocalizedString } from '../../../util/i18n.ts'
 import useApi from '../../../util/useApi.tsx'
 import LabeledSelect from '../LabeledSelect.tsx'
-import type { ValueDraft } from './backendLocaleUtils.ts'
+import type { ConditionDraft } from './backendLocaleUtils.ts'
 
 type OrganisationOption = {
   id: string
@@ -20,8 +20,8 @@ type OrganisationOption = {
 }
 
 type ConditionSelectorsProps = {
-  draft: ValueDraft
-  onChange: (patch: Partial<ValueDraft>) => void
+  draft: ConditionDraft
+  onChange: (patch: Partial<ConditionDraft>) => void
 }
 
 const ConditionSelectors = ({ draft, onChange }: ConditionSelectorsProps) => {
@@ -35,7 +35,7 @@ const ConditionSelectors = ({ draft, onChange }: ConditionSelectorsProps) => {
   const anyLabel = t('v2:admin.backendLocales.anyValue')
   const specificationDisabled = !specificationCanBeMatched(draft.lang || null, draft.primaryLanguage || null)
 
-  const changeLanguageCondition = (patch: Partial<ValueDraft>) => {
+  const changeLanguageCondition = (patch: Partial<ConditionDraft>) => {
     const lang = patch.lang ?? draft.lang
     const primaryLanguage = patch.primaryLanguage ?? draft.primaryLanguage
     if (specificationCanBeMatched(lang || null, primaryLanguage || null)) {

@@ -24,7 +24,7 @@ const ExitEditModeDialog = ({ open, versionId, versionName, onClose, onConfirm }
     enabled: open && versionId !== null,
   })
 
-  const dialog = (
+  return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>{t('v2:filterWordings.exit.title')}</DialogTitle>
       <DialogContent>
@@ -43,8 +43,6 @@ const ExitEditModeDialog = ({ open, versionId, versionName, onClose, onConfirm }
       </DialogActions>
     </Dialog>
   )
-
-  return dialog
 }
 
 export default ExitEditModeDialog

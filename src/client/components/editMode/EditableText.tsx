@@ -57,7 +57,7 @@ const EditableText = ({
     })
   }
 
-  const editable = (
+  return (
     <Box
       component="span"
       ref={ref}
@@ -94,8 +94,6 @@ const EditableText = ({
       {children}
     </Box>
   )
-
-  return editable
 }
 
 export default EditableText

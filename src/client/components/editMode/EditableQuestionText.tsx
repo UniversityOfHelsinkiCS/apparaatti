@@ -10,7 +10,7 @@ const EditableQuestionText = ({ children }: { children: ReactNode }) => {
     return <>{children}</>
   }
 
-  const text = (
+  return (
     <EditableText
       filterId={scope.filterId}
       field="question"
@@ -23,8 +23,6 @@ const EditableQuestionText = ({ children }: { children: ReactNode }) => {
       {children}
     </EditableText>
   )
-
-  return text
 }
 
 export default EditableQuestionText

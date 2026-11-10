@@ -9,6 +9,8 @@ export type ValueDraft = {
   text: LocalizedText
 }
 
+export type ConditionDraft = Omit<ValueDraft, 'text'>
+
 export const blankLocalized = (): LocalizedText => ({ fi: '', sv: '', en: '' })
 
 export const emptyValueDraft = (): ValueDraft => ({
