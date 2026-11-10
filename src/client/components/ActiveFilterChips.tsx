@@ -1,7 +1,9 @@
 import type { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { filterConfigMap, getFilterVariant, useFilterContext } from '../contexts/filterContext'
+import { getFilterVariant } from '../contexts/filter/filterRules'
+import { filterConfigMap } from '../contexts/filter/filterState'
+import { useFilterContext } from '../contexts/filterContext'
 import HyChip from './common/hy/HyChip'
 
 const MAX_CHARS = 21

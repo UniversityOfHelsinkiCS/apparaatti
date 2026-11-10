@@ -3,16 +3,14 @@ import { FC, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Question, Variant } from '../../common/types'
-import {
-  filterConfigMap,
-  FilterConfigMapType,
-  isFilterStateAnswered,
-  shouldRenderWelcomeFilter,
-  useFilterContext,
-} from '../contexts/filterContext'
+import { shouldRenderWelcomeFilter } from '../contexts/filter/filterRules'
+import { filterConfigMap, FilterConfigMapType, isFilterStateAnswered } from '../contexts/filter/filterState'
+import { useFilterContext } from '../contexts/filterContext'
+import { useFilterEditMode } from '../contexts/filterEditModeContext'
 import Filter from '../filters/filter'
 import useModalLabels from '../hooks/useModalLabels'
 import { resolveVariant } from '../hooks/useQuestions'
+import { canCloseWelcomeModal } from '../util/editModeAnswers'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
@@ -28,6 +26,7 @@ type WelcomeModalProps = {
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
   const { filters, language, primaryLanguage, variantQuery } = filterContext
+  const { isEditMode } = useFilterEditMode()
   const { t } = useTranslation()
   const modalLabels = useModalLabels()
   const configMap = filterConfigMap(filterContext)
@@ -69,9 +68,10 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
 
     return isFilterStateAnswered(entry.config.state)
   })
+  const canClose = canCloseWelcomeModal({ isEditMode, mandatoryQuestionsAnswered })
 
   const handleCloseIfMandatoryAnswered = () => {
-    if (!mandatoryQuestionsAnswered) {
+    if (!canClose) {
       return
     }
 
@@ -96,7 +96,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       )
     }
 
-    const rendered = (
+    return (
       <Filter
         variant={entry.variant}
         filter={buildFilter(entry.question, entry.config)}
@@ -106,8 +106,6 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
         variantQuery={variantQuery}
       />
     )
-
-    return rendered
   }
 
   return (
@@ -118,16 +116,11 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       title={t('v2:welcomeText')}
       size="large"
       scrollable
-      closeable={mandatoryQuestionsAnswered}
+      closeable={canClose}
       showCloseButton={false}
       footer={
         <>
-          <HyButton
-            variant="primary"
-            colour="blue"
-            onClick={handleCloseIfMandatoryAnswered}
-            disabled={!mandatoryQuestionsAnswered}
-          >
+          <HyButton variant="primary" colour="blue" onClick={handleCloseIfMandatoryAnswered} disabled={!canClose}>
             {t('v2:done')}
           </HyButton>
           {isAdmin && (

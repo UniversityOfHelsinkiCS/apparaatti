@@ -1,77 +1,16 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 
-import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
-import { CourseData, Question, User, UserSettings, Variant } from '../../common/types'
-import useApiMutation from '../hooks/useApiMutation'
-import useQuestions, { pickVariant, toVariantQuery, type VariantQuery } from '../hooks/useQuestions'
-import { getDefaultSelectedOptionIds } from '../util/filterDefaults'
-import {
-  checkChallenge,
-  checkCollaboration,
-  checkFinmu,
-  checkFlexible,
-  checkGraduation,
-  checkIndependent,
-  checkIntegrated,
-  checkMentoring,
-  checkMooc,
-  checkMultiPeriod,
-  checkReplacement,
-  checkStudyPeriod,
-  checkStudyPlace,
-  checkStudyYear,
-  isActiveFilterState,
-} from '../util/filtering'
-import useApi from '../util/useApi'
+import type { CourseData, Question, User } from '../../common/types'
+import useQuestions, { type VariantQuery } from '../hooks/useQuestions'
+import type { FilterStateType } from './filter/filterState'
+import useCourseRecommendations from './filter/useCourseRecommendations'
+import useFilterAnswers from './filter/useFilterAnswers'
+import useFilterSources, { type OrganisationOption, type StudyDataResponse } from './filter/useFilterSources'
+import useOptionCounts from './filter/useOptionCounts'
+import useWelcomeModal from './filter/useWelcomeModal'
+import { useFilterEditMode } from './filterEditModeContext'
 
-type LocalFilterStateKey =
-  | 'replacement'
-  | 'mentoring'
-  | 'finmu'
-  | 'challenge'
-  | 'graduation'
-  | 'integrated'
-  | 'independent'
-  | 'studyPlace'
-  | 'studyYear'
-  | 'studyPeriod'
-  | 'mooc'
-  | 'collaboration'
-  | 'multiPeriod'
-  | 'flexible'
-
-/**
- * Maps filter sidebar ids to the corresponding key in FiltersGroupedType.
- * Only contains the ids handled by filterCourseDatas (local/client-side filters).
- */
-const localFilterStateKeys: Record<string, LocalFilterStateKey> = {
-  replacement: 'replacement',
-  mentoring: 'mentoring',
-  finmu: 'finmu',
-  challenge: 'challenge',
-  graduation: 'graduation',
-  integrated: 'integrated',
-  independent: 'independent',
-  'study-place': 'studyPlace',
-  'study-year': 'studyYear',
-  'study-period': 'studyPeriod',
-  mooc: 'mooc',
-  collaboration: 'collaboration',
-  'multi-period': 'multiPeriod',
-  flexible: 'flexible',
-}
-
-type OrganisationOption = {
-  id: string
-  code: string
-  name: unknown
-}
-
-type StudyDataResponse = {
-  organisations: OrganisationOption[]
-}
-
-interface FilterContextType {
+export interface FilterContextType extends FilterStateType {
   variantQuery: VariantQuery
 
   filters: Question[]
@@ -87,685 +26,73 @@ interface FilterContextType {
   highlightedFilterId: string | null
   setHighlightedFilterId: (filterId: string | null) => void
 
-  language: string
-  setLanguage: (s: string) => void
-  primaryLanguage: string
-  setPrimaryLanguage: (s: string) => void
-  primaryLanguageSpecification: string
-  setPrimaryLanguageSpecification: (s: string) => void
-
-  studyField: string
-  setStudyField: (s: string) => void
-  previouslyDoneLang: string
-  setPreviouslyDoneLang: (s: string) => void
-  replacement: string
-  setReplacement: (s: string) => void
-  mentoring: string
-  setMentoring: (s: string) => void
-  finmu: string
-  setFinmu: (s: string) => void
-  challenge: string
-  setChallenge: (s: string) => void
-  graduation: string
-  setGraduation: (s: string) => void
-  studyPlace: string[]
-  setStudyPlace: (s: string[]) => void
-  studyYear: string
-  setStudyYear: (s: string) => void
-  studyPeriod: string[]
-  setStudyPeriod: (s: string[]) => void
-  integrated: string
-  setIntegrated: (s: string) => void
-  independent: string
-  setIndependent: (s: string) => void
-  mooc: string
-  setMooc: (s: string) => void
-  collaboration: string
-  setCollaboration: (s: string) => void
-  multiPeriod: string
-  setMultiPeriod: (s: string) => void
-  flexible: string
-  setFlexible: (s: string) => void
-
   resetFilters: () => void
   getOptionCount: (optionId: string, filterId: string) => number | null
   filterState: FilterStateType
 }
 
-export type FilterStateType = {
-  primaryLanguage: string
-  setPrimaryLanguage: (s: string) => void
-  language: string
-  setLanguage: (s: string) => void
-  primaryLanguageSpecification: string
-  setPrimaryLanguageSpecification: (s: string) => void
-  studyField: string
-  setStudyField: (s: string) => void
-  previouslyDoneLang: string
-  setPreviouslyDoneLang: (s: string) => void
-  replacement: string
-  setReplacement: (s: string) => void
-  mentoring: string
-  setMentoring: (s: string) => void
-  finmu: string
-  setFinmu: (s: string) => void
-  challenge: string
-  setChallenge: (s: string) => void
-  graduation: string
-  setGraduation: (s: string) => void
-  studyPlace: string[]
-  setStudyPlace: (s: string[]) => void
-  studyYear: string
-  setStudyYear: (s: string) => void
-  studyPeriod: string[]
-  setStudyPeriod: (s: string[]) => void
-  integrated: string
-  setIntegrated: (s: string) => void
-  independent: string
-  setIndependent: (s: string) => void
-  mooc: string
-  setMooc: (s: string) => void
-  collaboration: string
-  setCollaboration: (s: string) => void
-  multiPeriod: string
-  setMultiPeriod: (s: string) => void
-  flexible: string
-  setFlexible: (s: string) => void
-}
-
-export type FilterConfigMapType = {
-  state: string | string[]
-  setState: (state: string | string[]) => void
-}
-
-/**
- * Returns a helper map to easily access the state of the filters and the comparison function of the filter
- * @param filters
- * @returns
- */
-export const filterConfigMap = (filters: any) =>
-  new Map<string, FilterConfigMapType>([
-    //server side filters
-    ['study-field-select', { state: filters.studyField, setState: filters.setStudyField }],
-    ['primary-language', { state: filters.primaryLanguage, setState: filters.setPrimaryLanguage }],
-    [
-      'primary-language-specification',
-      { state: filters.primaryLanguageSpecification, setState: filters.setPrimaryLanguageSpecification },
-    ],
-    ['lang', { state: filters.language, setState: filters.setLanguage }],
-
-    //just a info filter
-    ['previusly-done-lang', { state: filters.previouslyDoneLang, setState: filters.setPreviouslyDoneLang }],
-
-    //local filters
-    ['replacement', { state: filters.replacement, setState: filters.setReplacement }],
-    ['mentoring', { state: filters.mentoring, setState: filters.setMentoring }],
-    ['finmu', { state: filters.finmu, setState: filters.setFinmu }],
-    ['challenge', { state: filters.challenge, setState: filters.setChallenge }],
-    ['graduation', { state: filters.graduation, setState: filters.setGraduation }],
-    ['integrated', { state: filters.integrated, setState: filters.setIntegrated }],
-    ['independent', { state: filters.independent, setState: filters.setIndependent }],
-    ['study-place', { state: filters.studyPlace, setState: filters.setStudyPlace }],
-    ['study-year', { state: filters.studyYear, setState: filters.setStudyYear }],
-    ['study-period', { state: filters.studyPeriod, setState: filters.setStudyPeriod }],
-    ['mooc', { state: filters.mooc, setState: filters.setMooc }],
-    ['collaboration', { state: filters.collaboration, setState: filters.setCollaboration }],
-    ['multi-period', { state: filters.multiPeriod, setState: filters.setMultiPeriod }],
-    ['flexible', { state: filters.flexible, setState: filters.setFlexible }],
-  ])
-
-const runFilter = (
-  result: CourseData[],
-  value: string | string[],
-  check: (c: CourseData, value: any) => boolean
-): CourseData[] => {
-  if (isActiveFilterState(value)) {
-    return result.filter(c => check(c, value))
-  }
-  return result
-}
-
-/**
- * @param courseData
- * applies local filters to courseData according to the choices
- *
- *
- * @param filters
- */
-
-export const filterCourseDatas = (courseData: CourseData[], filters: FilterStateType) => {
-  let result: CourseData[] = Array.from(courseData)
-
-  result = runFilter(result, filters.replacement, checkReplacement)
-  result = runFilter(result, filters.mentoring, checkMentoring)
-  result = runFilter(result, filters.finmu, checkFinmu)
-  result = runFilter(result, filters.challenge, checkChallenge)
-  result = runFilter(result, filters.graduation, checkGraduation)
-  result = runFilter(result, filters.integrated, checkIntegrated)
-  result = runFilter(result, filters.independent, checkIndependent)
-  result = runFilter(result, filters.studyPlace, checkStudyPlace)
-  result = runFilter(result, filters.studyYear, checkStudyYear)
-  result = runFilter(result, filters.studyPeriod, checkStudyPeriod)
-  result = runFilter(result, filters.mooc, checkMooc)
-  result = runFilter(result, filters.collaboration, checkCollaboration)
-  result = runFilter(result, filters.multiPeriod, checkMultiPeriod)
-  result = runFilter(result, filters.flexible, checkFlexible)
-
-  return result
-}
-
-export const isFilterStateAnswered = (state: unknown): boolean => {
-  if (Array.isArray(state)) {
-    return state.length > 0
-  }
-
-  if (typeof state === 'string') {
-    return state !== ''
-  }
-
-  return Boolean(state)
-}
-
-export const shouldRenderWelcomeFilter = (
-  filterId: string,
-  variant: Variant | undefined,
-  language: string,
-  primaryLanguage: string
-): boolean => {
-  if (!variant || variant.skipped) {
-    return false
-  }
-
-  if (filterId === 'primary-language-specification') {
-    return language !== '' && language !== 'en' && language === primaryLanguage
-  }
-
-  return true
-}
-
-/**
- * @returns
- * Mandatory filters that are being displayed in the app,
- * taking into account the cases where the user searches for main language courses
- */
-type MandatoryCheckState = FilterStateType & { variantQuery: VariantQuery }
-
-export const getUnansweredCurrentMandatoryFilters = (filters: Question[], state: MandatoryCheckState) => {
-  const configMap = filterConfigMap(state)
-  const { variantQuery, language, primaryLanguage } = state
-
-  return filters.filter(filter => {
-    if (!filter.mandatory) {
-      return false
-    }
-
-    const variant = pickVariant(filter, variantQuery)
-    if (!shouldRenderWelcomeFilter(filter.id, variant, language, primaryLanguage)) {
-      return false
-    }
-
-    const config = configMap.get(filter.id)
-    if (!config) {
-      return false
-    }
-
-    return !isFilterStateAnswered(config.state)
-  })
-}
-
-export const shouldShowFilterInSidebar = (filter: Pick<Question, 'hideInFilterSidebar'>) => {
-  return !filter.hideInFilterSidebar
-}
-
-export const shouldResetFilter = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
-  return !filter.showInWelcomeModal || filter.id === 'primary-language-specification'
-}
-
-export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any): string => {
-  const question = filterContext.filters.find((q: any) => q.coordinateKey === coordinateKey)
-  return question?.shortName ?? coordinateKey
-}
-
-export const getFilterVariant = (filterContext: FilterContextType, filterId: string) => {
-  const question = filterContext.filters.find((q: any) => q.id === filterId)
-  const context = toVariantQuery(
-    filterContext.studyField,
-    filterContext.language,
-    filterContext.primaryLanguage,
-    filterContext.primaryLanguageSpecification
-  )
-
-  const variant = question != undefined ? pickVariant(question, context) : null
-  if (variant) {
-    return variant
-  } else {
-    return null
-  }
-}
-
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 
 export const FilterContextProvider = ({ children }: { children: ReactNode }) => {
-  const [primaryLanguage, setPrimaryLanguage] = useState('')
-  const [primaryLanguageSpecification, setPrimaryLanguageSpecification] = useState('')
-  const [language, setLanguage] = useState('')
-  const [studyField, setStudyField] = useState('')
-  const [userOrgCode, setUserOrgCode] = useState('')
-  // Prefill the organisation once on load (and again after a reset), so it can otherwise be cleared
-  // on purpose, e.g. "mikä tahansa" when picking the edited variant in edit mode.
-  const organisationInitialized = useRef(false)
-  const [courseRecommendations, setCourseRecommendations] = useState<CourseData[] | null>(null)
-  const [finalRecommendedCourses, setFinalRecommendedCourses] = useState<CourseData[] | null>(null)
-  const [modalOpen, setModalOpen] = useState(false)
+  const { isEditMode } = useFilterEditMode()
   const [highlightedFilterId, setHighlightedFilterId] = useState<string | null>(null)
-
-  const shouldUsePrimaryLanguageSpecification = language !== '' && language !== 'en' && language === primaryLanguage
-
-  const variantQuery = toVariantQuery(studyField, language, primaryLanguage, primaryLanguageSpecification)
-
-  const [previouslyDoneLang, setPreviouslyDoneLang] = useState('')
-  const [replacement, setReplacement] = useState('')
-  const [mentoring, setMentoring] = useState('')
-  const [finmu, setFinmu] = useState('')
-  const [challenge, setChallenge] = useState('')
-  const [graduation, setGraduation] = useState('')
-  const [studyPlace, setStudyPlace] = useState<string[]>([])
-  const [studyYear, setStudyYear] = useState('2026')
-  const [studyPeriod, setStudyPeriod] = useState<string[]>([])
-  const [integrated, setIntegrated] = useState('')
-  const [independent, setIndependent] = useState('')
-  const [mooc, setMooc] = useState('')
-  const [collaboration, setCollaboration] = useState('')
-  const [multiPeriod, setMultiPeriod] = useState('')
-  const [flexible, setFlexible] = useState('')
-  const [multichoiceDefaultsInitialized, setMultichoiceDefaultsInitialized] = useState(false)
   const { filters, isLoading: filtersLoading } = useQuestions()
+  const sources = useFilterSources()
+  const isLoading = sources.isLoading || filtersLoading
 
-  const getDefaultMultichoiceState = useCallback(
-    (filterId: string) =>
-      getDefaultSelectedOptionIds(
-        filters.find(filter => filter.id === filterId),
-        ANY_VARIANT_QUERY
-      ),
-    [filters]
-  )
-
-  useEffect(() => {
-    if (!filtersLoading && filters.length > 0 && !multichoiceDefaultsInitialized) {
-      setStudyPlace(getDefaultMultichoiceState('study-place'))
-      setStudyPeriod(getDefaultMultichoiceState('study-period'))
-      setMultichoiceDefaultsInitialized(true)
-    }
-  }, [filters, filtersLoading, multichoiceDefaultsInitialized, getDefaultMultichoiceState])
-
-  useEffect(() => {
-    if (!shouldUsePrimaryLanguageSpecification && primaryLanguageSpecification !== '') {
-      setPrimaryLanguageSpecification('')
-    }
-  }, [shouldUsePrimaryLanguageSpecification, primaryLanguageSpecification])
-
-  const filterState: FilterStateType = {
-    studyField,
-    setStudyField,
-    primaryLanguage,
-    setPrimaryLanguage,
-    language,
-    setLanguage,
-    primaryLanguageSpecification,
-    setPrimaryLanguageSpecification,
-    previouslyDoneLang,
-    setPreviouslyDoneLang,
-    replacement,
-    setReplacement,
-    mentoring,
-    setMentoring,
-    finmu,
-    setFinmu,
-    challenge,
-    setChallenge,
-    graduation,
-    setGraduation,
-    studyPlace,
-    setStudyPlace,
-    studyYear,
-    setStudyYear,
-    studyPeriod,
-    setStudyPeriod,
-    integrated,
-    setIntegrated,
-    independent,
-    setIndependent,
-    mooc,
-    setMooc,
-    collaboration,
-    setCollaboration,
-    multiPeriod,
-    setMultiPeriod,
-    flexible,
-    setFlexible,
-  }
-
-  /**
-   * Precomputed map of `${filterId}:${optionId}` → course count that would be
-   * visible if that option were selected (given all other active filters).
-   * Only populated for local (client-side) filter ids.
-   */
-  const optionCountMap = useMemo(() => {
-    const map = new Map<string, number>()
-
-    for (const question of filters) {
-      const stateKey = localFilterStateKeys[question.id]
-      if (!stateKey) continue
-
-      const variant = pickVariant(question, variantQuery)
-      if (!variant || variant.skipped || !variant.options) continue
-
-      for (const option of variant.options) {
-        let hypotheticalValue: string | string[]
-
-        if (question.displayType === 'multichoice') {
-          // Show how many courses match this option alone (with all other filters active)
-          hypotheticalValue = [option.id]
-        } else {
-          // singlechoice and dropdownselect: replace
-          hypotheticalValue = option.id
-        }
-
-        const hypotheticalState = { ...filterState, [stateKey]: hypotheticalValue }
-        const count = filterCourseDatas(courseRecommendations ?? [], hypotheticalState).length
-        map.set(`${question.id}:${option.id}`, count)
-      }
-    }
-
-    return map
-  }, [
-    courseRecommendations,
+  // Hook order matters: React runs effects in call order (answers → welcome modal → recommendations).
+  const answers = useFilterAnswers({
     filters,
+    filtersLoading,
+    user: sources.user,
+    studyData: sources.studyData,
+    supportedOrganisations: sources.supportedOrganisations,
+  })
+  const { filterState, variantQuery } = answers
+
+  const { modalOpen, setModalOpen } = useWelcomeModal({
+    filters,
+    filterState,
     variantQuery,
-    replacement,
-    mentoring,
-    finmu,
-    challenge,
-    graduation,
-    studyPlace,
-    studyYear,
-    studyPeriod,
-    integrated,
-    independent,
-    mooc,
-    collaboration,
-    multiPeriod,
-    flexible,
-  ])
+    isLoading,
+    isEditMode,
+    userSettings: sources.userSettings,
+  })
 
-  const getOptionCount = (filterId: string, optionId: string): number | null => {
-    if (!(filterId in localFilterStateKeys)) return null
-    return optionCountMap.get(`${filterId}:${optionId}`) ?? null
-  }
+  const { courseRecommendations, finalRecommendedCourses } = useCourseRecommendations({
+    filters,
+    filterState,
+    variantQuery,
+    userOrgCode: answers.userOrgCode,
+    shouldUsePrimaryLanguageSpecification: answers.shouldUsePrimaryLanguageSpecification,
+    isEditMode,
+    userSettings: sources.userSettings,
+    userSettingsLoading: sources.userSettingsLoading,
+    refetchUserSettings: sources.refetchUserSettings,
+  })
 
-  const resetFilters = () => {
-    const sidebarFilterIds = new Set(filters.filter(filter => shouldResetFilter(filter)).map(filter => filter.id))
-    const configMap = filterConfigMap(filterState)
-
-    sidebarFilterIds.forEach(filterId => {
-      const config = configMap.get(filterId)
-      if (!config) {
-        return
-      }
-
-      if (filterId === 'study-place' || filterId === 'study-period') {
-        config.setState(getDefaultMultichoiceState(filterId))
-        return
-      }
-
-      if (filterId === 'study-year') {
-        config.setState('2026')
-        return
-      }
-
-      config.setState('')
-    })
-
-    setUserOrgCode(studyField)
-    organisationInitialized.current = false
-  }
-
-  const { data: user, isLoading: userLoading } = useApi<User>('user', '/api/user', 'GET')
-  const {
-    data: userSettings,
-    isLoading: userSettingsLoading,
-    refetch: refetchUserSettings,
-  } = useApi<UserSettings>('userSettings', '/api/user/settings', 'GET')
-  const { data: studyData, isLoading: studyDataLoading } = useApi<StudyDataResponse>(
-    'studyData',
-    '/api/user/studydata',
-    'GET'
-  )
-  const { data: supportedOrganisations, isLoading: supportedOrganisationsLoading } = useApi<OrganisationOption[]>(
-    'supportedOrganisations',
-    '/api/organisations/supported',
-    'GET'
-  )
-
-  useEffect(() => {
-    if (organisationInitialized.current) {
-      return
-    }
-    const organisations = user?.isAdmin ? supportedOrganisations : studyData?.organisations
-
-    if (organisations && organisations.length > 0) {
-      organisationInitialized.current = true
-      if (!studyField) {
-        const initialValue = organisations[0].code
-        setStudyField(initialValue)
-        setUserOrgCode(initialValue)
-      }
-    }
-  }, [user, supportedOrganisations, studyData, studyField])
-
-  const isLoading =
-    userLoading || studyDataLoading || supportedOrganisationsLoading || filtersLoading || userSettingsLoading
-
-  const unansweredModalMandatoryKey = getUnansweredCurrentMandatoryFilters(
-    filters.filter(filter => filter.showInWelcomeModal),
-    { ...filterState, variantQuery }
-  )
-    .map(filter => filter.id)
-    .join(',')
-
-  useEffect(() => {
-    if (isLoading) {
-      return
-    }
-
-    if (unansweredModalMandatoryKey !== '') {
-      sessionStorage.setItem('hasVisitedV2', 'true')
-      setModalOpen(true)
-      return
-    }
-
-    const hasVisited = sessionStorage.getItem('hasVisitedV2')
-    if (!hasVisited) {
-      sessionStorage.setItem('hasVisitedV2', 'true')
-      //preventing the modal from automatically opening if the user already has a first language
-      if (!userSettings?.educationLanguage) {
-        setModalOpen(true)
-      }
-    }
-  }, [isLoading, unansweredModalMandatoryKey, userSettings])
-
-  const submitAnswerMutation = useApiMutation(async (res: Response) => {
-    const recommendations = await res.json()
-    if (!res.ok) {
-      throw new Error('Network response was not ok')
-    }
-
-    const dateFormatted: CourseData[] = recommendations.map((c: any) => {
-      return {
-        ...c,
-        startDate: new Date(c.startDate),
-        endDate: new Date(c.endDate),
-      }
-    })
-
-    setCourseRecommendations(dateFormatted)
-  }, '/api/form/coursedata')
-
-  const submitSettingsMutation = useApiMutation(async (res: Response) => {
-    if (!res.ok) {
-      throw new Error('Network response was not ok')
-    }
-    refetchUserSettings()
-  }, '/api/user/settings')
-
-  useEffect(() => {
-    setFinalRecommendedCourses(courseRecommendations)
-  }, [courseRecommendations])
-
-  const getTrueFilterValue = (filterOptionId: string, questionId: string) => {
-    const filter = filters.find(f => f.id === questionId)
-    if (!filter || !filter.variants) {
-      return filterOptionId
-    }
-
-    const variant = pickVariant(filter, variantQuery)
-    if (!variant || !variant.options) {
-      return filterOptionId
-    }
-    const option = variant?.options.find(o => o.id === filterOptionId)
-    if (option?.valueOverride != undefined) {
-      return option.valueOverride
-    } else {
-      return filterOptionId
-    }
-  }
-  const submitFilters = () => {
-    const answerDataRaw = {
-      'study-field-select': getTrueFilterValue(userOrgCode, 'study-field-select'),
-      'primary-language': getTrueFilterValue(primaryLanguage, 'primary-language'),
-      lang: getTrueFilterValue(language, 'lang'),
-      'primary-language-specification': shouldUsePrimaryLanguageSpecification
-        ? getTrueFilterValue(primaryLanguageSpecification, 'primary-language-specification')
-        : '',
-    }
-
-    const answerData = Object.fromEntries(
-      Object.entries(answerDataRaw).filter(([, value]) => {
-        if (typeof value === 'string') {
-          return value !== ''
-        }
-        return true
-      })
-    )
-
-    const payload = {
-      answerData,
-    }
-
-    submitAnswerMutation.mutateAsync(payload, undefined)
-  }
-
-  //setting the welcome modal open if there is no lang in db.
-  useEffect(() => {
-    if (!userSettingsLoading) {
-      const lang = userSettings?.educationLanguage
-      if (lang && lang.length > 0 && primaryLanguage != lang) {
-        setPrimaryLanguage(lang)
-      }
-    }
-  }, [userSettings])
-
-  useEffect(() => {
-    if (primaryLanguage && primaryLanguage.length > 0 && primaryLanguage != userSettings?.educationLanguage) {
-      submitSettingsMutation.mutateAsync({ educationLanguage: primaryLanguage }, undefined)
-    }
-    submitFilters()
-  }, [userOrgCode, primaryLanguage, language, primaryLanguageSpecification])
-
-  useEffect(() => {
-    const filtered = filterCourseDatas(courseRecommendations ?? [], filterState)
-
-    setFinalRecommendedCourses(filtered)
-  }, [
-    previouslyDoneLang,
-    replacement,
-    mentoring,
-    finmu,
-    challenge,
-    graduation,
-    studyPlace,
-    studyYear,
-    studyPeriod,
-    integrated,
-    independent,
-    mooc,
-    collaboration,
-    multiPeriod,
-    flexible,
-    courseRecommendations,
-  ])
+  const { getOptionCount } = useOptionCounts({ filters, filterState, variantQuery, courseRecommendations })
 
   return (
     <FilterContext.Provider
       value={{
+        ...filterState,
+        filterState,
         variantQuery,
-        language,
-        setLanguage,
-
-        primaryLanguage,
-        setPrimaryLanguage,
-
-        primaryLanguageSpecification,
-        setPrimaryLanguageSpecification,
-
         filters,
-        user,
-        studyData,
-        supportedOrganisations,
-        setUserOrgCode,
+        user: sources.user,
+        studyData: sources.studyData,
+        supportedOrganisations: sources.supportedOrganisations,
+        setUserOrgCode: answers.setUserOrgCode,
         courseRecommendations,
+        finalRecommendedCourses,
         isLoading,
         modalOpen,
         setModalOpen,
-        finalRecommendedCourses,
         highlightedFilterId,
         setHighlightedFilterId,
-
-        studyField,
-        setStudyField,
-        previouslyDoneLang,
-        setPreviouslyDoneLang,
-        replacement,
-        setReplacement,
-        mentoring,
-        setMentoring,
-        finmu,
-        setFinmu,
-        challenge,
-        setChallenge,
-        graduation,
-        setGraduation,
-        studyPlace,
-        setStudyPlace,
-        studyYear,
-        setStudyYear,
-        studyPeriod,
-        setStudyPeriod,
-        integrated,
-        setIntegrated,
-        independent,
-        setIndependent,
-        mooc,
-        setMooc,
-        collaboration,
-        setCollaboration,
-        multiPeriod,
-        setMultiPeriod,
-        flexible,
-        setFlexible,
-        resetFilters,
+        resetFilters: answers.resetFilters,
         getOptionCount,
-        filterState,
       }}
     >
       {children}

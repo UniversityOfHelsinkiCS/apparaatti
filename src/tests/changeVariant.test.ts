@@ -5,7 +5,7 @@ import {
   normalizeVariantQuery,
   queryForVariant,
 } from '../client/components/editMode/changeVariant'
-import type { VariantQuery } from '../common/conditionMatching'
+import { describeVariantQuery, type VariantQuery } from '../common/conditionMatching'
 import type { FilterVariant } from '../common/types'
 
 const variant = (conditions: Partial<FilterVariant>): FilterVariant => ({
@@ -61,6 +61,24 @@ describe('queryForVariant', () => {
 
   it('keeps everything for the catch-all variant', () => {
     expect(queryForVariant(variant({}), current)).toEqual(current)
+  })
+
+  it('keeps an "any" faculty empty when the variant has no organisation condition', () => {
+    const anyFaculty = { ...current, organisationCode: '' }
+    expect(queryForVariant(variant({ lang: 'sv', primaryLanguage: 'fi' }), anyFaculty).organisationCode).toBe('')
+  })
+})
+
+describe('describeVariantQuery with an "any" faculty', () => {
+  it('leaves the organisation code out of the variant key', () => {
+    expect(
+      describeVariantQuery({
+        organisationCode: '',
+        lang: 'sv',
+        primaryLanguage: 'fi',
+        primaryLanguageSpecification: '',
+      })
+    ).toBe('sv-fi')
   })
 })
 

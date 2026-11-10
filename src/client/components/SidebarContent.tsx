@@ -3,12 +3,9 @@ import { PanelLeftClose } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  filterConfigMap,
-  isFilterStateAnswered,
-  shouldShowFilterInSidebar,
-  useFilterContext,
-} from '../contexts/filterContext'
+import { shouldShowFilterInSidebar } from '../contexts/filter/filterRules'
+import { filterConfigMap, isFilterStateAnswered } from '../contexts/filter/filterState'
+import { useFilterContext } from '../contexts/filterContext'
 import HyButton from './common/hy/HyButton'
 import HyIconButton from './common/hy/HyIconButton'
 import HySpinner from './common/hy/HySpinner'

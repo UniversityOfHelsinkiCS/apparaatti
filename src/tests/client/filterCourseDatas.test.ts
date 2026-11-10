@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { filterCourseDatas, FilterStateType } from '../../client/contexts/filterContext.tsx'
+import { filterCourseDatas, FilterStateType } from '../../client/contexts/filter/filterState'
 import type { CourseData, Period } from '../../common/types.ts'
 
 const createCustomCodeUrns = (...codes: string[]) => ({
