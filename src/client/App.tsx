@@ -8,13 +8,14 @@ import AppHeader from './AppHeader'
 import { hy } from './components/common/hy/hyTokens'
 import CourseRecommendations from './components/CourseRecommendations'
 import FilterEditModeOverlay from './components/editMode/FilterEditModeOverlay'
+import LoginFailedPage from './components/LoginFailedPage'
 import SidebarContent from './components/SidebarContent'
 import WelcomeModal from './components/WelcomeModal'
 import { BackendLocaleProvider } from './contexts/backendLocaleContext'
 import { FilterContextProvider, useFilterContext } from './contexts/filterContext'
 import { FilterEditModeProvider } from './contexts/filterEditModeContext'
 import useBreakpoints from './hooks/useBreakpoints'
-import { RedirectToLogin } from './util/redirectToLogin'
+import { loginFailureFromUrl, RedirectToLogin } from './util/redirectToLogin'
 import useRequiredUser from './util/useRequiredUser'
 
 const desktopDrawerWidth = '38%'
@@ -131,10 +132,12 @@ const OneThirdDrawerLayout = ({ user }: OneThirdDrawerLayoutProps) => {
 const App = () => {
   const { user, isLoading: isUserLoading, isUnauthorized } = useRequiredUser()
 
+  const loginFailure = loginFailureFromUrl()
+
   if (isUserLoading) return null // loads too quickly for loading state to make sense
 
   if (isUnauthorized || !user) {
-    return <RedirectToLogin />
+    return loginFailure ? <LoginFailedPage reason={loginFailure} /> : <RedirectToLogin />
   }
 
   return (

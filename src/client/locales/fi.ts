@@ -149,6 +149,13 @@ export default {
     },
     appTitle: 'Polku',
     adminButton: 'ADMIN',
+    login: {
+      failedTitle: 'Kirjautuminen ei onnistunut',
+      expiredDescription:
+        'Kirjautuminen keskeytyi, koska istunto ehti vanhentua. Tämä tapahtuu myös, jos palasit selaimen historiasta vanhaan kirjautumisosoitteeseen. Aloita kirjautuminen uudelleen.',
+      failedDescription: 'Kirjautuminen ei onnistunut. Yritä uudelleen.',
+      tryAgain: 'Kirjaudu uudelleen',
+    },
     filterWordings: {
       overlay: {
         title: 'Muokkaustila päällä',

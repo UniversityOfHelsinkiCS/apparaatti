@@ -150,6 +150,13 @@ export default {
     },
     appTitle: 'Polku',
     adminButton: 'ADMIN',
+    login: {
+      failedTitle: 'Inloggningen lyckades inte',
+      expiredDescription:
+        'Inloggningen avbröts eftersom sessionen hann gå ut. Det här händer också om du återvände till en gammal inloggningsadress från webbläsarens historik. Börja om inloggningen.',
+      failedDescription: 'Inloggningen lyckades inte. Försök igen.',
+      tryAgain: 'Logga in igen',
+    },
     filterWordings: {
       overlay: {
         title: 'Redigeringsläge på',

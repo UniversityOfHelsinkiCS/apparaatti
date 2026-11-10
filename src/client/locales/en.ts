@@ -149,6 +149,13 @@ export default {
     },
     appTitle: 'Polku',
     adminButton: 'ADMIN',
+    login: {
+      failedTitle: 'Signing in did not work',
+      expiredDescription:
+        'Signing in was interrupted because the session had expired. This also happens if you returned to an old sign-in address from your browser history. Please start again.',
+      failedDescription: 'Signing in did not succeed. Please try again.',
+      tryAgain: 'Sign in again',
+    },
     filterWordings: {
       overlay: {
         title: 'Edit mode on',

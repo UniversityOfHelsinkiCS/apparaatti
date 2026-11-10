@@ -37,6 +37,7 @@ import { allOrganisations, organisationsWithSupportedCodes } from '../util/dbAct
 import { allRecommendationCodeRows } from '../util/dbActions/recommendationCodes.ts'
 import { createUserFeedbackEntry } from '../util/dbActions/userFeedback.ts'
 import { getUserSettings, updateUserSettings } from '../util/dbActions/users.ts'
+import logger from '../util/logger.ts'
 import { codesForOrganisation, courseHasCustomCodeUrn } from '../util/organisationCourseRecommmendations.ts'
 import { getCourseData, getRealisationsWithCourseUnitCodes } from '../util/recommender.ts'
 import { getStudyData } from '../util/studydata.ts'
@@ -155,10 +156,42 @@ router.post('/feedback', requireUser, async (req, res) => {
   res.json({ status: 'success' })
 })
 
+const MISSING_SESSION_STATE = 'did not find expected authorization request details in session'
+
+const isMissingSessionState = (error: unknown): boolean =>
+  error instanceof Error && error.message.includes(MISSING_SESSION_STATE)
+
 router.get('/login', passport.authenticate('oidc'))
 
-router.get('/login/callback', passport.authenticate('oidc', { failureRedirect: '/' }), async (_req, res) => {
-  res.redirect('/')
+router.get('/login/callback', (req, res, next) => {
+  const authenticate = passport.authenticate('oidc', (error: unknown, user: Express.User | false) => {
+    if (error && !isMissingSessionState(error)) {
+      next(error)
+      return
+    }
+
+    if (error) {
+      logger.warn('OIDC callback arrived without session state', { path: req.path })
+      res.redirect('/?login=expired')
+      return
+    }
+
+    if (!user) {
+      res.redirect('/?login=failed')
+      return
+    }
+
+    req.logIn(user, loginError => {
+      if (loginError) {
+        next(loginError)
+        return
+      }
+
+      res.redirect('/')
+    })
+  })
+
+  authenticate(req, res, next)
 })
 
 router.get('/user', requireUser, async (req, res) => {
