@@ -1,7 +1,29 @@
-import { describeConditions } from '../../../common/conditionMatching'
+import { describeConditions, type MatchConditions } from '../../../common/conditionMatching'
 import type { FilterMutations, FilterVariant, FilterWordingMutation, LocalizedText } from '../../../common/types'
 import type { EditTarget } from '../../contexts/filterEditModeContext'
-import type { PickedTarget } from './VariantTargetChoice'
+import { describeFilterVariant } from './changeVariant'
+
+/** Where an edited text is saved: an existing variant of the filter, or a new one with these conditions. */
+export type PickedTarget = { mode: 'existing'; variantName: string } | { mode: 'new'; conditions: MatchConditions }
+
+type TargetLabels = {
+  /** Label of the catch-all variant, e.g. "Yleinen oletusteksti". */
+  defaultLabel: string
+  /** Label of a variant still to be created, given its key, e.g. "Uusi variantti: sv-fi". */
+  newVariant: (variantKey: string) => string
+}
+
+export const describePickedTarget = (
+  picked: PickedTarget,
+  filterVariants: FilterVariant[],
+  labels: TargetLabels
+): string => {
+  if (picked.mode === 'new') {
+    return labels.newVariant(describeConditions(picked.conditions))
+  }
+  const variant = filterVariants.find(candidate => candidate.name === picked.variantName)
+  return variant ? describeFilterVariant(variant, labels.defaultLabel) : picked.variantName
+}
 
 export const emptyLocalized: LocalizedText = { fi: '', sv: '', en: '' }
 
@@ -26,16 +48,11 @@ export const textForVariant = (target: EditTarget, variant: FilterVariant | unde
   return emptyLocalized
 }
 
-export const wordingMutations = (
-  target: EditTarget,
-  text: LocalizedText,
-  picked: PickedTarget | null
-): FilterMutations => {
+export const wordingMutations = (target: EditTarget, text: LocalizedText, picked: PickedTarget): FilterMutations => {
   const wordings: FilterWordingMutation[] = []
-  let variantName = target.variantName
+  const variantName = picked.mode === 'new' ? describeConditions(picked.conditions) : picked.variantName
 
-  if (picked?.mode === 'new') {
-    variantName = describeConditions(picked.conditions)
+  if (picked.mode === 'new') {
     wordings.push({
       op: 'createVariant',
       filterId: target.filterId,
@@ -46,8 +63,6 @@ export const wordingMutations = (
       primaryLanguage: picked.conditions.primaryLanguage,
       primaryLanguageSpecification: picked.conditions.primaryLanguageSpecification,
     })
-  } else if (picked?.mode === 'existing') {
-    variantName = picked.variantName
   }
 
   if (target.field === 'shortName') {

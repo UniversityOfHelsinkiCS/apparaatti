@@ -164,10 +164,6 @@ export default {
         title: 'Byt variant som redigeras',
         intro:
           'Varianten följer svaren på frågorna. Valen ändrar svaren på sidan, så att du ser och redigerar den valda varianten.',
-        unsavedWarning: 'Osparade ändringar går förlorade när varianten byts.',
-        existingVariants: 'Filtrets varianter',
-        pickExisting: 'Välj en befintlig variant',
-        noPick: 'Inget val',
         conditionsTitle: 'Variant som redigeras',
         preview: 'Resulterande variant: {{variant}}',
         cancel: 'Avbryt',
@@ -188,8 +184,6 @@ export default {
         extraInfo: 'Tilläggsinformation',
       },
       popover: {
-        variantScope: 'Redigeringen gäller varianten {{variant}}',
-        filterScope: 'Redigeringen gäller hela filtret, inte en enskild variant',
         defaultWarning: 'Du redigerar standardtexten. Ändringen syns i alla varianter som använder standardvarianten.',
         language: {
           fi: 'På finska',
@@ -201,10 +195,17 @@ export default {
         saveFailed: 'Sparandet misslyckades',
       },
       choice: {
-        pickTarget: 'Välj vilken variant du redigerar.',
         default: 'Allmän standardtext',
         createNew: 'Skapa en ny variant',
         continue: 'Fortsätt',
+      },
+      target: {
+        variant: 'Variant som redigeras',
+        current: 'Variant som redigeras: {{variant}}',
+        allVariants: 'alla varianter',
+        newVariant: 'Ny variant: {{variant}}',
+        change: 'Byt',
+        unsavedWarning: 'Osparade ändringar ersätts om du byter variant.',
       },
       hidden: {
         open: 'Visa dolda filter',

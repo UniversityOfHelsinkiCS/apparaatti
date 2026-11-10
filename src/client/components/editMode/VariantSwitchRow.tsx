@@ -3,27 +3,11 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { describeVariantQuery, type VariantQuery } from '../../../common/conditionMatching'
-import type { FilterVariant } from '../../../common/types'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
 import ChangeVariantDialog from './ChangeVariantDialog'
 
-type VariantSwitchRowProps = {
-  variantQuery: VariantQuery
-  /** Existing variants of the edited filter, offered as quick picks in the dialog. */
-  filterVariants?: FilterVariant[]
-  hasUnsavedChanges?: boolean
-  disabled?: boolean
-  onApplied?: () => void
-}
-
-/** "Muokattava variantti: …" with a button that opens the change-variant dialog. */
-const VariantSwitchRow = ({
-  variantQuery,
-  filterVariants,
-  hasUnsavedChanges = false,
-  disabled = false,
-  onApplied,
-}: VariantSwitchRowProps) => {
+/** "Muokattava variantti: …" for the whole page, with a button that changes the page answers. */
+const VariantSwitchRow = ({ variantQuery }: { variantQuery: VariantQuery }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -37,20 +21,12 @@ const VariantSwitchRow = ({
           type="button"
           size="small"
           onClick={() => setIsOpen(true)}
-          disabled={disabled}
           data-testid="change-variant-button"
         >
           {t('v2:filterWordings.changeVariant.open')}
         </BlackOutlinedButton>
       </Stack>
-      {isOpen && (
-        <ChangeVariantDialog
-          filterVariants={filterVariants}
-          hasUnsavedChanges={hasUnsavedChanges}
-          onClose={() => setIsOpen(false)}
-          onApplied={onApplied}
-        />
-      )}
+      {isOpen && <ChangeVariantDialog onClose={() => setIsOpen(false)} />}
     </>
   )
 }

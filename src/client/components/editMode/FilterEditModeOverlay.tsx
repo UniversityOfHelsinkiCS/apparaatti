@@ -7,7 +7,7 @@ import EditModePanel from './EditModePanel'
 import EditModeSavedSnackbar from './EditModeSavedSnackbar'
 import ExitEditModeDialog from './ExitEditModeDialog'
 import HiddenFilterWordingsDialog from './HiddenFilterWordingsDialog'
-import WordingEditPopover from './WordingEditPopover'
+import WordingEditDialog from './WordingEditDialog'
 
 const FilterEditModeOverlay = () => {
   const { isEditMode, editingVersionId, exitEditMode } = useFilterEditMode()
@@ -45,7 +45,7 @@ const FilterEditModeOverlay = () => {
         }}
       />
       <EditModeSavedSnackbar />
-      <WordingEditPopover />
+      <WordingEditDialog />
     </>
   )
 }

@@ -163,10 +163,6 @@ export default {
         title: 'Vaihda muokattava variantti',
         intro:
           'Variantti määräytyy kysymysten vastauksista. Valinnat muuttavat sivun vastaukset, jolloin näet ja muokkaat valittua varianttia.',
-        unsavedWarning: 'Tallentamattomat muutokset menetetään, kun variantti vaihdetaan.',
-        existingVariants: 'Suodattimen variantit',
-        pickExisting: 'Valitse olemassa oleva variantti',
-        noPick: 'Ei valintaa',
         conditionsTitle: 'Muokattava variantti',
         preview: 'Tuloksena variantti: {{variant}}',
         cancel: 'Peruuta',
@@ -187,8 +183,6 @@ export default {
         extraInfo: 'Lisätieto',
       },
       popover: {
-        variantScope: 'Muokkaus kohdistuu varianttiin {{variant}}',
-        filterScope: 'Muokkaus kohdistuu koko suodattimeen, ei yksittäiseen varianttiin',
         defaultWarning: 'Muokkaat oletustekstiä. Muutos näkyy kaikissa varianteissa, jotka käyttävät oletusta.',
         language: {
           fi: 'Suomeksi',
@@ -200,10 +194,17 @@ export default {
         saveFailed: 'Tallennus epäonnistui',
       },
       choice: {
-        pickTarget: 'Valitse, mitä varianttia muokkaat.',
         default: 'Yleinen oletusteksti',
         createNew: 'Luo uusi variantti',
         continue: 'Jatka',
+      },
+      target: {
+        variant: 'Muokattava variantti',
+        current: 'Muokattava variantti: {{variant}}',
+        allVariants: 'kaikki variantit',
+        newVariant: 'Uusi variantti: {{variant}}',
+        change: 'Vaihda',
+        unsavedWarning: 'Tallentamattomat muutokset korvataan, jos vaihdat varianttia.',
       },
       hidden: {
         open: 'Näytä piilotetut suodattimet',

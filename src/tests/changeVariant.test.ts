@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import {
-  describeFilterVariant,
-  normalizeVariantQuery,
-  queryForVariant,
-} from '../client/components/editMode/changeVariant'
+import { describeFilterVariant, normalizeVariantQuery } from '../client/components/editMode/changeVariant'
 import { describeVariantQuery, type VariantQuery } from '../common/conditionMatching'
 import type { FilterVariant } from '../common/types'
 
@@ -42,30 +38,6 @@ describe('normalizeVariantQuery', () => {
 
   it('clears the specification when the course language is unanswered', () => {
     expect(normalizeVariantQuery({ ...current, lang: '' }).primaryLanguageSpecification).toBe('')
-  })
-})
-
-describe('queryForVariant', () => {
-  it('uses the variant conditions and keeps current answers for open conditions', () => {
-    expect(queryForVariant(variant({ lang: 'sv', primaryLanguage: 'fi' }), current)).toEqual({
-      organisationCode: 'H3456',
-      lang: 'sv',
-      primaryLanguage: 'fi',
-      primaryLanguageSpecification: '',
-    })
-  })
-
-  it('takes an organisation-specific variant organisation', () => {
-    expect(queryForVariant(variant({ organisationCode: 'H1000' }), current).organisationCode).toBe('H1000')
-  })
-
-  it('keeps everything for the catch-all variant', () => {
-    expect(queryForVariant(variant({}), current)).toEqual(current)
-  })
-
-  it('keeps an "any" faculty empty when the variant has no organisation condition', () => {
-    const anyFaculty = { ...current, organisationCode: '' }
-    expect(queryForVariant(variant({ lang: 'sv', primaryLanguage: 'fi' }), anyFaculty).organisationCode).toBe('')
   })
 })
 

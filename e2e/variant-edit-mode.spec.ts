@@ -121,3 +121,56 @@ test('outside edit mode the faculty select has no "mikä tahansa" option', async
   await expect(page.getByRole('option').first()).toBeVisible()
   await expect(page.getByTestId('study-field-option-any')).toHaveCount(0)
 })
+
+test('the wording editor is a two-step modal: confirm the variant, then edit the text', async ({ page }) => {
+  await openInEditMode(page)
+  await expectWelcomeModalStaysClosed(page)
+  const pageVariant = await overlayVariant(page)
+
+  await page.getByTestId('editable-lang-question').click()
+  const editor = page.getByTestId('wording-edit-dialog')
+  await expect(editor).toBeVisible()
+  await expect(page.getByRole('dialog')).toHaveCount(1)
+
+  // Step 1: confirm the variant; no text fields yet.
+  const variantSelect = editor.getByRole('combobox', { name: /Muokattava variantti/ })
+  await expect(variantSelect).toBeVisible()
+  await expect(editor.getByRole('textbox', { name: 'Suomeksi' })).toHaveCount(0)
+
+  // Changing the variant keeps the modal open.
+  await variantSelect.click()
+  await page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true }).click()
+  await expect(editor).toBeVisible()
+  await expect(editor.getByText(/Muokkaat oletustekstiä/)).toBeVisible()
+  await editor.getByRole('button', { name: 'Jatka' }).click()
+
+  // Step 2: edit the text for the confirmed variant.
+  await expect(editor.getByTestId('wording-edit-target')).toHaveText('Muokattava variantti: Yleinen oletusteksti')
+  await expect(editor.getByRole('textbox', { name: 'Suomeksi' })).toBeVisible()
+
+  // Back to step 1 inside the same modal, and pick a new variant.
+  await editor.getByRole('button', { name: 'Vaihda' }).click()
+  await expect(editor).toBeVisible()
+  await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
+  await page.getByRole('option', { name: 'Luo uusi variantti', exact: true }).click()
+  await expect(editor.getByRole('combobox', { name: /Tiedekunta/ })).toBeVisible()
+  await editor.getByRole('button', { name: 'Jatka' }).click()
+  await expect(editor.getByTestId('wording-edit-target')).toHaveText(/^Muokattava variantti: Uusi variantti: /)
+
+  // Cancel closes the modal without touching the page variant.
+  await editor.getByRole('button', { name: 'Peruuta' }).click()
+  await expect(editor).toBeHidden()
+  expect(await overlayVariant(page)).toBe(pageVariant)
+})
+
+test('filter-wide texts open straight on the text step', async ({ page }) => {
+  await openInEditMode(page)
+  await expectWelcomeModalStaysClosed(page)
+
+  await page.locator('[data-testid$="-shortName"]').first().click()
+  const editor = page.getByTestId('wording-edit-dialog')
+  await expect(editor).toBeVisible()
+  await expect(editor.getByTestId('wording-edit-target')).toHaveText('Muokattava variantti: kaikki variantit')
+  await expect(editor.getByRole('textbox', { name: 'Suomeksi' })).toBeVisible()
+  await expect(editor.getByRole('button', { name: 'Vaihda' })).toHaveCount(0)
+})

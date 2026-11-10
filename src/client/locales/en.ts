@@ -163,10 +163,6 @@ export default {
         title: 'Change the variant being edited',
         intro:
           'The variant follows the answers to the questions. Your choices change the answers on the page, so you see and edit the chosen variant.',
-        unsavedWarning: 'Unsaved changes are lost when the variant is changed.',
-        existingVariants: 'Variants of this filter',
-        pickExisting: 'Pick an existing variant',
-        noPick: 'No selection',
         conditionsTitle: 'Variant being edited',
         preview: 'Resulting variant: {{variant}}',
         cancel: 'Cancel',
@@ -187,8 +183,6 @@ export default {
         extraInfo: 'Extra info',
       },
       popover: {
-        variantScope: 'This edit applies to variant {{variant}}',
-        filterScope: 'This edit applies to the whole filter, not a single variant',
         defaultWarning: 'You are editing the default wording. It changes every variant that falls back to default.',
         language: {
           fi: 'In Finnish',
@@ -200,10 +194,17 @@ export default {
         saveFailed: 'Saving failed',
       },
       choice: {
-        pickTarget: 'Choose which variant you are editing.',
         default: 'General default wording',
         createNew: 'Create a new variant',
         continue: 'Continue',
+      },
+      target: {
+        variant: 'Variant being edited',
+        current: 'Variant being edited: {{variant}}',
+        allVariants: 'all variants',
+        newVariant: 'New variant: {{variant}}',
+        change: 'Change',
+        unsavedWarning: 'Unsaved changes are replaced if you change the variant.',
       },
       hidden: {
         open: 'Show hidden filters',

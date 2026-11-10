@@ -11,17 +11,5 @@ export const specificationIsAsked = (query: VariantQuery): boolean =>
 export const normalizeVariantQuery = (query: VariantQuery): VariantQuery =>
   specificationIsAsked(query) ? query : { ...query, primaryLanguageSpecification: '' }
 
-/**
- * Answers that make the given variant the one shown: its fixed conditions win,
- * conditions it leaves open ("any") keep the current answers.
- */
-export const queryForVariant = (variant: FilterVariant, current: VariantQuery): VariantQuery =>
-  normalizeVariantQuery({
-    organisationCode: variant.organisationCode ?? current.organisationCode,
-    lang: variant.lang ?? current.lang,
-    primaryLanguage: variant.primaryLanguage ?? current.primaryLanguage,
-    primaryLanguageSpecification: variant.primaryLanguageSpecification ?? current.primaryLanguageSpecification,
-  })
-
 export const describeFilterVariant = (variant: FilterVariant, defaultLabel: string): string =>
   isCatchAll(variant) ? defaultLabel : describeConditions(variant)
