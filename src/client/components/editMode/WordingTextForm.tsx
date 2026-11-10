@@ -16,10 +16,12 @@ import BlackOutlinedButton from '../common/BlackOutlinedButton'
 const LANGUAGES: Language[] = ['fi', 'sv', 'en']
 
 type WordingTextFormProps = {
-  /** What "Muokattava variantti:" shows, e.g. "Yleinen oletusteksti" or "kaikki variantit". */
-  targetLabel: string
-  /** Goes back to the variant step; omitted for fields shared by all variants. */
+  /** Variant fields: what "Muokattava variantti:" shows, e.g. "Yleinen oletusteksti". */
+  targetLabel?: string
+  /** Variant fields: goes back to the variant step. */
   onChangeTarget?: () => void
+  /** Filter-wide fields: explains that the text is shared by every variant. */
+  note?: string
   text: LocalizedText
   onChangeText: (language: Language, value: string) => void
   /** Warns that the edit changes the catch-all text every variant falls back to. */
@@ -34,6 +36,7 @@ type WordingTextFormProps = {
 const WordingTextForm = ({
   targetLabel,
   onChangeTarget,
+  note,
   text,
   onChangeText,
   showDefaultWarning,
@@ -48,16 +51,23 @@ const WordingTextForm = ({
     <>
       <DialogContent>
         <Stack spacing={2.5} sx={{ mt: 1 }}>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-            <Typography variant="body2" data-testid="wording-edit-target">
-              {t('v2:filterWordings.target.current', { variant: targetLabel })}
+          {targetLabel !== undefined && (
+            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+              <Typography variant="body2" data-testid="wording-edit-target">
+                {t('v2:filterWordings.target.current', { variant: targetLabel })}
+              </Typography>
+              {onChangeTarget && (
+                <BlackOutlinedButton type="button" size="small" onClick={onChangeTarget} disabled={isSaving}>
+                  {t('v2:filterWordings.target.change')}
+                </BlackOutlinedButton>
+              )}
+            </Stack>
+          )}
+          {note && (
+            <Typography variant="body2" data-testid="wording-edit-note">
+              {note}
             </Typography>
-            {onChangeTarget && (
-              <BlackOutlinedButton type="button" size="small" onClick={onChangeTarget} disabled={isSaving}>
-                {t('v2:filterWordings.target.change')}
-              </BlackOutlinedButton>
-            )}
-          </Stack>
+          )}
 
           {showDefaultWarning && <Alert severity="warning">{t('v2:filterWordings.popover.defaultWarning')}</Alert>}
 

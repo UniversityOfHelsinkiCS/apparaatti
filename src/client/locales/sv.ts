@@ -202,7 +202,10 @@ export default {
       target: {
         variant: 'Variant som redigeras',
         current: 'Variant som redigeras: {{variant}}',
-        allVariants: 'alla varianter',
+        sharedNote: {
+          shortName: 'Det korta namnet är detsamma i alla varianter.',
+          extraInfo: 'Tilläggsinformationen är densamma i alla varianter.',
+        },
         newVariant: 'Ny variant: {{variant}}',
         change: 'Byt',
         unsavedWarning: 'Osparade ändringar ersätts om du byter variant.',

@@ -79,7 +79,7 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
         defaultLabel: t('v2:filterWordings.choice.default'),
         newVariant: variantKey => t('v2:filterWordings.target.newVariant', { variant: variantKey }),
       })
-    : t('v2:filterWordings.target.allVariants')
+    : undefined
 
   return (
     <Dialog open onClose={closeTarget} maxWidth="sm" fullWidth data-testid="wording-edit-dialog">
@@ -96,6 +96,7 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
       ) : (
         <WordingTextForm
           targetLabel={targetLabel}
+          note={isPerVariant ? undefined : t(`v2:filterWordings.target.sharedNote.${target.field}`)}
           onChangeTarget={isPerVariant ? () => setStep('variant') : undefined}
           text={text}
           onChangeText={changeText}

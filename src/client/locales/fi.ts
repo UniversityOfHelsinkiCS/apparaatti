@@ -201,7 +201,10 @@ export default {
       target: {
         variant: 'Muokattava variantti',
         current: 'Muokattava variantti: {{variant}}',
-        allVariants: 'kaikki variantit',
+        sharedNote: {
+          shortName: 'Lyhyt nimi on sama kaikissa varianteissa.',
+          extraInfo: 'Lisätieto on sama kaikissa varianteissa.',
+        },
         newVariant: 'Uusi variantti: {{variant}}',
         change: 'Vaihda',
         unsavedWarning: 'Tallentamattomat muutokset korvataan, jos vaihdat varianttia.',

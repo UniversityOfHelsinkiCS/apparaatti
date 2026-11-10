@@ -201,7 +201,10 @@ export default {
       target: {
         variant: 'Variant being edited',
         current: 'Variant being edited: {{variant}}',
-        allVariants: 'all variants',
+        sharedNote: {
+          shortName: 'The short name is the same in every variant.',
+          extraInfo: 'The additional info is the same in every variant.',
+        },
         newVariant: 'New variant: {{variant}}',
         change: 'Change',
         unsavedWarning: 'Unsaved changes are replaced if you change the variant.',
