@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { ANY_VARIANT_QUERY, type VariantQuery } from '../../common/conditionMatching'
 import { Variant } from '../../common/types'
 import { EditScopeProvider } from '../components/editMode/editScope'
+import FilterSettingsGear from '../components/editMode/FilterSettingsGear'
 import ExtraInfoModal from '../components/ExtraInfoModal'
 import QuestionTitle from '../components/QuestionTitle'
 import DropdownFilterComponent from './DropdownFilterComponent'
@@ -74,6 +75,7 @@ const Filter = ({
       rawVariant={variant.raw}
     >
       <Box>
+        <FilterSettingsGear />
         {showAsQuestion && (
           <>
             <QuestionTitle

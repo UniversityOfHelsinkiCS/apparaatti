@@ -47,6 +47,22 @@ const svUnknownConditions = {
 
 const payload = (): FilterSnapshotPayload => ({ filters: [structuredClone(baseFilter)] })
 
+const secondFilter: FilterConfig = { ...structuredClone(baseFilter), id: 'level', displayOrder: 7 }
+const untouchedFilter: FilterConfig = { ...structuredClone(baseFilter), id: 'mode', displayOrder: 42 }
+
+const threeFilterPayload = (): FilterSnapshotPayload => ({
+  filters: [structuredClone(baseFilter), structuredClone(secondFilter), structuredClone(untouchedFilter)],
+})
+
+const twoVariantPayload = (): FilterSnapshotPayload => {
+  const config = structuredClone(baseFilter)
+  const other = structuredClone(config.variants[0])
+  other.name = 'sv_only'
+  other.lang = 'sv'
+  config.variants.push(other)
+  return { filters: [config] }
+}
+
 describe('mergeFilterMutations', () => {
   it('creates a variant from default without touching default', () => {
     const merged = mergeFilterMutations(payload(), {
@@ -65,6 +81,7 @@ describe('mergeFilterMutations', () => {
           text: { fi: 'Uusi', sv: 'Ny', en: 'New' },
         },
       ],
+      settings: [],
     })
 
     const variants = merged.filters[0].variants
@@ -79,6 +96,7 @@ describe('mergeFilterMutations', () => {
       wordings: [
         { op: 'variantQuestion', filterId: 'lang', variantName: 'missing', text: { fi: 'X', sv: 'X', en: 'X' } },
       ],
+      settings: [],
     })
 
     expect(merged.filters[0].variants).toHaveLength(1)
@@ -96,11 +114,43 @@ describe('mergeFilterMutations', () => {
           text: { fi: 'Ruotsiksi', sv: 'På svenska', en: 'In Swedish' },
         },
       ],
+      settings: [],
     })
 
     const options = merged.filters[0].variants[0].options
     expect(options?.[0].name.fi).toBe('Suomi')
     expect(options?.[1].name.fi).toBe('Ruotsiksi')
+  })
+
+  it('renumbers displayOrder by position and leaves a filter outside the order untouched', () => {
+    const merged = mergeFilterMutations(threeFilterPayload(), {
+      wordings: [],
+      settings: [{ op: 'filterOrder', order: ['level', 'lang'] }],
+    })
+
+    const orders = Object.fromEntries(merged.filters.map(config => [config.id, config.displayOrder]))
+    expect(orders).toEqual({ level: 0, lang: 1, mode: 42 })
+  })
+
+  it('writes option settings, id included, to the named variant only', () => {
+    const merged = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [
+        {
+          op: 'optionSettings',
+          filterId: 'lang',
+          variantName: 'sv_only',
+          optionId: 'sv',
+          settings: { id: 'swe', valueOverride: 'SV', selectedByDefault: true },
+        },
+      ],
+    })
+
+    const [untouched, edited] = merged.filters[0].variants
+    expect(untouched.options?.map(option => option.id)).toEqual(['fi', 'sv'])
+    expect(edited.options?.map(option => option.id)).toEqual(['fi', 'swe'])
+    expect(edited.options?.[1].valueOverride).toBe('SV')
+    expect(edited.options?.[1].selectedByDefault).toBe(true)
   })
 })
 
@@ -115,6 +165,7 @@ describe('diffFilterPayloads', () => {
           text: { fi: 'Mikä kieli?', sv: 'Vilket språk vill du?', en: 'Which language?' },
         },
       ],
+      settings: [],
     })
 
     const diff = diffFilterPayloads(payload(), changed)
@@ -134,10 +185,34 @@ describe('diffFilterPayloads', () => {
           ...svUnknownConditions,
         },
       ],
+      settings: [],
     })
 
     const diff = diffFilterPayloads(payload(), changed)
     expect(diff.addedVariants).toEqual([{ filterId: 'lang', variantName: 'sv_unknown' }])
     expect(diff.changedTexts).toEqual([])
+  })
+
+  it('reports a flipped flag and a changed option setting', () => {
+    const changed = mergeFilterMutations(payload(), {
+      wordings: [],
+      settings: [
+        { op: 'filterSettings', filterId: 'lang', settings: { enabled: false } },
+        {
+          op: 'optionSettings',
+          filterId: 'lang',
+          variantName: 'default',
+          optionId: 'sv',
+          settings: { id: 'sv', valueOverride: 'SV', selectedByDefault: false },
+        },
+      ],
+    })
+
+    const diff = diffFilterPayloads(payload(), changed)
+    expect(diff.changedTexts).toEqual([])
+    expect(diff.changedSettings).toEqual([
+      { filterId: 'lang', variantName: null, optionId: null, field: 'enabled', from: 'true', to: 'false' },
+      { filterId: 'lang', variantName: 'default', optionId: 'sv', field: 'valueOverride', from: null, to: 'SV' },
+    ])
   })
 })

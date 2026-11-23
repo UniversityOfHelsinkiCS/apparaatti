@@ -27,7 +27,7 @@ const EditModePanel = ({ versionName, onOpenHiddenWordings, onExit }: EditModePa
       <Stack spacing={1}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
           <Typography variant="subtitle2">{t('v2:filterWordings.overlay.title')}</Typography>
-          <HyIconButton onClick={onOpenHiddenWordings} aria-label={t('v2:filterWordings.hidden.open')}>
+          <HyIconButton onClick={onOpenHiddenWordings} aria-label={t('v2:filterSettings.openOverview')}>
             <Settings />
           </HyIconButton>
         </Stack>

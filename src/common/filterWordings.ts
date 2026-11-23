@@ -2,7 +2,10 @@ import type {
   FilterConfig,
   FilterMutations,
   FilterOption,
+  FilterOptionSettings,
   FilterPayloadDiff,
+  FilterSettingChange,
+  FilterSettingsMutation,
   FilterSnapshotPayload,
   FilterTextChange,
   FilterVariant,
@@ -10,7 +13,7 @@ import type {
   LocalizedText,
 } from './types.ts'
 
-export const emptyFilterMutations: FilterMutations = { wordings: [] }
+export const emptyFilterMutations: FilterMutations = { wordings: [], settings: [] }
 
 const withVariant = (
   config: FilterConfig,
@@ -89,10 +92,37 @@ const applyWording = (config: FilterConfig, mutation: FilterWordingMutation): Fi
   )
 }
 
+const patchOptionSettings = (
+  variant: FilterVariant,
+  optionId: string,
+  settings: FilterOptionSettings
+): FilterVariant => ({
+  ...variant,
+  options: (variant.options ?? []).map(option => (option.id === optionId ? { ...option, ...settings } : option)),
+})
+
+const applySettings = (config: FilterConfig, mutation: FilterSettingsMutation): FilterConfig => {
+  if (mutation.op === 'filterSettings') {
+    return { ...config, ...mutation.settings }
+  }
+
+  if (mutation.op === 'filterOrder') {
+    const index = mutation.order.indexOf(config.id)
+    return index === -1 ? config : { ...config, displayOrder: index }
+  }
+
+  return patchVariant(config, mutation.variantName, variant =>
+    patchOptionSettings(variant, mutation.optionId, mutation.settings)
+  )
+}
+
 export function mergeFilterMutations(base: FilterSnapshotPayload, mutations: FilterMutations): FilterSnapshotPayload {
   const filters = base.filters.map(config => {
-    const relevant = mutations.wordings.filter(mutation => mutation.filterId === config.id)
-    return relevant.reduce(applyWording, config)
+    const wordings = mutations.wordings.filter(mutation => mutation.filterId === config.id)
+    const settings = (mutations.settings ?? []).filter(
+      mutation => mutation.op === 'filterOrder' || mutation.filterId === config.id
+    )
+    return settings.reduce(applySettings, wordings.reduce(applyWording, config))
   })
 
   return { exportedAt: new Date().toISOString(), filters }
@@ -114,6 +144,26 @@ const optionById = (options: FilterOption[] | undefined, id: string): FilterOpti
 export function diffFilterPayloads(from: FilterSnapshotPayload, to: FilterSnapshotPayload): FilterPayloadDiff {
   const addedVariants: FilterPayloadDiff['addedVariants'] = []
   const changedTexts: FilterTextChange[] = []
+  const changedSettings: FilterSettingChange[] = []
+
+  const describeValue = (value: string | number | boolean | null | undefined): string | null =>
+    value === null || value === undefined ? null : String(value)
+
+  const setting = (
+    filterId: string,
+    variantName: string | null,
+    optionId: string | null,
+    field: string,
+    before: string | number | boolean | null | undefined,
+    after: string | number | boolean | null | undefined
+  ) => {
+    const from = describeValue(before)
+    const to = describeValue(after)
+    if (from === to) {
+      return
+    }
+    changedSettings.push({ filterId, variantName, optionId, field, from, to })
+  }
 
   const change = (
     filterId: string,
@@ -140,6 +190,30 @@ export function diffFilterPayloads(from: FilterSnapshotPayload, to: FilterSnapsh
     change(config.id, null, 'shortName', null, previous.shortName, config.shortName)
     change(config.id, null, 'extraInfo', null, previous.extraInfo, config.extraInfo)
 
+    setting(config.id, null, null, 'enabled', previous.enabled, config.enabled)
+    setting(config.id, null, null, 'displayOrder', previous.displayOrder, config.displayOrder)
+    setting(config.id, null, null, 'mandatory', previous.mandatory, config.mandatory)
+    setting(config.id, null, null, 'showInWelcomeModal', previous.showInWelcomeModal, config.showInWelcomeModal)
+    setting(config.id, null, null, 'hideInFilterSidebar', previous.hideInFilterSidebar, config.hideInFilterSidebar)
+    setting(
+      config.id,
+      null,
+      null,
+      'hideInCurrentFiltersDisplay',
+      previous.hideInCurrentFiltersDisplay,
+      config.hideInCurrentFiltersDisplay
+    )
+    setting(
+      config.id,
+      null,
+      null,
+      'hideInRecommendationReasons',
+      previous.hideInRecommendationReasons,
+      config.hideInRecommendationReasons
+    )
+    setting(config.id, null, null, 'displayType', previous.displayType, config.displayType)
+    setting(config.id, null, null, 'parentFilterId', previous.parentFilterId, config.parentFilterId)
+
     for (const variant of config.variants) {
       const previousVariant = previous.variants.find(candidate => candidate.name === variant.name)
       if (!previousVariant) {
@@ -156,9 +230,18 @@ export function diffFilterPayloads(from: FilterSnapshotPayload, to: FilterSnapsh
           continue
         }
         change(config.id, variant.name, 'option', option.id, previousOption.name, option.name)
+        setting(config.id, variant.name, option.id, 'valueOverride', previousOption.valueOverride, option.valueOverride)
+        setting(
+          config.id,
+          variant.name,
+          option.id,
+          'selectedByDefault',
+          previousOption.selectedByDefault ?? false,
+          option.selectedByDefault ?? false
+        )
       }
     }
   }
 
-  return { addedVariants, changedTexts }
+  return { addedVariants, changedTexts, changedSettings }
 }

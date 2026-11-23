@@ -43,7 +43,7 @@ export const mutateFilterSnapshot = async (id: number, mutations: FilterMutation
   return await response.json()
 }
 
-export const FILTER_VERSION_QUERY_KEYS = ['filter-snapshots', 'filter-config', 'admin-filter-config']
+export const FILTER_VERSION_QUERY_KEYS = ['filter-snapshots', 'filter-config']
 
 export const invalidateFilterVersionQueries = async (queryClient: QueryClient) => {
   await queryClient.invalidateQueries({

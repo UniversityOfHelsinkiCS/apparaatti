@@ -1,7 +1,7 @@
 import { Chip, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import type { FilterPayloadDiff, FilterTextChange, Language } from '../../../../common/types.ts'
+import type { FilterPayloadDiff, FilterSettingChange, FilterTextChange, Language } from '../../../../common/types.ts'
 
 const LANGUAGES: Language[] = ['fi', 'sv', 'en']
 
@@ -29,6 +29,22 @@ const ChangeRow = ({ change }: { change: FilterTextChange }) => {
   )
 }
 
+const SettingRow = ({ change }: { change: FilterSettingChange }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Stack direction="row" spacing={1} alignItems="center" useFlexGap flexWrap="wrap" sx={{ py: 1 }}>
+      <Typography variant="subtitle2">{change.filterId}</Typography>
+      <Chip size="small" label={t(`v2:filterSettings.field.${change.field}`, { defaultValue: change.field })} />
+      {change.variantName && <Chip size="small" variant="outlined" label={change.variantName} />}
+      {change.optionId && <Chip size="small" variant="outlined" label={change.optionId} />}
+      <Typography variant="body2">
+        {change.from ?? '—'} → {change.to ?? '—'}
+      </Typography>
+    </Stack>
+  )
+}
+
 const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
   const { t } = useTranslation()
 
@@ -36,7 +52,7 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
     return <Typography variant="body2">{t('v2:filterVersions.diff.loading')}</Typography>
   }
 
-  if (diff.addedVariants.length === 0 && diff.changedTexts.length === 0) {
+  if (diff.addedVariants.length === 0 && diff.changedTexts.length === 0 && diff.changedSettings.length === 0) {
     return <Typography variant="body2">{t('v2:filterVersions.diff.empty')}</Typography>
   }
 
@@ -52,6 +68,9 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
           key={`${change.filterId}-${change.field}-${change.variantName}-${change.optionId}-${index}`}
           change={change}
         />
+      ))}
+      {diff.changedSettings.map((change, index) => (
+        <SettingRow key={`${change.filterId}-${change.field}-${change.optionId}-${index}`} change={change} />
       ))}
     </Stack>
   )

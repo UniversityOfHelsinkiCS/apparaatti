@@ -6,7 +6,7 @@ import useApi from '../../util/useApi'
 import EditModePanel from './EditModePanel'
 import EditModeSavedSnackbar from './EditModeSavedSnackbar'
 import ExitEditModeDialog from './ExitEditModeDialog'
-import HiddenFilterWordingsDialog from './HiddenFilterWordingsDialog'
+import FilterOverviewDialog from './FilterOverviewDialog'
 import WordingEditDialog from './WordingEditDialog'
 
 const FilterEditModeOverlay = () => {
@@ -33,7 +33,7 @@ const FilterEditModeOverlay = () => {
         onOpenHiddenWordings={() => setIsHiddenOpen(true)}
         onExit={() => setIsExitOpen(true)}
       />
-      <HiddenFilterWordingsDialog open={isHiddenOpen} onClose={() => setIsHiddenOpen(false)} />
+      <FilterOverviewDialog open={isHiddenOpen} onClose={() => setIsHiddenOpen(false)} />
       <ExitEditModeDialog
         open={isExitOpen}
         versionId={editingVersionId}

@@ -61,6 +61,7 @@ describe('wordingMutations', () => {
   it('writes the text to the picked existing variant', () => {
     expect(wordingMutations(target(), text, { mode: 'existing', variantName: 'sv-fi-H3456' })).toEqual({
       wordings: [{ op: 'variantQuestion', filterId: 'lang', variantName: 'sv-fi-H3456', text }],
+      settings: [],
     })
   })
 
@@ -71,6 +72,7 @@ describe('wordingMutations', () => {
         { op: 'createVariant', filterId: 'lang', variantName: 'sv-fi', fromVariantName: 'default', ...conditions },
         { op: 'variantQuestion', filterId: 'lang', variantName: 'sv-fi', text },
       ],
+      settings: [],
     })
   })
 
@@ -79,6 +81,7 @@ describe('wordingMutations', () => {
       wordingMutations(target({ field: 'shortName' }), text, { mode: 'existing', variantName: 'default' })
     ).toEqual({
       wordings: [{ op: 'shortName', filterId: 'lang', text }],
+      settings: [],
     })
   })
 })

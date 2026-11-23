@@ -1,4 +1,3 @@
-import type { FilterConfig } from '../../../../common/types.ts'
 import { apiFetch } from '../../../util/useApi.tsx'
 
 export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlechoice', 'info-only']
@@ -6,55 +5,6 @@ export const DISPLAY_TYPES = ['radio', 'dropdownselect', 'multichoice', 'singlec
 export const SWITCH_SX = {
   '& .MuiSwitch-switchBase.Mui-checked': { color: 'black' },
   '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: 'black' },
-}
-
-export const blankLocalized = () => ({ fi: '', sv: '', en: '' })
-
-export const blankFilter = (): FilterConfig => ({
-  id: '',
-  mandatory: false,
-  shortName: blankLocalized(),
-  explanation: blankLocalized(),
-  extraInfo: blankLocalized(),
-  parentFilterId: null,
-  displayOrder: 0,
-  displayType: null,
-  hideInCurrentFiltersDisplay: false,
-  hideInRecommendationReasons: false,
-  hideInFilterSidebar: false,
-  showInWelcomeModal: false,
-  enabled: true,
-  variants: [
-    {
-      name: 'default',
-      organisationCode: null,
-      lang: null,
-      primaryLanguage: null,
-      primaryLanguageSpecification: null,
-      question: blankLocalized(),
-      options: [],
-    },
-  ],
-})
-
-export const normalizeDraft = (f: FilterConfig): FilterConfig => ({
-  ...f,
-  explanation: f.explanation ?? blankLocalized(),
-  extraInfo: f.extraInfo ?? blankLocalized(),
-  variants: (f.variants ?? []).map(v => ({
-    ...v,
-    organisationCode: v.organisationCode ?? null,
-    lang: v.lang ?? null,
-    primaryLanguage: v.primaryLanguage ?? null,
-    primaryLanguageSpecification: v.primaryLanguageSpecification ?? null,
-    options: v.options ?? [],
-  })),
-})
-
-export const toNullIfEmpty = (loc: { fi: string; sv: string; en: string } | null | undefined) => {
-  if (!loc) return null
-  if (!loc.fi && !loc.sv && !loc.en) return null
-  return loc
 }
 
 export const adminFetch = (method: string, path: string, body?: unknown) => apiFetch(path, method, body)

@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { useAdminUser } from './AdminMain.tsx'
 import AdminNavbar from './AdminNavbar.tsx'
 import BackendLocalesEditor from './BackendLocalesEditor.tsx'
-import FilterConfigEditor from './FilterConfigEditor.tsx'
+import FilterEditingVersionBar from './filterVersions/FilterEditingVersionBar.tsx'
+import FilterVersionsTable from './filterVersions/FilterVersionsTable.tsx'
 import RecommendationCodesEditor from './RecommendationCodesEditor.tsx'
 import RecommendationLanguagesEditor from './RecommendationLanguagesEditor.tsx'
 
@@ -33,7 +34,12 @@ const AdminPage = () => {
       </Tabs>
 
       {tab === 0 && <BackendLocalesEditor isSuperuser={isSuperuser} />}
-      {tab === 1 && <FilterConfigEditor isSuperuser={isSuperuser} />}
+      {tab === 1 && (
+        <Box>
+          <FilterEditingVersionBar isSuperuser={isSuperuser} />
+          <FilterVersionsTable isSuperuser={isSuperuser} />
+        </Box>
+      )}
       {tab === 2 && <RecommendationCodesEditor isSuperuser={isSuperuser} />}
       {tab === 3 && isSuperuser && <RecommendationLanguagesEditor />}
     </Box>

@@ -431,6 +431,13 @@ export type FilterBase = { kind: 'published' } | { kind: 'snapshot'; id: number 
 
 export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo'
 
+/**
+ * Filter edits travel as an ordered list of typed ops rather than a REST call per field. Filter editing has many
+ * small operations, one save batches several of them into a single transaction over the snapshot's JSONB payload,
+ * and the same list also builds a version in POST /snapshots before that version exists. Keeping the ops explicit
+ * leaves the door open for undo history: the list is everything needed to replay or invert an edit, which a PATCH
+ * per field would not give us.
+ */
 export type FilterWordingMutation =
   | {
       op: 'createVariant'
@@ -448,8 +455,37 @@ export type FilterWordingMutation =
   | { op: 'shortName'; filterId: string; text: LocalizedText }
   | { op: 'extraInfo'; filterId: string; text: LocalizedText | null }
 
+export type FilterSettingsPatch = {
+  enabled?: boolean
+  mandatory?: boolean
+  showInWelcomeModal?: boolean
+  hideInCurrentFiltersDisplay?: boolean
+  hideInRecommendationReasons?: boolean
+  hideInFilterSidebar?: boolean
+  displayType?: string | null
+  parentFilterId?: string | null
+}
+
+export type FilterOptionSettings = {
+  id: string
+  valueOverride: string | null
+  selectedByDefault: boolean
+}
+
+export type FilterSettingsMutation =
+  | { op: 'filterSettings'; filterId: string; settings: FilterSettingsPatch }
+  | { op: 'filterOrder'; order: string[] }
+  | {
+      op: 'optionSettings'
+      filterId: string
+      variantName: string
+      optionId: string
+      settings: FilterOptionSettings
+    }
+
 export type FilterMutations = {
   wordings: FilterWordingMutation[]
+  settings: FilterSettingsMutation[]
 }
 
 export type FilterTextChange = {
@@ -461,7 +497,17 @@ export type FilterTextChange = {
   to: LocalizedText | null
 }
 
+export type FilterSettingChange = {
+  filterId: string
+  variantName: string | null
+  optionId: string | null
+  field: string
+  from: string | null
+  to: string | null
+}
+
 export type FilterPayloadDiff = {
   addedVariants: { filterId: string; variantName: string }[]
   changedTexts: FilterTextChange[]
+  changedSettings: FilterSettingChange[]
 }

@@ -1,11 +1,13 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { describeVariantQuery } from '../../../common/conditionMatching'
 import type { Question } from '../../../common/types'
 import { useFilterContext } from '../../contexts/filterContext'
+import { useFilterEditMode } from '../../contexts/filterEditModeContext'
 import { resolveVariant } from '../../hooks/useQuestions'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
+import FilterOrderList from './FilterOrderList'
 import HiddenFilterWordingRow from './HiddenFilterWordingRow'
 
 type HiddenReason = 'hiddenInSidebar' | 'welcomeModalOnly' | 'variantSkipped' | 'noVariant'
@@ -18,14 +20,15 @@ const hiddenReason = (filter: Question, isSkipped: boolean, hasVariant: boolean)
   return null
 }
 
-interface HiddenFilterWordingsDialogProps {
+interface FilterOverviewDialogProps {
   open: boolean
   onClose: () => void
 }
 
-const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialogProps) => {
+const FilterOverviewDialog = ({ open, onClose }: FilterOverviewDialogProps) => {
   const { t } = useTranslation()
   const filterContext = useFilterContext()
+  const { editingVersionId } = useFilterEditMode()
   const { variantQuery } = filterContext
   const variantId = describeVariantQuery(variantQuery)
 
@@ -39,8 +42,11 @@ const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialo
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{t('v2:filterWordings.hidden.title')}</DialogTitle>
+      <DialogTitle>{t('v2:filterSettings.overviewTitle')}</DialogTitle>
       <DialogContent>
+        {editingVersionId !== null && <FilterOrderList versionId={editingVersionId} />}
+        <Divider sx={{ my: 3 }} />
+        <Typography variant="subtitle2">{t('v2:filterWordings.hidden.title')}</Typography>
         <Typography variant="body2" sx={{ mb: 2 }}>
           {t('v2:filterWordings.hidden.description', { variant: variantId })}
         </Typography>
@@ -68,4 +74,4 @@ const HiddenFilterWordingsDialog = ({ open, onClose }: HiddenFilterWordingsDialo
   )
 }
 
-export default HiddenFilterWordingsDialog
+export default FilterOverviewDialog

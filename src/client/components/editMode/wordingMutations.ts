@@ -83,5 +83,5 @@ export const wordingMutations = (target: EditTarget, text: LocalizedText, picked
     })
   }
 
-  return { wordings }
+  return { wordings, settings: [] }
 }

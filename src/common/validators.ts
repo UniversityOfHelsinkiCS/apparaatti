@@ -299,8 +299,38 @@ const FilterWordingMutationSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('extraInfo'), filterId: z.string().min(1), text: LocalizedTextSchema.nullable() }),
 ])
 
+const FilterSettingsPatchSchema = z.object({
+  enabled: z.boolean().optional(),
+  mandatory: z.boolean().optional(),
+  showInWelcomeModal: z.boolean().optional(),
+  hideInCurrentFiltersDisplay: z.boolean().optional(),
+  hideInRecommendationReasons: z.boolean().optional(),
+  hideInFilterSidebar: z.boolean().optional(),
+  displayType: z.string().nullable().optional(),
+  parentFilterId: z.string().nullable().optional(),
+})
+
+const FilterOptionSettingsSchema = z.object({
+  id: z.string().trim().min(1),
+  valueOverride: z.string().nullable(),
+  selectedByDefault: z.boolean(),
+})
+
+const FilterSettingsMutationSchema = z.discriminatedUnion('op', [
+  z.object({ op: z.literal('filterSettings'), filterId: z.string().min(1), settings: FilterSettingsPatchSchema }),
+  z.object({ op: z.literal('filterOrder'), order: z.array(z.string().min(1)) }),
+  z.object({
+    op: z.literal('optionSettings'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    optionId: z.string().min(1),
+    settings: FilterOptionSettingsSchema,
+  }),
+])
+
 export const FilterMutationsSchema = z.object({
   wordings: z.array(FilterWordingMutationSchema),
+  settings: z.array(FilterSettingsMutationSchema).default([]),
 })
 
 export const FilterSnapshotMutateSchema = z.object({ mutations: FilterMutationsSchema })
