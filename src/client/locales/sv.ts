@@ -196,6 +196,8 @@ export default {
       superuserNote: 'Vissa fält kräver superanvändarrättigheter och visas skrivskyddade.',
       structureWarning: 'Att ändra dessa kan bryta sparade svar och kasta bort översättningar.',
       wiringSection: 'Kopplingar',
+      inWelcomeModal: 'Välkomstfönster',
+      inSidebar: 'Sidopanel',
       variantsSkipNote: 'En överhoppad variant döljs för användarna, men dess texter behålls.',
       tabs: {
         basic: 'Grundinställningar',
@@ -267,6 +269,8 @@ export default {
         extraInfo: 'Tilläggsinformation',
         filterExplanation: 'Filtrets förklaring',
       },
+      editName: 'Redigera namnet {{name}}',
+      editOption: 'Redigera texten för alternativet {{name}}',
       popover: {
         defaultWarning: 'Du redigerar standardtexten. Ändringen syns i alla varianter som använder standardvarianten.',
         language: {

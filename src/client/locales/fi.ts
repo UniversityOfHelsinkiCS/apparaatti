@@ -195,6 +195,8 @@ export default {
       superuserNote: 'Osa kentistä vaatii pääkäyttäjän oikeudet ja näkyy vain luettavana.',
       structureWarning: 'Näiden muuttaminen voi rikkoa tallennetut vastaukset ja hävittää käännöksiä.',
       wiringSection: 'Kytkennät',
+      inWelcomeModal: 'Aloitusikkuna',
+      inSidebar: 'Sivupalkki',
       variantsSkipNote: 'Ohitettu variantti ei näy käyttäjille, mutta sen tekstit säilyvät.',
       tabs: {
         basic: 'Perusasetukset',
@@ -266,6 +268,8 @@ export default {
         extraInfo: 'Lisätieto',
         filterExplanation: 'Suodattimen lisätieto',
       },
+      editName: 'Muokkaa nimeä {{name}}',
+      editOption: 'Muokkaa vaihtoehdon {{name}} tekstiä',
       popover: {
         defaultWarning: 'Muokkaat oletustekstiä. Muutos näkyy kaikissa varianteissa, jotka käyttävät oletusta.',
         language: {

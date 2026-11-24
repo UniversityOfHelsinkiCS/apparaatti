@@ -4,6 +4,7 @@ import { expect, test } from './fixtures'
 
 const EDITING_VERSION_KEY = 'apparaatti-filter-wording-version'
 const SNAPSHOTS_PATH = '/api/admin/filter-config/snapshots'
+const SEEDED_WITHOUT_TEXT = 'Backend locale key'
 
 let snapshotId: number
 
@@ -163,10 +164,14 @@ test('the mutate route refuses a destructive op from a regular admin', async ({
 test('the info-only filter body is editable and saves to extraInfo', async ({ page, request }) => {
   await openInEditMode(page)
 
-  await page.getByRole('button', { name: 'Aikaisemmat opinnot', expanded: false }).click()
+  const trigger = page.locator('button[aria-controls]', { hasText: 'Aikaisemmat opinnot' })
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  await trigger.locator('span[aria-hidden="true"]').first().click()
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true')
 
   const editable = page.getByTestId('editable-previusly-done-lang-extraInfo')
   await expect(editable).toBeVisible()
+  await expect(editable).toContainText('Lue tarkemmat ohjeet')
   await editable.click()
 
   const editor = page.getByTestId('wording-edit-dialog')
@@ -182,4 +187,99 @@ test('the info-only filter body is editable and saves to extraInfo', async ({ pa
   const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
   const config = payload.filters.find((filter: { id: string }) => filter.id === 'previusly-done-lang')
   expect(config.extraInfo.fi).toBe('Muokattu lisatieto')
+})
+
+test('the overview list toggles welcome modal and sidebar visibility', async ({ page, request }) => {
+  await openInEditMode(page)
+
+  await page.getByRole('button', { name: 'Avaa suodattimien yleisnäkymä' }).click()
+  const overview = page.getByRole('dialog')
+  await expect(overview.getByText('Suodattimet ja järjestys')).toBeVisible()
+
+  const row = overview.getByTestId('filter-order-row-primary-language')
+  await expect(row).toBeVisible()
+  const welcome = row.getByRole('checkbox', { name: 'Aloitusikkuna' })
+  const sidebar = row.getByRole('checkbox', { name: 'Sivupalkki' })
+
+  const welcomeWasChecked = await welcome.isChecked()
+  const sidebarWasChecked = await sidebar.isChecked()
+
+  await welcome.click()
+  await expect(welcome).toBeChecked({ checked: !welcomeWasChecked })
+  await sidebar.click()
+  await expect(sidebar).toBeChecked({ checked: !sidebarWasChecked })
+
+  const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+  const config = payload.filters.find((filter: { id: string }) => filter.id === 'primary-language')
+  expect(config.showInWelcomeModal).toBe(!welcomeWasChecked)
+  expect(config.hideInFilterSidebar).toBe(sidebarWasChecked)
+
+  await welcome.click()
+  await expect(welcome).toBeChecked({ checked: welcomeWasChecked })
+  await sidebar.click()
+  await expect(sidebar).toBeChecked({ checked: sidebarWasChecked })
+
+  const restored = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+  const restoredConfig = restored.filters.find((filter: { id: string }) => filter.id === 'primary-language')
+  expect(restoredConfig.showInWelcomeModal).toBe(welcomeWasChecked)
+  expect(restoredConfig.hideInFilterSidebar).toBe(!sidebarWasChecked)
+})
+
+test('edit mode renders the sidebar filters and their editable texts, not a blank page', async ({ page }) => {
+  const consoleErrors: string[] = []
+  page.on('console', message => {
+    if (message.type() === 'error') consoleErrors.push(message.text())
+  })
+  page.on('pageerror', error => consoleErrors.push(String(error)))
+
+  await openInEditMode(page)
+
+  const sidebar = page.getByRole('navigation', { name: /suodat/i })
+  await expect(sidebar).toBeVisible()
+
+  const triggers = page.locator('button[aria-controls]', { hasText: /\S/ })
+  expect(await triggers.count()).toBeGreaterThan(3)
+
+  await expect(page.getByTestId('editable-lang-shortName')).toBeVisible()
+  await expect(page.getByTestId('editable-previusly-done-lang-shortName')).toBeVisible()
+  await expect(page.locator('button[aria-controls] [role="button"]')).toHaveCount(0)
+
+  const langTrigger = page.locator('button[aria-controls]', { hasText: 'Minkä kielen kursseja etsit?' })
+  await expect(langTrigger).toHaveAttribute('aria-expanded', 'true')
+  await expect(langTrigger).toHaveAttribute('aria-disabled', 'true')
+  await expect(page.getByTestId('editable-lang-question')).toBeVisible()
+  await expect(page.getByTestId('filter-settings-gear-lang')).toBeVisible()
+
+  const unexpectedConsoleErrors = consoleErrors.filter(error => !error.startsWith(SEEDED_WITHOUT_TEXT))
+  expect(unexpectedConsoleErrors).toEqual([])
+})
+
+test('the filter name toggles the accordion and the pencil opens the rename dialog', async ({ page }) => {
+  await openInEditMode(page)
+
+  const trigger = page.locator('button[aria-controls]', { hasText: 'Aikaisemmat opinnot' })
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+  await trigger.click()
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.getByTestId('wording-edit-dialog')).toHaveCount(0)
+
+  await expect(trigger.getByTestId('editable-previusly-done-lang-shortName')).toHaveCount(0)
+  await page.getByTestId('editable-previusly-done-lang-shortName').click()
+  await expect(page.getByTestId('wording-edit-dialog')).toBeVisible()
+})
+
+test('an option text selects the option, and its pencil opens the text editor', async ({ page }) => {
+  await openInEditMode(page)
+
+  const trigger = page.locator('button[aria-controls]', { hasText: 'Koulukieli' })
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+  const option = page.getByTestId('primary-language-option-sv')
+  await option.getByText('ruotsi', { exact: true }).click()
+  await expect(page.getByTestId('wording-edit-dialog')).toHaveCount(0)
+  await expect(option.getByRole('radio', { name: 'ruotsi' })).toBeChecked()
+
+  await page.getByTestId('editable-primary-language-option-sv').click()
+  await expect(page.getByTestId('wording-edit-dialog')).toBeVisible()
 })

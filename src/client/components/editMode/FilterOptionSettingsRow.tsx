@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import type { FilterOption, FilterOptionSettings } from '../../../common/types'
 import { SWITCH_SX } from '../admin/filterEdit/filterEditorUtils'
+import OptionTextEditHandle from './OptionTextEditHandle'
 
 type FilterOptionSettingsRowProps = {
   option: FilterOption
@@ -18,7 +19,12 @@ const FilterOptionSettingsRow = ({ option, draft, onChange }: FilterOptionSettin
   const row = (
     <Paper variant="outlined" sx={{ p: 2 }}>
       <Stack spacing={1}>
-        <Typography variant="body2">{option.name.fi}</Typography>
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Typography variant="body2" sx={{ flexGrow: 1 }}>
+            {option.name.fi}
+          </Typography>
+          <OptionTextEditHandle optionId={option.id} name={option.name.fi} />
+        </Stack>
         <TextField
           size="small"
           label={t('v2:filterSettings.valueOverride')}

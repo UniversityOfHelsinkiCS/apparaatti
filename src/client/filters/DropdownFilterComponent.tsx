@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { Option, Question } from '../../common/types'
 import { useOptionCountText } from '../components/common/OptionCountBadge'
 import VisuallyHidden from '../components/common/VisuallyHidden'
-import EditableOptionLabel from '../components/editMode/EditableOptionLabel'
 import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 import { foreignLanguage } from '../util/contentLanguage'
@@ -55,7 +54,7 @@ const DropdownFilterComponent: React.FC<DropdownFilterComponentProps> = ({
       >
         {options.map(option => {
           const count = getOptionCount(filter.id, option.id)
-          const label = <EditableOptionLabel optionId={option.id}>{option.name}</EditableOptionLabel>
+          const label = <span>{option.name}</span>
           return (
             <MenuItem
               key={option.id}

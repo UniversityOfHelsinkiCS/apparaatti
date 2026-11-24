@@ -195,6 +195,8 @@ export default {
       superuserNote: 'Some fields need superuser rights and are shown read-only.',
       structureWarning: 'Changing these can break saved answers and throw away translations.',
       wiringSection: 'Wiring',
+      inWelcomeModal: 'Welcome modal',
+      inSidebar: 'Sidebar',
       variantsSkipNote: 'A skipped variant is hidden from users, but its texts are kept.',
       tabs: {
         basic: 'Basic settings',
@@ -266,6 +268,8 @@ export default {
         extraInfo: 'Extra info',
         filterExplanation: 'Filter explanation',
       },
+      editName: 'Edit the name {{name}}',
+      editOption: 'Edit the text of option {{name}}',
       popover: {
         defaultWarning: 'You are editing the default wording. It changes every variant that falls back to default.',
         language: {

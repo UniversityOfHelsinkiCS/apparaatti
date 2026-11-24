@@ -27,13 +27,19 @@ const FilterOrderRow = ({ filter, isFirst, isLast, isBusy, onMove, onToggleFlag 
       }
       sx={{ m: 0 }}
       control={
-        <Switch checked={checked} disabled={isBusy} sx={SWITCH_SX} onChange={event => onChange(event.target.checked)} />
+        <Switch
+          checked={checked}
+          disabled={isBusy}
+          sx={SWITCH_SX}
+          slotProps={{ input: { 'aria-label': label } }}
+          onChange={event => onChange(event.target.checked)}
+        />
       }
     />
   )
 
   return (
-    <Paper variant="outlined" sx={{ p: 1 }}>
+    <Paper variant="outlined" data-testid={`filter-order-row-${filter.id}`} sx={{ p: 1 }}>
       <Stack direction="row" spacing={1} alignItems="center" useFlexGap flexWrap="wrap">
         <IconButton
           size="small"

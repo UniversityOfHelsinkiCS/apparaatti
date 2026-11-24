@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,7 @@ import { Question } from '../../common/types'
 import { shouldRenderWelcomeFilter } from '../contexts/filter/filterRules'
 import { filterConfigMap } from '../contexts/filter/filterState'
 import { useFilterContext } from '../contexts/filterContext'
+import { useFilterEditMode } from '../contexts/filterEditModeContext'
 import Filter from '../filters/filter'
 import { resolveVariant } from '../hooks/useQuestions'
 import { foreignLanguage } from '../util/contentLanguage'
@@ -14,7 +15,7 @@ import ActiveFilterChips from './ActiveFilterChips'
 import HyAccordion from './common/hy/HyAccordion'
 import HyTag from './common/hy/HyTag'
 import { hy } from './common/hy/hyTokens'
-import EditableText from './editMode/EditableText'
+import FilterTextEditHandle from './editMode/FilterTextEditHandle'
 import StudyPhaseQuestion from './StudyPhaseQuestion'
 
 const flashHighlight = keyframes({
@@ -38,6 +39,7 @@ interface FilterRendererProps {
 const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOpen }: FilterRendererProps) => {
   const { t, i18n } = useTranslation()
   const filters = useFilterContext()
+  const { isEditMode } = useFilterEditMode()
   const { highlightedFilterId, setHighlightedFilterId } = filters
   const isHighlighted = highlightedFilterId === filter.id
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -95,7 +97,19 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
         borders={isFirst ? 'both' : 'bottom'}
         triggerRef={triggerRef}
         lockedOpenLabel={lockedOpen ? t('v2:filter.mandatoryStaysOpen') : undefined}
-        action={<ActiveFilterChips filterId={filter.id} focusRef={triggerRef} />}
+        action={
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <ActiveFilterChips filterId={filter.id} focusRef={triggerRef} />
+            {isEditMode && (
+              <FilterTextEditHandle
+                filterId={filter.id}
+                field="shortName"
+                current={filter.raw?.shortName}
+                label={t('v2:filterWordings.editName', { name: shortName })}
+              />
+            )}
+          </Stack>
+        }
         summary={
           <Box
             component="span"
@@ -116,9 +130,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
               />
             )}
             <Box component="span" lang={shortNameLanguage} sx={{ flexGrow: 1 }}>
-              <EditableText filterId={filter.id} field="shortName" current={filter.raw?.shortName}>
-                {shortName}
-              </EditableText>
+              {shortName}
             </Box>
           </Box>
         }

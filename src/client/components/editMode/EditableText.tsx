@@ -19,6 +19,7 @@ interface EditableTextProps {
   filterVariants?: FilterVariant[]
   current: LocalizedText | null | undefined
   block?: boolean
+  ariaLabel?: string
   children: ReactNode
 }
 
@@ -32,6 +33,7 @@ const EditableText = ({
   filterVariants = [],
   current,
   block = false,
+  ariaLabel,
   children,
 }: EditableTextProps) => {
   const { isEditMode, openTarget } = useFilterEditMode()
@@ -65,6 +67,7 @@ const EditableText = ({
       ref={ref}
       role="button"
       tabIndex={0}
+      aria-label={ariaLabel}
       data-testid={`editable-${filterId}-${field}${optionId ? `-${optionId}` : ''}`}
       onClick={(event: MouseEvent<HTMLElement>) => {
         event.stopPropagation()
