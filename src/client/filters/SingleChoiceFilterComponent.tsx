@@ -6,6 +6,7 @@ import { Option, Question } from '../../common/types'
 import AppMarkdown from '../components/common/AppMarkdown'
 import HyAccordion from '../components/common/hy/HyAccordion'
 import SingleChoiceOption from '../components/common/SingleChoiceOption'
+import EditableText from '../components/editMode/EditableText'
 import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -66,7 +67,9 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
           headingLevel={3}
           summary={t('question:extrainfo')}
         >
-          <AppMarkdown>{extrainfo}</AppMarkdown>
+          <EditableText filterId={filter.id} field="extraInfo" current={filter.raw?.extraInfo} block>
+            <AppMarkdown>{extrainfo}</AppMarkdown>
+          </EditableText>
         </HyAccordion>
       )}
     </>

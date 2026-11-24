@@ -2,6 +2,8 @@ import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import AppMarkdown from '../components/common/AppMarkdown'
+import EditableText from '../components/editMode/EditableText'
+import { useEditScope } from '../components/editMode/editScope'
 
 interface InfoOnlyFilterComponentProps {
   extraInfo?: string
@@ -9,20 +11,29 @@ interface InfoOnlyFilterComponentProps {
 
 const InfoOnlyFilterComponent = ({ extraInfo }: InfoOnlyFilterComponentProps) => {
   const { t } = useTranslation()
+  const scope = useEditScope()
 
-  if (!extraInfo) {
-    return (
-      <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
-        {t('question:noExtrainfo')}
-      </Typography>
-    )
+  const content = extraInfo ? (
+    <AppMarkdown>{extraInfo}</AppMarkdown>
+  ) : (
+    <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
+      {t('question:noExtrainfo')}
+    </Typography>
+  )
+
+  if (!scope) {
+    return <Box sx={{ px: 2 }}>{content}</Box>
   }
 
-  return (
+  const editable = (
     <Box sx={{ px: 2 }}>
-      <AppMarkdown>{extraInfo}</AppMarkdown>
+      <EditableText filterId={scope.filterId} field="extraInfo" current={scope.rawFilter?.extraInfo} block>
+        {content}
+      </EditableText>
     </Box>
   )
+
+  return editable
 }
 
 export default InfoOnlyFilterComponent

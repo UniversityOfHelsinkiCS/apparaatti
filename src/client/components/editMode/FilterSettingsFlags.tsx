@@ -1,4 +1,4 @@
-import { FormControlLabel, Stack, Switch, TextField } from '@mui/material'
+import { FormControlLabel, Stack, Switch, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type { FilterConfig, FilterSettingsPatch } from '../../../common/types'
@@ -17,7 +17,6 @@ const FilterSettingsFlags = ({ filter, patch, onPatch }: FilterSettingsFlagsProp
 
   const flagValue = (flag: FilterFlag): boolean => patch[flag] ?? filter[flag]
   const displayType = patch.displayType ?? filter.displayType ?? ''
-  const parentFilterId = patch.parentFilterId ?? filter.parentFilterId ?? ''
 
   return (
     <Stack spacing={1.5}>
@@ -43,14 +42,7 @@ const FilterSettingsFlags = ({ filter, patch, onPatch }: FilterSettingsFlagsProp
         onChange={value => onPatch(current => ({ ...current, displayType: value === '' ? null : value }))}
       />
 
-      <TextField
-        size="small"
-        label={t('v2:filterSettings.parentFilterId')}
-        value={parentFilterId}
-        onChange={event =>
-          onPatch(current => ({ ...current, parentFilterId: event.target.value === '' ? null : event.target.value }))
-        }
-      />
+      <Typography variant="caption">{t('v2:filterSettings.enabledNote')}</Typography>
     </Stack>
   )
 }

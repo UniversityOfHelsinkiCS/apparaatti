@@ -1,3 +1,5 @@
+import type { MatchConditions } from './conditionMatching.ts'
+
 /** How several selected URNs combine when filtering. */
 export type UrnMatchMode = 'or' | 'and'
 
@@ -429,7 +431,7 @@ export type FilterSnapshotMeta = {
 
 export type FilterBase = { kind: 'published' } | { kind: 'snapshot'; id: number }
 
-export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo'
+export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo' | 'filterExplanation'
 
 /**
  * Filter edits travel as an ordered list of typed ops rather than a REST call per field. Filter editing has many
@@ -454,6 +456,7 @@ export type FilterWordingMutation =
   | { op: 'optionName'; filterId: string; variantName: string; optionId: string; text: LocalizedText }
   | { op: 'shortName'; filterId: string; text: LocalizedText }
   | { op: 'extraInfo'; filterId: string; text: LocalizedText | null }
+  | { op: 'filterExplanation'; filterId: string; text: LocalizedText | null }
 
 export type FilterSettingsPatch = {
   enabled?: boolean
@@ -464,6 +467,7 @@ export type FilterSettingsPatch = {
   hideInFilterSidebar?: boolean
   displayType?: string | null
   parentFilterId?: string | null
+  coordinateKey?: string | null
 }
 
 export type FilterOptionSettings = {
@@ -482,6 +486,12 @@ export type FilterSettingsMutation =
       optionId: string
       settings: FilterOptionSettings
     }
+  | { op: 'variantConditions'; filterId: string; variantName: string; conditions: MatchConditions }
+  | { op: 'variantSkipped'; filterId: string; variantName: string; skipped: boolean }
+  | { op: 'renameVariant'; filterId: string; variantName: string; newName: string }
+  | { op: 'deleteVariant'; filterId: string; variantName: string }
+  | { op: 'addOption'; filterId: string; variantName: string; optionId: string; name: LocalizedText }
+  | { op: 'deleteOption'; filterId: string; variantName: string; optionId: string }
 
 export type FilterMutations = {
   wordings: FilterWordingMutation[]
@@ -506,8 +516,15 @@ export type FilterSettingChange = {
   to: string | null
 }
 
+export type FilterVariantRef = { filterId: string; variantName: string }
+
+export type FilterOptionRef = { filterId: string; variantName: string; optionId: string }
+
 export type FilterPayloadDiff = {
-  addedVariants: { filterId: string; variantName: string }[]
+  addedVariants: FilterVariantRef[]
+  removedVariants: FilterVariantRef[]
+  addedOptions: FilterOptionRef[]
+  removedOptions: FilterOptionRef[]
   changedTexts: FilterTextChange[]
   changedSettings: FilterSettingChange[]
 }

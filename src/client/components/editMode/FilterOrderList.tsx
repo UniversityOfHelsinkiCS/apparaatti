@@ -9,7 +9,7 @@ import {
   mutateFilterSnapshot,
 } from '../admin/filterVersions/filterSnapshotApi'
 import FilterOrderRow from './FilterOrderRow'
-import { enabledMutations, orderMutations } from './filterSettingsMutations'
+import { flagMutations, orderMutations } from './filterSettingsMutations'
 
 const byDisplayOrder = (a: FilterConfig, b: FilterConfig) => a.displayOrder - b.displayOrder
 
@@ -51,7 +51,7 @@ const FilterOrderList = ({ versionId }: { versionId: number }) => {
           isLast={index === filters.length - 1}
           isBusy={apply.isPending}
           onMove={direction => move(index, direction)}
-          onToggleEnabled={() => apply.mutate(enabledMutations(filter.id, !filter.enabled))}
+          onToggleFlag={patch => apply.mutate(flagMutations(filter.id, patch))}
         />
       ))}
     </Stack>

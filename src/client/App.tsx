@@ -141,7 +141,7 @@ const App = () => {
   }
 
   return (
-    <FilterEditModeProvider isAdmin={Boolean(user.isAdmin)}>
+    <FilterEditModeProvider isAdmin={Boolean(user.isAdmin)} isSuperuser={Boolean(user.isSuperuser)}>
       <FilterContextProvider>
         <BackendLocaleProvider>
           <OneThirdDrawerLayout user={user} />

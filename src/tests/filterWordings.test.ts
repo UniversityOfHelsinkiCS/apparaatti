@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { ANY_VARIANT_QUERY, isCatchAll, resolveBest } from '../common/conditionMatching'
 import { diffFilterPayloads, mergeFilterMutations } from '../common/filterWordings'
 import type { FilterConfig, FilterSnapshotPayload } from '../common/types'
 
@@ -214,5 +215,114 @@ describe('diffFilterPayloads', () => {
       { filterId: 'lang', variantName: null, optionId: null, field: 'enabled', from: 'true', to: 'false' },
       { filterId: 'lang', variantName: 'default', optionId: 'sv', field: 'valueOverride', from: null, to: 'SV' },
     ])
+  })
+})
+
+describe('variant and option structure mutations', () => {
+  it('moves a variant to another context when its conditions change', () => {
+    const merged = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [
+        {
+          op: 'variantConditions',
+          filterId: 'lang',
+          variantName: 'sv_only',
+          conditions: { organisationCode: null, lang: 'en', primaryLanguage: null, primaryLanguageSpecification: null },
+        },
+      ],
+    })
+
+    const variants = merged.filters[0].variants
+    expect(resolveBest(variants, { ...ANY_VARIANT_QUERY, lang: 'sv' })?.name).toBe('default')
+    expect(resolveBest(variants, { ...ANY_VARIANT_QUERY, lang: 'en' })?.name).toBe('sv_only')
+  })
+
+  it('keeps texts and catch-all status when a variant is renamed', () => {
+    const merged = mergeFilterMutations(payload(), {
+      wordings: [],
+      settings: [{ op: 'renameVariant', filterId: 'lang', variantName: 'default', newName: 'yleinen' }],
+    })
+
+    const variant = merged.filters[0].variants[0]
+    expect(variant.name).toBe('yleinen')
+    expect(variant.question.fi).toBe('Mikä kieli?')
+    expect(isCatchAll(variant)).toBe(true)
+  })
+
+  it('refuses to delete the only variant', () => {
+    const merged = mergeFilterMutations(payload(), {
+      wordings: [],
+      settings: [{ op: 'deleteVariant', filterId: 'lang', variantName: 'default' }],
+    })
+
+    expect(merged.filters[0].variants.map(variant => variant.name)).toEqual(['default'])
+  })
+
+  it('deletes a variant when another one remains', () => {
+    const merged = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [{ op: 'deleteVariant', filterId: 'lang', variantName: 'sv_only' }],
+    })
+
+    expect(merged.filters[0].variants.map(variant => variant.name)).toEqual(['default'])
+  })
+
+  it('ignores an added option whose id is already taken', () => {
+    const merged = mergeFilterMutations(payload(), {
+      wordings: [],
+      settings: [
+        {
+          op: 'addOption',
+          filterId: 'lang',
+          variantName: 'default',
+          optionId: 'fi',
+          name: { fi: 'Toinen', sv: 'Annan', en: 'Other' },
+        },
+      ],
+    })
+
+    const options = merged.filters[0].variants[0].options
+    expect(options?.map(option => option.id)).toEqual(['fi', 'sv'])
+    expect(options?.[0].name.fi).toBe('Suomi')
+  })
+
+  it('does not resurrect an option that was deleted earlier in the same batch', () => {
+    const merged = mergeFilterMutations(payload(), {
+      wordings: [],
+      settings: [
+        { op: 'deleteOption', filterId: 'lang', variantName: 'default', optionId: 'sv' },
+        {
+          op: 'optionSettings',
+          filterId: 'lang',
+          variantName: 'default',
+          optionId: 'sv',
+          settings: { id: 'sv', valueOverride: 'SV', selectedByDefault: false },
+        },
+      ],
+    })
+
+    expect(merged.filters[0].variants[0].options?.map(option => option.id)).toEqual(['fi'])
+  })
+
+  it('reports removed variants and added and removed options', () => {
+    const changed = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [
+        { op: 'deleteVariant', filterId: 'lang', variantName: 'sv_only' },
+        { op: 'deleteOption', filterId: 'lang', variantName: 'default', optionId: 'sv' },
+        {
+          op: 'addOption',
+          filterId: 'lang',
+          variantName: 'default',
+          optionId: 'en',
+          name: { fi: 'Englanti', sv: 'Engelska', en: 'English' },
+        },
+      ],
+    })
+
+    const diff = diffFilterPayloads(twoVariantPayload(), changed)
+    expect(diff.removedVariants).toEqual([{ filterId: 'lang', variantName: 'sv_only' }])
+    expect(diff.addedOptions).toEqual([{ filterId: 'lang', variantName: 'default', optionId: 'en' }])
+    expect(diff.removedOptions).toEqual([{ filterId: 'lang', variantName: 'default', optionId: 'sv' }])
   })
 })

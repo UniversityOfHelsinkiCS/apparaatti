@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import type { ReactNode } from 'react'
+import type { KeyboardEvent, MouseEvent, ReactNode } from 'react'
 import { useRef } from 'react'
 
 import { ANY_VARIANT_QUERY, type VariantQuery } from '../../../common/conditionMatching'
@@ -18,6 +18,7 @@ interface EditableTextProps {
   variantQuery?: VariantQuery
   filterVariants?: FilterVariant[]
   current: LocalizedText | null | undefined
+  block?: boolean
   children: ReactNode
 }
 
@@ -30,6 +31,7 @@ const EditableText = ({
   variantQuery = ANY_VARIANT_QUERY,
   filterVariants = [],
   current,
+  block = false,
   children,
 }: EditableTextProps) => {
   const { isEditMode, openTarget } = useFilterEditMode()
@@ -59,17 +61,17 @@ const EditableText = ({
 
   return (
     <Box
-      component="span"
+      component={block ? 'div' : 'span'}
       ref={ref}
       role="button"
       tabIndex={0}
       data-testid={`editable-${filterId}-${field}${optionId ? `-${optionId}` : ''}`}
-      onClick={event => {
+      onClick={(event: MouseEvent<HTMLElement>) => {
         event.stopPropagation()
         event.preventDefault()
         open()
       }}
-      onKeyDown={event => {
+      onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
         if (event.key !== 'Enter' && event.key !== ' ') {
           return
         }

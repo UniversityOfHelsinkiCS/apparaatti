@@ -1,8 +1,8 @@
-import { IconButton, Paper, Stack, Switch, Typography } from '@mui/material'
+import { FormControlLabel, IconButton, Paper, Stack, Switch, Typography } from '@mui/material'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import type { FilterConfig } from '../../../common/types'
+import type { FilterConfig, FilterSettingsPatch } from '../../../common/types'
 import { SWITCH_SX } from '../admin/filterEdit/filterEditorUtils'
 
 type FilterOrderRowProps = {
@@ -11,11 +11,26 @@ type FilterOrderRowProps = {
   isLast: boolean
   isBusy: boolean
   onMove: (direction: 1 | -1) => void
-  onToggleEnabled: () => void
+  onToggleFlag: (patch: FilterSettingsPatch) => void
 }
 
-const FilterOrderRow = ({ filter, isFirst, isLast, isBusy, onMove, onToggleEnabled }: FilterOrderRowProps) => {
+const FilterOrderRow = ({ filter, isFirst, isLast, isBusy, onMove, onToggleFlag }: FilterOrderRowProps) => {
   const { t } = useTranslation()
+
+  const toggle = (label: string, checked: boolean, onChange: (next: boolean) => void) => (
+    <FormControlLabel
+      labelPlacement="top"
+      label={
+        <Typography variant="caption" sx={{ whiteSpace: 'nowrap' }}>
+          {label}
+        </Typography>
+      }
+      sx={{ m: 0 }}
+      control={
+        <Switch checked={checked} disabled={isBusy} sx={SWITCH_SX} onChange={event => onChange(event.target.checked)} />
+      }
+    />
+  )
 
   return (
     <Paper variant="outlined" sx={{ p: 1 }}>
@@ -39,13 +54,13 @@ const FilterOrderRow = ({ filter, isFirst, isLast, isBusy, onMove, onToggleEnabl
         <Typography variant="body2" sx={{ flexGrow: 1 }}>
           {filter.shortName.fi || filter.id}
         </Typography>
-        <Switch
-          checked={filter.enabled}
-          disabled={isBusy}
-          sx={SWITCH_SX}
-          inputProps={{ 'aria-label': t('v2:filterSettings.flag.enabled') }}
-          onChange={onToggleEnabled}
-        />
+        {toggle(t('v2:filterSettings.flag.enabled'), filter.enabled, next => onToggleFlag({ enabled: next }))}
+        {toggle(t('v2:filterSettings.inWelcomeModal'), filter.showInWelcomeModal, next =>
+          onToggleFlag({ showInWelcomeModal: next })
+        )}
+        {toggle(t('v2:filterSettings.inSidebar'), !filter.hideInFilterSidebar, next =>
+          onToggleFlag({ hideInFilterSidebar: !next })
+        )}
       </Stack>
     </Paper>
   )

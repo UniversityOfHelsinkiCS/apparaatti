@@ -12,21 +12,13 @@ type FilterOptionSettingsRowProps = {
 
 const FilterOptionSettingsRow = ({ option, draft, onChange }: FilterOptionSettingsRowProps) => {
   const { t } = useTranslation()
-  const optionId = draft?.id ?? option.id
   const valueOverride = draft?.valueOverride ?? option.valueOverride ?? ''
   const selectedByDefault = draft?.selectedByDefault ?? option.selectedByDefault ?? false
 
-  return (
+  const row = (
     <Paper variant="outlined" sx={{ p: 2 }}>
       <Stack spacing={1}>
         <Typography variant="body2">{option.name.fi}</Typography>
-        <TextField
-          size="small"
-          label={t('v2:filterSettings.optionId')}
-          helperText={t('v2:filterSettings.optionIdWarning')}
-          value={optionId}
-          onChange={event => onChange({ id: event.target.value })}
-        />
         <TextField
           size="small"
           label={t('v2:filterSettings.valueOverride')}
@@ -46,6 +38,8 @@ const FilterOptionSettingsRow = ({ option, draft, onChange }: FilterOptionSettin
       </Stack>
     </Paper>
   )
+
+  return row
 }
 
 export default FilterOptionSettingsRow

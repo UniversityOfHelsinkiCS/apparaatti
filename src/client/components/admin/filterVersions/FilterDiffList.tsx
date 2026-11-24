@@ -52,7 +52,15 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
     return <Typography variant="body2">{t('v2:filterVersions.diff.loading')}</Typography>
   }
 
-  if (diff.addedVariants.length === 0 && diff.changedTexts.length === 0 && diff.changedSettings.length === 0) {
+  const isEmpty =
+    diff.addedVariants.length === 0 &&
+    diff.removedVariants.length === 0 &&
+    diff.addedOptions.length === 0 &&
+    diff.removedOptions.length === 0 &&
+    diff.changedTexts.length === 0 &&
+    diff.changedSettings.length === 0
+
+  if (isEmpty) {
     return <Typography variant="body2">{t('v2:filterVersions.diff.empty')}</Typography>
   }
 
@@ -61,6 +69,29 @@ const FilterDiffList = ({ diff }: { diff: FilterPayloadDiff | null }) => {
       {diff.addedVariants.map(added => (
         <Typography variant="body2" key={`${added.filterId}-${added.variantName}`}>
           {t('v2:filterVersions.diff.addedVariant', { filter: added.filterId, variant: added.variantName })}
+        </Typography>
+      ))}
+      {diff.removedVariants.map(removed => (
+        <Typography variant="body2" key={`removed-${removed.filterId}-${removed.variantName}`}>
+          {t('v2:filterVersions.diff.removedVariant', { filter: removed.filterId, variant: removed.variantName })}
+        </Typography>
+      ))}
+      {diff.addedOptions.map(added => (
+        <Typography variant="body2" key={`added-${added.filterId}-${added.variantName}-${added.optionId}`}>
+          {t('v2:filterVersions.diff.addedOption', {
+            filter: added.filterId,
+            variant: added.variantName,
+            option: added.optionId,
+          })}
+        </Typography>
+      ))}
+      {diff.removedOptions.map(removed => (
+        <Typography variant="body2" key={`removed-${removed.filterId}-${removed.variantName}-${removed.optionId}`}>
+          {t('v2:filterVersions.diff.removedOption', {
+            filter: removed.filterId,
+            variant: removed.variantName,
+            option: removed.optionId,
+          })}
         </Typography>
       ))}
       {diff.changedTexts.map((change, index) => (

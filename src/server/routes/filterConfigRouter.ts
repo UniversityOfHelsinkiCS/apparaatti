@@ -1,6 +1,7 @@
 import express from 'express'
 import { z } from 'zod'
 
+import { restrictedChanges } from '../../common/filterPermissions.ts'
 import { diffFilterPayloads } from '../../common/filterWordings.ts'
 import type { FilterBase, FilterConfig, User } from '../../common/types.ts'
 import {
@@ -133,6 +134,12 @@ filterConfigRouter.post('/snapshots/:id/mutate', async (req, res) => {
   const parsed = FilterSnapshotMutateSchema.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).json({ message: 'Invalid data', errors: parsed.error.flatten() })
+    return
+  }
+
+  const restricted = restrictedChanges(parsed.data.mutations)
+  if (restricted.length > 0 && !isSuperuser(req.user as User)) {
+    res.status(403).json({ message: 'Forbidden', restricted })
     return
   }
 

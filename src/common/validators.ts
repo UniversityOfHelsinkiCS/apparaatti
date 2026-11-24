@@ -42,6 +42,22 @@ const FilterVariantFields = z.object({
   options: z.array(FilterOptionSchema).optional(),
 })
 
+const MatchConditionsSchema = z
+  .object({
+    organisationCode: z.string().min(1).nullable().default(null),
+    lang: z.enum(LANGS).nullable().default(null),
+    primaryLanguage: z.enum(PRIMARY_LANGUAGES).nullable().default(null),
+    primaryLanguageSpecification: z.enum(PRIMARY_LANGUAGE_SPECIFICATIONS).nullable().default(null),
+  })
+  .refine(
+    value =>
+      value.primaryLanguageSpecification === null || specificationCanBeMatched(value.lang, value.primaryLanguage),
+    {
+      message: 'This combination can never be matched',
+      path: ['primaryLanguageSpecification'],
+    }
+  )
+
 const FilterVariantSchema = FilterVariantFields.refine(
   value => value.primaryLanguageSpecification === null || specificationCanBeMatched(value.lang, value.primaryLanguage),
   {
@@ -56,6 +72,7 @@ export const FilterUpdateSchema = z.object({
   explanation: LocalizedTextSchema.nullable().optional(),
   extraInfo: LocalizedTextSchema.nullable().optional(),
   parentFilterId: z.string().nullable().optional(),
+  coordinateKey: z.string().nullable().optional(),
   displayOrder: z.number().int(),
   displayType: z.string().nullable().optional(),
   hideInCurrentFiltersDisplay: z.boolean(),
@@ -72,7 +89,6 @@ export const FilterCreateSchema = FilterUpdateSchema.extend({
 
 export const FilterImportItemSchema = FilterUpdateSchema.extend({
   id: z.string(),
-  coordinateKey: z.string().nullable().optional(),
 })
 
 export const FilterConfigImportSchema = z.object({
@@ -297,6 +313,11 @@ const FilterWordingMutationSchema = z.discriminatedUnion('op', [
   }),
   z.object({ op: z.literal('shortName'), filterId: z.string().min(1), text: LocalizedTextSchema }),
   z.object({ op: z.literal('extraInfo'), filterId: z.string().min(1), text: LocalizedTextSchema.nullable() }),
+  z.object({
+    op: z.literal('filterExplanation'),
+    filterId: z.string().min(1),
+    text: LocalizedTextSchema.nullable(),
+  }),
 ])
 
 const FilterSettingsPatchSchema = z.object({
@@ -308,6 +329,7 @@ const FilterSettingsPatchSchema = z.object({
   hideInFilterSidebar: z.boolean().optional(),
   displayType: z.string().nullable().optional(),
   parentFilterId: z.string().nullable().optional(),
+  coordinateKey: z.string().nullable().optional(),
 })
 
 const FilterOptionSettingsSchema = z.object({
@@ -325,6 +347,42 @@ const FilterSettingsMutationSchema = z.discriminatedUnion('op', [
     variantName: z.string().trim().min(1),
     optionId: z.string().min(1),
     settings: FilterOptionSettingsSchema,
+  }),
+  z.object({
+    op: z.literal('variantConditions'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    conditions: MatchConditionsSchema,
+  }),
+  z.object({
+    op: z.literal('variantSkipped'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    skipped: z.boolean(),
+  }),
+  z.object({
+    op: z.literal('renameVariant'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    newName: z.string().trim().min(1),
+  }),
+  z.object({
+    op: z.literal('deleteVariant'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+  }),
+  z.object({
+    op: z.literal('addOption'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    optionId: z.string().trim().min(1),
+    name: LocalizedTextSchema,
+  }),
+  z.object({
+    op: z.literal('deleteOption'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    optionId: z.string().min(1),
   }),
 ])
 

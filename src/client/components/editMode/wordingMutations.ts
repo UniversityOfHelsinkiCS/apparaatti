@@ -69,6 +69,8 @@ export const wordingMutations = (target: EditTarget, text: LocalizedText, picked
     wordings.push({ op: 'shortName', filterId: target.filterId, text })
   } else if (target.field === 'extraInfo') {
     wordings.push({ op: 'extraInfo', filterId: target.filterId, text })
+  } else if (target.field === 'filterExplanation') {
+    wordings.push({ op: 'filterExplanation', filterId: target.filterId, text })
   } else if (target.field === 'question') {
     wordings.push({ op: 'variantQuestion', filterId: target.filterId, variantName, text })
   } else if (target.field === 'explanation') {

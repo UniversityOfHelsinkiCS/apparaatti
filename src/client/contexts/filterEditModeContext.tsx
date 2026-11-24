@@ -23,6 +23,7 @@ export type EditTarget = {
 type FilterEditModeValue = {
   editingVersionId: number | null
   isEditMode: boolean
+  isSuperuser: boolean
   target: EditTarget | null
   savedField: FilterWordingField | null
   openTarget: (target: EditTarget) => void
@@ -36,6 +37,7 @@ type FilterEditModeValue = {
 const FilterEditModeContext = createContext<FilterEditModeValue>({
   editingVersionId: null,
   isEditMode: false,
+  isSuperuser: false,
   target: null,
   savedField: null,
   openTarget: () => {},
@@ -48,7 +50,15 @@ const FilterEditModeContext = createContext<FilterEditModeValue>({
 
 export const useFilterEditMode = () => useContext(FilterEditModeContext)
 
-export const FilterEditModeProvider = ({ isAdmin, children }: { isAdmin: boolean; children: ReactNode }) => {
+export const FilterEditModeProvider = ({
+  isAdmin,
+  isSuperuser,
+  children,
+}: {
+  isAdmin: boolean
+  isSuperuser: boolean
+  children: ReactNode
+}) => {
   const [editingVersionId, setEditingVersionId] = useState<number | null>(() =>
     isAdmin ? readEditingFilterVersionId() : null
   )
@@ -59,6 +69,7 @@ export const FilterEditModeProvider = ({ isAdmin, children }: { isAdmin: boolean
     () => ({
       editingVersionId: isAdmin ? editingVersionId : null,
       isEditMode: isAdmin && editingVersionId !== null,
+      isSuperuser: isAdmin && isSuperuser,
       target,
       savedField,
       openTarget: setTarget,
@@ -75,7 +86,7 @@ export const FilterEditModeProvider = ({ isAdmin, children }: { isAdmin: boolean
         setTarget(null)
       },
     }),
-    [isAdmin, editingVersionId, target, savedField]
+    [isAdmin, isSuperuser, editingVersionId, target, savedField]
   )
 
   return <FilterEditModeContext.Provider value={value}>{children}</FilterEditModeContext.Provider>
