@@ -262,7 +262,7 @@ courseTagRouter.post('/snapshots/:id/mutate', async (req, res) => {
   res.json({ status: 'mutated' })
 })
 
-courseTagRouter.post('/snapshots/:id/activate', requireSuperuser, async (req, res) => {
+courseTagRouter.post('/snapshots/:id/activate', async (req, res) => {
   const id = Number(req.params.id)
   const snapshot = await tagSnapshotById(id)
   if (!snapshot) {

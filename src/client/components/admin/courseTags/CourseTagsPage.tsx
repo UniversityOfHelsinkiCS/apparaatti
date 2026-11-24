@@ -61,7 +61,6 @@ const CourseTagsPage = () => {
         snapshots={snapshots ?? []}
         base={base}
         editingVersionId={editingVersionId}
-        isSuperuser={user.isSuperuser === true}
         onChange={handleVersionChange}
       />
 

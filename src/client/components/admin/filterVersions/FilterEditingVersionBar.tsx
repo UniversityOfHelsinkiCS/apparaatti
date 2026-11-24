@@ -11,7 +11,7 @@ import { createFilterSnapshot, fetchFilterSnapshots, invalidateFilterVersionQuer
 import { storeEditingFilterVersionId } from './filterVersionState.ts'
 import NewFilterVersionDialog from './NewFilterVersionDialog.tsx'
 
-const FilterEditingVersionBar = ({ isSuperuser }: { isSuperuser: boolean }) => {
+const FilterEditingVersionBar = () => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [selectedId, setSelectedId] = useState<number | null>(null)
@@ -75,7 +75,7 @@ const FilterEditingVersionBar = ({ isSuperuser }: { isSuperuser: boolean }) => {
           {t('v2:filterVersions.enterEditMode')}
         </BlackOutlinedButton>
 
-        {selectedVersion && isSuperuser ? (
+        {selectedVersion ? (
           <BlackOutlinedButton type="button" onClick={() => setReviewed(selectedVersion)}>
             {t('v2:filterVersions.publish.publishVersion')}
           </BlackOutlinedButton>

@@ -13,11 +13,10 @@ interface EditingVersionBarProps {
   snapshots: TagSnapshotMeta[]
   base: TagBase
   editingVersionId: number | null
-  isSuperuser: boolean
   onChange: (id: number | null) => void
 }
 
-const EditingVersionBar = ({ snapshots, base, editingVersionId, isSuperuser, onChange }: EditingVersionBarProps) => {
+const EditingVersionBar = ({ snapshots, base, editingVersionId, onChange }: EditingVersionBarProps) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isNewOpen, setIsNewOpen] = useState(false)
@@ -65,7 +64,7 @@ const EditingVersionBar = ({ snapshots, base, editingVersionId, isSuperuser, onC
           {t('v2:courseTags.editing.new')}
         </BlackOutlinedButton>
 
-        {editedVersion && isSuperuser ? (
+        {editedVersion ? (
           <BlackOutlinedButton type="button" onClick={() => setReviewed(editedVersion)}>
             {t('v2:courseTags.publish.publishVersion')}
           </BlackOutlinedButton>

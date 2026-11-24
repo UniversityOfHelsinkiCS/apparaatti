@@ -36,7 +36,7 @@ const AdminPage = () => {
       {tab === 0 && <BackendLocalesEditor isSuperuser={isSuperuser} />}
       {tab === 1 && (
         <Box>
-          <FilterEditingVersionBar isSuperuser={isSuperuser} />
+          <FilterEditingVersionBar />
           <FilterVersionsTable isSuperuser={isSuperuser} />
         </Box>
       )}

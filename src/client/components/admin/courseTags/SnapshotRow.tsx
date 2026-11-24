@@ -46,13 +46,13 @@ const SnapshotRow = ({
           <BlackOutlinedButton type="button" onClick={() => onCompare(snapshot)}>
             {t('v2:courseTags.snapshots.compare')}
           </BlackOutlinedButton>
+          <BlackOutlinedButton type="button" onClick={() => onActivate(snapshot)}>
+            {t('v2:courseTags.snapshots.activate')}
+          </BlackOutlinedButton>
           {isSuperuser ? (
             <>
               <BlackOutlinedButton type="button" onClick={() => onEdit(snapshot)}>
                 {t('v2:courseTags.snapshots.edit')}
-              </BlackOutlinedButton>
-              <BlackOutlinedButton type="button" onClick={() => onActivate(snapshot)}>
-                {t('v2:courseTags.snapshots.activate')}
               </BlackOutlinedButton>
               <BlackOutlinedButton type="button" onClick={() => onDelete(snapshot)}>
                 {t('v2:courseTags.snapshots.delete')}

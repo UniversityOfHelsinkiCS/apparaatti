@@ -162,7 +162,7 @@ filterConfigRouter.post('/snapshots/:id/overwrite', requireSuperuser, async (req
   res.json({ status: 'overwritten' })
 })
 
-filterConfigRouter.post('/snapshots/:id/activate', requireSuperuser, async (req, res) => {
+filterConfigRouter.post('/snapshots/:id/activate', async (req, res) => {
   const id = Number(req.params.id)
   const payload = await filterSnapshotById(id)
   if (!payload) {
