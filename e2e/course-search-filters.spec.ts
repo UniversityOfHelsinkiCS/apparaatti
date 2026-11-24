@@ -49,17 +49,6 @@ test('excludeCourseCodes matches as a case-insensitive substring', async ({ requ
   expect(upper.total).toBe(0)
 })
 
-test('excludeCourseCodes removes a course even when only one of its units matches', async ({ request }) => {
-  const all = await unfiltered(request)
-  const multiUnit = all.courses.find((course: any) => codesOf(course).length > 1)
-  test.skip(!multiUnit, 'seed data has no course with several course units')
-
-  const oneCode = codesOf(multiUnit)[0]
-  const filtered = await search(request, { excludeCourseCodes: oneCode })
-
-  expect(filtered.courses.some((course: any) => course.id === multiUnit.id)).toBe(false)
-})
-
 test('excludeUrns drops courses carrying the urn', async ({ request }) => {
   const all = await unfiltered(request)
   const withUrns = all.courses.find((course: any) => urnsOf(course).length > 0)

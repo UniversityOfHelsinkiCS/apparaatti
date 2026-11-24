@@ -253,6 +253,12 @@ export default {
         preview: 'Resulterande variant: {{variant}}',
         cancel: 'Avbryt',
         apply: 'Byt',
+        pick: {
+          title: 'Välj variant som redigeras',
+          intro:
+            'Välj vilken variant du redigerar. Valen ställer in svaren på sidan, så att du ser och redigerar den valda varianten.',
+          apply: 'Välj',
+        },
       },
       saved: '{{field}} sparad i versionen',
       exit: {

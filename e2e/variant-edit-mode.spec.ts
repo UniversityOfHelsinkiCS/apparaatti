@@ -5,6 +5,7 @@ import { expect, test } from './fixtures'
 // The app defaults to Finnish; these tests never switch the UI language.
 const ANY = 'mikä tahansa'
 const EDITING_VERSION_KEY = 'apparaatti-filter-wording-version'
+const PICK_VARIANT_KEY = 'apparaatti-filter-wording-pick-variant'
 const SNAPSHOTS_PATH = '/api/admin/filter-config/snapshots'
 
 let snapshotId: number
@@ -174,4 +175,29 @@ test('filter-wide texts open straight on the text step', async ({ page }) => {
   await expect(editor.getByTestId('wording-edit-target')).toHaveCount(0)
   await expect(editor.getByRole('textbox', { name: 'Suomeksi' })).toBeVisible()
   await expect(editor.getByRole('button', { name: 'Vaihda' })).toHaveCount(0)
+})
+
+test('entering edit mode opens the variant select, which only closes by picking', async ({ page }) => {
+  await openInEditMode(page)
+  await page.evaluate(key => window.localStorage.setItem(key, 'true'), PICK_VARIANT_KEY)
+  await page.reload()
+
+  const dialog = page.getByTestId('pick-variant-dialog')
+  await expect(dialog).toBeVisible()
+  await expect(dialog.getByRole('button', { name: 'Peruuta' })).toHaveCount(0)
+
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeVisible()
+
+  await dialog.getByRole('combobox', { name: /Tiedekunta/ }).click()
+  await page.getByRole('option', { name: ANY, exact: true }).click()
+  await dialog.getByRole('button', { name: 'Valitse' }).click()
+
+  await expect(dialog).toBeHidden()
+  await expectWelcomeModalStaysClosed(page)
+  await expectNoOrganisation(page)
+
+  await page.reload()
+  await expect(page.getByTestId('filter-edit-mode-overlay')).toBeVisible()
+  await expect(page.getByTestId('pick-variant-dialog')).toHaveCount(0)
 })

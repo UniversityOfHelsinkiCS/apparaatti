@@ -8,8 +8,13 @@ import ConditionSelectors from '../admin/backendLocaleEdit/ConditionSelectors'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
 import { normalizeVariantQuery } from './changeVariant'
 
+type ChangeVariantDialogProps = {
+  onClose: () => void
+  mustPick?: boolean
+}
+
 /** Changes the page answers so the page shows another variant. Mount only while open. */
-const ChangeVariantDialog = ({ onClose }: { onClose: () => void }) => {
+const ChangeVariantDialog = ({ onClose, mustPick = false }: ChangeVariantDialogProps) => {
   const { t } = useTranslation()
   const {
     variantQuery,
@@ -22,6 +27,7 @@ const ChangeVariantDialog = ({ onClose }: { onClose: () => void }) => {
   const [draft, setDraft] = useState<VariantQuery>(variantQuery)
 
   const result = normalizeVariantQuery(draft)
+  const prefix = mustPick ? 'v2:filterWordings.changeVariant.pick' : 'v2:filterWordings.changeVariant'
 
   const apply = () => {
     setStudyField(result.organisationCode)
@@ -33,27 +39,34 @@ const ChangeVariantDialog = ({ onClose }: { onClose: () => void }) => {
   }
 
   return (
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth data-testid="change-variant-dialog">
-      <DialogTitle>{t('v2:filterWordings.changeVariant.title')}</DialogTitle>
+    <Dialog
+      open
+      onClose={mustPick ? undefined : onClose}
+      disableEscapeKeyDown={mustPick}
+      maxWidth="sm"
+      fullWidth
+      data-testid={mustPick ? 'pick-variant-dialog' : 'change-variant-dialog'}
+    >
+      <DialogTitle>{t(`${prefix}.title`)}</DialogTitle>
       <DialogContent>
         <Stack spacing={2.5} sx={{ mt: 1 }}>
           <Alert severity="info" icon={false}>
-            <Typography variant="subtitle2">{describeVariantQuery(variantQuery)}</Typography>
-            <Typography variant="body2">{t('v2:filterWordings.changeVariant.intro')}</Typography>
+            <Typography variant="subtitle2">
+              {t('v2:filterWordings.changeVariant.preview', { variant: describeVariantQuery(result) })}
+            </Typography>
+            <Typography variant="body2">{t(`${prefix}.intro`)}</Typography>
           </Alert>
 
           <Typography variant="subtitle2">{t('v2:filterWordings.changeVariant.conditionsTitle')}</Typography>
           <ConditionSelectors draft={draft} onChange={patch => setDraft(current => ({ ...current, ...patch }))} />
-
-          <Typography variant="body2">
-            {t('v2:filterWordings.changeVariant.preview', { variant: describeVariantQuery(result) })}
-          </Typography>
         </Stack>
       </DialogContent>
       <DialogActions>
-        <BlackOutlinedButton onClick={onClose}>{t('v2:filterWordings.changeVariant.cancel')}</BlackOutlinedButton>
+        {mustPick ? null : (
+          <BlackOutlinedButton onClick={onClose}>{t('v2:filterWordings.changeVariant.cancel')}</BlackOutlinedButton>
+        )}
         <Button variant="contained" color="secondary" onClick={apply}>
-          {t('v2:filterWordings.changeVariant.apply')}
+          {t(`${prefix}.apply`)}
         </Button>
       </DialogActions>
     </Dialog>

@@ -8,7 +8,7 @@ import type { FilterSnapshotMeta } from '../../../../common/types.ts'
 import BlackOutlinedButton from '../../common/BlackOutlinedButton.tsx'
 import FilterPublishReviewDialog from './FilterPublishReviewDialog.tsx'
 import { createFilterSnapshot, fetchFilterSnapshots, invalidateFilterVersionQueries } from './filterSnapshotApi.ts'
-import { storeEditingFilterVersionId } from './filterVersionState.ts'
+import { storeEditingFilterVersionId, storeVariantPickPending } from './filterVersionState.ts'
 import NewFilterVersionDialog from './NewFilterVersionDialog.tsx'
 
 const FilterEditingVersionBar = () => {
@@ -41,6 +41,7 @@ const FilterEditingVersionBar = () => {
       return
     }
     storeEditingFilterVersionId(selectedId)
+    storeVariantPickPending(true)
     window.location.assign('/')
   }
 

@@ -252,6 +252,12 @@ export default {
         preview: 'Resulting variant: {{variant}}',
         cancel: 'Cancel',
         apply: 'Change',
+        pick: {
+          title: 'Select the variant to edit',
+          intro:
+            'Choose which variant you edit. Your choices set the answers on the page, so you see and edit the chosen variant.',
+          apply: 'Select',
+        },
       },
       saved: '{{field}} saved to the version',
       exit: {

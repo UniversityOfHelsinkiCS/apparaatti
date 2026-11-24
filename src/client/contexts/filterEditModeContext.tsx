@@ -6,6 +6,7 @@ import type { FilterVariant, FilterWordingField, LocalizedText } from '../../com
 import {
   readEditingFilterVersionId,
   storeEditingFilterVersionId,
+  storeVariantPickPending,
 } from '../components/admin/filterVersions/filterVersionState'
 
 export type EditTarget = {
@@ -78,10 +79,12 @@ export const FilterEditModeProvider = ({
       clearSaved: () => setSavedField(null),
       enterEditMode: (versionId: number) => {
         storeEditingFilterVersionId(versionId)
+        storeVariantPickPending(true)
         setEditingVersionId(versionId)
       },
       exitEditMode: () => {
         storeEditingFilterVersionId(null)
+        storeVariantPickPending(false)
         setEditingVersionId(null)
         setTarget(null)
       },

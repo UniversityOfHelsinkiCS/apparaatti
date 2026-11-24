@@ -252,6 +252,12 @@ export default {
         preview: 'Tuloksena variantti: {{variant}}',
         cancel: 'Peruuta',
         apply: 'Vaihda',
+        pick: {
+          title: 'Valitse muokattava variantti',
+          intro:
+            'Valitse mitä varianttia muokkaat. Valinnat asettavat sivun vastaukset, jolloin näet ja muokkaat valittua varianttia.',
+          apply: 'Valitse',
+        },
       },
       saved: '{{field}} tallennettu versioon',
       exit: {

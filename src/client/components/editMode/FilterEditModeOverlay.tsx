@@ -3,6 +3,8 @@ import { useState } from 'react'
 import type { FilterSnapshotMeta } from '../../../common/types'
 import { useFilterEditMode } from '../../contexts/filterEditModeContext'
 import useApi from '../../util/useApi'
+import { readVariantPickPending, storeVariantPickPending } from '../admin/filterVersions/filterVersionState'
+import ChangeVariantDialog from './ChangeVariantDialog'
 import EditModePanel from './EditModePanel'
 import EditModeSavedSnackbar from './EditModeSavedSnackbar'
 import ExitEditModeDialog from './ExitEditModeDialog'
@@ -13,6 +15,7 @@ const FilterEditModeOverlay = () => {
   const { isEditMode, editingVersionId, exitEditMode } = useFilterEditMode()
   const [isHiddenOpen, setIsHiddenOpen] = useState(false)
   const [isExitOpen, setIsExitOpen] = useState(false)
+  const [isPickOpen, setIsPickOpen] = useState(readVariantPickPending)
   const { data: snapshots } = useApi<FilterSnapshotMeta[]>(
     'filter-snapshots',
     '/api/admin/filter-config/snapshots',
@@ -44,6 +47,15 @@ const FilterEditModeOverlay = () => {
           exitEditMode()
         }}
       />
+      {isPickOpen && (
+        <ChangeVariantDialog
+          mustPick
+          onClose={() => {
+            storeVariantPickPending(false)
+            setIsPickOpen(false)
+          }}
+        />
+      )}
       <EditModeSavedSnackbar />
       <WordingEditDialog />
     </>
