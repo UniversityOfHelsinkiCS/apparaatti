@@ -120,7 +120,7 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
           blankWarning={blocked ? t('v2:filterWordings.popover.shortNameRequired') : undefined}
           onUseShared={canClear ? () => save.mutate(null) : undefined}
           onCancel={closeTarget}
-          onSave={() => save.mutate(isBlank(text) ? null : text)}
+          onSave={() => save.mutate(text)}
         />
       )}
     </Dialog>

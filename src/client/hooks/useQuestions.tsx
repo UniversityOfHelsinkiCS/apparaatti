@@ -36,14 +36,14 @@ export const resolveVariant = (
 export const pickVariant = (question: Question, context: VariantQuery) => resolveVariant(question, context).variant
 
 export const pickQuestionExplanation = (context: VariantQuery | undefined, question: Question, t: TFunction) => {
-  if (context) {
-    const explanationVariant = resolveBest(question.variants, context)
-    if (explanationVariant?.explanation) {
-      return explanationVariant.explanation
-    }
+  const variantExplanation = context ? resolveBest(question.variants, context)?.explanation : undefined
+  const explanation = variantExplanation ?? question.explanation
+
+  if (!explanation) {
+    return t('question:noExtrainfo')
   }
 
-  return question.explanation || t('question:noExtrainfo')
+  return explanation
 }
 
 export const getOptionDisplayTexts = (variant: Variant | null, valueId: string | string[]): string[] => {

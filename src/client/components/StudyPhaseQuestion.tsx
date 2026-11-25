@@ -63,7 +63,7 @@ const StudyPhaseQuestion = ({
     <Box sx={{ minWidth: 200 }}>
       <QuestionTitle
         handleOpen={handleOpen}
-        title={variant.question || t('question:pickStudy')}
+        title={variant.question}
         titleLanguage={variant.questionLanguage}
         question={question}
         scope={scope}
