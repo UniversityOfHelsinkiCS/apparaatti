@@ -39,6 +39,9 @@ const FilterVariantFields = z.object({
   skipped: z.boolean().optional(),
   question: LocalizedTextSchema,
   explanation: LocalizedTextSchema.optional(),
+  shortName: LocalizedTextSchema.optional(),
+  extraInfo: LocalizedTextSchema.optional(),
+  extraInfoDisabled: z.boolean().optional(),
   options: z.array(FilterOptionSchema).optional(),
 })
 
@@ -305,6 +308,18 @@ const FilterWordingMutationSchema = z.discriminatedUnion('op', [
     text: LocalizedTextSchema.nullable(),
   }),
   z.object({
+    op: z.literal('variantShortName'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    text: LocalizedTextSchema.nullable(),
+  }),
+  z.object({
+    op: z.literal('variantExtraInfo'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    text: LocalizedTextSchema.nullable(),
+  }),
+  z.object({
     op: z.literal('optionName'),
     filterId: z.string().min(1),
     variantName: z.string().trim().min(1),
@@ -359,6 +374,12 @@ const FilterSettingsMutationSchema = z.discriminatedUnion('op', [
     filterId: z.string().min(1),
     variantName: z.string().trim().min(1),
     skipped: z.boolean(),
+  }),
+  z.object({
+    op: z.literal('variantExtraInfoDisabled'),
+    filterId: z.string().min(1),
+    variantName: z.string().trim().min(1),
+    disabled: z.boolean(),
   }),
   z.object({
     op: z.literal('renameVariant'),

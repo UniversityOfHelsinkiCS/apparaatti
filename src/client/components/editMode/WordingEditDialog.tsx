@@ -11,6 +11,10 @@ import { invalidateFilterVersionQueries, mutateFilterSnapshot } from '../admin/f
 import VariantStep from './VariantStep'
 import {
   describePickedTarget,
+  hasOwnText,
+  hasSharedFallback,
+  isBlank,
+  isShortNameField,
   isVariantField,
   type PickedTarget,
   textForVariant,
@@ -31,16 +35,18 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
   const { closeTarget, editingVersionId, notifySaved } = useFilterEditMode()
   const isPerVariant = isVariantField(target)
   const [step, setStep] = useState<'variant' | 'text'>(isPerVariant ? 'variant' : 'text')
-  const [picked, setPicked] = useState<PickedTarget>({ mode: 'existing', variantName: target.variantName })
+  const [picked, setPicked] = useState<PickedTarget>(
+    isPerVariant ? { mode: 'existing', variantName: target.variantName } : { mode: 'filter' }
+  )
   const [text, setText] = useState<LocalizedText>(target.current)
   const [isDirty, setIsDirty] = useState(false)
 
   const save = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (payload: LocalizedText | null) => {
       if (editingVersionId === null) {
         return
       }
-      await mutateFilterSnapshot(editingVersionId, wordingMutations(target, text, picked))
+      await mutateFilterSnapshot(editingVersionId, wordingMutations(target, payload, picked))
     },
     onSuccess: async () => {
       await invalidateFilterVersionQueries(queryClient)
@@ -49,20 +55,24 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
     },
   })
 
+  const textForPicked = (next: PickedTarget): LocalizedText => {
+    if (next.mode === 'filter') {
+      return target.filterText ?? target.current
+    }
+    if (next.mode === 'new') {
+      return target.current
+    }
+    return textForVariant(
+      target,
+      target.filterVariants.find(variant => variant.name === next.variantName)
+    )
+  }
+
   const confirmTarget = (next: PickedTarget) => {
     if (!sameTarget(next, picked)) {
       setPicked(next)
       setIsDirty(false)
-      if (next.mode === 'existing') {
-        setText(
-          textForVariant(
-            target,
-            target.filterVariants.find(variant => variant.name === next.variantName)
-          )
-        )
-      } else {
-        setText(target.current)
-      }
+      setText(textForPicked(next))
     }
     setStep('text')
   }
@@ -77,9 +87,14 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
   const targetLabel = isPerVariant
     ? describePickedTarget(picked, target.filterVariants, {
         defaultLabel: t('v2:filterWordings.choice.default'),
+        sharedLabel: t('v2:filterWordings.choice.shared'),
         newVariant: variantKey => t('v2:filterWordings.target.newVariant', { variant: variantKey }),
       })
     : undefined
+  const note = picked.mode === 'filter' ? t(`v2:filterWordings.target.sharedNote.${target.field}`) : undefined
+  const blocked = isShortNameField(target.field) && isBlank(text)
+  const canClear =
+    hasSharedFallback(target.field) && picked.mode === 'existing' && hasOwnText(target, picked.variantName)
 
   return (
     <Dialog open onClose={closeTarget} maxWidth="sm" fullWidth data-testid="wording-edit-dialog">
@@ -89,6 +104,7 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
           filterVariants={target.filterVariants}
           variantQuery={target.variantQuery}
           picked={picked}
+          allowShared={hasSharedFallback(target.field)}
           hasUnsavedChanges={isDirty}
           onCancel={closeTarget}
           onContinue={confirmTarget}
@@ -96,15 +112,18 @@ const WordingEditor = ({ target }: { target: EditTarget }) => {
       ) : (
         <WordingTextForm
           targetLabel={targetLabel}
-          note={isPerVariant ? undefined : t(`v2:filterWordings.target.sharedNote.${target.field}`)}
+          note={note}
           onChangeTarget={isPerVariant ? () => setStep('variant') : undefined}
           text={text}
           onChangeText={changeText}
           showDefaultWarning={isPerVariant && pickedVariant !== undefined && isCatchAll(pickedVariant)}
           isSaving={save.isPending}
           saveFailed={save.isError}
+          saveDisabled={blocked}
+          blankWarning={blocked ? t('v2:filterWordings.popover.shortNameRequired') : undefined}
+          onUseShared={canClear ? () => save.mutate(null) : undefined}
           onCancel={closeTarget}
-          onSave={() => save.mutate()}
+          onSave={() => save.mutate(isBlank(text) ? null : text)}
         />
       )}
     </Dialog>

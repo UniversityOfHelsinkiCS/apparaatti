@@ -45,6 +45,9 @@ export type FilterVariant = {
   skipped?: boolean
   question: LocalizedText
   explanation?: LocalizedText
+  shortName?: LocalizedText
+  extraInfo?: LocalizedText
+  extraInfoDisabled?: boolean
   options?: FilterOption[]
 }
 
@@ -101,6 +104,10 @@ export type Variant = {
   primaryLanguageSpecification: string | null
   skipped?: boolean | undefined
   explanation?: string | undefined
+  shortName?: string | undefined
+  shortNameLanguage?: Language
+  extraInfo?: string | undefined
+  extraInfoDisabled?: boolean | undefined
   question: string
   questionLanguage?: Language
   options?: Option[]
@@ -431,7 +438,15 @@ export type FilterSnapshotMeta = {
 
 export type FilterBase = { kind: 'published' } | { kind: 'snapshot'; id: number }
 
-export type FilterWordingField = 'question' | 'explanation' | 'option' | 'shortName' | 'extraInfo' | 'filterExplanation'
+export type FilterWordingField =
+  | 'question'
+  | 'explanation'
+  | 'option'
+  | 'shortName'
+  | 'extraInfo'
+  | 'filterExplanation'
+  | 'variantShortName'
+  | 'variantExtraInfo'
 
 /**
  * Filter edits travel as an ordered list of typed ops rather than a REST call per field. Filter editing has many
@@ -453,6 +468,8 @@ export type FilterWordingMutation =
     }
   | { op: 'variantQuestion'; filterId: string; variantName: string; text: LocalizedText }
   | { op: 'variantExplanation'; filterId: string; variantName: string; text: LocalizedText | null }
+  | { op: 'variantShortName'; filterId: string; variantName: string; text: LocalizedText | null }
+  | { op: 'variantExtraInfo'; filterId: string; variantName: string; text: LocalizedText | null }
   | { op: 'optionName'; filterId: string; variantName: string; optionId: string; text: LocalizedText }
   | { op: 'shortName'; filterId: string; text: LocalizedText }
   | { op: 'extraInfo'; filterId: string; text: LocalizedText | null }
@@ -488,6 +505,7 @@ export type FilterSettingsMutation =
     }
   | { op: 'variantConditions'; filterId: string; variantName: string; conditions: MatchConditions }
   | { op: 'variantSkipped'; filterId: string; variantName: string; skipped: boolean }
+  | { op: 'variantExtraInfoDisabled'; filterId: string; variantName: string; disabled: boolean }
   | { op: 'renameVariant'; filterId: string; variantName: string; newName: string }
   | { op: 'deleteVariant'; filterId: string; variantName: string }
   | { op: 'addOption'; filterId: string; variantName: string; optionId: string; name: LocalizedText }

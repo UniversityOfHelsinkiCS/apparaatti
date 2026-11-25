@@ -10,7 +10,8 @@ const resolveLanguage = (text: LocalizedText, lang: string): Language | undefine
   return fallbackLanguages.find(fallback => text[fallback])
 }
 
-const localize = (text: LocalizedText, lang: string): string => text[lang as keyof LocalizedText] ?? text.fi ?? ''
+export const localize = (text: LocalizedText, lang: string): string =>
+  text[lang as keyof LocalizedText] ?? text.fi ?? ''
 
 export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
   id: cfg.id,
@@ -37,6 +38,10 @@ export const toQuestion = (cfg: FilterConfig, lang: string): Question => ({
     question: localize(v.question, lang),
     questionLanguage: resolveLanguage(v.question, lang),
     explanation: v.explanation ? localize(v.explanation, lang) : undefined,
+    shortName: v.shortName ? localize(v.shortName, lang) : undefined,
+    shortNameLanguage: v.shortName ? resolveLanguage(v.shortName, lang) : undefined,
+    extraInfo: v.extraInfo ? localize(v.extraInfo, lang) : undefined,
+    extraInfoDisabled: v.extraInfoDisabled,
     options: v.options?.map(o => ({
       id: o.id,
       name: localize(o.name, lang),

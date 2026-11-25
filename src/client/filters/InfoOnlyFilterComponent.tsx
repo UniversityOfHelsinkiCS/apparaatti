@@ -27,7 +27,17 @@ const InfoOnlyFilterComponent = ({ extraInfo }: InfoOnlyFilterComponentProps) =>
 
   const editable = (
     <Box sx={{ px: 2 }}>
-      <EditableText filterId={scope.filterId} field="extraInfo" current={scope.rawFilter?.extraInfo} block>
+      <EditableText
+        filterId={scope.filterId}
+        field="variantExtraInfo"
+        variantName={scope.variantName}
+        isFallbackVariant={scope.isFallbackVariant}
+        variantQuery={scope.variantQuery}
+        filterVariants={scope.rawFilter?.variants ?? []}
+        current={scope.rawVariant?.extraInfo ?? scope.rawFilter?.extraInfo}
+        filterText={scope.rawFilter?.extraInfo ?? null}
+        block
+      >
         {content}
       </EditableText>
     </Box>

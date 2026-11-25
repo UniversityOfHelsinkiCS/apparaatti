@@ -169,14 +169,20 @@ test('the info-only filter body is editable and saves to extraInfo', async ({ pa
   await trigger.locator('span[aria-hidden="true"]').first().click()
   await expect(trigger).toHaveAttribute('aria-expanded', 'true')
 
-  const editable = page.getByTestId('editable-previusly-done-lang-extraInfo')
+  const editable = page.getByTestId('editable-previusly-done-lang-variantExtraInfo')
   await expect(editable).toBeVisible()
   await expect(editable).toContainText('Lue tarkemmat ohjeet')
   await editable.click()
 
   const editor = page.getByTestId('wording-edit-dialog')
   await expect(editor).toBeVisible()
-  await expect(editor.getByTestId('wording-edit-note')).toHaveText('Lisätieto on sama kaikissa varianteissa.')
+
+  await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
+  await page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true }).click()
+  await editor.getByRole('button', { name: 'Jatka' }).click()
+  await expect(editor.getByTestId('wording-edit-note')).toHaveText(
+    'Tätä lisätietoa käyttävät kaikki variantit, joilla ei ole omaa.'
+  )
 
   const finnish = editor.getByRole('textbox', { name: 'Suomeksi' })
   await expect(finnish).toBeVisible()
@@ -187,6 +193,58 @@ test('the info-only filter body is editable and saves to extraInfo', async ({ pa
   const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
   const config = payload.filters.find((filter: { id: string }) => filter.id === 'previusly-done-lang')
   expect(config.extraInfo.fi).toBe('Muokattu lisatieto')
+})
+
+test('the gear texts tab lists the filter texts and edits them through the wording wizard', async ({
+  page,
+  request,
+}) => {
+  await openInEditMode(page)
+  const dialog = await openGear(page)
+
+  await dialog.getByRole('tab', { name: 'Tekstit' }).click()
+  await expect(dialog.getByTestId('filter-text-row-lang-variantShortName')).toBeVisible()
+  await expect(dialog.getByTestId('filter-text-row-lang-question')).toBeVisible()
+  await expect(dialog.getByTestId('filter-text-row-lang-explanation')).toBeVisible()
+  await expect(dialog.getByTestId('filter-text-row-lang-variantExtraInfo')).toBeVisible()
+
+  await dialog.getByTestId('filter-text-row-lang-explanation').getByRole('button').click()
+  const editor = page.getByTestId('wording-edit-dialog')
+  await expect(editor).toBeVisible()
+
+  await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
+  await page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true }).click()
+  await editor.getByRole('button', { name: 'Jatka' }).click()
+  await editor.getByRole('textbox', { name: 'Suomeksi' }).fill('Gear-lisatieto e2e')
+  await editor.getByRole('button', { name: 'Tallenna' }).click()
+  await expect(editor).toBeHidden()
+
+  await expect(dialog).toBeVisible()
+  await expect(dialog.getByTestId('filter-text-row-lang-explanation')).toContainText('Gear-lisatieto e2e')
+
+  const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+  const config = payload.filters.find((filter: { id: string }) => filter.id === 'lang')
+  expect(config.explanation.fi).toBe('Gear-lisatieto e2e')
+})
+
+test('the gear can hide the yes-answer extra info for one variant', async ({ page, request }) => {
+  await openInEditMode(page)
+  const variantName = await firstVariantName(request)
+  const dialog = await openGear(page)
+
+  const toggle = dialog.getByRole('switch', { name: 'Piilota kyllä-vastauksen lisätieto' }).first()
+  await expect(toggle).not.toBeChecked()
+  await toggle.check()
+  await dialog.getByRole('button', { name: 'Tallenna' }).click()
+  await expect(dialog).toBeHidden()
+
+  const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+  const config = payload.filters.find((filter: { id: string }) => filter.id === 'lang')
+  const variant = config.variants.find((candidate: { name: string }) => candidate.name === variantName)
+  expect(variant.extraInfoDisabled).toBe(true)
+
+  const reopened = await openGear(page)
+  await expect(reopened.getByRole('switch', { name: 'Piilota kyllä-vastauksen lisätieto' }).first()).toBeChecked()
 })
 
 test('the overview list toggles welcome modal and sidebar visibility', async ({ page, request }) => {
@@ -240,8 +298,8 @@ test('edit mode renders the sidebar filters and their editable texts, not a blan
   const triggers = page.locator('button[aria-controls]', { hasText: /\S/ })
   expect(await triggers.count()).toBeGreaterThan(3)
 
-  await expect(page.getByTestId('editable-lang-shortName')).toBeVisible()
-  await expect(page.getByTestId('editable-previusly-done-lang-shortName')).toBeVisible()
+  await expect(page.getByTestId('editable-lang-variantShortName')).toBeVisible()
+  await expect(page.getByTestId('editable-previusly-done-lang-variantShortName')).toBeVisible()
   await expect(page.locator('button[aria-controls] [role="button"]')).toHaveCount(0)
 
   const langTrigger = page.locator('button[aria-controls]', { hasText: 'Minkä kielen kursseja etsit?' })
@@ -264,8 +322,8 @@ test('the filter name toggles the accordion and the pencil opens the rename dial
   await expect(trigger).toHaveAttribute('aria-expanded', 'true')
   await expect(page.getByTestId('wording-edit-dialog')).toHaveCount(0)
 
-  await expect(trigger.getByTestId('editable-previusly-done-lang-shortName')).toHaveCount(0)
-  await page.getByTestId('editable-previusly-done-lang-shortName').click()
+  await expect(trigger.getByTestId('editable-previusly-done-lang-variantShortName')).toHaveCount(0)
+  await page.getByTestId('editable-previusly-done-lang-variantShortName').click()
   await expect(page.getByTestId('wording-edit-dialog')).toBeVisible()
 })
 

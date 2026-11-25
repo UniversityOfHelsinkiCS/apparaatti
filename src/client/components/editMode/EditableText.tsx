@@ -18,6 +18,7 @@ interface EditableTextProps {
   variantQuery?: VariantQuery
   filterVariants?: FilterVariant[]
   current: LocalizedText | null | undefined
+  filterText?: LocalizedText | null
   block?: boolean
   ariaLabel?: string
   children: ReactNode
@@ -32,6 +33,7 @@ const EditableText = ({
   variantQuery = ANY_VARIANT_QUERY,
   filterVariants = [],
   current,
+  filterText = null,
   block = false,
   ariaLabel,
   children,
@@ -57,6 +59,7 @@ const EditableText = ({
       variantQuery,
       filterVariants,
       current: current ?? emptyLocalized,
+      filterText,
       anchor: ref.current,
     })
   }

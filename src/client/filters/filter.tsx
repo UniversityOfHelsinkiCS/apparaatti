@@ -64,6 +64,8 @@ const Filter = ({
   }
 
   const showAsQuestion = filter.displayType !== 'info-only'
+  const extraInfo = variant.extraInfo ?? filter.extraInfo
+  const choiceExtraInfo = variant.extraInfoDisabled ? undefined : extraInfo
 
   return (
     <EditScopeProvider
@@ -86,14 +88,19 @@ const Filter = ({
               showMandatoryStatus={scope === 'welcome'}
               scope={scope}
             />
-            <ExtraInfoModal question={filter} open={open} handleClose={handleClose} />
+            <ExtraInfoModal
+              question={filter}
+              open={open}
+              handleClose={handleClose}
+              currentVariant={variantQuery ?? ANY_VARIANT_QUERY}
+            />
           </>
         )}
         <Box sx={{ marginTop: 0.5 }}>
           {(() => {
             switch (filter.displayType) {
               case 'info-only':
-                return <InfoOnlyFilterComponent extraInfo={filter.extraInfo} />
+                return <InfoOnlyFilterComponent extraInfo={extraInfo} />
               case 'multichoice':
                 return (
                   <MultiChoiceFilterComponent
@@ -122,7 +129,7 @@ const Filter = ({
                     state={state}
                     handleRadioChange={handleRadioChange}
                     options={variant.options || []}
-                    extrainfo={filter.extraInfo}
+                    extrainfo={choiceExtraInfo}
                     scope={scope}
                   />
                 )

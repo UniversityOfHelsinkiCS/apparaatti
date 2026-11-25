@@ -153,6 +153,99 @@ describe('mergeFilterMutations', () => {
     expect(edited.options?.[1].valueOverride).toBe('SV')
     expect(edited.options?.[1].selectedByDefault).toBe(true)
   })
+
+  it('writes a short name override to one variant only', () => {
+    const merged = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [
+        {
+          op: 'variantShortName',
+          filterId: 'lang',
+          variantName: 'sv_only',
+          text: { fi: 'Ruotsin kieli', sv: 'Svenska språket', en: 'Swedish' },
+        },
+      ],
+      settings: [],
+    })
+
+    const [untouched, edited] = merged.filters[0].variants
+    expect(merged.filters[0].shortName.fi).toBe('Kieli')
+    expect(untouched.shortName).toBeUndefined()
+    expect(edited.shortName?.sv).toBe('Svenska språket')
+  })
+
+  it('clears an override with a null text so the shared fallback takes over', () => {
+    const withOverride = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [
+        {
+          op: 'variantExtraInfo',
+          filterId: 'lang',
+          variantName: 'sv_only',
+          text: { fi: 'Vain ruotsiksi', sv: 'Bara svenska', en: 'Swedish only' },
+        },
+      ],
+      settings: [],
+    })
+    expect(withOverride.filters[0].variants[1].extraInfo?.fi).toBe('Vain ruotsiksi')
+
+    const cleared = mergeFilterMutations(withOverride, {
+      wordings: [{ op: 'variantExtraInfo', filterId: 'lang', variantName: 'sv_only', text: null }],
+      settings: [],
+    })
+    expect(cleared.filters[0].variants[1].extraInfo).toBeUndefined()
+  })
+
+  it('inherits the source override when creating a variant, then overrides it', () => {
+    const withOverride = mergeFilterMutations(payload(), {
+      wordings: [
+        {
+          op: 'variantShortName',
+          filterId: 'lang',
+          variantName: 'default',
+          text: { fi: 'Oletusnimi', sv: 'Standardnamn', en: 'Default name' },
+        },
+      ],
+      settings: [],
+    })
+
+    const merged = mergeFilterMutations(withOverride, {
+      wordings: [
+        {
+          op: 'createVariant',
+          filterId: 'lang',
+          variantName: 'fi_primary_written',
+          fromVariantName: 'default',
+          ...fiPrimaryWrittenConditions,
+        },
+      ],
+      settings: [],
+    })
+    expect(merged.filters[0].variants[1].shortName?.fi).toBe('Oletusnimi')
+
+    const renamed = mergeFilterMutations(merged, {
+      wordings: [
+        {
+          op: 'variantShortName',
+          filterId: 'lang',
+          variantName: 'fi_primary_written',
+          text: { fi: 'Oma nimi', sv: 'Eget namn', en: 'Own name' },
+        },
+      ],
+      settings: [],
+    })
+    expect(renamed.filters[0].variants[0].shortName?.fi).toBe('Oletusnimi')
+    expect(renamed.filters[0].variants[1].shortName?.fi).toBe('Oma nimi')
+  })
+
+  it('disables the extra info on the named variant only', () => {
+    const merged = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [{ op: 'variantExtraInfoDisabled', filterId: 'lang', variantName: 'sv_only', disabled: true }],
+    })
+
+    const [untouched, edited] = merged.filters[0].variants
+    expect(untouched.extraInfoDisabled).toBeUndefined()
+    expect(edited.extraInfoDisabled).toBe(true)
+  })
 })
 
 describe('diffFilterPayloads', () => {
@@ -214,6 +307,58 @@ describe('diffFilterPayloads', () => {
     expect(diff.changedSettings).toEqual([
       { filterId: 'lang', variantName: null, optionId: null, field: 'enabled', from: 'true', to: 'false' },
       { filterId: 'lang', variantName: 'default', optionId: 'sv', field: 'valueOverride', from: null, to: 'SV' },
+    ])
+  })
+
+  it('separates a short name override from a change to the shared one', () => {
+    const shared = { fi: 'Opetuskieli', sv: 'Undervisningsspråk', en: 'Teaching language' }
+    const own = { fi: 'Ruotsin kieli', sv: 'Svenska språket', en: 'Swedish' }
+
+    const changed = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [
+        { op: 'shortName', filterId: 'lang', text: shared },
+        { op: 'variantShortName', filterId: 'lang', variantName: 'sv_only', text: own },
+      ],
+      settings: [],
+    })
+
+    const diff = diffFilterPayloads(twoVariantPayload(), changed)
+    expect(diff.changedTexts).toEqual([
+      {
+        filterId: 'lang',
+        variantName: null,
+        field: 'shortName',
+        optionId: null,
+        from: { fi: 'Kieli', sv: 'Språk', en: 'Language' },
+        to: shared,
+      },
+      {
+        filterId: 'lang',
+        variantName: 'sv_only',
+        field: 'variantShortName',
+        optionId: null,
+        from: null,
+        to: own,
+      },
+    ])
+  })
+
+  it('reports a disabled extra info as a variant setting change', () => {
+    const changed = mergeFilterMutations(twoVariantPayload(), {
+      wordings: [],
+      settings: [{ op: 'variantExtraInfoDisabled', filterId: 'lang', variantName: 'sv_only', disabled: true }],
+    })
+
+    const diff = diffFilterPayloads(twoVariantPayload(), changed)
+    expect(diff.changedSettings).toEqual([
+      {
+        filterId: 'lang',
+        variantName: 'sv_only',
+        optionId: null,
+        field: 'extraInfoDisabled',
+        from: 'false',
+        to: 'true',
+      },
     ])
   })
 })

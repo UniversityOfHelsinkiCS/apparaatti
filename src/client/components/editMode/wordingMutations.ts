@@ -1,14 +1,23 @@
 import { describeConditions, type MatchConditions } from '../../../common/conditionMatching'
-import type { FilterMutations, FilterVariant, FilterWordingMutation, LocalizedText } from '../../../common/types'
+import type {
+  FilterMutations,
+  FilterVariant,
+  FilterWordingField,
+  FilterWordingMutation,
+  LocalizedText,
+} from '../../../common/types'
 import type { EditTarget } from '../../contexts/filterEditModeContext'
 import { describeFilterVariant } from './changeVariant'
 
-/** Where an edited text is saved: an existing variant of the filter, or a new one with these conditions. */
-export type PickedTarget = { mode: 'existing'; variantName: string } | { mode: 'new'; conditions: MatchConditions }
+export type PickedTarget =
+  | { mode: 'filter' }
+  | { mode: 'existing'; variantName: string }
+  | { mode: 'new'; conditions: MatchConditions }
 
 type TargetLabels = {
   /** Label of the catch-all variant, e.g. "Yleinen oletusteksti". */
   defaultLabel: string
+  sharedLabel: string
   /** Label of a variant still to be created, given its key, e.g. "Uusi variantti: sv-fi". */
   newVariant: (variantKey: string) => string
 }
@@ -18,6 +27,9 @@ export const describePickedTarget = (
   filterVariants: FilterVariant[],
   labels: TargetLabels
 ): string => {
+  if (picked.mode === 'filter') {
+    return labels.sharedLabel
+  }
   if (picked.mode === 'new') {
     return labels.newVariant(describeConditions(picked.conditions))
   }
@@ -27,9 +39,19 @@ export const describePickedTarget = (
 
 export const emptyLocalized: LocalizedText = { fi: '', sv: '', en: '' }
 
-/** Fields whose text lives in a variant; the rest (shortName, extraInfo) belong to the whole filter. */
 export const isVariantField = (target: EditTarget) =>
-  target.field === 'question' || target.field === 'explanation' || target.field === 'option'
+  target.field === 'question' ||
+  target.field === 'explanation' ||
+  target.field === 'option' ||
+  target.field === 'variantShortName' ||
+  target.field === 'variantExtraInfo'
+
+export const hasSharedFallback = (field: FilterWordingField) =>
+  field === 'explanation' || field === 'variantShortName' || field === 'variantExtraInfo'
+
+export const isShortNameField = (field: FilterWordingField) => field === 'shortName' || field === 'variantShortName'
+
+export const isBlank = (text: LocalizedText) => !text.fi && !text.sv && !text.en
 
 /** The existing text of the edited field in the given variant. */
 export const textForVariant = (target: EditTarget, variant: FilterVariant | undefined): LocalizedText => {
@@ -40,7 +62,13 @@ export const textForVariant = (target: EditTarget, variant: FilterVariant | unde
     return variant.question
   }
   if (target.field === 'explanation') {
-    return variant.explanation ?? emptyLocalized
+    return variant.explanation ?? target.filterText ?? emptyLocalized
+  }
+  if (target.field === 'variantShortName') {
+    return variant.shortName ?? target.filterText ?? emptyLocalized
+  }
+  if (target.field === 'variantExtraInfo') {
+    return variant.extraInfo ?? target.filterText ?? emptyLocalized
   }
   if (target.field === 'option') {
     return variant.options?.find(option => option.id === target.optionId)?.name ?? emptyLocalized
@@ -48,9 +76,70 @@ export const textForVariant = (target: EditTarget, variant: FilterVariant | unde
   return emptyLocalized
 }
 
-export const wordingMutations = (target: EditTarget, text: LocalizedText, picked: PickedTarget): FilterMutations => {
-  const wordings: FilterWordingMutation[] = []
+export const hasOwnText = (target: EditTarget, variantName: string): boolean => {
+  const variant = target.filterVariants.find(candidate => candidate.name === variantName)
+  if (!variant) {
+    return false
+  }
+  if (target.field === 'explanation') {
+    return variant.explanation !== undefined
+  }
+  if (target.field === 'variantShortName') {
+    return variant.shortName !== undefined
+  }
+  if (target.field === 'variantExtraInfo') {
+    return variant.extraInfo !== undefined
+  }
+  return false
+}
+
+const filterWideOp = (
+  field: FilterWordingField,
+  filterId: string,
+  text: LocalizedText | null
+): FilterWordingMutation => {
+  if (field === 'shortName' || field === 'variantShortName') {
+    return { op: 'shortName', filterId, text: text ?? emptyLocalized }
+  }
+  if (field === 'extraInfo' || field === 'variantExtraInfo') {
+    return { op: 'extraInfo', filterId, text }
+  }
+  return { op: 'filterExplanation', filterId, text }
+}
+
+const variantOp = (
+  field: FilterWordingField,
+  filterId: string,
+  variantName: string,
+  optionId: string,
+  text: LocalizedText | null
+): FilterWordingMutation => {
+  if (field === 'question') {
+    return { op: 'variantQuestion', filterId, variantName, text: text ?? emptyLocalized }
+  }
+  if (field === 'explanation') {
+    return { op: 'variantExplanation', filterId, variantName, text }
+  }
+  if (field === 'variantShortName') {
+    return { op: 'variantShortName', filterId, variantName, text }
+  }
+  if (field === 'variantExtraInfo') {
+    return { op: 'variantExtraInfo', filterId, variantName, text }
+  }
+  return { op: 'optionName', filterId, variantName, optionId, text: text ?? emptyLocalized }
+}
+
+export const wordingMutations = (
+  target: EditTarget,
+  text: LocalizedText | null,
+  picked: PickedTarget
+): FilterMutations => {
+  if (picked.mode === 'filter') {
+    return { wordings: [filterWideOp(target.field, target.filterId, text)], settings: [] }
+  }
+
   const variantName = picked.mode === 'new' ? describeConditions(picked.conditions) : picked.variantName
+  const wordings: FilterWordingMutation[] = []
 
   if (picked.mode === 'new') {
     wordings.push({
@@ -65,25 +154,7 @@ export const wordingMutations = (target: EditTarget, text: LocalizedText, picked
     })
   }
 
-  if (target.field === 'shortName') {
-    wordings.push({ op: 'shortName', filterId: target.filterId, text })
-  } else if (target.field === 'extraInfo') {
-    wordings.push({ op: 'extraInfo', filterId: target.filterId, text })
-  } else if (target.field === 'filterExplanation') {
-    wordings.push({ op: 'filterExplanation', filterId: target.filterId, text })
-  } else if (target.field === 'question') {
-    wordings.push({ op: 'variantQuestion', filterId: target.filterId, variantName, text })
-  } else if (target.field === 'explanation') {
-    wordings.push({ op: 'variantExplanation', filterId: target.filterId, variantName, text })
-  } else {
-    wordings.push({
-      op: 'optionName',
-      filterId: target.filterId,
-      variantName,
-      optionId: target.optionId ?? '',
-      text,
-    })
-  }
+  wordings.push(variantOp(target.field, target.filterId, variantName, target.optionId ?? '', text))
 
   return { wordings, settings: [] }
 }

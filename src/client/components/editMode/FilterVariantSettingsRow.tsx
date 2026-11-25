@@ -13,6 +13,7 @@ export type VariantDraft = {
   name: string
   conditions: ConditionDraft
   skipped: boolean
+  extraInfoDisabled: boolean
   deleted: boolean
 }
 
@@ -25,6 +26,7 @@ export const toVariantDraft = (variant: FilterVariant): VariantDraft => ({
     primaryLanguageSpecification: variant.primaryLanguageSpecification ?? '',
   },
   skipped: variant.skipped ?? false,
+  extraInfoDisabled: variant.extraInfoDisabled ?? false,
   deleted: false,
 })
 

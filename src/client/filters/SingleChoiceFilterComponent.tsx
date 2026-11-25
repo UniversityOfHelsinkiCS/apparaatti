@@ -2,11 +2,13 @@ import { RadioGroup } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
 import { Option, Question } from '../../common/types'
 import AppMarkdown from '../components/common/AppMarkdown'
 import HyAccordion from '../components/common/hy/HyAccordion'
 import SingleChoiceOption from '../components/common/SingleChoiceOption'
 import EditableText from '../components/editMode/EditableText'
+import { useEditScope } from '../components/editMode/editScope'
 import { questionGroupName, questionTextId } from '../components/QuestionTitle'
 import { useFilterContext } from '../contexts/filterContext'
 
@@ -30,6 +32,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   const { t } = useTranslation()
   const [accordionOpen, setAccordionOpen] = useState(false)
   const { getOptionCount } = useFilterContext()
+  const editScope = useEditScope()
 
   const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // aria-disabled options stay focusable, so reject the selection here instead
@@ -67,7 +70,17 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
           headingLevel={3}
           summary={t('question:extrainfo')}
         >
-          <EditableText filterId={filter.id} field="extraInfo" current={filter.raw?.extraInfo} block>
+          <EditableText
+            filterId={filter.id}
+            field="variantExtraInfo"
+            variantName={editScope?.variantName ?? ''}
+            isFallbackVariant={editScope?.isFallbackVariant ?? false}
+            variantQuery={editScope?.variantQuery ?? ANY_VARIANT_QUERY}
+            filterVariants={filter.raw?.variants ?? []}
+            current={editScope?.rawVariant?.extraInfo ?? filter.raw?.extraInfo}
+            filterText={filter.raw?.extraInfo ?? null}
+            block
+          >
             <AppMarkdown>{extrainfo}</AppMarkdown>
           </EditableText>
         </HyAccordion>

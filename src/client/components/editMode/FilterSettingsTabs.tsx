@@ -24,6 +24,7 @@ const FilterSettingsTabs = ({ value, onChange }: FilterSettingsTabsProps) => {
       }}
     >
       <Tab label={t('v2:filterSettings.tabs.basic')} data-testid="filter-settings-tab-basic" />
+      <Tab label={t('v2:filterSettings.tabs.texts')} data-testid="filter-settings-tab-texts" />
       <Tab label={t('v2:filterSettings.tabs.structure')} data-testid="filter-settings-tab-structure" />
     </Tabs>
   )

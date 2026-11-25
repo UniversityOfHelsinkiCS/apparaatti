@@ -21,6 +21,7 @@ import FilterBasicSettingsTab from './FilterBasicSettingsTab'
 import { type OptionChange, settingsMutations, type VariantChange } from './filterSettingsMutations'
 import FilterSettingsTabs from './FilterSettingsTabs'
 import FilterStructureSettingsTab from './FilterStructureSettingsTab'
+import FilterTextsSettingsTab from './FilterTextsSettingsTab'
 import { toVariantDraft, type VariantDraft } from './FilterVariantSettingsRow'
 
 type FilterSettingsDialogProps = {
@@ -91,10 +92,12 @@ const FilterSettingsDialog = ({ filter, variantName, onClose }: FilterSettingsDi
       const draft = variantDrafts[candidate.name]
       const conditions = toConditions(draft.conditions)
       const wasSkipped = candidate.skipped ?? false
+      const wasDisabled = candidate.extraInfoDisabled ?? false
       return {
         variantName: candidate.name,
         conditions: sameConditions(conditions, candidate) ? null : conditions,
         skipped: draft.skipped === wasSkipped ? null : draft.skipped,
+        extraInfoDisabled: draft.extraInfoDisabled === wasDisabled ? null : draft.extraInfoDisabled,
         newName: draft.name === candidate.name ? null : draft.name,
         deleted: draft.deleted,
       }
@@ -140,36 +143,41 @@ const FilterSettingsDialog = ({ filter, variantName, onClose }: FilterSettingsDi
     setAddedOptions(current => [...current, { optionId, name }])
   }
 
-  const body =
-    tab === 0 ? (
-      <FilterBasicSettingsTab
-        filter={filter}
-        patch={patch}
-        onPatch={setPatch}
-        variant={variant}
-        options={options}
-        optionDrafts={optionDrafts}
-        addedOptions={addedOptions}
-        variantDrafts={variantDrafts}
-        onVariantChange={patchVariantDraft}
-        onOptionChange={patchOption}
-        onAddOption={addOption}
-      />
-    ) : (
-      <FilterStructureSettingsTab
-        filter={filter}
-        patch={patch}
-        onPatch={setPatch}
-        variant={variant}
-        options={options}
-        optionDrafts={optionDrafts}
-        deletedOptions={deletedOptions}
-        variantDrafts={variantDrafts}
-        onVariantChange={patchVariantDraft}
-        onOptionChange={patchOption}
-        onToggleDeletedOption={toggleDeletedOption}
-      />
-    )
+  const basicTab = (
+    <FilterBasicSettingsTab
+      filter={filter}
+      patch={patch}
+      onPatch={setPatch}
+      variant={variant}
+      options={options}
+      optionDrafts={optionDrafts}
+      addedOptions={addedOptions}
+      variantDrafts={variantDrafts}
+      onVariantChange={patchVariantDraft}
+      onOptionChange={patchOption}
+      onAddOption={addOption}
+    />
+  )
+
+  const textsTab = <FilterTextsSettingsTab filter={filter} variant={variant} />
+
+  const structureTab = (
+    <FilterStructureSettingsTab
+      filter={filter}
+      patch={patch}
+      onPatch={setPatch}
+      variant={variant}
+      options={options}
+      optionDrafts={optionDrafts}
+      deletedOptions={deletedOptions}
+      variantDrafts={variantDrafts}
+      onVariantChange={patchVariantDraft}
+      onOptionChange={patchOption}
+      onToggleDeletedOption={toggleDeletedOption}
+    />
+  )
+
+  const body = [basicTab, textsTab, structureTab][tab] ?? basicTab
 
   return (
     <Dialog open onClose={onClose} fullWidth maxWidth="sm" data-testid="filter-settings-dialog">

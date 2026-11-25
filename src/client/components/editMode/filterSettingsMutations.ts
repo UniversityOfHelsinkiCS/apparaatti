@@ -16,6 +16,7 @@ export type VariantChange = {
   variantName: string
   conditions: MatchConditions | null
   skipped: boolean | null
+  extraInfoDisabled: boolean | null
   newName: string | null
   deleted: boolean
 }
@@ -77,6 +78,15 @@ export const settingsMutations = (
 
     if (change.skipped !== null) {
       ops.push({ op: 'variantSkipped', filterId, variantName: change.variantName, skipped: change.skipped })
+    }
+
+    if (change.extraInfoDisabled !== null) {
+      ops.push({
+        op: 'variantExtraInfoDisabled',
+        filterId,
+        variantName: change.variantName,
+        disabled: change.extraInfoDisabled,
+      })
     }
 
     if (change.newName !== null) {

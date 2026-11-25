@@ -25,16 +25,28 @@ const FilterVariantsSection = ({ variants, drafts, scope, onChange }: FilterVari
           <Typography variant="body2" sx={{ flexGrow: 1 }}>
             {describeFilterVariant(variant, t('v2:filterWordings.choice.default'))}
           </Typography>
-          <FormControlLabel
-            label={t('v2:filterSettings.skipped')}
-            control={
-              <Switch
-                checked={draft.skipped}
-                sx={SWITCH_SX}
-                onChange={event => onChange(variant, { skipped: event.target.checked })}
-              />
-            }
-          />
+          <Stack>
+            <FormControlLabel
+              label={t('v2:filterSettings.skipped')}
+              control={
+                <Switch
+                  checked={draft.skipped}
+                  sx={SWITCH_SX}
+                  onChange={event => onChange(variant, { skipped: event.target.checked })}
+                />
+              }
+            />
+            <FormControlLabel
+              label={t('v2:filterSettings.extraInfoDisabled')}
+              control={
+                <Switch
+                  checked={draft.extraInfoDisabled}
+                  sx={SWITCH_SX}
+                  onChange={event => onChange(variant, { extraInfoDisabled: event.target.checked })}
+                />
+              }
+            />
+          </Stack>
         </Stack>
       </Paper>
     )

@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
   DialogActions,
@@ -12,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import type { Language, LocalizedText } from '../../../common/types'
 import BlackOutlinedButton from '../common/BlackOutlinedButton'
+import { hy } from '../common/hy/hyTokens'
 
 const LANGUAGES: Language[] = ['fi', 'sv', 'en']
 
@@ -28,6 +30,9 @@ type WordingTextFormProps = {
   showDefaultWarning: boolean
   isSaving: boolean
   saveFailed: boolean
+  saveDisabled?: boolean
+  blankWarning?: string
+  onUseShared?: () => void
   onCancel: () => void
   onSave: () => void
 }
@@ -42,6 +47,9 @@ const WordingTextForm = ({
   showDefaultWarning,
   isSaving,
   saveFailed,
+  saveDisabled = false,
+  blankWarning,
+  onUseShared,
   onCancel,
   onSave,
 }: WordingTextFormProps) => {
@@ -52,16 +60,36 @@ const WordingTextForm = ({
       <DialogContent>
         <Stack spacing={2.5} sx={{ mt: 1 }}>
           {targetLabel !== undefined && (
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <Typography variant="body2" data-testid="wording-edit-target">
-                {t('v2:filterWordings.target.current', { variant: targetLabel })}
-              </Typography>
-              {onChangeTarget && (
-                <BlackOutlinedButton type="button" size="small" onClick={onChangeTarget} disabled={isSaving}>
-                  {t('v2:filterWordings.target.change')}
-                </BlackOutlinedButton>
-              )}
-            </Stack>
+            <Box
+              sx={{
+                p: 1.5,
+                border: '2px solid',
+                borderColor: hy.borderColor.info,
+                backgroundColor: hy.bgColor.info,
+                borderRadius: '2px',
+              }}
+            >
+              <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+                <Stack spacing={0.25} sx={{ minWidth: 0 }}>
+                  <Typography variant="caption" sx={{ color: hy.textColor.info, fontWeight: 600 }}>
+                    {t('v2:filterWordings.target.variant')}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="p"
+                    sx={{ fontSize: '1.125rem', fontWeight: 700, overflowWrap: 'anywhere' }}
+                    data-testid="wording-edit-target"
+                  >
+                    {targetLabel}
+                  </Typography>
+                </Stack>
+                {onChangeTarget && (
+                  <BlackOutlinedButton type="button" size="small" onClick={onChangeTarget} disabled={isSaving}>
+                    {t('v2:filterWordings.target.change')}
+                  </BlackOutlinedButton>
+                )}
+              </Stack>
+            </Box>
           )}
           {note && (
             <Typography variant="body2" data-testid="wording-edit-note">
@@ -83,6 +111,8 @@ const WordingTextForm = ({
             />
           ))}
 
+          {blankWarning && <Alert severity="warning">{blankWarning}</Alert>}
+
           {saveFailed && <Alert severity="error">{t('v2:filterWordings.popover.saveFailed')}</Alert>}
         </Stack>
       </DialogContent>
@@ -90,11 +120,16 @@ const WordingTextForm = ({
         <BlackOutlinedButton type="button" onClick={onCancel} disabled={isSaving}>
           {t('v2:filterWordings.popover.cancel')}
         </BlackOutlinedButton>
+        {onUseShared && (
+          <BlackOutlinedButton type="button" onClick={onUseShared} disabled={isSaving}>
+            {t('v2:filterWordings.popover.useShared')}
+          </BlackOutlinedButton>
+        )}
         <Button
           variant="contained"
           color="secondary"
           onClick={onSave}
-          disabled={isSaving}
+          disabled={isSaving || saveDisabled}
           startIcon={isSaving ? <CircularProgress size={16} /> : null}
         >
           {t('v2:filterWordings.popover.save')}

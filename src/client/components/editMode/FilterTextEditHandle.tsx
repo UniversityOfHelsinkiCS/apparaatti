@@ -13,6 +13,7 @@ type FilterTextEditHandleProps = {
   variantQuery?: VariantQuery
   filterVariants?: FilterVariant[]
   current: LocalizedText | null | undefined
+  filterText?: LocalizedText | null
   label: string
 }
 
@@ -25,6 +26,7 @@ const FilterTextEditHandle = ({
   variantQuery = ANY_VARIANT_QUERY,
   filterVariants = [],
   current,
+  filterText = null,
   label,
 }: FilterTextEditHandleProps) => (
   <EditableText
@@ -36,6 +38,7 @@ const FilterTextEditHandle = ({
     variantQuery={variantQuery}
     filterVariants={filterVariants}
     current={current}
+    filterText={filterText}
     ariaLabel={label}
   >
     <Pencil size={16} />

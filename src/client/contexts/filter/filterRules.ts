@@ -31,23 +31,27 @@ export const getUnansweredCurrentMandatoryFilters = (filters: Question[], state:
   const configMap = filterConfigMap(state)
   const { variantQuery, language, primaryLanguage } = state
 
-  return filters.filter(filter => {
+  const unanswered: { id: string; shortName?: string }[] = []
+
+  for (const filter of filters) {
     if (!filter.mandatory) {
-      return false
+      continue
     }
 
     const variant = pickVariant(filter, variantQuery)
     if (!shouldRenderWelcomeFilter(filter.id, variant, language, primaryLanguage)) {
-      return false
+      continue
     }
 
     const config = configMap.get(filter.id)
-    if (!config) {
-      return false
+    if (!config || isFilterStateAnswered(config.state)) {
+      continue
     }
 
-    return !isFilterStateAnswered(config.state)
-  })
+    unanswered.push({ id: filter.id, shortName: variant?.shortName ?? filter.shortName })
+  }
+
+  return unanswered
 }
 
 export const shouldShowFilterInSidebar = (filter: Pick<Question, 'hideInFilterSidebar'>) => {
@@ -56,11 +60,6 @@ export const shouldShowFilterInSidebar = (filter: Pick<Question, 'hideInFilterSi
 
 export const shouldResetFilter = (filter: Pick<Question, 'id' | 'showInWelcomeModal'>) => {
   return !filter.showInWelcomeModal || filter.id === 'primary-language-specification'
-}
-
-export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any): string => {
-  const question = filterContext.filters.find((q: any) => q.coordinateKey === coordinateKey)
-  return question?.shortName ?? coordinateKey
 }
 
 export const getFilterVariant = (filterContext: FilterContextType, filterId: string) => {
@@ -78,4 +77,13 @@ export const getFilterVariant = (filterContext: FilterContextType, filterId: str
   } else {
     return null
   }
+}
+
+export const getCoordinateDisplayName = (coordinateKey: string, filterContext: any): string => {
+  const question = filterContext.filters.find((q: any) => q.coordinateKey === coordinateKey)
+  if (!question) {
+    return coordinateKey
+  }
+  const variant = getFilterVariant(filterContext, question.id)
+  return variant?.shortName ?? question.shortName ?? coordinateKey
 }

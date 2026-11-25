@@ -18,6 +18,7 @@ export type EditTarget = {
   variantQuery: VariantQuery
   filterVariants: FilterVariant[]
   current: LocalizedText
+  filterText: LocalizedText | null
   anchor: HTMLElement
 }
 

@@ -28,9 +28,8 @@ const ExtraInfoModal = ({
 
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
   const variant = scope?.rawVariant
-  const hasVariantExplanation = variant?.explanation !== undefined
 
-  const editable = hasVariantExplanation ? (
+  const editable = (
     <EditableText
       filterId={question.id}
       field="explanation"
@@ -38,13 +37,10 @@ const ExtraInfoModal = ({
       isFallbackVariant={scope?.isFallbackVariant ?? false}
       variantQuery={scope?.variantQuery ?? ANY_VARIANT_QUERY}
       filterVariants={question.raw?.variants ?? []}
-      current={variant?.explanation}
+      current={variant?.explanation ?? question.raw?.explanation}
+      filterText={question.raw?.explanation ?? null}
       block
     >
-      <AppMarkdown>{explanationToShow}</AppMarkdown>
-    </EditableText>
-  ) : (
-    <EditableText filterId={question.id} field="filterExplanation" current={question.raw?.explanation} block>
       <AppMarkdown>{explanationToShow}</AppMarkdown>
     </EditableText>
   )

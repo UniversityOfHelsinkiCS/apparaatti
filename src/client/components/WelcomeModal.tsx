@@ -31,11 +31,11 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
   const modalLabels = useModalLabels()
   const configMap = filterConfigMap(filterContext)
 
-  const buildFilter = (filter: Question, config: FilterConfigMapType) => {
+  const buildFilter = (filter: Question, config: FilterConfigMapType, variant: Variant) => {
     const state = config.state
     const setState = config.setState
     const displayType = filter.displayType ?? 'singlechoice'
-    const shortName = filter.shortName ?? filter.id
+    const shortName = variant.shortName ?? filter.shortName ?? filter.id
 
     return { ...filter, displayType, state, setState, shortName }
   }
@@ -99,7 +99,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     return (
       <Filter
         variant={entry.variant}
-        filter={buildFilter(entry.question, entry.config)}
+        filter={buildFilter(entry.question, entry.config, entry.variant)}
         scope="welcome"
         variantName={entry.variant.name}
         isFallbackVariant={entry.isFallback}

@@ -91,6 +91,20 @@ const applyWording = (config: FilterConfig, mutation: FilterWordingMutation): Fi
     }))
   }
 
+  if (mutation.op === 'variantShortName') {
+    return patchVariant(config, mutation.variantName, variant => ({
+      ...variant,
+      shortName: mutation.text ?? undefined,
+    }))
+  }
+
+  if (mutation.op === 'variantExtraInfo') {
+    return patchVariant(config, mutation.variantName, variant => ({
+      ...variant,
+      extraInfo: mutation.text ?? undefined,
+    }))
+  }
+
   return patchVariant(config, mutation.variantName, variant =>
     patchOptionName(variant, mutation.optionId, mutation.text)
   )
@@ -143,6 +157,13 @@ const applySettings = (config: FilterConfig, mutation: FilterSettingsMutation): 
 
   if (mutation.op === 'variantSkipped') {
     return patchVariant(config, mutation.variantName, variant => ({ ...variant, skipped: mutation.skipped }))
+  }
+
+  if (mutation.op === 'variantExtraInfoDisabled') {
+    return patchVariant(config, mutation.variantName, variant => ({
+      ...variant,
+      extraInfoDisabled: mutation.disabled,
+    }))
   }
 
   if (mutation.op === 'renameVariant') {
@@ -278,8 +299,18 @@ export function diffFilterPayloads(from: FilterSnapshotPayload, to: FilterSnapsh
 
       change(config.id, variant.name, 'question', null, previousVariant.question, variant.question)
       change(config.id, variant.name, 'explanation', null, previousVariant.explanation, variant.explanation)
+      change(config.id, variant.name, 'variantShortName', null, previousVariant.shortName, variant.shortName)
+      change(config.id, variant.name, 'variantExtraInfo', null, previousVariant.extraInfo, variant.extraInfo)
 
       setting(config.id, variant.name, null, 'skipped', previousVariant.skipped ?? false, variant.skipped ?? false)
+      setting(
+        config.id,
+        variant.name,
+        null,
+        'extraInfoDisabled',
+        previousVariant.extraInfoDisabled ?? false,
+        variant.extraInfoDisabled ?? false
+      )
       setting(
         config.id,
         variant.name,
