@@ -307,8 +307,6 @@ export default {
       },
       choice: {
         default: 'Yleinen oletusteksti',
-        shared: 'Yhteinen kaikille varianteille',
-        sharedWarning: 'Muutos näkyy kaikissa varianteissa, joilla ei ole omaa tekstiä.',
         createNew: 'Luo uusi variantti',
         continue: 'Jatka',
       },
@@ -318,9 +316,6 @@ export default {
           shortName: 'Lyhyt nimi on sama kaikissa varianteissa.',
           extraInfo: 'Lisätieto on sama kaikissa varianteissa.',
           filterExplanation: 'Tätä lisätietoa käyttävät kaikki variantit, joilla ei ole omaa.',
-          explanation: 'Tätä lisätietoa käyttävät kaikki variantit, joilla ei ole omaa.',
-          variantShortName: 'Tätä lyhyttä nimeä käyttävät kaikki variantit, joilla ei ole omaa.',
-          variantExtraInfo: 'Tätä lisätietoa käyttävät kaikki variantit, joilla ei ole omaa.',
         },
         newVariant: 'Uusi variantti: {{variant}}',
         change: 'Vaihda',

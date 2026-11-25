@@ -307,8 +307,6 @@ export default {
       },
       choice: {
         default: 'General default wording',
-        shared: 'Shared by every variant',
-        sharedWarning: 'The change shows in every variant that has no wording of its own.',
         createNew: 'Create a new variant',
         continue: 'Continue',
       },
@@ -318,9 +316,6 @@ export default {
           shortName: 'The short name is the same in every variant.',
           extraInfo: 'The additional info is the same in every variant.',
           filterExplanation: 'This explanation is the fallback used by every variant without its own.',
-          explanation: 'This explanation is the fallback used by every variant without its own.',
-          variantShortName: 'This short name is the fallback used by every variant without its own.',
-          variantExtraInfo: 'This additional info is the fallback used by every variant without its own.',
         },
         newVariant: 'New variant: {{variant}}',
         change: 'Change',

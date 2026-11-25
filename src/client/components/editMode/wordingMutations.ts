@@ -1,4 +1,4 @@
-import { describeConditions, type MatchConditions } from '../../../common/conditionMatching'
+import { defaultVariant, describeConditions, type MatchConditions } from '../../../common/conditionMatching'
 import type {
   FilterMutations,
   FilterVariant,
@@ -9,15 +9,11 @@ import type {
 import type { EditTarget } from '../../contexts/filterEditModeContext'
 import { describeFilterVariant } from './changeVariant'
 
-export type PickedTarget =
-  | { mode: 'filter' }
-  | { mode: 'existing'; variantName: string }
-  | { mode: 'new'; conditions: MatchConditions }
+export type PickedTarget = { mode: 'existing'; variantName: string } | { mode: 'new'; conditions: MatchConditions }
 
 type TargetLabels = {
   /** Label of the catch-all variant, e.g. "Yleinen oletusteksti". */
   defaultLabel: string
-  sharedLabel: string
   /** Label of a variant still to be created, given its key, e.g. "Uusi variantti: sv-fi". */
   newVariant: (variantKey: string) => string
 }
@@ -27,9 +23,6 @@ export const describePickedTarget = (
   filterVariants: FilterVariant[],
   labels: TargetLabels
 ): string => {
-  if (picked.mode === 'filter') {
-    return labels.sharedLabel
-  }
   if (picked.mode === 'new') {
     return labels.newVariant(describeConditions(picked.conditions))
   }
@@ -39,15 +32,18 @@ export const describePickedTarget = (
 
 export const emptyLocalized: LocalizedText = { fi: '', sv: '', en: '' }
 
-export const isVariantField = (target: EditTarget) =>
-  target.field === 'question' ||
-  target.field === 'explanation' ||
-  target.field === 'option' ||
-  target.field === 'variantShortName' ||
-  target.field === 'variantExtraInfo'
+export const isVariantField = (field: FilterWordingField) =>
+  field === 'question' ||
+  field === 'explanation' ||
+  field === 'option' ||
+  field === 'variantShortName' ||
+  field === 'variantExtraInfo'
 
 export const hasSharedFallback = (field: FilterWordingField) =>
   field === 'explanation' || field === 'variantShortName' || field === 'variantExtraInfo'
+
+export const isDefaultVariant = (filterVariants: FilterVariant[], variantName: string) =>
+  defaultVariant(filterVariants)?.name === variantName
 
 export const isShortNameField = (field: FilterWordingField) => field === 'shortName' || field === 'variantShortName'
 
@@ -134,7 +130,7 @@ export const wordingMutations = (
   text: LocalizedText | null,
   picked: PickedTarget
 ): FilterMutations => {
-  if (picked.mode === 'filter') {
+  if (!isVariantField(target.field)) {
     return { wordings: [filterWideOp(target.field, target.filterId, text)], settings: [] }
   }
 

@@ -54,6 +54,10 @@ export function isCatchAll<T extends MatchConditions>(item: T): boolean {
   return true
 }
 
+export function defaultVariant<T extends MatchConditions>(items: T[]): T | undefined {
+  return items.find(isCatchAll)
+}
+
 export function describeVariantQuery(context: VariantQuery): string {
   const parts = [context.lang, context.primaryLanguage, context.primaryLanguageSpecification, context.organisationCode]
   const label = parts.filter(part => part !== '').join('-')

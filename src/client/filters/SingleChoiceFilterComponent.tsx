@@ -2,7 +2,7 @@ import { RadioGroup } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
+import { ANY_VARIANT_QUERY, defaultVariant } from '../../common/conditionMatching'
 import { Option, Question } from '../../common/types'
 import AppMarkdown from '../components/common/AppMarkdown'
 import HyAccordion from '../components/common/hy/HyAccordion'
@@ -33,6 +33,7 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
   const [accordionOpen, setAccordionOpen] = useState(false)
   const { getOptionCount } = useFilterContext()
   const editScope = useEditScope()
+  const sharedExtraInfo = defaultVariant(filter.raw?.variants ?? [])?.extraInfo ?? filter.raw?.extraInfo
 
   const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // aria-disabled options stay focusable, so reject the selection here instead
@@ -77,8 +78,8 @@ const SingleChoiceFilterComponent: React.FC<SingleChoiceFilterComponentProps> = 
             isFallbackVariant={editScope?.isFallbackVariant ?? false}
             variantQuery={editScope?.variantQuery ?? ANY_VARIANT_QUERY}
             filterVariants={filter.raw?.variants ?? []}
-            current={editScope?.rawVariant?.extraInfo ?? filter.raw?.extraInfo}
-            filterText={filter.raw?.extraInfo ?? null}
+            current={editScope?.rawVariant?.extraInfo ?? sharedExtraInfo}
+            filterText={sharedExtraInfo ?? null}
             block
           >
             <AppMarkdown>{extrainfo}</AppMarkdown>

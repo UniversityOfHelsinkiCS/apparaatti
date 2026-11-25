@@ -65,10 +65,6 @@ describe('describePickedTarget', () => {
   it('falls back to the variant name when the variant is unknown', () => {
     expect(describePickedTarget({ mode: 'existing', variantName: 'gone' }, variants, labels)).toBe('gone')
   })
-
-  it('labels the filter-wide fallback as shared', () => {
-    expect(describePickedTarget({ mode: 'filter' }, variants, labels)).toBe('Yhteinen kaikille varianteille')
-  })
 })
 
 describe('hasSharedFallback', () => {
@@ -120,16 +116,20 @@ describe('wordingMutations', () => {
     })
   })
 
-  it('writes filter-wide fields without a variant', () => {
-    expect(wordingMutations(target({ field: 'shortName' }), text, { mode: 'filter' })).toEqual({
+  it('writes a filter-wide field to the filter whatever variant is picked', () => {
+    expect(
+      wordingMutations(target({ field: 'shortName' }), text, { mode: 'existing', variantName: 'sv-fi-H3456' })
+    ).toEqual({
       wordings: [{ op: 'shortName', filterId: 'lang', text }],
       settings: [],
     })
   })
 
-  it('sends a per-variant field to the shared fallback when that target is picked', () => {
-    expect(wordingMutations(target({ field: 'variantShortName' }), text, { mode: 'filter' })).toEqual({
-      wordings: [{ op: 'shortName', filterId: 'lang', text }],
+  it('writes the default variant override to that variant, not to the filter', () => {
+    expect(
+      wordingMutations(target({ field: 'variantShortName' }), text, { mode: 'existing', variantName: 'default' })
+    ).toEqual({
+      wordings: [{ op: 'variantShortName', filterId: 'lang', variantName: 'default', text }],
       settings: [],
     })
   })

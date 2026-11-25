@@ -308,8 +308,6 @@ export default {
       },
       choice: {
         default: 'Allmän standardtext',
-        shared: 'Gemensam för alla varianter',
-        sharedWarning: 'Ändringen syns i alla varianter som saknar en egen text.',
         createNew: 'Skapa en ny variant',
         continue: 'Fortsätt',
       },
@@ -319,9 +317,6 @@ export default {
           shortName: 'Det korta namnet är detsamma i alla varianter.',
           extraInfo: 'Tilläggsinformationen är densamma i alla varianter.',
           filterExplanation: 'Den här förklaringen används av alla varianter som saknar en egen.',
-          explanation: 'Den här förklaringen används av alla varianter som saknar en egen.',
-          variantShortName: 'Det här korta namnet används av alla varianter som saknar ett eget.',
-          variantExtraInfo: 'Den här tilläggsinformationen används av alla varianter som saknar en egen.',
         },
         newVariant: 'Ny variant: {{variant}}',
         change: 'Byt',

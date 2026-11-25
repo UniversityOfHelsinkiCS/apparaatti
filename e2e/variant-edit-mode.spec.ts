@@ -164,7 +164,7 @@ test('the wording editor is a two-step modal: confirm the variant, then edit the
   expect(await overlayVariant(page)).toBe(pageVariant)
 })
 
-test('filter-wide texts open straight on the text step', async ({ page }) => {
+test('a hidden filter edits its short name on the default variant', async ({ page }) => {
   await openInEditMode(page)
   await expectWelcomeModalStaysClosed(page)
 
@@ -179,16 +179,15 @@ test('filter-wide texts open straight on the text step', async ({ page }) => {
     await expect(sidebar).not.toBeChecked()
   }
 
-  const hiddenShortName = page.getByTestId('editable-primary-language-shortName')
+  const hiddenShortName = page.getByTestId('editable-primary-language-variantShortName')
   await expect(hiddenShortName).toBeVisible()
   await hiddenShortName.click()
 
   const editor = page.getByTestId('wording-edit-dialog')
   await expect(editor).toBeVisible()
-  await expect(editor.getByTestId('wording-edit-note')).toHaveText('Lyhyt nimi on sama kaikissa varianteissa.')
-  await expect(editor.getByTestId('wording-edit-target')).toHaveCount(0)
+  await editor.getByRole('button', { name: 'Jatka' }).click()
+  await expect(editor.getByTestId('wording-edit-target')).toHaveText('Yleinen oletusteksti')
   await expect(editor.getByRole('textbox', { name: 'Suomeksi' })).toBeVisible()
-  await expect(editor.getByRole('button', { name: 'Vaihda' })).toHaveCount(0)
   await editor.getByRole('button', { name: 'Peruuta' }).click()
   await expect(editor).toBeHidden()
 
@@ -198,7 +197,7 @@ test('filter-wide texts open straight on the text step', async ({ page }) => {
   }
 })
 
-test('the short name beside a filter is edited per variant, with the shared text reachable', async ({ page }) => {
+test('the picker offers exactly one default, which edits the default variant', async ({ page, request }) => {
   await openInEditMode(page)
   await expectWelcomeModalStaysClosed(page)
 
@@ -208,14 +207,14 @@ test('the short name beside a filter is edited per variant, with the shared text
 
   const variantSelect = editor.getByRole('combobox', { name: /Muokattava variantti/ })
   await variantSelect.click()
-  await page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true }).click()
-  await expect(editor.getByText('Muutos näkyy kaikissa varianteissa, joilla ei ole omaa tekstiä.')).toBeVisible()
+  await expect(page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true })).toHaveCount(1)
+  await expect(page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true })).toHaveCount(0)
+  await page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true }).click()
   await editor.getByRole('button', { name: 'Jatka' }).click()
 
-  await expect(editor.getByTestId('wording-edit-target')).toHaveText('Yhteinen kaikille varianteille')
-  await expect(editor.getByTestId('wording-edit-note')).toHaveText(
-    'Tätä lyhyttä nimeä käyttävät kaikki variantit, joilla ei ole omaa.'
-  )
+  await expect(editor.getByTestId('wording-edit-target')).toHaveText('Yleinen oletusteksti')
+  await expect(editor.getByTestId('wording-edit-note')).toHaveCount(0)
+  await expect(editor.getByRole('button', { name: 'Käytä yhteistä tekstiä' })).toHaveCount(0)
 
   const finnish = editor.getByRole('textbox', { name: 'Suomeksi' })
   const swedish = editor.getByRole('textbox', { name: 'Ruotsiksi' })
@@ -232,32 +231,59 @@ test('the short name beside a filter is edited per variant, with the shared text
   await expect(editor).toBeHidden()
 
   await expect(page.locator('button[aria-controls]', { hasText: 'Opetuskieli e2e' })).toBeVisible()
+
+  const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+  const config = payload.filters.find((filter: { id: string }) => filter.id === 'lang')
+  const fallback = config.variants.find(
+    (candidate: { lang: string | null; primaryLanguage: string | null }) =>
+      candidate.lang === null && candidate.primaryLanguage === null
+  )
+  expect(fallback.shortName.fi).toBe('Opetuskieli e2e')
 })
 
-test('a variant short name overrides the shared one and can be handed back', async ({ page }) => {
+test('a non-default variant overrides the default short name and can hand it back', async ({ page, request }) => {
   await openInEditMode(page)
   await expectWelcomeModalStaysClosed(page)
-  const pageVariant = await overlayVariant(page)
+
+  type SnapshotVariant = { name: string; lang: string | null; shortName?: { fi: string } }
+
+  const langVariants = async (): Promise<SnapshotVariant[]> => {
+    const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
+    return payload.filters.find((filter: { id: string }) => filter.id === 'lang').variants
+  }
 
   await page.getByTestId('editable-lang-variantShortName').click()
   const editor = page.getByTestId('wording-edit-dialog')
   await expect(editor).toBeVisible()
 
-  await expect(editor.getByRole('combobox', { name: /Muokattava variantti/ })).toBeVisible()
+  await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
+  await page.getByRole('option', { name: 'Luo uusi variantti', exact: true }).click()
+  await editor.getByRole('combobox', { name: /Haettavan kurssin kieli/ }).click()
+  await page.getByRole('option', { name: 'ruotsi', exact: true }).click()
   await editor.getByRole('button', { name: 'Jatka' }).click()
-  await editor.getByRole('textbox', { name: 'Suomeksi' }).fill(`Oma nimi ${pageVariant}`)
+
+  await editor.getByRole('textbox', { name: 'Suomeksi' }).fill('Ruotsi-nimi e2e')
   await editor.getByRole('button', { name: 'Tallenna' }).click()
   await expect(editor).toBeHidden()
-  await expect(page.locator('button[aria-controls]', { hasText: `Oma nimi ${pageVariant}` })).toBeVisible()
+
+  const afterSave = await langVariants()
+  const created = afterSave.find(variant => variant.lang === 'sv')
+  expect(created?.shortName?.fi).toBe('Ruotsi-nimi e2e')
+  expect(afterSave.find(variant => variant.name === 'default')?.shortName?.fi).not.toBe('Ruotsi-nimi e2e')
 
   await page.getByTestId('editable-lang-variantShortName').click()
   await expect(editor).toBeVisible()
+  await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
+  await page.getByRole('option', { name: created!.name, exact: true }).click()
   await editor.getByRole('button', { name: 'Jatka' }).click()
+
   const useShared = editor.getByRole('button', { name: 'Käytä yhteistä tekstiä' })
   await expect(useShared).toBeVisible()
   await useShared.click()
   await expect(editor).toBeHidden()
-  await expect(page.locator('button[aria-controls]', { hasText: `Oma nimi ${pageVariant}` })).toHaveCount(0)
+
+  const afterClear = await langVariants()
+  expect(afterClear.find(variant => variant.name === created!.name)?.shortName).toBeUndefined()
 })
 
 test('the info-icon text can be worded per variant even when the filter has none', async ({ page }) => {
@@ -274,7 +300,8 @@ test('the info-icon text can be worded per variant even when the filter has none
   await expect(editor.getByRole('combobox', { name: /Muokattava variantti/ })).toBeVisible()
 
   await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
-  await expect(page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true })).toBeVisible()
+  await expect(page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true })).toHaveCount(1)
+  await expect(page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true })).toHaveCount(0)
   await page.keyboard.press('Escape')
   await editor.getByRole('button', { name: 'Jatka' }).click()
 

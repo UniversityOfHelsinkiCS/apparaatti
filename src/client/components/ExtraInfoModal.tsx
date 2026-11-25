@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import type { VariantQuery } from '../../common/conditionMatching'
-import { ANY_VARIANT_QUERY } from '../../common/conditionMatching'
+import { ANY_VARIANT_QUERY, defaultVariant } from '../../common/conditionMatching'
 import { Question } from '../../common/types'
 import useModalLabels from '../hooks/useModalLabels'
 import { pickQuestionExplanation } from '../hooks/useQuestions'
@@ -28,6 +28,7 @@ const ExtraInfoModal = ({
 
   const explanationToShow = pickQuestionExplanation(currentVariant, question, t)
   const variant = scope?.rawVariant
+  const sharedExplanation = defaultVariant(question.raw?.variants ?? [])?.explanation ?? question.raw?.explanation
 
   const editable = (
     <EditableText
@@ -37,8 +38,8 @@ const ExtraInfoModal = ({
       isFallbackVariant={scope?.isFallbackVariant ?? false}
       variantQuery={scope?.variantQuery ?? ANY_VARIANT_QUERY}
       filterVariants={question.raw?.variants ?? []}
-      current={variant?.explanation ?? question.raw?.explanation}
-      filterText={question.raw?.explanation ?? null}
+      current={variant?.explanation ?? sharedExplanation}
+      filterText={sharedExplanation ?? null}
       block
     >
       <AppMarkdown>{explanationToShow}</AppMarkdown>

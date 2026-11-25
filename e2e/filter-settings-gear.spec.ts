@@ -178,11 +178,8 @@ test('the info-only filter body is editable and saves to extraInfo', async ({ pa
   await expect(editor).toBeVisible()
 
   await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
-  await page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true }).click()
+  await page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true }).click()
   await editor.getByRole('button', { name: 'Jatka' }).click()
-  await expect(editor.getByTestId('wording-edit-note')).toHaveText(
-    'Tätä lisätietoa käyttävät kaikki variantit, joilla ei ole omaa.'
-  )
 
   const finnish = editor.getByRole('textbox', { name: 'Suomeksi' })
   await expect(finnish).toBeVisible()
@@ -192,7 +189,11 @@ test('the info-only filter body is editable and saves to extraInfo', async ({ pa
 
   const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
   const config = payload.filters.find((filter: { id: string }) => filter.id === 'previusly-done-lang')
-  expect(config.extraInfo.fi).toBe('Muokattu lisatieto')
+  const fallback = config.variants.find(
+    (candidate: { lang: string | null; primaryLanguage: string | null }) =>
+      candidate.lang === null && candidate.primaryLanguage === null
+  )
+  expect(fallback.extraInfo.fi).toBe('Muokattu lisatieto')
 })
 
 test('the gear texts tab lists the filter texts and edits them through the wording wizard', async ({
@@ -213,7 +214,7 @@ test('the gear texts tab lists the filter texts and edits them through the wordi
   await expect(editor).toBeVisible()
 
   await editor.getByRole('combobox', { name: /Muokattava variantti/ }).click()
-  await page.getByRole('option', { name: 'Yhteinen kaikille varianteille', exact: true }).click()
+  await page.getByRole('option', { name: 'Yleinen oletusteksti', exact: true }).click()
   await editor.getByRole('button', { name: 'Jatka' }).click()
   await editor.getByRole('textbox', { name: 'Suomeksi' }).fill('Gear-lisatieto e2e')
   await editor.getByRole('button', { name: 'Tallenna' }).click()
@@ -224,7 +225,11 @@ test('the gear texts tab lists the filter texts and edits them through the wordi
 
   const payload = await (await request.get(`${SNAPSHOTS_PATH}/${snapshotId}`)).json()
   const config = payload.filters.find((filter: { id: string }) => filter.id === 'lang')
-  expect(config.explanation.fi).toBe('Gear-lisatieto e2e')
+  const fallback = config.variants.find(
+    (candidate: { lang: string | null; primaryLanguage: string | null }) =>
+      candidate.lang === null && candidate.primaryLanguage === null
+  )
+  expect(fallback.explanation.fi).toBe('Gear-lisatieto e2e')
 })
 
 test('the gear can hide the yes-answer extra info for one variant', async ({ page, request }) => {

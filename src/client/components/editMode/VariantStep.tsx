@@ -2,7 +2,7 @@ import { Alert, Button, DialogActions, DialogContent, Stack } from '@mui/materia
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { isCatchAll, type VariantQuery } from '../../../common/conditionMatching'
+import { defaultVariant, isCatchAll, type VariantQuery } from '../../../common/conditionMatching'
 import type { FilterVariant } from '../../../common/types'
 import type { ConditionDraft } from '../admin/backendLocaleEdit/backendLocaleUtils'
 import ConditionSelectors from '../admin/backendLocaleEdit/ConditionSelectors'
@@ -12,16 +12,13 @@ import { describeFilterVariant } from './changeVariant'
 import type { PickedTarget } from './wordingMutations'
 
 const NEW_VARIANT = '__new__'
-const SHARED = '__shared__'
 
-const selectionFrom = (picked: PickedTarget): string => {
-  if (picked.mode === 'filter') {
-    return SHARED
-  }
+const selectionFrom = (picked: PickedTarget, filterVariants: FilterVariant[]): string => {
   if (picked.mode === 'new') {
     return NEW_VARIANT
   }
-  return picked.variantName
+  const known = filterVariants.some(variant => variant.name === picked.variantName)
+  return known ? picked.variantName : (defaultVariant(filterVariants)?.name ?? picked.variantName)
 }
 
 const draftFrom = (picked: PickedTarget, variantQuery: VariantQuery): ConditionDraft =>
@@ -38,7 +35,6 @@ type VariantStepProps = {
   filterVariants: FilterVariant[]
   variantQuery: VariantQuery
   picked: PickedTarget
-  allowShared: boolean
   hasUnsavedChanges: boolean
   onCancel: () => void
   onContinue: (picked: PickedTarget) => void
@@ -49,24 +45,17 @@ const VariantStep = ({
   filterVariants,
   variantQuery,
   picked,
-  allowShared,
   hasUnsavedChanges,
   onCancel,
   onContinue,
 }: VariantStepProps) => {
   const { t } = useTranslation()
-  const [selected, setSelected] = useState(() => selectionFrom(picked))
+  const [selected, setSelected] = useState(() => selectionFrom(picked, filterVariants))
   const [draft, setDraft] = useState<ConditionDraft>(() => draftFrom(picked, variantQuery))
 
   const selectedVariant = filterVariants.find(variant => variant.name === selected)
 
-  const sharedOption = allowShared ? [{ value: SHARED, label: t('v2:filterWordings.choice.shared') }] : []
-
   const continueWithSelection = () => {
-    if (selected === SHARED) {
-      onContinue({ mode: 'filter' })
-      return
-    }
     if (selected !== NEW_VARIANT) {
       onContinue({ mode: 'existing', variantName: selected })
       return
@@ -92,7 +81,6 @@ const VariantStep = ({
             label={t('v2:filterWordings.target.variant')}
             value={selected}
             options={[
-              ...sharedOption,
               ...filterVariants.map(variant => ({
                 value: variant.name,
                 label: describeFilterVariant(variant, t('v2:filterWordings.choice.default')),
@@ -101,8 +89,6 @@ const VariantStep = ({
             ]}
             onChange={setSelected}
           />
-
-          {selected === SHARED && <Alert severity="info">{t('v2:filterWordings.choice.sharedWarning')}</Alert>}
 
           {selected === NEW_VARIANT && (
             <ConditionSelectors draft={draft} onChange={patch => setDraft(current => ({ ...current, ...patch }))} />

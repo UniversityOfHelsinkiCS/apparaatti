@@ -1,7 +1,7 @@
 import { Chip, Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import type { VariantQuery } from '../../../common/conditionMatching'
+import { defaultVariant, type VariantQuery } from '../../../common/conditionMatching'
 import type { Question, Variant } from '../../../common/types'
 import EditableText from './EditableText'
 
@@ -24,12 +24,22 @@ const HiddenFilterWordingRow = ({
 }: HiddenFilterWordingRowProps) => {
   const { t } = useTranslation()
   const isReadOnly = reason === 'variantSkipped' || reason === 'noVariant'
+  const fallbackVariant = defaultVariant(filter.raw?.variants ?? [])
 
   const texts = (
     <Stack spacing={1}>
       <Typography variant="body2">
         {t('v2:filterWordings.hidden.shortName')}:{' '}
-        <EditableText filterId={filter.id} field="shortName" current={filter.raw?.shortName}>
+        <EditableText
+          filterId={filter.id}
+          field="variantShortName"
+          variantName={fallbackVariant?.name ?? variantName}
+          isFallbackVariant={isFallbackVariant}
+          variantQuery={variantQuery}
+          filterVariants={filter.raw?.variants ?? []}
+          current={fallbackVariant?.shortName ?? filter.raw?.shortName}
+          filterText={filter.raw?.shortName ?? null}
+        >
           {filter.shortName ?? filter.id}
         </EditableText>
       </Typography>

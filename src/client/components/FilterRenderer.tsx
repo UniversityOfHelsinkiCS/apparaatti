@@ -3,6 +3,7 @@ import { keyframes } from '@mui/material/styles'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { defaultVariant } from '../../common/conditionMatching'
 import { Question } from '../../common/types'
 import { shouldRenderWelcomeFilter } from '../contexts/filter/filterRules'
 import { filterConfigMap } from '../contexts/filter/filterState'
@@ -56,6 +57,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
   const state = config ? config.state : ''
   const setState = config ? config.setState : () => {}
   const displayType = filter.displayType ?? 'singlechoice'
+  const sharedShortName = defaultVariant(filter.raw?.variants ?? [])?.shortName ?? filter.raw?.shortName
   const nameSource = variant?.shortName ? variant : filter
   const shortName = nameSource.shortName ?? filter.id
   const shortNameLanguage = nameSource.shortName
@@ -103,8 +105,8 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
             isFallbackVariant={isFallback}
             variantQuery={filters.variantQuery}
             filterVariants={filter.raw?.variants ?? []}
-            current={variant.raw?.shortName ?? filter.raw?.shortName}
-            filterText={filter.raw?.shortName}
+            current={variant.raw?.shortName ?? sharedShortName}
+            filterText={sharedShortName}
           />
         }
         summary={

@@ -1,7 +1,7 @@
 import { Paper, Stack, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import { ANY_VARIANT_QUERY } from '../../../common/conditionMatching'
+import { ANY_VARIANT_QUERY, defaultVariant } from '../../../common/conditionMatching'
 import type { FilterConfig, FilterVariant, FilterWordingField, LocalizedText } from '../../../common/types'
 import { localize } from '../../util/filterConfigAdapter'
 import { useEditScope } from './editScope'
@@ -10,16 +10,21 @@ import FilterTextEditHandle from './FilterTextEditHandle'
 type RowTexts = { current: LocalizedText | undefined; filterText: LocalizedText | undefined }
 
 const textsFor = (filter: FilterConfig, variant: FilterVariant | undefined, field: FilterWordingField): RowTexts => {
+  const fallback = defaultVariant(filter.variants)
+
   if (field === 'variantShortName') {
-    return { current: variant?.shortName ?? filter.shortName, filterText: filter.shortName }
+    const shared = fallback?.shortName ?? filter.shortName
+    return { current: variant?.shortName ?? shared, filterText: shared }
   }
   if (field === 'question') {
     return { current: variant?.question, filterText: undefined }
   }
   if (field === 'explanation') {
-    return { current: variant?.explanation ?? filter.explanation, filterText: filter.explanation }
+    const shared = fallback?.explanation ?? filter.explanation
+    return { current: variant?.explanation ?? shared, filterText: shared }
   }
-  return { current: variant?.extraInfo ?? filter.extraInfo, filterText: filter.extraInfo }
+  const shared = fallback?.extraInfo ?? filter.extraInfo
+  return { current: variant?.extraInfo ?? shared, filterText: shared }
 }
 
 type FilterTextRowProps = {

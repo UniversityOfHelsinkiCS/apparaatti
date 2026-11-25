@@ -2,6 +2,7 @@ import { FormControlLabel, IconButton, Paper, Stack, Switch, Typography } from '
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { defaultVariant } from '../../../common/conditionMatching'
 import type { FilterConfig, FilterSettingsPatch } from '../../../common/types'
 import { SWITCH_SX } from '../admin/filterEdit/filterEditorUtils'
 
@@ -58,7 +59,7 @@ const FilterOrderRow = ({ filter, isFirst, isLast, isBusy, onMove, onToggleFlag 
           <ChevronDown />
         </IconButton>
         <Typography variant="body2" sx={{ flexGrow: 1 }}>
-          {filter.shortName.fi || filter.id}
+          {defaultVariant(filter.variants)?.shortName?.fi || filter.shortName.fi || filter.id}
         </Typography>
         {toggle(t('v2:filterSettings.flag.enabled'), filter.enabled, next => onToggleFlag({ enabled: next }))}
         {toggle(t('v2:filterSettings.inWelcomeModal'), filter.showInWelcomeModal, next =>
