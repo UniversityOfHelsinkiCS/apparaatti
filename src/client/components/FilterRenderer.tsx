@@ -5,16 +5,13 @@ import { useTranslation } from 'react-i18next'
 
 import { defaultVariant } from '../../common/conditionMatching'
 import { Question } from '../../common/types'
-import { shouldRenderWelcomeFilter } from '../contexts/filter/filterRules'
-import { filterConfigMap } from '../contexts/filter/filterState'
+import { resolveRenderableFilter } from '../contexts/filter/renderableFilter'
 import { useFilterContext } from '../contexts/filterContext'
-import Filter from '../filters/filter'
-import { resolveVariant } from '../hooks/useQuestions'
 import { foreignLanguage } from '../util/contentLanguage'
 import HyAccordion from './common/hy/HyAccordion'
 import { hy } from './common/hy/hyTokens'
 import { FilterAccordionAction, FilterAccordionSummary } from './FilterAccordionHeader'
-import StudyPhaseQuestion from './StudyPhaseQuestion'
+import QuestionBody from './QuestionBody'
 
 const flashHighlight = keyframes({
   '0%': { opacity: 0 },
@@ -52,26 +49,18 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
     return () => clearTimeout(timeout)
   }, [isHighlighted, setHighlightedFilterId])
 
-  const { variant, isFallback } = resolveVariant(filter, filters.variantQuery)
-  const config = filterConfigMap(filters).get(filter.id)
-  const state = config ? config.state : ''
-  const setState = config ? config.setState : () => {}
-  const displayType = filter.displayType ?? 'singlechoice'
+  const entry = resolveRenderableFilter(filter, filters)
   const sharedShortName = defaultVariant(filter.raw?.variants ?? [])?.shortName ?? filter.raw?.shortName
-  const nameSource = variant?.shortName ? variant : filter
-  const shortName = nameSource.shortName ?? filter.id
-  const shortNameLanguage = nameSource.shortName
-    ? foreignLanguage(nameSource.shortNameLanguage, i18n.resolvedLanguage ?? i18n.language)
-    : undefined
   const skipInSideBar = filter.hideInFilterSidebar ?? false
 
-  const filterToRender = { ...filter, displayType, state, setState, shortName }
-
-  const shouldRenderFilter = shouldRenderWelcomeFilter(filter.id, variant, filters.language, filters.primaryLanguage)
-
-  if (!variant || !shouldRenderFilter || skipInSideBar) {
+  if (!entry || skipInSideBar) {
     return null
   }
+
+  const { variant, isFallback, shortName, shortNameSource } = entry
+  const shortNameLanguage = shortNameSource.shortName
+    ? foreignLanguage(shortNameSource.shortNameLanguage, i18n.resolvedLanguage ?? i18n.language)
+    : undefined
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -117,17 +106,7 @@ const FilterRenderer = ({ filter, expanded, onAccordionChange, isFirst, lockedOp
           />
         }
       >
-        {filter.id === 'study-field-select' ? (
-          <StudyPhaseQuestion question={filter} />
-        ) : (
-          <Filter
-            variant={variant}
-            filter={filterToRender}
-            variantName={variant.name}
-            isFallbackVariant={isFallback}
-            variantQuery={filters.variantQuery}
-          />
-        )}
+        <QuestionBody entry={entry} variantQuery={filters.variantQuery} />
       </HyAccordion>
     </Box>
   )

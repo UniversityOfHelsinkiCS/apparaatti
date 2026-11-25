@@ -2,20 +2,16 @@ import { Box, Stack } from '@mui/material'
 import { FC, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Question, Variant } from '../../common/types'
-import { shouldRenderWelcomeFilter } from '../contexts/filter/filterRules'
-import { filterConfigMap, FilterConfigMapType, isFilterStateAnswered } from '../contexts/filter/filterState'
+import { isFilterStateAnswered } from '../contexts/filter/filterState'
+import { resolveRenderableFilter } from '../contexts/filter/renderableFilter'
 import { useFilterContext } from '../contexts/filterContext'
 import { useFilterEditMode } from '../contexts/filterEditModeContext'
-import Filter from '../filters/filter'
 import useModalLabels from '../hooks/useModalLabels'
-import { resolveVariant } from '../hooks/useQuestions'
 import { canCloseWelcomeModal } from '../util/editModeAnswers'
 import HyButton from './common/hy/HyButton'
 import HyModal from './common/hy/HyModal'
 import LanguageSelector from './LanguageSelector'
-import RadioQuestion from './RadioQuestion'
-import StudyPhaseQuestion from './StudyPhaseQuestion'
+import QuestionBody from './QuestionBody'
 
 type WelcomeModalProps = {
   open: boolean
@@ -25,39 +21,24 @@ type WelcomeModalProps = {
 
 const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false }) => {
   const filterContext = useFilterContext()
-  const { filters, language, primaryLanguage, variantQuery } = filterContext
+  const { filters, variantQuery } = filterContext
   const { isEditMode } = useFilterEditMode()
   const { t } = useTranslation()
   const modalLabels = useModalLabels()
-  const configMap = filterConfigMap(filterContext)
-
-  const buildFilter = (filter: Question, config: FilterConfigMapType, variant: Variant) => {
-    const state = config.state
-    const setState = config.setState
-    const displayType = filter.displayType ?? 'singlechoice'
-    const shortName = variant.shortName ?? filter.shortName ?? filter.id
-
-    return { ...filter, displayType, state, setState, shortName }
-  }
 
   const welcomeFilters = filters
     .map(question => {
-      const config = configMap.get(question.id)
       if (!question.showInWelcomeModal) {
         return null
       }
 
-      const { variant, isFallback } = resolveVariant(question, variantQuery)
+      const entry = resolveRenderableFilter(question, filterContext)
 
-      if (!shouldRenderWelcomeFilter(question.id, variant, language, primaryLanguage)) {
+      if (!entry || !entry.config) {
         return null
       }
 
-      if (!config || !variant) {
-        return null
-      }
-
-      return { question, config, variant, isFallback }
+      return entry
     })
     .filter(entry => entry !== null)
 
@@ -66,7 +47,7 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
       return true
     }
 
-    return isFilterStateAnswered(entry.config.state)
+    return isFilterStateAnswered(entry.filterToRender.state)
   })
   const canClose = canCloseWelcomeModal({ isEditMode, mandatoryQuestionsAnswered })
 
@@ -76,36 +57,6 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
     }
 
     onClose()
-  }
-
-  const renderWelcomeFilter = (entry: {
-    question: Question
-    config: FilterConfigMapType
-    variant: Variant
-    isFallback: boolean
-  }) => {
-    const configState = entry.config.state
-
-    if (entry.question.id === 'study-field-select') {
-      return <StudyPhaseQuestion question={entry.question} scope="welcome" />
-    }
-
-    if ((entry.question.id === 'primary-language' || entry.question.id === 'lang') && !Array.isArray(configState)) {
-      return (
-        <RadioQuestion question={entry.question} value={configState} setValue={entry.config.setState} scope="welcome" />
-      )
-    }
-
-    return (
-      <Filter
-        variant={entry.variant}
-        filter={buildFilter(entry.question, entry.config, entry.variant)}
-        scope="welcome"
-        variantName={entry.variant.name}
-        isFallbackVariant={entry.isFallback}
-        variantQuery={variantQuery}
-      />
-    )
   }
 
   return (
@@ -136,7 +87,9 @@ const WelcomeModal: FC<WelcomeModalProps> = ({ open, onClose, isAdmin = false })
 
         <Stack spacing={3}>
           {welcomeFilters.map(entry => (
-            <Fragment key={entry.question.id}>{renderWelcomeFilter(entry)}</Fragment>
+            <Fragment key={entry.question.id}>
+              <QuestionBody entry={entry} variantQuery={variantQuery} scope="welcome" />
+            </Fragment>
           ))}
         </Stack>
       </Box>

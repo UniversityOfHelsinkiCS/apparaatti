@@ -2,7 +2,8 @@ import { Box, type SelectChangeEvent } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { LocalizedString, Question, User } from '../../common/types'
+import type { VariantQuery } from '../../common/conditionMatching'
+import { LocalizedString, Question, User, Variant } from '../../common/types'
 import { useFilterContext } from '../contexts/filterContext'
 import { useFilterEditMode } from '../contexts/filterEditModeContext'
 import { translateLocalizedString } from '../util/i18n'
@@ -10,7 +11,17 @@ import { HyMenuItem, HySelect } from './common/hy/HySelect'
 import ExtraInfoModal from './ExtraInfoModal'
 import QuestionTitle, { questionGroupName, questionTextId } from './QuestionTitle'
 
-const StudyPhaseQuestion = ({ question, scope }: { question: Question; scope?: string }) => {
+const StudyPhaseQuestion = ({
+  question,
+  variant,
+  variantQuery,
+  scope,
+}: {
+  question: Question
+  variant: Variant
+  variantQuery?: VariantQuery
+  scope?: string
+}) => {
   const { user, studyData, supportedOrganisations, setUserOrgCode, studyField, setStudyField } = useFilterContext()
   // In edit mode the admin may preview the variant shared by all faculties ("mikä tahansa").
   const { isEditMode: allowAnyFaculty } = useFilterEditMode()
@@ -50,9 +61,15 @@ const StudyPhaseQuestion = ({ question, scope }: { question: Question; scope?: s
 
   return (
     <Box sx={{ minWidth: 200 }}>
-      <QuestionTitle handleOpen={handleOpen} title={t('question:pickStudy')} question={question} scope={scope} />
+      <QuestionTitle
+        handleOpen={handleOpen}
+        title={variant.question || t('question:pickStudy')}
+        titleLanguage={variant.questionLanguage}
+        question={question}
+        scope={scope}
+      />
 
-      <ExtraInfoModal question={question} open={open} handleClose={handleClose} />
+      <ExtraInfoModal question={question} open={open} handleClose={handleClose} currentVariant={variantQuery} />
 
       <HySelect
         sx={{ minWidth: 100, maxWidth: '100%', marginTop: 1.5 }}

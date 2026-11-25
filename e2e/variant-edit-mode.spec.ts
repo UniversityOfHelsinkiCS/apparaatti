@@ -88,6 +88,21 @@ test('the start modal offers "mikä tahansa" as faculty in edit mode and can be 
   await expectNoOrganisation(page)
 })
 
+test('the welcome modal questions are editable in edit mode', async ({ page }) => {
+  await openInEditMode(page)
+  await page.getByRole('button', { name: 'Vastaa alkukysymyksiin' }).click()
+
+  const modal = page.getByRole('dialog')
+  await expect(modal).toBeVisible()
+
+  await expect(modal.getByTestId('editable-primary-language-question')).toBeVisible()
+  await expect(modal.getByTestId('filter-settings-gear-primary-language')).toBeVisible()
+  await expect(modal.getByTestId('editable-primary-language-option-fi')).toBeVisible()
+
+  await expect(modal.getByTestId('editable-study-field-select-question')).toBeVisible()
+  await expect(modal.getByTestId('filter-settings-gear-study-field-select')).toBeVisible()
+})
+
 test('the variant dialog sets the faculty to "mikä tahansa" without opening the welcome modal', async ({ page }) => {
   await openInEditMode(page)
   await expectWelcomeModalStaysClosed(page)
