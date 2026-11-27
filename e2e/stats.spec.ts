@@ -14,7 +14,7 @@ const rangeAround = (now: number) => {
 
 const visitCountFor = async (request: APIRequestContext, id: string) => {
   const visits = await (await request.get('/api/debug/visits')).json()
-  return visits.filter((visit: { visitorHashHex: string }) => visit.visitorHashHex === hashOf(id)).length
+  return visits.byVisitor[hashOf(id)]?.count ?? 0
 }
 
 test.describe.configure({ mode: 'serial' })
