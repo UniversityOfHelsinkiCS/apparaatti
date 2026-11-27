@@ -13,6 +13,7 @@ import path from 'path'
 
 import { connectToDatabase } from './db/connection.ts'
 import { seedDatabase } from './db/seed.ts'
+import errorHandler from './middleware/errorHandler.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
 import router from './routes/router.ts'
 import setupCron from './updater/cron.ts'
@@ -92,6 +93,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Sentry.setupExpressErrorHandler(app)
+
+app.use(errorHandler)
 
 app.listen(process.env.PORT, async () => {
   await connectToDatabase()

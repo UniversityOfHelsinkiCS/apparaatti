@@ -88,7 +88,26 @@ export const organisationColors: Record<string, string> = {
 }
 
 //the order organisations are stacked in and listed in the legend
-export const stackOrder = Object.keys(organisationColors)
+export const stackOrder = [
+  NO_ORGANISATION,
+  'H40',
+  'H50',
+  'H20',
+  'H10',
+  'H74',
+  'H70',
+  'H90',
+  'H60',
+  'H57',
+  'H80',
+  '4141',
+  'H305',
+  'H30',
+  'H3456',
+  '414',
+  'H55',
+  OTHER_ORGANISATIONS,
+]
 
 export const groupKeyOf = (organisationCode: string | null) => {
   if (organisationCode === null) {

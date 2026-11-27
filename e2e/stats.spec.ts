@@ -46,6 +46,19 @@ test('an admin visit is never recorded', async ({ adminRequest, request, e2eUser
   expect(await visitCountFor(request, e2eUserId)).toBe(before)
 })
 
+test('a grouping the schema does not allow is refused without leaking the failure', async ({ request }) => {
+  const response = await request.get(
+    `/api/admin/stats?${rangeAround(Date.now()).replace('groupBy=day', 'groupBy=fortnight')}`
+  )
+
+  expect(response.status()).toBe(400)
+
+  const body = await response.json()
+  expect(body.message).toBe('Invalid input')
+  expect(body.stack).toBeUndefined()
+  expect(JSON.stringify(body)).not.toContain('node_modules')
+})
+
 test('a range that predates every visit reports no visitors', async ({ request }) => {
   const start = new Date('2020-01-01T00:00:00.000Z').toISOString()
   const end = new Date('2020-01-02T00:00:00.000Z').toISOString()

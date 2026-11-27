@@ -1,2 +1,2 @@
-npm run translations -- --lang fi,en --quiet
+npm run translations -- --lang fi,sv,en --quiet
 npx lint-staged

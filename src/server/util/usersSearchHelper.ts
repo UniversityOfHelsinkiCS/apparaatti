@@ -8,7 +8,7 @@ export const getWhereClauseForOneWordSearch = (search: string) => ({
       },
     },
     {
-      firstName: {
+      firstNames: {
         [Op.iLike]: `${search}%`,
       },
     },
@@ -79,7 +79,7 @@ export const getWhereClauseForManyWordSearch = (search: string) => {
     [Op.or]: [
       {
         firstNames: {
-          [Op.iLike]: `${searchedWords}%`,
+          [Op.iLike]: `${search}%`,
         },
       },
       {
