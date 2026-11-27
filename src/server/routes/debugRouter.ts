@@ -22,15 +22,16 @@ const debugRouter = express.Router({ mergeParams: true })
 
 debugRouter.use(express.json())
 debugRouter.use(requireUser)
+debugRouter.use(requireAdmin)
 
 //yes i know a get should not edit anything but this is convinient and only in local anyways
-debugRouter.get('/reset/settings', requireAdmin, async (req: any, res: any) => {
+debugRouter.get('/reset/settings', async (req: any, res: any) => {
   await updateUserSettings(req.user.id, { educationLanguage: '' })
 
   res.json({ message: 'User settings reset' })
 })
 
-debugRouter.get('/visits', requireAdmin, async (req: any, res: any) => {
+debugRouter.get('/visits', async (req: any, res: any) => {
   const limit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 1000
   const visits = await getAllUserVisits(limit)
 

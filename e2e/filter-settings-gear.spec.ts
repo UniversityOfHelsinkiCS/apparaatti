@@ -125,17 +125,8 @@ test('a regular admin sees the restricted fields read-only and no delete buttons
   await context.close()
 })
 
-test('the mutate route refuses a destructive op from a regular admin', async ({
-  playwright,
-  baseURL,
-  e2eUserId,
-  request,
-}) => {
+test('the mutate route refuses a destructive op from a regular admin', async ({ request, adminRequest }) => {
   const variantName = await firstVariantName(request)
-  const adminRequest = await playwright.request.newContext({
-    baseURL,
-    extraHTTPHeaders: { 'x-e2e-user': e2eUserId, 'x-e2e-role': 'admin' },
-  })
 
   const forbidden = await adminRequest.post(`${SNAPSHOTS_PATH}/${snapshotId}/mutate`, {
     data: {
@@ -157,8 +148,6 @@ test('the mutate route refuses a destructive op from a regular admin', async ({
     },
   })
   expect(allowed.status()).toBe(200)
-
-  await adminRequest.dispose()
 })
 
 test('the info-only filter body is editable and saves to extraInfo', async ({ page, request }) => {

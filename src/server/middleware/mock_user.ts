@@ -28,10 +28,13 @@ const e2eUserIdFromHeader = (req: Request) => {
 
 const e2eGroups = (req: Request): string[] => {
   const groups = mockUser.hyGroupCn ?? []
-  if (!IN_E2E || req.get('x-e2e-role') !== 'admin') {
-    return groups
-  }
-  return groups.filter(group => group !== 'grp-toska')
+  if (!IN_E2E) return groups
+
+  const role = req.get('x-e2e-role')
+  if (role === 'user') return []
+  if (role === 'admin') return groups.filter(group => group !== 'grp-toska')
+
+  return groups
 }
 
 const ensureE2eUserRow = async (id: string) => {

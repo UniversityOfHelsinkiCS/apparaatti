@@ -1,4 +1,4 @@
-import { expect,test as base } from '@playwright/test'
+import { type APIRequestContext, expect, test as base } from '@playwright/test'
 
 // The e2e stack has one shared database, and answering the welcome modal writes
 // `educationLanguage` for the request's user. Each Playwright worker therefore
@@ -8,7 +8,12 @@ type WorkerFixtures = {
   e2eUserId: string
 }
 
-export const test = base.extend<Record<never, never>, WorkerFixtures>({
+type TestFixtures = {
+  adminRequest: APIRequestContext
+  userRequest: APIRequestContext
+}
+
+export const test = base.extend<TestFixtures, WorkerFixtures>({
   e2eUserId: [
     // eslint-disable-next-line no-empty-pattern -- playwright requires a destructuring pattern here
     async ({}, use, workerInfo) => {
@@ -27,6 +32,24 @@ export const test = base.extend<Record<never, never>, WorkerFixtures>({
     const requestContext = await playwright.request.newContext({
       baseURL,
       extraHTTPHeaders: { 'x-e2e-user': e2eUserId },
+    })
+    await use(requestContext)
+    await requestContext.dispose()
+  },
+
+  adminRequest: async ({ playwright, baseURL, e2eUserId }, use) => {
+    const requestContext = await playwright.request.newContext({
+      baseURL,
+      extraHTTPHeaders: { 'x-e2e-user': e2eUserId, 'x-e2e-role': 'admin' },
+    })
+    await use(requestContext)
+    await requestContext.dispose()
+  },
+
+  userRequest: async ({ playwright, baseURL, e2eUserId }, use) => {
+    const requestContext = await playwright.request.newContext({
+      baseURL,
+      extraHTTPHeaders: { 'x-e2e-user': e2eUserId, 'x-e2e-role': 'user' },
     })
     await use(requestContext)
     await requestContext.dispose()
