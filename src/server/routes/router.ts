@@ -9,10 +9,10 @@ import type {
   UpdaterRunKind,
   UserSettings as UserSettingsType,
 } from '../../common/types.ts'
-import type { FormSubmission, User } from '../../common/types.ts'
+import type { User } from '../../common/types.ts'
 import {
-  AnswerSchema,
   BackendLocaleQuerySchema,
+  FormSubmissionSchema,
   UserFeedbackSchema,
   UserSettingsSchema,
 } from '../../common/validators.ts'
@@ -134,10 +134,9 @@ router.get('/organisations/integrated', requireUser, async (req, res) => {
 })
 
 router.post('/form/coursedata', requireUser, async (req, res: Response<CourseData[]>) => {
-  const submission: FormSubmission = req.body
-  const answerData = AnswerSchema.parse(submission.answerData) as AnswerData
+  const submission = FormSubmissionSchema.parse(req.body)
 
-  const result = await getCourseData(answerData)
+  const result = await getCourseData(submission.answerData as AnswerData)
   return res.json(result)
 })
 
@@ -256,13 +255,11 @@ router.get('/fail', async (_req, res) => {
   })
 })
 
-router.get('/logout', requireUser, async (req, res, next) => {
+router.get('/logout', requireUser, (req, res, next) => {
   req.logout(err => {
     if (err) return next(err)
     res.redirect('/')
   })
-
-  res.redirect('/')
 })
 
 export default router

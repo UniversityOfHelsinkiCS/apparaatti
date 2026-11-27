@@ -7,6 +7,8 @@ export const AnswerSchema = z.record(z.string().min(1), z.union([z.string().min(
 
 export type Answer = z.infer<typeof AnswerSchema>
 
+export const FormSubmissionSchema = z.object({ answerData: AnswerSchema })
+
 export const LocalizedTextSchema = z.object({
   fi: z.string(),
   sv: z.string(),
@@ -100,21 +102,25 @@ export const FilterConfigImportSchema = z.object({
   filters: z.array(FilterImportItemSchema),
 })
 
+export const FEEDBACK_TEXT_MAX_LENGTH = 10000
+
+export const FEEDBACK_METADATA_COURSES_MAX = 2000
+
 export const UserFeedbackSchema = z.object({
-  textFeedback: z.string().trim().min(1),
+  textFeedback: z.string().trim().min(1).max(FEEDBACK_TEXT_MAX_LENGTH),
   stars: z.number().int().min(0).max(5),
   recommendationMetadata: z
     .object({
       filterState: z.record(z.string(), z.unknown()).nullable(),
-      courses: z.array(z.record(z.string(), z.unknown())),
+      courses: z.array(z.record(z.string(), z.unknown())).max(FEEDBACK_METADATA_COURSES_MAX),
     })
     .optional(),
-  appVersion: z.string().optional(),
+  appVersion: z.string().max(255).optional(),
   sendContactEmail: z.boolean().optional(),
 })
 
 export const UserSettingsSchema = z.object({
-  educationLanguage: z.string().min(1),
+  educationLanguage: z.string().min(1).max(255),
 })
 
 export const BackendLocaleKeySchema = z.object({

@@ -4,6 +4,7 @@ import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { FEEDBACK_TEXT_MAX_LENGTH } from '../../common/validators.ts'
 import { useFilterContext } from '../contexts/filterContext'
 import useApiMutation from '../hooks/useApiMutation'
 import useModalLabels from '../hooks/useModalLabels'
@@ -118,6 +119,7 @@ const FeedbackModal = ({ open, onClose }: FeedbackModalProps) => {
                 value={textFeedback}
                 onChange={event => setTextFeedback(event.target.value)}
                 rows={7}
+                characterLimit={FEEDBACK_TEXT_MAX_LENGTH}
                 fullWidth
                 required
               />
