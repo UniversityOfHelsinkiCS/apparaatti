@@ -1,6 +1,8 @@
 import react from '@vitejs/plugin-react'
 import { configDefaults, defineConfig } from 'vitest/config'
 
+const inProductionBuild = process.env.RELEASE_VERSION !== undefined
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -8,7 +10,7 @@ export default defineConfig({
     __RELEASE_VERSION__: JSON.stringify(process.env.RELEASE_VERSION ?? null),
   },
   build: {
-    sourcemap: true,
+    sourcemap: inProductionBuild ? 'hidden' : true,
   },
   test: {
     exclude: [...configDefaults.exclude, 'e2e/**'],

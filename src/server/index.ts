@@ -15,6 +15,7 @@ import { connectToDatabase } from './db/connection.ts'
 import { seedDatabase } from './db/seed.ts'
 import errorHandler from './middleware/errorHandler.ts'
 import mockUserMiddleware from './middleware/mock_user.ts'
+import securityHeaders from './middleware/securityHeaders.ts'
 import router from './routes/router.ts'
 import setupCron from './updater/cron.ts'
 import { clearInterruptedUpdaterRuns } from './updater/manualRun.ts'
@@ -44,6 +45,8 @@ let isReady = false
 const app = express()
 
 app.set('trust proxy', 1)
+
+app.use(securityHeaders)
 
 app.use(
   session({

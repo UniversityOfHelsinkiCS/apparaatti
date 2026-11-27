@@ -37,3 +37,10 @@ export const RELEASE_VERSION = process.env.RELEASE_VERSION || undefined
 export const PACKAGE_VERSION = process.env.APP_VERSION || process.env.npm_package_version
 
 export const UPDATER_RUN_URL = process.env.UPDATER_RUN_URL || 'http://apparaatti-updater:8001/api/updater/run'
+
+if (inProduction) {
+  if (!process.env.SESSION_SECRET) throw new Error('SESSION_SECRET must be set in production')
+  if (!process.env.OIDC_CLIENT_SECRET) throw new Error('OIDC_CLIENT_SECRET must be set in production')
+  if (!process.env.OIDC_REDIRECT_URI) throw new Error('OIDC_REDIRECT_URI must be set in production')
+  if (!process.env.API_TOKEN) throw new Error('API_TOKEN must be set in production')
+}

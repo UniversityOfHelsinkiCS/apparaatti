@@ -7,9 +7,9 @@ const { combine, timestamp, printf, splat } = winston.format
 
 const transports = []
 
-transports.push(new winston.transports.File({ filename: 'debug.log' }))
-
 if (!inProduction) {
+  transports.push(new winston.transports.File({ filename: 'debug.log' }))
+
   const devFormat = printf(
     ({ level, message, timestamp, ...rest }) => `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`
   )
